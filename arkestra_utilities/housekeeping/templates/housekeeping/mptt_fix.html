@@ -1,0 +1,13 @@
+{% extends "housekeeping/housekeeping.html" %}
+{% block operations %}
+
+{% block title %}
+    <title>Repair MPTT</title>
+{% endblock title %}
+
+<ul>
+	<li>{{tree_report}}</li>
+	<li>{{level_report}}</li>
+	<li>{{leftright_report}}</li>
+</ul>
+{% endblock operations %}

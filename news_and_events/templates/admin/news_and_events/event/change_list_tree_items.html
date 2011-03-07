@@ -1,0 +1,9 @@
+{% load i18n event_admin_tags %}
+<li id="page_{{event.pk}}" class="{% if cl.is_filtered %}leaf{% endif %} moveable"{% if metadata %} mdata="{{ metadata }}{% endif %}" rel="{% ifequal event.level 0 %}topnode{% else %}node{% endifequal %}">
+	{% include 'admin/news_and_events/event/change_list_tree_item.html' %}
+	{% with event.children.all as children %}
+		{% if children%}<ul>{% for child in children %}
+			{% show_event_tree_item child %}{% endfor %}
+		</ul>{% endif %}
+	{% endwith %}
+</li>

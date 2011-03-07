@@ -1,0 +1,62 @@
+{% load events_tags %}
+					<div class = "">
+						<h{{h_main_body}}>Details</h{{h_main_body}}>
+						<dl>
+							{% event_date_and_time %}
+						    {% if speakers %}
+		    				    <dt>Instructors</dt>
+									{% for speaker in speakers %}
+										<dd>
+											<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
+										</dd>
+									{% endfor %}
+						    {% endif %}
+						    {% if event.hosted_by %}
+								{% with event.hosted_by.website.get_absolute_url as website_url %}
+			    				    <dt>Hosted by</dt>
+									{% if website_url %}
+			    				    	<dd><a href="{{ website_url }}">{{ event.hosted_by }}</a></dd>
+									{% else %}
+										<dd>{{ event.hosted_by }}</dd>
+			    				    {% endif %}
+								{% endwith %}
+						    {% endif %}
+						    {% if event.enquiries.all %}
+		    				    <dt>General enquiries</dt>
+									{% for person in event.enquiries.all %}
+										<dd>
+											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
+										</dd>
+									{% endfor %}
+						    {% endif %}
+						    {% if event.registration_enquiries.all %}
+		    				    <dt>Registration enquiries</dt>
+									{% for person in event.registration_enquiries.all %}
+										<dd>
+											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
+										</dd>
+									{% endfor %}
+						    {% endif %}
+						    {% if event.organisers.all %}
+		    				    <dt>Organisers</dt>
+									{% for person in event.organisers.all %}
+										<dd>
+											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
+										</dd>
+									{% endfor %}
+						    {% endif %}
+						    {% if event.building %}
+		    				    <dt>Venue {% if event.get_children %}(unless otherwise indicated){% endif %}</dt>
+		    				    <dd>{{ event.building.get_postal_address|join:"<br />" }}
+								{% if event.building.map %}<br /><a href="{{event.building.get_absolute_url}}">map/directions</a>{% endif %}</dd>
+						    {% endif %}
+						    {% if event.precise_location %}
+		    				    <dt>Location</dt>
+		    				    <dd>{{ event.precise_location }}</dd>
+						    {% endif %}
+						    {% if event.access_note %}
+		    				    <dt>Note</dt>
+		    				    <dd>{{ event.access_note }}</dd>
+						    {% endif %}
+						</dl>    
+					</div>

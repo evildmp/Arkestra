@@ -1,0 +1,9 @@
+{% load i18n externalsite_admin_tags %}
+<li id="page_{{externalsite.pk}}" class="{% if cl.is_filtered %}leaf{% endif %} moveable"{% if metadata %} mdata="{{ metadata }}{% endif %}" rel="{% ifequal externalsite.level 0 %}topnode{% else %}node{% endifequal %}">
+	{% include 'admin/links/externalsite/change_list_tree_item.html' %}
+	{% with externalsite.children.all as children %}
+		{% if children%}<ul>{% for child in children %}
+			{% show_externalsite_tree_item child %}{% endfor %}
+		</ul>{% endif %}
+	{% endwith %}
+</li>

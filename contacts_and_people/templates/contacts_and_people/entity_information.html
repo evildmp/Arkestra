@@ -1,0 +1,31 @@
+{% extends entity.get_template %}
+{ % load mptt_tags %}
+{ % load entity_tags %}
+{% load link_tags %}
+{% load cms_tags %}
+{% load typogrify %}
+
+{% block meta %}
+	{% for name,content in meta.items %}
+		<meta name="{{ name }}" content="{{ content }}" />
+	{% endfor %}
+{% endblock meta %}
+
+{% block title %}
+	<title>{{ title }}</title>
+{% endblock %}
+
+{% block columns %}	
+	@import url("/media/css/_layout/horiz/20_80.css");
+{% endblock columns %}
+  
+{% block skip_and_language %}
+{% endblock %}
+
+{% block pagetitle %}
+    <h{{page_title_heading_level}}>{{ pagetitle|typogrify }}</h{{page_title_heading_level}}>
+{% endblock pagetitle %}
+
+{% block main_page_body %}
+	{% include main_page_body_file %}
+{% endblock main_page_body %}

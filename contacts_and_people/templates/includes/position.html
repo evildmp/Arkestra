@@ -1,0 +1,4 @@
+{% if home_role %}
+	<dt>Position</dt>
+	<dd>{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}</dd>
+{% endif %}

@@ -1,0 +1,133 @@
+{% load thumbnail %}
+{% load typogrify %}
+{% if segments %}
+<div class="carousel-envelope">
+<script type="text/javascript">
+    function jsGetChildren(aElement) {
+        try
+        {
+            return aElement.childNodes;
+        }
+        catch(err)
+        {
+            return aElement.children;
+        }
+    }
+    function jsHideElement(aElement) {
+        try
+        {
+            aElement.style.display = 'none';
+        }
+        catch(err)
+        { }
+    }
+    function jsShowElement(aElement) {
+        try
+        {
+            aElement.style.display = 'block';
+        }
+        catch(err)
+        { }
+    }
+    function jsUnfocusElement(aElement) {
+        try
+        {
+            aElement.className = aElement.className.replace(' focus','');
+        }
+        catch(err)
+        { }
+    }
+    function jsFocusElement(aElement) {
+        try
+        {
+            aElement.className += " focus";
+        }
+        catch(err)
+        { }
+    }
+</script>
+<script type="text/javascript">
+    function jsCarouselCountSegments(aSegmentsElement) {      
+        try
+        {
+            return aSegmentsElement.children.length;
+        }
+        catch(err)
+        {
+            var max = 0;
+            var segments = aSegmentsElement.childNodes;
+            for (var i in segments) {
+                if ( typeof(segments[i] == "object") && segments[i].nodeName == 'LI') {
+                   max++; 
+                }
+            }
+            return max;
+        }
+    }
+    function jsCarouselPickSegment(aCarouselName, aSegmentNumber) {        
+        var segments = jsGetChildren( document.getElementById(aCarouselName + '-segments') );
+        for (var i in segments) {
+            if (typeof(segments[i]) == "object") {
+                jsHideElement( segments[i] );
+            }
+        }
+        jsShowElement( document.getElementById(aCarouselName + '-segment' + aSegmentNumber) );
+        var btns = jsGetChildren( document.getElementById(aCarouselName + '-btns') );
+        for (var i in btns) {
+            if (typeof(btns[i]) == "object") {        
+                jsUnfocusElement( btns[i] );
+            }
+        }
+        jsFocusElement( document.getElementById(aCarouselName + '-btn' + aSegmentNumber) );
+    }
+    var jsCarouselRotatorIntervalID = [];    
+    function jsCarouselRotator(aCarouselName, aSegment) {
+        jsCarouselPickSegment(aCarouselName, aSegment);
+    }    
+    function jsCarouselRotateStart(aCarouselName, aSegmentNumber) {
+        jsCarouselRotateStop(aCarouselName);
+        var i = aSegmentNumber;
+        var max = jsCarouselCountSegments( document.getElementById(aCarouselName + '-segments') );
+        jsCarouselRotatorIntervalID[aCarouselName] = window.setInterval(
+          function(){
+            jsCarouselRotator(aCarouselName, i);
+            i = (i % max)+1;
+          }
+          , 3500);
+    }
+    function jsCarouselRotateStop(aCarouselName) {
+        window.clearInterval(jsCarouselRotatorIntervalID[aCarouselName]);
+        jsCarouselRotatorIntervalID[aCarouselName] = null;
+    }
+</script>
+
+<div id="carousel{{carousel.pk}}" class="carousel" style="width:{{size.0}}px;">
+  <ul id="carousel{{carousel.pk}}-segments" class="carousel-segments" >
+        {% for segment in segments %}
+    <li id="carousel{{carousel.pk}}-segment{{forloop.counter}}" name="carousel{{carousel.pk}}-segment" class="carousel-segment" {% if forloop.first %} style="display:block;" {% endif %}>
+						{% thumbnail segment.image size crop upscale subject_location=segment.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" />{% endif %}
+
+    </li>
+    {% endfor %}
+  </ul>
+  
+  <ul id="carousel{{carousel.pk}}-btns" class="carousel-btns faded">
+              {% for segment in segments %}
+
+    <li id="carousel{{carousel.pk}}-btn{{forloop.counter}}" name="carousel{{carousel.pk}}-btn" class="carousel-btn fadeded {{segment.line_class}} {{segment.label_class}}" style="width:{{segment.label_width}}px;" onmouseover="jsCarouselRotateStop('carousel{{carousel.pk}}');javascript:jsCarouselPickSegment('carousel{{carousel.pk}}',{{forloop.counter}});" onmouseout="jsCarouselRotateStart('carousel{{carousel.pk}}',{{forloop.counter}});">
+      <a class = "unfaded" href="{{segment.url}}">
+      {{segment.link_title|caps}}
+      </a>
+    </li>    {% endfor %}
+
+  </ul>
+</div>
+
+
+
+<script type="text/javascript">
+    jsCarouselPickSegment('carousel{{carousel.pk}}',1);
+    jsCarouselRotateStart('carousel{{carousel.pk}}',2);
+</script>
+</div>
+{% endif %}

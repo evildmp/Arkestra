@@ -1,0 +1,160 @@
+<div class="{{ news_and_events.row_class }} {{ news_and_events.type }}">
+
+	{% if news_and_events.news or news_and_events.other_news %}
+
+		{% if news_and_events.newsindex %}
+			<div class = "{{ news_and_events.index_div_class }}">
+				<div class ="tint6">
+					<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
+					<ul class = "none">
+						{% regroup news_and_events.news by date.year as yearlist %}
+						{% for year in yearlist %}
+							<li><strong>{{ year.grouper }}</strong>
+								{% regroup year.list by date|date:"F" as monthlist %}
+								<ul class = "close">
+									{% for month in monthlist %}
+									<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class = "{{ news_and_events.news_div_class }}">
+			{% if news_and_events.heading_level %}
+				<h{{ news_and_events.heading_level }}>{{ news_and_events.news_heading_text }}</h{{ news_and_events.heading_level }}>
+			{% endif %}
+
+			<ul class="{{ news_and_events.news_list_class}}">
+		        {% if news_and_events.show_news_when %}
+						{% regroup news_and_events.news by get_when as newslist %}
+						{% for get_when in newslist %}
+							<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
+							    <ul>
+					        		{% for news_article in get_when.list %}
+										{% include news_and_events.news_listitem_template %}
+					        	    {% endfor %}
+					        	</ul>
+					    	</li>
+					{% endfor %}
+		    	{% else %}
+					{% for news_article in news_and_events.news %}
+						{% include news_and_events.news_listitem_template %}
+					{% endfor %}
+				{% endif %}
+			</ul>
+			{% ifequal news_and_events.type "main_page" %}
+			    {% if news_and_events.other_news %}
+    				<ul class="fancy close top-border">
+    					{% for item in news_and_events.other_news %}
+    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    					{% endfor %}
+    				</ul>
+    			{% endif %}
+			{% endifequal %}
+		</div>
+	{% endif %}
+
+    {% if news_and_events.events or news_and_events.other_events %}
+
+		{% if news_and_events.eventsindex %}
+				<div class = "{{ news_and_events.index_div_class }}">
+					<div class ="tint6">
+						<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
+						<ul class = "none">
+							{% regroup news_and_events.events by start_date.year as yearlist %}
+							{% for year in yearlist %}
+								<li><strong>{{ year.grouper }}</strong>
+									{% regroup year.list by start_date|date:"F" as monthlist %}
+									<ul class = "close">
+										{% for month in monthlist %}
+										<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
+										{% endfor %}
+									</ul>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+		{% endif %}
+
+		<div class = "{{ news_and_events.events_div_class }}">
+			{% if news_and_events.heading_level %}
+				<h{{ news_and_events.heading_level }}>{{ news_and_events.events_heading_text }}</h{{ news_and_events.heading_level }}>
+			{% endif %}
+
+			{% if news_and_events.events %}
+			    <ul class="{{ news_and_events.events_list_class}}">
+				    {% if news_and_events.show_events_when %}	        	
+			    	    {% regroup news_and_events.events by get_when as eventlist %}
+			       	    {% for get_when in eventlist %}
+			        		<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
+			    				<ul>
+			    		    		{% for event in get_when.list %}
+			    						{% include news_and_events.events_listitem_template %}
+			    		    	    {% endfor %}
+			    				</ul>
+			    			</li>
+			    	    {% endfor %}
+
+				    {% else %}
+				    		{% for event in news_and_events.events %}
+								{% include news_and_events.events_listitem_template %}
+				    	    {% endfor %}
+				    {% endif %}
+				</ul>	
+			{% endif %}
+
+			{% if series_events %}
+				<h{{ news_and_events.sub_heading_level }}>Current events series</h{{ news_and_events.sub_heading_level }}>
+				<ul class="{{ news_and_events.events_list_class}}">
+					{% for event in series_events %}
+						<li>
+							<strong><a href="{{ event.get_absolute_url }}">{{event.get_short_title}}</a></strong>
+					    	{% if event.subtitle %}<div class = "subtitle">{{ event.subtitle }}</div>{% endif %}
+						</li>
+				    {% endfor %}
+
+				</ul>
+			{% endif %}
+
+			{% ifequal news_and_events.type "main_page" %}
+    			{% if news_and_events.other_events %}
+    				<ul class="fancy close top-border">
+    					{% for item in news_and_events.other_events %}
+    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    					{% endfor %}
+    				</ul>
+    			{% endif %}
+			{% endifequal %}
+		</div>
+	{% endif %}
+
+</div>
+
+{% ifequal news_and_events.type "sub_page" %}
+	<ul class="fancy close top-border">
+    					{% for item in news_and_events.other_news %}
+    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    					{% endfor %}
+    					{% for item in news_and_events.other_events %}
+    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    					{% endfor %}
+        {% if news_and_events.link_to_news_and_events %}
+            <li><strong><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/">{{ entity.short_name }} {{ entity.news_page_menu_title|lower }} page</a></strong></li>
+    	{% endif %}
+	</ul>
+{% endifequal %}
+
+{% ifequal news_and_events.type "plugin" %}
+<div class="{{ news_and_events.type }} ">
+	<ul class="fancy close {% ifequal news_and_events.format "Details" %}all_info{% endifequal %}">
+        {% if news_and_events.link_to_news_and_events %}
+            <li><strong><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/">More news &amp; events</a></strong></li>
+    	{% endif %}
+	</ul>
+</div>
+{% endifequal %}

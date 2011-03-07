@@ -1,0 +1,9 @@
+{% if membership_list %}
+{% regroup membership_list by person as person_list %}
+	<dl>
+		{% for person in person_list %}
+			<dt><a href="{{ person.grouper.get_absolute_url }}">{{ person.grouper }}</a></dt>
+			{% for role in person.list %}<dd>{{role.role}}</dd>{% endfor %}
+		{% endfor %}
+	</dl>
+{% endif %}

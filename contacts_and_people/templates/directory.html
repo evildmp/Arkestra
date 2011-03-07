@@ -1,0 +1,18 @@
+{% load mptt_tags %}
+<div class = "directory {{directory_class}}">
+{% for entity,structure in entities|tree_info %}
+{% if structure.new_level %}
+    <ul class="">
+{% else %}</li>
+{% endif %}
+    <li class="{{entity.klass}}">
+{% with entity.website as url %}
+    {% if url %}<a href = "{{url.get_absolute_url}}"><span class ="entity">{% if directory.use_short_names %}{{entity.short_name}}{% else %}{{entity}}{% endif %}</span></a>
+    {% if entity.description %}<br />{{ entity.description }}{% endif %}
+    {% else %}<span class ="entity">{% if directory.use_short_names %}{{entity.short_name}}{% else %}{{entity}}{% endif %}</span>
+    {% endif %}
+
+{% endwith %}
+{% for level in structure.closed_levels %}</li></ul>{% endfor %}
+{% endfor %}
+</div>

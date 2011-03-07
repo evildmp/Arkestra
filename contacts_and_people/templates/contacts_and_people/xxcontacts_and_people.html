@@ -1,0 +1,73 @@
+{% extends "contacts_and_people/entity_information.html" %}
+{% load mptt_tags %}
+{% load entity_tags %}
+{% load link_tags %}
+{% load thumbnail %}
+{% load cms_tags %}
+{% load typogrify %}
+
+{% block meta %}
+	<meta name="description" content="Addresses, phone numbers, staff lists and other contact information"/>
+{% endblock meta %}
+
+{% block title %}
+	<title>Contact information for {{ entity }}</title>
+{% endblock %}
+
+{% block columns %}	
+	@import url("/media/css/_layout/horiz/20_80.css");
+{% endblock columns %}
+  
+{% block skip_and_language %}
+{% endblock %}
+
+
+
+{% block main_page_body %}
+    {% block entity_information %}
+		<div class="row columns2">
+	    	<div class="column firstcolumn">
+				<div class = "">
+				    <h3>Contact information</h3>
+				    <dl>
+				        {% include "includes/entity_contacts.html" %}
+	    		        {% include "includes/address.html" %}
+	                    {% include "includes/precise_location.html" %}
+	    		        {% include "includes/access_notes.html" %}
+	                    {% include "includes/email.html" %}
+	    		        {% include "includes/phone_contacts.html" %}
+				    </dl>
+				</div>
+			</div>
+			{% thumbnail entity.image 388x540 as image %}
+			{% if roles or image %}
+				<div class="column lastcolumn"> 
+				    {% if image %}<img alt="" src="{{ image }}" />{% endif %}
+						{% if roles %}
+						<div class="">
+						    <h3>Key people</h3>
+					    	<dl>
+			   		        	{% include "includes/entity_roles.html" %}
+						    </dl>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}	
+		</div>
+		{% if initials_list or people %}
+			<div class = "row" style = "width: 32em">
+				{% if initials_list %}
+					<h3>Index: people A-Z by surname</h3>
+					<ul class="index">
+						{% for initial in initials_list %}
+							<li><a href="{{entity.get_absolute_url}}people/{{initial|lower}}/">{{ initial }}</a></li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<h3>All people</h3>
+					{% all_people_with_roles %}
+				{% endif %}
+			</div>
+		{% endif %}
+	{% endblock entity_information %}
+{% endblock main_page_body %}

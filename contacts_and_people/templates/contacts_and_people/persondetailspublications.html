@@ -1,0 +1,19 @@
+{% extends "contacts_and_people/persondetails.html" %}
+{% load publications_tags %}
+
+{% block meta %}
+	<meta name="description" content="Research publications by {{ person}}, {{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
+{% endblock meta %}
+
+{% block title %}
+	<title>{{ person }} - Publications </title>
+{% endblock %}
+{% block page_title %}
+	<h{{page_title_heading_level}} class="name">{{ person}} - Publications</h{{page_title_heading_level}}>
+{% endblock page_title %}
+
+{% block person_information %}
+    <div>	
+		{% get_all_person_publications %}
+    </div>
+{% endblock person_information %}

@@ -1,0 +1,21 @@
+{% spaceless %}
+{% autoescape off %}
+{% ifequal object.insert_as 0 %}
+	{% for link in links %}<a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>{{ link.separator }}{% endfor %}
+{% else %}
+    {% ifequal object.insert_as 2 %}
+    	{% for link in links %}
+    	<p><a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>{% if link.include_description %}<br /><span class="link-description">{{ link.description }}</span>{% endif %}</p>
+    	{% endfor %}
+    {% else %}
+    <ul class = "{% if use_link_icons %}fancy{% else %}none{% endif %}">
+    	{% for link in links %}
+    		<li>{% if link.key_link %}<strong>{% endif %}<a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>{% if link.key_link %}</strong>{% endif %}{% if link.include_description %}<div class="link-description">{{ link.description }}</div>{% endif %}
+	    	{% if show_images %}{% if link.thumbnail_url %}<img class="right" src="{{ link.thumbnail_url }}" />{% endif %}{% endif %}
+</li>
+	{% endfor %}
+    </ul>
+    {% endifequal %}
+{% endifequal %}
+{% endautoescape %}
+{% endspaceless %}

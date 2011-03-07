@@ -1,0 +1,33 @@
+{% extends "housekeeping/housekeeping.html" %}
+{% block operations %}
+
+<h3>Summary</h3>
+{% if not execute %}
+    <p>This is a <strong>dry run</strong>. Nothing has been changed.</p>
+    <p>Please check the results. If you are satisfied, <a href="/housekeeping/clean_plugins/execute/">perform the actions listed below</a>, or <a href="/housekeeping/clean_plugins/dryrun/">do another dry run</a>.</p>
+{% else %}
+    <p><a href="/housekeeping/clean_plugins/execute/">Perform a dry run instead</a>. It's probably too late though.</p>
+
+{% endif %}  
+
+<p>Found {{ trashed_nbsps|length }} text plugins with <em>nbsp</em> text.</p>
+
+<p>Found {{ double_spaces|length }} text plugins with <em>double spaces</em> text.</p>
+    
+<p>Found {{ trashed_paragraphs|length }} text plugins with <em>empty paragraphs</em>.</p>
+{% for plugin in trashed_paragraphs %}
+<dt>{{ plugin }}</dt>
+<dd>{{ plugin.body }}</dd>
+{% endfor %}
+</dl>
+
+<p>Found {{ trashed_styles|length }} text plugins with <em>style</em> elements.</p>
+
+<p>Found {{ click_heres|length }} text plugins with <em>click here</em>.</p>
+{% for plugin in click_heres %}
+<dt>{{ plugin }}</dt>
+<dd>{{ plugin.body }}</dd>
+{% endfor %}
+</dl>
+
+{% endblock operations %}

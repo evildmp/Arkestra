@@ -1,0 +1,79 @@
+{% extends "admin/change_list.html" %}
+{% load adminmedia admin_list i18n cms_admin js %}
+{% block title %}List of sites{% endblock %}
+{% block bodyclass %}change-list{% endblock %}
+
+{% block coltype %}flex{% endblock %}
+{% block extrahead %}{{ block.super }}
+
+<link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}css/pages.css"/>
+<link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}jstree/tree_component.css" />
+<link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}css/jquery.dialog.css" />
+
+
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.livequery.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.core.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.bind.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.checkbox.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/effects.core.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/effects.highlight.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.form.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}jstree/_lib/_all.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}jstree/tree_component.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.dialog.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/functional.js"></script>
+{# <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/change_list.js"></script> #}
+<script type="text/javascript" src="{{ MEDIA_URL }}javascript/change_list.js"></script>
+
+
+
+{% if cl.is_filtered %}
+<link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}jstree/themes/default/style.css" />
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+	function showchangelistfilter(){
+		$("#changelist-filter").toggle();
+	}
+	function moveSuccess(node){
+		var msg = $('<span class="success">{% trans "Successfully moved" %}</span>');
+		node.append(msg);
+	    msg.fadeOut(3000);
+	}
+	function moveError(node){
+		var msg = $('<span class="success">An error occurred. Please reload the page</span>');
+		node.append(msg);
+	}
+	
+	$(document).ready(function() {
+		{% if not cl.is_filtered %}
+		initTree();
+		{% endif %}
+		
+	});	
+	settings = {
+		debug: true,
+	};
+</script>
+
+<div id="content-main"{% if cl.is_filtered %} class="activ-filter"{% endif %}>
+{% block object-tools %}
+	<ul class="object-tools">
+		{% if has_add_permission %}
+		<li><a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">{% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}</a></li>
+		{% endif %}
+	</ul>
+	{% include "admin/cms/page/loading.html" %}
+{% endblock %}
+	
+<div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+
+{% include "admin/links/externalsite/change_list_tree.html" %}
+
+</div>
+</div>
+
+{% endblock %}

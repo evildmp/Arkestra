@@ -1,0 +1,18 @@
+{% load entity_tags %}
+
+<div class="row columns2">
+   	<div class="column firstcolumn">
+		<h3 style="clear:both">{% if letter %}People: surnames beginning {{letter|upper}}{% else %}All people by surname{% endif %}</h3>
+		{% all_people_with_roles letter %}
+	</div>
+	<div class="column lastcolumn"> 
+	{% if initials_list %}
+		<h3>Index of people by surname</h3>
+		<ul class="index">
+			{% for initial in initials_list %}
+				<li><a href="{{entity.get_absolute_url}}contact/people/{{initial|lower}}/">{{ initial }}</a></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	</div>
+</div>

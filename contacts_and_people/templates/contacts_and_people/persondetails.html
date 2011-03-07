@@ -1,0 +1,92 @@
+{% extends template %}
+{% load mptt_tags %}
+{% load person_tags %}
+{% load link_tags %}
+{% load thumbnail %}
+{% load typogrify %}
+{% load placeholder_tags %}
+
+{% block meta %}
+	{% for name,content in meta.items %}
+		<meta name="{{ name }}" content="{{ content }}" />
+	{% endfor %}
+{% endblock meta %}
+
+
+{% block title %}
+	<title>{{ person }}</title>
+{% endblock %}
+
+{% block columns %}	
+		@import url("/media/css/_layout/horiz/100.css");
+{% endblock columns %}
+  
+{% block skip_and_language %}
+{% endblock %}
+
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{page_title_heading_level}} class="name">{{ person}}</h{{page_title_heading_level}}>
+{% endblock pagetitle %}
+
+{% block main_page_body %}
+	{% block entity_information %}
+		{% if tabs %}
+			<ul id="tab_menu">
+				{% if not active_tab %}
+					<li class="active">
+						<strong>Overview</strong>
+					</li>
+				{% else %}
+					<li>
+						<a href="{{ person.get_absolute_url }}">Overview</a>
+					</li>
+				{% endif %}
+				{% for tab in tabs %}
+					{% ifequal tab active_tab %}
+						<li class="active"> 
+							<strong>{{tab|capfirst}}</strong>
+						</li>
+					{% else %}
+						<li> 
+							<a href="{{ person.get_absolute_url }}{{tab}}">{{tab|capfirst}}</a>
+						</li>            
+					{% endifequal %}        
+				{% endfor %}
+			</ul>    
+		{% endif %}
+		{% block person_information %}				    
+    		<div class="row columns2">
+    			<div class="column firstcolumn">
+    				<div>{% render_placeholder person.description %}
+
+						{% if home_role or address or location or access_note or email or phone.all %}<h3>Contact information</h3>
+						<dl>
+							{% include "includes/position.html" %}
+							{% include "includes/address.html" %}
+							{% include "includes/precise_location.html" %}
+							{% include "includes/access_notes.html" %}
+							{% include "includes/email.html" %}
+							{% include "includes/phone_contacts.html" %}
+						</dl>
+						{% endif %}
+					</div>
+				</div>
+				<div class="column lastcolumn">
+					<div class = "">
+						{% thumbnail person.image 340x340 subject_location=person.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
+						{% if home_role and multiple_entity_mode %}
+							<h3>Roles & memberships</h3>
+								{% membership_tree_roots person %}
+						{% endif %}	
+												
+					</div>
+				</div>
+			</div>	
+	
+		{% endblock person_information %}
+	{% endblock entity_information %}
+{% endblock main_page_body %}

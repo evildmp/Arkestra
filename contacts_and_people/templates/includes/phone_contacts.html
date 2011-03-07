@@ -1,0 +1,6 @@
+{% if phone.all %}
+    <dt>Telephone</dt>
+    {% for phone_number in phone.all %}
+        <dd>+{{ phone_number.country_code }} {{ phone_number.area_code }} {{ phone_number.number }}{% if phone_number.internal_extension %}, ext. {{ phone_number.internal_extension }} {% endif %} {% if phone_number.label %} ({{ phone_number.label }}) {% endif %}</dd>
+    {% endfor %}
+{% endif %}

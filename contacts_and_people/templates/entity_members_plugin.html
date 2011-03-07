@@ -1,0 +1,18 @@
+{% if nest %}
+{% regroup memberships by entity as entities %}
+<ul>
+	{% for entity in entities %}
+		<li>{{ entity.grouper }}
+			<ul class= "none">{% for person in entity.list %}
+				<li><a href = "{{person.person.get_absolute_url}}">{{ person.person }}</a></li>
+				{% endfor %}
+			</ul>
+		</li>	
+	{% endfor %}	
+</ul>
+{% else %}
+<ul class = "none">{% for person in memberships %}
+	<li><a href = "{{person.person.get_absolute_url}}">{{ person.person }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}

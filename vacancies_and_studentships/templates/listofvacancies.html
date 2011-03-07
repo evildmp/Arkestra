@@ -1,0 +1,7 @@
+{% load vacancies_and_studentships_tags %}
+
+<ul class="plugin">
+    {% for vacancy in vacancies %}
+        <li><a href="{{ vacancy.get_absolute_url }}">{{vacancy.short_title}}, {{ vacancy.hosted_by }}</a></li>
+    {%endfor%}
+</ul>

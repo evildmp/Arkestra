@@ -1,0 +1,78 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_modify adminmedia %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#tabs").tabs({
+		select: function(event, ui) {
+			var form = $('form#{{ opts.module_name }}_form');
+			var panel_id = $(ui.panel).attr('id');
+			 $('form#{{ opts.module_name }}_form').attr('action', '#' + panel_id);
+		}
+	});
+  });
+</script>
+{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<style type="text/css">
+	#tabs ul.ui-tabs-nav li { list-style-type: none;}
+	#tabs ul li.has_errors, #tabs ul li.has_errors a { color: red;}
+</style>
+{% endblock %}
+
+{% block content %}<div id="content-main">
+{% block object-tools %}
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools"><li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+  {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% block form_top %}{% endblock %}
+<div>
+{% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+{% if save_on_top %}{% submit_row %}{% endif %}
+{% if errors %}
+    <p class="errornote">
+    {% blocktrans count errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </p>
+    <ul class="errorlist">{% for error in adminform.form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+
+<div id="tabs">
+	<ul>
+	{% for tab in adminform %}
+		<li{% if tab.has_errors %} class="has_errors"{% endif %}><a href="#tab_{{ tab.name|slugify }}"><span>{{ tab.name }}</span></a></li>
+	{% endfor %}
+	</ul>
+	{% for tab in adminform %}
+	<div id="tab_{{ tab.name|slugify }}">
+		{% for fieldset in tab %}
+		  {% include "admin/includes/fieldset.html" %}
+		{% endfor %}
+		{% for inline_admin_formset in tab.inlines %}
+		    {% include inline_admin_formset.opts.template %}
+		{% endfor %}
+	</div>
+	{% endfor %}
+</div>
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+{% block after_related_objects %}{% endblock %}
+
+{% submit_row %}
+
+{% if adminform and add %}
+   {# <script type="text/javascript">document.getElementById("{{ adminform.first_field.auto_id }}").focus();</script>#}
+{% endif %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form></div>
+{% endblock %}

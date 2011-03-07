@@ -1,0 +1,53 @@
+{% extends "contacts_and_people/entity_information.html" %}
+{% load news_and_events_tags %}
+{% load thumbnail %}
+
+{% block meta %}
+	<meta name="description" content="News articles"/>
+{% endblock meta %}
+
+{% block title %}
+	<title>News for {{ entity }}</title>
+{% endblock %}
+
+{% block entity_information %}
+<div class = "row columns4">
+	<div class="column firstcolumn triplecolumn">
+		<ul style="list-style: none;">
+			<li style = "float: left;">
+				<a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
+				{{news_item.short_title}}</a>
+				<p>{{news_item.subtitle}}</p>
+			</li>
+			<li style = "width: 45%; float: left; display: block">
+				<a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
+				{{news_item.short_title}}</a>
+				<p>{{news_item.subtitle}}</p>
+			</li>
+			<li style = "width: 45%; float: left; display: block">
+				<a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
+				{{news_item.short_title}}</a>
+				<p>{{news_item.subtitle}}</p>
+			</li>
+		</ul>
+		<div class = "row columns2">
+			<h3><a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
+				{{news_item.short_title}}</a></h3>
+				<p>{{news_item.subtitle}}</p>
+		</div>	
+		<div class = "row columns2">
+			<div class = "column  firstcolumn">
+				<h3 style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
+				{{news_item.short_title}}</a></h3>
+				<p>{{news_item.subtitle}}</p>
+			</div>
+			<div class = "column  lastcolumn">
+				<h3 style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
+				{{news_item.short_title}}</a></h3>
+				<p>{{news_item.subtitle}}</p>
+			</div>
+		</div>
+	</div>
+</div>	
+
+{% endblock entity_information %}

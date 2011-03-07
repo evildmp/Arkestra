@@ -1,0 +1,7 @@
+<li class = "{{ events_item_class }}">
+        {% if event.parent.series %}
+		<a href="{% if event.parent.no_direct_access_to_children %}{{ event.parent.get_absolute_url }}{% else %}{{ event.get_absolute_url }}{% endif %}">{{event.parent.short_title}}: {{event.short_title}}</a>
+	{% else %}
+		<a href="{{ event.get_absolute_url }}">{{event.short_title}}</a>
+	{% endif %}
+</li>

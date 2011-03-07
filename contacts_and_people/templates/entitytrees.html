@@ -1,0 +1,6 @@
+{% load person_tags %}
+{% if roots %}
+	{% for root in roots %}
+			{% make_membership_tree person root %}
+	{% endfor %}
+{% endif %}	

@@ -1,0 +1,11 @@
+<dt>Address</dt>This message comes from contacts_and_people/templates/address.html
+<dd>{% if entity %}
+		<strong>{{ entity }}</strong>
+		<br />
+	{% endif %}
+   {{ address|join:"<br />" }}
+{ { entity.building.map}}
+{% if entity.building.map %}
+<p><a href="entity.building.get_absolute_url">map &amp; directions</a></p>
+{% endif %}
+</dd>

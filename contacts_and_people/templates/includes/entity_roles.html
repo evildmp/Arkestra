@@ -1,0 +1,7 @@
+{% regroup roles by role as roles %}
+<dl>
+	{% for role in roles %}
+		<dt>{{ role.grouper }}</dt>
+		{% for person in role.list %}<dd><a href ="{{ person.person.get_absolute_url }}">{{person.person}}</a></dd>{% endfor %}
+	{% endfor %}
+</dl>

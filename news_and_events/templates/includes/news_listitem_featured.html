@@ -1,0 +1,16 @@
+{% load thumbnail %}
+<li class = "{{ news_and_events.all_columns }}{{news_article.column_class}}">
+	<div class = "expands ">
+	    {% if news_article.external_url %}
+			<a class = "external" href="{{ news_article.get_absolute_url }}"><strong>{{news_article.short_title}}</strong></a> ({{ news_article.external_url.external_site }})
+	    {% else %}
+			<a href="{{ news_article.get_absolute_url }}"><strong>{{news_article.short_title}}</strong></a>
+		{% endif %}
+
+		{% if news_article.image %}
+			{% thumbnail news_article.image news_and_events.image_size crop subject_location=news_article.image.subject_location as image %}<img class="right" src="{{ image.url }}" />
+		{% endif %}
+		<div class = "date">{{ news_article.date|date }}</div>	 
+		<div class = "subtitle">{{ news_article.subtitle }}</div>
+	</div>
+</li>

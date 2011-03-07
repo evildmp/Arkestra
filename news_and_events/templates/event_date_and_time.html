@@ -1,0 +1,5 @@
+{% load typogrify %}
+	{% if not event.series %}
+		<dt>{{date_and_time_heading|join:" & "|typogrify|capfirst}}</dt>
+		<dd>{% autoescape off %}{{ date_and_time|join:", " }}{% endautoescape %}</dd>
+	{% endif %}

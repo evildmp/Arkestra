@@ -1,0 +1,7 @@
+{% if contacts %}
+	<dt>Key contact{{ contacts.count|pluralize }}</dt>
+	{% for contact in contacts %}
+	<dd><a href="{{ contact.person.get_absolute_url }}">{{ contact.person }}</a>
+	</dd>
+	{% endfor %}
+{% endif %}

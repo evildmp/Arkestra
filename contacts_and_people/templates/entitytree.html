@@ -1,0 +1,35 @@
+{% load person_tags %}
+{% spaceless %}
+{% if node %}
+	    {% if node.display %}
+    		<ul class="entity-tree">
+    	        <li><div>
+	    	            {% if node.website or node.url %}<a href="{{ node.get_website_url }}">{% endif %}
+	    	                {% if node.home %}<strong>{{node}}</strong>
+	    	                {% else %}
+	    	                    {{node}}
+	    	            {% endif %}
+	    	            {% if node.website or node.url %}</a>{% endif %}
+						{% for role in roles %}
+							{% if node.home %}<br /><strong><span class = "grey italic">{{ role }}</span></strong>
+							{% else %}<br /><span class = "grey italic">{{ role }}</span>
+							{% endif %}
+						{% endfor %}
+					</div>
+    	        	{% if node.get_children %}
+    	        		{% for item in node.get_children %}
+    	        			{% make_membership_tree person item %}
+    	        		{% endfor %}
+    	        	{% endif %}
+    	        </li>
+    		</ul>
+	    {% else %}   
+	        {% if node.get_children %}
+	    		{% for item in node.get_children %}
+	    			{% make_membership_tree person item %}
+	    		{% endfor %}
+	    	{% endif %}
+	
+	    {% endif %}
+{% endif %}
+{% endspaceless %}

@@ -1,0 +1,20 @@
+{% load i18n entity_admin_tags %}
+<div id="sitemap" style="display:none">
+<ul class="header">
+	<li>
+		<div class="cont">
+			<div class="col1">{% trans "title" %}</div>
+			<div class="col2">
+				<div class="col-actions">{% trans "actions" %}</div>
+			</div>
+		</div>
+	</li>
+</ul>
+<div class="tree root_allow_children">
+	<ul class="tree-default">
+		{% for entity in root_entities %}
+			{% show_entity_tree_item entity %}
+		{% endfor %}
+	</ul>
+</div>
+</div>

@@ -1,0 +1,12 @@
+{% regroup links by heading as link_types %}{% autoescape off %}
+
+{% for kind in link_types %}
+<h3>{{kind.grouper}}</h3>
+<ul class= "none">
+	{% for link in kind.list %}
+		<li>
+			<a href = "{{ link.url }}">{{ link.text }}</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+		</li>
+	{% endfor %}
+</ul>
+{% endfor %}{% endautoescape %}

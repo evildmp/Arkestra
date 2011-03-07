@@ -1,0 +1,9 @@
+{% if address %}
+<dt>Address</dt>
+<dd>
+	<strong>{{ entity }}</strong>
+	<br />
+	{{ address|join:"<br />" }}
+	{% if entity.building.map %}<p><a href="{{entity.building.get_absolute_url}}">map &amp; directions</a></p>{% endif %}
+</dd>
+{% endif %}

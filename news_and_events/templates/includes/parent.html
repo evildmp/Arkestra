@@ -1,0 +1,9 @@
+					{% if event.parent %}
+						<div>
+							{% if event.parent.series %}
+								<p><strong>Part of the <a href = "{{event.parent.get_absolute_url}}">{{ event.parent }}</a> series</strong></p>
+							{% else %}
+								<p><strong>Part of the <a href = "{{event.parent.get_absolute_url}}">{{ event.parent }}</a> {{ event.parent.type|lower }}, {{ event.parent.get_dates }}</strong></p>
+							{% endif %}
+						</div>
+					{% endif %}

@@ -1,0 +1,26 @@
+	{% load i18n adminmedia %}
+<div class="cont">
+	<div class="col1">
+		<a href="{{ url }}{{ entity.id }}" class="title" title="edit">{{ entity.name }}</a>	
+		<a href="{{ url }}{{ entity.id }}" class="changelink" title="edit">edit</a>
+	</div>
+	<div class="col2">
+		<span id="move-target-{{ entity.id }}" class="move-target-container" >
+			{% if has_add_permission %}
+				<a href="#" class="move-target left" title="{% trans "insert above" %}"><img alt="" src="{% admin_media_prefix %}img/admin/arrow-up.gif"/></a><span class="line first"> |</span>
+				<a href="#" class="move-target right" title="{% trans "insert below" %}"><img alt="" src="{% admin_media_prefix %}img/admin/arrow-down.gif"/></a><span class="line second"> |</span>
+				<a href="#" class="move-target first-child" title="{% trans "insert inside" %}">↘</a>
+			{% endif %}
+		</span>
+		
+		<div class="col-actions">{% if not filtered %}
+			{% if has_change_permission %}<a href="#" class="move" title="{% trans "Cut" %}" id="move-link-{{ entity.id }}"><span>{% trans "cut" %}</span></a>{% endif %}{% endif %}
+			{# {% if has_change_permission %}<a href="#" class="copy" title="{% trans "Copy" %}" id="copy-link-{{ entity.id }}"><span>{% trans "copy" %}</span></a>{% endif %} #}
+			
+			{% if has_add_permission %}
+				<a href="add/?parent={{ entity.id }}" class="addlink" title="{% trans "Add Child" %}" id="add-link-{{ entity.id }}"><span>{% trans "add" %}</span></a>
+			{% endif %}
+			{% if has_delete_permission %}<a href="{{ entity.id }}/delete/" title="{% trans "Delete" %}" class="deletelink"><span>{% trans "delete" %}</span></a>{% endif %}
+		</div>	
+	</div>
+</div>

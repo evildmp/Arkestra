@@ -1,0 +1,90 @@
+{% extends "housekeeping/housekeeping.html" %}
+{% block title %}
+    <title>Remove duplicate external links</title>
+{% endblock title %}
+
+{% block operations %}
+
+<h3>Summary</h3>
+<p><strong>Tidy links</strong> tidies and converts External Links.</p>
+<ul>
+	<li>delete blank links</li>
+	<li>identify duplicates in the ExternalLink table</li>
+	<li>reduce duplicates to a single instance</li>
+	<li>delete unused ones</li>
+	<li>change references in ObjectLinks and Link Plugins where these referred to duplicates</li>
+	<li>identify and delete unused sites in the ExternalSite table</li>
+	<li>identify and convert old-style URLFields to ForeignKeys to the ExternalLink table, for:
+	    <ul>
+	        {% for module, module_values in models_dictionary.modules.items %}
+	            <li><strong>{{module_values.application}}</strong>
+	                <ul>
+            	        {% for model in module_values.models %}
+            	        	<li>{{model}}</li>
+                        {% endfor %}
+                    </ul>    
+	           </li>
+	        {% endfor %}
+	    </ul>
+	</li>    
+</ul>
+
+{% if not execute %}
+    <p>This is a <strong>dry run</strong>. Nothing has been changed.</p>
+    <p>Please check the results. If you are satisfied, <a href="/housekeeping/tidy_links/execute/">perform the actions listed below</a>, or <a href="/housekeeping/tidy_links/dryrun/">do another dry run</a>.</p>
+{% else %}
+    <p><a href="/housekeeping/tidy_links/dryrun/">Perform a dry run instead</a>. It's probably too late though.</p>
+
+{% endif %}  
+<div class = "row columns2">
+	<div class = "column firstcolumn">
+
+<h3>Duplicates</h3>
+<p><em>duplicates will be deleted</em></p>
+<p>{{ de_duplicated_links|length }} links were found with duplicates.</p>
+<dl>
+    {% for link in de_duplicated_links %}
+        <dt>{{link}} (kind: {{link.kind}}) had {{ link.duplicates|length }} duplicates</dt>
+        {% for duplicate in link.duplicates %}
+            <dd>{{ duplicate }}: used on {{ duplicate.objects|length }} objects and in {{ duplicate.plugins|length }} plugins</dd>
+        {% endfor %}
+    {% endfor %}
+<dl>
+
+<h3>Unused sites</h3><ul>
+    {% for site in sites_to_be_deleted %}
+        <li>{{site}}</li>
+		{% endfor %}
+<ul>
+<h3>Convert old-style URLFields to ForeignKeys</h3>
+	    <ul>
+	        {% for module, module_values in models_dictionary.modules.items %}
+	            <li><strong>{{module_values.application}}</strong>
+	                <ul>
+            	        {% for model, model_values in module_values.models.items %}
+            	        	<li>{{model}}
+            	        	    <ul>
+            	        	        {% for message in model_values.messages %}
+            	        	            <li>{{message}}</li>
+            	        	        {% endfor %}
+            	        	    </ul>    
+            	        	</li>
+                        {% endfor %}
+                    </ul>    
+	           </li>
+	        {% endfor %}
+	    </ul>
+    
+</div>
+	<div class = "column lastcolumn"><h3>All links</h3>
+<ul>
+    {% for link in links %}
+		<li><strong>{{link}}</strong> <em {% if link.kind_warning %}style="color: red;"{% endif %}>type:</em> {{link.kind}} <em {% if not link.external_site %}style="color: red;"{% endif %}>site:</em> {{link.external_site}}<br /><em {% if not link.url %}style="color: red;"{% endif %}>url:</em> {{link.url}}</li>
+	{% endfor %}
+</ul>
+
+</div>
+</div>
+{% endblock operations %}
+
+

@@ -1,0 +1,27 @@
+{% extends "contacts_and_people/persondetails.html" %}
+{% load publications_tags %}
+
+{% block meta %}
+	<meta name="description" content="Research overview for {{ person}}, {{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
+{% endblock meta %}
+
+{% block title %}
+	<title>{{ person }} - Research </title>
+{% endblock %}
+{% block page_title %}
+	<h{{page_title_heading_level}} class="name">{{ person}} - Research</h{{page_title_heading_level}}>
+{% endblock page_title %}
+
+{% block person_information %}
+  {% if person.researcher.research_synopsis or person.researcher.research_description %}
+    <div>
+        <h3>Research overview</h3>
+        <div>{{person.researcher.research_synopsis|safe}}</div>
+        <div>{{person.researcher.research_description|safe}}</div>
+    </div>
+	{% endif %}
+  <div>
+      <h3>Selected key publications</h3>
+     {% get_selected_person_publications %}
+  </div>
+{% endblock person_information %}
