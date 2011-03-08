@@ -16,7 +16,22 @@ import mptt
 from django.conf import settings
 from cms.models import CMSPlugin
 
+# if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
+multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
+if not multiple_entity_mode and Entity.objects.all():
+    default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
+else:
+    default_entity = None
+print default_entity
+
 class NewsAndEvents(models.Model):
+    # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
+    multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
+    if not multiple_entity_mode and Entity.objects.all():
+        default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
+    else:
+        default_entity = None
+    print default_entity
     class Meta:
         abstract = True
     title = models.CharField(
@@ -40,7 +55,7 @@ class NewsAndEvents(models.Model):
         help_text = u"Use these sensibly - don't send minor items to the home page, for example", 
         null = True, blank = True,
         )
-    hosted_by = models.ForeignKey(Entity, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
+    hosted_by = models.ForeignKey(Entity, default = default_entity.id, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
         help_text = u"The entity responsible for publishing this item",
         )
     enquiries = models.ManyToManyField(Person, 

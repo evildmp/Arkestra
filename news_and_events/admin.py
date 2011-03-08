@@ -57,10 +57,7 @@ class NewsAndEventsForm(forms.ModelForm):
             raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
         #must have content or url in order to be published
         if not (self.cleaned_data["external_url"] or self.cleaned_data["content"] or self.cleaned_data["body"]):          
-            # Note for Stefan: 
-            # to give the user warnings, we do this:
             self.warnings.append("This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now.")
-            # and then use the ModelAdmin.response_change() below - is this the correct way to do it?
 
 # Note for Stefan:
 
@@ -122,12 +119,13 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
                 db_field.name in self.related_search_fields:
             kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
         return super(NewsAndEventsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    def response_change(self, request, obj):
+    def save_model(self, request, obj, form, change):
+        print "respnse-change", self.form.info
         for message in self.form.warnings:
             messages.warning(request, message)
         for message in self.form.info:
             messages.info(request, message)
-        return super(NewsAndEventsAdmin, self).response_change(request, obj)
+        return super(NewsAndEventsAdmin, self).save_model(request, obj, form, change)
 
     class Media:
         js = (
@@ -280,6 +278,7 @@ class EventForm(NewsAndEventsForm):
             self.cleaned_data['single_day_event'] = False
             self.cleaned_data['jumps_queue_on'] = None 
             self.cleaned_data['importance'] = 0
+        print "info", self.info
         return self.cleaned_data
 
     '''
