@@ -5,9 +5,6 @@ from vacancies_and_studentships import models, admin
 from links import schema, LinkWrapper
 from django.utils.encoding import smart_unicode
 
-from sorl.thumbnail.main import DjangoThumbnail, build_thumbnail_name
-from sorl.thumbnail.fields import ALL_ARGS
-
 from datetime import datetime
 from django.template.defaultfilters import date
 

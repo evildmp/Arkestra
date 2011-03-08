@@ -5,8 +5,6 @@ from news_and_events import models, admin
 from links import schema, LinkWrapper
 from django.utils.encoding import smart_unicode
 
-from sorl.thumbnail.main import DjangoThumbnail, build_thumbnail_name
-from sorl.thumbnail.fields import ALL_ARGS
 
 schema.register(models.NewsArticle, search_fields=admin.NewsArticleAdmin.search_fields,
     metadata='subtitle', heading='"Related news"',
