@@ -3,6 +3,7 @@ from django.template import RequestContext
 import django.shortcuts as shortcuts
 from django.core.exceptions import ViewDoesNotExist
 from models import Person, Building, Site, Membership, Entity
+from links.link_functions import object_links
 
 
 from django.contrib.contenttypes.models import ContentType
@@ -180,7 +181,7 @@ def person(request, slug, active_tab = ""):
     meta = {
         "description": ", ".join([str(person), person_description])
         }
-    print meta
+    links = object_links(person)
     return shortcuts.render_to_response(
         "contacts_and_people/persondetails" + str(active_tab) + ".html",
         {
@@ -198,6 +199,7 @@ def person(request, slug, active_tab = ""):
             "active_tab": active_tab,
             "multiple_entity_mode": multiple_entity_mode,
             "meta": meta,
+            "links": links,
         },
         RequestContext(request),
         )

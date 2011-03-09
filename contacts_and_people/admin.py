@@ -29,6 +29,8 @@ from widgetry import fk_lookup
 from contacts_and_people import models
 
 from links.admin import ExternalLinkForm, validate_and_get_messages
+from links.models import ExternalLink
+from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 # for the WYMeditor fields
@@ -200,10 +202,9 @@ class PersonForm(forms.ModelForm):
 class PersonAdmin(PlaceholderAdmin):
 
     search_fields = ['given_name','surname','institutional_username',]
+    inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
     if HAS_PUBLICATIONS:
-        inlines = (MembershipForPersonInline, PhoneContactInline, ResearcherInline, )
-    else:
-        inlines = (MembershipForPersonInline, PhoneContactInline,)
+        inlines.append(ResearcherInline)
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'get_entity', 'slug')
     #list_editable = ('user',)

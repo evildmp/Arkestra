@@ -23,3 +23,11 @@ class ArkestraUser(User):
             last_edit = "Never"
         
         return last_edit
+
+
+from django.db import models
+from cms.plugins.twitter.models import TwitterSearch
+from django.utils.translation import ugettext_lazy as _
+
+class ArkestraTwitterSearch(TwitterSearch):
+    twitter_user = models.CharField(_('twitter user'), max_length=75)

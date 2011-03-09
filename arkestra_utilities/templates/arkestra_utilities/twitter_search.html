@@ -1,0 +1,48 @@
+{% load cms_tags i18n thumbnail %}{%  plugins_media %}
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/plugins.tweet.js"></script><script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function ($) {
+	$('#twitter-container-{{ object.pk }}').tweet({
+		username: 'Laugharne2011',
+		avatar_size: null,
+		count: {{ object.count }},
+		join_text: 'auto',
+		auto_join_text_default: '{% trans "we said," %}',
+		auto_join_text_ed: '{% trans "we" %}',
+		auto_join_text_ing: '{% trans "we were" %}',
+		auto_join_text_reply: '{% trans "we replied to" %}',
+		auto_join_text_url: '{% trans "we were checking out" %}',
+		loading_text: '<span class="loader">{% trans "loading tweets..." %}<\/span>'
+		{% if object.query %},query: "{{ object.query }}"{% endif %}
+	});
+
+	// add tweet animation
+	var bound = {{ object.count }};
+	var start = 0;
+	var interval = 7500;
+
+	$('#twitter-container-{{ object.pk }}').css({
+		'position': 'relative',
+		'left': '0',
+		'top': '0'
+	});
+
+	$('#twitter-container-{{ object.pk }} ul').css('position', 'absolute');
+
+	setInterval(function () {
+		start++;
+		if(start >= bound-1) { start = 0; }
+
+		$('#twitter-container-{{ object.pk }} ul').animate({
+			'left': '0',
+			'top': -start*14+'ex'
+		});
+	}, interval);
+});
+//]]>
+</script>
+
+<div class="plugin_twitter">
+	<a href="http://twitter.com/Laugharne2011/" class="icon-link"><img class="twitter-icon" src = "/media/images/twitter_newbird_white_50px.png" alt = "Our Twitter feed" /></a>
+	<div id="twitter-container-{{ object.pk }}"></div>
+</div>

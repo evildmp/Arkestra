@@ -12,7 +12,6 @@
 	{% endfor %}
 {% endblock meta %}
 
-
 {% block title %}
 	<title>{{ person }}</title>
 {% endblock %}
@@ -77,12 +76,27 @@
 				</div>
 				<div class="column lastcolumn">
 					<div class = "">
-						{% thumbnail person.image 340x340 subject_location=person.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
+						{% thumbnail person.image 340x340 subject_location=person.image.subject_location crop as image %}{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
 						{% if home_role and multiple_entity_mode %}
 							<h3>Roles & memberships</h3>
 								{% membership_tree_roots person %}
 						{% endif %}	
-												
+						{% if links %}
+								{% regroup links by wrapped_destination_obj.heading as link_types %}
+								{% for kind in link_types %}
+								<h3>{{kind.grouper}}</h3>
+				                <ul class= "none">
+				                	{% for link in kind.list %}
+				                		<li>
+				                			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
+				                				{% else %}{{ link.destination_content_object }}
+				                				{% endif %}
+				                			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+				                		</li>
+				                	{% endfor %}
+				                </ul>
+								{% endfor %}
+				        {% endif %}
 					</div>
 				</div>
 			</div>	

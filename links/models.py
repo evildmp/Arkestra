@@ -183,7 +183,7 @@ class LinkType(models.Model):
 class ExternalSite(models.Model):
     class Meta:
         ordering = ['site',]
-    site = models.CharField(max_length=50,help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", blank = True)
+    site = models.CharField(max_length=50,help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", null = True)
     domain = models.CharField(max_length=256, null = True, blank = True,)
     parent = models.ForeignKey('self', blank=True, null = True, related_name='children') # for tree version of ExternalLinks
     
