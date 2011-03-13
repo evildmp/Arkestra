@@ -129,6 +129,8 @@ class ExternalLink(models.Model):
     """
     Links to external sites
     """
+    class Meta:
+        ordering = ['title',]
     title = models.CharField(max_length=256,)
     url = models.CharField(max_length=255,) # this would have unique = True, but it makes it too hard to migrate from databases with duplicates
     external_site = models.ForeignKey('ExternalSite', related_name="links", null = True, blank = True, help_text = u"Leave blank for Cardiff University pages",)

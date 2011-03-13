@@ -8,7 +8,7 @@
 			<a href="{{ event.get_absolute_url }}">
 			<strong>{{event.get_short_title}}</strong>{% if event.image %}{% thumbnail event.image news_and_events.image_size crop subject_location=event.image.subject_location as image %}<img class="right" src="{{ image.url }}" />{% endif %}</a>
 		{% endif %}
-	<div class = "date">{{ event.get_dates }}{% if event.get_times %}, {{ event.get_times|safe }}{% endif %}</div>
+	<div class = "date">{% if show_venue_in_events_lists %}{{ event.building }}{% endif %}{{ event.get_dates }}{% if event.get_times %}, {{ event.get_times|safe }}{% endif %}</div>
 	<div class = "subtitle">{{ event.subtitle }}</div>
 	</div>
 </li>

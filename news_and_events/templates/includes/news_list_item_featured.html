@@ -2,7 +2,7 @@
 <li class = "{{ news_and_events.all_columns }}{{news_article.column_class}}">
 	<div class = "expands ">
 	    {% if news_article.external_url %}
-			<a class = "external" href="{{ news_article.get_absolute_url }}"><strong>{{news_article.short_title}}</strong></a> ({{ news_article.external_url.external_site }})
+			<a class = "external" href="{{ news_article.get_absolute_url }}"><strong>{{news_article.short_title}}</strong></a> - <span class="site-name">{{ news_article.external_url.external_site }}</span>
 	    {% else %}
 			<a href="{{ news_article.get_absolute_url }}"><strong>{{news_article.short_title}}</strong></a>
 		{% endif %}

@@ -38,6 +38,7 @@ def news_and_events(request, slug):
     main_page_body_file = "news_and_event_lists.html"
 
     instance.type = "main_page"
+    instance.show_images = True
     get_news_and_events(instance)
 
     meta = ({"name": "description", "content": "Recent news and forthcoming events"},)
@@ -161,7 +162,7 @@ def event(request, slug):
     """
     print " -------- views.event --------"
     event = Event.objects.get(slug=slug)
-    speakers = event.get_speakers()
+    featuring = event.get_featuring()
     entity = event.hosted_by
     template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
     links = object_links(event)
@@ -170,7 +171,7 @@ def event(request, slug):
         "news_and_events/event.html",
         {"event": event,
         "content_object": event,
-        "speakers": speakers,
+        "featuring": featuring,
         "template": template,
         "entity" : entity,
         "links": links,

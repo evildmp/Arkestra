@@ -1,11 +1,11 @@
 {% load i18n adminmedia arkestra_filters %}
 <div class="cont">
 	<div class="col1">
-		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{{ event.type }}: {{ event.title|truncatewords_by_chars:"40 3 4" }}</a></span>	
+		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{{ event.type }}: {{ event.title }}</a></span>	
 		<a href="{{ url }}{{ event.id }}" class="changelink" title="edit">edit</a>
 	</div>
 	<div class="col2">
-	    <div class="col-actions">{{ event.hosted_by.short_name|truncatewords_by_chars:"30 3 6" }}</div>
+	    <div class="col-actions">{{ event.hosted_by.short_name }}</div>
 	    <div class="col-actions">{{ event.get_dates }}</div>
 		<span id="move-target-{{ event.id }}" class="move-target-container" >
 			{% if has_add_permission %}

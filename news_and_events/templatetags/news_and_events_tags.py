@@ -3,10 +3,10 @@ from django.shortcuts import render_to_response
 from django.db.models import Q
 from news_and_events.models import Event, NewsArticle, NewsAndEventsPlugin
 from contacts_and_people.models import Entity
-from entity_tags import work_out_entity
+# from entity_tags import work_out_entity
 from cms.models import Page
 from datetime import datetime
-
+from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from itertools import chain
@@ -34,5 +34,43 @@ def news_and_events(context, display = "news-and-events", heading = 3, format = 
     instance.layout = "sidebyside"
     instance.current_or_archive = current_or_archive
     instance.show_more_items = False # because we know that these hardcoded lists don't require it
+    CMSNewsAndEventsPlugin().render(context, instance, None)
+    return context
+    
+@register.inclusion_tag('news_and_event_lists.html', takes_context = True)
+def person_events(context):
+    """
+    Depends on Cardiff's row/column CSS
+    Publishes a date-ordered list of news and events
+    """
+    instance = NewsAndEventsPlugin()
+    instance.type = "for_person"
+    instance.display = "events"
+    instance.view = "current"
+    instance.order_by = "date"
+    instance.format = "details"
+    instance.show_images = False
+    instance.person = context["person"]
+    # get_news_and_events(instance)
+    CMSNewsAndEventsPlugin().render(context, instance, None)
+    return context
+    
+@register.inclusion_tag('news_and_event_lists.html', takes_context = True)
+def place_events(context):
+    """
+    Depends on Cardiff's row/column CSS
+    Publishes a date-ordered list of news and events
+    """
+    instance = NewsAndEventsPlugin()
+    instance.type = "for_place"
+    instance.display = "events"
+    instance.view = "current"
+    instance.order_by = "date"
+    instance.format = "details"
+    instance.show_images = False
+    instance.limit_to = None
+    instance.show_venue = False
+    instance.place = context["place"]
+    # get_news_and_events(instance)
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context

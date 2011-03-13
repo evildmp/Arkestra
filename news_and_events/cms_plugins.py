@@ -24,7 +24,6 @@ class NewsAndEventsPluginForm(forms.ModelForm):
             self.cleaned_data["order_by"] = "importance/date"
         if self.cleaned_data["format"] == "featured horizontal":
             self.cleaned_data["layout"] = "stacked"
-            print "making it 3"
             if self.cleaned_data["limit_to"] >3:
                 self.cleaned_data["limit_to"] = 3
             if self.cleaned_data["limit_to"] < 2:
@@ -93,18 +92,16 @@ class CMSNewsAndEventsPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         #print self.render_template
         print "-- in render of CMSNewsAndEventsPlugin --"
-        instance.entity = instance.entity or work_out_entity(context, None)
-        instance.type = "plugin"
+        instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
+        instance.type = getattr(instance, "type", "plugin")
+        instance.show_images = getattr(instance, "show_images", True)
+        print "instance.show_images", instance.show_images
         try:
             render_template = instance.render_template
         except AttributeError:
             pass
         get_news_and_events(instance)
         context.update({ 
-            'entity': instance.entity,
-            'news': instance.news,
-            'actual_events': instance.events,
-            'layout': instance.layout,
             'news_and_events': instance,
             'placeholder': placeholder,
             })

@@ -33,7 +33,7 @@ class NewsAndEventsForm(forms.ModelForm):
     )
     """    
     input_url = forms.CharField(max_length=255, required = False)
-
+    
     def clean(self):
         NewsAndEventsForm.warnings = []
         NewsAndEventsForm.info = []
@@ -102,7 +102,7 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     filter_horizontal = (
-        'enquiries',
+        # 'enquiries',
         'publish_to', 
         )
     prepopulated_fields = {
@@ -222,7 +222,7 @@ class EventForm(NewsAndEventsForm):
         if parent:
             print "admin.clean thinks this has a parent:", parent
             # the many-to-many fields can be inherited
-            m2m_fields = ['publish_to', 'enquiries', 'registration_enquiries', ] #organisers
+            m2m_fields = ['publish_to',  ] #organisers ,'enquiries', 'registration_enquiries',
             for field_name in m2m_fields:
                 print "checking parent field_content"
                 self.cleaned_data[field_name] = self.cleaned_data[field_name] or list(getattr(parent,field_name).all())
@@ -296,11 +296,11 @@ class EventAdmin(NewsAndEventsAdmin):
     # some general settings
     form = EventForm
     filter_horizontal = (
-        'enquiries',
+        # 'enquiries',
         'publish_to', 
-        'registration_enquiries',
+        # 'registration_enquiries',
         #'organisers', 
-        'speakers', 
+        'featuring', 
         )
     change_list_template = "admin/news_and_events/event/change_list.html"
     list_display = ('short_title','parent',  'inherit_name',  'hosted_by','start_date', 'series', 'slug',)
@@ -342,7 +342,7 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_people = (    
         ('People', {
             'fields': (
-            'speakers', 'enquiries', 'registration_enquiries', #'organisers', 
+            'featuring', #'enquiries', 'registration_enquiries', #'organisers', 
             ),
         }),)    
     fieldset_advanced = (    

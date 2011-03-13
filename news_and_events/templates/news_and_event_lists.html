@@ -7,7 +7,7 @@
 				<div class ="tint6">
 					<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
 					<ul class = "none">
-						{% regroup news_and_events.news by date.year as yearlist %}
+						{% regroup news_and_events.news_index_items by date.year as yearlist %}
 						{% for year in yearlist %}
 							<li><strong>{{ year.grouper }}</strong>
 								{% regroup year.list by date|date:"F" as monthlist %}
@@ -35,14 +35,14 @@
 							<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
 							    <ul>
 					        		{% for news_article in get_when.list %}
-										{% include news_and_events.news_listitem_template %}
+										{% include news_and_events.news_list_item_template %}
 					        	    {% endfor %}
 					        	</ul>
 					    	</li>
 					{% endfor %}
 		    	{% else %}
 					{% for news_article in news_and_events.news %}
-						{% include news_and_events.news_listitem_template %}
+						{% include news_and_events.news_list_item_template %}
 					{% endfor %}
 				{% endif %}
 			</ul>
@@ -50,7 +50,7 @@
 			    {% if news_and_events.other_news %}
     				<ul class="fancy close top-border">
     					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{instance.news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
@@ -65,7 +65,7 @@
 					<div class ="tint6">
 						<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
 						<ul class = "none">
-							{% regroup news_and_events.events by start_date.year as yearlist %}
+							{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
 							{% for year in yearlist %}
 								<li><strong>{{ year.grouper }}</strong>
 									{% regroup year.list by start_date|date:"F" as monthlist %}
@@ -94,7 +94,7 @@
 			        		<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
 			    				<ul>
 			    		    		{% for event in get_when.list %}
-			    						{% include news_and_events.events_listitem_template %}
+			    						{% include news_and_events.events_list_item_template %}
 			    		    	    {% endfor %}
 			    				</ul>
 			    			</li>
@@ -102,7 +102,7 @@
 
 				    {% else %}
 				    		{% for event in news_and_events.events %}
-								{% include news_and_events.events_listitem_template %}
+								{% include news_and_events.events_list_item_template %}
 				    	    {% endfor %}
 				    {% endif %}
 				</ul>	
@@ -125,7 +125,7 @@
     			{% if news_and_events.other_events %}
     				<ul class="fancy close top-border">
     					{% for item in news_and_events.other_events %}
-    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
@@ -138,13 +138,13 @@
 {% ifequal news_and_events.type "sub_page" %}
 	<ul class="fancy close top-border">
     					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     					{% for item in news_and_events.other_events %}
-    						<li><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
         {% if news_and_events.link_to_news_and_events %}
-            <li><strong><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/">{{ entity.short_name }} {{ entity.news_page_menu_title|lower }} page</a></strong></li>
+            <li><strong><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/">{{ news_and_events.entity.short_name }} {{ news_and_events.entity.news_page_menu_title|lower }} page</a></strong></li>
     	{% endif %}
 	</ul>
 {% endifequal %}
@@ -153,7 +153,7 @@
 <div class="{{ news_and_events.type }} ">
 	<ul class="fancy close {% ifequal news_and_events.format "Details" %}all_info{% endifequal %}">
         {% if news_and_events.link_to_news_and_events %}
-            <li><strong><a class = "linkIcon" href = "{{entity.get_absolute_url}}news-and-events/">More news &amp; events</a></strong></li>
+            <li><strong><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/">More news &amp; events</a></strong></li>
     	{% endif %}
 	</ul>
 </div>

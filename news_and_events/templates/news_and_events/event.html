@@ -1,6 +1,7 @@
 {% extends template %}
 {% load events_tags %}
 {% load link_tags %}
+{% load placeholder_tags %}
 {% load humanize %}
 {% load typogrify %}
 {% load thumbnail %}
@@ -33,6 +34,7 @@
         <div class="row columns3">
         	<div class="column firstcolumn doublecolumn">
                 {{ event.content|safe }}
+				{% render_placeholder event.body %}
                 {% include "includes/children.html" %}
             </div>
 			<div class="column lastcolumn">

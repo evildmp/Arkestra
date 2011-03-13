@@ -1,10 +1,5 @@
 {% extends template %}
-{% load mptt_tags %}
-{% load person_tags %}
-{% load link_tags %}
-{% load thumbnail %}
-{% load typogrify %}
-{% load placeholder_tags %}
+{% load mptt_tags person_tags link_tags thumbnail typogrify news_and_events_tags placeholder_tags %}
 
 {% block meta %}
 	{% for name,content in meta.items %}
@@ -97,6 +92,7 @@
 				                </ul>
 								{% endfor %}
 				        {% endif %}
+						{% person_events %}
 					</div>
 				</div>
 			</div>	

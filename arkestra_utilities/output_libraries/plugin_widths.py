@@ -8,7 +8,9 @@ def get_placeholder_width(context, plugin):
     """
     # plugin previews don't return a width, so let's just say 100...
     # maybe if we get the width into a context processor, it will always be available
-    placeholder_width = float(context.get('width', 100))
+    # this really needs sorting out
+    width = context.get('width', 100) or 400
+    placeholder_width = float(width)
     print "placeholder width:", placeholder_width
     # check for left-hand menu and adjust width accordingly
     # if plugin.page.flags['no_local_menu'] == False:

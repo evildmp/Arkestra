@@ -22,7 +22,7 @@ if not multiple_entity_mode and Entity.objects.all():
     default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
 else:
     default_entity = None
-print default_entity
+get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
 
 class NewsAndEvents(models.Model):
     # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
@@ -57,11 +57,6 @@ class NewsAndEvents(models.Model):
         )
     hosted_by = models.ForeignKey(Entity, default = default_entity.id, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
         help_text = u"The entity responsible for publishing this item",
-        )
-    enquiries = models.ManyToManyField(Person, 
-        related_name = '%(class)s_person', 
-        help_text = u'The person to whom enquiries about this should be directed ', 
-        null = True, blank = True
         )
     IMPORTANCES = (
         (0, u"Normal"),
@@ -103,6 +98,11 @@ class NewsArticle(NewsAndEvents):
         )
     sticky_until = models.DateField(null=True, blank = True, default=datetime.now, help_text = u"Will be a  featured item until this date")
     is_sticky_everywhere = models.BooleanField(default = False, help_text = u"Will be sticky for other entities") 
+    enquiries = models.ManyToManyField(Person, 
+        related_name = '%(class)s_person', 
+        help_text = u'The person to whom enquiries about this should be directed ', 
+        null = True, blank = True
+        )
     def __unicode__(self):
         return self.title
     def get_when(self):
@@ -133,18 +133,18 @@ class Event(NewsAndEvents):
     class Meta:
         ordering = ['type', 'start_date', 'start_time']
     type = models.ForeignKey('EventType')
-    speakers = models.ManyToManyField(Person, 
-        related_name = '%(class)s_speaker', 
+    featuring = models.ManyToManyField(Person, 
+        related_name = '%(class)s_featuring', 
         null = True, blank = True
         )
-    registration_enquiries = models.ManyToManyField(Person, 
-        related_name = '%(class)s_registration', 
-        null = True, blank = True
-        )
-    organisers = models.ManyToManyField(Person, 
-        related_name = '%(class)s_organiser', 
-        null = True, blank = True
-        )
+    # registration_enquiries = models.ManyToManyField(Person, 
+    #     related_name = '%(class)s_registration', 
+    #     null = True, blank = True
+    #     )
+    # organisers = models.ManyToManyField(Person, 
+    #     related_name = '%(class)s_organiser', 
+    #     null = True, blank = True
+    #     )
     parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
     series = models.BooleanField(
         help_text = u"A series of regular or repeating events, but not an event itself", 
@@ -187,14 +187,12 @@ class Event(NewsAndEvents):
     def get_children_previous(self):
         if self.series:
             return self.children.filter(Q(start_date__lt = datetime.now()) | Q(end_date__lt = datetime.now()) | Q(series = True)).order_by('-start_date')
-    def get_speakers(self, speakers = None):
-        if not speakers:
-            speakers = set()
+    def get_featuring(self, featuring = None):
+        featuring = set(self.featuring.all()) or set()
         if not self.series:
-            speakers.update(self.speakers.all())
             for child_event in self.children.all():
-                speakers.update(child_event.get_speakers(speakers))
-        return speakers
+                featuring.update(child_event.get_featuring(featuring))
+        return featuring
     def get_date_if_needed_and_time_heading(self):
         date_time_heading = []
         if not self.series:
@@ -325,7 +323,7 @@ class Event(NewsAndEvents):
             
             #return self.start_date
             #now = datetime.now()
-            date_format = "Y" # Aikido Cardiff version
+            date_format = "F Y" # Aikido Cardiff version
             # date_format = "F Y" # standard version
             #if self.start_date.year == now.year:               # they're both this year, so:
             #    date_format = "F"                # end format example: "23rd May"

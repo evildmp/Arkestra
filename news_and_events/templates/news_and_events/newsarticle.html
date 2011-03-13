@@ -56,7 +56,8 @@
 					</dl>    
 				</div>
 			<div>						{% thumbnail newsarticle.image 300x300 subject_location=newsarticle.image.subject_location as image %}{% if image %}<img class="right" src="{{ image.url }}" />{% endif %}
-{{ newsarticle.content|safe }}</div>  
+{{ newsarticle.content|safe }}
+{% render_placeholder newsarticle.body %}</div>  
 			<ul class = "news linkIcon">
 				<li><a href = "{{entity.get_absolute_url}}news-and-events/">More {{ entity.short_name }} news</a></li>
 			</ul>

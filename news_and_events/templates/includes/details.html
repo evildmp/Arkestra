@@ -1,17 +1,16 @@
 {% load events_tags %}
 					<div class = "">
-						<h{{h_main_body}}>Details</h{{h_main_body}}>
 						<dl>
 							{% event_date_and_time %}
-						    {% if speakers %}
-		    				    <dt>Instructors</dt>
-									{% for speaker in speakers %}
+						    {% if featuring %}
+		    				    <dt>Featuring</dt>
+									{% for speaker in featuring %}
 										<dd>
 											<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
 										</dd>
 									{% endfor %}
 						    {% endif %}
-						    {% if event.hosted_by %}
+						    {% if event.hosted_by and multiple_entity_mode %}
 								{% with event.hosted_by.website.get_absolute_url as website_url %}
 			    				    <dt>Hosted by</dt>
 									{% if website_url %}
@@ -48,7 +47,7 @@
 						    {% if event.building %}
 		    				    <dt>Venue {% if event.get_children %}(unless otherwise indicated){% endif %}</dt>
 		    				    <dd>{{ event.building.get_postal_address|join:"<br />" }}
-								{% if event.building.map %}<br /><a href="{{event.building.get_absolute_url}}">map/directions</a>{% endif %}</dd>
+								{% if event.building %}<br /><a href="{{event.building.get_absolute_url}}">map/directions</a>{% endif %}</dd>
 						    {% endif %}
 						    {% if event.precise_location %}
 		    				    <dt>Location</dt>

@@ -22,9 +22,10 @@ from django.utils.encoding import smart_unicode
 
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound
 
-from arkestra_utilities import admin_tabs_extension
+# from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.widgets.combobox import ComboboxField
 from widgetry import fk_lookup
+# from widgetry.tabs.admin import ModelAdminWithTabs
 
 from contacts_and_people import models
 

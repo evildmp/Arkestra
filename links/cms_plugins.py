@@ -55,6 +55,7 @@ class PluginLinkInlineForm(ObjectLinkInlineForm):
         model=GenericLinkListPluginItem
 
 class PluginInlineLink(admin.StackedInline):
+    extra=1
     model = GenericLinkListPluginItem
     form = PluginLinkInlineForm
     fieldsets = (
@@ -81,7 +82,7 @@ class LinksPlugin(CMSPluginBase):
     fieldsets = (
         (None, {
             'fields': (
-                ('insert_as',), ('use_link_icons',), ('separator',)
+                ('insert_as', 'use_link_icons',), ('separator', 'final_separator',)
             ),
         }),
     )

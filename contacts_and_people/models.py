@@ -35,6 +35,7 @@ class Building(models.Model):
     postcode = models.CharField(max_length=9, null = True, blank=True)
     site = models.ForeignKey(Site)
     slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", max_length=255, null=True, unique=True,)
+    image = FilerImageField(null=True, blank=True)
     # for the place page
     about = models.TextField(null = True, blank = True, 
         help_text = "About this place",)
