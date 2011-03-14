@@ -131,7 +131,6 @@ def person(request, slug, active_tab = ""):
     """
     Responsible for the person pages
     """
-    print " -------- views.person --------"
     # the straightforward person attributes:            
     person = Person.objects.get(slug=slug)
     access_note = person.access_note
@@ -204,7 +203,35 @@ def person(request, slug, active_tab = ""):
         RequestContext(request),
         )
 
-def place(request, slug):
+def place(request, slug, active_tab = ""):
+    print "place(request, slug):"
+    tabs = [
+        # {
+        #     "address": "directions",
+        #     "title": "Directions & maps"
+        # },
+        {
+            "address": "events",
+            "title": "What's on"
+        }, 
+        ]
+    place = Building.objects.get(slug=slug)
+    if default_entity:
+        request.current_page = default_entity.get_website()
+    else:
+        request.current_page = entity.get_website() # for the menu, so it knows where we are
+    return shortcuts.render_to_response(
+        "contacts_and_people/place%s.html" % active_tab,
+        {
+        "place":place,
+        "tabs": tabs,
+        "active_tab": active_tab,
+        "key": google_maps_key,
+        "template": default_template,
+        },
+        RequestContext(request),        )
+        
+def place_directions(request, slug):
     print "place(request, slug):"
     place = Building.objects.get(slug=slug)
     place.row_class="plugin row"
@@ -219,7 +246,7 @@ def place(request, slug):
     else:
         request.current_page = entity.get_website() # for the menu, so it knows where we are
     return shortcuts.render_to_response(
-        "contacts_and_people/place.html",
+        "contacts_and_people/place_directions.html",
         {"place":place, 
         "key": google_maps_key,
         "template": default_template,

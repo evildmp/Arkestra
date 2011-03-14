@@ -1,0 +1,99 @@
+{% extends template %}
+{% load thumbnail news_and_events_tags typogrify %}
+
+{% block meta %}
+	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+{% endblock meta %}
+
+{% block title %}
+	<title>{{ place.get_name }}</title>
+{% endblock %}
+
+{% block columns %}	
+		@import url("/media/css/_layout/horiz/100.css");
+{% endblock columns %}
+
+{% block scripts %}
+{% if place.latitude and place.longitude and place.zoom and place.map %}
+	<script type="text/javascript"
+	    src="http://maps.google.com/maps/api/js?sensor=false">
+	</script>
+	<script type="text/javascript">
+	 function initialize() {
+	    var latlng = new google.maps.LatLng({{ place.latitude }}, {{place.longitude}});
+	    var myOptions = {
+	      zoom: {{place.zoom}},
+	      center: latlng,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	    };
+	    var map = new google.maps.Map(document.getElementById("map_canvas"),
+	        myOptions);
+	var contentString = '<div id="content">'+
+	    '<div id="siteNotice">'+
+	    '</div>'+
+	    // '<h3 id="firstHeading" class="firstHeading">Chapter Arts Centre</h3>'+
+	    '<div id="bodyContent">'+
+	    '<p>{{ place.name }}</p>'+
+	    '</div>'+
+	    '</div>';
+
+	var infowindow = new google.maps.InfoWindow({
+	    content: contentString
+	});
+
+	var marker = new google.maps.Marker({
+	    position: latlng,
+	    map: map,
+	    title:"Uluru (Ayers Rock)"
+	});
+	// 
+	google.maps.event.addListener(marker, 'click', function() {
+	  infowindow.open(map,marker);
+	});
+  
+	  // To add the marker to the map, call setMap();
+	  marker.setMap(map);  
+	}
+	</script>
+{% endif %}
+{{ block.super }}
+{% endblock scripts %}
+
+{% block body_attributes %}onload="initialize()"{% endblock body_attributes %}
+
+{% block skip_and_language %}
+{% endblock %}
+
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{page_title_heading_level}} class="name">{{ place.get_name }}</h{{page_title_heading_level}}>
+{% endblock pagetitle %}
+
+{% block main_page_body %}
+	<div class="row columns4">
+		<div class="column firstcolumn triplecolumn">
+
+			<div id="map_canvas"></div>
+		</div>
+		<div class="column lastcolumn"> 
+			<h2>Address</h2>
+		   {{ place.get_postal_address|join:"<br />" }}
+		
+		</div>
+	</div>	
+{% if place.getting_here or place.access_and_parking %}
+	<div class="{{ place.row_class }}">
+		<div class="{{ place.getting_here_div_class }}">
+		<h2>Getting here</h2>
+		{{ place.getting_here|safe }}
+		</div>
+		<div class="{{ place.access_and_parking_div_class }}"><h2>Access &amp; parking</h2>
+		{{ place.access_and_parking|safe }}
+		</div>
+	</div>
+{% endif %}	
+{% endblock main_page_body %}
