@@ -1,5 +1,5 @@
 {% load thumbnail %}
-<li class = "{{ news_and_events.all_columns }}{{event.column_class}}">
+<li class = "{{ news_and_events.all_columns }} {{event.column_class}}">
 	<div class = "expands">
 		{% if event.parent.series and event.parent.no_direct_access_to_children %}		
 			<a href="{{ event.parent.get_absolute_url }}">

@@ -6,11 +6,10 @@ urlpatterns = patterns('',
 
     # contacts & people
     (r"^person/(?P<slug>[-\w]+)/(?P<active_tab>[-\w]*)/?$", "contacts_and_people.views.person"),
-    # (r"^place/(?P<slug>[-\w]+)/directions/$", "contacts_and_people.views.place_directions"),
-    (r"^place/(?P<slug>[-\w]+)/(?P<active_tab>[-\w]*)/?$", "contacts_and_people.views.place"),
     (r"^entity/(?P<slug>[-\w]+)/contact/people/(?P<letter>[a-z])/$", "contacts_and_people.views.people"),
     (r"^entity/(?P<slug>[-\w]+)/contact/people/$", "contacts_and_people.views.people"),
     (r"^entity/(?P<slug>[-\w]+)/contact/$", "contacts_and_people.views.contacts_and_people"),
+    (r"^place/(?P<slug>[-\w]+)/(?P<active_tab>[-\w]*)/?$", "contacts_and_people.views.place"),
     # (r"^entity/(?P<slug>[-\w]+)/$", "contacts_and_people.views.entity"),    
     
     )

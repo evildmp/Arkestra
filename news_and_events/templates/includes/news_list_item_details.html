@@ -1,5 +1,5 @@
 {% load thumbnail %}
-<li class = "{{ news_item_class }} ">
+<li class = "{{ news_item_class }} {{news.get_when|slugify}} news-list-item row">
     {% if news_article.external_url %}<strong><a class = "external" href="{{ news_article.get_absolute_url }}">{{news_article.short_title}}</a></strong> - <span class="site-name">{{ news_article.external_url.external_site }}</span>
     {% else %}<strong><a href="{{ news_article.get_absolute_url }}">{{news_article.short_title}}</a></strong>{% endif %}
     {% if news_article.image %}{% thumbnail news_article.image news_and_events.image_size crop subject_location=news_article.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="" />{% endif %}

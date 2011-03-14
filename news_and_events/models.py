@@ -323,7 +323,7 @@ class Event(NewsAndEvents):
             
             #return self.start_date
             #now = datetime.now()
-            date_format = "F Y" # Aikido Cardiff version
+            date_format = "F Y D" # Aikido Cardiff version
             # date_format = "F Y" # standard version
             #if self.start_date.year == now.year:               # they're both this year, so:
             #    date_format = "F"                # end format example: "23rd May"

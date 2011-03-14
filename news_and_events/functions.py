@@ -211,7 +211,7 @@ def determine_layout_settings(instance):
         instance.format = "featured"
     else:
         instance.image_size = (75,75)
-        instance.news_list_class = instance.events_list_class = "news_and_events"
+        instance.news_list_class = instance.events_list_class = "news-and-events"
         # instance.show_events_when = True    # no when group in featured style
     return
 
