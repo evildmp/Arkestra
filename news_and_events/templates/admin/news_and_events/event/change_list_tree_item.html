@@ -6,6 +6,7 @@
 	</div>
 	<div class="col2">
 	    <div class="col-actions">{{ event.hosted_by.short_name }}</div>
+	    <div class="col-actions">{{ event.importance }}</div>
 	    <div class="col-actions">{{ event.get_dates }}</div>
 		<span id="move-target-{{ event.id }}" class="move-target-container" >
 			{% if has_add_permission %}

@@ -23,6 +23,7 @@ if not multiple_entity_mode and Entity.objects.all():
 else:
     default_entity = None
 get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
+collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 
 class NewsAndEvents(models.Model):
     # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
@@ -70,7 +71,13 @@ class NewsAndEvents(models.Model):
         help_text = "Do not meddle with this unless you know exactly what you're doing!")
     content = models.TextField(null = True, blank = True, 
         help_text = "Not used or required for external items",)
-    
+
+    def get_importance(self):
+        if self.importance and not collect_top_events: # only of they are not being gathered together
+            return "important"
+        else:
+            return ""
+
     def external_site(self):
         return self.external_url.external_site
             

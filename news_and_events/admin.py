@@ -303,8 +303,8 @@ class EventAdmin(NewsAndEventsAdmin):
         'featuring', 
         )
     change_list_template = "admin/news_and_events/event/change_list.html"
-    list_display = ('short_title','parent',  'inherit_name',  'hosted_by','start_date', 'series', 'slug',)
-    list_editable = ('parent', 'inherit_name', 'hosted_by', 'start_date',  'series', 'slug',)
+    list_display = ('short_title','parent',  'inherit_name',  'start_date', 'series', 'slug',)
+    list_editable = ('parent', 'inherit_name',  'start_date',  'series', 'slug',)
     search_fields = ['title',]
     list_filter = ('start_date',)
     save_as = True

@@ -11,6 +11,8 @@ if not multiple_entity_mode:
 else:
     default_entity = None
 
+collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
+
 def get_news_and_events(instance):
     """
     display
@@ -57,6 +59,8 @@ def get_news_and_events(instance):
     convert_and_save_old_format(instance)   # old-style values might need to be converted (surely no longer required)
 
     if "news" in instance.display:          # have we been asked to get news?
+        print
+        print "============ Getting news ============"
         if instance.order_by == "importance/date":
             top_news, ordinary_news = get_news_ordered_by_importance_and_date(instance)
             instance.news =  top_news + ordinary_news
@@ -64,10 +68,12 @@ def get_news_and_events(instance):
             instance.news = get_publishable_news(instance)
         
     if "events" in instance.display:    # have we been asked to get events?
-        get_events(instance)            #
+        print
+        print "============ Getting events ============"
+        get_events(instance)            # go and get events
         if instance.view == "archive":
             instance.events = instance.previous_events
-        elif instance.order_by == "importance/date":
+        elif instance.order_by == "importance/date" and collect_top_events:
             get_events_ordered_by_importance_and_date(instance)
             instance.events = instance.top_events + instance.ordinary_events
         else: 
@@ -246,6 +252,7 @@ def get_events_ordered_by_importance_and_date(instance):
     """
     When we need more than just a simple list-by-date, this keeps the top items separate
     """
+    print "____ get_events_ordered_by_importance_and_date() ____"
     ordinary_events = []
     # split the within-date items for this entity into two sets
     actual_events = instance.forthcoming_events
@@ -259,22 +266,20 @@ def get_events_ordered_by_importance_and_date(instance):
         Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
         jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
         )
-    print "_____________________________________________________"
-    print "Top events", top_events
+    print "Queue-jumping top events", top_events
     print "Non top events", non_top_events.count()
 
     # now we have to go through the non-top items, and find any that can be promoted to top_events
     # get the set of dates where possible promotable items can be found             
     dates = non_top_events.dates('start_date', 'day')
-    print "_____________________________________________________"
     print "Going through the date set"
     for date in dates:
-        print "  examining possibles from", date
+        print "    examining possibles from", date
         # get all non-top items from this date
         possible_top_events = non_top_events.filter(
             start_date = date)
         # promotable items have importance > 0
-        print "    found", possible_top_events.count(), "of which I will promote", possible_top_events.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1).count()
+        print "        found", possible_top_events.count(), "of which I will promote", possible_top_events.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1).count()
         # promote the promotable items
         list(top_events).extend(possible_top_events.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1))
         top_events = top_events | possible_top_events.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1)
@@ -284,21 +289,20 @@ def get_events_ordered_by_importance_and_date(instance):
         if demotable_items.count() > 0:
             # put those unimportant items into ordinary news
             ordinary_events = demotable_items
-            print "    demoting",  demotable_items.count()
+            print "        demoting",  demotable_items.count()
             # and stop looking for any more
             break
     # and everything left in non-top items after this date
     if dates:
         remaining_items = non_top_events.filter(start_date__gt=date)
-        print "  demoting the remaining", remaining_items.count()            
+        print "    demoting the remaining", remaining_items.count()            
         ordinary_events = ordinary_events | remaining_items
         top_events = list(top_events)
         ordinary_events = list(ordinary_events)
         for item in top_events:
             item.sticky = True
         
-        print "_____________________________________________________"
-        print "Top events", len(top_events), top_events
+        print "Top events after processing", len(top_events), top_events
         print "Ordinary events", len(ordinary_events)
         # ordinary_events.sort(key=operator.attrgetter('start_date'))
     instance.top_events, instance.ordinary_events = top_events, ordinary_events
@@ -328,21 +332,19 @@ def get_previous_events(instance):
 
 def get_events(instance):
     """
-    sets fortcoming_events, previous_events, series_events
+    returns forthcoming_events, previous_events, series_events
     """
+    print "____ get_events() ____"
     if instance.type == "for_person":
         all_events = instance.person.event_featuring.all()
-        print "all", all_events
     elif instance.type == "for_place":
         all_events = instance.place.event_set.all()
-        print "all", all_events
-    else:    
+    else:
         instance.entity = instance.entity or work_out_entity(context, None)
         all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
         # if an entity should automatically publish its descendants' items
         #     all_events = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-    print "_____________________________________________________"
-    print "All events", all_events.count()
+    print "All events", instance.type, all_events.count()
     
     actual_events = all_events.filter(
         # if it's (not a series and not a child) - series events are excluded, children too unless:
@@ -350,7 +352,6 @@ def get_events(instance):
         # tough luck if it's the child of a series and can't be advertised
         Q(series = False, parent = None) | Q(parent__series = True,  parent__do_not_advertise_children = False), 
         )
-    print "_____________________________________________________"
     print "Actual events", actual_events.count()
         
     instance.forthcoming_events = actual_events.filter(  
@@ -363,11 +364,9 @@ def get_events(instance):
         Q(single_day_event = True, start_date__gte = datetime.now()) | Q(single_day_event = False, end_date__gte = datetime.now())
         ).order_by('-start_date')
         
-    print "_____________________________________________________"
     print "Previous events", instance.previous_events.count()
         
     instance.series_events = all_events.filter(series = True)
-    print "_____________________________________________________"
     print "Series events", instance.series_events.count()
 
     return 
@@ -377,6 +376,7 @@ def get_news_ordered_by_importance_and_date(instance):
     # split the within-date items for this entity into two sets
 
     publishable_news = get_publishable_news(instance)
+    print "Publishable news", publishable_news
     sticky_news = publishable_news.order_by('-importance').filter(
         Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
         sticky_until__gte=datetime.today(),  
@@ -385,7 +385,6 @@ def get_news_ordered_by_importance_and_date(instance):
         Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
         sticky_until__gte=datetime.today(), 
         )
-    print "_____________________________________________________"
     print "Sticky news", sticky_news.count()
     print "Non-sticky news", non_sticky_news.count()
     top_news = list(sticky_news)
@@ -393,14 +392,13 @@ def get_news_ordered_by_importance_and_date(instance):
     # now we have to go through the non-top items, and find any that can be promoted
     # get the set of dates where possible promotable items can be found             
     dates = non_sticky_news.dates('date', 'day').reverse()
-    print "_____________________________________________________"
     print "Going through the date set"
     for date in dates:
-        print "  examining possibles from", date
+        print "    examining possibles from", date
         # get all non-top items from this date
         possible_top_news = non_sticky_news.filter(date__year=date.year, date__month= date.month, date__day= date.day)
         # promotable items have importance > 0
-        print "    found", possible_top_news.count(), "of which I will promote", possible_top_news.filter(Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),importance__gte = 1).count()
+        print "        found", possible_top_news.count(), "of which I will promote", possible_top_news.filter(Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),importance__gte = 1).count()
         # add the good ones to the top news list
         top_news.extend(possible_top_news.filter(
             Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
@@ -414,17 +412,16 @@ def get_news_ordered_by_importance_and_date(instance):
         if demotable_items.count() > 0:
             # put those unimportant items into ordinary news
             ordinary_news.extend(demotable_items)
-            print "    demoting",  demotable_items.count()
+            print "        demoting",  demotable_items.count()
             # and stop looking for any more
             break
     # and add everything left in non-sticky news before this date
     if dates:
         remaining_items = non_sticky_news.filter(date__lte=date)
-        print "  demoting the remaining", remaining_items.count()
+        print "    demoting the remaining", remaining_items.count()
         ordinary_news.extend(remaining_items)
         for item in top_news:
             item.sticky = True
-        print "_____________________________________________________"
         print "Top news", len(top_news)
         print "Ordinary news", len(ordinary_news)
         ordinary_news.sort(key=operator.attrgetter('date'), reverse = True)
@@ -435,8 +432,6 @@ def get_publishable_news(instance):
     publishable_news = get_all_news(instance) \
         .filter(date__lte = datetime.today()) \
         .order_by('-date')
-    print "_____________________________________________________"
-    print "Publishable news", publishable_news.count()
     return publishable_news
 
 
@@ -448,7 +443,6 @@ def get_all_news(instance):
             ).distinct()
     else:
         all_news = NewsArticle.objects.all()
-    print "_____________________________________________________"
     print "All news", all_news.count()
     return all_news
 

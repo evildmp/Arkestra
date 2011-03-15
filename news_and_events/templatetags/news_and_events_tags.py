@@ -55,6 +55,7 @@ def person_events(context):
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context
     
+
 @register.inclusion_tag('news_and_event_lists.html', takes_context = True)
 def place_events(context):
     """
@@ -74,3 +75,10 @@ def place_events(context):
     # get_news_and_events(instance)
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context
+    
+@register.inclusion_tag('event_index.html', takes_context = True)
+def event_index(context):
+    """
+    """
+    events = context["news_and_events"].events
+    return {"xxx": len(events)}

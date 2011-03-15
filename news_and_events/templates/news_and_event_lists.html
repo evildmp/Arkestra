@@ -1,3 +1,4 @@
+{% load news_and_events_tags %}
 <div class="{{ news_and_events.row_class }} {{ news_and_events.type }}">
 
 	{% if news_and_events.news or news_and_events.other_news %}
@@ -77,6 +78,8 @@
 								</li>
 							{% endfor %}
 						</ul>
+						{% event_index %}
+
 					</div>
 				</div>
 		{% endif %}
