@@ -24,6 +24,7 @@
 
 {% block pagetitle %}
 	<h{{page_title_heading_level}} class="name">{{ person}}</h{{page_title_heading_level}}>
+	{% include "includes/position.html" %}
 {% endblock pagetitle %}
 
 {% block main_page_body %}
@@ -59,7 +60,6 @@
 
 						{% if home_role or address or location or access_note or email or phone.all %}<h3>Contact information</h3>
 						<dl>
-							{% include "includes/position.html" %}
 							{% include "includes/address.html" %}
 							{% include "includes/precise_location.html" %}
 							{% include "includes/access_notes.html" %}

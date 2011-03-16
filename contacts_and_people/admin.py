@@ -207,7 +207,7 @@ class PersonAdmin(PlaceholderAdmin):
     if HAS_PUBLICATIONS:
         inlines.append(ResearcherInline)
     form = PersonForm
-    list_display = ( 'surname', 'given_name', 'get_entity', 'slug')
+    list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
     #list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}

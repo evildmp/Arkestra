@@ -4,6 +4,7 @@ from datetime import datetime
 import operator
 from django.conf import settings
 from contacts_and_people.models import Entity
+from itertools import groupby
 
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
 if not multiple_entity_mode:
@@ -78,7 +79,7 @@ def get_news_and_events(instance):
             instance.events = instance.top_events + instance.ordinary_events
         else: 
             instance.events = instance.forthcoming_events
-        
+        build_indexes(instance)
     set_links_to_more_views(instance)       # limit lists, set links to previous/archived/etc items as needed
     set_limits_and_indexes(instance)
     determine_layout_settings(instance)     # work out a layout
@@ -341,7 +342,7 @@ def get_events(instance):
         all_events = instance.place.event_set.all()
     else:
         instance.entity = instance.entity or work_out_entity(context, None)
-        all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
+        all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
         # if an entity should automatically publish its descendants' items
         #     all_events = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
     print "All events", instance.type, all_events.count()
@@ -357,12 +358,12 @@ def get_events(instance):
     instance.forthcoming_events = actual_events.filter(  
         # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
         Q(single_day_event = True, start_date__gte = datetime.now()) | Q(single_day_event = False, end_date__gte = datetime.now())
-        ).order_by('start_date')
+        )
 
     instance.previous_events = actual_events.exclude(  
         # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
         Q(single_day_event = True, start_date__gte = datetime.now()) | Q(single_day_event = False, end_date__gte = datetime.now())
-        ).order_by('-start_date')
+        ).order_by('-start_date', '-start_time')
         
     print "Previous events", instance.previous_events.count()
         
@@ -465,3 +466,11 @@ def convert_and_save_old_format(instance):
         instance.display = "events"
         instance.save()
     return
+    
+def build_indexes(instance):
+    """docstring for build_indexes"""
+    return
+    print [{'grouper': key, 'list': list(val)}
+            for key, val in
+            groupby(instance.events, lambda v, f="start_date": f(v, True))
+        ]

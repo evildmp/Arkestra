@@ -47,7 +47,6 @@
 						    {% if event.building %}
 		    				    <dt>Venue {% if event.get_children %}(unless otherwise indicated){% endif %}</dt>
 		    				    <dd>{{ event.building.get_postal_address|join:"<br />" }}
-								{% if event.building %}<br /><a href="{{event.building.get_absolute_url}}directions/">map/directions</a>{% endif %}</dd>
 						    {% endif %}
 						    {% if event.precise_location %}
 		    				    <dt>Location</dt>

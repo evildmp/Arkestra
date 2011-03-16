@@ -81,4 +81,8 @@ def event_index(context):
     """
     """
     events = context["news_and_events"].events
-    return {"xxx": len(events)}
+    index_items = context["news_and_events"].events_index_items
+    return {
+        "index_items": index_items,
+        "indexer": "start_date.year",
+        }

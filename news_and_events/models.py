@@ -223,14 +223,14 @@ class Event(NewsAndEvents):
             end_date = self.end_date
             if not end_date or self.single_day_event:
                 end_date = start_date
-            start_date_format = end_date_format = "jS F Y"
+            start_date_format = end_date_format = "l jS F Y"
             now = datetime.now()
             if start_date.year == end_date.year:            # start and end in the same year, so:
-                start_date_format = "jS F"                  # start format example: "3rd May"
+                start_date_format = "l jS F"                  # start format example: "3rd May"
                 if start_date.month == end_date.month:      # start and end in the same month, so:
-                    start_date_format = "jS"                # start format example: "21st" 
+                    start_date_format = "l jS"                # start format example: "21st" 
                 if end_date.year == now.year:               # they're both this year, so:
-                    end_date_format = "jS F"                # end format example: "23rd May"
+                    end_date_format = "l jS F"                # end format example: "23rd May"
             if self.single_day_event:
                 dates = date(start_date, end_date_format)
             else:
@@ -330,7 +330,7 @@ class Event(NewsAndEvents):
             
             #return self.start_date
             #now = datetime.now()
-            date_format = "F Y D" # Aikido Cardiff version
+            date_format = "F Y" # Aikido Cardiff version
             # date_format = "F Y" # standard version
             #if self.start_date.year == now.year:               # they're both this year, so:
             #    date_format = "F"                # end format example: "23rd May"

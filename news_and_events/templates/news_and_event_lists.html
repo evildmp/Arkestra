@@ -1,4 +1,3 @@
-{% load news_and_events_tags %}
 <div class="{{ news_and_events.row_class }} {{ news_and_events.type }}">
 
 	{% if news_and_events.news or news_and_events.other_news %}
@@ -65,8 +64,8 @@
 				<div class = "{{ news_and_events.index_div_class }}">
 					<div class ="tint6">
 						<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
+						{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
 						<ul class = "none">
-							{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
 							{% for year in yearlist %}
 								<li><strong>{{ year.grouper }}</strong>
 									{% regroup year.list by start_date|date:"F" as monthlist %}
@@ -78,8 +77,6 @@
 								</li>
 							{% endfor %}
 						</ul>
-						{% event_index %}
-
 					</div>
 				</div>
 		{% endif %}

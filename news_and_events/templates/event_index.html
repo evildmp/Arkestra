@@ -1,1 +1,7 @@
-{{ xxx }}
+{% load news_and_events_tags %}
+----
+<ul>
+	{% regroup index_items by indexer as indexlist %}
+	{{ indexlist }}
+</ul>
+---	

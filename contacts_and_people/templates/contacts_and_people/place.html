@@ -41,7 +41,7 @@
 					</li>
 				{% else %}
 					<li> 
-						<a href="{{ place.get_absolute_url }}{{tab.address}}">{{tab.address|capfirst}}</a>
+						<a href="{{ place.get_absolute_url }}{{tab.address}}">{{tab.title|capfirst}}</a>
 					</li>            
 				{% endifequal %}        
 			{% endfor %}
@@ -52,7 +52,6 @@
     		<div class="column firstcolumn">
     			<h2>Address</h2>
     		   {{ place.get_postal_address|join:"<br />" }}
-               <br /><a href="{{event.building.get_absolute_url}}directions/">map/directions</a>
     		</div>
     		<div class="column lastcolumn"> 
     		</div>
