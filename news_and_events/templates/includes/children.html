@@ -11,9 +11,9 @@
 		<ul class = "none">
 		    {% for child_event in event.get_children_forthcoming %}
     			{% if event.no_direct_access_to_children and not child_event.content %}
-    				<li><strong>{{child_event.title}}</strong>{% if child_event.subtitle %}<br />{{ child_event.subtitle }}{% endif %}
+    				<li class="event-list-item"><strong>{{child_event.title}}</strong>{% if child_event.subtitle %}<br />{{ child_event.subtitle }}{% endif %}
     			{% else %}
-    				<li><a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>{% if child_event.subtitle %}<br />{{ child_event.subtitle }}{% endif %}
+    				<li class="event-list-item"><a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>{% if child_event.subtitle %}<br />{{ child_event.subtitle }}{% endif %}
     			{% endif %}
 				<dl>
 				    {% if event.series %}{% event_date_and_time child_event %}{% endif %}

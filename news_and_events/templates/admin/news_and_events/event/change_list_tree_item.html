@@ -8,6 +8,7 @@
 	    <div class="col-actions">{{ event.hosted_by.short_name }}</div>
 	    <div class="col-actions">{{ event.importance }}</div>
 	    <div class="col-actions">{{ event.get_dates }}</div>
+		<div class="col-actions">{{ event.start_time }}-{{ event.end_time }}</div>
 		<span id="move-target-{{ event.id }}" class="move-target-container" >
 			{% if has_add_permission %}
 				<a href="#" class="move-target left" title="{% trans "insert above" %}"><img alt="" src="{% admin_media_prefix %}img/admin/arrow-up.gif"/></a><span class="line first"> |</span>
