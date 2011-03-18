@@ -3,10 +3,10 @@
 	<div class = "expands">
 		{% if event.parent.series and event.parent.no_direct_access_to_children %}		
 			<a href="{{ event.parent.get_absolute_url }}">
-			<strong>{{event.parent.get_short_title}}</strong>{% if event.parent.image %}{% thumbnail event.parent.image news_and_events.image_size crop subject_location=event.parent.image.subject_location as image %}<img class="right" src="{{ image.url }}" />{% endif %}</a>: 
+			<strong>{{event.parent.get_short_title}}</strong>{% if event.parent.image %}{% thumbnail event.parent.image news_and_events.image_size crop subject_location=event.parent.image.subject_location as image %}<img alt="{% if event_list_item_details_image.alt %}{{ object.alt }}{% endif %}" class="right" src="{{ image.url }}" />{% endif %}</a>: 
 		{% else %}
 			<a href="{{ event.get_absolute_url }}">
-			<strong>{{event.get_short_title}}</strong>{% if event.image %}{% thumbnail event.image news_and_events.image_size crop subject_location=event.image.subject_location as image %}<img class="right" src="{{ image.url }}" />{% endif %}</a>
+			<strong>{{event.get_short_title}}</strong>{% if event.image %}{% thumbnail event.image news_and_events.image_size crop subject_location=event.image.subject_location as image %}<img alt="{% if event_list_item_details_image.alt %}{{ object.alt }}{% endif %}" class="right" src="{{ image.url }}" />{% endif %}</a>
 		{% endif %}
 	<div class = "date">{% if show_venue_in_events_lists %}{{ event.building }}{% endif %}{{ event.get_dates }}{% if event.get_times %}, {{ event.get_times|safe }}{% endif %}</div>
 	<div class = "subtitle">{{ event.subtitle }}</div>
