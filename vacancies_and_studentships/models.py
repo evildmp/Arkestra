@@ -1,7 +1,9 @@
 from django.db import models
 from contacts_and_people.models import Entity, Person
+from links.models import ExternalLink
 from cms.models import Page
 from datetime import datetime
+from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
 
@@ -16,10 +18,12 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text = "Maximum two lines",
         )
     description = models.TextField(help_text = "Not used or required for external items",)
+    body = PlaceholderField('description',)
     hosted_by = models.ForeignKey(Entity,
         blank=True, null=True,
         help_text = u"The research group or department responsible for this vacancy")
     url = models.URLField(verify_exists=True, blank=True, null=True, help_text = u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
+    external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
     please_contact = models.ForeignKey(Person, 
         related_name = '%(class)s_person', 
         help_text = u'The person to whom enquiries about this should be directed ', 
@@ -40,8 +44,8 @@ class Vacancy(CommonVacancyAndStudentshipInformation):
     job_number = models.CharField(max_length = 9)
     salary = models.CharField(blank=True, help_text=u"Please include currency symbol", max_length=255, null=True,)
     def get_absolute_url(self):
-        if self.url:
-            return self.url
+        if self.external_url:
+            return self.external_url.url
         else:
             return "/vacancy/%s/" % self.slug
 
@@ -51,8 +55,8 @@ class Studentship(CommonVacancyAndStudentshipInformation):
         null = True, blank = True
         )
     def get_absolute_url(self):
-        if self.url:
-            return self.url
+        if self.external_url:
+            return self.external_url.url
         else:
             return "/studentship/%s/" % self.slug
 

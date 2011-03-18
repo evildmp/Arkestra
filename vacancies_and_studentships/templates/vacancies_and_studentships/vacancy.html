@@ -1,5 +1,6 @@
 {% extends template %}
 {% load link_tags %}
+{% load placeholder_tags %}
 
 {% block columns %}	
     {% get_links as links %}
@@ -31,6 +32,7 @@
 	<div class ="column firstcolumn ">
 		<p>{{ vacancy.summary }}</p>
 		
+		<div>{% render_placeholder vacancy.body %}</div>
 		<div>{{ vacancy.description|safe }}</div>
 	</div>
 	<div class = "column lastcolumn">

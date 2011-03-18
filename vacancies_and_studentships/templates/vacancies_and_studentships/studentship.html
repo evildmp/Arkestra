@@ -1,5 +1,6 @@
 {% extends template %}
 {% load link_tags %}
+{% load placeholder_tags %}
 
 {% block columns %}	
     {% get_links as links %}
@@ -33,6 +34,7 @@
 			<p>{{ studentship.summary }}</p>
 			
 			<div>{{ studentship.description|safe }}</div>
+			<div>{% render_placeholder studentship.body %}</div>
 		</div>
 		<div class = "column lastcolumn">
 			<div class = "tint1">

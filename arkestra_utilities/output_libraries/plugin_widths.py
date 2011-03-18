@@ -81,26 +81,27 @@ def calculate_container_width(plugins, width, auto = False):
         soup = BeautifulSoup(''.join(body)) # soup it up
         target = soup.find(id="plugin_obj_"+str(plugin.id))  # find the element with that id in the HTML
         grandparent_class = target.parent.parent.get("class", "") # find the image's span's containing div
-        print grandparent_class
+        print "  grandparent_class:", grandparent_class
         if "space-on" in grandparent_class:
             space = True
+        print "  space:", space
 
         if "images-left" in grandparent_class or "images-right" in grandparent_class:
             floated = True
         
         reduce_key = (auto, space, floated)
         
-        print "reduce key", reduce_key
-        print reduce_by[reduce_key]
+        print "  reduce key:", reduce_key, "reduceby:", reduce_by[reduce_key]
         
         width = width * reduce_by[reduce_key] / 100
-        print "reduced width", width
+        print "  reduced width: ", width
+        print
         
         elements = reversed(target.findParents()) # get the tree of elements and reverse it
-        print "-- Examining elements --"        
+        print "  -- examining elements --"        
         for element in elements:
             element_class = element.get("class", "") # and its HTML class
-            print  ">", element.name, element_class
+            print  "    element name and class:", element.name, element_class
             # width reduction for borders
             if "image-borders" in element_class:
                 has_borders = True
@@ -110,14 +111,14 @@ def calculate_container_width(plugins, width, auto = False):
                 width = width - 32
             # prove we know when we have found a row 
             if re.search(r"\brow\b", element_class):
-                print "  this is a row:", element_class
+                print "    this is a row:", element_class
                 if "columns" in element_class:
-                    print "  width:", width
+                    print "    width:", width
             # if this is a column whose parent is a row        
             if re.search(r"\column\b", element_class) and "columns" in element.parent.get("class", ""):
                 # columns is the number of columns, or 1 if not specified
                 columns = float(element.parent.get("class", "").split("columns")[1][0] or 1)
-                print "  this is a column:", element_class
+                print "    this is a column:", element_class
                 # if double or triplewidth
                 if "triplecolumn" in element_class:
                     columnwidth = 3.0
@@ -125,7 +126,7 @@ def calculate_container_width(plugins, width, auto = False):
                     columnwidth = 2.0
                 else:
                     columnwidth = 1
-                print "  this column width:", columnwidth, "/", columns
+                print "    this column width:", columnwidth, "/", columns
                 # now use the value of columnwidth/columns as a key to the column_widths dict
                 width = width * column_widths[columnwidth/columns]/100
 

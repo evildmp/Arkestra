@@ -15,6 +15,8 @@ from django.db.models import ForeignKey
 from widgetry import fk_lookup
 from links.admin import ObjectLinkInline
 
+# for the plugin system
+from cms.admin.placeholderadmin import PlaceholderAdmin
 
 COMMON_SEARCH_FIELDS = ['short_title','title','summary','description','slug','url']
 
@@ -30,7 +32,8 @@ class StudentshipForm(forms.ModelForm):
             raise forms.ValidationError("A Host is required except for Studentships on external websites - please provide either a Host or a URL")                              
         return self.cleaned_data    
 
-class StudentshipAdmin(admin_tabs_extension.ModelAdminWithTabs):
+# class StudentshipAdmin(admin_tabs_extension.ModelAdminWithTabs):
+class StudentshipAdmin(PlaceholderAdmin):
     search_fields = COMMON_SEARCH_FIELDS
     form = StudentshipForm
     list_display = ('short_title', 'hosted_by', 'closing_date',)
@@ -93,10 +96,10 @@ class StudentshipAdmin(admin_tabs_extension.ModelAdminWithTabs):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/javascript/jquery/ui/ui.tabs.js',
+            '/media/arkestra/js/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/javascript/jquery/themes/base/ui.all.css',)
+            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
         }    
     
 admin.site.register(models.Studentship,StudentshipAdmin)
@@ -116,7 +119,8 @@ class VacancyForm(forms.ModelForm):
             raise forms.ValidationError("A Host is required except for Vacancies on external websites - please provide either a Host or a URL")                  
         return self.cleaned_data    
     
-class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
+# class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
+class VacancyAdmin(PlaceholderAdmin):
     search_fields = COMMON_SEARCH_FIELDS + ['job_number']
     form = VacancyForm
     list_display = ('short_title', 'hosted_by', 'closing_date',)
@@ -178,9 +182,9 @@ class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/javascript/jquery/ui/ui.tabs.js',
+            '/media/arkestra/js/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/javascript/jquery/themes/base/ui.all.css',)
+            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
         }          
 admin.site.register(models.Vacancy,VacancyAdmin)
