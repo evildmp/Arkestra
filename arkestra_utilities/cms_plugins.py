@@ -14,3 +14,4 @@ class ArkestraTwitterSearchPlugin(TwitterSearchPlugin):
         js = ('%splugins/twitter/js/jquery.tweet.js' % settings.CMS_MEDIA_URL,)
     
 plugin_pool.register_plugin(ArkestraTwitterSearchPlugin)
+

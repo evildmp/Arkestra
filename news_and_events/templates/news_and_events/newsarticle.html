@@ -1,17 +1,8 @@
 {% extends template %}
-{% load humanize %}
-{% load typogrify %}
-{% load news_tags %}
-{% load humanize %}
-{% load typogrify %}
-{% load link_tags %}
-{% load thumbnail %}
+{% load humanize typogrify news_tags humanize link_tags thumbnail placeholder_tags %}
 
 {% block columns %}
 	{% get_links as links %}
-	{% if links %}@import url("/media/css/_layout/horiz/80_20.css");
-	{% else %}@import url("/media/css/_layout/horiz/100.css");
-    {% endif %}
 {% endblock columns %}
 
 {% block meta %}
@@ -22,8 +13,6 @@
 	<title>{{ newsarticle }}</title>
 {% endblock %}
 
-{% block skip_and_language %}
-{% endblock %}
 
 {% block nav_local %}
 {% endblock nav_local %}
@@ -39,30 +28,43 @@
 
 {% block main_page_body %}
     {% block entity_information %}
-		<div class="row">
-			 <div class = "">
-					<dl>
-						{% newsarticle_date %}
-					    {% if newsarticle.enquiries.all %}
-	    				    <dt>General enquiries</dt>
-	    				    <dd>
-								{% for person in newsarticle.enquiries.all %}
-									<dd>
-										<a href = "{{ person.get_absolute_url }}">{{ person }}</a>
-									</dd>
-								{% endfor %}
-	    				    </dd>
-					    {% endif %}
-					</dl>    
-				</div>
-			<div>						{% thumbnail newsarticle.image 300x300 subject_location=newsarticle.image.subject_location as image %}{% if image %}<img class="right" src="{{ image.url }}" />{% endif %}
-{{ newsarticle.content|safe }}
-{% render_placeholder newsarticle.body %}</div>  
-			<ul class = "news linkIcon">
-				<li><a href = "{{entity.get_absolute_url}}news-and-events/">More {{ entity.short_name }} news</a></li>
-			</ul>
-		</div>	
-
+        <div class="row columns3">
+        	<div class="column firstcolumn doublecolumn">
+				{{ newsarticle.content|safe }}
+				{% render_placeholder newsarticle.body %}
+			</div>
+			<div class="column lastcolumn">
+				{% thumbnail newsarticle.image 227x0 subject_location=newsarticle.image.subject_location as image %}
+				{% if image %}<div><img class="fl oatRight" src="{{ image.url }}" /></div>{% endif %}				
+				<dl>
+					{% newsarticle_date %}
+					{% if newsarticle.enquiries.all %}
+	 				    <dt>General enquiries</dt>
+	 				    {% for person in newsarticle.enquiries.all %}
+							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
+						{% endfor %}
+					{% endif %}
+				</dl>    
+				{% if links %}
+					{% regroup links by wrapped_destination_obj.heading as link_types %}
+					{% for kind in link_types %}
+						<h3>{{kind.grouper}}</h3>
+		                <ul class= "none">
+		               	{% for link in kind.list %}
+		               		<li>
+		               			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
+		               				{% else %}{{ link.destination_content_object }}
+		               				{% endif %}
+		               			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+		               		</li>
+		               	{% endfor %}
+		               </ul>
+					{% endfor %}
+			    {% endif %}
+			</div>
+		</div>
+		<ul class = "news linkIcon">
+			<li><a href = "{{entity.get_absolute_url}}news-and-events/">More {{ entity.short_name }} news</a></li>
+		</ul>
     {% endblock entity_information %}
-
 {% endblock main_page_body %}

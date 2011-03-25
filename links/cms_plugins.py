@@ -55,7 +55,7 @@ class PluginLinkInlineForm(ObjectLinkInlineForm):
         model=GenericLinkListPluginItem
 
 class PluginInlineLink(admin.StackedInline):
-    extra=1
+    extra=10
     model = GenericLinkListPluginItem
     form = PluginLinkInlineForm
     fieldsets = (

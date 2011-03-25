@@ -15,6 +15,7 @@ class BaseLink(models.Model):
     """
     class Meta:
         abstract = True
+        ordering = ['id',]
     destination_content_type = models.ForeignKey(ContentType, verbose_name="Item type", related_name = "links_to_%(class)s") 
     destination_object_id = models.PositiveIntegerField(verbose_name="Item")
     destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
@@ -254,6 +255,8 @@ class GenericLinkListPlugin(CMSPlugin):
     final_separator = models.CharField(help_text = "Applies to Inline links only; default is ' and '", max_length=20, null = True, blank = True, default = " and ")
 
 class GenericLinkListPluginItem(Link):
+    class Meta:
+        ordering = ['id',]
     plugin = models.ForeignKey(GenericLinkListPlugin, related_name="links")
     key_link = models.BooleanField(help_text = "Make this item stand out (for links in lists only)"
     )

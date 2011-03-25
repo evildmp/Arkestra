@@ -26,8 +26,14 @@ class ArkestraUser(User):
 
 
 from django.db import models
-from cms.plugins.twitter.models import TwitterSearch
+from cms.models.pluginmodel import CMSPlugin
 from django.utils.translation import ugettext_lazy as _
 
-class ArkestraTwitterSearch(TwitterSearch):
+class ArkestraTwitterSearch(CMSPlugin):
     twitter_user = models.CharField(_('twitter user'), max_length=75)
+    title = models.CharField(_('title'), max_length=75, blank=True)
+    query = models.CharField(_('query'), max_length=200, blank=True, default='', help_text=_('Example: "brains AND zombies AND from:umbrella AND to:nemesis": tweets from the user "umbrella" to the user "nemesis" that contain the words "brains" and "zombies"'))
+    count = models.PositiveSmallIntegerField(_('count'), help_text=_('Number of entries to display'), default=3)
+    
+    def __unicode__(self):
+        return self.title

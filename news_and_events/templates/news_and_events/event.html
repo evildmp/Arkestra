@@ -6,6 +6,10 @@
 {% load typogrify %}
 {% load thumbnail %}
 
+{% block columns %}
+	@import url("/media/css/_layout/horiz/100.css");
+{% endblock columns %}
+
 {% block meta %}
 	<meta name="description" content="{{event.subtitle}}"/>
 {% endblock meta %}
@@ -14,9 +18,6 @@
 	<title>{{event.type}}: {{ event }}</title>
 {% endblock %}
 
-{% block columns %}
-	@import url("/media/css/_layout/horiz/100.css");
-{% endblock columns %}
 
 {% block nav_local %}
 {% endblock nav_local %}
@@ -26,8 +27,8 @@
 	{% if event.subtitle %}
    		<p class= "subtitle"><strong>{{ event.subtitle }}</strong></p>
 	{% endif %}
-
 {% endblock pagetitle %}
+
 
 {% block main_page_body %}
     {% block entity_information %}
