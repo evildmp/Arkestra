@@ -30,7 +30,7 @@ class Migration(SchemaMigration):
         db.add_column('news_and_events_newsarticle', 'importance', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True), keep_default=False)
 
         # Adding field 'NewsArticle.sticky_until'
-        db.add_column('news_and_events_newsarticle', 'sticky_until', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now, null=True, blank=True), keep_default=False)
+        db.add_column('news_and_events_newsarticle', 'sticky_until', self.gf('django.db.models.fields.DateField')(default=datetime.date.today, null=True, blank=True), keep_default=False)
 
         # Adding field 'NewsArticle.is_sticky_everywhere'
         db.add_column('news_and_events_newsarticle', 'is_sticky_everywhere', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)

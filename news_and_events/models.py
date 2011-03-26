@@ -5,6 +5,7 @@ from links.models import ExternalLink
 from cms.models import Page
 from cms.models.fields import PlaceholderField
 from datetime import datetime, timedelta
+from datetime import date as pythondate
 from django.db.models.signals import post_save
 from django.template.defaultfilters import date, time
 from django.template import TemplateSyntaxError
@@ -19,20 +20,13 @@ from cms.models import CMSPlugin
 # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
 if not multiple_entity_mode and Entity.objects.all():
-    default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
+    default_entity = getattr(settings, 'ARKESTRA_BASE_ENTITY')
 else:
     default_entity = None
 get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
 collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 
 class NewsAndEvents(models.Model):
-    # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
-    multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-    if not multiple_entity_mode and Entity.objects.all():
-        default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
-    else:
-        default_entity = None
-    print default_entity
     class Meta:
         abstract = True
     title = models.CharField(
@@ -56,7 +50,7 @@ class NewsAndEvents(models.Model):
         help_text = u"Use these sensibly - don't send minor items to the home page, for example", 
         null = True, blank = True,
         )
-    hosted_by = models.ForeignKey(Entity, default = default_entity.id, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
+    hosted_by = models.ForeignKey(Entity, default = default_entity, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
         help_text = u"The entity responsible for publishing this item",
         )
     IMPORTANCES = (
@@ -103,7 +97,7 @@ class NewsArticle(NewsAndEvents):
     external_news_source = models.ForeignKey('NewsSource', null = True, blank = True, 
         help_text = u"If this news item is from an external source"
         )
-    sticky_until = models.DateField(null=True, blank = True, default=datetime.now, help_text = u"Will be a  featured item until this date")
+    sticky_until = models.DateField(null=True, blank = True, default=pythondate.today, help_text = u"Will be a  featured item until this date")
     is_sticky_everywhere = models.BooleanField(default = False, help_text = u"Will be sticky for other entities") 
     enquiries = models.ManyToManyField(Person, 
         related_name = '%(class)s_person', 
