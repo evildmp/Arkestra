@@ -7,7 +7,7 @@ from contacts_and_people.models import Entity
 from itertools import groupby
 
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-if not multiple_entity_mode:
+if not multiple_entity_mode and Entity.objects.all():
     default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
 else:
     default_entity = None

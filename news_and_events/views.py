@@ -15,7 +15,7 @@ else:
 news_and_events_list_default_limit = getattr(settings, "NEWS_AND_EVENT_LIMIT_TO", 8)
 h_main_body = settings.H_MAIN_BODY
 
-def common_settings(request, slug = default_entity.slug):
+def common_settings(request, slug = getattr(default_entity,"slug", None)):
     # general values - entity, request, template
     entity = Entity.objects.get(slug=slug)
     # request.current_page = entity.get_website() # for the menu, so it knows where we are
