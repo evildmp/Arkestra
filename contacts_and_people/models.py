@@ -86,6 +86,8 @@ class Building(models.Model):
         else:
             building_identifier = str(self.site) + ": " + self.postcode
         return building_identifier
+    def forthcoming_events(self):
+        return self.event_set.all()
     def save(self):
         if not self.slug or self.slug == '':
             self.slug = slugify(self.__unicode__())

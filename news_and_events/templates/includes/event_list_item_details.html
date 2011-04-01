@@ -1,4 +1,4 @@
-{% load thumbnail %}{{ event.image }}
+{% load thumbnail %}
 {% if news_and_events.show_images %}{% thumbnail event.image news_and_events.image_size crop subject_location=event.image.subject_location as event_list_item_details_image %}{% endif %}
 <li class = "{{event.get_when|slugify}} event-list-item {{event.get_importance}} row">
     {% if event.parent.series %}

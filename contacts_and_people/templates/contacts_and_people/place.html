@@ -11,7 +11,6 @@
 {% endblock %}
 
 {% block columns %}	
-		@import url("/media/css/_layout/horiz/100.css");
 {% endblock columns %}
 
 
@@ -52,8 +51,10 @@
     		<div class="column firstcolumn">
     			<h2>Address</h2>
     		   {{ place.get_postal_address|join:"<br />" }}
+			{% thumbnail place.image 340x340 subject_location=person.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
     		</div>
     		<div class="column lastcolumn"> 
+			{{ place.about|safe }}
     		</div>
     	</div>	
 	{% endblock place_information %}

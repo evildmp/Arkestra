@@ -1,0 +1,106 @@
+{% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify %}
+
+{% block meta %}
+	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+{% endblock meta %}
+
+{% block scripts %}
+{{ block.super }}
+{% if place.latitude and place.longitude and place.zoom and place.map %}
+<script type="text/javascript"
+    src="http://maps.google.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+	var infowindow = null;
+
+	$(document).ready(initialize);
+
+	function initialize() {
+		var latlng = new google.maps.LatLng({{ place.latitude }}, {{place.longitude}});
+
+	    var myOptions = {
+	      zoom: {{ place.zoom }},
+	      center: latlng,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+
+	    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+		var placeMarker = setMarkers(map);
+
+	    infowindow = new google.maps.InfoWindow({
+	                content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}'
+	            });
+    	
+/*        var marker = new google.maps.Marker({
+       		position: latlng,
+       		map: map,
+       		title: "{{place.get_name}}"
+   		});
+ */  		
+        infowindow.open(map, placeMarker);
+
+    }
+
+	function setMarkers(map) {
+
+    var pMarker = null;
+
+	{% for p in place.site.building_set.all %}{% if p.latitude and p.longitude and p.zoom and p.map %}
+			
+		var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
+	
+	    var marker = new google.maps.Marker({
+       		position: siteLatLng,
+       		map: map,
+       		title: "{{p.get_name}}"
+   		});
+
+
+	    google.maps.event.addListener(marker, "click", function () {
+			                                                            infowindow.setContent('<h2>{{p.get_name}}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}');
+			                                                            infowindow.open(map, this);
+		                                                            });
+		
+		{%ifequal p place%}
+		    pMarker = marker;
+        {%endifequal%}
+
+			
+    {% endif %}{% endfor %}
+      return pMarker;
+    }	
+</script>
+{% endif %}
+{% endblock scripts %}
+
+{% block body_attributes %}onload="initialize()"{% endblock body_attributes %}
+
+{% block skip_and_language %}
+{% endblock %}
+
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{page_title_heading_level}} class="name">{{ place.get_name }}</h{{page_title_heading_level}}>
+{% endblock pagetitle %}
+
+{% block place_information %}
+{% if place.getting_here or place.access_and_parking %}
+	<div class="{{ place.row_class }}">
+		<div class="{{ place.getting_here_div_class }}">
+		<h2>Getting here</h2>
+		{{ place.getting_here|safe }}
+		</div>
+		<div class="{{ place.access_and_parking_div_class }}"><h2>Access &amp; parking</h2>
+		{{ place.access_and_parking|safe }}
+		</div>
+	</div>
+{% endif %}	
+	<div class="row">
+		<div id="map_canvas"></div>
+	</div>	
+{% endblock place_information %}

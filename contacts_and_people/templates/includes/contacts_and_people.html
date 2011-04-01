@@ -14,7 +14,7 @@
 	                {% include "includes/email.html" %}
 	   		        {% include "includes/phone_contacts.html" %}
 			    </dl>
-			    {% thumbnail entity.image 388x540 subject_location=entity.image.subject_location as image.get_url %}{% if image %}<img src="{{ image.url }}" alt = "" />{% endif %}
+			    {% thumbnail entity.image.file 388x540 subject_location=entity.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt = "" />{% endif %}
 			</div>
 		</div>
 		{% if roles or initials_list or people %}

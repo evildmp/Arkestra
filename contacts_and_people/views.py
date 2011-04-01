@@ -205,21 +205,33 @@ def person(request, slug, active_tab = ""):
 
 def place(request, slug, active_tab = ""):
     print "place(request, slug):"
+    place = Building.objects.get(slug=slug)
+    print place.forthcoming_events()
     tabs = [
         # {
         #     "address": "directions",
         #     "title": "Directions & maps"
         # },
-        {
-            "address": "events",
-            "title": "What's on"
-        }, 
+
         ]
-    place = Building.objects.get(slug=slug)
+    if place.forthcoming_events():
+        tabs.append({
+            "address": "events",
+            "title": "What's on",
+        })
+
+    if place.getting_here or place.access_and_parking or place.map:
+        tabs.append({
+            "address": "directions",
+            "title": "Getting here",
+        })
+   
     if default_entity:
         request.current_page = default_entity.get_website()
     else:
         request.current_page = entity.get_website() # for the menu, so it knows where we are
+    if active_tab:
+        active_tab = "_" + active_tab
     return shortcuts.render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
         {
@@ -231,27 +243,6 @@ def place(request, slug, active_tab = ""):
         },
         RequestContext(request),        )
         
-def place_directions(request, slug):
-    print "place(request, slug):"
-    place = Building.objects.get(slug=slug)
-    place.row_class="plugin row"
-    place.getting_here_div_class = place.access_and_parking_div_class = "column firstcolumn"
-    if place.getting_here and place.access_and_parking:
-        place.row_class=place.row_class+" columns2"
-        place.access_and_parking_div_class = "column lastcolumn"
-    else: 
-        place.row_class=place.row_class+" columns1"
-    if default_entity:
-        request.current_page = default_entity.get_website()
-    else:
-        request.current_page = entity.get_website() # for the menu, so it knows where we are
-    return shortcuts.render_to_response(
-        "contacts_and_people/place_directions.html",
-        {"place":place, 
-        "key": google_maps_key,
-        "template": default_template,
-        },
-        RequestContext(request),        )
         
 def ajaxGetMembershipForPerson(request):
   #Which person was/is selected
