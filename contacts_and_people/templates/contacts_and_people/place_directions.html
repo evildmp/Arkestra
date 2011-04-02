@@ -30,7 +30,8 @@
 		var placeMarker = setMarkers(map);
 
 	    infowindow = new google.maps.InfoWindow({
-	                content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}'
+	    	content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}',
+			maxWidth: 300
 	            });
     	
 /*        var marker = new google.maps.Marker({
