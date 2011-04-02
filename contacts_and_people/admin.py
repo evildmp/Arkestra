@@ -442,8 +442,8 @@ class EntityAdmin(admin.ModelAdmin):
 class BuildingAdminForm(forms.ModelForm):
     class Meta:
         model = models.Building
-    getting_here = forms.CharField(widget=WYMEditor, required = False)
-    access_and_parking = forms.CharField(widget=WYMEditor, required = False)
+    # getting_here = forms.CharField(widget=WYMEditor, required = False)
+    # access_and_parking = forms.CharField(widget=WYMEditor, required = False)
     def clean(self):
         if self.cleaned_data["number"] and not self.cleaned_data["street"]:
             raise forms.ValidationError("Silly. You can't have a street number but no street, can you?")
@@ -483,7 +483,7 @@ class SiteAdmin(admin.ModelAdmin):
             'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
         }
 
-class BuildingAdmin(admin.ModelAdmin):
+class BuildingAdmin(PlaceholderAdmin):
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
     class Media:

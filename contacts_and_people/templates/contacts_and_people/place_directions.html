@@ -1,4 +1,4 @@
-{% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify %}
+{% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify placeholder_tags %}
 
 {% block meta %}
 	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
@@ -30,7 +30,7 @@
 		var placeMarker = setMarkers(map);
 
 	    infowindow = new google.maps.InfoWindow({
-	                content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}'
+	                content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}'
 	            });
     	
 /*        var marker = new google.maps.Marker({
@@ -59,7 +59,7 @@
 
 
 	    google.maps.event.addListener(marker, "click", function () {
-			                                                            infowindow.setContent('<h2>{{p.get_name}}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}');
+			                                                            infowindow.setContent('<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img class = "right" src="{{ image.url }}" alt="" />{% endif %} {{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
 			                                                            infowindow.open(map, this);
 		                                                            });
 		
@@ -91,13 +91,10 @@
 {% block place_information %}
 {% if place.getting_here or place.access_and_parking %}
 	<div class="{{ place.row_class }}">
-		<div class="{{ place.getting_here_div_class }}">
 		<h2>Getting here</h2>
-		{{ place.getting_here|safe }}
-		</div>
-		<div class="{{ place.access_and_parking_div_class }}"><h2>Access &amp; parking</h2>
-		{{ place.access_and_parking|safe }}
-		</div>
+		{% render_placeholder place.getting_here %}
+		<h2>Access & parking</h2>
+		{% render_placeholder place.access_and_parking %}
 	</div>
 {% endif %}	
 	<div class="row">

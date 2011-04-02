@@ -1,5 +1,5 @@
 {% extends template %}
-{% load thumbnail news_and_events_tags typogrify %}
+{% load thumbnail news_and_events_tags typogrify placeholder_tags %}
 
 {% block meta %}
 	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
@@ -26,11 +26,11 @@
 		<ul id="tab_menu">
 			{% if not active_tab %}
 				<li class="active">
-					<strong>Overview</strong>
+					<strong>About</strong>
 				</li>
 			{% else %}
 				<li>
-					<a href="{{ place.get_absolute_url }}">Overview</a>
+					<a href="{{ place.get_absolute_url }}">About</a>
 				</li>
 			{% endif %}
 			{% for tab in tabs %}
@@ -54,8 +54,8 @@
 			{% thumbnail place.image 340x340 subject_location=person.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
     		</div>
     		<div class="column lastcolumn"> 
-			{{ place.about|safe }}
-    		</div>
+				{% render_placeholder place.description %}
+			</div>	
     	</div>	
 	{% endblock place_information %}
 {% endblock main_page_body %}

@@ -219,7 +219,7 @@ def place(request, slug, active_tab = ""):
             "address": "events",
             "title": "What's on",
         })
-
+    print "oo", place.map
     if place.getting_here or place.access_and_parking or place.map:
         tabs.append({
             "address": "directions",

@@ -37,11 +37,19 @@ class Building(models.Model):
     slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", max_length=255, null=True, unique=True,)
     image = FilerImageField(null=True, blank=True)
     # for the place page
-    about = models.TextField(null = True, blank = True, 
-        help_text = "About this place",)
-    getting_here = models.TextField(null = True, blank = True, 
+    summary =  models.TextField(
+        verbose_name = "Summary",
+        max_length=256, 
+        help_text = "A very short description of this building (maximum two lines)",)
+    description = PlaceholderField('body', 
+        related_name = "description",
+        help_text = "A fuller description",)
+    getting_here = PlaceholderField('simple', 
+        related_name = "getting_here",
         help_text = "How to get here",)
-    access_and_parking = models.TextField(null = True, blank = True,)
+    access_and_parking = PlaceholderField('simple', 
+        related_name = "access_and_parking",
+        help_text = "Where to park, how to get in, etc",)
     map = models.BooleanField(
         "Show map",
         default=False)
