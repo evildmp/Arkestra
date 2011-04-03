@@ -1,10 +1,9 @@
 import django.http as http
 from django.template import RequestContext
-import django.shortcuts as shortcuts
+from django.shortcuts import render_to_response, get_object_or_404
 from django.core.exceptions import ViewDoesNotExist
 from models import Person, Building, Site, Membership, Entity
 from links.link_functions import object_links
-
 
 from django.contrib.contenttypes.models import ContentType
 from links.models import Link
@@ -55,7 +54,7 @@ def contacts_and_people(request, slug):
     # does the list of role exhaust the list of people too? if so, don't bother showing people separately
     if not set(people) - set([role.person for role in roles]):
         people = []
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
             "entity":entity,
@@ -100,7 +99,7 @@ def people(request, slug, letter=None):
     if letter:
         people = entity.get_people(letter)
         title = "%s, people by surname: %s" % (entity, letter.upper())
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html",
         {
             "entity":entity,
@@ -121,7 +120,7 @@ def people(request, slug, letter=None):
 def publications(request, slug):
     entity = Entity.objects.get(slug=slug)
     request.current_page = entity.website
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/publications.html",
         {"entity":entity,},
         RequestContext(request),
@@ -132,7 +131,7 @@ def person(request, slug, active_tab = ""):
     Responsible for the person pages
     """
     # the straightforward person attributes:            
-    person = Person.objects.get(slug=slug)
+    person = get_object_or_404(Person,slug=slug)
     access_note = person.access_note
     # attributes that need to be obtained from please_contact:
     contact = person.get_please_contact()
@@ -181,7 +180,7 @@ def person(request, slug, active_tab = ""):
         "description": ", ".join([str(person), person_description])
         }
     links = object_links(person)
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/persondetails" + str(active_tab) + ".html",
         {
             "person":person, # personal information
@@ -231,7 +230,7 @@ def place(request, slug, active_tab = ""):
         request.current_page = entity.get_website() # for the menu, so it knows where we are
     if active_tab:
         active_tab = "_" + active_tab
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
         {
         "place":place,

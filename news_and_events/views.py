@@ -1,5 +1,5 @@
 import django.http as http
-import django.shortcuts as shortcuts
+from django.shortcuts import render_to_response, get_object_or_404
 from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle # should improve 
 from contacts_and_people.models import Entity
 from django.conf import settings
@@ -44,7 +44,7 @@ def news_and_events(request, slug):
     meta = ({"name": "description", "content": "Recent news and forthcoming events"},)
     title = str(entity)  + " news & events"
     pagetitle = str(entity) + " news & events"
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html",
         {"entity":entity,
         "title": title,
@@ -69,7 +69,7 @@ def previous_events(request, slug):
     pagetitle = str(entity) + " previous events"
     main_page_body_file = "news_and_event_lists.html"
 
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html",
         {"entity":entity,
         "title": title,
@@ -94,7 +94,7 @@ def all_forthcoming_events(request, slug):
     pagetitle = str(entity) + " forthcoming events"
     main_page_body_file = "news_and_event_lists.html"
 
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html",
         {"entity":entity,
         "title": title,
@@ -120,7 +120,7 @@ def news_archive(request, slug):
     pagetitle = str(entity) + " - news archive"
     main_page_body_file = "news_and_event_lists.html"
 
-    return shortcuts.render_to_response(
+    return render_to_response(
         "contacts_and_people/entity_information.html",
         {"entity":entity,
         "title": title,
@@ -137,7 +137,7 @@ def newsarticle(request, slug):
     Responsible for publishing news article
     """
     print " -------- views.newsarticle --------"
-    newsarticle = NewsArticle.objects.get(slug=slug)
+    newsarticle = get_object_or_404(NewsArticle, slug=slug)
     print newsarticle.date - datetime.now()
     entity = newsarticle.hosted_by
     links = object_links(newsarticle)
@@ -145,7 +145,7 @@ def newsarticle(request, slug):
     request.current_page = default_entity.get_website()
     
     template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
-    return shortcuts.render_to_response(
+    return render_to_response(
         "news_and_events/newsarticle.html",
         {"newsarticle":newsarticle,
         "template": template,
@@ -161,13 +161,13 @@ def event(request, slug):
     Responsible for publishing an event
     """
     print " -------- views.event --------"
-    event = Event.objects.get(slug=slug)
+    event = get_object_or_404(Event, slug=slug)
     featuring = event.get_featuring()
     entity = event.hosted_by
     template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
     links = object_links(event)
     request.current_page = default_entity.get_website()
-    return shortcuts.render_to_response(
+    return render_to_response(
         "news_and_events/event.html",
         {"event": event,
         "content_object": event,
