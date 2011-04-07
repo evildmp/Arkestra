@@ -1,0 +1,34 @@
+You'll need
+
+
+
+Required aliases
+
+lrwxrwxrwx 1  38 2011-03-04 08:52 appmedia -> ../downloads/django-appmedia/appmedia/
+lrwxrwxrwx 1  36 2011-03-16 23:25 arkestra_media -> ../downloads/arkestra/arkestra_media
+lrwxrwxrwx 1  41 2011-03-02 14:59 arkestra_utilities -> ../downloads/arkestra/arkestra_utilities/
+lrwxrwxrwx 1  51 2011-03-02 14:50 BeautifulSoup.py -> ../downloads/BeautifulSoup-3.0.8.1/BeautifulSoup.py
+lrwxrwxrwx 1  43 2011-03-02 14:50 classytags -> ../downloads/django-classy-tags/classytags/
+lrwxrwxrwx 1  27 2011-03-02 14:50 cms -> ../downloads/django-cms/cms
+lrwxrwxrwx 1  54 2011-03-02 14:50 cmsplugin_filer_file -> ../downloads/cmsplugin-filer/src/cmsplugin_filer_file/
+lrwxrwxrwx 1  61 2011-03-07 14:26 cmsplugin_filer_image -> ../downloads/filer-plugins-daniele/src/cmsplugin_filer_image/
+lrwxrwxrwx 1  42 2011-03-02 14:58 contacts_and_people -> ../downloads/arkestra/contacts_and_people/
+lrwxrwxrwx 1  33 2011-03-02 14:50 django -> ../downloads/Django-1.2.5/django/
+lrwxrwxrwx 1  37 2011-03-30 22:45 docutils -> ../downloads/docutils/trunk/docutils/
+lrwxrwxrwx 1  45 2011-03-02 14:50 easy_thumbnails -> ../downloads/easy-thumbnails/easy_thumbnails/
+lrwxrwxrwx 1  31 2011-04-04 17:45 features -> ../downloads/features/features/
+lrwxrwxrwx 1  36 2011-03-07 13:36 filer -> ../downloads/django-filer-new/filer/
+lrwxrwxrwx 1  35 2011-04-07 11:07 housekeeping -> ../downloads/arkestra/housekeeping/
+lrwxrwxrwx 1  28 2011-03-02 14:59 links -> ../downloads/arkestra/links/
+lrwxrwxrwx 1  29 2011-03-02 14:50 menus -> ../downloads/django-cms/menus
+lrwxrwxrwx 1  28 2011-03-02 14:50 mptt -> ../downloads/django-cms/mptt
+lrwxrwxrwx 1  38 2011-03-02 14:58 news_and_events -> ../downloads/arkestra/news_and_events/
+lrwxrwxrwx 1  34 2011-03-08 17:38 publisher -> ../downloads/django-cms/publisher/
+lrwxrwxrwx 1  34 2011-03-02 14:50 pyquery -> ../downloads/pyquery-0.3.1/pyquery
+lrwxrwxrwx 1  44 2011-03-02 14:50 semanticeditor -> ../downloads/semanticeditor2/semanticeditor/
+lrwxrwxrwx 1  27 2011-03-02 14:50 smartypants.py -> ../downloads/smartypants.py
+-rw-r--r-- 1 28K 2011-03-27 10:45 smartypants.pyc
+lrwxrwxrwx 1  25 2011-03-02 14:50 south -> ../downloads/south/south/
+lrwxrwxrwx 1  33 2011-03-02 14:50 typogrify -> ../downloads/typogrify/typogrify/
+lrwxrwxrwx 1  38 2011-03-02 14:50 widgetry -> ../downloads/django-widgetry/widgetry/
+

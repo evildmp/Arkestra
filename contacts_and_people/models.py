@@ -42,13 +42,13 @@ class Building(models.Model):
         max_length=256, 
         help_text = "A very short description of this building (maximum two lines)",)
     description = PlaceholderField('body', 
-        related_name = "description",
+        related_name = "building_description",
         help_text = "A fuller description",)
     getting_here = PlaceholderField('simple', 
         related_name = "getting_here",
         help_text = "How to get here",)
     access_and_parking = PlaceholderField('simple', 
-        related_name = "access_and_parking",
+        related_name = "building_access_and_parking",
         help_text = "Where to park, how to get in, etc",)
     map = models.BooleanField(
         "Show map",
