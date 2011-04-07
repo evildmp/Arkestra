@@ -30,7 +30,7 @@
 		var placeMarker = setMarkers(map);
 
 	    infowindow = new google.maps.InfoWindow({
-	    	content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}',
+	    	content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}',
 			maxWidth: 300
 	            });
     	
@@ -60,7 +60,7 @@
 
 
 	    google.maps.event.addListener(marker, "click", function () {
-			                                                            infowindow.setContent('<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img class = "right" src="{{ image.url }}" alt="" />{% endif %} {{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
+			                                                            infowindow.setContent('<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %} {{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
 			                                                            infowindow.open(map, this);
 		                                                            });
 		

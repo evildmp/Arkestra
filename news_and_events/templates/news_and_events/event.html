@@ -40,7 +40,7 @@
             </div>
 			<div class="column lastcolumn">
 				{% include "includes/parent.html" %}
-				{% thumbnail event.image 227x0 subject_location=event.image.subject_location as image %}{% if image %}<div><img class="fl oatRight" src="{{ image.url }}" /></div>{% endif %}				
+				{% thumbnail event.image 227x0 subject_location=event.image.subject_location as image %}{% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}				
 				{% include "includes/details.html" %}
 				{% if links %}
 						{% regroup links by wrapped_destination_obj.heading as link_types %}

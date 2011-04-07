@@ -218,11 +218,12 @@ def place(request, slug, active_tab = ""):
             "address": "events",
             "title": "What's on",
         })
-    if place.getting_here or place.access_and_parking or place.map:
-        tabs.append({
-            "address": "directions",
-            "title": "Getting here",
-        })
+    if place.getting_here or place.access_and_parking or (place.map and place.zoom and place.latitude and place.longitude):
+        if place.map: 
+            tabs.append({
+                "address": "directions",
+                "title": "Directions etc.",
+            })
    
     if default_entity:
         request.current_page = default_entity.get_website()

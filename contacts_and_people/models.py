@@ -86,6 +86,8 @@ class Building(models.Model):
         elif self.postcode:
             address.append(self.postcode)
         return address
+    def show_map(self):
+        return
     def __unicode__(self):
         if self.name:
             building_identifier = str(self.site) + ": " + self.name
