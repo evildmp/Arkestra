@@ -164,9 +164,9 @@ def event(request, slug):
     event = get_object_or_404(Event, slug=slug)
     featuring = event.get_featuring()
     entity = event.hosted_by
-    template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
+    template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))  # this perhaps should reflect either the default_entity or the new article's hosted_by
     links = object_links(event)
-    request.current_page = default_entity.get_website()
+    # request.current_page = default_entity.get_website()
     return render_to_response(
         "news_and_events/event.html",
         {"event": event,

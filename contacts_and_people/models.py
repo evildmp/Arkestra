@@ -323,7 +323,7 @@ class Entity(EntityLite, CommonFields):
             initials.sort()
             # no letter but list is long? initials only
             if not letter:
-                people = None
+                people = []
         # no letter, short list? don't show initials
         else:
             initials = None
