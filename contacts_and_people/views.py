@@ -50,6 +50,7 @@ def contacts_and_people(request, slug):
     access_note = entity.access_note
     roles = entity.get_roles()
     people = entity.get_people()
+    print people
     people, initials = entity.get_people_and_initials()
     # does the list of role exhaust the list of people too? if so, don't bother showing people separately
     if not set(people) - set([role.person for role in roles]):
