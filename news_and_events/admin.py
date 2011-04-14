@@ -56,7 +56,7 @@ class NewsAndEventsForm(forms.ModelForm):
         if not self.cleaned_data["hosted_by"] and not self.cleaned_data["external_url"]:
             raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
         #must have content or url in order to be published
-        if not (self.cleaned_data["external_url"] or self.cleaned_data["content"] or self.cleaned_data["body"]):          
+        if not (self.cleaned_data["external_url"] or self.cleaned_data["body"]):          
             self.warnings.append("This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now.")
 
 # Note for Stefan:
