@@ -97,6 +97,7 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
     class Meta:
         abstract = True
     inlines = (ObjectLinkInline,)
+    exclude = ('content',)
     # for the change list pages
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
@@ -314,9 +315,6 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_basic = (
         ('', {
             'fields': ('type', ('title',  'short_title',),  'image', 'subtitle', 'hosted_by', ),
-        }),
-        ('', {
-            'fields': ('content',),
         }),
     )
     fieldset_where_to_publish = (    
