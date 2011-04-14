@@ -1,12 +1,12 @@
 {% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify %}
 
 	{% block place_information %}
-    <div class="row columns2">
+    <div class="row columns3">
 		<div class="column firstcolumn">
 			<h2>Address</h2>
 		   {{ place.get_postal_address|join:"<br />" }}
 		</div>
-		<div class="column lastcolumn"> 
+		<div class="column lastcolumn doublecolumn"> 
 			{% place_events %}
 		</div>
 	</div>	
