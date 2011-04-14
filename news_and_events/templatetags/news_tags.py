@@ -6,6 +6,7 @@ from contacts_and_people.models import Entity
 from cms.models import Page
 from datetime import datetime
 from django.template.defaultfilters import date
+from arkestra_utilities.output_libraries.dates import nice_date
 
 register = template.Library()
 
@@ -42,7 +43,8 @@ def newsarticle_date(context, newsarticle = None):
     now = datetime.now()
     if newsarticle.date.year == now.year:                                     # this year
         date_format = "jS F"
-    newsarticle_date = date(newsarticle.date, date_format) 
+    print "newsarticle.date", newsarticle.date
+    newsarticle_date = nice_date(newsarticle.date, date_format) 
     return {
         'newsarticle': newsarticle,
         'date': newsarticle_date,

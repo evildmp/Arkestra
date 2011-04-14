@@ -119,7 +119,7 @@ class NewsArticle(NewsAndEvents):
             pass
         
         date_format = "F Y"
-        get_when = date(self.date, date_format)
+        get_when = nice_date(self.date, date_format)
         return get_when
     def get_absolute_url(self):
         if self.external_url:
