@@ -7,11 +7,11 @@ from cms.models.fields import PlaceholderField
 from datetime import datetime, timedelta
 from datetime import date as pythondate
 from django.db.models.signals import post_save
-from django.template.defaultfilters import date, time
+from django.template.defaultfilters import date, time, slugify
 from django.template import TemplateSyntaxError
+from arkestra_utilities.output_libraries.dates import nice_date
 import bisect
 from filer.fields.image import FilerImageField
-from django.template.defaultfilters import slugify
 import mptt
 
 from django.conf import settings
@@ -226,9 +226,9 @@ class Event(NewsAndEvents):
                 if end_date.year == now.year:               # they're both this year, so:
                     end_date_format = "l jS F"                # end format example: "23rd May"
             if self.single_day_event:
-                dates = date(start_date, end_date_format)
+                dates = nice_date(start_date, end_date_format)
             else:
-                dates = date(start_date, start_date_format) + " to " + date(end_date, end_date_format)
+                dates = nice_date(start_date, start_date_format) + " to " + nice_date(end_date, end_date_format)
             return dates
         else:
             return "Series"
