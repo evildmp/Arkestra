@@ -50,7 +50,7 @@
 			    {% if news_and_events.other_news %}
     				<ul class="fancy close top-border">
     					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{instance.news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
