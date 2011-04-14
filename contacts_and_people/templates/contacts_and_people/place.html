@@ -51,7 +51,7 @@
     		<div class="column firstcolumn">
     			<h2>Address</h2>
     		   {{ place.get_postal_address|join:"<br />" }}
-			{% thumbnail place.image 340x340 subject_location=person.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
+			{% thumbnail place.image 330x330 subject_location=person.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
     		</div>
     		<div class="column lastcolumn"> 
 				{% render_placeholder place.description %}
