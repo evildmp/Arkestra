@@ -34,9 +34,7 @@
     {% block entity_information %}
         <div class="row columns3">
         	<div class="column firstcolumn doublecolumn">
-                {{ event.content|safe }}
 				{% render_placeholder event.body %}
-                {% include "includes/children.html" %}
             </div>
 			<div class="column lastcolumn">
 				{% include "includes/parent.html" %}
@@ -58,7 +56,7 @@
 		                </ul>
 						{% endfor %}
 		        {% endif %}
-		        				
+				{% include "includes/children.html" %}		        				
 			</div>
 		</div>
         {% if entity.website %}
