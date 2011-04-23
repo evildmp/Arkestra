@@ -6,17 +6,22 @@ def get_placeholder_width(context, plugin):
     """
     Gets the width placeholder in which a plugin finds itself
     """
-    # plugin previews don't return a width, so let's just say 100...
-    # maybe if we get the width into a context processor, it will always be available
-    # this really needs sorting out
-    width = context.get('width', 100) or 400
-    placeholder_width = float(width)
+    print ">>:", context.get("placeholder_width")
+    width = context.get("width", 100) # get value from settings template tuple; default 100 is for admin preview
+    placeholder_width = float(context.get("placeholder_width", width)) # see if it has been set in the template, default to template settings value
+    reduce_for_left_hand_menu = context.get("reduce_for_left_hand_menu", False)
+    left_hand_menu_width_reduction = float(context.get("left_hand_menu_width_reduction", 0))
+
+
     print "placeholder width:", placeholder_width
-    # check for left-hand menu and adjust width accordingly
-    # if plugin.page.flags['no_local_menu'] == False:
-    #    print "reducing width for Cardiff left-hand menu"
-    #    placeholder_width = int(placeholder_width/1.269)
-    #    print "placeholder width:", placeholder_width
+    print "width:", width
+    
+    if reduce_for_left_hand_menu and left_hand_menu_width_reduction:
+        # check for left-hand menu and adjust width accordingly
+        if plugin.page.flags['no_local_menu'] == False:
+            print "reducing width for Cardiff left-hand menu"
+            placeholder_width = int(placeholder_width/left_hand_menu_width_reduction)
+            print "placeholder width:", placeholder_width
     return placeholder_width
 
 def get_plugin_ancestry(plugin):
