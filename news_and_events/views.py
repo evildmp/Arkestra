@@ -8,7 +8,8 @@ from django.template import RequestContext, Context
 from datetime import datetime
 from functions import get_news_and_events
 
-if not getattr(settings, "MULTIPLE_ENTITY_MODE", False) and Entity.objects.all():
+multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
+if not multiple_entity_mode and Entity.objects.all():
     default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
 else:
     default_entity = None

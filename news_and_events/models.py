@@ -20,9 +20,10 @@ from cms.models import CMSPlugin
 # if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
 if not multiple_entity_mode and Entity.objects.all():
-    default_entity = getattr(settings, 'ARKESTRA_BASE_ENTITY')
+    default_entity_id = getattr(settings, 'ARKESTRA_BASE_ENTITY')
 else:
-    default_entity = None
+    default_entity_id = None
+    
 get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
 collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 
@@ -50,7 +51,7 @@ class NewsAndEvents(models.Model):
         help_text = u"Use these sensibly - don't send minor items to the home page, for example", 
         null = True, blank = True,
         )
-    hosted_by = models.ForeignKey(Entity, default = default_entity, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
+    hosted_by = models.ForeignKey(Entity, default = default_entity_id, related_name = '%(class)s_hosted_events', null = True, blank = True, # though in fact the .save() and the admin between them won't allow null = True
         help_text = u"The entity responsible for publishing this item",
         )
     IMPORTANCES = (
@@ -65,7 +66,22 @@ class NewsAndEvents(models.Model):
         help_text = "Do not meddle with this unless you know exactly what you're doing!")
     content = models.TextField(null = True, blank = True, 
         help_text = "Not used or required for external items",)
-
+    
+    def get_entity(self):
+        """
+        Real-world information, can be None
+        """
+        return self.hosted_by or Entity.objects.get(id=default_entity_id)
+    
+    def get_website(self):
+        """
+        for internal Arkestra purposes only
+        """
+        if self.get_entity():
+                return self.get_entity().get_website()
+        else:
+            return None
+    
     def get_importance(self):
         if self.importance and not collect_top_events: # only of they are not being gathered together
             return "important"
