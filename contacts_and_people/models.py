@@ -106,6 +106,9 @@ class Building(models.Model):
     def get_absolute_url(self):
         return "/place/%s/" % self.slug
 
+    def get_website(self):
+        return None
+        
 class PhoneContact(models.Model):
     class Meta:
         ordering = ('label',)

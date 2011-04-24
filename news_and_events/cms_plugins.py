@@ -38,6 +38,7 @@ class CMSNewsAndEventsPlugin(CMSPluginBase):
     text_enabled = True
     form = NewsAndEventsPluginForm
     render_template = "news_and_event_lists.html"
+    admin_preview = False
     
     fieldsets = (
         (None, {

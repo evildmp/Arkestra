@@ -2,7 +2,6 @@ from django import template
 from django.db.models import Q
 from django.shortcuts import render_to_response
 from contacts_and_people.models import Membership, Entity
-from contacts_and_people.entity_tags import work_out_entity
 from cms.models import Page
 import operator
 #import DoesNotExistError
