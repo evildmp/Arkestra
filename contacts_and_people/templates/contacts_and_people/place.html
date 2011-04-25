@@ -56,7 +56,7 @@
     		</div>
     		<div class="column lastcolumn doublecolumn"> 
 				{% render_placeholder place.description %}
-				{% thumbnail place.image 450x450 subject_location=person.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
+				{% thumbnail place.image 450x450 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
 			</div>	
     	</div>	
 	{% endblock place_information %}

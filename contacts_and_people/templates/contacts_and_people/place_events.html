@@ -7,7 +7,7 @@
 		   {{ place.get_postal_address|join:"<br />" }}
 		</div>
 		<div class="column lastcolumn doublecolumn"> 
-			{% place_events %}
+			{% with place.events as news_and_events %}{% include "news_and_event_lists.html" %}{% endwith %}
 		</div>
 	</div>	
 	{% endblock place_information %}

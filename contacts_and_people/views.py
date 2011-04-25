@@ -205,7 +205,6 @@ def person(request, slug, active_tab = ""):
 def place(request, slug, active_tab = ""):
     print "place(request, slug):"
     place = Building.objects.get(slug=slug)
-    print place.forthcoming_events()
     tabs = [
         # {
         #     "address": "directions",
@@ -213,7 +212,7 @@ def place(request, slug, active_tab = ""):
         # },
 
         ]
-    if place.forthcoming_events():
+    if place.events().forthcoming_events:
         tabs.append({
             "address": "events",
             "title": "What's on",

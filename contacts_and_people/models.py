@@ -10,6 +10,7 @@ from filer.fields.image import FilerImageField
 from links.models import ExternalLink
 import mptt
 
+
 Page = models.get_model('cms', 'Page')
 CMSPlugin = models.get_model('cms', 'CMSPlugin')
 
@@ -96,8 +97,17 @@ class Building(models.Model):
         else:
             building_identifier = str(self.site) + ": " + self.postcode
         return building_identifier
-    def forthcoming_events(self):
-        return self.event_set.all()
+    def events(self):
+        instance = CMSNewsAndEventsPlugin()
+        instance.display = "events"
+        instance.order_by = "date"
+        instance.format = "details"
+        instance.type = "for_place"
+        instance.place = self
+        instance.show_venue = False
+        events = get_news_and_events(instance)
+        print ">> forthcoming events", events.forthcoming_events
+        return events
     def save(self):
         if not self.slug or self.slug == '':
             self.slug = slugify(self.__unicode__())
@@ -584,3 +594,6 @@ try:
     mptt.register(Entity)
 except mptt.AlreadyRegistered:
     pass
+    
+from news_and_events.functions import get_news_and_events
+from news_and_events.cms_plugins import CMSNewsAndEventsPlugin

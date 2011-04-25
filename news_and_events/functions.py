@@ -36,9 +36,9 @@ def get_news_and_events(instance):
     type
         sub_page        news archive, events archive, all forthcoming events (the only kind that has indexes)
         plugin          produced by a plugin
-        none            must be a main page
+        main_page       a main news and events page
         for_person      raised by a {% person_events %} tag in a person template
-        for_place      raised by a {% place_events %} tag in a person template
+        for_place       raised by a {% place_events %} tag in a place template
         
     newsindex
     eventsindex
@@ -85,7 +85,7 @@ def get_news_and_events(instance):
     determine_layout_settings(instance)     # work out a layout
     set_templates(instance)                 # choose template files
     set_layout_classes(instance)            # apply CSS classes
-    return
+    return instance
 
 def set_defaults(instance):
     # set defaults
@@ -101,6 +101,7 @@ def set_defaults(instance):
     instance.layout = getattr(instance, "layout", "sidebyside")
     instance.show_images = getattr(instance, "show_images", True)
     instance.show_venue = getattr(instance, "show_venue", True)
+    instance.at_venue = getattr(instance, "at_venue", None) # if specified, only show venue's events
     # are we looking at current or archived items?
     try:
         instance.view

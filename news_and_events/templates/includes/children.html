@@ -15,9 +15,17 @@
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
 					{% endif %}	
-					{% ifnotequal event.subtitle child_event.subtitle %}<br />{{ child_event.subtitle }}{% endifnotequal %}
+					{% ifnotequal event.subtitle child_event.subtitle %}<div class = "subtitle">{{ event.subtitle }}</div>{% endifnotequal %}
+				    <div class = "date">{{ child_event.get_dates }}{% if child_event.get_times %}, {{ child_event.get_times|safe }}{% endif %}</div>
+					{% ifnotequal child_event.building event.building %}<a href="{{child_event.building.get_absolute_url}}">{{ child_event.building.get_name }}</a>{% endifnotequal %}
+					{% if child_event.precise_location %}
+						{% ifnotequal child_event.precise_location event.precise_location %}{{ child_event.precise_location }}{% endifnotequal %}
+					{% endif %}
+					{% if child_event.access_note %}
+						{% ifnotequal child_event.access_note event.access_note %}{{ child_event.access_note }}{% endifnotequal %}
+					{% endif %}
+
 				<dl>
-				    {% if event.series %}{% event_date_and_time child_event %}{% endif %}
 					{% if child_event.featuring.all %}{% ifnotequal child_event.get_featuring featuring %}
 						<dt>Speaker{{ child_event.featuring.all|pluralize }}</dt>
 						{% for speaker in child_event.featuring.all %}
@@ -25,30 +33,6 @@
 								<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
 							</dd>
 						{% endfor %}
-						{% endifnotequal %}
-					{% endif %}
-					{% if child_event.building %}
-						{% ifnotequal child_event.building event.building %}
-							<dt>Venue</dt>
-							<dd>
-								{{ child_event.building.get_postal_address|join:"<br />" }}
-							</dd>
-						{% endifnotequal %}
-					{% endif %}
-					{% if child_event.precise_location %}
-						{% ifnotequal child_event.precise_location event.precise_location %}
-							<dt>Location</dt>
-							<dd>
-								{{ child_event.precise_location }}
-							</dd>
-						{% endifnotequal %}
-					{% endif %}
-					{% if child_event.access_note %}
-						{% ifnotequal child_event.access_note event.access_note %}
-							<dt>Note</dt>
-							<dd>
-								{{ child_event.access_note }}
-							</dd>
 						{% endifnotequal %}
 					{% endif %}
 				</dl>
@@ -71,9 +55,8 @@
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
 					{% endif %}	
-					{% ifnotequal event.subtitle child_event.subtitle %}<br />{{ child_event.subtitle }}{% endifnotequal %}
-				<dl>
-				    {% if event.series %}{% event_date_and_time child_event %}{% endif %}
+					{% ifnotequal event.subtitle child_event.subtitle %}<div class = "subtitle">{{ event.subtitle }}</div>{% endifnotequal %}
+				    {% if event.series %}<div class = "date">{{ child_event.get_dates }}{% if child_event.get_times %}, {{ child_event.get_times|safe }}{% endif %}</div>{% endif %}
 					{% if child_event.featuring.all %}{% ifnotequal child_event.get_featuring featuring %}
 						<dt>Speaker{{ child_event.featuring.all|pluralize }}</dt>
 						{% for speaker in child_event.featuring.all %}
