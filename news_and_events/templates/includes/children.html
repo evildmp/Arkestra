@@ -27,7 +27,7 @@
 
 				<dl>
 					{% if child_event.featuring.all %}{% ifnotequal child_event.get_featuring featuring %}
-						<dt>Speaker{{ child_event.featuring.all|pluralize }}</dt>
+		    			<dt>Featuring</dt>
 						{% for speaker in child_event.featuring.all %}
 							<dd>
 								<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
@@ -58,7 +58,7 @@
 					{% ifnotequal event.subtitle child_event.subtitle %}<div class = "subtitle">{{ event.subtitle }}</div>{% endifnotequal %}
 				    {% if event.series %}<div class = "date">{{ child_event.get_dates }}{% if child_event.get_times %}, {{ child_event.get_times|safe }}{% endif %}</div>{% endif %}
 					{% if child_event.featuring.all %}{% ifnotequal child_event.get_featuring featuring %}
-						<dt>Speaker{{ child_event.featuring.all|pluralize }}</dt>
+		    			<dt>Featuring</dt>
 						{% for speaker in child_event.featuring.all %}
 							<dd>
 								<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
