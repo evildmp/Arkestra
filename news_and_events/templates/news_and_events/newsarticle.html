@@ -28,7 +28,7 @@
 				{{ newsarticle.content|safe }}
 				{% render_placeholder newsarticle.body %}
 			</div>
-			<div class="column lastcolumn">{{ template }}
+			<div class="column lastcolumn">
 				{% thumbnail newsarticle.image 227x0 subject_location=newsarticle.image.subject_location as image %}
 				{% if image %}<div><img class="fl oatRight" src="{{ image.url }}" /></div>{% endif %}				
 				<dl>
