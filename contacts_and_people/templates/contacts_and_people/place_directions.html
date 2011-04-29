@@ -1,10 +1,5 @@
 {% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify placeholder_tags %}
 
-{% block meta %}
-	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-{% endblock meta %}
-
 {% block scripts %}
 {{ block.super }}
 {% if place.has_map %}

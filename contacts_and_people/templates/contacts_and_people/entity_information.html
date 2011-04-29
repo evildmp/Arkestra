@@ -5,12 +5,6 @@
 {% load cms_tags %}
 {% load typogrify %}
 
-{% block meta %}
-	{% for name,content in meta.items %}
-		<meta name="{{ name }}" content="{{ content }}" />
-	{% endfor %}
-{% endblock meta %}
-
 {% block title %}
 	<title>{{ title }}</title>
 {% endblock %}

@@ -5,14 +5,9 @@
 	{% get_links as links %}
 {% endblock columns %}
 
-{% block meta %}
-	<meta name="description" content="{{newsarticle.subtitle}}"/>
-{% endblock meta %}
-
 {% block title %}
 	<title>{{ newsarticle }}</title>
 {% endblock %}
-
 
 {% block nav_local %}
 {% endblock nav_local %}
@@ -33,7 +28,7 @@
 				{{ newsarticle.content|safe }}
 				{% render_placeholder newsarticle.body %}
 			</div>
-			<div class="column lastcolumn">
+			<div class="column lastcolumn">{{ template }}
 				{% thumbnail newsarticle.image 227x0 subject_location=newsarticle.image.subject_location as image %}
 				{% if image %}<div><img class="fl oatRight" src="{{ image.url }}" /></div>{% endif %}				
 				<dl>

@@ -42,7 +42,7 @@ def news_and_events(request, slug):
     instance.show_images = True
     get_news_and_events(instance)
 
-    meta = ({"name": "description", "content": "Recent news and forthcoming events"},)
+    meta = {"description": "Recent news and forthcoming events",}
     title = str(entity)  + " news & events"
     pagetitle = str(entity) + " news & events"
     return render_to_response(
@@ -65,7 +65,7 @@ def previous_events(request, slug):
     instance.limit_to = None
     get_news_and_events(instance)
 
-    meta = ({"name": "description", "content": "An archive of previous events"},)
+    meta = {"description": "Archive of previous events",}
     title = str(entity)  + " previous events"
     pagetitle = str(entity) + " previous events"
     main_page_body_file = "news_and_event_lists.html"
@@ -90,7 +90,7 @@ def all_forthcoming_events(request, slug):
     instance.limit_to = None
     get_news_and_events(instance)
 
-    meta = ({"name": "description", "content": "All forthcoming events"},)
+    meta = {"description": "All forthcoming events",}
     title = str(entity)  + " forthcoming events"
     pagetitle = str(entity) + " forthcoming events"
     main_page_body_file = "news_and_event_lists.html"
@@ -116,7 +116,7 @@ def news_archive(request, slug):
     instance.order_by = "date"
     get_news_and_events(instance)
 
-    meta = ({"name": "description", "content": "An archive of news items"},)
+    meta = {"description": "Archive of news items",}
     title = str(entity)  + " - news archive"
     pagetitle = str(entity) + " - news archive"
     main_page_body_file = "news_and_event_lists.html"
@@ -144,6 +144,7 @@ def newsarticle(request, slug):
     links = object_links(newsarticle)
     print links
     request.current_page = default_entity.get_website()
+    meta = {"description": newsarticle.subtitle,}
     
     template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
     return render_to_response(
@@ -153,6 +154,7 @@ def newsarticle(request, slug):
         "content_object": newsarticle,
         "entity": entity,
         "links": links,
+        "meta": meta,
         },
         RequestContext(request),
         )
@@ -167,6 +169,7 @@ def event(request, slug):
     entity = event.hosted_by
     template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))  # this perhaps should reflect either the default_entity or the new article's hosted_by
     links = object_links(event)
+    meta = {"description": event.subtitle,}
     # request.current_page = default_entity.get_website()
     return render_to_response(
         "news_and_events/event.html",
@@ -176,6 +179,7 @@ def event(request, slug):
         "template": template,
         "entity" : entity,
         "links": links,
+        "meta": meta,
         },
         RequestContext(request),
         )

@@ -120,6 +120,9 @@ def people(request, slug, letter=None):
 def publications(request, slug):
     entity = Entity.objects.get(slug=slug)
     request.current_page = entity.website
+    meta = {
+        "description": "Publications by people in %s" % entity,
+        }
     return render_to_response(
         "contacts_and_people/publications.html",
         {"entity":entity,},
@@ -166,15 +169,16 @@ def person(request, slug, active_tab = ""):
         except Researcher.DoesNotExist:
             pass
     # meta values - title and meta
-    if multiple_entity_mode:
+    if home_role:
         person_description = str(home_role)
+    else:
+        person_description = str()
+    if multiple_entity_mode:
         if person.override_entity:
             person_description = person_description + str(override_entity.entity)
-        else:
+        elif home_role:
             person_description = person_description + str(home_role.entity)
-    else:
-        person_description = str(home_role)
-    print person_description
+    print "person_description", person_description
     
     meta = {
         "description": ", ".join([str(person), person_description])
@@ -229,7 +233,17 @@ def place(request, slug, active_tab = ""):
     else:
         request.current_page = entity.get_website() # for the menu, so it knows where we are
     if active_tab:
+        if active_tab=="events":
+            meta_description_content="Forthcoming events at " + place.get_name()
+        elif active_tab=="directions":
+            meta_description_content="How to get to " + place.get_name()
         active_tab = "_" + active_tab
+    else:
+        meta_description_content=place.summary
+    meta = {
+        "description": meta_description_content,
+        }
+
     return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
         {
@@ -238,6 +252,7 @@ def place(request, slug, active_tab = ""):
         "active_tab": active_tab,
         "key": google_maps_key,
         "template": default_template,
+        "meta": meta,
         },
         RequestContext(request),        )
         

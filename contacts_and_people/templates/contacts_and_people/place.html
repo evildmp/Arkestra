@@ -1,11 +1,6 @@
 {% extends template %}
 {% load thumbnail news_and_events_tags typogrify placeholder_tags %}
 
-{% block meta %}
-	<meta name="description" content="{{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-{% endblock meta %}
-
 {% block title %}
 	<title>{{ place.get_name }}</title>
 {% endblock %}
