@@ -1,27 +1,37 @@
 from BeautifulSoup import BeautifulSoup
-import re
 from cms.plugins.text.models import Text
+from arkestra_utilities.modifier_pool import adjuster_pool
 
 def get_placeholder_width(context, plugin):
+    
     """
     Gets the width placeholder in which a plugin finds itself
-    """
-    print ">>:", context.get("placeholder_width")
-    width = context.get("width", 100) # get value from settings template tuple; default 100 is for admin preview
-    placeholder_width = float(context.get("placeholder_width", width)) # see if it has been set in the template, default to template settings value
-    reduce_for_left_hand_menu = context.get("reduce_for_left_hand_menu", False)
-    left_hand_menu_width_reduction = float(context.get("left_hand_menu_width_reduction", 0))
-
-
-    print "placeholder width:", placeholder_width
-    print "width:", width
     
-    if reduce_for_left_hand_menu and left_hand_menu_width_reduction:
-        # check for left-hand menu and adjust width accordingly
-        if plugin.page.flags['no_local_menu'] == False:
-            print "reducing width for Cardiff left-hand menu"
-            placeholder_width = int(placeholder_width/left_hand_menu_width_reduction)
-            print "placeholder width:", placeholder_width
+	{% with
+	    adjust_width=current_page.flags.no_page_title 
+	    width_adjuster="absolute" 
+	    width_adjustment=200 %
+	    
+	    border_classes="image_borders"
+	    border_adjuster="px"
+	    border_adjustment=16
+	    
+	    background_classes="background"
+	    background_adjuster="px"
+	    background_adjustment=32
+	    %}    
+    	{% placeholder body %}
+    {% endwith %}
+
+    """
+    # try to get placeholder_width context variable; if not, then width; if not, use 100 (100 is for admin)
+    placeholder_width = float(context.get("placeholder_width", context.get("width", 100.0))) 
+    print "placeholder width:", placeholder_width
+
+    for cls in adjuster_pool.adjusters["placeholder_width"]:
+        inst = cls()
+        placeholder_width = inst.modify(context, placeholder_width)
+        
     return placeholder_width
 
 def get_plugin_ancestry(plugin):
@@ -34,109 +44,43 @@ def get_plugin_ancestry(plugin):
         plugin = plugin.parent 
     return reversed(plugins)
 
-def calculate_container_width(plugins, width, auto = False):
-    """
-    These values are given as variables here because we never quite know how values such as 2/0/5 will be calculated - this way, we need not worry what the values will be
-    """
-    one = 1.0
-    half = 1.0/2
-    one_third = 1.0/3
-    one_quarter = 1.0/4
-    one_fifth = 1.0/5
-    one_sixth = 1.0/6
-    two_thirds = 2.0/3
-    three_quarters = 3.0/4
-    two_fifths = 2.0/5
-    three_fifths = 3.0/5
+def calculate_container_width(instance, width, auto = False):
+    markers={}
 
-    column_widths = {
-        one: 1.0,
-        half:48.5,
-        one_third:31.4,
-        one_quarter:22.85,
-        one_fifth:17.72,
-        one_sixth:14.23,
-        two_thirds:65.7,
-        three_quarters:74.5,
-        two_fifths:38.5,
-        three_fifths:58.9, }
-
-    # this truth table gives us clues about how to decide on width reductions. The three conditions that make up the key are:
-    #   auto, space [the space-on-left/right classes that we use], floated
-    # the reduce_by value is a percentage
-    reduce_by = {
-        (False, False, False): 100.0,
-        (False, False, True): 100.0,
-        (False, True, False): 67.0,
-        (False, True, True): 100.0,
-        (True, False, False): 100.0,
-        (True, False, True): 50.0,
-        (True, True, False): 67.0,
-        (True, True, True): 50.0,
-        }
-
-    has_borders = False
-    space = False
-    floated = False
-
+    plugins = get_plugin_ancestry(instance) # we could in theory have nested text/layout plugins, but in practice probably never will - it's not necessary, given the inner row/column capabilities of the semantic editor - so this list of plugins will usually just contain the plugin we're working on 
+    
     for plugin in plugins:
         print "start width", width
-        print "plugin", type(plugin) 
-        body = Text.objects.get(id=plugin.parent_id).body # get the body field of the Text object this item is inserted into
-        soup = BeautifulSoup(''.join(body)) # soup it up
-        target = soup.find(id="plugin_obj_"+str(plugin.id))  # find the element with that id in the HTML
-        grandparent_class = target.parent.parent.get("class", "") # find the image's span's containing div
-        print "  grandparent_class:", grandparent_class
-        if "space-on" in grandparent_class:
-            space = True
-        print "  space:", space
-
-        if "images-left" in grandparent_class or "images-right" in grandparent_class:
-            floated = True
-        
-        reduce_key = (auto, space, floated)
-        
-        print "  reduce key:", reduce_key, "reduceby:", reduce_by[reduce_key]
-        
-        width = width * reduce_by[reduce_key] / 100
-        print "  reduced width: ", width
-        print
+        print "plugin:", plugin, "id:", plugin.id, "type:", type(plugin) 
+        # get the body field (i.e. output HTML) of the Text object this item is inserted into
+        body = Text.objects.get(id=plugin.parent_id).body 
+        print "parent id:",plugin.parent_id
+        # soup it up
+        soup = BeautifulSoup(''.join(body)) 
+        # find the element with that id in the HTML
+        target = soup.find(id="plugin_obj_"+str(plugin.id)) 
+                    
+        # check for attributes that use the reduce_key
+        for cls in adjuster_pool.adjusters["plugin_width"]:
+            inst = cls()
+            width = inst.modify(target, width, auto)
         
         elements = reversed(target.findParents()) # get the tree of elements and reverse it
-        print "  -- examining elements --"        
-        for element in elements:
-            element_class = element.get("class", "") # and its HTML class
-            print  "    element name and class:", element.name, element_class
-            # width reduction for borders
-            if "image-borders" in element_class:
-                has_borders = True
-            # width reduction for outlines
-            if "outline" in element_class or "tint" in element_class:
-                print "  reducing by 32 for outline/tint"
-                width = width - 32
-            # prove we know when we have found a row 
-            if re.search(r"\brow\b", element_class):
-                print "    this is a row:", element_class
-                if "columns" in element_class:
-                    print "    width:", width
-            # if this is a column whose parent is a row        
-            if re.search(r"\column\b", element_class) and "columns" in element.parent.get("class", ""):
-                # columns is the number of columns, or 1 if not specified
-                columns = float(element.parent.get("class", "").split("columns")[1][0] or 1)
-                print "    this is a column:", element_class
-                # if double or triplewidth
-                if "triplecolumn" in element_class:
-                    columnwidth = 3.0
-                elif "doublecolumn" in element_class:
-                    columnwidth = 2.0
-                else:
-                    columnwidth = 1
-                print "    this column width:", columnwidth, "/", columns
-                # now use the value of columnwidth/columns as a key to the column_widths dict
-                width = width * column_widths[columnwidth/columns]/100
+        # we start with the root (i.e. document)
 
-    if has_borders:
-        print "-16 for borders"
-        width = width - 16
+        for element in elements:
+            # check for attributes that have a cumulative adjusting affect - we need to act each time we find one
+            for cls in adjuster_pool.adjusters["image_width"]:
+                inst = cls()
+                width = inst.modify(element, width)
+
+            # check for attributes that have an effect only once - act after the loop
+            for cls in adjuster_pool.adjusters["mark_and_modify"]:
+                inst = cls()
+                markers = inst.mark(element, markers)
+            
+    for cls in adjuster_pool.adjusters["mark_and_modify"]:
+        inst = cls()
+        width = inst.modify(markers, width)
         
     return width
