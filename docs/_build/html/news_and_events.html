@@ -1,0 +1,119 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; Arkestra v2.0dev documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Arkestra v2.0dev documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Arkestra v2.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <p>News and Events for Django CMS</p>
+<p>&lt;<a class="reference external" href="http://github.com/evildmp/Apps-for-Django-CMS/">http://github.com/evildmp/Apps-for-Django-CMS/</a>&gt;</p>
+<p>This application will manage and publish news articles and events for an institution.</p>
+<p>It requires the Contacts and People application, &lt;<a class="reference external" href="http://github.com/evildmp/Contacts-and-people/">http://github.com/evildmp/Contacts-and-people/</a>&gt;.</p>
+<p>A News item or Event can be can be attached to one or more Entities of an institution, by setting its Publishing destinations. This way the author of an item can control its distribution across a website.</p>
+<p>For example, consider an institution with the following hierarchy of entities:</p>
+<dl class="docutils">
+<dt>University of Rummidge</dt>
+<dd><dl class="first docutils">
+<dt>Faculty of Humanities</dt>
+<dd>Department of English
+Department of Philosophy
+[...]</dd>
+</dl>
+<p class="last">[...]
+Academic Exchange Office
+[...]</p>
+</dd>
+</dl>
+<p>A minor item in the Philosophy Department should be published at the level of the Philosophy department (on its home page or its news/events page, perhaps) but it shouldn&#8217;t appear outside that. (No-one else is very interested in minor items in the Philosophy department.)</p>
+<p>However, if the Department of English is involved in a high-profile academic exchange with Professor Morris Zapp from Euphoria State University, this should certainly go to the Department of English <em>and</em> the Academic Exchange Office, and if it&#8217;s important enough, the Faculty of Humanities too.</p>
+<p>A simple templatetag on the home page for each entity can display recent news headlines and event titles; a news/events page for each entity can hold an archive of news/events for that entity.</p>
+<p>It is also possible to add metadata to items describing which pages, people and other items they are related to. Uses for this would include:</p>
+<ul class="simple">
+<li>links on items directing readers to people mentioned or involved</li>
+<li>links on news items referring to previous stories on the subject/related events</li>
+<li>on a person&#8217;s profile page, lists of news stories/events referring to them</li>
+</ul>
+<p>There are many ways in which this application can (and needs to) be
+developed. However it is ready to use and includes templates and
+templatetags demonstrating some useful functionality.</p>
+<p>Its output can be explored (when the server is up) by starting at:</p>
+<p>&lt;<a class="reference external" href="http://w128.medcn.uwcm.ac.uk:8001/news/item/nixon-resigns/">http://w128.medcn.uwcm.ac.uk:8001/news/item/nixon-resigns/</a>&gt;</p>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/news_and_events.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Arkestra v2.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

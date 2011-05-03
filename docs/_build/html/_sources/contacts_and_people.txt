@@ -1,0 +1,92 @@
+###################
+Contacts and People
+###################
+
+This application will help manage an institution's people, entities and addresses.
+
+It is in a very basic form, and needs to be made considerably more sophisticated, but it works and has useful functionality.
+
+It has four components:
+
+*   Sites
+*   Addresses
+*   Entities
+*   People
+
+Briefly, this is how they work.
+
+*****
+Site
+*****
+A site is a collection of Places.
+
+A university might be based at several campuses (sites) each with a number of buildings (Places), for example.
+
+At present, each site has a name, town and country.
+
+*********
+Building
+*********
+
+On each site, there will be one or more buildings, so each building is assigned to a site.
+
+A building has a name and/or number, a street name, an additional address line, and a postal code. Together with the Site, this adds up to the complete postal address for a building.
+
+******
+Entity
+******
+
+An entity is a part of an institution - a faculty, department, office, commitee, helpdesk, section, etc. Entities are arranged in a hierarchy (each entity has a parent until we get to the root of the hieararchy). The hierarchy is managed by MPTT.
+
+Some entities are just abstract entities, i.e. groups of actual entities. For example, we might have an entity called "Departments", the group of all departments.
+
+An entity can be connected to a Page in Django CMS. This way, a Page in CMS can pull in all kinds of information from other databases and publish it automatically. 
+
+For example, if a page has been assigned to an entity, a templatetag in it can publish contact details, or lists of members, or appropriate news items, and so on.
+
+Entity names are also used to build the internal or institutional part of an address, for example:
+
+Complaints Department
+Customer Services
+Yoyodyne Corporation
+[...]
+
+An option for an entity is not to display its parent's name. This would be useful where an entity is not needed in to route mail or visitors. It is also useful in cases where we might find ourselves with a silly address like:
+
+[...]
+Department of Anaesthetics
+Cardiff University School of Medicine
+Cardiff University
+
+In such a case, Cardiff University School of Medicine obviously does not want its parent's address published.
+
+Entities can also be external to the institution.
+
+******
+Person
+******
+
+People share an abstract model for contact information with entities, and this is used to build the postal part of their address.
+
+In addition, a person has a Home entity, their base within the institution. Memebrship of an entity automatically gives a person membership of all its ancestors too.
+
+They can be added to other entities too, from different parts of the hierarchy. For example a person might belong to several different committees.
+
+A simple templatetag will generate a tree of the entities within the institution, showing only those nodes that a person belongs to.
+
+A person can have a another person assigned to them for contact purposes, so that the other person's contact details are published. This would be useful for when someone is away on leave, or prefers to have communications go through a secretary or assistant.
+
+Also important is the ability to override the person's entity for address purposes. For example, if a person is:
+
+Stanley Koteks
+Top Secret Project 
+Research Labs
+Yoyodyne Corporation
+
+it might not be a good idea to publish all that information. Instead, we can override "Top Secret project" and choose something safer ("Research Labs", or even just "Yoyodyne Corporation").
+
+There are many ways in which this application can (and needs to) be developed. However it is ready to use and includes templates and templatetags demonstrating some useful functionality.
+
+Its output can be explored (when the server is up) by starting at:
+
+<http://w128.medcn.uwcm.ac.uk:8001/en/person/mr-daniele-procida/>
