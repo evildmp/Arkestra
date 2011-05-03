@@ -2,7 +2,7 @@ import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.exceptions import ViewDoesNotExist
-from models import Person, Building, Site, Membership, Entity
+from models import Person, Building, Site, Membership, Entity, default_entity
 from links.link_functions import object_links
 
 from django.contrib.contenttypes.models import ContentType
@@ -11,12 +11,6 @@ from links.models import Link
 from django.conf import settings
 
 applications = getattr(settings, 'INSTALLED_APPS')
-
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-if not multiple_entity_mode and Entity.objects.all():
-    default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
-else:
-    default_entity = None
 
 google_maps_key = getattr(settings, "GOOGLE_MAPS_API_KEY", "")
 

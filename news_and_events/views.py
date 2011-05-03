@@ -1,18 +1,13 @@
 import django.http as http
 from django.shortcuts import render_to_response, get_object_or_404
 from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle # should improve 
-from contacts_and_people.models import Entity
+from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
 from links.link_functions import object_links
 from django.template import RequestContext, Context
 from datetime import datetime
 from functions import get_news_and_events
 
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-if not multiple_entity_mode and Entity.objects.all():
-    default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
-else:
-    default_entity = None
 news_and_events_list_default_limit = getattr(settings, "NEWS_AND_EVENT_LIMIT_TO", 8)
 h_main_body = settings.H_MAIN_BODY
 

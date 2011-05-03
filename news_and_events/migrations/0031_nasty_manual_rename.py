@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field publishing_destinations on 'Event'
         # db.delete_table('news_and_events_event_publishing_destinations')
-        db.rename_table('news_and_events_event_publishing_destinations', 'news_and_events_event_publish_to')
+        # db.rename_table('news_and_events_event_publishing_destinations', 'news_and_events_event_publish_to')
 
         # Adding M2M table for field publish_to on 'Event'
         # db.create_table('news_and_events_event_publish_to', (
@@ -37,7 +37,7 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field publishing_destinations on 'NewsArticle'
         # db.delete_table('news_and_events_newsarticle_publishing_destinations')
-        db.rename_table('news_and_events_newsarticle_publishing_destinations', 'news_and_events_newsarticle_publish_to')
+        # db.rename_table('news_and_events_newsarticle_publishing_destinations', 'news_and_events_newsarticle_publish_to')
 
         # Adding M2M table for field publish_to on 'NewsArticle'
         # db.create_table('news_and_events_newsarticle_publish_to', (
@@ -69,7 +69,7 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field publish_to on 'Event'
         # db.delete_table('news_and_events_event_publish_to')
-        db.rename_table('news_and_events_event_publish_to', 'news_and_events_event_publishing_destinations')
+        # db.rename_table('news_and_events_event_publish_to', 'news_and_events_event_publishing_destinations')
 
         # Changing field 'Event.subtitle'
         db.alter_column('news_and_events_event', 'subtitle', self.gf('django.db.models.fields.TextField')(max_length=350, null=True))
@@ -89,7 +89,7 @@ class Migration(SchemaMigration):
         # db.create_unique('news_and_events_newsarticle_publishing_destinations', ['newsarticle_id', 'entity_id'])
 
         # Removing M2M table for field publish_to on 'NewsArticle'
-        db.rename_table('news_and_events_newsarticle_publish_to', 'news_and_events_newsarticle_publishing_destinations')
+        # db.rename_table('news_and_events_newsarticle_publish_to', 'news_and_events_newsarticle_publishing_destinations')
  
         # Changing field 'NewsArticle.subtitle'
         db.alter_column('news_and_events_newsarticle', 'subtitle', self.gf('django.db.models.fields.TextField')(max_length=350, null=True))

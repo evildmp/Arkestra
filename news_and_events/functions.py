@@ -3,14 +3,8 @@ from django.db.models import Q
 from datetime import datetime
 import operator
 from django.conf import settings
-from contacts_and_people.models import Entity
+from contacts_and_people.models import Entity, default_entity
 from itertools import groupby
-
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-if not multiple_entity_mode and Entity.objects.all():
-    default_entity = Entity.objects.get(id = getattr(settings, 'ARKESTRA_BASE_ENTITY'))
-else:
-    default_entity = None
 
 collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 

@@ -1,5 +1,6 @@
 #app = contacts_and_people
 from django.db import models
+from django.db.utils import DatabaseError
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
@@ -10,7 +11,7 @@ from filer.fields.image import FilerImageField
 from links.models import ExternalLink
 import mptt
 
-
+multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)    
 Page = models.get_model('cms', 'Page')
 CMSPlugin = models.get_model('cms', 'CMSPlugin')
 
@@ -594,6 +595,15 @@ try:
     mptt.register(Entity)
 except mptt.AlreadyRegistered:
     pass
-    
+
+default_entity_id = default_entity = None
+try:
+    if not multiple_entity_mode and Entity.objects.all():
+        default_entity_id = getattr(settings, 'ARKESTRA_BASE_ENTITY')
+        default_entity = Entity.objects.get(id = default_entity_id)
+except DatabaseError:
+    pass
+
+  
 from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin

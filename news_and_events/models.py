@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Q
-from contacts_and_people.models import Entity, Person, Building
+from contacts_and_people.models import Entity, Person, Building, default_entity_id
 from links.models import ExternalLink
 from cms.models import Page
 from cms.models.fields import PlaceholderField
@@ -17,13 +17,6 @@ import mptt
 from django.conf import settings
 from cms.models import CMSPlugin
 
-# if not in multiple_entity_mode, use the default_entity where we can - we need to get this out of here
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
-if not multiple_entity_mode and Entity.objects.all():
-    default_entity_id = getattr(settings, 'ARKESTRA_BASE_ENTITY')
-else:
-    default_entity_id = None
-    
 get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
 collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 
