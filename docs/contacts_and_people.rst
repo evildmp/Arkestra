@@ -1,3 +1,5 @@
+.. py:module:: contacts_and_people
+
 ###################
 Contacts and People
 ###################
@@ -61,6 +63,9 @@ Cardiff University
 In such a case, Cardiff University School of Medicine obviously does not want its parent's address published.
 
 Entities can also be external to the institution.
+
+.. automodule:: contacts_and_people.models
+   :members:
 
 ******
 Person
