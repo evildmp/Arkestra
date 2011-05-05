@@ -6,28 +6,29 @@ from django.conf import settings
 from contacts_and_people.models import Entity, default_entity
 from itertools import groupby
 
+multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)    
 collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
 
 def get_news_and_events(instance):
     """
-    display
+    instance.display
         news:           show news
         events:         show events
         news events:    show both
         
-    view (applies to events only)
+    instance.view (applies to events only)
         current:        future
         archive:        past 
       
-    order_by
+    instance.order_by
         importance/date:    show important items first, then by date
         date:               by date only
 
-    format
+    instance.format
         featured horizontal:    limited to 3, layout stacked, importance/date, use images
         featured vertical:      limited to 3, importance/date, use images
 
-    type
+    instance.type
         sub_page        news archive, events archive, all forthcoming events (the only kind that has indexes)
         plugin          produced by a plugin
         main_page       a main news and events page
