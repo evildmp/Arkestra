@@ -7,6 +7,8 @@ def get_placeholder_width(context, plugin):
     """
     Gets the width placeholder in which a plugin finds itself
     
+    The 
+    
 	{% with
 	    adjust_width=current_page.flags.no_page_title 
 	    width_adjuster="absolute" 
@@ -25,6 +27,7 @@ def get_placeholder_width(context, plugin):
 
     """
     # try to get placeholder_width context variable; if not, then width; if not, use 100 (100 is for admin)
+    
     placeholder_width = float(context.get("placeholder_width", context.get("width", 100.0))) 
     print "placeholder width:", placeholder_width
 
