@@ -460,7 +460,7 @@ class BuildingInline(admin.StackedInline):
 
 class SiteAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'post_town', 'country',)
-    inlines = (BuildingInline,)
+    # inlines = (BuildingInline,) # not working for some reason - can't render the inlines
     tabs = (
             ('General', {
                     'fieldsets': (
