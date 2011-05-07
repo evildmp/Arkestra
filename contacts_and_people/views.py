@@ -11,8 +11,7 @@ from links.models import Link
 from django.conf import settings
 
 applications = getattr(settings, 'INSTALLED_APPS')
-
-google_maps_key = getattr(settings, "GOOGLE_MAPS_API_KEY", "")
+multiple_entity_mode = getattr(settings, 'MULTIPLE_ENTITY_MODE')
 
 if 'publications' in applications:
     from publications.models import BibliographicRecord
