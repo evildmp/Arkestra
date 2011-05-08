@@ -243,7 +243,6 @@ def place(request, slug, active_tab = ""):
         "place":place,
         "tabs": tabs,
         "active_tab": active_tab,
-        "key": google_maps_key,
         "template": default_template,
         "meta": meta,
         },
