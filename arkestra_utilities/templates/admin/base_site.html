@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+{% block extrastyle %}<link rel="stylesheet" type="text/css" href="/static/admin/css/arkestra.css" />
+{% endblock %}
+
+{% block title %}{{ title }} | {% trans 'Arkestra administration' %}{% endblock %}
+
+{% block branding %}<img src="/static/admin/images/arkestra_admin_logo.png" alt = "" />
+{% endblock %}
+
+
+{% block nav-global %}{% endblock %}

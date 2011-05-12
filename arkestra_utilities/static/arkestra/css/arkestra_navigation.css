@@ -1,0 +1,40 @@
+ul#tab_menu {
+	border-bottom: 7px solid #707070;
+	float:left;
+	width: 100%; /* width of entire menu */
+	margin: 0 0 .5em 0; /*margin underneath menu*/
+	padding: 0;
+	list-style: none;
+}
+ul#tab_menu li {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_rt.gif) no-repeat right top;
+	float:left;
+	margin: 0 2px 0 0; /*gap between menu tabs*/
+	padding:0;
+}
+ul#tab_menu a {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_lt.gif) no-repeat left top;
+	display:block;
+	padding: 0.1em 1.2em;/*padding within tab*/	
+}
+ul#tab_menu  .active strong {
+	color:#fff;
+	display:block;
+	padding: 0.1em 1.2em;		
+}
+ul#tab_menu .active {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_active_rt.gif) no-repeat right top;
+	border-bottom: 1px solid #707070;
+}
+ul#tab_menu .active strong {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_active_lt.gif) no-repeat left top;
+}
+ul#tab_menu a, 
+ul#tab_menu li a:link, 
+ul#tab_menu li a:hover, 
+ul#tab_menu li a:visited, 
+ul#tab_menu li a:active{
+	color:#fff;
+	text-decoration:none;
+	border-bottom: none;
+}

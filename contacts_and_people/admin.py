@@ -181,7 +181,6 @@ class PersonForm(forms.ModelForm):
     class Media:
         js = (
             '/media/cms/js/lib/ui.sortable.js',
-            '/media/jquery/menu-sort-people.js',
             )
 
     def clean(self):
@@ -251,10 +250,10 @@ class PersonAdmin(PlaceholderAdmin):
         js = (
             '/media/cms/js/lib/jquery.js',
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-             'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+             'all': ('/static/jquery/themes/base/ui.all.css',)
         }
     related_search_fields = {
             'please_contact': ('surname',),
@@ -420,10 +419,10 @@ class EntityAdmin(admin.ModelAdmin):
         js = (
             '/media/cms/js/lib/jquery.js',
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }        
     related_search_fields = ['parent', 'building', 'website',]
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -477,10 +476,10 @@ class SiteAdmin(admin.ModelAdmin):
         js = (
             '/media/cms/js/lib/jquery.js',
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
 
 class BuildingAdmin(PlaceholderAdmin):
@@ -490,10 +489,10 @@ class BuildingAdmin(PlaceholderAdmin):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
 
 admin.site.register(models.Person,PersonAdmin)

@@ -1,0 +1,8 @@
+div.linkIcon ul li	a {
+	background: url(/media/images/arrow_cu_right.gif) left 1px no-repeat;
+	padding: 0 0 0 15px;
+	}
+	
+div.linkIcon ul li {
+	list-style: none;
+	margin-left: 0; padding-left: 0;}	

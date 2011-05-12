@@ -1,0 +1,75 @@
+{% block doctype %}<!DOCTYPE html>{% endblock doctype %} 
+{% load cache cms_tags link_tags menu_tags typogrify %}
+{% block html_tag %}<html lang="en" >{% endblock html_tag %}
+{% block head %}
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+{% block meta %}
+	{% if meta.items %}
+		{% for name,content in meta.items %}
+			<meta name="{{ name }}" content="{{ content }}" />
+		{% endfor %}
+	{% else %}
+		<meta name="description" content="{% page_attribute meta_description %}"/>
+	{% endif %}
+{% endblock meta %}
+
+{% block title %}<title>{% page_attribute title %}</title>{% endblock %}
+
+{% block favicon %}
+<link rel="icon" 
+      type="image/png" 
+      href="/static/arkestra/images/arkestra-favicon.png">
+{% endblock favicon %}
+
+{% block styles %}
+  <style media="screen" type="text/css"><!--
+    @import url("{{ STATIC_URL }}arkestra/css/arkestra.css");
+    @import url("{{ STATIC_URL }}arkestra/css/arkestra_layout.css");
+    @import url("{{ STATIC_URL }}arkestra/css/arkestra_navigation.css");
+    @import url("{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css");
+    @import url("{{ STATIC_URL }}arkestra/css/temporaryhacks.css");
+    @import url("{{ STATIC_URL }}arkestra/css/carousel.css");
+    @import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css");
+
+		--></style>
+  <!--[if IE]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
+  <!--[if IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if lt IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie6.css" rel="stylesheet" type="text/css" /><![endif]--> 
+
+    {% block extrastyles %}
+    {% endblock extrastyles %}
+
+{% endblock styles %}
+
+{% block scripts %}<script type="text/javascript" src="/media/cms/js/lib/jquery.js"></script>{% endblock scripts %}
+
+</head>
+{% endblock head %}
+
+{% block body %}<body {% block body_attributes %}{% endblock body_attributes %}>
+<div id="outer-wrapper">
+	<div id="inner-wrapper">
+		{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
+
+		{% block pagetitle %}
+			{% if not current_page.flags.no_page_title %}
+	           	{% filter typogrify %}<h{{page_title_heading_level}}>{% page_attribute title %}</h{{page_title_heading_level}}>{% endfilter %}
+			{% endif %}
+		{% endblock pagetitle %}
+		
+		{% block main_page_body %}
+	   		{% placeholder body %}
+	  	{% endblock main_page_body %}
+     
+		{% block footer %}
+			<div class = "footer row"><ul><li class="arkestra">This website is powered by <a href="http://medicine.cardiff.ac.uk/">Arkestra</a>.</li></ul></div>
+		{% endblock footer %}
+	</div>
+</div>		
+
+</body>
+{% endblock body %}
+</html>

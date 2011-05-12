@@ -1,0 +1,14 @@
+/* IE all */
+
+
+
+/* Move the text away from the open quote */
+p.pull-out {
+    list-style-image:url(../fixes/quotes-left-wide.png);
+}
+
+
+.faded, .faded li, .faded li a
+{
+    background: #ccc;
+}

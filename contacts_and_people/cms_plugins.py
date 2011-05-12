@@ -34,10 +34,10 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/media/arkestra//static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
         }
    
     
@@ -93,10 +93,10 @@ class EntityDirectoryPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/media/arkestra//static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
         }
    
     def render(self, context, instance, placeholder):
@@ -151,10 +151,10 @@ class EntityMembersPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/js/jquery/ui/ui.tabs.js',
+            '/media/arkestra//static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra/js/jquery/themes/base/ui.all.css',)
+            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
         }
    
     def render(self, context, instance, placeholder):

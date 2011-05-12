@@ -1,0 +1,18 @@
+{% load cms_tags cache %}
+{% load typogrify %}
+{% load menu_tags %}
+
+{#% cache CMS_CONTENT_CACHE_DURATION menu page.id lang current_page.id %#}
+{% for child in children %}
+<li> 
+    <a href="{{ child.get_absolute_url }}" class="
+        {% ifequal child.menu_level 0 %}subsite_head{% endifequal %}
+ 		{% if child.selected %}current{% endif %}">
+        {{ child.get_menu_title|typogrify }}</a>
+        {% if child.childrens %}
+            <ul>{ % show_menu from_level to_level extra_inactive extra_active template "" "" child %}</ul>
+        {% endif %}
+        </li>
+    {% endfor %}
+
+{#% endcache %#}

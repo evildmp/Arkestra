@@ -200,6 +200,13 @@ def person(request, slug, active_tab = ""):
         )
 
 def place(request, slug, active_tab = ""):
+    """
+    Receives active_tab from the slug.
+    
+    The template receives "_" + active_tab to identify the correct template (from includes).
+    
+    
+    """
     print "place(request, slug):"
     place = Building.objects.get(slug=slug)
     tabs = [
@@ -220,7 +227,14 @@ def place(request, slug, active_tab = ""):
                 "address": "directions",
                 "title": "Directions etc.",
             })
-   
+    # if we're going to show tabs, putthe about tab first
+    if tabs:
+        about_tab = {
+            "address": "",
+            "title": "About",
+        }
+        tabs.insert(0, about_tab)
+    
     if default_entity:
         request.current_page = default_entity.get_website()
     else:

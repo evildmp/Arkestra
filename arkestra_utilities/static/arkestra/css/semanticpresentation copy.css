@@ -1,0 +1,142 @@
+/* Within each row, columns are floated (all floated left, except for the last one which is floated right. We need the row to expand downwards to the bottom of the columns it contains, and it won't do this automatically because the columns are floated. So, this is a technique to insert some invisible content after the elements, and which pull down the bottom of the row. */
+
+div.row:after	{
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+}
+
+.column {
+	float: left;
+	margin-left: 3%;
+	}
+
+.column.firstcolumn	{
+	margin-left: 0;
+	}
+		
+.column.lastcolumn	{
+	float: right;
+	margin-left: 0 !important; 
+	} 
+
+/* This controls the vertical margins on each row - adjust to taste */
+
+div.row {margin: .3em 0 .8em;}
+
+/* A tint is a background colour on an item - it could be a row, column, paragraph, list or other block element. When such a background colour is applied, it looks better if it pads out the element. If you want to add more tints, just name the classes appropriately, and add them to the selector below (e.g. tint, tint1, tint2 etc) */
+
+.tint1,
+.outline	{
+	padding-top: 1.5%; 
+	padding-right: 1.5%;
+	padding-left: 1.5%;
+	padding-bottom: 0;
+	}
+
+.tint1   {background: #def;}
+
+.outline   {outline: 1px solid gray;}
+
+
+/* Because IE 6 is shit - in a sane world this wouldn't be necessary */
+	
+h2, h3, h4, h5, h6 {clear: left;} 
+.row	{height: 0%; }
+
+
+
+/* The basic row/column system works as in the following example for three columns of equal size:
+
+<div class="row columns3">
+    <div class="columns firstcolumn"></div>
+    <div class="columns column"></div>
+    <div class="columns lastcolumn"></div>
+</div> 
+
+Here we set the widths for columns, according to how many columns the parent row has. Feel free to adjust the widths to taste. 
+
+We have a class for double-width columns (note that a double-width column is as wide as two normal ones, so it counts for two in as far as the row is concerned - a normal-width column and a double-width column require a three-column row; similarly for triple-width columns.
+
+We also need to add classes for the tinted columns, to reduce those widths.  IE 6 can't distinguish between .tint.doublecolumn and .doublecolunm, so it won't reduce them. We can't do much about that. */ 
+
+
+
+
+/* 1/3 width columns */
+.columns3 .column       {width: 31.4%; }
+.columns3 .column.tint1,
+.columns3 .column.outline	{width: 28.4%; }
+
+/* 1/4 width columns */
+.columns4 .column	{width: 22.85%;}
+.columns4 .column.tint1,
+.columns4 .column.outline	{width: 19.85%;}
+
+/* 1/5 width columns */
+.columns5 .column	{width: 17.72%;}
+.columns5 .column.tint1	{width: 14.72%;}
+
+/* 1/6 width columns */
+.columns6 .column	{width: 14.23%;}
+.columns6 .column.tint1	{width: 11.23%;}
+
+/* 2/3 width columns */
+.columns3 .doublecolumn	{width: 65.7%;}
+.columns3 .tint1.doublecolumn,
+.columns3 .outline.doublecolumn	{width: 62.7%;}
+
+/* 1/2 width columns */
+.columns2 .column,
+.columns4 .doublecolumn,
+.columns6 .triplecolumn       {width: 48.5%;}
+
+.columns2 .column.tint1,
+.columns2 .column.outline,
+.columns4 .tint1.doublecolumn,
+.columns4 .outline.doublecolumn,
+.columns6 .tint1.triplecolumn,
+.columns6 .outline.triplecolumn    {width: 45.5%;}
+
+/* 3/4 width columns */
+.columns4 .triplecolumn	        {width: 74.5%;}
+.columns4 .tint1.triplecolumn	{width: 71.2%;}
+
+/* 2/5 width columns */
+.columns5 .doublecolumn	        {width: 38.5%;}
+.columns5 .tint1.doublecolumn	{width: 38.2%;}
+
+/* 3/5 width columns */
+.columns5 .triplecolumn      {width: 58.9%;}
+.columns5 .tint1.doublecolumn	{width: 35.2%;}
+
+/* 2/6 width columns */
+.columns6 .doublecolumn         {width: 31.4%;}
+.columns6 .tint1.doublecolumn	{width: 31.4%;}
+
+/* non-layout styling */
+
+
+/* An example of a style for link icons, when in lists */
+
+ul.linkicon {
+	margin: 0 0 .5em 0;
+	padding:0;
+	list-style:none;
+	}
+ul.linkIcon li {
+	margin:0;
+	list-style:none;
+	}
+
+/* To make a list item stand out */
+
+li.key	{font-weight: bold;}	
+
+/* inline lists */
+
+ul.horizontal li  {
+    display: inline;
+    }

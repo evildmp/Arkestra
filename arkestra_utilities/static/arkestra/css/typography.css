@@ -1,0 +1,16 @@
+body	{
+	background: white ;
+    margin: 10%;
+	font-family: "Optima", "Gill Sans", "gill sans mt", helvetica, sans-serif ;
+	}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Gill Sans", "gill sans mt", "Optima", helvetica, sans-serif ;
+    }
+    
+h1  {font-size: 150%;}
+h2  {font-size: 140%;}
+h3  {font-size: 130%;}
+h4  {font-size: 120%;}
+h5  {font-size: 110%;}
+h6  {font-size: 100%;}

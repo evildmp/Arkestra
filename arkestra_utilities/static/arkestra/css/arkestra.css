@@ -1,0 +1,456 @@
+/* Within each row, columns are floated (all floated left, except for the last one which is floated right. We need the row to expand downwards to the bottom of the columns it contains, and it won't do this automatically because the columns are floated. So, this is a technique to insert some invisible content after the elements, and which pull down the bottom of the row. */
+
+.row:after, .expands:after	{
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+    }
+
+/* vertical margins on each row - adjust to taste */
+
+div.row {
+    clear: both;
+    margin: .5em 0 .2em;
+    height:100%;
+    }
+
+.row ul.row ,
+.row .row {
+    margin: 0 0 .5em; 
+    height: 100%; /* why do we do this? */
+    }
+
+div.plugin  {margin-bottom: 1em;}
+div.plugin div.row  {margin: 0; padding: 0;}
+
+/* column widths 
+
+These need to be ordered carefully. 
+
+Firstly, single-width columns - .column - need to come before double and triple-width ones, so that they don't override them. We could solve this with chained selectors - /column.doublecolumn - but of course IE6 is too stupid to recognise these
+
+Secondly, if a column has *both* double and triple columns:
+
+    the semantic editor treats it a s a double, so:
+    the presentation system in arkestra_utilities/output_libraries/plugin_widths.py will do the same, so:
+    doublecolumns must come last
+
+ */
+
+/* single widths */
+
+.columns1 .column,
+.column .columns1 .column   { width: 100%;}
+
+.columns2 .column, 
+.column .columns2 .column   {width: 48.5%;}
+
+.columns3 .column,
+.column .columns3 .column   {width: 31.4%; }
+
+.columns4 .column,
+.column .columns4 .column	{width: 22.85%;}
+
+.columns5 .column,
+.column .columns5 .column 	{width: 17.72%;}
+
+.columns6 .column,
+.column .columns6 .column	{width: 14.23%;}
+
+/* triple widths */
+
+.columns4 .triplecolumn,
+.column .columns4 .triplecolumn     {width: 74.5%;}
+
+.columns5 .triplecolumn,
+.column .columns5 .triplecolumn     {width: 58.9%;}
+
+.columns6 .triplecolumn,
+.column .columns6 .triplecolumn     {width: 48.5%;}
+
+/* double widths */
+
+.columns3 .doublecolumn,
+.column .columns3 .doublecolumn     {width: 65.7%;}
+
+.columns4 .doublecolumn,
+.column .columns4 .doublecolumn     {width: 48.5%;}
+
+.columns5 .doublecolumn,
+.column .columns5 .doublecolumn     {width: 38.5%;}
+
+.columns6 .doublecolumn,
+.column .columns6 .doublecolumn     {width: 31.4%; }
+
+/* all rows float left except the last, which floats right
+all rows have a left margin except the first, which has none */
+
+.row .column	{
+	float: left;
+	margin-left: 2.8%; 
+	}
+	
+.row li.column {
+    list-style: none; 
+    font-size: 1em; 
+    display: block; 
+    clear: none;
+    }
+
+div.column.firstcolumn,
+li.column.firstcolumn	{
+	margin-left: 0;
+	}
+		
+div.column.lastcolumn,
+li.column.lastcolumn	{
+	float: right;
+	clear: right;
+	margin-left: 0 !important; 
+	} 
+
+/* lists */	
+
+/* we really need to fix some of these styles. the idea of a div.plugin ul li is quite out of date now and a nuisance */
+
+ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
+	
+ul, ol, dl  {margin-left: 0; padding-left: 0;}	
+ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}	
+	
+ul.linkIcon,
+ul.plugin,
+.fancy ul {
+		margin: 0;
+		padding: 0;
+		list-style:none;
+	}
+
+ul.linkIcon li, 
+ul.plugin_list li,
+.fancy li   {
+    list-style:none;
+    margin: 0;
+    }
+
+div.plugin ul {
+    font-weight: normal;
+    list-style:none;
+    /* font-size: 1em; */
+    }
+
+div.plugin ul li {
+    margin: 0;
+    }
+
+div.plugin li.pluslistitem   {
+    clear: right;
+    padding: 0 0 .4em;
+}    
+
+.plugin li    {
+    line-height: 1.25; 
+    padding-bottom: .6em;
+    clear: both;
+    }
+
+ul.none {list-style-type: none;}
+
+ul.linkIcon li, 
+.fancy li,  
+li.key   {
+	background: url(/media/images/hand-right.png) left .5ex no-repeat;
+	padding-left: 30px;
+	display: block;
+	}
+
+.fancy li li,  
+li.key li    {
+	background: none;
+	padding-left: 20px;
+	display: block;
+	}
+	
+li.grouper {font-weight: bold; color: #903;  }
+li.grouper ul {font-weight: normal; color: black;}
+	
+li.key	{font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;}	
+
+ul	{margin-bottom: 1em;}
+ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
+
+li.grouper.top-news ul li , li.grouper.top-events ul li {padding: .5em; margin-bottom: 1em;	background: #eee;}
+ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
+ul.entity-tree li {margin: 0; padding: 0;}
+ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
+ul.entity-tree li {list-style: none;}
+
+/* used only in entity trees, I think */
+
+.grey   {color: gray;}
+.italic {font-style: italic;}
+.bold   {font-weight: bold;}
+
+/* directories */
+
+div.directory ul {list-style: none; }
+div.directory li {margin-left: 0;}
+div.directory li li {margin-left: 1.5em;}
+div.directory ul li .entity {font-weight: bold; }
+div.directory ul li li .entity {font-weight: normal;}
+
+/* inline lists */
+
+ul.horizontal li, ul.horizontal a  {
+    display: inline;
+    list-style-type: none;
+    }
+
+ul.horizontal.grid li {
+        padding-right: 1em;}
+
+li.horizontal   {float: left; list-style-type: none;}
+
+ul.index li  {
+    font-weight: bold;
+    display: inline;
+    float: left;
+    margin: 0px 0.3em 0.4em 0px
+    }
+
+ul.index li a {display: block;
+    padding: 0.1em;
+    width: 2.1em;
+    color: white;
+    background: #903;
+    text-align: center;
+    border: 1px solid black;
+    }
+
+ul.index li a:hover {
+    text-decoration: none;
+    color: #903;
+    background: white;
+    }
+
+ul.boxed li {
+    border: 1px solid #ccc;
+    background: #ecf1ff;
+    list-style:none;
+    padding: .5em;
+    margin: 0 0 1em;
+    }
+    
+ul.boxed li li {border: none;}
+ul.boxed li dl {margin:0;}
+
+dl dd {padding: 0; margin: 0 0 0 15px;}
+
+/* for the sub column - the right hand column in some pages - that contains lists of links etc */
+
+div#sub ul.none li  {margin-bottom: 1em; }
+div#sub h3  {font-size: 1em;}
+
+/* link system */
+
+li div.link-description  {padding: 0 0 0 0;}
+
+/*because IE 6 is rubbish - moved this to the fixes file*/
+	
+/* h2, h3, h4, h5, h6 {clear: left;} 
+.row	{height: 0%; } */
+
+/* images */
+
+/* an image from a plugin will be inside a span.image, along with its span.image_caption */
+
+span.image {display: block; clear: both;}
+span.image img {padding: 5px 0; }
+span.image_caption,
+p.image_caption  {font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+
+a img {border: none;}
+
+/* images as used in news plugins etc are usually floated right */
+
+img.left    {float: left; margin-right: 1em; margin-bottom: .5em;}
+img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
+
+/* styles available to the presentation editor */
+
+/* 
+standout - large type
+big-quotes - fancy quotes - implies standout */
+
+p.standout, 
+p.big-quotes
+    {
+    font-size:177%; 
+    line-height: 1.5;
+    font-family:"Hoefler Text", "Didot", Georgia, serif;
+    padding-right:25px;
+    margin-left:0;
+    margin-top:.0em;
+    }
+
+p.standout:first-line,
+p.big-quotes:first-line   {
+    color: #990033;
+}
+
+p.big-quotes     {
+    background:url(fixes/quotes-right.png) right bottom no-repeat;
+    display:list-item;
+    padding-left:35px; 
+    list-style:none inside url(fixes/quotes-left.png);
+    text-indent:-35px;
+    }
+/* 
+pull-out - in a space-on-right or space-on-left element, brings the pulled-out element out of the margin in the appropriate direction
+*/
+
+div.space-on-right .pull-out-new,
+div.space-on-right.images-right span.image    {
+    float: right;
+    clear:right;
+    margin-right: -50%;
+    margin-left: 10%;
+    }
+
+div.space-on-left .pull-out-new,
+div.space-on-left.images-left span.image    {
+    float: left;
+    clear: left;
+    margin-left: -50%;
+    margin-right: 10%;
+    }
+
+.pull-out-new {width: 75%;}    /* the ones which aren't images need a width - for images, Arkestra will do its best to give them a 75% width based on a typical browser text size */
+
+div.space-on-left p.pull-out-new.big-quotes,
+div.space-on-right p.pull-out-new.big-quotes   { width: 65%;} /* makes a bit of room for the quotes */
+
+div.space-on-left .pull-out-new.standout   {margin-right: 3.5%;}
+div.space-on-right .pull-out-new.standout   {margin-left: 3.5%;}
+
+div.space-on-left p.pull-out-new.big-quotes {margin-right: 5%;}
+div.space-on-right p.pull-out-new.big-quotes{margin-left: 5%;}  
+
+/* drop caps */   
+        
+p.drop-cap:first-letter  {
+    float: left;
+    font-family: "Hoefler Text", "Didot", Georgia, serif;
+    font: 300% bold;
+    line-height: 1;
+    margin-right: 0.04em;
+    margin-bottom:-0.1em;
+}
+
+/* 
+images: float left/right - left/right floats can be applied either directly to image plugins or their containers */
+
+.images-left span.image,
+span.image.left {
+    float: left; 
+    margin-right: 10%; 
+    clear: none;
+    }
+
+.images-right span.image,
+span.image.right {
+    float: right; 
+    margin-left: 10%; 
+    clear: none;
+    }
+
+/* 
+
+images: have borders - appplied to the elements containing images/carousels
+
+it's a bit awkward when non-floated images can have borders, because then the border area is the width of the containing element, which can be rather wide*/
+
+.image-borders span.image
+  {
+    background: #efefef; 
+    padding: 4px 7px; 
+    border: 1px solid #EBD4DB;
+    margin-bottom: 2px;
+    }
+
+.image-borders div.carousel-envelope
+  {
+    background: #efefef; 
+    padding: 4px 7px; 
+    border: 1px solid #EBD4DB;
+    margin-bottom: 2px;
+    }
+
+/* typogrify */
+
+.caps {font-size: 92%;}
+.amp {font-size: 105%; font-family: "Hoefler Text", "Didot", Georgia, serif; font-style:italic;}    
+.dquo {margin-left:-.3em; }
+
+div.contact_information {font-size: .9em; line-height: 1.3;}
+div.contact_information .entity {font-weight: bold;}
+
+dt  {color: gray;}
+
+/* subtitle for news, events, etc */
+.subtitle   {color: gray; size: 120%;} /* probably looks best at <h2> size, since that's what is used in Events and other pages */
+.plugin .subtitle   {color: black;}  /* font-size: 95%; for the ones in lists */
+
+.date   {color: #666; font-weight: lighter;}
+
+/* styles for publications */
+
+cite.articles, cite.conference-proceedings    {font-style: normal; }
+cite.journal    {font-style: italic;}
+.publication-details    {color: #777;}
+ul.publications {list-style-type: none;}
+.publications li { margin-left: 0; padding-left: 0;}
+.publications dd, .publications li  {margin-bottom: .5em}
+.statistics dt {color: #903;}
+
+/* A tint is a background colour on an item - it could be a row, column, paragraph, list or other block element. When such a background colour is applied, it also pads out the element. */
+
+.tint, .tint1, .tint2, .tint3, .tint4, .tint5, .tint6,
+.outline, .outline-red	{
+	padding: 1em;
+    }
+
+.outline   {outline: 1px solid gray;}
+.outline-red   {outline: 1px solid #990033;}
+
+div.space-on-left {margin-left: 33%;}
+div.space-on-right {margin-right: 33%;}
+
+img.center {
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	}
+
+/* pull-out, stand-out, quotes */
+/* old version- we don't use this any more */
+
+p.pull-out  {
+    background:url(fixes/quotes-right.png) right bottom no-repeat;
+    font-size:177%; 
+    line-height: 1.5;
+    font-family:"Hoefler Text", "Didot", Georgia, serif;
+    margin-left:0;
+    margin-top:.0em;
+    padding-left:35px; 
+    padding-right:25px;
+    text-indent:-35px;
+    display:list-item;
+    list-style:none inside url(fixes/quotes-left.png);
+}
+
+p.pull-out:first-line   {
+    color: #990033;
+}

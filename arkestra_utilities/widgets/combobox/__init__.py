@@ -35,11 +35,11 @@ class Combobox(forms.Select):
         context = {
             'name': name,
             'CMS_MEDIA_URL': settings.CMS_MEDIA_URL,
-            'MEDIA_URL': settings.MEDIA_URL,
+            'STATIC_URL': settings.STATIC_URL,
         }
         return rendered + mark_safe(u'''<script type="text/javascript">
             $(document).ready(function(){
-                $('#id_%(name)s').combobox({autoShow: false,arrowURL:'%(MEDIA_URL)scombobox/drop_down.png',});
+                $('#id_%(name)s').combobox({autoShow: false,arrowURL:'%(STATIC_URL)scombobox/drop_down.png',});
             });
             </script>''' % context)
 

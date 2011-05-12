@@ -1,0 +1,145 @@
+#content    {margin-right: .7em;}
+
+/* IE 6 */
+
+div.column.lastcolumn,
+li.column.lastcolumn	{
+	float: right !important; 
+	} 
+
+.row .firstcolumn   {margin-left: 0;}
+
+div.space-on-left {margin-left: 0;} 
+div.space-on-right {margin-right: 0;}
+
+div.space-on-left p.pull-out-new,
+div.space-on-left span.image.left,
+div.space-on-left.images-left span.image    {
+    float: none;
+    clear: left;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+div.space-on-right p.pull-out-new,
+div.space-on-right span.image.right,
+div.space-on-right.images-right span.image    {
+    float: none;
+    clear: right;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+div.space-on-left p.pull-out-new.big-quotes,
+div.space-on-right p.pull-out-new.big-quotes {width: auto;}
+
+
+/* these are some horrible hacks for the span.image boxes. Oh well. */
+
+/* div.div span.image  {float: left; overflow: hidden; width: 100%;} 
+div.image-borders div.div span.image  {width: 95%;}*/
+
+.images-left span.image,
+span.image.left {float: left; margin-right: 2px; clear: none;}
+.images-right span.image,
+span.image.right {float: right; margin-left: 2px; clear: none;}
+
+
+/* START: Carousel css for IE6 */
+div.carousel
+{
+    border:1px solid #000000;
+    margin:0;
+    padding:0;        
+    position:relative;
+}
+
+
+div.carousel ul.carousel-segments
+{
+    margin:0;
+    padding:0;        
+}
+
+div.carousel ul.carousel-segments li.carousel-segment
+{
+    display:none;
+    list-style-type:none;
+    margin:0;
+    padding:0;            
+}
+
+div.carousel ul.carousel-segments li.carousel-segment p, div.carousel ul.carousel-segments li.carousel-segment p a, div.carousel ul.carousel-segments li.carousel-segment a
+{
+    color:#ffffff; 
+    font-size:1em;
+    position:absolute;
+}
+
+div.carousel ul.carousel-segments li.carousel-segment p a, div.carousel ul.carousel-segments li.carousel-segment a
+{
+    text-decoration:underline;
+}
+
+
+div.carousel ul.carousel-btns, div.carousel ul.carousel-btns li.carousel-btn
+{
+    background-color:#000000;
+}
+
+div.carousel ul.carousel-btns
+{
+    bottom:0px;
+    margin:0;
+    padding:0;  
+    position:absolute;
+    width:100%;
+}
+
+div.carousel ul.carousel-btns li.carousel-btn
+{
+    cursor:default;
+    display:block;
+    float:left;
+    font-size:1.1em;
+    height:3em;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+    width:33%;
+}
+
+div.carousel ul.carousel-btns li.carousel-btn.single-line
+{
+    line-height:3em;
+}
+
+div.carousel ul.carousel-btns li.carousel-btn.multi-line
+{
+    line-height:1.35em;
+}
+
+div.carousel ul.carousel-btns li.carousel-btn, div.carousel ul.carousel-btns li.carousel-btn a
+{
+    color:#ffffff;
+    display:block;
+    text-decoration:none;    
+}
+
+div.carousel ul.carousel-btns li.carousel-btn.focus, div.carousel ul.carousel-btns li.carousel-btn.focus a
+{
+    background-color:#404040;
+    color:#ffffff;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+
+.faded, .faded * {
+	filter:alpha(opacity=90); /* IE lt 8 */
+	opacity:0.90; /* FF lt 1.5, Netscape */
+}
+/* FINISH: Carousel css for IE6 */

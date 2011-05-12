@@ -1,0 +1,14 @@
+/* IE 7 */
+
+div.space-on-left p.pull-out-new,
+div.space-on-left span.image.left,
+div.space-on-left.images-left span.image    {
+    margin-left: -30%;
+    }
+
+div.space-on-right p.pull-out-new,
+div.space-on-right span.image.right,
+div.space-on-right.images-right span.image    {
+    margin-right: -30%;
+    }
+

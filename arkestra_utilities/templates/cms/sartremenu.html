@@ -1,0 +1,22 @@
+{% load cms_tags cache %}
+{% load typogrify %}
+
+{#% cache CMS_CONTENT_CACHE_DURATION menu page.id lang current_page.id %#}
+{% for child in children %}
+<li class="menu-{{ child.level }}
+        {% if child.selected %}selected{% endif %}
+    	{% if child.is_leaf_node %}leaf node{% endif %}
+    	{% if child.ancestor %}ancestor{% endif %}
+        {% if child.childrens %}children{% endif %}
+    	{% if child.descendant %}descendant{% endif %}
+    	{% if child.sibling %}sibling{% endif %}
+    	">
+        <a href="{{ child.get_absolute_url }}">
+        <span>
+        {{ child.get_menu_title }}
+</span></a>
+        {% if child.childrens %}
+            <ul>{% show_menu from_level to_level extra_inactive extra_active template child %}</ul>
+        {% endif %}</li>
+{% endfor %}
+{#% endcache %#}

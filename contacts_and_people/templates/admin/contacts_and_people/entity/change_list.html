@@ -3,8 +3,15 @@
 {% block title %}List of entities{% endblock %}
 {% block bodyclass %}change-list{% endblock %}
 
+{% if not is_popup %}{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="../../">{% trans "Home" %}</a> &rsaquo; 
+    <a href="../">{{ app_label|capfirst|escape }}</a> &rsaquo; {{ opts.verbose_name_plural|capfirst|escape }}
+    </div>
+{% endblock %}{% endif %}
+
 {% block coltype %}flex{% endblock %}
-{% block extrahead %}{{ block.super }}
+{% block extrahead %}
 
 <link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}css/pages.css"/>
 <link rel="stylesheet" type="text/css" href="{{ CMS_MEDIA_URL }}jstree/tree_component.css" />
@@ -12,7 +19,9 @@
 
 
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/csrf.js"></script>
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.livequery.js"></script>
+
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.core.js"></script>
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/jquery.bind.js"></script>
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.checkbox.js"></script>
@@ -23,9 +32,8 @@
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}jstree/tree_component.js"></script>
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/ui.dialog.js"></script>
 <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/lib/functional.js"></script>
-{# <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/change_list.js"></script> #}
-<script type="text/javascript" src="{{ MEDIA_URL }}javascript/change_list.js"></script>
-
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/tools.js"></script>
+<script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/change_list.js"></script>
 
 
 {% if cl.is_filtered %}
@@ -35,45 +43,85 @@
 
 {% block content %}
 <script type="text/javascript">
-	function showchangelistfilter(){
+//<![CDATA[	
+(function($) {
+	$(document).ready(function() {
+		{% if not cl.is_filtered %}
+			initTree();
+		{% endif %}		
+	});
+	
+	showchangelistfilter = function(){
 		$("#changelist-filter").toggle();
 	}
-	function moveSuccess(node){
+	moveSuccess = function(node){
 		var msg = $('<span class="success">{% trans "Successfully moved" %}</span>');
 		node.append(msg);
 	    msg.fadeOut(3000);
 	}
-	function moveError(node){
-		var msg = $('<span class="success">An error occurred. Please reload the page</span>');
+	moveError = function(node){
+		var msg = $('<span class="success">{% trans "An error occured. Please reload the page" %}</span>');
 		node.append(msg);
 	}
-	
-	$(document).ready(function() {
-		{% if not cl.is_filtered %}
-		initTree();
-		{% endif %}
-		
-	});	
-	settings = {
-		debug: true,
-	};
+
+})(jQuery);
+//]]>
 </script>
 
+
 <div id="content-main"{% if cl.is_filtered %} class="activ-filter"{% endif %}>
+
 {% block object-tools %}
+
 	<ul class="object-tools">
+		{% if has_recover_permission %}
+			<li><a href="recover/" class="recoverlink">{% blocktrans with cl.opts.verbose_name_plural|escape as name %}Recover deleted {{name}}{% endblocktrans %}</a></li>
+		{% endif %}
 		{% if has_add_permission %}
 		<li><a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">{% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}</a></li>
 		{% endif %}
 	</ul>
-	{% include "admin/cms/page/loading.html" %}
-{% endblock %}
 	
+	{% include "admin/cms/page/loading.html" %}
+
+{% endblock %}
 <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+{% block search %}
+
+
+{% if cl.has_access_to_multiple_sites %}
+	<div id="site-selector">{% trans "Entities on:" %}
+		<select id="site-select">{% for site in cl.sites %}
+			<option {% ifequal site.pk cl.current_site.pk %}selected {% endifequal %}value="{{ site.pk }}">{{ site.name }}</option>{% endfor %}
+		</select>
+	</div>
+{% else %}
+	<input type="hidden" id="site-select" value="{{ cl.sites.0.pk }}">
+{% endif %}
+
+{% search_form cl %}
+{% endblock %}
+{% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
+
+{% block filters %}
+{% if cl.has_filters %}
+
+
+<a href="javascript:showchangelistfilter();" id="changelist-filter-button">{% trans "Filter:" %} {% if cl.is_filtered %}{% trans "on" %}{% else %}{% trans "off" %}{% endif %}</a>
+<div id="changelist-filter" style="display:none;">
+<h2>{% trans 'Filter' %}</h2>
+{% for spec in cl.filter_specs %}
+   {% clean_admin_list_filter cl spec %}
+{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
 
 {% include "admin/contacts_and_people/entity/change_list_tree.html" %}
 
 </div>
 </div>
+
+<div id="dialogs"></div>
 
 {% endblock %}
