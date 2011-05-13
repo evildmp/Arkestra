@@ -209,47 +209,43 @@ def place(request, slug, active_tab = ""):
     """
     print "place(request, slug):"
     place = Building.objects.get(slug=slug)
-    tabs = [
-        # {
-        #     "address": "directions",
-        #     "title": "Directions & maps"
-        # },
-
-        ]
-    if place.events().forthcoming_events:
-        tabs.append({
-            "address": "events",
-            "title": "What's on",
-        })
-    if place.getting_here or place.access_and_parking or (place.map and place.zoom and place.latitude and place.longitude):
-        if place.map: 
-            tabs.append({
-                "address": "directions",
-                "title": "Directions etc.",
-            })
-    # if we're going to show tabs, putthe about tab first
-    if tabs:
-        about_tab = {
-            "address": "",
+    places_dict = { # information for each kind of place page
+        "about": {
             "title": "About",
+            "address": "",
+            "meta_description_content": place.summary,
+        },
+        "directions": {
+            "title": "Directions etc.",
+            "address": "directions",
+            "meta_description_content": "How to get to " + place.get_name(),
+        },
+        "events": {
+            "title": "What's on",
+            "address": "events",
+            "meta_description_content": "What's on at " + place.get_name(),
+        },
+    }
+    # mark the active tab (no active_tab must be "about")
+    places_dict[active_tab or "about"]["active"] = True
+    tabs = []
+    if place.events().forthcoming_events:
+        tabs.append(places_dict["events"])        
+    if place.getting_here or place.access_and_parking or (place.map and place.zoom and place.latitude and place.longitude):
+        tabs.append(places_dict["directions"])
+    # if we're going to show tabs, put the about tab first
+    if tabs:
+        tabs.insert(0, places_dict["about"])
+    meta_description_content = places_dict[active_tab or "about"]["meta_description_content"] 
+    if active_tab:
+        active_tab = "_" + active_tab
+    meta = {
+        "description": meta_description_content,
         }
-        tabs.insert(0, about_tab)
-    
     if default_entity:
         request.current_page = default_entity.get_website()
     else:
         request.current_page = entity.get_website() # for the menu, so it knows where we are
-    if active_tab:
-        if active_tab=="events":
-            meta_description_content="Forthcoming events at " + place.get_name()
-        elif active_tab=="directions":
-            meta_description_content="How to get to " + place.get_name()
-        active_tab = "_" + active_tab
-    else:
-        meta_description_content=place.summary
-    meta = {
-        "description": meta_description_content,
-        }
 
     return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,

@@ -1,10 +1,16 @@
 {% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify placeholder_tags %}
 
+{% block extrastyles %}
+{{ block.super }}
+<link href="{{ STATIC_URL }}arkestra/css/arkestra_maps.css" rel="stylesheet" type="text/css" />
+{% endblock extrastyles %}
+
+
 {% block scripts %}
 {{ block.super }}
 {% if place.has_map %}
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="../src/markerwithlabel.js"></script>
+<script type="text/javascript" src="/static/arkestra/js/maps/markerwithlabel.js"></script>
 <script type="text/javascript">
 	var infowindow = null;
 
@@ -20,7 +26,7 @@
 	      mapTypeId: google.maps.MapTypeId.ROADMAP,
 		  scaleControl: true,
     	  scaleControlOptions: {
-          	position: google.maps.ControlPosition.BOTTOM_RIGHT
+          position: google.maps.ControlPosition.BOTTOM_RIGHT
      	  },		
 		}
 
@@ -28,48 +34,59 @@
 
 		var placeMarker = setMarkers(map);
 
-	    infowindow = new google.maps.InfoWindow({
-	    	content: '<h2>{{place.get_name}}</h2>{% thumbnail place.image 80x80 subject_location=place.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class="right" src="{{ image.url }}" alt="" />{% endif %} {{place.summary}}{% if place.forthcoming_events %}<p><a href="{{place.get_absolute_url}}events/">Events</a></p>{% endif %}',
-			maxWidth: 300
-	            });
-    	
-/*        var marker = new google.maps.Marker({
-       		position: latlng,
-       		map: map,
-       		title: "{{place.get_name}}"
-   		});
- */  		
-        infowindow.open(map, placeMarker);
+        infowindow = new google.maps.InfoWindow({maxWidth: 300})
+        
+        
+            //      infowindow = new google.maps.InfoWindow({
+            //          content: 'xxx',
+            // maxWidth: 300
+            //              });
+            // 
+            //         infowindow.open(map, placeMarker);
 
     }
 
-	function setMarkers(map) {
+	function setMarkers(map, latlngbounds) {
 
     var pMarker = null;
+
+    var latlngbounds = new google.maps.LatLngBounds( );
 
 	{% for p in place.site.building_set.all %}{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
 		var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
+
+        latlngbounds.extend(siteLatLng);
 	
-	    var marker = new google.maps.Marker({
+	    var marker = new MarkerWithLabel({
        		position: siteLatLng,
        		map: map,
-       		title: "{{p.get_name}}"
+            {% ifequal place p %}
+            animation: google.maps.Animation.DROP,
+            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
+            zIndex: 10000,
+            {% endifequal %}
+			labelContent: "{{p.get_name}}",
+			labelAnchor: new google.maps.Point(50, -5),
+			labelClass: "labels", // the CSS class for the label
+			labelStyle: {opacity: 0.85}
    		});
 
 
 	    google.maps.event.addListener(marker, "click", function () {
-			                                                            infowindow.setContent('<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %} {{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
-			                                                            infowindow.open(map, this);
-		                                                            });
+		    infowindow.setContent('{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
+            infowindow.open(map, this);
+        });
 		
 		{%ifequal p place%}
 		    pMarker = marker;
         {%endifequal%}
-
 			
     {% endif %}{% endfor %}
-      return pMarker;
+    
+    map.fitBounds( latlngbounds );
+
+    return pMarker;
     }	
 </script>
 {% endif %}

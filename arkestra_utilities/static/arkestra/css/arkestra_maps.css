@@ -1,0 +1,17 @@
+div#map_canvas {
+    border: 2px solid black;
+    height: 500px;
+    width: 100%;
+    font-size: 80%;
+}
+
+div#map_canvas div.labels {
+     color: black;
+     background-color: white;
+     font-size: 10px;
+     padding: 1px;
+     font-weight: bold;
+     text-align: center;
+     border: 1px solid black;
+     white-space: nowrap;
+   }

@@ -19,17 +19,16 @@
 {% block main_page_body %}
     {% if tabs %}
 		<ul id="tab_menu">
-			{{ tab.address }}/{{ active_tab }}
 			{% for tab in tabs %}
-				{% ifequal tab.address active_tab %}
+				{% if tab.active %}
 					<li class="active"> 
-						<strong>{{tab.title|capfirst}}</strong>
+						<span>{{tab.title|capfirst}}</span>
 					</li>
 				{% else %}
 					<li> 
 						<a href="{{ place.get_absolute_url }}{{tab.address}}">{{tab.title|capfirst}}</a>
 					</li>            
-				{% endifequal %}        
+				{% endif %}        
 			{% endfor %}
 		</ul>    
 	{% endif %}
