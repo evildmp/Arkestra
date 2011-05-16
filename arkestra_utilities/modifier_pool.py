@@ -8,11 +8,17 @@ class WidthAdjuster(object):
         return
 
 class AdjusterPool(object):
+    """
+    Contains the set of adjusters that can provide Arkestra with hints about the widths (or other attributes) of placeholders and their contents
+    """
     def __init__(self):
         self.adjusters = {}
         self.discovered = False
     
-    def discover_modifers(self):    
+    def discover_modifers(self):  
+        """
+        Looks for adjusters that need to be registered
+        """  
         if self.discovered:
             return    
         for app in settings.INSTALLED_APPS:

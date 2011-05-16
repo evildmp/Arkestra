@@ -6,9 +6,7 @@ def get_placeholder_width(context, plugin):
     
     """
     Gets the width placeholder in which a plugin finds itself
-    
-    The 
-    
+        
 	{% with
 	    adjust_width=current_page.flags.no_page_title 
 	    width_adjuster="absolute" 
