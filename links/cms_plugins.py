@@ -34,7 +34,7 @@ class FocusOnPluginPublisher(CMSPluginBase):
     inlines = (FocusOnInlineItemAdmin,)
     def icon_src(self, instance):
         print "getting icon image for links plugin"
-        return "/media/arkestra/focus_on.png"
+        return "/static/plugin_icons/focus_on.png"
     def render(self, context, instance, placeholder):
         print "--------------------------"
         print "in render of FocusOnPlugin"
@@ -88,7 +88,7 @@ class LinksPlugin(CMSPluginBase):
     )
     inlines = (PluginInlineLink,)
     def icon_src(self, instance):
-        return "/media/arkestra/links.png"
+        return "/static/plugin_icons/links.png"
     def render(self, context, instance, placeholder):
         print "in render of LinksPlugin"
         all_links = instance.links.all()
@@ -140,7 +140,7 @@ class CarouselPluginPublisher(CMSPluginBase):
     inlines = (PluginInlineCarousel,)
     def icon_src(self, instance):
         print "returning carousel icon"
-        return "/media/arkestra/carousel.png"
+        return "/static/plugin_icons/carousel.png"
         
     def render(self, context, instance, placeholder):
         print "----------------- Carousel plugin ------------------------"

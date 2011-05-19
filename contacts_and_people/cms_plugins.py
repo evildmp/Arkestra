@@ -34,10 +34,10 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra//static/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
    
     
@@ -69,7 +69,7 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
             })
         return context
     def icon_src(self, instance):
-        return "/media/arkestra/entity_auto_page_link.png"
+        return "/static/plugin_icons/entity_auto_page_link.png"
 
 class EntityDirectoryPluginPublisher(CMSPluginBase):
     model = EntityDirectoryPluginEditor
@@ -93,12 +93,15 @@ class EntityDirectoryPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra//static/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
             'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
         }
    
+    def icon_src(self, instance):
+        return "/static/plugin_icons/entity_directory.png"
+        
     def render(self, context, instance, placeholder):
         print "in EntityDirectoryPluginPublisher"
         if instance.entity:
@@ -138,6 +141,9 @@ class EntityMembersPluginPublisher(CMSPluginBase):
      # autocomplete fields
     related_search_fields = ['entity',]
 
+    def icon_src(self, instance):
+        return "/static/plugin_icons/entity_members.png"
+        
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
         Overrides the default widget for Foreignkey fields if they are
@@ -151,10 +157,10 @@ class EntityMembersPluginPublisher(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra//static/jquery/ui/ui.tabs.js',
+            '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
    
     def render(self, context, instance, placeholder):

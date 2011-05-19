@@ -81,6 +81,6 @@ class CMSVacanciesPlugin(CMSPluginBase):
             return context
         def icon_src(self, instance):
             print "getting icon image for links plugin"
-            return "/media/arkestra/vacancies_and_studentships.png"
+            return "/static/plugin_icons/vacancies_and_studentships.png"
 
 plugin_pool.register_plugin(CMSVacanciesPlugin)

@@ -84,10 +84,10 @@ class CMSNewsAndEventsPlugin(CMSPluginBase):
         js = (
             '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra//static/jquery/ui/ui.tabs.js',
+            '/media/arkestra/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
 
     def render(self, context, instance, placeholder):
@@ -110,6 +110,6 @@ class CMSNewsAndEventsPlugin(CMSPluginBase):
         return context
 
     def icon_src(self, instance):
-        return "/media/arkestra/news_and_events.png"
+        return "/static/plugin_icons/news_and_events.png"
             
 plugin_pool.register_plugin(CMSNewsAndEventsPlugin)
