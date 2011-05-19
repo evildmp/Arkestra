@@ -66,7 +66,7 @@ def calculate_container_width(instance, width, auto = False):
         for cls in adjuster_pool.adjusters["plugin_width"]:
             inst = cls()
             width = inst.modify(target, width, auto)
-        
+
         elements = reversed(target.findParents()) # get the tree of elements and reverse it
         # we start with the root (i.e. document)
 

@@ -1,7 +1,7 @@
-#header {background: #417690 url(/static/admin/images/headergradient.png) repeat-y ;}
+#header {background: #417690 url(/static/arkestra/admin/images/headergradient.png) repeat-y ;}
 
 .login #header {
-    background: white url(/static/admin/images/arkestra_login_logo.png) no-repeat;
+    background: white url(/static/arkestra/admin/images/arkestra_login_logo.png) no-repeat;
     border-bottom: 1px solid #903; 
     width: 299px;
     height: 176px;

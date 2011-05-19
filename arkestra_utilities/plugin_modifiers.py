@@ -48,12 +48,14 @@ class KeyReducer(WidthAdjuster):
 
     def modify(self, target, width, auto):
         # check for attributes that use the reduce_key
-        grandparent_class = target.parent.parent.get("class", "")
-        print "  grandparent_class:", grandparent_class
-        space = "space-on" in grandparent_class
-        print "  space:", space
-        floated = "images-left" in grandparent_class or "images-right" in grandparent_class
-        reduce_key = (auto, space, floated)
+        grandparent = target.parent.parent
+        if grandparent: 
+            grandparent_class = grandparent.get("class", "")
+            print "  grandparent_class:", grandparent_class
+            self.space = "space-on" in grandparent_class
+            print "  space:", self.space
+            self.floated = "images-left" in grandparent_class or "images-right" in grandparent_class
+        reduce_key = (auto, self.space, self.floated)
         print "  reduce key:", reduce_key, "reduceby:", self.reduce_by[reduce_key]
         width = width * self.reduce_by[reduce_key] / 100
         print "  reduced width: ", width

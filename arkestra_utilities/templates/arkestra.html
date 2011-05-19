@@ -20,7 +20,7 @@
 {% block favicon %}
 <link rel="icon" 
       type="image/png" 
-      href="/static/arkestra/images/arkestra-favicon.png">
+      href="{{ STATIC_URL }}arkestra/images/arkestra-favicon.png">
 {% endblock favicon %}
 
 {% block styles %}
@@ -44,7 +44,7 @@
 
 {% endblock styles %}
 
-{% block scripts %}<script type="text/javascript" src="/media/cms/js/lib/jquery.js"></script>{% endblock scripts %}
+{% block scripts %}<script type="text/javascript" src="{{ STATIC_URL }}cms/js/lib/jquery.js"></script>{% endblock scripts %}
 
 </head>
 {% endblock head %}

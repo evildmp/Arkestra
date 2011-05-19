@@ -180,7 +180,7 @@ class PersonForm(forms.ModelForm):
         return data
     class Media:
         js = (
-            '/media/cms/js/lib/ui.sortable.js',
+            '/static/cms/js/lib/ui.sortable.js',
             )
 
     def clean(self):
@@ -248,8 +248,8 @@ class PersonAdmin(PlaceholderAdmin):
     )
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js',
-            '/media/cms/js/lib/ui.core.js',
+            '/static/cms/js/lib/jquery.js',
+            '/static/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
@@ -417,8 +417,8 @@ class EntityAdmin(admin.ModelAdmin):
         return HttpResponse("ok")
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js',
-            '/media/cms/js/lib/ui.core.js',
+            '/static/cms/js/lib/jquery.js',
+            '/static/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
@@ -474,8 +474,8 @@ class SiteAdmin(admin.ModelAdmin):
     )
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js',
-            '/media/cms/js/lib/ui.core.js',
+            '/static/cms/js/lib/jquery.js',
+            '/static/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
@@ -487,8 +487,8 @@ class BuildingAdmin(PlaceholderAdmin):
     form = BuildingAdminForm
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/media/cms/js/lib/ui.core.js',
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
