@@ -4,6 +4,7 @@ from datetime import datetime
 import operator
 from django.conf import settings
 from contacts_and_people.models import Entity, default_entity
+from contacts_and_people.templatetags.entity_tags import work_out_entity
 from itertools import groupby
 
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)    
@@ -336,9 +337,11 @@ def get_events(instance):
         all_events = instance.person.event_featuring.all()
     elif instance.type == "for_place":
         all_events = instance.place.event_set.all()
-    else:
-        instance.entity = instance.entity or work_out_entity(context, None)
+    elif multiple_entity_mode and instance.entity:
         all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
+    else:
+        all_events = Event.objects.all()
+
         # if an entity should automatically publish its descendants' items
         #     all_events = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
     print "All events", instance.type, all_events.count()
@@ -433,8 +436,9 @@ def get_publishable_news(instance):
 
 
 def get_all_news(instance):
-    # returns every news item associated with this entity
-    if multiple_entity_mode:
+    # returns every news item associated with this entity, 
+    # or all news items if multiple_entity_mode is False, or instance.entity is unspecified
+    if multiple_entity_mode and instance.entity:
         all_news = NewsArticle.objects.filter(
             Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)
             ).distinct()

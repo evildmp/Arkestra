@@ -84,10 +84,13 @@ def entity_for_page(page):
     If the page doesn't have an entity attached to it, will try for the page's parent, and so on.
     """
     print "entity_for_page()"
-    try:
-        return page.entity.get() # what on earth is this?
-    except Entity.DoesNotExist: # this is very bad: we don't know what the exception is
-        return entity_for_page(page.parent)
+    if page:
+        try:
+            return page.entity.get() # return the entity associated with that page
+        except Entity.DoesNotExist: # this is very bad: we don't know what the exception is
+            return entity_for_page(page.parent)
+    else:
+        return None
 
 # this ought to be a context processor
 def work_out_entity(context,entity):

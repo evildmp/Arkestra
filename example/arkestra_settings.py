@@ -4,7 +4,7 @@ from settings import STATIC_URL
 # ------------------------ Arkestra settings
 
 ARKESTRA_BASE_ENTITY = 1 # get this wrong, and you'll be sorry
-MULTIPLE_ENTITY_MODE = False
+MULTIPLE_ENTITY_MODE = False # True if you want to be able direct news/events and other items to particular entities - False if they'll all share all of thems
 MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news",)}
 
 # heading levels
