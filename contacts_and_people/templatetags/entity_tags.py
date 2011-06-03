@@ -87,12 +87,12 @@ def entity_for_page(page):
     if page:
         try:
             return page.entity.get() # return the entity associated with that page
-        except Entity.DoesNotExist: # this is very bad: we don't know what the exception is
+        except Entity.DoesNotExist: # page didn't have an entity
             return entity_for_page(page.parent)
     else:
         return None
 
-# this ought to be a context processor
+# this ought to be a context processor, maybe
 def work_out_entity(context,entity):
     """
     One of Arkestra's core functions
@@ -117,24 +117,3 @@ def work_out_entity(context,entity):
                 entity = None
             print "> entity from plugin: ", entity
     return entity
-
-
-"""
-def members_for_entity(entity): # is this actually used anywhere - yes
-
-looks like this can be eplaced by the much simpler:
-
-people = Person.objects.filter(member_of__entity__in = self.get_descendants(include_self = True)).distinct().order_by('surname', 'given_name', 'middle_names')
-
-    memberlist = set()
-    for descendant_entity in entity.get_descendants(include_self = True):
-        memberlist.update(descendant_entity.people.all())
-    return memberlist
-    
-def real_ancestor(entity): # what on earth is this for?
-    for ancestor in entity.get_ancestors(ascending = True):
-        if not ancestor.abstract_entity:
-            entity = ancestor
-            break    
-    return entity
-"""
