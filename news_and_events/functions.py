@@ -337,6 +337,7 @@ def get_events(instance):
         all_events = instance.person.event_featuring.all()
     elif instance.type == "for_place":
         all_events = instance.place.event_set.all()
+    # most likely, we're getting events related to an entity
     elif multiple_entity_mode and instance.entity:
         all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
     else:

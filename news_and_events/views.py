@@ -9,6 +9,7 @@ from datetime import datetime
 from functions import get_news_and_events
 
 news_and_events_list_default_limit = getattr(settings, "NEWS_AND_EVENT_LIMIT_TO", 8)
+layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 h_main_body = settings.H_MAIN_BODY
 
 def common_settings(request, slug = getattr(default_entity,"slug", None)):
@@ -25,7 +26,7 @@ def common_settings(request, slug = getattr(default_entity,"slug", None)):
     instance.heading_level = h_main_body
     instance.display = "news-and-events"
     instance.format = "details"
-    instance.layout = "sidebyside"
+    instance.layout = layout
     instance.view = "current"
     return instance, context, entity
 

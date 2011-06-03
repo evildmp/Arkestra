@@ -27,6 +27,7 @@ HEADINGS = (
 
 CASCADE_NEWS_AND_EVENTS = True # news & events items of children are automatically on parents' pages
 NEWS_AND_EVENT_LIMIT_TO = 6
+# NEWS_AND_EVENTS_LAYOUT = "sidebyside" # preferred layout for news and events; sidebyside or stacked 
 SHOW_VENUE_IN_EVENTS_LISTS = True
 SHOW_EVENT_TYPES = False
 COLLECT_TOP_EVENTS = False # in long lists, gather top events all together
