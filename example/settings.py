@@ -226,6 +226,9 @@ ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION=True
 FORCE_SCRIPT_NAME = ''
 # ------------------------ Django CMS
 
+# Important - the arkestra.html template can be adapted to your needs, but note that it 
+# includes various blocks that Arkestra is expecting to find.
+
 CMS_DEFAULT_TEMPLATE = "arkestra.html"
 
 CMS_TEMPLATES = (
