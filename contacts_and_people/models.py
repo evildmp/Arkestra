@@ -596,10 +596,11 @@ try:
 except mptt.AlreadyRegistered:
     pass
 
+# contacts_and_people.models.default_entity and default_entity_id is a key value, and used throughout the system
 default_entity_id = default_entity = None
 try:
     if not multiple_entity_mode and Entity.objects.all():
-        default_entity_id = getattr(settings, 'ARKESTRA_BASE_ENTITY')
+        default_entity_id = getattr(settings, 'ARKESTRA_BASE_ENTITY') # default_entity_id is used to fill in admin fields automatically
         default_entity = Entity.objects.get(id = default_entity_id)
 except DatabaseError:
     pass

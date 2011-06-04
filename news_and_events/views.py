@@ -30,7 +30,7 @@ def common_settings(request, slug = getattr(default_entity,"slug", None)):
     instance.view = "current"
     return instance, context, entity
 
-def news_and_events(request, slug):
+def news_and_events(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)    
     main_page_body_file = "news_and_event_lists.html"
 

@@ -19,7 +19,7 @@ if 'publications' in applications:
 
 default_template = getattr(settings, 'CMS_DEFAULT_TEMPLATE')
 
-def contacts_and_people(request, slug):
+def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
     print "-------- views.contacts_and_people --------"
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
