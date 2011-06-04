@@ -141,7 +141,7 @@ class PersonLiteAdmin(admin.ModelAdmin):
         else:
             print "***ERROR: See",type(self), ".save_model()"
           
-admin.site.register(models.PersonLite, PersonLiteAdmin)     
+# admin.site.register(models.PersonLite, PersonLiteAdmin)     
     
     
     
@@ -307,7 +307,7 @@ class EntityLiteAdmin(admin.ModelAdmin):
         else:
             print "***ERROR: See",type(self), ".save_model()"
           
-admin.site.register(models.EntityLite, EntityLiteAdmin)          
+# admin.site.register(models.EntityLite, EntityLiteAdmin)          
         
 # ------------------------- Entity admin -------------------------
 
@@ -500,8 +500,8 @@ admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)
 admin.site.register(models.Site,SiteAdmin)
 admin.site.register(models.Title,TitleAdmin)
-admin.site.register(models.Membership,MembershipAdmin)
-admin.site.register(models.PhoneContact,PhoneContactAdmin)
+# admin.site.register(models.Membership,MembershipAdmin)
+# admin.site.register(models.PhoneContact,PhoneContactAdmin)
 
 # ------------------------- admin hacks -------------------------
 if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
