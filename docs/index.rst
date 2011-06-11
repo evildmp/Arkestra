@@ -1,6 +1,4 @@
-######################################################
-Arkestra: documentation for development and deployment
-######################################################
+
 
 .. Arkestra documentation master file, created by
    sphinx-quickstart on Tue May  3 19:31:41 2011.
