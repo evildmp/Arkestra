@@ -377,7 +377,6 @@ def get_news_ordered_by_importance_and_date(instance):
     # split the within-date items for this entity into two sets
 
     publishable_news = get_publishable_news(instance)
-    print "Publishable news", publishable_news
     sticky_news = publishable_news.order_by('-importance').filter(
         Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
         sticky_until__gte=datetime.today(),  
