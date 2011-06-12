@@ -69,10 +69,15 @@ class EntityWrapper(LinkWrapper):
     search_fields = admin.EntityAdmin.search_fields
     link_attributes = models.EntityAutoPageLinkPluginEditor.AUTO_PAGES["contacts-and-people"]
     def description(self):
+        if self.obj.abstract_entity:
+            return "Abstract entity - description unavailable"
         if self.obj.url:
-            return "External entity"
-        else:
+            return "External entity - description unavailable"
+        try:
             return self.obj.get_website().get_meta_description()
+        except AttributeError:
+            return "Entity has no website"
+
 #        r = []
 #        if self.obj.building: r.append(smart_unicode(self.obj.building))
 #        return "\n".join(r)
@@ -85,7 +90,7 @@ class EntityWrapper(LinkWrapper):
     def text(self):
         return str(self.obj)# + ": " + self.link_attributes[0]
     def short_text(self):
-        return str(self.obj.short_name)        
+        return str(self.obj.short_name)      
 schema.register_wrapper([models.Entity],EntityWrapper)
 
 class BuildingWrapper(LinkWrapper):

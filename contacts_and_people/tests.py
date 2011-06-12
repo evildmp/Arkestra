@@ -4,6 +4,17 @@ unittest). These will both pass when you run "manage.py test".
 
 Replace these with more appropriate tests for your application.
 """
+from django.utils import unittest
+from contacts_and_people.models import Person
+
+class PersonTestCase(unittest.TestCase):
+    def setUp(self):
+        self.lion = Animal.objects.create(name="lion", sound="roar")
+        self.cat = Animal.objects.create(name="cat", sound="meow")
+
+    def testSpeaking(self):
+        self.assertEqual(self.lion.speak(), 'The lion says "roar"')
+        self.assertEqual(self.cat.speak(), 'The cat says "meow"')
 
 from django.test import TestCase
 
