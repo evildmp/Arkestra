@@ -2,9 +2,9 @@
 					<div class = "">
 						<dl>
 							{% event_date_and_time %}
-						    {% if featuring %}
+						    {% if event.get_featuring %}
 		    				    <dt>Featuring</dt>
-									{% for speaker in featuring %}
+									{% for speaker in event.get_featuring %}
 										<dd>
 											<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
 										</dd>

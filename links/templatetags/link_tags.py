@@ -28,7 +28,40 @@ def links(context):
 
 @register.tag
 def get_links(parser, token):
-    print "in get_links -----"
+    """
+    Place {% get_links as links %} in your template.
+    As long as your item is available in the template as {{ content_object }}, you'll 
+    have access to any links placed on it.
+    
+    An as a template:
+    
+	{% if links %}
+    	{% regroup links by wrapped_destination_obj.heading as link_types %}
+    	{% for kind in link_types %}
+    		<h3>{{kind.grouper}}</h3>
+            <ul class= "none">
+               	{% for link in kind.list %}
+               		<li>
+               			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
+               				{% else %}{{ link.destination_content_object }}
+               				{% endif %}
+               			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+               		</li>
+               	{% endfor %}
+           </ul>
+    	{% endfor %}
+    {% endif %}
+
+    should do the trick.
+    
+    However, it's just as simple to pass links to the context in the view.
+    
+    The only reason for doing it this way is to get links into the context of from a 
+    view we can't easily set up ourselves, for example that of another application.
+    
+    There doesn't seem to be much point in using for views that we can easily edit.
+    """
+    print "---- in get_links -----"
     try:
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:

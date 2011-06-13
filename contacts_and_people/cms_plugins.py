@@ -42,32 +42,30 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
    
     
     def render(self, context, instance, placeholder):
-        LINK_ATTRIBUTES = {
-            "news-and-events": "news_page_menu_title",
-            "contacts-and-people": "contacts_page_menu_title",
-            "publications": "publications_page_menu_title",
-            "vacancies-and-studentships": "vacancies_page_menu_title",
-            }
-        EntityAutoPageLinkPluginEditor.AUTO_PAGES
         print "-- in render of CMSContactsAndPeoplePlugin --"
-        # find out what kind of information we're linking to
+
+        # get a tuple containing for example:
+        # (u'Contacts & people', 'contact', 'contacts_page_menu_title')
         LINK_TUPLE = EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to]
         print "LINK_TUPLE", LINK_TUPLE
+        kind = LINK_TUPLE[1]
+        field_name = LINK_TUPLE[2]
+        
         entity = work_out_entity(context, None)
-        if instance.entity and instance.entity != entity:
-            link = instance.entity.get_absolute_url() + LINK_TUPLE[1]
-            link_title = instance.entity.short_name + ': ' + getattr(entity,LINK_TUPLE[2])
-        else:
-            link_title = getattr(entity,LINK_TUPLE[2])
-            link = entity.get_absolute_url() + LINK_TUPLE[1]
-        if instance.text_override:
-            link_title = instance.text_override
-        print EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to][2]
-        context.update({ 
-            'link': link,
-            'link_title': link_title,
-            })
-        return context
+        if entity or instance.entity:
+            link = instance.entity.get_related_info_page_url(kind)
+            if instance.entity and instance.entity != entity:
+                link_title = instance.entity.short_name + ': ' + getattr(instance.entity,field_name)
+            else:
+                link_title = getattr(instance.entity, field_name)
+            if instance.text_override:
+                link_title = instance.text_override
+            print EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to][2]
+            context.update({ 
+                'link': link,
+                'link_title': link_title,
+                })
+            return context
     def icon_src(self, instance):
         return "/static/plugin_icons/entity_auto_page_link.png"
 

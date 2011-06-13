@@ -12,7 +12,7 @@ news_and_events_list_default_limit = getattr(settings, "NEWS_AND_EVENT_LIMIT_TO"
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 h_main_body = settings.H_MAIN_BODY
 
-def common_settings(request, slug = getattr(default_entity,"slug", None)):
+def common_settings(request, slug):
     # general values - entity, request, template
     entity = Entity.objects.get(slug=slug)
     # request.current_page = entity.get_website() # for the menu, so it knows where we are
@@ -53,7 +53,7 @@ def news_and_events(request, slug = getattr(default_entity,"slug", None)):
         context,
         )
 
-def previous_events(request, slug):
+def previous_events(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -78,7 +78,7 @@ def previous_events(request, slug):
         context,
         )
         
-def all_forthcoming_events(request, slug):
+def all_forthcoming_events(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "current"
@@ -103,7 +103,7 @@ def all_forthcoming_events(request, slug):
         context,
         )
 
-def news_archive(request, slug):
+def news_archive(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -129,28 +129,28 @@ def news_archive(request, slug):
         context,
         )
 
+def newsarticle_and_event(item):
+    item.links = object_links(item) # not needed if using get_links templatetag
+    item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
+    
+    # this is ancient and ugly - there'll be a better way of doing this
+    # it perhaps should reflect either the default_entity or the item's hosted_by:
+    item.template = getattr(item.hosted_by, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
+    
+    return item
+
 def newsarticle(request, slug):
     """
     Responsible for publishing news article
     """
     print " -------- views.newsarticle --------"
     newsarticle = get_object_or_404(NewsArticle, slug=slug)
-    print newsarticle.date - datetime.now()
-    entity = newsarticle.hosted_by
-    links = object_links(newsarticle)
-    print links
-    request.current_page = default_entity.get_website()
-    meta = {"description": newsarticle.subtitle,}
+    newsarticle = newsarticle_and_event(newsarticle)
     
-    template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
     return render_to_response(
         "news_and_events/newsarticle.html",
         {"newsarticle":newsarticle,
-        "template": template,
-        "content_object": newsarticle,
-        "entity": entity,
-        "links": links,
-        "meta": meta,
+        "meta": {"description": newsarticle.subtitle,}
         },
         RequestContext(request),
         )
@@ -161,21 +161,14 @@ def event(request, slug):
     """
     print " -------- views.event --------"
     event = get_object_or_404(Event, slug=slug)
-    featuring = event.get_featuring()
-    entity = event.hosted_by
-    template = getattr(entity, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))  # this perhaps should reflect either the default_entity or the new article's hosted_by
-    links = object_links(event)
-    meta = {"description": event.subtitle,}
-    # request.current_page = default_entity.get_website()
+    event = newsarticle_and_event(event)
+    
+    # featuring = event.get_featuring()
+
     return render_to_response(
         "news_and_events/event.html",
         {"event": event,
-        "content_object": event,
-        "featuring": featuring,
-        "template": template,
-        "entity" : entity,
-        "links": links,
-        "meta": meta,
+        "meta": {"description": event.subtitle,},
         },
         RequestContext(request),
         )

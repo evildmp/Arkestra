@@ -1,14 +1,10 @@
-{% extends template %}
+{% extends event.template %}
 {% load events_tags %}
 {% load link_tags %}
 {% load placeholder_tags %}
 {% load humanize %}
 {% load typogrify %}
 {% load thumbnail %}
-
-{% block columns %}
-	@import url("/media/css/_layout/horiz/100.css");
-{% endblock columns %}
 
 {% block meta %}
 	<meta name="description" content="{{event.subtitle}}"/>
@@ -45,30 +41,15 @@
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
 				{% include "includes/details.html" %}
-				{% if links %}
-						{% regroup links by wrapped_destination_obj.heading as link_types %}
-						{% for kind in link_types %}
-						<h3>{{kind.grouper}}</h3>
-		                <ul class= "none">
-		                	{% for link in kind.list %}
-		                		<li>
-		                			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
-		                				{% else %}{{ link.destination_content_object }}
-		                				{% endif %}
-		                			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
-		                		</li>
-		                	{% endfor %}
-		                </ul>
-						{% endfor %}
-		        {% endif %}
+				{% with event.links as links %}
+				    {% include "includes/related_links_list.html" %}
+		        {% endwith %}
 				{% include "includes/children.html" %}		        				
 			</div>
 		</div>
-        {% if entity.website %}
-    		<ul class = "news linkIcon">
-    			<li><a href = "{{entity.get_absolute_url}}news-and-events/">More {{ entity.short_name }} events</a></li>
-    		</ul>
-		{% endif %}
+		<ul class = "news linkIcon">
+			<li><a href = "{{ event.link_to_news_and_events_page }}">More {{ entity.short_name }} events</a></li>
+		</ul>
     {% endblock entity_information %}
 
 {% endblock main_page_body %}

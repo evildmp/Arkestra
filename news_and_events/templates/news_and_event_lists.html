@@ -50,7 +50,7 @@
 			    {% if news_and_events.other_news %}
     				<ul class="fancy close top-border">
     					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
@@ -125,7 +125,7 @@
     			{% if news_and_events.other_events %}
     				<ul class="fancy close top-border">
     					{% for item in news_and_events.other_events %}
-    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
@@ -137,14 +137,14 @@
 
 {% ifequal news_and_events.type "sub_page" %}
 	<ul class="fancy close top-border">
-    					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
-    					{% endfor %}
-    					{% for item in news_and_events.other_events %}
-    						<li><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
-    					{% endfor %}
-        {% if news_and_events.link_to_news_and_events %}
-            <li><strong><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/">{{ news_and_events.entity.short_name }} {{ news_and_events.entity.news_page_menu_title|lower }} page</a></strong></li>
+		{% for item in news_and_events.other_news %}
+			<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+		{% endfor %}
+		{% for item in news_and_events.other_events %}
+			<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+		{% endfor %}
+        {% if news_and_events.link_to_news_and_events_page %}
+            <li><strong><a class = "linkIcon" href = "{{news_and_events.link_to_news_and_events_page}}">{{ news_and_events.entity.short_name }} {{ news_and_events.entity.news_page_menu_title|lower }} page</a></strong></li>
     	{% endif %}
 	</ul>
 {% endifequal %}
@@ -152,8 +152,8 @@
 {% ifequal news_and_events.type "plugin" %}
 <div class="{{ news_and_events.type }} ">
 	<ul class="fancy close {% ifequal news_and_events.format "Details" %}all_info{% endifequal %}">
-        {% if news_and_events.link_to_news_and_events %}
-            <li><strong><a class = "linkIcon" href = "{{news_and_events.entity.get_absolute_url}}news-and-events/">More news &amp; events</a></strong></li>
+        {% if news_and_events.link_to_news_and_events_page %}
+            <li><strong><a class = "linkIcon" href = "{{news_and_events.link_to_news_and_events_page}}">More news &amp; events</a></strong></li>
     	{% endif %}
 	</ul>
 </div>

@@ -351,6 +351,62 @@ class Entity(EntityLite, CommonFields):
             return self.external_url.url
         else:
             return "/entity/%s/" % self.slug
+    # def get_contact_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/contact/"
+    #     else:
+    #         return "/contact/" + self.slug + "/"
+    # def get_news_and_events_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/news-and-events/"
+    #     else:
+    #         return "/news-and-events/" + self.slug + "/"
+    # def get_news_archive_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/news-archive/"
+    #     else:
+    #         return "/news-archive/" + self.slug + "/"
+    # def get_forthcoming_events_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/forthcoming-events/"
+    #     else:
+    #         return "/forthcoming-events/" + self.slug + "/"
+    # def get_previous_events_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/previous-events/"
+    #     else:
+    #         return "/previous-events/" + self.slug + "/"
+    # def get_vacancies_and_studentships_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/vacancies-and-studentships/"
+    #     else:
+    #         return "/vacancies-and-studentships/" + self.slug + "/"
+    # def get_publications_url(self):
+    #     if self.external_url:
+    #         return ""
+    #     elif self == default_entity:
+    #         return "/publications/"
+    #     else:
+    #         return "/publications/" + self.slug + "/"
+    def get_related_info_page_url(self, kind):
+        if self.external_url:
+            return ""
+        elif self == default_entity:
+            return "/" + kind + "/"
+        else:
+            return "/" + kind + "/" + self.slug + "/"
 
 class Title(models.Model):
     class Meta:

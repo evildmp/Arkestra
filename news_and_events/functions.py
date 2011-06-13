@@ -4,7 +4,7 @@ from datetime import datetime
 import operator
 from django.conf import settings
 from contacts_and_people.models import Entity
-from contacts_and_people.templatetags.entity_tags import work_out_entity
+# from contacts_and_people.templatetags.entity_tags import work_out_entity
 from itertools import groupby
 
 multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)    
@@ -86,7 +86,7 @@ def get_news_and_events(instance):
 def set_defaults(instance):
     # set defaults
     instance.news = instance.events = None
-    instance.link_to_news_and_events = None # link to more news and/or events for this entity
+    instance.link_to_news_and_events_page = None # link to more news and/or events for this entity
     instance.other_events = []  # a list of dicts recording what other events are available
     instance.forthcoming_events = []        # actual forthcoming events
     instance.other_news = []                # dicts recording kinds of other news available
@@ -111,32 +111,23 @@ def set_links_to_more_views(instance):
     if this is a plugin, create the "More news/events" link
     limits "current" views to the number of items specified in settings
     """
-    if instance.type == "plugin":
-        if instance.news:
-            instance.link_to_news_and_events = "news"
-            # if instance.limit_to and len(instance.news) > instance.limit_to:
-            #     instance.news = instance.news[:instance.limit_to]
-        if instance.events:
-            # if instance.limit_to and len(instance.events) > instance.limit_to:
-            #     instance.events = instance.events[:instance.limit_to]
-            if instance.link_to_news_and_events:
-                instance.link_to_news_and_events = "news & events"
-            else:
-                instance.link_to_news_and_events = "events"
-    # not a plugin, but still current     
+    if (instance.type == "plugin" or instance.type == "sub_page") and (instance.news or instance.events) and instance.entity.auto_news_page:
+        instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
+
+    # not a plugin, but showing current events items on main page or subpage
     elif instance.view == "current":
         if instance.previous_events or instance.forthcoming_events:
             if instance.limit_to and len(instance.events) > instance.limit_to:
                 # instance.events = instance.events[:instance.limit_to]
                 if instance.forthcoming_events.count() > instance.limit_to:
                     instance.other_events.append({
-                        "link":"all-forthcoming", 
+                        "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
                         "title":"all forthcoming events", 
                         "count": instance.forthcoming_events.count(),}
                         )
         if instance.previous_events:
             instance.other_events.append({
-                "link":"previous-events", 
+                "link":instance.entity.get_related_info_page_url("previous-events"), 
                 "title":"previous events",
                 "count": instance.previous_events.count(),}
                 )    
@@ -145,25 +136,16 @@ def set_links_to_more_views(instance):
             if instance.limit_to and all_news_count > instance.limit_to:
                 # instance.news = instance.news[:instance.limit_to]
                 instance.other_news = [{
-                    "link":"news-archive", 
+                    "link":instance.entity.get_related_info_page_url("news-archive"), 
                     "title":"news archive",
                     "count": all_news_count,}]
     # an archive
     elif instance.view == "archive":
         if instance.forthcoming_events[instance.default_limit:]:
             instance.other_events = [{
-                "link":"all-forthcoming", 
+                "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
                 "title":"all forthcoming events", 
-                "count": instance.forthcoming_events.count(),}]
-                
-    # if this is a news/events sub-page                
-    if instance.type == "sub_page":
-        if instance.news:
-            instance.link_to_news_and_events = "news"
-            if instance.link_to_news_and_events:
-                instance.link_to_news_and_events = "news & events"
-            else:
-                instance.link_to_news_and_events = "events"
+                "count": instance.forthcoming_events.count(),}]                
     return
 
 def set_limits_and_indexes(instance):

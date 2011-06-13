@@ -66,30 +66,28 @@ class ArkestraPages(Modifier):
                         if instance.news or instance.other_news or instance.events or instance.other_events:
                         
                             menutitle = entity.news_page_menu_title
-                            new_node = NavigationNode(mark_safe(menutitle), entity.get_absolute_url()  + "news-and-events/", None)
+                            new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('news-and-events'), None)
                             if new_node.get_absolute_url() in request.page_path:
 
                                 new_node.selected = True
                                 child.selected=False
 
-
                                 if instance.other_news  and "news_archive" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("News archive"), entity.get_absolute_url()  + "news-and-events/news-archive/", None )
+                                    new_sub_node = NavigationNode(mark_safe("News archive"), entity.get_related_info_page_url('news-archive'), None )
                                     if request.page_path == new_sub_node.get_absolute_url():
                                         new_sub_node.selected = True
                                         new_node.selected=False
                                     new_node.children.append(new_sub_node)
 
-
-                                if any("all-forthcoming" in d.itervalues() for d in instance.other_events)  and "forthcoming_events" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("All forthcoming events"), entity.get_absolute_url()  + "news-and-events/all-forthcoming/", None )
+                                if any("all-forthcoming" in d.itervalues() for d in instance.other_events) and "forthcoming_events" in menu_tests:
+                                    new_sub_node = NavigationNode(mark_safe("All forthcoming events"), entity.get_related_info_page_url('forthcoming-events'), None )
                                     if request.page_path == new_sub_node.get_absolute_url():
                                         new_sub_node.selected = True
                                         new_node.selected=False
                                     new_node.children.append(new_sub_node)
                 
                                 if any("previous-events" in d.itervalues() for d in instance.other_events) and "previous_events" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("Previous events"), entity.get_absolute_url()  + "news-and-events/previous-events/", None )
+                                    new_sub_node = NavigationNode(mark_safe("Previous events"), entity.get_related_info_page_url('previous-events'), None )
                                     if request.page_path == new_sub_node.get_absolute_url():
                                         new_sub_node.selected = True
                                         new_node.selected=False
@@ -99,7 +97,7 @@ class ArkestraPages(Modifier):
 
                     if entity.auto_contacts_page and "contacts" in menu_tests:
                         menutitle = entity.contacts_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_absolute_url() + "contact/", None)
+                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('contact'), None)
                         if new_node.get_absolute_url() in request.page_path:
                             new_node.selected = True
                             child.selected=False
@@ -108,7 +106,7 @@ class ArkestraPages(Modifier):
 
                     if getattr(entity, "auto_vacancies_page", None)  and "vacancies" in menu_tests:
                         menutitle = entity.vacancies_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_absolute_url()  + "vacancies-and-studentships/", None)
+                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
                         if request.page_path == new_node.get_absolute_url():
                             new_node.selected = True
                             child.selected=False
@@ -116,7 +114,7 @@ class ArkestraPages(Modifier):
             
                     if getattr(entity, "auto_publications_page", None) and entity.auto_publications_page and "publications" in menu_tests:
                         menutitle = entity.publications_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_absolute_url()  + "publications/", None)
+                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('publications'), None)
                         if request.page_path == new_node.get_absolute_url():
                             new_node.selected = True
                             child.selected=False

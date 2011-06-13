@@ -1,9 +1,5 @@
-{% extends template %}
+{% extends newsarticle.template %}
 {% load humanize typogrify news_tags humanize link_tags thumbnail placeholder_tags %}
-
-{% block columns %}
-	{% get_links as links %}
-{% endblock columns %}
 
 {% block title %}
 	<title>{{ newsarticle }}</title>
@@ -43,26 +39,13 @@
 						{% endfor %}
 					{% endif %}
 				</dl>    
-				{% if links %}
-					{% regroup links by wrapped_destination_obj.heading as link_types %}
-					{% for kind in link_types %}
-						<h3>{{kind.grouper}}</h3>
-		                <ul class= "none">
-		               	{% for link in kind.list %}
-		               		<li>
-		               			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
-		               				{% else %}{{ link.destination_content_object }}
-		               				{% endif %}
-		               			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
-		               		</li>
-		               	{% endfor %}
-		               </ul>
-					{% endfor %}
-			    {% endif %}
+				{% with newsarticle.links as links %}
+				    {% include "includes/related_links_list.html" %}
+		        {% endwith %}
 			</div>
 		</div>
 		<ul class = "news linkIcon">
-			<li><a href = "{{entity.get_absolute_url}}news-and-events/">More {{ entity.short_name }} news</a></li>
+			<li><a href = "{{ newsarticle.link_to_news_and_events_page }}">More {{ newsarticle.hosted_by.short_name }} news</a></li>
 		</ul>
     {% endblock entity_information %}
 {% endblock main_page_body %}
