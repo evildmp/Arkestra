@@ -31,7 +31,7 @@ def key_people(context, entity = None):
     # this doesn't list people's non-key-roles - should it?
     return {'membership_list': membership_list}
 
-@register.inclusion_tag('people_with_roles.html', takes_context=True)
+@register.inclusion_tag('includes/people_with_roles.html', takes_context=True)
 def people_with_roles(context, letter = None):
     """
    For an Entity, returns a list of members who have roles. 

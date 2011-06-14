@@ -1,0 +1,14 @@
+{% regroup links by wrapped_destination_obj.heading as link_types %}
+{% for kind in link_types %}
+    <h3>{{kind.grouper}}</h3>
+    <ul class= "none">
+    	{% for link in kind.list %}
+    		<li>
+    			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
+    				{% else %}{{ link.destination_content_object }}
+    				{% endif %}
+    			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+    		</li>
+    	{% endfor %}
+    </ul>
+{% endfor %}

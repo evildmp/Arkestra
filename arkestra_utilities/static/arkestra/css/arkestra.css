@@ -224,14 +224,14 @@ ul.index li a {display: block;
     padding: 0.1em;
     width: 2.1em;
     color: white;
-    background: #903;
+    background: #666;
     text-align: center;
-    border: 1px solid black;
+    border: 1px solid black !important; /* important because otherwise site's links styles can affect it */
     }
 
 ul.index li a:hover {
     text-decoration: none;
-    color: #903;
+    color: #666;
     background: white;
     }
 

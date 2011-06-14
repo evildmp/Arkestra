@@ -362,12 +362,12 @@ class Entity(EntityLite, CommonFields):
         """
         Returns a list of people and/or their initials for use in people lists
         
-        More than 25 people, or a letter was provided? Return initials
-        Fewer than 25 people? Return the people
+        More than 20 people, or a letter was provided? Return initials
+        Fewer than 20 people? Return the people
         """
         people = self.get_people(letter)
         # letter or long list? show initials
-        if letter or len(people) > 2:
+        if letter or len(people) > 20:
             initials = set(person.surname[0].upper() for person in people)
             initials = list(initials)
             initials.sort()
