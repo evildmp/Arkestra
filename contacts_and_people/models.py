@@ -250,13 +250,13 @@ class Entity(EntityLite, CommonFields):
         print "------ get_website_url -------"
         if self.website:
             return self.website.get_absolute_url()
-        elif self.external_url.url:
+        elif self.external_url:
             return self.external_url.url
         else:
             try:
                 return self.parent.get_website_url()
             except:
-                return Entity.objects.get(id=1).get_website()
+                return default_entity.get_website()
 
     def get_template(self):
         """
