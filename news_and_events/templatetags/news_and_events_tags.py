@@ -45,6 +45,7 @@ def person_events(context):
     """
     instance = NewsAndEventsPlugin()
     instance.type = "for_person"
+    instance.heading_level = 3
     instance.display = "events"
     instance.view = "all_forthcoming"
     instance.order_by = "date"
