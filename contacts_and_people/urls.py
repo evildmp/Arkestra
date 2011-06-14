@@ -12,11 +12,11 @@ urlpatterns = patterns('',
 
     # lists of people in an entity
     (r"^people/(?P<slug>[-\w]+)/(?P<letter>[a-z])/$", "contacts_and_people.views.people"),
-    (r"^people/(?P<slug>[-\w]+)/$", "contacts_and_people.views.people"),    
+    (r"^people/(?P<slug>[-\w]+)/$", "contacts_and_people.views.people"), 
     
     # main contacts & people page
-    (r'^contact/(?P<slug>[-\w]+)/$', "contacts_and_people.views.contacts_and_people"),
-    (r'^contact/$', "contacts_and_people.views.contacts_and_people"),
+    (r'^contact/(?P<slug>[-\w]+)/$', "contacts_and_people.views.contacts_and_people"), # non-base entities
+    (r'^contact/$', "contacts_and_people.views.contacts_and_people"), # base entity only
 
     # the old ways
     (r"^entity/(?P<slug>[-\w]+)/contact/people/(?P<letter>[a-z])/$", "contacts_and_people.views.people"),
