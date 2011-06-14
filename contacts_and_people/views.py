@@ -26,27 +26,24 @@ def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
     request.page_path = request.path # for the menu, because next we mess up the path
     request.path = entity.get_website().get_absolute_url()
     template = entity.get_template()
-    main_page_body_file = "includes/contacts_and_people.html"
+    main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
 
     # meta values - title and meta
     title = "Contact information for %s" % entity
     meta = {
         "description": "Addresses, phone numbers, staff lists and other contact information",
         }
-
-    # content values
-    contacts = entity.get_contacts()
-    address = entity.get_address()
-    email = entity.email
-    phone = entity.phone_contacts
-    location = entity.precise_location
-    access_note = entity.access_note
-    roles = entity.get_roles()
-    people = entity.get_people()
+        
     people, initials = entity.get_people_and_initials()
-    # does the list of role exhaust the list of people too? if so, don't bother showing people separately
-    if not set(people) - set([role.person for role in roles]):
-        people = []
+    # are there Key People to show?    
+    if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
+        people_list_heading = "All other people"
+        # now remove the Key People from the people list
+        people = [ person for person in people if person not in set([role.person for role in entity.get_key_people()])]
+    else: # otherwise, just a list of the people with roles
+        people_list_heading = "People"
+    people = entity.get_roles_for_members(people) # convert the list of Persons into a list of Members
+
     return render_to_response(
         "contacts_and_people/entity_information.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
@@ -58,14 +55,8 @@ def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
             "title": title,
             "meta": meta,
 
-            "contacts": contacts,
-            "address": address,
-            "email": email,
-            "phone": phone,
-            "location": location,
-            "access_note": access_note,
-            "roles": roles,
             "people": people,
+            "people_list_heading": people_list_heading,
             "initials_list": initials,
         },
         RequestContext(request),

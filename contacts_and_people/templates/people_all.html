@@ -1,6 +1,0 @@
-<ul class="none">
-	{% for person in membership_list %}
-    	<li><strong><a href="{{ person.get_absolute_url }}">{{ person }}</a></strong><br />{{ person.membership.role}}{% ifnotequal entity person.membership.entity %} ({% if person.membership.entity.get_website %}<a href = "{{ person.membership.entity.get_website_url }}">{{ person.membership.entity.short_name }}</a>{% else %}{{ person.membership.entity.short_name }}{% endif %}) {% endifnotequal %}	
-		</li>
-	{% endfor %}
-</ul>

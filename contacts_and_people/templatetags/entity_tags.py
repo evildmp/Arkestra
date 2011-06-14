@@ -31,51 +31,19 @@ def key_people(context, entity = None):
     # this doesn't list people's non-key-roles - should it?
     return {'membership_list': membership_list}
 
-@register.inclusion_tag('people_all.html', takes_context=True)
-def all_people_with_roles(context, letter = None):
+@register.inclusion_tag('people_with_roles.html', takes_context=True)
+def people_with_roles(context, letter = None):
     """
    For an Entity, returns a list of members who have roles. 
-   
-   This is very slow and inefficient.
     """
     entity = work_out_entity(context, None)
     print "I am working out the members for:", entity
     members = list(entity.get_people(letter))
-    #members.sort(key=operator.attrgetter('surname', 'given_name', 'middle_names'))
-    member_list = []
-    print "... there are", len(member_list), "members"
-    for member in members:
-        print "Person:", member
-        memberships = []
-        ms = Membership.objects.filter(person = member)
-        print "... has", len(ms), "memberships"        
-        # get the best named membership in the entity
-        named_memberships = list(ms.filter(entity=entity).exclude(role ="").order_by('-importance_to_person'))
-        if named_memberships:
-            member.membership = named_memberships[0]
-            print "... and she has a specified role here, the best of which is", member.membership
-        else:            
-            # see if there's a display_role membership - actually this one should go first
-            display_role_memberships = list(ms.filter(entity=entity).exclude(display_role = None).order_by('-importance_to_person',)) 
-            if display_role_memberships:
-                member.membership = display_role_memberships[0].display_role
-                print "... she doesn't have a specified role in this enitity, but does have a display_role, which is", member.membership
-            else:                 
-                # find the best named membership anywhere we can
-                best_named_membership = list(ms.exclude(role = "").order_by('-importance_to_person',)) 
-                if best_named_membership:
-                    member.membership = best_named_membership[0]
-                    print "... she doesn't have a role here, or a display_role, but the very best membership is", member.membership
-                else:                        
-                    # add the unnamed membership for this entity - it's all we have
-                    unnamed_memberships = list(ms.order_by('-importance_to_person',)) 
-                    member.membership = unnamed_memberships[0]
-                    print "... I didn't find any named memberships for", member                    
+    people = entity.get_roles_for_members(members)
     return {
         'entity' : entity,
-        'membership_list': members
+        'people': people,
             }  
-
 
 # think we need some error checking here, in case we get to the last ancestor page without having found an entity
 def entity_for_page(page):

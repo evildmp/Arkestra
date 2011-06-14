@@ -1,6 +1,6 @@
-{% if contacts %}
-	<dt>Key contact{{ contacts.count|pluralize }}</dt>
-	{% for contact in contacts %}
+{% if entity.get_contacts %}
+	<dt>Key contact{{ entity.get_contacts.count|pluralize }}</dt>
+	{% for contact in entity.get_contacts %}
 	<dd><a href="{{ contact.person.get_absolute_url }}">{{ contact.person }}</a>
 	</dd>
 	{% endfor %}

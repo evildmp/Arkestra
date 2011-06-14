@@ -171,18 +171,6 @@ class Entity(EntityLite, CommonFields):
     class Meta:
         verbose_name_plural = "Entities"
         ordering = ['tree_id', 'lft']
-    CONTACT_TEMPLATES = (
-        (None, 'No automatic page'),
-        ('entity_information.html', 'Default contacts and people'),
-        ('basic_contact_information.html', 'Basic contact information only'),
-        ('all_contact_information.html', 'All contact information'),
-        ('key_roles.html', 'Key roles'),
-        ('named_roles.html', 'Named roles'),
-        ('key_people.html', 'Key people'),
-        ('all_people_with_roles.html', 'All people (with roles)'),
-        ('all_people_with_contact_info.html', 'All people (with contact information)'),
-        ('entity_information.html', 'All info - testing only')
-        )
     short_name = models.CharField(blank=True, help_text = "e.g. Haematology", max_length= 100, null=True, verbose_name = "Short name for menus",)
     abstract_entity = models.BooleanField(
         "Group",
@@ -204,28 +192,21 @@ class Entity(EntityLite, CommonFields):
     if 'publications' in settings.INSTALLED_APPS:
         auto_publications_page = models.BooleanField(default = False)
         publications_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"),)
-    def real(self):
-        if self.parent and self.abstract_entity:
-            for ancestor in self.get_ancestors(ascending = True):
-                print ancestor
-                if not ancestor.abstract_entity:
-                    entity = ancestor
-                    break
-            return entity
-        else:
-            return self
+
+
     def get_real_ancestor(self):
         """
-        Find a non-abstract Entity amongst this Entity's ancestors
+        Find the nearest non-abstract Entity amongst this Entity's ancestors
         """
         for ancestor in self.get_ancestors(ascending = True):
             if not ancestor.abstract_entity:
                 entity = ancestor
                 break
         return entity
+
     def get_address(self):
         """
-        Returns the full address of an entity
+        Returns the full address of the entity
         """
         entity = self
         if entity.abstract_entity:
@@ -235,6 +216,7 @@ class Entity(EntityLite, CommonFields):
         if building:
             address.extend(building.get_postal_address())
         return address
+
     def get_institutional_address(self):
         """
         Lists the parts of an address within the institution (Section of YYY, Department of XXX and YYY, School of ZZZ)
@@ -246,6 +228,7 @@ class Entity(EntityLite, CommonFields):
                 ancestors.append(entity)
             showparent = entity.display_parent
         return ancestors
+
     def get_website(self):
         """
         Return the Django CMS page that this Entity has attached to it (or to its nearest parent)
@@ -259,9 +242,10 @@ class Entity(EntityLite, CommonFields):
             except AttributeError: # I think this is right                
                 print "couldn't find a website, so returning None"
                 return None
+
     def get_website_url(self):
         """
-        Return the Django CMS page that this Entity has attached to it (or to its nearest parent)
+        Return the Django CMS page's url that this Entity has attached to it (or to its nearest parent)
         """
         print "------ get_website_url -------"
         if self.website:
@@ -273,6 +257,7 @@ class Entity(EntityLite, CommonFields):
                 return self.parent.get_website_url()
             except:
                 return Entity.objects.get(id=1).get_website()
+
     def get_template(self):
         """
         Returns a template for any pages that need to render based on this entity
@@ -282,6 +267,7 @@ class Entity(EntityLite, CommonFields):
             return self.get_website().get_template()
         else:
             return settings.CMS_DEFAULT_TEMPLATE
+
     def get_building(self):
         """
         Return the Building for this Entity (or its nearest parent) 
@@ -293,16 +279,21 @@ class Entity(EntityLite, CommonFields):
                 return self.parent.get_building()
             except AttributeError:
                 return None
+
     def get_contacts(self):
         """
         Return designated contacts for the entity
         """
         contacts = Membership.objects.filter(entity = self, key_contact = True).order_by('importance_to_entity')
         return contacts
-    def get_roles(self, key_members_only = True):   
+
+    def get_people_with_roles(self, key_members_only = False):   
         """
         Publishes an ordered list of key members grouped by their most significant roles in the entity
+        
         Ranks roles by importance to entity, then gathers people under that role
+        
+        Optionally, will return *all* members with roles
         """
         memberships = Membership.objects.filter(entity = self).exclude(role ="").order_by('-importance_to_entity','person__surname',) 
         if key_members_only:
@@ -318,6 +309,45 @@ class Entity(EntityLite, CommonFields):
                 membership_list.extend(memberships.filter(role = membership.role))
         # returns a list of memberships, in the right order - we use a regroup tag to group them by person in the template    
         return membership_list
+
+    def get_key_people(self):
+        return self.get_people_with_roles(key_members_only = True)
+
+    def get_roles_for_members(self, members):
+        """
+        Given a list of its members (as Persons), returns the best role for each.
+    
+        The roles returned are in alphabetical order by Person.
+        """
+        for member in members:
+            print "Person:", member
+            memberships = []
+            ms = Membership.objects.filter(person = member)
+            print "... has", len(ms), "memberships"        
+            # get the best named membership in the entity
+            named_memberships = list(ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person'))
+            if named_memberships:
+                member.membership = named_memberships[0]
+                print "... and she has a specified role here, the best of which is", member.membership
+            else:            
+                # see if there's a display_role membership - actually this one should go first
+                display_role_memberships = list(ms.filter(entity=self).exclude(display_role = None).order_by('-importance_to_person',)) 
+                if display_role_memberships:
+                    member.membership = display_role_memberships[0].display_role
+                    print "... she doesn't have a specified role in this enitity, but does have a display_role, which is", member.membership
+                else:                 
+                    # find the best named membership anywhere we can
+                    best_named_membership = list(ms.exclude(role = "").order_by('-importance_to_person',)) 
+                    if best_named_membership:
+                        member.membership = best_named_membership[0]
+                        print "... she doesn't have a role here, or a display_role, but the very best membership is", member.membership
+                    else:                        
+                        # add the unnamed membership for this entity - it's all we have
+                        unnamed_memberships = list(ms.order_by('-importance_to_person',)) 
+                        member.membership = unnamed_memberships[0]
+                        print "... I didn't find any named memberships for", member                    
+        return members
+
     def get_people(self, letter = None):
         """
         Publishes a list of every member, and of every member of all children
@@ -327,13 +357,17 @@ class Entity(EntityLite, CommonFields):
         else:    
             people = Person.objects.filter(member_of__entity__in = self.get_descendants(include_self = True)).distinct().order_by('surname', 'given_name', 'middle_names')
         return people
+
     def get_people_and_initials(self, letter = None):
         """
         Returns a list of people and/or their initials for use in people lists
+        
+        More than 25 people, or a letter was provided? Return initials
+        Fewer than 25 people? Return the people
         """
         people = self.get_people(letter)
         # letter or long list? show initials
-        if letter or len(people) > 25:
+        if letter or len(people) > 2:
             initials = set(person.surname[0].upper() for person in people)
             initials = list(initials)
             initials.sort()
@@ -344,63 +378,22 @@ class Entity(EntityLite, CommonFields):
         else:
             initials = None
         return (people, initials)
+
     def __unicode__(self):
         return self.name
+
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
         else:
             return "/entity/%s/" % self.slug
-    # def get_contact_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/contact/"
-    #     else:
-    #         return "/contact/" + self.slug + "/"
-    # def get_news_and_events_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/news-and-events/"
-    #     else:
-    #         return "/news-and-events/" + self.slug + "/"
-    # def get_news_archive_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/news-archive/"
-    #     else:
-    #         return "/news-archive/" + self.slug + "/"
-    # def get_forthcoming_events_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/forthcoming-events/"
-    #     else:
-    #         return "/forthcoming-events/" + self.slug + "/"
-    # def get_previous_events_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/previous-events/"
-    #     else:
-    #         return "/previous-events/" + self.slug + "/"
-    # def get_vacancies_and_studentships_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/vacancies-and-studentships/"
-    #     else:
-    #         return "/vacancies-and-studentships/" + self.slug + "/"
-    # def get_publications_url(self):
-    #     if self.external_url:
-    #         return ""
-    #     elif self == default_entity:
-    #         return "/publications/"
-    #     else:
-    #         return "/publications/" + self.slug + "/"
+
     def get_related_info_page_url(self, kind):
+        """
+        Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
+        
+        If the entity is the base entity, doesn't add the entity slug to the URL
+        """
         if self.external_url:
             return ""
         elif self == default_entity:

@@ -1,4 +1,4 @@
-{% regroup roles by role as roles %}
+{% regroup entity.get_key_people by role as roles %}
 <dl>
 	{% for role in roles %}
 		<dt>{{ role.grouper }}</dt>
