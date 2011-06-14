@@ -1,27 +1,8 @@
 <div class="{{ news_and_events.row_class }} {{ news_and_events.type }}">
 
 	{% if news_and_events.news or news_and_events.other_news %}
-
-		{% if news_and_events.newsindex %}
-			<div class = "{{ news_and_events.index_div_class }}">
-				<div class ="tint6">
-					<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
-					<ul class = "none">
-						{% regroup news_and_events.news_index_items by date.year as yearlist %}
-						{% for year in yearlist %}
-							<li><strong>{{ year.grouper }}</strong>
-								{% regroup year.list by date|date:"F" as monthlist %}
-								<ul class = "close">
-									{% for month in monthlist %}
-									<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
-									{% endfor %}
-								</ul>
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</div>
-		{% endif %}
+		
+		{% include "includes/news_date_index.html" %}
 
 		<div class = "{{ news_and_events.news_div_class }}">
 			{% if news_and_events.heading_level %}
@@ -61,29 +42,29 @@
     {% if news_and_events.events or news_and_events.other_events %}
 
 		{% if news_and_events.eventsindex %}
-				<div class = "{{ news_and_events.index_div_class }}">
-					<div class ="tint6">
-						<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
-						{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
-						<ul class = "none">
-							{% for year in yearlist %}
-								<li><strong>{{ year.grouper }}</strong>
-									{% regroup year.list by start_date|date:"F" as monthlist %}
-									<ul class = "close">
-										{% for month in monthlist %}
-										<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
-										{% endfor %}
-									</ul>
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
+			<div class = "{{ news_and_events.index_div_class }}">
+				<div class ="tint6">
+					<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
+					{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
+					<ul class = "none">
+						{% for year in yearlist %}
+							<li><strong>{{ year.grouper }}</strong>
+								{% regroup year.list by start_date|date:"F" as monthlist %}
+								<ul class = "close">
+									{% for month in monthlist %}
+									<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endfor %}
+					</ul>
 				</div>
+			</div>
 		{% endif %}
 
 		<div class = "{{ news_and_events.events_div_class }}">
 			{% if news_and_events.heading_level %}
-				<h{{ news_and_events.heading_level }}>{{ news_and_events.events_heading_text }}</h{{ news_and_events.heading_level }}>
+				<h{{ news_and_events.heading_level }}>*{{ news_and_events.events_heading_text }}</h{{ news_and_events.heading_level }}>
 			{% endif %}
 
 			{% if news_and_events.events %}
