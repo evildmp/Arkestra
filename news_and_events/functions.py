@@ -18,8 +18,9 @@ def get_news_and_events(instance):
         news events:    show both
         
     instance.view (applies to events only)
-        current:        future
-        archive:        past 
+        current:            future (may be limited)
+        all_forthcoming:    future events without limit
+        archive:            past 
       
     instance.order_by
         importance/date:    show important items first, then by date

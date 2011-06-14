@@ -1,0 +1,9 @@
+{% ifequal news_and_events.type "plugin" %}
+<div class="{{ news_and_events.type }} ">
+	<ul class="fancy close {% ifequal news_and_events.format "Details" %}all_info{% endifequal %}">
+        {% if news_and_events.link_to_news_and_events_page %}
+            <li><strong><a class = "linkIcon" href = "{{news_and_events.link_to_news_and_events_page}}">More news &amp; events</a></strong></li>
+    	{% endif %}
+	</ul>
+</div>
+{% endifequal %}

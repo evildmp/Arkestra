@@ -1,0 +1,20 @@
+{% if news_and_events.eventsindex %}
+	<div class = "{{ news_and_events.index_div_class }}">
+		<div class ="tint6">
+			<h{{ news_and_events.heading_level }} id = "index">Index</h{{ news_and_events.heading_level }}>
+			{% regroup news_and_events.events_index_items by start_date.year as yearlist %}
+			<ul class = "none">
+				{% for year in yearlist %}
+					<li><strong>{{ year.grouper }}</strong>
+						{% regroup year.list by start_date|date:"F" as monthlist %}
+						<ul class = "close">
+							{% for month in monthlist %}
+							<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
+							{% endfor %}
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endif %}
