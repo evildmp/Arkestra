@@ -51,9 +51,10 @@ def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
             "pagetitle": entity,
             "entity.website.template": template,
             "main_page_body_file": main_page_body_file,
-
+            "email": entity.email,
             "title": title,
             "meta": meta,
+            "location": entity.precise_location,
 
             "people": people,
             "people_list_heading": people_list_heading,
@@ -72,7 +73,7 @@ def people(request, slug, letter=None):
     request.page_path = request.path # for the menu, because next we mess up the path
     request.path = entity.get_website().get_absolute_url()
     template = entity.get_template()
-    main_page_body_file = "includes/people_list.html"
+    main_page_body_file = "includes/people_list_with_index.html"
     # meta values - title and meta
     meta = {
         "description": "People in %s" % entity,
@@ -117,34 +118,40 @@ def person(request, slug, active_tab = ""):
     """
     Responsible for the person pages
     """
-    # the straightforward person attributes:            
     person = get_object_or_404(Person,slug=slug)
-    access_note = person.access_note
-    # attributes that need to be obtained from please_contact:
+    links = object_links(person)
+    home_role = person.get_role()
+    entity = person.get_entity() # don't rely on home_role.entity - could be None or overridden
+    address = person.get_address()
+   
     contact = person.get_please_contact()
     email = contact.email
     phone = contact.phone_contacts
-    if person.please_contact:
+
+    if person.override_entity or not address:
         location = None
-    else: 
+    else:
         location = person.precise_location
-    # information is based on the Person's most important entity:
-    home_role = person.get_role() # could be None
-    # if we can't do home_role.entity.get_address() it means that this person has no memberships at all: 
+    access_note = person.access_note
+        
+    if home_role:
+        description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
+        request.current_page = entity.get_website() 
+    else:
+        description = default_entity.__unicode__()
+        request.current_page = default_entity.get_website()
+
+    meta = {
+        "description": ": ".join((person.__unicode__(), description))
+        }
+    
+    # quite possibly we can get rid of this    
     try:
-        address = person.get_address()
-        entity = person.get_entity() # used for address information
         template = entity.get_template() 
     except AttributeError: # no memberships, no useful information
         print "no memberships, no useful information"
-        address = None
-        location = None
-        entity = default_entity
         template = default_template
-    if default_entity:
-        request.current_page = default_entity.get_website()
-    else:
-        request.current_page = entity.get_website() # for the menu, so it knows where we are
+
     tabs = []
     if 'publications' in applications:
         try:
@@ -152,22 +159,7 @@ def person(request, slug, active_tab = ""):
                 tabs.extend(("research","publications"))
         except Researcher.DoesNotExist:
             pass
-    # meta values - title and meta
-    if home_role:
-        person_description = str(home_role)
-    else:
-        person_description = str()
-    if multiple_entity_mode:
-        if person.override_entity:
-            person_description = person_description + str(override_entity.entity)
-        elif home_role:
-            person_description = person_description + str(home_role.entity)
-    print "person_description", person_description
-    
-    meta = {
-        "description": ", ".join([str(person), person_description])
-        }
-    links = object_links(person)
+
     return render_to_response(
         "contacts_and_people/persondetails" + str(active_tab) + ".html",
         {

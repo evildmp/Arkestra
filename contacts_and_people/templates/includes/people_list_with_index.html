@@ -1,5 +1,11 @@
-{% load entity_tags %}
+{% comment %}
 
+Used by: views.people 
+
+Lists members of an entity - either all people by surname, or surnames beginning {{ letter }}.
+
+{% endcomment %}
+{% load entity_tags %}
 <div class="row columns2">
    	<div class="column firstcolumn">
 		<h3 style="clear:both">{% if letter %}People: surnames beginning {{letter|upper}}{% else %}All people by surname{% endif %}</h3>

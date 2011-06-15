@@ -252,11 +252,11 @@ class Entity(EntityLite, CommonFields):
             return self.website.get_absolute_url()
         elif self.external_url:
             return self.external_url.url
-        else:
-            try:
-                return self.parent.get_website_url()
-            except:
-                return default_entity.get_website()
+        elif self.parent:
+            # try
+            return self.parent.get_website_url()
+        else:    # except
+            return default_entity.get_website()
 
     def get_template(self):
         """
@@ -445,41 +445,50 @@ class Person(PersonLite, CommonFields):
     please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person", related_name='contact_for', blank = True, null = True)
     staff_id = models.CharField(null=True, blank = True, max_length=20)
     data_feed_locked = models.BooleanField(default=False)
+
     def get_role(self):
         """
-        Works out a person's best role. If it can't find any role, it returns None
+        Returns a Membership object.
+        
+        Works the Membership object representing a Person's best role. 
+        
+        If it can't find any role, it returns None.
         """
         memberships = Membership.objects.filter(person = self)
-        try:
-            role = memberships.order_by('-importance_to_person')[0] # we could just .exclude(importance_to_person__lt = 2) I think
-            if role.role:
-                return role
+        if memberships:
+            membership = memberships.order_by('-importance_to_person')[0]
+            if membership.role: # this membership has named role
+                return membership
             else:
-                return None
-        except IndexError:
-            print "person has no memberships"
+                return None 
+        else: # the poor person had no memberships
             return None
+            
     def get_entity(self):
         """
-        Works out a person's entity, based on get_role
+        Works out a person's best entity, based on get_role
+        
+        A person needs at least a named role to have an entity.
         """
         if self.override_entity:
             return self.override_entity
-        else:    
-            try:
-                return self.get_role().entity
-            except AttributeError:
-                return None
+        elif self.get_role():
+            return self.get_role().entity
+        else:
+            return None
+                
     def get_address(self):
         """
         Works out a person's address, based on their home/best entity or information that overrides this
         """
-        if self.building:
-            address = self.get_entity().get_institutional_address()
-            address.extend(self.building.get_postal_address())
-            return address
-        else:
-            return self.get_entity().get_address()
+        if self.get_entity(): # needs an entity to work
+            if self.building:
+                address = self.get_entity().get_institutional_address()
+                address.extend(self.building.get_postal_address())
+                return address
+            else:
+                return self.get_entity().get_address()
+
     def get_please_contact(self):
         """
         Works out whether to display someone else's contact details
@@ -488,6 +497,7 @@ class Person(PersonLite, CommonFields):
             return self.please_contact.get_please_contact()
         else:
             return self
+
     def gather_entities(self):
         """
         Returns all the entities that a person belongs to, including implicit membership

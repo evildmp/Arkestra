@@ -45,11 +45,11 @@ class ShowRootMenu(InclusionTag):
         node = page_to_node(page, page, None)
         children = cut_levels([node], 0, 100, 0, 1)
         children = apply_modifiers(children, request, None, None, post_cut=True)
-        try:
-            context.update({'children':children,
-                            'template':template,})
-        except:
-            context = {"template":template}
+        # try:
+        context.update({'children':children,
+                        'template':template,})
+        # except:
+        context = {"template":template}
 
         return context
 

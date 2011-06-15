@@ -11,10 +11,6 @@
 	<title>{{ person }}</title>
 {% endblock %}
 
-{% block columns %}	
-		@import url("/media/css/_layout/horiz/100.css");
-{% endblock columns %}
-  
 {% block skip_and_language %}
 {% endblock %}
 
@@ -24,8 +20,9 @@
 
 {% block pagetitle %}
 	<h{{page_title_heading_level}} class="name">{{ person}}</h{{page_title_heading_level}}>
-	{% include "includes/position.html" %}
-{% endblock pagetitle %}
+	{% if home_role %}
+		<p><span class="home-role">{{ home_role.role }}</span>, {{ entity }}</p>
+	{% endif %}{% endblock pagetitle %}
 
 {% block main_page_body %}
 	{% block entity_information %}
@@ -56,8 +53,7 @@
 		{% block person_information %}				    
     		<div class="row columns2">
     			<div class="column firstcolumn">
-    				<div>{% render_placeholder person.description %}
-
+    				<div>
 						{% if home_role or address or location or access_note or email or phone.all %}<h3>Contact information</h3>
 						<dl>
 							{% include "includes/address.html" %}
@@ -67,6 +63,7 @@
 							{% include "includes/phone_contacts.html" %}
 						</dl>
 						{% endif %}
+						{% render_placeholder person.description %}
 					</div>
 				</div>
 				<div class="column lastcolumn">
