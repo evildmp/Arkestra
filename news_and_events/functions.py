@@ -2,13 +2,13 @@ from models import NewsAndEventsPlugin, NewsArticle, Event
 from django.db.models import Q
 from datetime import datetime
 import operator
-from django.conf import settings
+from arkestra_utilities import settings
 from contacts_and_people.models import Entity
 # from contacts_and_people.templatetags.entity_tags import work_out_entity
 from itertools import groupby
 
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False)    
-collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
+MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
+COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
 def get_news_and_events(instance):
     """
@@ -71,7 +71,8 @@ def get_news_and_events(instance):
         get_events(instance)            # go and get events
         if instance.view == "archive":
             instance.events = instance.previous_events
-        elif instance.order_by == "importance/date" and collect_top_events:
+        # keep top events together where appropriate - not in long lists if COLLECT_TOP_ALL_FORTHCOMING_EVENTS is False
+        elif instance.order_by == "importance/date" and (instance.view == "current" or COLLECT_TOP_ALL_FORTHCOMING_EVENTS):
             get_events_ordered_by_importance_and_date(instance)
             instance.events = instance.top_events + instance.ordinary_events
         else: 
@@ -321,7 +322,7 @@ def get_events(instance):
     elif instance.type == "for_place":
         all_events = instance.place.event_set.all()
     # most likely, we're getting events related to an entity
-    elif multiple_entity_mode and instance.entity:
+    elif MULTIPLE_ENTITY_MODE and instance.entity:
         all_events = Event.objects.filter(Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
     else:
         all_events = Event.objects.all()
@@ -420,8 +421,8 @@ def get_publishable_news(instance):
 
 def get_all_news(instance):
     # returns every news item associated with this entity, 
-    # or all news items if multiple_entity_mode is False, or instance.entity is unspecified
-    if multiple_entity_mode and instance.entity:
+    # or all news items if MULTIPLE_ENTITY_MODE is False, or instance.entity is unspecified
+    if MULTIPLE_ENTITY_MODE and instance.entity:
         all_news = NewsArticle.objects.filter(
             Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)
             ).distinct()

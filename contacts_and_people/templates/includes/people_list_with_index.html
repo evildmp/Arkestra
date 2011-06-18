@@ -8,12 +8,12 @@ Lists members of an entity - either all people by surname, or surnames beginning
 {% load entity_tags %}
 <div class="row columns2">
    	<div class="column firstcolumn">
-		<h3 style="clear:both">{% if letter %}People: surnames beginning {{letter|upper}}{% else %}All people by surname{% endif %}</h3>
+		<h{{ IN_BODY_HEADING_LEVEL }} style="clear:both">{% if letter %}People: surnames beginning {{letter|upper}}{% else %}All people by surname{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
 		{% people_with_roles letter %}
 	</div>
 	<div class="column lastcolumn"> 
 	{% if initials_list %}
-		<h3>Index of people by surname</h3>
+		<h{{ IN_BODY_HEADING_LEVEL }}>Index of people by surname</h{{ IN_BODY_HEADING_LEVEL }}>
 		<ul class="index">
 			{% for initial in initials_list %}
 				<li><a href="/people/{{ entity.slug }}/{{initial|lower}}/">{{ initial }}</a></li>

@@ -11,7 +11,8 @@ from filer.fields.image import FilerImageField
 from links.models import ExternalLink
 import mptt
 
-multiple_entity_mode = getattr(settings, "MULTIPLE_ENTITY_MODE", False) 
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
+
 base_entity_id = getattr(settings, "ARKESTRA_BASE_ENTITY", False)
 
 Page = models.get_model('cms', 'Page')
@@ -662,7 +663,7 @@ except mptt.AlreadyRegistered:
 # default_entity_id is used to autofill the default entity where required, when MULTIPLE_ENTITY_MODE = False
 default_entity_id = default_entity = None
 try:
-    if not multiple_entity_mode and Entity.objects.all():
+    if not MULTIPLE_ENTITY_MODE and Entity.objects.all():
         default_entity_id = base_entity_id # default_entity_id is used to fill in admin fields automatically
     default_entity = Entity.objects.get(id = base_entity_id)
 except DatabaseError:

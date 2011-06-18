@@ -1,7 +1,7 @@
 {% regroup links by heading as link_types %}{% autoescape off %}
 
 {% for kind in link_types %}
-<h3>{{kind.grouper}}</h3>
+<h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
 <ul class= "none">
 	{% for link in kind.list %}
 		<li>

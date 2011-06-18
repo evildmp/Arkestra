@@ -66,7 +66,7 @@
 
 
 	    google.maps.event.addListener(marker, "click", function () {
-		    infowindow.setContent('{% thumbnail p.image 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
+		    infowindow.setContent('{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
             infowindow.open(map, this);
         });
 		
@@ -94,7 +94,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{page_title_heading_level}} class="name">{{ place.get_name }}</h{{page_title_heading_level}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.get_name }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
 {% block place_information %}

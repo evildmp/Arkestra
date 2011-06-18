@@ -13,12 +13,13 @@ from arkestra_utilities.output_libraries.dates import nice_date
 import bisect
 from filer.fields.image import FilerImageField
 import mptt
-
-from django.conf import settings
 from cms.models import CMSPlugin
+from django.conf import settings
+from arkestra_utilities import settings
 
-get_when_format = getattr(settings, "GET_WHEN_FORMAT", "F Y D")
-collect_top_events = getattr(settings, 'COLLECT_TOP_EVENTS', True)
+PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
+PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
+COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
 class NewsAndEvents(models.Model):
     class Meta:
@@ -76,7 +77,7 @@ class NewsAndEvents(models.Model):
             return None
     
     def get_importance(self):
-        if self.importance and not collect_top_events: # only of they are not being gathered together
+        if self.importance and not COLLECT_TOP_ALL_FORTHCOMING_EVENTS: # if they are not being gathered together, mark them as important
             return "important"
         else:
             return ""
@@ -422,7 +423,7 @@ class NewsAndEventsPlugin(CMSPlugin):
         )
     format = models.CharField(max_length=25,choices = FORMATS, default = "title")
     
-    heading_level = models.PositiveSmallIntegerField(choices = settings.HEADINGS, default = settings.H_MAIN_BODY)
+    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
     ORDERING = (
         ("date", u"Date"),
         ("importance/date", u"Importance & date"),

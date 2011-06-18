@@ -8,9 +8,11 @@ from django.template import RequestContext, Context
 from datetime import datetime
 from functions import get_news_and_events
 
-news_and_events_list_default_limit = getattr(settings, "NEWS_AND_EVENT_LIMIT_TO", 8)
+news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
-h_main_body = settings.H_MAIN_BODY
+
+from arkestra_utilities.settings import MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+from arkestra_utilities.settings import IN_BODY_HEADING_LEVEL
 
 def common_settings(request, slug):
     # general values - entity, request, template
@@ -19,11 +21,11 @@ def common_settings(request, slug):
     request.current_page = default_entity.get_website()
     context = RequestContext(request)
     instance = NewsAndEventsPlugin()
-    instance.limit_to = news_and_events_list_default_limit
-    instance.default_limit = news_and_events_list_default_limit
+    instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+    instance.default_limit = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
     instance.order_by = "importance/date"
     instance.entity = entity
-    instance.heading_level = h_main_body
+    instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "news-and-events"
     instance.format = "details"
     instance.layout = layout

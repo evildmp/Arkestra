@@ -56,7 +56,7 @@
 
 		{% block pagetitle %}
 			{% if not current_page.flags.no_page_title %}
-	           	{% filter typogrify %}<h{{page_title_heading_level}}>{% page_attribute title %}</h{{page_title_heading_level}}>{% endfilter %}
+	           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
 			{% endif %}
 		{% endblock pagetitle %}
 		

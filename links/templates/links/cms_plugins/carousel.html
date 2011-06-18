@@ -105,7 +105,7 @@
   <ul id="carousel{{carousel.pk}}-segments" class="carousel-segments" >
         {% for segment in segments %}
     <li id="carousel{{carousel.pk}}-segment{{forloop.counter}}" name="carousel{{carousel.pk}}-segment" class="carousel-segment" {% if forloop.first %} style="display:block;" {% endif %}>
-						{% thumbnail segment.image size crop upscale subject_location=segment.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" />{% endif %}
+						{% thumbnail segment.image.file size crop upscale subject_location=segment.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" />{% endif %}
 
     </li>
     {% endfor %}

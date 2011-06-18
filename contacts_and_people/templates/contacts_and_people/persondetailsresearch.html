@@ -9,19 +9,19 @@
 	<title>{{ person }} - Research </title>
 {% endblock %}
 {% block page_title %}
-	<h{{page_title_heading_level}} class="name">{{ person}} - Research</h{{page_title_heading_level}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ person}} - Research</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock page_title %}
 
 {% block person_information %}
   {% if person.researcher.research_synopsis or person.researcher.research_description %}
     <div>
-        <h3>Research overview</h3>
+        <h{{ IN_BODY_HEADING_LEVEL }}>Research overview</h{{ IN_BODY_HEADING_LEVEL }}>
         <div>{{person.researcher.research_synopsis|safe}}</div>
         <div>{{person.researcher.research_description|safe}}</div>
     </div>
 	{% endif %}
   <div>
-      <h3>Selected key publications</h3>
+      <h{{ IN_BODY_HEADING_LEVEL }}>Selected key publications</h{{ IN_BODY_HEADING_LEVEL }}>
      {% get_selected_person_publications %}
   </div>
 {% endblock person_information %}

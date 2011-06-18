@@ -2,9 +2,9 @@
 {% if event.children.all %}
         {% if event.get_children_forthcoming %}
     		{% if event.child_list_heading %}
-		        <h3>{% if event.series %}Forthcoming {{ event.child_list_heading|lower }}{% else %}{{ event.child_list_heading }}{% endif %}</h3>
+		        <h{{ IN_BODY_HEADING_LEVEL }}>{% if event.series %}Forthcoming {{ event.child_list_heading|lower }}{% else %}{{ event.child_list_heading }}{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
     		{% else %}
-		        <h3>{% if event.series %}Forthcoming sessions{% else %}Sessions{% endif %}</h3>
+		        <h{{ IN_BODY_HEADING_LEVEL }}>{% if event.series %}Forthcoming sessions{% else %}Sessions{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
     		{% endif %}
 
 		<ul class = "none">
@@ -42,9 +42,9 @@
 {% endif %}
 {% if event.get_children_previous %}
     		{% if event.child_list_heading %}
-		        <h3>Previous {{ event.child_list_heading|lower }}</h3>
+		        <h{{ IN_BODY_HEADING_LEVEL }}>Previous {{ event.child_list_heading|lower }}</h{{ IN_BODY_HEADING_LEVEL }}>
     		{% else %}
-    			<h3>Previous sessions</h3>
+    			<h{{ IN_BODY_HEADING_LEVEL }}>Previous sessions</h{{ IN_BODY_HEADING_LEVEL }}>
     		{% endif %}
 		
 		<ul class = "none">

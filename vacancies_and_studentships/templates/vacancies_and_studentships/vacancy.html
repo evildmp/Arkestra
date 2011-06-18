@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block pagetitle %}
-		<h{{page_title_heading_level}}> {{ vacancy }}{% if vacancy.hosted_by %}<br /><span class = "subtitle"{% if vacancy.hosted_by.get_website_url %}<a href = "{{vacancy.hosted_by.get_website_url }}">{{ vacancy.hosted_by }}</a>{% else %}{{ vacancy.hosted_by }}{% endif %}{% endif %}</h{{page_title_heading_level}}>
+		<h{{PAGE_TITLE_HEADING_LEVEL}}> {{ vacancy }}{% if vacancy.hosted_by %}<br /><span class = "subtitle"{% if vacancy.hosted_by.get_website_url %}<a href = "{{vacancy.hosted_by.get_website_url }}">{{ vacancy.hosted_by }}</a>{% else %}{{ vacancy.hosted_by }}{% endif %}{% endif %}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 		
 {% endblock pagetitle %}
 

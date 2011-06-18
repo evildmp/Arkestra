@@ -13,7 +13,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{page_title_heading_level}} class="name">{{ place.get_name }}</h{{page_title_heading_level}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.get_name }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
 {% block main_page_body %}
@@ -42,7 +42,7 @@
     		</div>
     		<div class="column lastcolumn doublecolumn"> 
 				{% render_placeholder place.description %}
-				{% thumbnail place.image 450x450 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
+				{% thumbnail place.image.file 450x450 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
 			</div>	
     	</div>	
 	{% endblock place_information %}

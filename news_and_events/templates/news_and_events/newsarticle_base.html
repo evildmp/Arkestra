@@ -9,7 +9,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{page_title_heading_level}}>{{ newsarticle }}</h{{page_title_heading_level}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 
 	{% if newsarticle.subtitle %}
    		<p class= "standout"><strong>{{ newsarticle.subtitle }}</strong></p>
@@ -27,7 +27,7 @@
 			</div>
 			<div class="column lastcolumn">
 				{% block image %}
-				    {% thumbnail newsarticle.image 227x0 subject_location=newsarticle.image.subject_location as image %}
+				    {% thumbnail newsarticle.image.file 227x0 subject_location=newsarticle.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
 				<dl>

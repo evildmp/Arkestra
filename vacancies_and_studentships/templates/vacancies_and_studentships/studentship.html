@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block pagetitle %}
-		<h{{page_title_heading_level}}> {{ studentship }}{% if studentship.hosted_by %}<br /><span class = "subtitle"{% if studentship.hosted_by.get_website_url %}<a href = "{{studentship.hosted_by.get_website_url }}">{{ studentship.hosted_by }}</a>{% else %}{{ studentship.hosted_by }}{% endif %}{% endif %}</h{{page_title_heading_level}}>
+		<h{{PAGE_TITLE_HEADING_LEVEL}}> {{ studentship }}{% if studentship.hosted_by %}<br /><span class = "subtitle"{% if studentship.hosted_by.get_website_url %}<a href = "{{studentship.hosted_by.get_website_url }}">{{ studentship.hosted_by }}</a>{% else %}{{ studentship.hosted_by }}{% endif %}{% endif %}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
 {% block main_page_body %}

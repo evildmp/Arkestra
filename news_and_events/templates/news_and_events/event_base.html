@@ -19,7 +19,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{page_title_heading_level}}>{{ event }}</h{{page_title_heading_level}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 	{% if event.subtitle %}
    		<p class= "standout"><strong>{{ event.subtitle }}</strong></p>
 	{% endif %}
@@ -37,7 +37,7 @@
 			<div class="column lastcolumn">
 				{% include "includes/parent.html" %}
 				{% block image %}
-				    {% thumbnail event.image 227x0 subject_location=event.image.subject_location as image %}
+				    {% thumbnail event.image.file 227x0 subject_location=event.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
 				{% include "includes/details.html" %}

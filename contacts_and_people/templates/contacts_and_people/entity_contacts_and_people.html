@@ -12,7 +12,7 @@ Called up by entity_information.html
 	<div class="row columns2">
 	   	<div class="column firstcolumn">
 			<div class = "">
-			    <h3>Contact information</h3>
+			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 			    <dl>
 			        {% include "includes/key_contacts.html" %}
 	   		        {% include "includes/address.html" %}
@@ -28,12 +28,12 @@ Called up by entity_information.html
     		<div class="column lastcolumn"> 
     			{% if entity.get_key_people %}
             		<div class="">
-    				    <h3>Key people</h3>
+    				    <h{{ IN_BODY_HEADING_LEVEL }}>Key people</h{{ IN_BODY_HEADING_LEVEL }}>
     	  		        {% include "includes/entity_roles.html" %}
     				</div>
     		    {% endif %}	
     		    {% if initials_list %}
-    				<h3>All people A-Z by surname</h3>
+    				<h{{ IN_BODY_HEADING_LEVEL }}>All people A-Z by surname</h{{ IN_BODY_HEADING_LEVEL }}>
     				<ul class= "index">
     					{% for initial in initials_list %}
     						<li><a href="{{entity.get_absolute_url}}contact/people/{{initial|lower}}/">{{ initial }}</a></li>
@@ -41,7 +41,7 @@ Called up by entity_information.html
     				</ul>	
         		{% endif %}
         		{% if people %}
-					<h3>{{ people_list_heading }}</h3>
+					<h{{ IN_BODY_HEADING_LEVEL }}>{{ people_list_heading }}</h{{ IN_BODY_HEADING_LEVEL }}>
 					{% include "includes/people_with_roles.html" %}
         		{% endif %}
     		</div>

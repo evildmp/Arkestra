@@ -31,19 +31,19 @@
 			</li>
 		</ul>
 		<div class = "row columns2">
-			<h3><a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
-				{{news_item.short_title}}</a></h3>
+			<h{{ IN_BODY_HEADING_LEVEL }}><a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
+				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
 				<p>{{news_item.subtitle}}</p>
 		</div>	
 		<div class = "row columns2">
 			<div class = "column  firstcolumn">
-				<h3 style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
-				{{news_item.short_title}}</a></h3>
+				<h{{ IN_BODY_HEADING_LEVEL }} style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
+				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
 				<p>{{news_item.subtitle}}</p>
 			</div>
 			<div class = "column  lastcolumn">
-				<h3 style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
-				{{news_item.short_title}}</a></h3>
+				<h{{ IN_BODY_HEADING_LEVEL }} style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
+				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
 				<p>{{news_item.subtitle}}</p>
 			</div>
 		</div>

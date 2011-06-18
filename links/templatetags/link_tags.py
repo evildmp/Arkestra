@@ -38,7 +38,7 @@ def get_links(parser, token):
 	{% if links %}
     	{% regroup links by wrapped_destination_obj.heading as link_types %}
     	{% for kind in link_types %}
-    		<h3>{{kind.grouper}}</h3>
+    		<h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
             <ul class= "none">
                	{% for link in kind.list %}
                		<li>

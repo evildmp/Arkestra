@@ -191,7 +191,7 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',    
     'widgetry',
-    'south',
+    # 'south',
     # 'features',
 
     # core Django applications

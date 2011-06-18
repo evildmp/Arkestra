@@ -7,6 +7,10 @@ from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
 
+from arkestra_utilities import settings
+PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
+PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
+
 class CommonVacancyAndStudentshipInformation(models.Model):
     class Meta:
         abstract = True
@@ -65,13 +69,6 @@ class VacanciesPlugin(CMSPlugin):
         (0, u"Title only"),
         (1, u"Details"),
         )
-    HEADINGS = (
-        (0, u"No heading"),
-        (3, u"Heading 3"),
-        (4, u"Heading 4"),
-        (5, u"Heading 5"),
-        (6, u"Heading 6"),
-        )
     DISPLAY = (
         (0, u"Vacancies and studentships"),
         (1, u"Vacancies only"),
@@ -82,7 +79,7 @@ class VacanciesPlugin(CMSPlugin):
     format = models.IntegerField(choices = FORMATS, default = 0)
     current_items_only = models.BooleanField(default = True)
     limit_to = models.PositiveSmallIntegerField(default = 5, null = True, blank = True, help_text = u"Leave blank for no limit")
-    heading_level = models.PositiveSmallIntegerField(choices = HEADINGS, default = 3)
+    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
     vacancies_heading_text = models.CharField(max_length = 25, default = "Vacancies")
     studentships_heading_text = models.CharField(max_length = 25, default = "Studentships")
     more_vacancies_link = models.ForeignKey(Entity, null = True, blank = True, help_text = "Offer a link to all vacancies in chosen entity", related_name = "vacs_plugin_link")

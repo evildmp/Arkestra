@@ -10,7 +10,7 @@
 										</dd>
 									{% endfor %}
 						    {% endif %}
-						    {% if event.hosted_by and multiple_entity_mode %}
+						    {% if event.hosted_by and MULTIPLE_ENTITY_MODE %}
 								{% with event.hosted_by.website.get_absolute_url as website_url %}
 			    				    <dt>Hosted by</dt>
 									{% if website_url %}

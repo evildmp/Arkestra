@@ -1,5 +1,5 @@
 {% load thumbnail %}
-{% if news_and_events.show_images %}{% thumbnail event.image news_and_events.image_size crop subject_location=event.image.subject_location as event_list_item_details_image %}{% endif %}
+{% if news_and_events.show_images %}{% thumbnail event.image.file news_and_events.image_size crop subject_location=event.image.subject_location as event_list_item_details_image %}{% endif %}
 <li class = "{{event.get_when|slugify}} event-list-item {{event.get_importance}} row">
     {% if event.parent.series %}
 		<strong><a href="{{ event.parent.get_absolute_url }}">{{event.parent.get_short_title}}</a></strong>
@@ -7,7 +7,7 @@
 	    {% if event.parent.no_direct_access_to_children %}<div><span class = "grey bold italic">{{event.get_short_title}}</span></div>
 		{% else%}<div><a href="{{ event.get_absolute_url }}">{{event.get_short_title}}</a></div>{% endif %}
 	{% else %}
-		<strong class="title"><a href="{{ event.get_absolute_url }}">{% if show_event_types %}{{ event.type }}: {% endif %} {{event.get_short_title}}{% if event.series %} series{% endif %}</a></strong>{% if event_list_item_details_image %}<img alt="{% if event_list_item_details_image.alt %}{{ image.alt }}{% endif %}" class="right" src="{{ event_list_item_details_image.url }}" />{% endif %}
+		<strong class="title"><a href="{{ event.get_absolute_url }}">{% if SHOW_EVENT_TYPES %}{{ event.type }}: {% endif %} {{event.get_short_title}}{% if event.series %} series{% endif %}</a></strong>{% if event_list_item_details_image %}<img alt="{% if event_list_item_details_image.alt %}{{ image.alt }}{% endif %}" class="right" src="{{ event_list_item_details_image.url }}" />{% endif %}
 	{% endif %}
     {% if event.subtitle %}<div class = "subtitle">{{ event.subtitle }}</div>{% endif %}
     <div class = "date">{{ event.get_dates }}{% if event.get_times %}, {{ event.get_times|safe }}{% endif %}{% if news_and_events.show_venue and event.building %}<br /> <a href="{{event.building.get_absolute_url}}">{{ event.building.get_name }}</a>{% endif %}</div>

@@ -11,7 +11,6 @@ from links.models import Link
 from django.conf import settings
 
 applications = getattr(settings, 'INSTALLED_APPS')
-multiple_entity_mode = getattr(settings, 'MULTIPLE_ENTITY_MODE')
 
 if 'publications' in applications:
     from publications.models import BibliographicRecord
@@ -175,7 +174,6 @@ def person(request, slug, active_tab = ""):
             "access_note": access_note, # from person
             "tabs": tabs,
             "active_tab": active_tab,
-            "multiple_entity_mode": multiple_entity_mode,
             "meta": meta,
             "links": links,
         },

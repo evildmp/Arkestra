@@ -9,6 +9,10 @@ import mptt
 from urlparse import urlparse  # for tree version of ExternalLinks
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned # for tree version of ExternalLinks
 
+from arkestra_utilities import settings
+PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
+PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
+
 class BaseLink(models.Model):
     """
     All links, whether placed using the Admin Inline mechanism or as plugins, require this information
@@ -309,13 +313,7 @@ class CarouselPluginItem(BaseLink):
     link_title = models.CharField(max_length=35)    
 
 class FocusOnPluginEditor(CMSPlugin):
-    HEADINGS = (
-        (3, u"Heading 3"),
-        (4, u"Heading 4"),
-        (5, u"Heading 5"),
-        (6, u"Heading 6"),
-        )
-    heading_level = models.PositiveSmallIntegerField(choices = HEADINGS, default = 3)
+    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
 
 class FocusOnPluginItemEditor(BaseLink):
     plugin = models.ForeignKey(FocusOnPluginEditor, related_name = "focuson_items")
