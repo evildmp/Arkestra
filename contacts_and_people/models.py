@@ -666,8 +666,7 @@ try:
     if not MULTIPLE_ENTITY_MODE and Entity.objects.all():
         default_entity_id = base_entity_id # default_entity_id is used to fill in admin fields automatically
     default_entity = Entity.objects.get(id = base_entity_id)
-    print default_entity
-except Entity.DoesNotExist:
+except (Entity.DoesNotExist, DatabaseError):
     pass
 
 from news_and_events.functions import get_news_and_events
