@@ -267,7 +267,7 @@ class Entity(EntityLite, CommonFields):
         if self.get_website():
             return self.get_website().get_template()
         else:
-            return settings.CMS_DEFAULT_TEMPLATE
+            return default_entity.get_website().get_template()
 
     def get_building(self):
         """
@@ -668,6 +668,6 @@ try:
     default_entity = Entity.objects.get(id = base_entity_id)
 except (Entity.DoesNotExist, DatabaseError):
     pass
-
+    
 from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
