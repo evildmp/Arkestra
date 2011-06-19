@@ -19,6 +19,7 @@ Contents:
    :maxdepth: 2
 
    installation
+   getting_started
 
 Indices and tables
 ==================

@@ -17,3 +17,4 @@ In addition, Akestra requires installation of:
 * pyquery
 * the Semantic Presentation Editor
 
+Arkestra itself can be obtained from `GitHub <https://github.com/evildmp/Arkestra/>`_.
