@@ -10,6 +10,8 @@ Arkestra requires a working installation of `Django CMS <http://django-cms.org/>
 
 Django CMS has its own installation requirements; installing Django CMS will ensure that most of the components required by Arkestra are also installed.
 
+You'll need to follow `Django CMS's installation instructions <https://www.django-cms.org/en/documentation/>`; do that first, before installing Arkestra.
+
 In addition, Akestra requires installation of:
 
 * BeautifulSoup

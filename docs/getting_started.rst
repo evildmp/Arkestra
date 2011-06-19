@@ -2,7 +2,7 @@
 Getting Started
 ###############
 
-In order to make anything work, you'll need to do three things.
+In order to make anything work, you'll need to do log in to Admin and do three things.
 
 * create a Page
 * create an Entity
