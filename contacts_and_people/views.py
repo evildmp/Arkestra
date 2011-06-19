@@ -16,8 +16,6 @@ if 'publications' in applications:
     from publications.models import BibliographicRecord
     from publications.models import Researcher # required for publications
 
-default_template = getattr(settings, 'CMS_DEFAULT_TEMPLATE')
-
 def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
     print "-------- views.contacts_and_people --------"
     # general values needed to set up and construct the page and menus
