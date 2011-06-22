@@ -118,7 +118,7 @@ def set_links_to_more_views(instance):
             instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
 
     # not a plugin, but showing current events items on main page
-    if instance.type == "main_page" or instance.type = "sub_page":
+    if instance.type == "main_page" or instance.type == "sub_page":
         if instance.view == "current":
             if instance.previous_events or instance.forthcoming_events:
                 if instance.limit_to and len(instance.events) > instance.limit_to:
