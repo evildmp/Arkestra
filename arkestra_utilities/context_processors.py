@@ -1,4 +1,4 @@
-from arkestra_utilities import settings
+from django.conf import settings
 
 def arkestra_templates(request):
     print "------arkestra_templates context processor-------"

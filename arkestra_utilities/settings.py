@@ -1,32 +1,36 @@
-from django.conf import settings
-
 # For projects hosting the site of more than one entity
 # This does not necessarily entail a site for complex organisation,
 # or for a number of different organisations - being able to redirect 
 # news and events items to particular entities for example requires
 # MULTIPLE_ENTITY_MODE to be True 
-MULTIPLE_ENTITY_MODE = getattr(settings, "MULTIPLE_ENTITY_MODE", False)
+
+MULTIPLE_ENTITY_MODE = True
+
+# 1. copy this to arkestra_settings
+# 2. make sure it's correct
+
+ARKESTRA_BASE_ENTITY = 1
 
 # -------- News & Events ----------------------
 
 # How many items should be displayed on main news & events pages, 
 # such as /news-and-events
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 6)
+MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = 6
 
 # in All forthcoming events lisys, gather top events  together
-COLLECT_TOP_ALL_FORTHCOMING_EVENTS = getattr(settings, "COLLECT_TOP_EVENTS", True) 
+COLLECT_TOP_ALL_FORTHCOMING_EVENTS = True
 
 # show event type (e.g. "Seminar")
-SHOW_EVENT_TYPES = getattr(settings, "SHOW_EVENT_TYPES", False) 
+SHOW_EVENT_TYPES = False
 
 # -------- Headings ----------------------
 
 # global value for the heading level for page titles (e.g. entity names in entity pages)
-PAGE_TITLE_HEADING_LEVEL = getattr(settings, "PAGE_TITLE_HEADING_LEVEL", 1) 
+PAGE_TITLE_HEADING_LEVEL = 1 
 
 # The default (typically, the next down from the PAGE_TITLE_HEADING_LEVEL)
-IN_BODY_HEADING_LEVEL = getattr(settings, "IN_BODY_HEADING_LEVEL", 2)
-PLUGIN_HEADING_LEVEL_DEFAULT = getattr(settings, "PLUGIN_HEADING_LEVEL_DEFAULT", 2)
+IN_BODY_HEADING_LEVEL = 2
+PLUGIN_HEADING_LEVEL_DEFAULT = 2
 
 # The heading levels available to plugins
 PLUGIN_HEADING_LEVELS = (
@@ -38,12 +42,14 @@ PLUGIN_HEADING_LEVELS = (
     (5, u"Heading 5"),
     )
 
-PLUGIN_HEADING_LEVELS = getattr(settings, "PLUGIN_HEADING_LEVELS", PLUGIN_HEADING_LEVELS)
+# -------- Django CMS ----------------------
+
+CMS_SEO_FIELDS = True
 
 # -------- Menus ----------------------
 
 # Built in menu modifiers are in contacts_and_people.menu
-MENU_MODIFIERS  = getattr(settings, "MENU_MODIFIERS", {"ArkestraPages": ("contacts", "news",)})
+MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news",)}
 
 # -------- Semantic editor ----------------------
 
@@ -61,8 +67,6 @@ WYM_CONTAINERS = ",\n".join([
    "{'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'}",
    # "{'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}", # not ready for this yet
 ])
-
-WYM_TOOLS = getattr(settings, "WYM_CONTAINERS", WYM_CONTAINERS)
 
 WYM_TOOLS = ",\n".join([
     "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}", # not 'bold'
@@ -84,4 +88,6 @@ WYM_TOOLS = ",\n".join([
     #"{'name': 'Preview', 'title': 'Preview', 'css': 'wym_tools_preview'}",
 ])
 
-WYM_TOOLS = getattr(settings, "WYM_TOOLS", WYM_TOOLS)
+# -------- what happens after login - why is this required? ----------------------
+
+LOGIN_REDIRECT_URL = "/admin/"
