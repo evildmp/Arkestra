@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from contacts_and_people.models import Membership
 from cms.models import Page
 
+from contacts_and_people.models import Entity
 register = template.Library()
 
 @register.inclusion_tag('entitytrees.html', takes_context=True)
@@ -10,9 +11,16 @@ def membership_tree_roots(context, person):
     """
     Produces a list of tree roots. For each of these, uses make_membership_tree to display the entities in the tree that the person belongs to.
     """
+    print person.entities.all()
     roots = set()
-    for entity in person.entities.all(): # was Membership.objects.filter(person = person) - this seems simpler
-        roots.add(entity.get_root())
+    for entity in person.entities.all():
+        # get the closest-to-root non-abstract entity
+        if entity.get_ancestors().filter(abstract_entity = False):
+            roots.add(entity.get_ancestors().filter()[0])
+        # or this entity, if it's not an abstract entity
+        elif not entity.abstract_entity:
+            roots.add(entity)
+            
     return {
         'roots': list(roots),
         'person': person,
@@ -44,14 +52,14 @@ def make_membership_tree(person, node):
             'roles': roles,
             }
 
-@register.inclusion_tag('address.html', takes_context=True)
-def address(context):
-    """
-    Publishes address for a person.
-    """
-    print " -------- person_tags.address --------"
-    person = context.get('person')
-    entity = person.get_entity()        
-    address = entity.get_address()
-    return {'address': address, 'entity': entity}
-    
+# @register.inclusion_tag('address.html', takes_context=True)
+# def address(context):
+#     """
+#     Publishes address for a person.
+#     """
+#     print " -------- person_tags.address --------"
+#     person = context.get('person')
+#     entity = person.get_entity()        
+#     address = entity.get_address()
+#     return {'address': address, 'entity': entity}
+#     
