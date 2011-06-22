@@ -7,7 +7,7 @@ Called up by entity_information.html
 {% endcomment %}
 {% load entity_tags %}
 {% load thumbnail %}
-{% load typogrify %}
+{% load typogrify_tags %}
 {% block entity_information %}
 	<div class="row columns2">
 	   	<div class="column firstcolumn">
@@ -15,7 +15,9 @@ Called up by entity_information.html
 			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 			    <dl>
 			        {% include "includes/key_contacts.html" %}
-	   		        {% include "includes/address.html" %}
+					{% with address=entity.get_address %}
+						{% include "includes/address.html" %}
+					{% endwith %}
 	                {% include "includes/precise_location.html" %}
 	   		        {% include "includes/access_notes.html" %}
 	                {% include "includes/email.html" %}
