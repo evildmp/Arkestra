@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from menus.base import Modifier
 from django.utils.safestring import mark_safe 
 
-from arkestra_utilities import settings
+from django.conf import settings
 
 from news_and_events.models import NewsAndEventsPlugin
 from news_and_events.functions import get_news_and_events
