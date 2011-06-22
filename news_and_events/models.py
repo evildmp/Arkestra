@@ -15,7 +15,6 @@ from filer.fields.image import FilerImageField
 import mptt
 from cms.models import CMSPlugin
 from django.conf import settings
-from arkestra_utilities import settings
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT

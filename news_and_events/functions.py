@@ -2,7 +2,7 @@ from models import NewsAndEventsPlugin, NewsArticle, Event
 from django.db.models import Q
 from datetime import datetime
 import operator
-from arkestra_utilities import settings
+from django.conf import settings
 from contacts_and_people.models import Entity
 # from contacts_and_people.templatetags.entity_tags import work_out_entity
 from itertools import groupby

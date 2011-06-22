@@ -11,8 +11,8 @@ from functions import get_news_and_events
 news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 
-from arkestra_utilities.settings import MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-from arkestra_utilities.settings import IN_BODY_HEADING_LEVEL
+MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
 
 def common_settings(request, slug):
     # general values - entity, request, template
