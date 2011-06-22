@@ -1,0 +1,20 @@
+body    {
+    margin: 30px;
+    background: gray;
+    border: 1px solid black;
+    }
+
+div#outer-wrapper   {
+    padding: 30px;
+    background: #aaa;
+    }
+    
+div#inner-wrapper   {
+    padding: 30px;
+    margin: 0;
+    background: white;
+}
+
+div.footer  {
+    border-top: 1px solid black;
+}

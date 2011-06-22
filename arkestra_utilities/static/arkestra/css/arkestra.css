@@ -388,7 +388,7 @@ it's a bit awkward when non-floated images can have borders, because then the bo
     margin-bottom: 2px;
     }
 
-/* typogrify */
+/* typogrify_tags */
 
 .caps {font-size: 92%;}
 .amp {font-size: 105%; font-family: "Hoefler Text", "Didot", Georgia, serif; font-style:italic;}    
