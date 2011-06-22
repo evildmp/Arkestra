@@ -11,9 +11,9 @@ from filer.fields.image import FilerImageField
 from links.models import ExternalLink
 import mptt
 
-from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
-base_entity_id = getattr(settings, "ARKESTRA_BASE_ENTITY", False)
+MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
+base_entity_id = settings.ARKESTRA_BASE_ENTITY
 
 Page = models.get_model('cms', 'Page')
 CMSPlugin = models.get_model('cms', 'CMSPlugin')
@@ -179,8 +179,8 @@ class Entity(EntityLite, CommonFields):
         default=False)
     parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
     display_parent = models.BooleanField(default=True, help_text=u"Include parent entity's name in address")
-    building = models.ForeignKey(Building, null = True, blank=True)
-    website = models.ForeignKey(Page, verbose_name = "Home page", related_name = 'entity', unique = True, null = True, blank=True)
+    building = models.ForeignKey(Building, null = True, blank=True, on_delete=models.SET_NULL)
+    website = models.ForeignKey(Page, verbose_name = "Home page", related_name = 'entity', unique = True, null = True, blank=True, on_delete=models.SET_NULL)
     if 'news_and_events' in settings.INSTALLED_APPS:
         auto_news_page = models.BooleanField(default = False)
         news_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"),)
@@ -201,9 +201,9 @@ class Entity(EntityLite, CommonFields):
         """
         for ancestor in self.get_ancestors(ascending = True):
             if not ancestor.abstract_entity:
-                entity = ancestor
-                break
-        return entity
+                return ancestor
+                
+        return None
 
     def get_address(self):
         """
@@ -212,11 +212,12 @@ class Entity(EntityLite, CommonFields):
         entity = self
         if entity.abstract_entity:
             entity = self.get_real_ancestor()
-        address = entity.get_institutional_address()
-        building = entity.get_building()
-        if building:
-            address.extend(building.get_postal_address())
-        return address
+        if entity:
+            address = entity.get_institutional_address()
+            building = entity.get_building()
+            if building:
+                address.extend(building.get_postal_address())
+            return address
 
     def get_institutional_address(self):
         """
@@ -416,7 +417,7 @@ class PersonLite(models.Model):
         to_field = "abbreviation", 
         blank = True, 
         null = True,
-        )
+        on_delete=models.SET_NULL)
     given_name = models.CharField(max_length=50, blank = True, null = True)
     middle_names = models.CharField(max_length=100, blank = True, null = True)
     surname = models.CharField(max_length=50)
@@ -435,48 +436,51 @@ class Person(PersonLite, CommonFields):
     class Meta:
         ordering = ['surname', 'given_name', 'user',]
         verbose_name_plural = "People"
-    user = models.ForeignKey(User, related_name = 'person_user', unique=True, blank = True, null = True, verbose_name='Arkestra User')
-    institutional_username = models.CharField(max_length = 10, blank = True, null = True,)
+    user = models.ForeignKey(User, related_name = 'person_user', unique=True, blank = True, null = True, verbose_name='Arkestra User',
+        on_delete=models.SET_NULL)
+    institutional_username = models.CharField(max_length = 10, blank = True, null = True)
     active = models.BooleanField(
         default=True,)
     description = PlaceholderField('body',)
     entities = models.ManyToManyField(Entity, related_name = 'people', through ='Membership', blank = True, null = True)
-    building = models.ForeignKey(Building, verbose_name = 'Specify building', help_text = u"Specify a building for contact information - over-rides postal address",blank = True, null = True)
-    override_entity = models.ForeignKey(Entity, verbose_name = 'Specify entity', help_text= u"Specify an entity for contact information - over-rides entity and postal address", related_name = 'people_override', blank = True, null = True)
-    please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person", related_name='contact_for', blank = True, null = True)
+    building = models.ForeignKey(Building, verbose_name = 'Specify building', help_text = u"Specify a building for contact information - over-rides postal address",blank = True, null = True,
+        on_delete=models.SET_NULL)
+    override_entity = models.ForeignKey(Entity, verbose_name = 'Specify entity', help_text= u"Specify an entity for contact information - over-rides entity and postal address", related_name = 'people_override', blank = True, null = True,
+        on_delete=models.SET_NULL)
+    please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person", related_name='contact_for', blank = True, null = True,
+        on_delete=models.SET_NULL)
     staff_id = models.CharField(null=True, blank = True, max_length=20)
     data_feed_locked = models.BooleanField(default=False)
 
     def get_role(self):
+        print "get_role(self)"
         """
         Returns a Membership object.
         
-        Works the Membership object representing a Person's best role. 
+        Works the Membership object representing a Person's best role, which
+        has to be in a real, not abstract, entity, and it must be at least 
+        Significant (gte = 2) to the person
         
         If it can't find any role, it returns None.
         """
-        memberships = Membership.objects.filter(person = self)
+        memberships = Membership.objects.filter(person = self, entity__abstract_entity = False, importance_to_person__gte = 2).order_by('-importance_to_person')
         if memberships:
-            membership = memberships.order_by('-importance_to_person')[0]
-            if membership.role: # this membership has named role
-                return membership
-            else:
-                return None 
+            return memberships[0]
         else: # the poor person had no memberships
             return None
             
     def get_entity(self):
+        print "get_entity"
         """
         Works out a person's best entity, based on get_role
         
         A person needs at least a named role to have an entity.
         """
-        if self.override_entity:
+        if self.override_entity and not self.override_entity.abstract_entity:
             return self.override_entity
         elif self.get_role():
             return self.get_role().entity
-        else:
-            return None
+        return None
                 
     def get_address(self):
         """
@@ -622,7 +626,8 @@ class EntityAutoPageLinkPluginEditor(CMSPlugin):
     link_to = models.CharField(max_length=50, choices=[(x,y[0]) for x,y in sorted(AUTO_PAGES.items())])
     entity = models.ForeignKey(Entity, null = True, blank = True, 
         help_text = "Leave blank for autoselect", 
-        related_name = "auto_page_plugin"
+        related_name = "auto_page_plugin",
+        on_delete=models.SET_NULL
         )
     text_override = models.CharField(
         max_length=256, null = True, blank = True, 
@@ -636,7 +641,8 @@ class EntityDirectoryPluginEditor(CMSPlugin):
         )
     entity = models.ForeignKey(Entity, null = True, blank = True, 
         help_text = "Leave blank for autoselect", 
-        related_name = "directory_plugin"
+        related_name = "directory_plugin",
+        on_delete=models.SET_NULL
         )
     #display = models.CharField(max_length=50, choices = DIRECTORY_TYPE, default = 'children',)
     levels = models.PositiveSmallIntegerField(help_text = u'Leave blank/set to 0 if all sub-levels are to be displayed', null = True, blank = True)
@@ -650,7 +656,8 @@ class EntityDirectoryPluginEditor(CMSPlugin):
 class EntityMembersPluginEditor(CMSPlugin):
     entity = models.ForeignKey(Entity, null = True, blank = True, 
         help_text = "Leave blank for autoselect", 
-        related_name = "entity_members_plugin"
+        related_name = "entity_members_plugin",
+        on_delete=models.SET_NULL
         )
 
 try:
@@ -671,3 +678,37 @@ except (Entity.DoesNotExist, DatabaseError):
     
 from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
+
+# crazymaniac's wild monkeypatch# 
+# """
+# THE FOLLOWING CODE IS A LOADED GUN AND MAY VERY WELL BACKFIRE.
+# 
+# I STRONGLY ADVICE AGAINST USING THIS CODE AND IF YOU STILL WANT TO USE IT, YOU ARE
+# DOING SO AT YOUR OWN RISK.
+# """
+# 
+# from cms.admin.forms import PageForm
+# from cms.admin.pageadmin import PageAdmin
+
+# set up the attributes of the the meta_description in the PageForm
+# PageForm.base_fields['meta_description'].required = True
+# PageForm.base_fields['meta_description'].label = "Summary"
+# PageForm.base_fields['meta_description'].help_text = \
+# "A <em>brief</em> (25-30 words maximum) summary of the page's message or contents in the clearest, simplest language possible."
+
+# get the SEO settings fields
+# tmp = list(PageAdmin.fieldsets[4][1]['fields'])
+
+# we can't amend the fieldsets tuple itself, so we'll just leave the SEO fieldset blank
+# this is in fact a good metaphor for the empty nature of SEO
+# tmp.remove('meta_keywords')
+# tmp.remove('meta_description')
+# tmp.remove('page_title')
+# PageAdmin.fieldsets[4][1]['fields'] = tmp
+
+# rescue the meta_description field from its undeserved obscurity
+# and put it in the first fieldset on the page
+# PageAdmin.fieldsets[0][1]['fields'].insert(1, 'meta_description')
+
+# page_title really belongs in the Advanced settings fieldset
+# PageAdmin.fieldsets[03][1]['fields'].insert(1, 'page_title')
