@@ -117,15 +117,21 @@ def person(request, slug, active_tab = ""):
     """
     person = get_object_or_404(Person,slug=slug)
     links = object_links(person)
+    print "^^^^^"
+    # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
     home_role = person.get_role()
+    print "&&&"
+    if home_role:
+        entity = home_role.entity
     entity = person.get_entity() # don't rely on home_role.entity - could be None or overridden
-    address = person.get_address()
+    print "***"
+    # address = person.get_address()
    
     contact = person.get_please_contact()
     email = contact.email
     phone = contact.phone_contacts
 
-    if person.override_entity or not address:
+    if person.override_entity:
         location = None
     else:
         location = person.precise_location
@@ -142,12 +148,11 @@ def person(request, slug, active_tab = ""):
         "description": ": ".join((person.__unicode__(), description))
         }
     
-    # quite possibly we can get rid of this    
-    try:
+    if entity:
         template = entity.get_template() 
-    except AttributeError: # no memberships, no useful information
+    else: # no memberships, no useful information
         print "no memberships, no useful information"
-        template = default_template
+        template = default_entity.get_template()
 
     tabs = []
     if 'publications' in applications:
@@ -164,7 +169,7 @@ def person(request, slug, active_tab = ""):
             "home_role": home_role, # entity and position
             "entity": entity,
             "template": template, # from entity
-            "address": address, # from entity
+            # "address": address, # from entity
             "email": email, # from person or please_contact
             "location": location, # from person, or None 
             "contact": contact, # from person or please_contact
@@ -222,17 +227,21 @@ def place(request, slug, active_tab = ""):
         "description": meta_description_content,
         }
     if default_entity:
-        request.current_page = default_entity.get_website()
+        page =  default_entity.get_website()
+        request.current_page = page
+        template = page.get_template()
     else:
-        request.current_page = entity.get_website() # for the menu, so it knows where we are
-
+        page =  entity.get_website()
+        request.current_page = page # for the menu, so it knows where we are
+        template = page.get_template()
+        
     return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
         {
         "place":place,
         "tabs": tabs,
         "active_tab": active_tab,
-        "template": default_template,
+        "template": template,
         "meta": meta,
         },
         RequestContext(request),        )
