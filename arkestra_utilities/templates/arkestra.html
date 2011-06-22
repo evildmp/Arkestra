@@ -31,8 +31,6 @@
     @import url("{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css");
     @import url("{{ STATIC_URL }}arkestra/css/temporaryhacks.css");
     @import url("{{ STATIC_URL }}arkestra/css/carousel.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css");
-
 		--></style>
   <!--[if IE]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
   <!--[if IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -41,8 +39,22 @@
 
     {% block extrastyles %}
     {% endblock extrastyles %}
+  
+	{% comment %} if you inherit arkestra.html, add an empty:
+	
+	 	{% block arkestra_default_styles %}{% endblock arkestra_default_styles %} 
+	
+	to your template to avoid importing and having to overwrite the default 
+	styles in arkestra_default.css that are provided to get you started.
+	
+	{% endcomment %}
+    {% block arkestra_default_styles %}
+		<style media="screen" type="text/css"><!--@import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css"); --></style>
+	{% endblock arkestra_default_styles %}
+
 
 {% endblock styles %}
+
 
 {% block scripts %}<script type="text/javascript" src="{{ STATIC_URL }}cms/js/lib/jquery.js"></script>{% endblock scripts %}
 
