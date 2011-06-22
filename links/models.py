@@ -9,7 +9,7 @@ import mptt
 from urlparse import urlparse  # for tree version of ExternalLinks
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned # for tree version of ExternalLinks
 
-from arkestra_utilities import settings
+from django.conf import settings
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
