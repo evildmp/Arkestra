@@ -32,7 +32,7 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
         return super(EntityAutoPageLinkPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
@@ -89,12 +89,12 @@ class EntityDirectoryPluginPublisher(CMSPluginBase):
         return super(EntityDirectoryPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
-            'all': ('/media/arkestra//static/jquery/themes/base/ui.all.css',)
+            'all': ('/static/jquery/themes/base/ui.all.css',)
         }
    
     def icon_src(self, instance):
@@ -153,7 +153,7 @@ class EntityMembersPluginPublisher(CMSPluginBase):
         return super(EntityMembersPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
