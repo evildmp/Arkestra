@@ -7,7 +7,7 @@ from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
 
-from arkestra_utilities import settings
+from django.conf import settings
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 

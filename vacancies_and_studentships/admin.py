@@ -94,7 +94,7 @@ class StudentshipAdmin(PlaceholderAdmin):
         return super(StudentshipAdmin, self).formfield_for_dbfield(db_field, **kwargs)
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
             '/media/arkestra/js/jquery/ui/ui.tabs.js',
         )
@@ -180,7 +180,7 @@ class VacancyAdmin(PlaceholderAdmin):
         return super(VacancyAdmin, self).formfield_for_dbfield(db_field, **kwargs)     
     class Media:
         js = (
-            '/media/cms/js/lib/jquery.js', # we already load jquery for the tabs
+            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
             '/media/cms/js/lib/ui.core.js',
             '/media/arkestra/js/jquery/ui/ui.tabs.js',
         )
