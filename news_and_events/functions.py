@@ -31,9 +31,9 @@ def get_news_and_events(instance):
         featured vertical:      limited to 3, importance/date, use images
 
     instance.type
+        main_page       a main news and events page
         sub_page        news archive, events archive, all forthcoming events (the only kind that has indexes)
         plugin          produced by a plugin
-        main_page       a main news and events page
         for_person      raised by a {% person_events %} tag in a person template
         for_place       raised by a {% place_events %} tag in a place template
         
@@ -113,41 +113,43 @@ def set_links_to_more_views(instance):
     if this is a plugin, create the "More news/events" link
     limits "current" views to the number of items specified in settings
     """
-    if (instance.type == "plugin" or instance.type == "sub_page") and (instance.news or instance.events) and instance.entity.auto_news_page:
-        instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
+    if instance.type == "plugin":
+        if (instance.news or instance.events) and instance.entity.auto_news_page:
+            instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
 
-    # not a plugin, but showing current events items on main page or subpage
-    elif instance.view == "current":
-        if instance.previous_events or instance.forthcoming_events:
-            if instance.limit_to and len(instance.events) > instance.limit_to:
-                # instance.events = instance.events[:instance.limit_to]
-                if instance.forthcoming_events.count() > instance.limit_to:
-                    instance.other_events.append({
-                        "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
-                        "title":"all forthcoming events", 
-                        "count": instance.forthcoming_events.count(),}
-                        )
-        if instance.previous_events:
-            instance.other_events.append({
-                "link":instance.entity.get_related_info_page_url("previous-events"), 
-                "title":"previous events",
-                "count": instance.previous_events.count(),}
-                )    
-        if instance.news:
-            all_news_count = len(instance.news)
-            if instance.limit_to and all_news_count > instance.limit_to:
-                # instance.news = instance.news[:instance.limit_to]
-                instance.other_news = [{
-                    "link":instance.entity.get_related_info_page_url("news-archive"), 
-                    "title":"news archive",
-                    "count": all_news_count,}]
-    # an archive
-    elif instance.view == "archive":
-        if instance.forthcoming_events[instance.default_limit:]:
-            instance.other_events = [{
-                "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
-                "title":"all forthcoming events", 
-                "count": instance.forthcoming_events.count(),}]                
+    # not a plugin, but showing current events items on main page
+    if instance.type == "main_page" or instance.type = "sub_page":
+        if instance.view == "current":
+            if instance.previous_events or instance.forthcoming_events:
+                if instance.limit_to and len(instance.events) > instance.limit_to:
+                    # instance.events = instance.events[:instance.limit_to]
+                    if instance.forthcoming_events.count() > instance.limit_to:
+                        instance.other_events.append({
+                            "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
+                            "title":"all forthcoming events", 
+                            "count": instance.forthcoming_events.count(),}
+                            )
+            if instance.previous_events:
+                instance.other_events.append({
+                    "link":instance.entity.get_related_info_page_url("previous-events"), 
+                    "title":"previous events",
+                    "count": instance.previous_events.count(),}
+                    )    
+            if instance.news:
+                all_news_count = len(instance.news)
+                if instance.limit_to and all_news_count > instance.limit_to:
+                    # instance.news = instance.news[:instance.limit_to]
+                    instance.other_news = [{
+                        "link":instance.entity.get_related_info_page_url("news-archive"), 
+                        "title":"news archive",
+                        "count": all_news_count,}]
+        # an archive
+        elif instance.view == "archive":
+            if instance.forthcoming_events[instance.default_limit:]:
+                instance.other_events = [{
+                    "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
+                    "title":"all forthcoming events", 
+                    "count": instance.forthcoming_events.count(),}]                
     return
 
 def set_limits_and_indexes(instance):
