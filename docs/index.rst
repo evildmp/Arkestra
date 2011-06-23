@@ -12,11 +12,13 @@ It is flexible, modular and extensible, and has a rich set of automated web publ
 
 Arkestra was developed at `Cardiff University School of Medicine <http://medicine.cardiff.ac.uk/>`_  to provide a platform for the School’s web presence.
 
+Arkestra can be obtained from our `GitHub repository <https://github.com/evildmp/Arkestra>`_.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
    installation
    getting_started
 

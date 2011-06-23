@@ -1,5 +1,10 @@
 Arkestra runs on Django.
 
+Documentation
+*************
+
+Documentation is in progress; what exists can be found at http://readthedocs.org/docs/arkestra/.
+
 Relationship with Django CMS
 ****************************
 

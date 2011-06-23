@@ -23,6 +23,8 @@ In addition, Akestra requires installation of:
 Available through pip
 ---------------------
 
+(just use pip install <package_name>)
+
 * BeautifulSoup
 * django-typogrify
 * pyquery
