@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Arkestra’s documentation! &mdash; Arkestra vdev documentation</title>
+    <title>Getting Started &mdash; Arkestra vdev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Arkestra vdev documentation" href="#" />
-    <link rel="next" title="Installation" href="installation.html" /> 
+    <link rel="top" title="Arkestra vdev documentation" href="index.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,8 +34,8 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="installation.html" title="Installation"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">Arkestra vdev documentation</a> &raquo;</li> 
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Arkestra vdev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -44,30 +44,17 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-arkestra-s-documentation">
-<h1>Welcome to Arkestra&#8217;s documentation!<a class="headerlink" href="#welcome-to-arkestra-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Arkestra is an intelligent, semantic web content management system for organisations and institutions.</p>
-<p>It is flexible, modular and extensible, and has a rich set of automated web publishing tools.</p>
-<p>Arkestra was developed at <a class="reference external" href="http://medicine.cardiff.ac.uk/">Cardiff University School of Medicine</a>  to provide a platform for the School’s web presence.</p>
-<p>Arkestra can be obtained from our <a class="reference external" href="https://github.com/evildmp/Arkestra">GitHub repository</a>.</p>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>In order to make anything work, you&#8217;ll need to do log in to Admin and do three things.</p>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li>create a Page</li>
+<li>create an Entity</li>
+<li>link the Entity to the Page, by selecting the Page as the Entity&#8217;s /Home page/</li>
 </ul>
+<p>And since Arkestra needs to know what the <em>base entity</em> of your site is, in your <tt class="docutils literal"><span class="pre">arkestra_settings</span></tt> file add something like:</p>
+<p>ARKESTRA_BASE_ENTITY = 1</p>
+<p>where the value corresponds to the id of your base entity.</p>
 </div>
 
 
@@ -76,20 +63,12 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to Arkestra&#8217;s documentation!</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-  <h4>Next topic</h4>
+  <h4>Previous topic</h4>
   <p class="topless"><a href="installation.html"
-                        title="next chapter">Installation</a></p>
+                        title="previous chapter">Installation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/getting_started.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -117,8 +96,8 @@
              >index</a></li>
         <li class="right" >
           <a href="installation.html" title="Installation"
-             >next</a> |</li>
-        <li><a href="#">Arkestra vdev documentation</a> &raquo;</li> 
+             >previous</a> |</li>
+        <li><a href="index.html">Arkestra vdev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
