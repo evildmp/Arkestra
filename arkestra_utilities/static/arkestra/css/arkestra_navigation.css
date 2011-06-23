@@ -1,3 +1,42 @@
+/* the default horizontal menu site navigation menu */
+
+ul.menu	{
+	padding: 0 0;
+	/*
+	top: 100px; 
+	right: 50px ; 
+	left: 50px; */
+	text-align: left ;
+	} 
+	
+ul.menu ul {display: inline; text-align: right; float: right;}
+	
+li.menu_item	{
+	display: inline; 
+	width: 100%;
+	padding: 0; 
+	margin-right: 0; 
+	list-style-type: none; 
+	font-family: Baskerville, "gill sans", "gill sans mt", "Trebuchet MS", sans-serif; 
+	font-weight: normal;
+	font-variant: small-caps;
+	}
+
+ul.menu ul li {padding-left: 1em;}
+	
+li.menu_item a	{
+	text-decoration: none; 
+	margin: 0; 
+	padding: 0; 
+	color: gray;
+	}
+	
+li.menu_item a:hover	{
+	color: #f95011; 
+	}
+
+/* the default tab menu, as used for People and Places */
+
 ul#tab_menu {
 	border-bottom: 7px solid #707070;
 	float:left;

@@ -1,15 +1,25 @@
-# For projects hosting the site of more than one entity
+# *Don't* be tempted to change anything in this file.
+# If you do need to change a setting, copy it to your project's settings
+# file, and change it there; it'll override the setiing here.
+
+# -------- Fundamental entity settings ----------------------
+
+# ARKESTRA_BASE_ENTITY
+# This is the only item you need to put safely in your project's settings file
+#
+# 1. copy this to arkestra_settings in your project folder
+# 2. make sure it's correct
+# 3. very rarely, you might have to change it to keep it correct
+
+ARKESTRA_BASE_ENTITY = 1
+
+# MULTIPLE_ENTITY_MODE is for projects hosting the site of more than one entity
 # This does not necessarily entail a site for complex organisation,
 # or for a number of different organisations - being able to redirect 
 # news and events items to particular entities for example requires
 # MULTIPLE_ENTITY_MODE to be True 
 
 MULTIPLE_ENTITY_MODE = True
-
-# 1. copy this to arkestra_settings
-# 2. make sure it's correct
-
-ARKESTRA_BASE_ENTITY = 1
 
 # -------- News & Events ----------------------
 
@@ -45,10 +55,12 @@ PLUGIN_HEADING_LEVELS = (
 # -------- Django CMS ----------------------
 
 CMS_SEO_FIELDS = True
+CMS_MENU_TITLE_OVERWRITE = True
 
 # -------- Menus ----------------------
 
 # Built in menu modifiers are in contacts_and_people.menu
+
 MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news",)}
 
 # -------- Semantic editor ----------------------
@@ -88,6 +100,6 @@ WYM_TOOLS = ",\n".join([
     #"{'name': 'Preview', 'title': 'Preview', 'css': 'wym_tools_preview'}",
 ])
 
-# -------- what happens after login - why is this required? ----------------------
+# -------- Django ----------------------
 
-LOGIN_REDIRECT_URL = "/admin/"
+LOGIN_REDIRECT_URL = "/admin/" #what happens after login - why is this required? 
