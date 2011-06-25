@@ -1,10 +1,7 @@
-import operator
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
 
 from django.db.models.query import QuerySet
 from django.db.models import get_model
-from django.db.models import ForeignKey
-from django.db.models import F
 from django.db.models import Q
 
 from django.conf import settings
@@ -24,7 +21,6 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpRespons
 
 # from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.widgets.combobox import ComboboxField
-from widgetry import fk_lookup
 # from widgetry.tabs.admin import ModelAdminWithTabs
 
 from contacts_and_people import models
@@ -34,9 +30,9 @@ from links.models import ExternalLink
 from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
-# for the WYMeditor fields
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 
+from arkestra_utilities.admin import AutocompleteMixin
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 if HAS_PUBLICATIONS:
@@ -51,7 +47,6 @@ class MembershipInline(admin.TabularInline): # for all membership inline admin
     form = MembershipForm    
     model = models.Membership
     extra = 1
-    #order = forms.IntegerField(widget=forms.RadioSelect)
     related_search_fields = {
         'person': ('surname',),
         'entity': ('name',),
@@ -59,14 +54,6 @@ class MembershipInline(admin.TabularInline): # for all membership inline admin
     editable_search_fields = (
         'person','entity',
         )
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey):
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(MembershipInline, self).formfield_for_dbfield(db_field, **kwargs)
 
 class MembershipForEntityInline(MembershipInline): # for Entity admin
     exclude = ('importance_to_person', 'display_role')
@@ -79,21 +66,10 @@ class MembershipAdmin(admin.ModelAdmin):
     list_display = ('person', 'entity', 'importance_to_person', 'importance_to_entity',)
     ordering = ['person',]
     form = MembershipForm
-    #radio_fields = {"order": admin.HORIZONTAL, }
     related_search_fields = [
         'person',
         'entity',
     ]
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(MembershipAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-
 
 # ------------------------- Phone contact admin -------------------------
 
@@ -114,7 +90,6 @@ class PhoneContactInline(generic.GenericTabularInline):
 class PhoneContactAdmin(admin.ModelAdmin):
     pass
 
-    
 # ------------------------- PersonLite admin -------------------------
 
 class PersonLiteForm(forms.ModelForm):
@@ -124,7 +99,6 @@ class PersonLiteForm(forms.ModelForm):
         if hasattr(self.instance, "person"):
             raise forms.ValidationError(mark_safe(u"A PersonLite who is also a Person must be edited using the Person Admin Interface"))
         return self.cleaned_data    
-
         
 class PersonLiteAdmin(admin.ModelAdmin):
     search_fields = ('surname', 'given_name',)
@@ -142,9 +116,7 @@ class PersonLiteAdmin(admin.ModelAdmin):
             print "***ERROR: See",type(self), ".save_model()"
           
 # admin.site.register(models.PersonLite, PersonLiteAdmin)     
-    
-    
-    
+
 # ------------------------- Person admin -------------------------
 
 """
@@ -164,6 +136,7 @@ class PersonForm(forms.ModelForm):
         if instance and instance.id and instance.user:
             self.fields['user'].widget = DisplayUsernameWidget()
             self.fields['user'].help_text = "Once a user has been assigned, it cannot be changed"       
+
     def clean_please_contact(self):
         data = self.cleaned_data['please_contact']
         # only do the check when in "change" mode. there can't be a loop if in "new" mode
@@ -178,10 +151,6 @@ class PersonForm(forms.ModelForm):
                 r = u' &rarr; '.join(r)    
                 raise forms.ValidationError(mark_safe(u"Please prevent loops: %s" % r))
         return data
-    class Media:
-        js = (
-            '/static/cms/js/lib/ui.sortable.js',
-            )
 
     def clean(self):
         self.warnings = []
@@ -200,8 +169,7 @@ class PersonForm(forms.ModelForm):
             )          
         return self.cleaned_data
         
-class PersonAdmin(PlaceholderAdmin):
-
+class PersonAdmin(AutocompleteMixin, PlaceholderAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
     if HAS_PUBLICATIONS:
@@ -246,31 +214,8 @@ class PersonAdmin(PlaceholderAdmin):
         ('Memberships', {'inlines': ('MembershipForPersonInline',)}),
         ('Researcher', {'inlines': ('ResearcherInline',)}),
     )
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js',
-            '/static/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-             'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
-    related_search_fields = {
-            'please_contact': ('surname',),
-            'override_entity': ('name',),
-            'user': ('username','first_name','last_name',),
-            'building': ('name', 'number', 'street', 'postcode', 'site__site_name',),
-        }
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(PersonAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    
+    related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
+            
 class TitleAdmin(admin.ModelAdmin):
     pass
 
@@ -280,8 +225,6 @@ class DisplayUsernameWidget(forms.TextInput):
         default = super(DisplayUsernameWidget,self).render(name, value, attrs)
         return mark_safe(u'<span>Assigned user: <strong>%s</strong></span><div style="display: none;">%s</div>' % (user,default))
 
-        
-        
 # ------------------------- EntityLite admin -------------------------
 
 class EntityLiteForm(forms.ModelForm):
@@ -291,8 +234,7 @@ class EntityLiteForm(forms.ModelForm):
         if hasattr(self.instance, "entity"):
             raise forms.ValidationError(mark_safe(u"An EntityLite who is also a full Entity must be edited using the Entity Admin Interface"))
         return self.cleaned_data    
-
-        
+       
 class EntityLiteAdmin(admin.ModelAdmin):
     form = EntityLiteForm
 
@@ -313,6 +255,8 @@ class EntityLiteAdmin(admin.ModelAdmin):
 
 class EntityForm(forms.ModelForm):
     model = models.Entity
+    input_url = forms.CharField(max_length=255, required = False)
+
     def clean(self):
         print "in clean of EntityForm(forms.ModelForm"
         EntityForm.messages = []
@@ -322,13 +266,14 @@ class EntityForm(forms.ModelForm):
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
         return self.cleaned_data 
 
-class EntityAdmin(admin.ModelAdmin): 
+class EntityAdmin(AutocompleteMixin, admin.ModelAdmin): 
     search_fields = ['name']
     inlines = (MembershipForEntityInline,PhoneContactInline)
     form = EntityForm
     list_display = ('name', 'parent', 'building', 'abstract_entity','website', )
     list_editable = ('website', )
     change_list_template = "admin/contacts_and_people/entity/change_list.html"
+    related_search_fields = ['parent', 'building', 'website', 'external_url',]    
     prepopulated_fields = {
             'slug': ('name',)
             }
@@ -374,6 +319,7 @@ class EntityAdmin(admin.ModelAdmin):
             ('Automatic pages', {'fieldsets':tab_automatic_pages}),
             ('Memberships', {'inlines':('MembershipForEntityInline',)}),
         )
+
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context.update({
@@ -383,8 +329,8 @@ class EntityAdmin(admin.ModelAdmin):
                 'has_delete_permission': request.user.has_perm('contacts_and_people.delete_entity'),
         })
         return super(EntityAdmin, self).changelist_view(request, extra_context)
+
     def get_urls(self):
-        from django.conf.urls.defaults import patterns, url
         urls = super(EntityAdmin, self).get_urls()
         
         # helper for url pattern generation
@@ -397,6 +343,7 @@ class EntityAdmin(admin.ModelAdmin):
         )
         url_patterns.extend(urls)
         return url_patterns
+
     def move_entity(self, request, entity_id, extra_context=None):
         target = request.POST.get('target', None)
         position = request.POST.get('position', None)
@@ -415,26 +362,6 @@ class EntityAdmin(admin.ModelAdmin):
         entity.move_to(target, position)
         entity.save()
         return HttpResponse("ok")
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js',
-            '/static/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }        
-    related_search_fields = ['parent', 'building', 'website',]
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(EntityAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    
 
 # ------------------------- Building and site admin -------------------------
 
@@ -443,6 +370,7 @@ class BuildingAdminForm(forms.ModelForm):
         model = models.Building
     # getting_here = forms.CharField(widget=WYMEditor, required = False)
     # access_and_parking = forms.CharField(widget=WYMEditor, required = False)
+
     def clean(self):
         if self.cleaned_data["number"] and not self.cleaned_data["street"]:
             raise forms.ValidationError("Silly. You can't have a street number but no street, can you?")
@@ -457,7 +385,7 @@ class BuildingInline(admin.StackedInline):
     model = models.Building
     extra = 1
 
-class SiteAdmin(admin.ModelAdmin):
+class SiteAdmin(AutocompleteMixin, admin.ModelAdmin):
     list_display = ('site_name', 'post_town', 'country',)
     # inlines = (BuildingInline,) # not working for some reason - can't render the inlines
     tabs = (
@@ -472,28 +400,10 @@ class SiteAdmin(admin.ModelAdmin):
                     'inlines': ('BuildingInline',),
             }),
     )
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js',
-            '/static/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
 
 class BuildingAdmin(PlaceholderAdmin):
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/static/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
 
 admin.site.register(models.Person,PersonAdmin)
 admin.site.register(models.Building,BuildingAdmin)
@@ -524,6 +434,7 @@ if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
         
     class MyNoPasswordCapableUserCreationForm(UserCreationForm):
         has_password = forms.BooleanField(required=False, initial=True)
+
         def clean(self):
             data = self.cleaned_data
             if self.cleaned_data['has_password'] in (False, None,):
@@ -534,6 +445,7 @@ if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
                 # save() will remove this temp password again.
                 self.cleaned_data['password1'] = self.cleaned_data['password2'] = 'xxxxxxxxxxxxxxx'
             return data
+
         def save(self, commit=True):
             instance = super(MyNoPasswordCapableUserCreationForm, self).save(commit=False)
             if self.cleaned_data['has_password'] in (False, None,):
@@ -548,6 +460,7 @@ if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
         
     class MyNoPasswordCapableUserChangeForm(UserChangeForm):
         has_password = forms.BooleanField(label="has password", help_text="LDAP users don't need a password", required=False, initial=True)
+
         def __init__(self, *args, **kwargs):
             r = super(MyNoPasswordCapableUserChangeForm,self).__init__(*args, **kwargs)
             instance = kwargs.get('instance',None)
@@ -557,6 +470,7 @@ if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
                 else:
                     self.initial['has_password'] = False     
             return r
+
         def save(self, commit=True):
             instance = super(MyNoPasswordCapableUserChangeForm, self).save(commit=False)
             if self.cleaned_data['has_password'] in (False, None,):

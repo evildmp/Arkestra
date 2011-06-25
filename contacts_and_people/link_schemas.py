@@ -73,7 +73,7 @@ class BuildingWrapper(LinkWrapper):
 
     def description(self):
         description = lambda obj: ", ".join(obj.get_postal_address())
-        return "this doesn't work yet"
+        return "description not yet available"
 
     def heading(self):
         return "Places"

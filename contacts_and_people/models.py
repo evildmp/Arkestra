@@ -11,7 +11,6 @@ from filer.fields.image import FilerImageField
 from links.models import ExternalLink
 import mptt
 
-
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 base_entity_id = settings.ARKESTRA_BASE_ENTITY
 
@@ -193,7 +192,6 @@ class Entity(EntityLite, CommonFields):
     if 'publications' in settings.INSTALLED_APPS:
         auto_publications_page = models.BooleanField(default = False)
         publications_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"),)
-
 
     def get_real_ancestor(self):
         """
@@ -453,7 +451,6 @@ class Person(PersonLite, CommonFields):
     data_feed_locked = models.BooleanField(default=False)
 
     def get_role(self):
-        print "get_role(self)"
         """
         Returns a Membership object.
         
@@ -470,7 +467,6 @@ class Person(PersonLite, CommonFields):
             return None
             
     def get_entity(self):
-        print "get_entity"
         """
         Works out a person's best entity, based on get_role
         
