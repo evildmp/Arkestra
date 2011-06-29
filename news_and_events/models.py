@@ -40,7 +40,6 @@ class NewsAndEvents(models.Model):
     url = models.URLField(verify_exists=True, blank = True, null = True, help_text = u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
     external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
     publish_to = models.ManyToManyField(Entity, 
-        verbose_name = "Additional publishing destinations",
         help_text = u"Use these sensibly - don't send minor items to the home page, for example", 
         null = True, blank = True,
         )
