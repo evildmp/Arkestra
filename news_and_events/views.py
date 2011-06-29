@@ -133,14 +133,9 @@ def news_archive(request, slug = getattr(default_entity,"slug", None)):
 
 def newsarticle_and_event(item):
     item.links = object_links(item) # not needed if using get_links templatetag
-    if item.hosted_by:
-        item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
-
-    # this is ancient and ugly - there'll be a better way of doing this
-    # it perhaps should reflect either the default_entity or the item's hosted_by:
-
-    item.template = getattr(item.hosted_by, "__get_template__", getattr(settings, "CMS_DEFAULT_TEMPLATE", "base.html"))
-
+    item.hosted_by = item.hosted_by or default_entity
+    item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
+    item.template = item.hosted_by.get_template()
     return item
 
 def newsarticle(request, slug):

@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     
     (r'^semantic/', include('semanticeditor.urls')),
     (r"", include("contacts_and_people.urls")),
-    (r"", include("features.urls")),
         
     
     (r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
