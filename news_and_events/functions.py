@@ -281,7 +281,7 @@ def get_events_ordered_by_importance_and_date(instance):
         remaining_items = non_top_events.filter(start_date__gt=date)
         print "    demoting the remaining", remaining_items.count()            
         ordinary_events = ordinary_events | remaining_items
-        top_events = list(top_events)
+        top_events = top_events
         ordinary_events = list(ordinary_events)
         for item in top_events:
             item.sticky = True
@@ -289,7 +289,7 @@ def get_events_ordered_by_importance_and_date(instance):
         print "Top events after processing", len(top_events), top_events
         print "Ordinary events", len(ordinary_events)
         # ordinary_events.sort(key=operator.attrgetter('start_date'))
-    instance.top_events, instance.ordinary_events = top_events, ordinary_events
+    instance.top_events, instance.ordinary_events = list(top_events), ordinary_events
     return 
     
 def get_actual_events(instance):
