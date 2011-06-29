@@ -1,7 +1,7 @@
 #app = news_and_events
 from news_and_events.models import NewsArticle, NewsSource, Event, EventType
 from links.models import ExternalLink
-from links.admin import ExternalLinkForm, validate_and_get_messages
+from links.admin import ExternalLinkForm, get_or_create_external_link
 from django.contrib import admin, messages
 from django import forms
 from datetime import datetime
@@ -11,6 +11,8 @@ from arkestra_utilities.widgets.wym_editor import WYMEditor
 
 # for tabbed interface
 from arkestra_utilities import admin_tabs_extension
+
+from arkestra_utilities.admin import SupplyRequestMixin
 
 # for autocomplete search
 from widgetry import fk_lookup
@@ -35,65 +37,33 @@ class NewsAndEventsForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
     
     def clean(self):
-        NewsAndEventsForm.warnings = []
-        NewsAndEventsForm.info = []
         # create the short_title automatically if necessary
         if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
             if len(self.cleaned_data["title"]) > 70:
                 raise forms.ValidationError("Please provide a short (less than 70 characters) version of the Title for the Short title field.")     
             else:
                 self.cleaned_data["short_title"] = self.cleaned_data["title"]
+                
+        # check ExternalLink-related issues
+        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
+            self.cleaned_data.get("input_url", None), # a manually entered url
+            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
+            self.cleaned_data.get("title"), # link title
+            self.cleaned_data.get("subtitle"), # link description
+            )          
 
-        # if this item has an external url, we need to do all kinds of things with it    
-        self.info, self.warnings, self.cleaned_data["external_url"]= validate_and_get_messages(
-        self.cleaned_data.get("input_url", None), # a manually entered url
-        self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-        self.cleaned_data.get("title"), # link title
-        self.cleaned_data.get("subtitle"), # link description
-        self.info, 
-        self.warnings,
-        )          
-        if not self.cleaned_data["hosted_by"] and not self.cleaned_data["external_url"]:
-            raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
-        #must have content or url in order to be published
-        if not (self.cleaned_data["external_url"] or self.cleaned_data["body"]):          
-            self.warnings.append("This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now.")
+        # misc checks
+        if not self.cleaned_data["external_url"]:
+            if not self.cleaned_data["hosted_by"]:
+                raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
+            # must have content or url in order to be published
+            # not currently working, because self.cleaned_data["body"] = None
+            # if not self.cleaned_data["body"]:          
+            #     message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+            #     messages.add_message(self.request, messages.WARNING, message)
 
-# Note for Stefan:
 
-# the NewsAndEventsAdmin admin class should use admin_tabs_extension.ModelAdminWithTabs, but it seems to be incompatible with readonly_fields
-# it will also need to inherit PlaceholderAdmin too
-
-# The error is: 'Tab' object has no attribute 'readonly_fields'
-# Traceback:
-# File "/usr/local/lib/python2.6/dist-packages/django/core/handlers/base.py" in get_response
-#   100.                     response = callback(request, *callback_args, **callback_kwargs)
-# File "/usr/local/lib/python2.6/dist-packages/django/contrib/admin/options.py" in wrapper
-#   239.                 return self.admin_site.admin_view(view)(*args, **kwargs)
-# File "/usr/local/lib/python2.6/dist-packages/django/utils/decorators.py" in _wrapped_view
-#   76.                     response = view_func(request, *args, **kwargs)
-# File "/usr/local/lib/python2.6/dist-packages/django/views/decorators/cache.py" in _wrapped_view_func
-#   69.         response = view_func(request, *args, **kwargs)
-# File "/usr/local/lib/python2.6/dist-packages/django/contrib/admin/sites.py" in inner
-#   190.             return view(request, *args, **kwargs)
-# File "/usr/local/lib/python2.6/dist-packages/django/db/transaction.py" in _commit_on_success
-#   299.                     res = func(*args, **kw)
-# File "/var/www/html/modules/arkestra_utilities/admin_tabs_extension/tabs.py" in change_view
-#   316.         media = self.media + adminForm.media
-# File "/var/www/html/modules/arkestra_utilities/admin_tabs_extension/tabs.py" in _media
-#   81.             media = media + tab.media
-# File "/var/www/html/modules/arkestra_utilities/admin_tabs_extension/tabs.py" in _media
-#   124.         return super(Tab, self)._media()
-# File "/usr/local/lib/python2.6/dist-packages/django/contrib/admin/helpers.py" in _media
-#   62.         for fs in self:
-# File "/usr/local/lib/python2.6/dist-packages/django/contrib/admin/helpers.py" in __iter__
-#   41.                 readonly_fields=self.readonly_fields,
-# 
-# Exception Type: AttributeError at /admin/news_and_events/newsarticle/307/
-# Exception Value: 'Tab' object has no attribute 'readonly_fields'
-
-# class NewsAndEventsAdmin(admin_tabs_extension.ModelAdminWithTabs, PlaceholderAdmin): # turned off because 'Tab' object has no attribute 'readonly_fields'
-class NewsAndEventsAdmin(PlaceholderAdmin):
+class NewsAndEventsAdmin(SupplyRequestMixin, PlaceholderAdmin):
     class Meta:
         abstract = True
     inlines = (ObjectLinkInline,)
@@ -103,7 +73,7 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     filter_horizontal = (
-        # 'enquiries',
+        'enquiries',
         'publish_to', 
         )
     prepopulated_fields = {
@@ -111,6 +81,7 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
             }
     # autocomplete fields
     related_search_fields = ['hosted_by', 'external_url',]
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
         Overrides the default widget for Foreignkey fields if they are
@@ -120,13 +91,6 @@ class NewsAndEventsAdmin(PlaceholderAdmin):
                 db_field.name in self.related_search_fields:
             kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
         return super(NewsAndEventsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    def save_model(self, request, obj, form, change):
-        print "respnse-change", self.form.info
-        for message in self.form.warnings:
-            messages.warning(request, message)
-        for message in self.form.info:
-            messages.info(request, message)
-        return super(NewsAndEventsAdmin, self).save_model(request, obj, form, change)
 
     class Media:
         js = (

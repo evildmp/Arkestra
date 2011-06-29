@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpRespons
 from django.db.models import ForeignKey
 #from arkestra_utilities.widgets.widgets import ForeignKeySearchInput, GenericForeignKeySearchInput
 #from arkestra_utilities.views import search
+from arkestra_utilities.admin import SupplyRequestMixin
+
 from widgetry import fk_lookup
 from widgetry.views import search 
 
@@ -78,94 +80,114 @@ class ObjectLinkInline(generic.GenericStackedInline):
         })
     )
 
-def validate_and_get_messages(url, external_url, title, description="", info=[], warnings=[]):
-    if url:
-        try:
-            ExternalLink.objects.get(url=url)
-            known_to_exist = True
-        except ExternalLink.DoesNotExist:
-            known_to_exist = False
-        # set up some cleaned_data based on this instance
-        external_link_form = ExternalLinkForm()
-        external_link_form.cleaned_data = {}
-        external_link_form.cleaned_data["url"]=url
-        external_link_form.cleaned_data["title"]=title
-        external_link_form.cleaned_data["description"]=description
-        # go ahead and run the clean() 
-        external_link_form.clean(allowed_schemes=["http"], known_to_exist = known_to_exist)
-        # get the messages
-        info.extend(external_link_form.info)
-        warnings.extend(external_link_form.warnings)
-        # if the link exists, get it, otherwise create it then get it
-        external_url, created = ExternalLink.objects.get_or_create(url=url,
-              defaults={'title': title, 'description': description})
+def get_or_create_external_link(request, input_url, external_url, title, description=""):
+    """
+    When provided with candidate attributes for an ExternalLink object, will:
+    * return the URL of an ExternalLink that matches
+    * create an ExternalLink if there's no match, then return its URL
+    """
+    if input_url or external_url:
+        # run checks - doesn't return anything 
+        check_urls(request, input_url or external_url.url, ["https", "http"])
+
+    if input_url:
+        # get or create the external_link based on the url
+        external_url, created = ExternalLink.objects.get_or_create(url=input_url, defaults = {
+            "url": input_url,
+            "title": title,
+            "description": description,
+        })
+
         if created:
-            info.append("A link to %s has been added to the External Links database." %url)
+            message = "A link for this item has been added to the External Links database: %s." % external_url.url
+            messages.add_message(request, messages.INFO, message)
         else:
-            info.append("A link to %s already existed in External Links database, so I've used that." %url)
-    if external_url:
-        info.append("This is an external item at %s" %external_url.url)
-    else:
-        external_url = None
-    return info, warnings, external_url
+            message = "Using existing External Link: %s." % external_url.url
+            messages.add_message(request, messages.INFO, message)
+
+    elif external_url:
+        message = "This is an external item: %s." % external_url.url
+        messages.add_message(request, messages.INFO, message)
+
+    return external_url
+
+def check_urls(request, url, allowed_schemes = [kind.scheme for kind in LinkType.objects.all()]):
+    """
+    Checks and reports on a URL that might end up in the database
+    """
+    # parse the url and get some attributes
+    purl = urlparse(url)
+    scheme = purl.scheme
+    
+    # make sure it's a kind we allow before anything else
+    if not scheme in allowed_schemes:
+        permitted_schemes = (", ".join(allowed_schemes[:-1]) + " and " + allowed_schemes[-1]) if len(allowed_schemes) > 1 else allowed_schemes[0]
+        if scheme:
+            message = "Sorry, link type %s is not permitted. Permitted types are %s." % (scheme, permitted_schemes)
+        else:
+            message = "Please provide a complete URL of the form http://example.com/. Permitted schemes are %s." % permitted_schemes
+
+        raise forms.ValidationError(message)
+    
+    # for hypertext types only
+    if str(scheme) == "http" or scheme == "https":
+        # can we reach the domain?
+        try:
+            url_test = urlopen(url)
+        except IOError:
+            message = "Hostname " + purl.netloc + " not found. Please check that it is correct."
+            raise forms.ValidationError(message)
+
+        # check for a 404 (needs python 2.6)
+        if url_test.getcode() == 404:
+            message = "Warning: the link %s appears not to work. Please check that it is correct." %url
+            messages.add_message(request, messages.WARNING, message)            
+        
+        # check for a redirect
+        if url_test.geturl() != url:
+            message = "Warning: your URL " + url + " doesn't match the site's, which is: " + url_test.geturl()
+            messages.add_message(request, messages.WARNING, message)            
+        
+    # for mailto types only
+    elif str(scheme) == "mailto":
+        message = "Warning: this email address hasn't been checked. I hope it's correct."
+        messages.add_message(request, messages.WARNING, message)
 
 class ExternalLinkForm(forms.ModelForm):
     class Meta:
         model = ExternalLink
     allowed_schemes = [kind.scheme for kind in LinkType.objects.all()]
-    # sometimes other forms use this clean method, so we let them choose their own schemes
-    def clean(self, allowed_schemes=allowed_schemes, known_to_exist = False):
-        ExternalLinkForm.warnings = []
-        ExternalLinkForm.info = []
+
+    def clean(self):
         url = self.cleaned_data.get('url', "")
         title = self.cleaned_data.get('title', "")
         
-        # check if the ul is a duplicate - we don't enforce this in models with unique = True because it makes it too hard to migrate from databases with duplicates
+        # check if the url is a duplicate
+        # if the url exists, and this would be a new instance in the database, it's a duplicate
         print "ExternalLinkForm self.instance.pk", self.instance
-        if self.Meta.model.objects.filter(url=url) and not known_to_exist and not self.instance.pk:
+        if self.Meta.model.objects.filter(url=url) and not self.instance.pk:
             message = "Sorry, this link appears to exist already"
             raise forms.ValidationError(message)
 
         # warn if the title is a duplicate
-        if self.Meta.model.objects.filter(title=title) and not known_to_exist and not self.instance.pk:
-            self.warnings.append("Warning: the link title %s already exists in the database - consider changing it." %title)
-        # parse the url and get some attributes
-        purl = urlparse(url)
-        scheme = purl.scheme
-        
-        # make sure it's a kind we allow before anything else
-        if not scheme in allowed_schemes:
-            message = "Sorry, this link type is not permitted. Permitted types are: " + ", ".join(allowed_schemes)
-            raise forms.ValidationError(message)
-        
-        # for hypertext types only
-        if str(scheme) == "http" or scheme == "https":
-            # can we reach the domain?
-            try:
-                url_test = urlopen(url)
-            except IOError:
-                message = "Hostname " + purl.netloc + " not found. Please check that it is correct."
-                raise forms.ValidationError(message)
-
-            # check for a 404 (needs python 2.6)
-            # if url_test.getcode() == 404:
-            #     self.warnings.append("Warning: the link %s appears not to work. Please check that it is correct." %url)
-            # check for a redirect
-            if url_test.geturl() != url:
-                self.warnings.append("Warning: your URL " + url + " doesn't match the site's, which is: " + url_test.geturl())
-        
-        # for mailto types only
-        if str(scheme) == "mailto":
-            self.warnings.append("Warning: this email address hasn't been checked. I hope it's correct.")
+        # if the title exists, and this would be a new instance in the database, it's a duplicate        
+        if self.Meta.model.objects.filter(title=title) and not self.instance.pk:
+            message = "Warning: the link title %s already exists in the database - consider changing it." %title
+            messages.add_message(self.request, messages.WARNING, message)
 
         return self.cleaned_data    
 
-class ExternalLinkAdmin(admin.ModelAdmin):
+class ExternalLinkAdmin(SupplyRequestMixin, admin.ModelAdmin):
     readonly_fields = ('external_site', 'kind',)
     search_fields = ('title', 'external_site__site','description', 'url')
     list_display = ('title', 'url', )
     form = ExternalLinkForm
     
+    def get_form(self, request, obj=None, **kwargs):
+        form_class = super(ExternalLinkAdmin, self).get_form(request, obj, **kwargs)
+        form_class.request = request
+        return form_class
+
     def response_change(self, request, obj):
         for message in ExternalLinkForm.warnings:
             messages.warning(request, message)
@@ -173,6 +195,9 @@ class ExternalLinkAdmin(admin.ModelAdmin):
             messages.info(request, message)
         return super(ExternalLinkAdmin, self).response_change(request, obj)
 
+    def save_model(self, request, obj, form, change):
+        print ">>>>>>> Admin.save_model of ExtLink"
+        return super(ExternalLinkAdmin, self).save_model(request, obj, form, change)
 
 class LinkTypeAdmin(admin.ModelAdmin):
     pass

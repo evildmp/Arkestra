@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from django.conf import settings
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 
@@ -25,7 +25,7 @@ from arkestra_utilities.widgets.combobox import ComboboxField
 
 from contacts_and_people import models
 
-from links.admin import ExternalLinkForm, validate_and_get_messages
+from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.models import ExternalLink
 from links.admin import ObjectLinkInline
 
@@ -153,12 +153,13 @@ class PersonForm(forms.ModelForm):
         return data
 
     def clean(self):
-        self.warnings = []
-        self.info = []
+        PersonForm.warnings = []
+        PersonForm.info = []
 
-        # if this person has an external url, we need to do all kinds of things with it
+        # set the title
         title = self.cleaned_data["title"] or ""
         link_title = " ".join(name_part for name_part in [str(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
+        # validate and get messages relating to the link
         self.info, self.warnings, self.cleaned_data["external_url"]= validate_and_get_messages(
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
@@ -166,7 +167,8 @@ class PersonForm(forms.ModelForm):
             "", # link description
             self.info, 
             self.warnings,
-            )          
+            )  
+        print self.warnings, self.info        
         return self.cleaned_data
         
 class PersonAdmin(AutocompleteMixin, PlaceholderAdmin):
@@ -215,6 +217,15 @@ class PersonAdmin(AutocompleteMixin, PlaceholderAdmin):
         ('Researcher', {'inlines': ('ResearcherInline',)}),
     )
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
+
+    def save_model(self, request, obj, form, change):
+        print "respnse-change", self.form.info
+        for message in self.form.warnings:
+            messages.warning(request, message)
+        for message in self.form.info:
+            messages.info(request, message)
+        return super(PersonAdmin, self).save_model(request, obj, form, change)
+
             
 class TitleAdmin(admin.ModelAdmin):
     pass
@@ -258,10 +269,23 @@ class EntityForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
 
     def clean(self):
-        print "in clean of EntityForm(forms.ModelForm"
-        EntityForm.messages = []
+        self.warnings = []
+        self.info = []
+
+        # set the title
+        link_title = self.cleaned_data["name"]
+        # validate and get messages relating to the link
+        self.info, self.warnings, self.cleaned_data["external_url"]= validate_and_get_messages(
+            self.cleaned_data.get("input_url", None), # a manually entered url
+            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
+            link_title, # link title
+            "", # link description
+            self.info, 
+            self.warnings,
+            )          
+
         if not self.cleaned_data["website"]:
-            self.messages.append("This entity doesn't have a home page. Are you sure you want to do that?")
+            self.warnings.append("This entity doesn't have a home page. Are you sure you want to do that?")
         if not self.cleaned_data["short_name"]:
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
         return self.cleaned_data 
