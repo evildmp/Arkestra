@@ -1,39 +1,69 @@
 /* the default horizontal menu site navigation menu */
 
-ul.menu	{
-	padding: 0 0;
-	/*
-	top: 100px; 
-	right: 50px ; 
-	left: 50px; */
-	text-align: left ;
+ul.menu	{ /* the whole thing */
+    background: #d4cbe2;
+	padding: 8px;
+	margin: 0;
+	text-align: left;
+	font-size: 72%;
 	} 
 	
-ul.menu ul {display: inline; text-align: right; float: right;}
-	
-li.menu_item	{
+li.menu_item	{ /* all items */
 	display: inline; 
 	width: 100%;
-	padding: 0; 
+	padding: 0 0 8px; 
 	margin-right: 0; 
 	list-style-type: none; 
-	font-family: Baskerville, "gill sans", "gill sans mt", "Trebuchet MS", sans-serif; 
-	font-weight: normal;
-	font-variant: small-caps;
+	text-transform: uppercase;
+	font-weight: bold;
 	}
 
-ul.menu ul li {padding-left: 1em;}
+ul.menu ul { /* 2nd level list */
+    display: inline; 
+    text-align: right; 
+    float: right; 
+    margin: 0; 
+    padding: 0; 
+}
 	
+ul.menu ul li { /* 2nd level items */
+    padding-left: 8px; 
+   	position: relative; /* for the absolute drop-down */
+    background: #d4cbe2;
+}
+
+ul.menu ul ul { /* 3rd level list */
+	display: none;
+	margin: 0;
+    text-align: left;
+	position: absolute;
+    left: 0;
+    width: 100%;
+	padding: 7px 0 0;
+}
+
+ul.menu ul li:hover ul {
+	display: block;
+}
+
+ul.menu ul  ul li {
+    display: list-item;
+	padding-top: 8px;
+	border-top: 1px solid white;
+}
+
 li.menu_item a	{
+    color: #4b2683;
 	text-decoration: none; 
+	border: none;
 	margin: 0; 
 	padding: 0; 
-	color: gray;
-	}
+}
 	
 li.menu_item a:hover	{
-	color: #f95011; 
+	color: #4858ff; 
 	}
+
 
 /* the default tab menu, as used for People and Places */
 
