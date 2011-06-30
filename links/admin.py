@@ -182,18 +182,6 @@ class ExternalLinkAdmin(SupplyRequestMixin, admin.ModelAdmin):
     search_fields = ('title', 'external_site__site','description', 'url')
     list_display = ('title', 'url', )
     form = ExternalLinkForm
-    
-    def get_form(self, request, obj=None, **kwargs):
-        form_class = super(ExternalLinkAdmin, self).get_form(request, obj, **kwargs)
-        form_class.request = request
-        return form_class
-
-    def response_change(self, request, obj):
-        for message in ExternalLinkForm.warnings:
-            messages.warning(request, message)
-        for message in self.form.info:
-            messages.info(request, message)
-        return super(ExternalLinkAdmin, self).response_change(request, obj)
 
     def save_model(self, request, obj, form, change):
         print ">>>>>>> Admin.save_model of ExtLink"

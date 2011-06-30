@@ -11,8 +11,7 @@ from arkestra_utilities.widgets.wym_editor import WYMEditor
 
 # for tabbed interface
 from arkestra_utilities import admin_tabs_extension
-
-from arkestra_utilities.admin import SupplyRequestMixin
+from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
 
 # for autocomplete search
 from widgetry import fk_lookup
@@ -27,13 +26,12 @@ from cms.admin.placeholderadmin import PlaceholderAdmin
 
 class NewsAndEventsForm(forms.ModelForm):
     # a shared form for news and events
-    """
-    subtitle = forms.CharField( # enabling this makes the help_text disappear
-        widget=forms.Textarea(
-          attrs={'cols':100, 'rows':2,},
-        ),      
-    )
-    """    
+    class Meta:
+        widgets = {'subtitle': forms.Textarea(
+              attrs={'cols':80, 'rows':2,},
+            ),  
+        }
+
     input_url = forms.CharField(max_length=255, required = False)
     
     def clean(self):
@@ -58,16 +56,16 @@ class NewsAndEventsForm(forms.ModelForm):
                 raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
             # must have content or url in order to be published
             # not currently working, because self.cleaned_data["body"] = None
-            # if not self.cleaned_data["body"]:          
-            #     message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
-            #     messages.add_message(self.request, messages.WARNING, message)
+            if not self.cleaned_data["body"]:          
+                message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+                messages.add_message(self.request, messages.WARNING, message)
 
 
-class NewsAndEventsAdmin(SupplyRequestMixin, PlaceholderAdmin):
+class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
     class Meta:
         abstract = True
     inlines = (ObjectLinkInline,)
-    exclude = ('content',)
+    exclude = ('content', 'url')
     # for the change list pages
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
@@ -82,16 +80,6 @@ class NewsAndEventsAdmin(SupplyRequestMixin, PlaceholderAdmin):
     # autocomplete fields
     related_search_fields = ['hosted_by', 'external_url',]
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(NewsAndEventsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-
     class Media:
         js = (
             '/static/jquery/ui/ui.tabs.js',
@@ -101,7 +89,7 @@ class NewsAndEventsAdmin(SupplyRequestMixin, PlaceholderAdmin):
         }
 
 class NewsArticleForm(NewsAndEventsForm):
-    class Meta:
+    class Meta(NewsAndEventsForm.Meta):
         model = NewsArticle
         
     def clean(self):
@@ -127,16 +115,6 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
     form = NewsArticleForm
     list_filter = ('date',)
     read_only_fields = ('sticky_until')
-    # the tabs
-
-    # fieldsets = (
-    #     (None, 
-    #         {
-    #             'fields': ('body',),
-    #             'classes': ('plugin-holder', 'plugin-holder-nopage'),
-    #             },
-    #         ),
-    #     )
         
     fieldset_basic = (
         ('Basic', {
@@ -171,13 +149,11 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         ('Links', {'inlines': ('ObjectLinkInline',),}),
         ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
         )
-    prepopulated_fields = {
-        'slug': ('title',)
-            }
 
 class EventForm(NewsAndEventsForm):
-    class Meta:
+    class Meta(NewsAndEventsForm.Meta):
         model = Event
+
     def clean(self):
         super(EventForm, self).clean()
         # 1. obtain missing information from parent
@@ -199,7 +175,8 @@ class EventForm(NewsAndEventsForm):
                 if parent.single_day_event:
                     self.cleaned_data["start_date"] = self.cleaned_data["end_date"] = parent.start_date
                     self.cleaned_data["single_day_event"] = True
-                    self.info.append("You didn't say, but I am guessing that this is a single-day event on " + str(self.cleaned_data["start_date"]) + ".")
+                    message = "You didn't say, but I am guessing that this is a single-day event on " + str(self.cleaned_data["start_date"]) + "."
+                    messages.add_message(self.request, messages.INFO, message)
                 else:
                     raise forms.ValidationError("I'm terribly sorry, I can't work out when this event is supposed to start. You'll have to enter that information yourself.")
         
@@ -211,18 +188,21 @@ class EventForm(NewsAndEventsForm):
                 self.cleaned_data["single_day_event"] = True
             elif not self.cleaned_data["end_date"]:
                 self.cleaned_data["single_day_event"] = True
-                self.info.append("You didn't enter an end date, so I have assumed this is a single-day event")        
+                message = "You didn't enter an end date, so I have assumed this is a single-day event"
+                messages.add_message(self.request, messages.INFO, message)
             elif not self.cleaned_data["single_day_event"]:
                 if self.cleaned_data["end_date"] < self.cleaned_data["start_date"]:
                     raise forms.ValidationError('This event appears to end before it starts, which is very silly. Please correct the dates.')
                 if not self.cleaned_data["start_time"] and self.cleaned_data["end_time"]:
                     self.cleaned_data["end_time"] = None
-                    self.warning.append("You didn't enter a start time, so I deleted the end time. I hope that's OK.")
+                    message = "You didn't enter a start time, so I deleted the end time. I hope that's OK."
+                    messages.add_message(self.request, messages.WARNING, message)
             
             if self.cleaned_data["single_day_event"]:  
                 self.cleaned_data["end_date"] = self.cleaned_data["start_date"]
                 if not self.cleaned_data["start_time"]:
-                    self.info.append("You have a lovely smile.")
+                    message = "You have a lovely smile."
+                    messages.add_message(self.request, messages.INFO, message)
                     self.cleaned_data["end_time"] = None
                 elif self.cleaned_data["end_time"] and self.cleaned_data["end_time"] < self.cleaned_data["start_time"]:
                     raise forms.ValidationError('This event appears to end before it starts, which is very silly. Please correct the times.')
@@ -236,12 +216,12 @@ class EventForm(NewsAndEventsForm):
         # an event without a start date can be assumed to be a series of events
         else:
             self.cleaned_data["series"] = True
-            self.info.append("You didn't enter a start date, so I will assume this is a series of events")
+            message = "You didn't enter a start date, so I will assume this is a series of events."
+            messages.add_message(self.request, messages.INFO, message)
             self.cleaned_data['start_date'] = self.cleaned_data['end_date'] = self.cleaned_data['start_time'] = self.cleaned_data['end_time'] = None
             self.cleaned_data['single_day_event'] = False
             self.cleaned_data['jumps_queue_on'] = None 
             self.cleaned_data['importance'] = 0
-        print "info", self.info
         return self.cleaned_data
 
     '''
@@ -272,7 +252,7 @@ class EventAdmin(NewsAndEventsAdmin):
     list_filter = ('start_date',)
     save_as = True
     # autocomplete fields
-    related_search_fields = ['hosted_by','parent','building',]
+    related_search_fields = ['hosted_by','parent','building', 'external_url']
     # the tabs
     fieldset_basic = (
         ('', {

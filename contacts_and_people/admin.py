@@ -32,7 +32,7 @@ from links.admin import ObjectLinkInline
 from cms.admin.placeholderadmin import PlaceholderAdmin
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 
-from arkestra_utilities.admin import AutocompleteMixin
+from arkestra_utilities.admin import AutocompleteMixin, SupplyRequestMixin
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 if HAS_PUBLICATIONS:
@@ -43,7 +43,7 @@ class MembershipForm(forms.ModelForm): # cleans up membership & role information
     class Meta:
         model = models.Membership
 
-class MembershipInline(admin.TabularInline): # for all membership inline admin
+class MembershipInline(AutocompleteMixin, admin.TabularInline): # for all membership inline admin
     form = MembershipForm    
     model = models.Membership
     extra = 1
@@ -153,25 +153,22 @@ class PersonForm(forms.ModelForm):
         return data
 
     def clean(self):
-        PersonForm.warnings = []
-        PersonForm.info = []
 
         # set the title
         title = self.cleaned_data["title"] or ""
         link_title = " ".join(name_part for name_part in [str(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
-        # validate and get messages relating to the link
-        self.info, self.warnings, self.cleaned_data["external_url"]= validate_and_get_messages(
+
+        # check ExternalLink-related issues
+        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            link_title, # link title
+            self.cleaned_data.get("link_title"), # link title
             "", # link description
-            self.info, 
-            self.warnings,
-            )  
-        print self.warnings, self.info        
+            )          
+
         return self.cleaned_data
         
-class PersonAdmin(AutocompleteMixin, PlaceholderAdmin):
+class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
     if HAS_PUBLICATIONS:
@@ -217,15 +214,6 @@ class PersonAdmin(AutocompleteMixin, PlaceholderAdmin):
         ('Researcher', {'inlines': ('ResearcherInline',)}),
     )
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
-
-    def save_model(self, request, obj, form, change):
-        print "respnse-change", self.form.info
-        for message in self.form.warnings:
-            messages.warning(request, message)
-        for message in self.form.info:
-            messages.info(request, message)
-        return super(PersonAdmin, self).save_model(request, obj, form, change)
-
             
 class TitleAdmin(admin.ModelAdmin):
     pass
@@ -269,28 +257,25 @@ class EntityForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
 
     def clean(self):
-        self.warnings = []
-        self.info = []
-
         # set the title
         link_title = self.cleaned_data["name"]
-        # validate and get messages relating to the link
-        self.info, self.warnings, self.cleaned_data["external_url"]= validate_and_get_messages(
+
+        # check ExternalLink-related issues
+        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            link_title, # link title
+            self.cleaned_data.get("link_title"), # link title
             "", # link description
-            self.info, 
-            self.warnings,
             )          
 
         if not self.cleaned_data["website"]:
-            self.warnings.append("This entity doesn't have a home page. Are you sure you want to do that?")
+            message = "This entity doesn't have a home page. Are you sure you want to do that?"
+            messages.add_message(self.request, messages.WARNING, message)
         if not self.cleaned_data["short_name"]:
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
         return self.cleaned_data 
 
-class EntityAdmin(AutocompleteMixin, admin.ModelAdmin): 
+class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin): 
     search_fields = ['name']
     inlines = (MembershipForEntityInline,PhoneContactInline)
     form = EntityForm

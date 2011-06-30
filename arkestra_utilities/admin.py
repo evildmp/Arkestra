@@ -1,5 +1,6 @@
 from django.db.models import ForeignKey
 from widgetry import fk_lookup
+from django.contrib import messages
 
 class AutocompleteMixin(object):
     class Media:
@@ -27,3 +28,10 @@ class SupplyRequestMixin(object):
         form_class = super(SupplyRequestMixin, self).get_form(request, obj, **kwargs)
         form_class.request = request
         return form_class
+
+ 
+def send_info_message(request, message):
+    messages.add_message(request, messages.INFO, message)
+
+def send_warning_message(request, message):
+    messages.add_message(request, messages.WARNING, message)

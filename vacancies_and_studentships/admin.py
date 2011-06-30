@@ -23,7 +23,6 @@ COMMON_SEARCH_FIELDS = ['short_title','title','summary','description','slug','ur
 class StudentshipForm(forms.ModelForm):
     class Meta:
         model = models.Studentship        
-    description = forms.CharField(widget=WYMEditor)        
     def clean(self):
         if not self.cleaned_data["short_title"] or self.cleaned_data["short_title"] == '':
             self.cleaned_data["short_title"] = self.cleaned_data["title"]
@@ -38,12 +37,12 @@ class StudentshipAdmin(PlaceholderAdmin):
     form = StudentshipForm
     list_display = ('short_title', 'hosted_by', 'closing_date',)
     filter_horizontal = (
-        'also_advertise_on', 
+        'publish_to', 
         'supervisors', 
     )
     inlines = (ObjectLinkInline,)
     prepopulated_fields = {
-        'slug': ('short_title',)
+        'slug': ('title',)
             }
     fieldset_basic = (
         ('', {
@@ -110,7 +109,6 @@ admin.site.register(models.Studentship,StudentshipAdmin)
 class VacancyForm(forms.ModelForm):
     class Meta:
         model = models.Vacancy
-    description = forms.CharField(widget=WYMEditor)                
     def clean(self):
         if not self.cleaned_data["short_title"] or self.cleaned_data["short_title"] == '':
             self.cleaned_data["short_title"] = self.cleaned_data["title"]
@@ -125,11 +123,11 @@ class VacancyAdmin(PlaceholderAdmin):
     form = VacancyForm
     list_display = ('short_title', 'hosted_by', 'closing_date',)
     filter_horizontal = (
-        'also_advertise_on', 
+        'publish_to', 
     )
     inlines = (ObjectLinkInline,)
     prepopulated_fields = {
-        'slug': ('short_title',)
+        'slug': ('title',)
             }
     fieldset_basic = (
         ('', {
