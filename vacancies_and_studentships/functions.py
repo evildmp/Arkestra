@@ -60,10 +60,8 @@ def get_vacancies_and_studentships(instance):
         get_vacancies(instance)            # go and get vacancies
         if instance.order_by == "archive":
             instance.vacancies = instance.archived_vacancies
-            top_vacancies, ordinary_vacancies = get_vacancies_ordered_by_importance_and_date(instance)
         elif instance.order_by == "importance/date" and instance.view == "current":
-            get_vacancies_ordered_by_importance_and_date(instance)
-            instance.vacancies = instance.top_vacancies + instance.ordinary_vacancies
+            instance.vacancies = instance.all_current_vacancies.order_by('importance').reverse()
         else: 
             instance.vacancies = instance.all_current_vacancies
             
@@ -75,8 +73,7 @@ def get_vacancies_and_studentships(instance):
             instance.studentships = instance.archived_studentships
         # keep top studentships together where appropriate - not in long lists if COLLECT_TOP_ALL_FORTHCOMING_EVENTS is False
         elif instance.order_by == "importance/date" and (instance.view == "current" or COLLECT_TOP_ALL_FORTHCOMING_EVENTS):
-            get_studentships_ordered_by_importance_and_date(instance)
-            instance.studentships = instance.top_studentships + instance.ordinary_studentships
+            instance.studentships = instance.all_current_studentships.order_by('importance').reverse()
         else: 
             instance.studentships = instance.all_current_studentships
             
@@ -241,67 +238,7 @@ def set_layout_classes(instance):
         else: 
             instance.row_class=instance.row_class+" columns1"
     return
-                
-def get_studentships_ordered_by_importance_and_date(instance):
-    """
-    When we need more than just a simple list-by-date, this keeps the top items separate
-    """
-    print "____ get_studentships_ordered_by_importance_and_date() ____"
-    ordinary_studentships = []
-    # split the within-date items for this entity into two sets
-    actual_studentships = instance.all_current_studentships
-    # top_studentships jump the queue
-    top_studentships = actual_studentships.filter(
-        Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
-        jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
-        ).order_by('importance').reverse()  
-    # non_top studentships are the rest
-    non_top_studentships = actual_studentships.exclude(
-        Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
-        jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
-        )
-    print "Queue-jumping top studentships", top_studentships
-    print "Non top studentships", non_top_studentships.count()
-
-    # now we have to go through the non-top items, and find any that can be promoted to top_studentships
-    # get the set of dates where possible promotable items can be found             
-    dates = non_top_studentships.dates('start_date', 'day')
-    print "Going through the date set"
-    for date in dates:
-        print "    examining possibles from", date
-        # get all non-top items from this date
-        possible_top_studentships = non_top_studentships.filter(
-            start_date = date)
-        # promotable items have importance > 0
-        print "        found", possible_top_studentships.count(), "of which I will promote", possible_top_studentships.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1).count()
-        # promote the promotable items
-        list(top_studentships).extend(possible_top_studentships.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1))
-        top_studentships = top_studentships | possible_top_studentships.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1)
-        # print top_studentships | possible_top_studentships.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1))
-        # if this date set contains any unimportant items, then there are no more to promote
-        demotable_items = possible_top_studentships.exclude(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1)
-        if demotable_items.count() > 0:
-            # put those unimportant items into ordinary vacancies
-            ordinary_studentships = demotable_items
-            print "        demoting",  demotable_items.count()
-            # and stop looking for any more
-            break
-    # and everything left in non-top items after this date
-    if dates:
-        remaining_items = non_top_studentships.filter(start_date__gt=date)
-        print "    demoting the remaining", remaining_items.count()            
-        ordinary_studentships = ordinary_studentships | remaining_items
-        top_studentships = top_studentships
-        ordinary_studentships = list(ordinary_studentships)
-        for item in top_studentships:
-            item.sticky = True
-        
-        print "Top studentships after processing", len(top_studentships), top_studentships
-        print "Ordinary studentships", len(ordinary_studentships)
-        # ordinary_studentships.sort(key=operator.attrgetter('start_date'))
-    instance.top_studentships, instance.ordinary_studentships = list(top_studentships), ordinary_studentships
-    return 
-    
+                    
 def get_actual_studentships(instance):
     actual_studentships = get_all_studentships(instance).filter(
         # if it's (not a series and not a child) or if its parent is a series ....
@@ -348,66 +285,6 @@ def get_studentships(instance):
         
     print "Previous studentships", instance.archived_studentships.count()
         
-    return 
-
-def get_vacancies_ordered_by_importance_and_date(instance):
-    """
-    When we need more than just a simple list-by-date, this keeps the top items separate
-    """
-    print "____ get_vacancies_ordered_by_importance_and_date() ____"
-    ordinary_vacancies = []
-    # split the within-date items for this entity into two sets
-    actual_vacancies = instance.all_current_vacancies
-    # top_vacancies jump the queue
-    top_vacancies = actual_vacancies.filter(
-        Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
-        jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
-        ).order_by('importance').reverse()  
-    # non_top vacancies are the rest
-    non_top_vacancies = actual_vacancies.exclude(
-        Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
-        jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
-        )
-    print "Queue-jumping top vacancies", top_vacancies
-    print "Non top vacancies", non_top_vacancies.count()
-
-    # now we have to go through the non-top items, and find any that can be promoted to top_vacancies
-    # get the set of dates where possible promotable items can be found             
-    dates = non_top_vacancies.dates('start_date', 'day')
-    print "Going through the date set"
-    for date in dates:
-        print "    examining possibles from", date
-        # get all non-top items from this date
-        possible_top_vacancies = non_top_vacancies.filter(
-            start_date = date)
-        # promotable items have importance > 0
-        print "        found", possible_top_vacancies.count(), "of which I will promote", possible_top_vacancies.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1).count()
-        # promote the promotable items
-        list(top_vacancies).extend(possible_top_vacancies.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1))
-        top_vacancies = top_vacancies | possible_top_vacancies.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1)
-        # print top_vacancies | possible_top_vacancies.filter(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1))
-        # if this date set contains any unimportant items, then there are no more to promote
-        demotable_items = possible_top_vacancies.exclude(Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),importance__gte = 1)
-        if demotable_items.count() > 0:
-            # put those unimportant items into ordinary vacancies
-            ordinary_vacancies = demotable_items
-            print "        demoting",  demotable_items.count()
-            # and stop looking for any more
-            break
-    # and everything left in non-top items after this date
-    if dates:
-        remaining_items = non_top_vacancies.filter(start_date__gt=date)
-        print "    demoting the remaining", remaining_items.count()            
-        ordinary_vacancies = ordinary_vacancies | remaining_items
-        top_vacancies = top_vacancies
-        ordinary_vacancies = list(ordinary_vacancies)
-        for item in top_vacancies:
-            item.sticky = True
-        
-        print "Top vacancies after processing", len(top_vacancies), top_vacancies
-        print "Ordinary vacancies", len(ordinary_vacancies)
-        # ordinary_vacancies.sort(key=operator.attrgetter('start_date'))
-    instance.top_vacancies, instance.ordinary_vacancies = list(top_vacancies), ordinary_vacancies
     return 
     
 def get_actual_vacancies(instance):

@@ -41,6 +41,12 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text = u"Other research groups or departments where this should be advertised", 
         null = True, blank = True
         )
+    IMPORTANCES = (
+        (0, u"Normal"),
+        (1, u"More important"),
+        (10, u"Most important"),
+        )
+    importance = models.PositiveIntegerField(null=True, blank = False, default = 0, choices = IMPORTANCES, help_text = u"Important items will be featured in lists")
     slug=models.SlugField(unique = True)  
 
     def get_when(self):
