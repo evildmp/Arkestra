@@ -114,6 +114,7 @@ class NewsArticle(NewsAndEvents):
         )
     def __unicode__(self):
         return self.title
+
     def get_when(self):
         """
         get_when() provides a human-readable attribute under which items can be grouped.
@@ -129,6 +130,7 @@ class NewsArticle(NewsAndEvents):
         date_format = "F Y"
         get_when = nice_date(self.date, date_format)
         return get_when
+
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url

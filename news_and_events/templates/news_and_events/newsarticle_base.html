@@ -1,5 +1,5 @@
 {% extends newsarticle.template %}
-{% load humanize typogrify_tags news_tags humanize link_tags thumbnail placeholder_tags %}
+{% load arkestra_date_tags typogrify_tags humanize link_tags thumbnail placeholder_tags %}
 
 {% block title %}
 	<title>{{ newsarticle }}</title>
@@ -31,7 +31,8 @@
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
 				<dl>
-					{% newsarticle_date %}
+					<dt>Date</dt>
+					<dd>{% date newsarticle.date %}</dd>
 					{% if newsarticle.enquiries.all %}
 	 				    <dt>General enquiries</dt>
 	 				    {% for person in newsarticle.enquiries.all %}

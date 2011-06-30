@@ -1,6 +1,6 @@
 import django.http as http
 from django.shortcuts import render_to_response, get_object_or_404
-from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle # should improve 
+from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle 
 from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
 from links.link_functions import object_links

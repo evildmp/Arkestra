@@ -34,18 +34,3 @@ def news_for_this_page(context, max_items):
             }
     else:    
         return { 'news': "No news is good news",}
-
-@register.inclusion_tag('newsarticle_date.html', takes_context = True)
-def newsarticle_date(context, newsarticle = None):
-    if not newsarticle:
-        newsarticle = context['newsarticle']
-    date_format = "jS F Y"
-    now = datetime.now()
-    if newsarticle.date.year == now.year:                                     # this year
-        date_format = "jS F"
-    print "newsarticle.date", newsarticle.date
-    newsarticle_date = nice_date(newsarticle.date, date_format) 
-    return {
-        'newsarticle': newsarticle,
-        'date': newsarticle_date,
-    }    
