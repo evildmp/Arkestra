@@ -131,7 +131,7 @@ def person(request, slug, active_tab = ""):
     email = contact.email
     phone = contact.phone_contacts
 
-    if person.override_entity:
+    if person.override_entity or person.please_contact:
         location = None
     else:
         location = person.precise_location

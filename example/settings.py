@@ -188,6 +188,7 @@ INSTALLED_APPS = (
     
     'contacts_and_people',
     'news_and_events',
+    'vacancies_and_studentships',
     'links',
     'arkestra_utilities',
     'arkestra_utilities.widgets.combobox', # so that static-files picks it up

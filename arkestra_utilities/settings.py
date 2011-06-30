@@ -61,7 +61,7 @@ CMS_MENU_TITLE_OVERWRITE = True
 
 # Built in menu modifiers are in contacts_and_people.menu
 
-MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news",)}
+MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news", "vacancies")}
 
 # -------- Semantic editor ----------------------
 
