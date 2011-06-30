@@ -1,11 +1,12 @@
 from django.db import models
-from contacts_and_people.models import Entity, Person
+from contacts_and_people.models import Entity, Person, default_entity_id
 from links.models import ExternalLink
 from cms.models import Page
 from datetime import datetime
 from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
+from arkestra_utilities.output_libraries.dates import nice_date
 
 from django.conf import settings
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
@@ -21,10 +22,12 @@ class CommonVacancyAndStudentshipInformation(models.Model):
     summary = models.TextField(
         help_text = "Maximum two lines",
         )
-    description = models.TextField(help_text = "Not used or required for external items",)
+    description = models.TextField(help_text = "Not used or required for external items", null= True, blank = True)
     body = PlaceholderField('description',)
-    hosted_by = models.ForeignKey(Entity,
-        blank=True, null=True,
+    hosted_by = models.ForeignKey(Entity, 
+        default = default_entity_id, 
+        related_name = '%(class)s_hosted_events', 
+        null = True, blank = True, 
         help_text = u"The research group or department responsible for this vacancy")
     url = models.URLField(verify_exists=True, blank=True, null=True, help_text = u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
     external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
@@ -33,12 +36,29 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text = u'The person to whom enquiries about this should be directed ', 
         null = True, blank = True
         )
-    also_advertise_on = models.ManyToManyField(Entity, 
+    publish_to = models.ManyToManyField(Entity, 
         related_name = "%(class)s_advertise_on",
         help_text = u"Other research groups or departments where this should be advertised", 
         null = True, blank = True
         )
     slug=models.SlugField(unique = True)  
+
+    def get_when(self):
+        """
+        get_when() provides a human-readable attribute under which items can be grouped.
+        Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
+        """
+        try:
+            # The render function of CMSNewsAndEventsPlugin can set a temporary sticky attribute for Top news items
+            if self.sticky:
+                return "Top news"
+        except AttributeError:
+            pass
+        
+        date_format = "F Y"
+        get_when = nice_date(self.closing_date, date_format)
+        return get_when
+
     def __unicode__(self):
         return self.title    
 
@@ -65,22 +85,39 @@ class Studentship(CommonVacancyAndStudentshipInformation):
             return "/studentship/%s/" % self.slug
 
 class VacanciesPlugin(CMSPlugin):
-    FORMATS = (
-        (0, u"Title only"),
-        (1, u"Details"),
+    LAYOUTS = (
+        ("sidebyside", u"Side-by-side"),
+        ("stacked", u"Stacked"),
         )
+    layout = models.CharField(max_length=25, choices = LAYOUTS, default = "sidebyside")
     DISPLAY = (
-        (0, u"Vacancies and studentships"),
-        (1, u"Vacancies only"),
-        (2, u"Studentships only"),
+        (u"vacancie_and_studentships", u"Vacancies and studentships"),
+        (u"vacancies", u"Vacancies only"),
+        (u"studentships", u"Studentships only"),
         )
-    entity = models.ForeignKey(Entity, null = True, blank = True, help_text = "Leave blank for autoselect", related_name = "vacs_studs_plugin")
-    display = models.IntegerField(choices = DISPLAY, default = 0)
-    format = models.IntegerField(choices = FORMATS, default = 0)
-    current_items_only = models.BooleanField(default = True)
-    limit_to = models.PositiveSmallIntegerField(default = 5, null = True, blank = True, help_text = u"Leave blank for no limit")
+    display = models.CharField(max_length=25,choices = DISPLAY, default = "news_and_events")
+    FORMATS = (
+        ("title", u"Title only"),
+        ("details", u"Details"),
+        ("featured horizontal", u"Featured items (horizontal)"),
+        ("featured vertical", u"Featured items (vertical)"),
+        )
+    format = models.CharField(max_length=25,choices = FORMATS, default = "featured vertical")
+    ORDERING = (
+        ("date", u"Date"),
+        ("importance/date", u"Importance & date"),
+        )
+    order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
+    entity = models.ForeignKey(Entity, null = True, blank = True, 
+        help_text = "Leave blank for autoselect",
+        related_name = "vacs_studs_plugin")
+    limit_to = models.PositiveSmallIntegerField(default = 5, null = True, blank = True, 
+        help_text = u"Leave blank for no limit")
     vacancies_heading_text = models.CharField(max_length = 25, default = "Vacancies")
     studentships_heading_text = models.CharField(max_length = 25, default = "Studentships")
-    more_vacancies_link = models.ForeignKey(Entity, null = True, blank = True, help_text = "Offer a link to all vacancies in chosen entity", related_name = "vacs_plugin_link")
-    more_studentships_link = models.ForeignKey(Entity, null = True, blank = True, help_text = "Offer a link to all studentships in chosen entity", related_name = "studs_plugin_link")
+    def sub_heading_level(self): # requires that we change 0 to None in the database
+        if self.heading_level == None: # this means the user has chosen "No heading"
+            return 6 # we need to give sub_heading_level a value
+        else:
+            return self.heading_level + 1 # so if headings are h3, sub-headings are h4

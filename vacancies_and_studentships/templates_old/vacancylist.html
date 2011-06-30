@@ -1,0 +1,9 @@
+<ul class="plugin">
+  {% for vacancy in vacancies %}
+    <li>
+        <strong><a href="{{ vacancy.get_absolute_url }}">{{vacancy.short_title}}</a></strong>
+        <div><a href="{{ vacancy.hosted_by.get_absolute_url }}">{{ vacancy.hosted_by }}</a></div>
+        <div>{{ vacancy.summary }}</div>   
+    </li>
+  {% endfor %}
+</ul>

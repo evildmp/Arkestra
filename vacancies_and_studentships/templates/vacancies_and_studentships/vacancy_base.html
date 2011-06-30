@@ -1,0 +1,52 @@
+{% extends studentship.template %}
+{% load humanize typogrify_tags arkestra_date_tags link_tags thumbnail placeholder_tags %}
+
+{% block title %}
+	<title>{{ studentship }}</title>
+{% endblock %}
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ studentship }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+
+	{% if studentship.subtitle %}
+   		<p class= "standout"><strong>{{ studentship.subtitle }}</strong></p>
+	{% endif %}
+{% endblock pagetitle %}
+
+
+{% block main_page_body %}
+    {% block entity_information %}
+        <div class="row columns3">
+        	<div class="column firstcolumn doublecolumn">
+				{% block placeholder %}
+				    {% render_placeholder studentship.body %}
+				{% endblock placeholder %}
+			</div>
+			<div class="column lastcolumn">
+				{% block image %}
+				    {% thumbnail studentship.image.file 227x0 subject_location=studentship.image.subject_location as image %}
+				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
+				{% endblock image %}				
+				<dl>
+					<dt>Closing date</dt>
+					<dd>{% date studentship.closing_date %}</dd>
+					{% if studentship.enquiries.all %}
+	 				    <dt>General enquiries</dt>
+	 				    {% for person in studentship.enquiries.all %}
+							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
+						{% endfor %}
+					{% endif %}
+				</dl>    
+				{% with studentship.links as links %}
+				    {% include "includes/related_links_list.html" %}
+		        {% endwith %}
+			</div>
+		</div>
+		<ul class = "news linkIcon">
+			<li><a href = "{{ studentship.link_to_vacancies_and_studentships_page }}">More {{ studentship.hosted_by.short_name }} studentships</a></li>
+		</ul>
+    {% endblock entity_information %}
+{% endblock main_page_body %}

@@ -1,0 +1,52 @@
+{% extends vacancy.template %}
+{% load humanize typogrify_tags arkestra_date_tags link_tags thumbnail placeholder_tags %}
+
+{% block title %}
+	<title>{{ vacancy }}</title>
+{% endblock %}
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ vacancy }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+
+	{% if vacancy.subtitle %}
+   		<p class= "standout"><strong>{{ vacancy.subtitle }}</strong></p>
+	{% endif %}
+{% endblock pagetitle %}
+
+
+{% block main_page_body %}
+    {% block entity_information %}
+        <div class="row columns3">
+        	<div class="column firstcolumn doublecolumn">
+				{% block placeholder %}
+				    {% render_placeholder vacancy.body %}
+				{% endblock placeholder %}
+			</div>
+			<div class="column lastcolumn">
+				{% block image %}
+				    {% thumbnail vacancy.image.file 227x0 subject_location=vacancy.image.subject_location as image %}
+				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
+				{% endblock image %}				
+				<dl>
+					<dt>Closing date</dt>
+					<dd>{% date vacancy.closing_date %}</dd>
+					{% if vacancy.enquiries.all %}
+	 				    <dt>General enquiries</dt>
+	 				    {% for person in vacancy.enquiries.all %}
+							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
+						{% endfor %}
+					{% endif %}
+				</dl>    
+				{% with vacancy.links as links %}
+				    {% include "includes/related_links_list.html" %}
+		        {% endwith %}
+			</div>
+		</div>
+		<ul class = "news linkIcon">
+			<li><a href = "{{ vacancy.link_to_vacancies_and_studentships_page }}">More {{ vacancy.hosted_by.short_name }} vacancies</a></li>
+		</ul>
+    {% endblock entity_information %}
+{% endblock main_page_body %}
