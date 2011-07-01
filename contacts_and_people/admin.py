@@ -155,6 +155,7 @@ class PersonForm(forms.ModelForm):
     def clean(self):
 
         # set the title
+        print self.cleaned_data
         title = self.cleaned_data["title"] or ""
         link_title = " ".join(name_part for name_part in [str(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
 

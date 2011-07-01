@@ -12,7 +12,9 @@ from django.db.models import ForeignKey
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 
-class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
+from arkestra_utilities.admin import AutocompleteMixin
+
+class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
     model = EntityAutoPageLinkPluginEditor
     name = _("Entity auto page link")
     render_template = "entity-auto-page-link.html"
@@ -20,26 +22,6 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
  
      # autocomplete fields
     related_search_fields = ['entity',]
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(EntityAutoPageLinkPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/media/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
-   
     
     def render(self, context, instance, placeholder):
         print "-- in render of CMSContactsAndPeoplePlugin --"
@@ -69,7 +51,7 @@ class EntityAutoPageLinkPluginPublisher(CMSPluginBase):
     def icon_src(self, instance):
         return "/static/plugin_icons/entity_auto_page_link.png"
 
-class EntityDirectoryPluginPublisher(CMSPluginBase):
+class EntityDirectoryPluginPublisher(AutocompleteMixin, CMSPluginBase):
     model = EntityDirectoryPluginEditor
     name = _("Directory")
     render_template = "directory.html"
@@ -78,25 +60,6 @@ class EntityDirectoryPluginPublisher(CMSPluginBase):
      # autocomplete fields
     related_search_fields = ['entity',]
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(EntityDirectoryPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/media/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
-   
     def icon_src(self, instance):
         return "/static/plugin_icons/entity_directory.png"
         
@@ -128,7 +91,7 @@ class EntityDirectoryPluginPublisher(CMSPluginBase):
             })
         return context
 
-class EntityMembersPluginPublisher(CMSPluginBase):
+class EntityMembersPluginPublisher(AutocompleteMixin, CMSPluginBase):
     """
     Returns all the memberships in the entity and its descendants; the template groups them by entity"""
     model = EntityMembersPluginEditor
@@ -141,26 +104,7 @@ class EntityMembersPluginPublisher(CMSPluginBase):
 
     def icon_src(self, instance):
         return "/static/plugin_icons/entity_members.png"
-        
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(EntityMembersPluginPublisher, self).formfield_for_dbfield(db_field, **kwargs)
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/media/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
-   
+           
     def render(self, context, instance, placeholder):
         if instance.entity:
             entity = instance.entity
