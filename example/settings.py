@@ -148,6 +148,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    BASE_PATH+'/templates/',
 )
 
 # ------------------------ Django CMS
@@ -159,6 +160,7 @@ CMS_MEDIA_URL = STATIC_URL + 'cms/'
 
 CMS_TEMPLATES = (
     ('arkestra.html', gettext('Arkestra')),
+    ('institute.html', gettext('Institute of Mediaeval Medicine')),
 )
 
 CMS_PAGE_FLAGS = (
@@ -182,7 +184,7 @@ INSTALLED_APPS = (
     'appmedia',
     'cms.plugins.text',
     'cms.plugins.snippet',
-#    'cmsplugin_filer_image',    
+    'arkestra_image_plugin',    
 
     # Arkestra applications
     

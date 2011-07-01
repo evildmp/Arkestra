@@ -19,7 +19,7 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns+= patterns('',
-        url(r'^media/cms/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.CMS_MEDIA_ROOT, 'show_indexes': True}),
+        # url(r'^media/cms/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.CMS_MEDIA_ROOT, 'show_indexes': True}),
         # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
         (r'^' + settings.MEDIA_URL.lstrip('/'), include('appmedia.urls')),
     )
