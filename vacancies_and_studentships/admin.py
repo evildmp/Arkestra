@@ -23,6 +23,13 @@ from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
 COMMON_SEARCH_FIELDS = ['short_title','title','summary','description','slug','url']
 
 class VacancyStudentshipForm(forms.ModelForm):
+    class Meta:
+        widgets = {'summary': forms.Textarea(
+              attrs={'cols':80, 'rows':2,},
+            ),  
+        }
+
+    input_url = forms.CharField(max_length=255, required = False)
     def clean(self):
         if not self.cleaned_data["short_title"] or self.cleaned_data["short_title"] == '':
             self.cleaned_data["short_title"] = self.cleaned_data["title"]
@@ -42,18 +49,60 @@ class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, admin.Model
         'please_contact',
         'external_url',
         ]
+    filter_horizontal = (
+        'publish_to', 
+        'enquiries',
+    )
 
-    class Media:
-        js = (
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
-
+class VacancyForm(VacancyStudentshipForm):
+    class Meta(VacancyStudentshipForm.Meta):
+        model = models.Vacancy
+    
+# class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
+class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
+    search_fields = COMMON_SEARCH_FIELDS + ['job_number']
+    form = VacancyForm
+    prepopulated_fields = {
+        'slug': ('title',)
+            }
+    fieldset_basic = (
+        ('', {
+            'fields': (('title', 'short_title',), 'closing_date', 'salary', 'job_number',),
+        }),
+        ('', {
+            'fields': ('summary',),
+        }),
+        ('', {
+            'fields': ('description',),
+        }),
+    )
+    fieldset_institution = (
+        ('Institutional details', {
+            'fields': ('hosted_by',)
+        }), 
+    )
+    fieldset_furtherinfo = (
+        ('', {
+            'fields': ('please_contact', 'also_advertise_on',)
+        }),
+    )
+    fieldset_advanced = (
+        ('', {
+            'fields': ('url', 'slug',),
+        }),
+    )
+    tabs = (
+        ('Basic', {'fieldsets': fieldset_basic,}),
+        ('Institution', {'fieldsets': fieldset_institution,}),
+        ('Further Information', {'fieldsets': fieldset_furtherinfo,}),
+        ('Links', {'inlines': ('ObjectLinkInline',),}),
+        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
+    ) 
+         
+admin.site.register(models.Vacancy,VacancyAdmin)
 
 class StudentshipForm(VacancyStudentshipForm):
-    class Meta:
+    class Meta(VacancyStudentshipForm.Meta):
         model = models.Studentship        
 
 
@@ -63,6 +112,7 @@ class StudentshipAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
     filter_horizontal = (
         'publish_to', 
         'supervisors', 
+        'enquiries',
     )
     prepopulated_fields = {
         'slug': ('title',)
@@ -108,52 +158,3 @@ class StudentshipAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
     
 admin.site.register(models.Studentship,StudentshipAdmin)
 
-class VacancyForm(VacancyStudentshipForm):
-    class Meta:
-        model = models.Vacancy
-    
-# class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
-class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
-    search_fields = COMMON_SEARCH_FIELDS + ['job_number']
-    form = VacancyForm
-    filter_horizontal = (
-        'publish_to', 
-    )
-    prepopulated_fields = {
-        'slug': ('title',)
-            }
-    fieldset_basic = (
-        ('', {
-            'fields': (('title', 'short_title',), 'closing_date', 'salary', 'job_number',),
-        }),
-        ('', {
-            'fields': ('summary',),
-        }),
-        ('', {
-            'fields': ('description',),
-        }),
-    )
-    fieldset_institution = (
-        ('Institutional details', {
-            'fields': ('hosted_by',)
-        }), 
-    )
-    fieldset_furtherinfo = (
-        ('', {
-            'fields': ('please_contact', 'also_advertise_on',)
-        }),
-    )
-    fieldset_advanced = (
-        ('', {
-            'fields': ('url', 'slug',),
-        }),
-    )
-    tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Institution', {'fieldsets': fieldset_institution,}),
-        ('Further Information', {'fieldsets': fieldset_furtherinfo,}),
-        ('Links', {'inlines': ('ObjectLinkInline',),}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
-    ) 
-         
-admin.site.register(models.Vacancy,VacancyAdmin)

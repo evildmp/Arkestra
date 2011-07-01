@@ -7,6 +7,7 @@ from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
 from arkestra_utilities.output_libraries.dates import nice_date
+from filer.fields.image import FilerImageField
 
 from django.conf import settings
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
@@ -23,6 +24,7 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text = "Maximum two lines",
         )
     description = models.TextField(help_text = "Not used or required for external items", null= True, blank = True)
+    image = FilerImageField(null=True, blank=True)
     body = PlaceholderField('description',)
     hosted_by = models.ForeignKey(Entity, 
         default = default_entity_id, 
@@ -31,7 +33,7 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text = u"The research group or department responsible for this vacancy")
     url = models.URLField(verify_exists=True, blank=True, null=True, help_text = u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
     external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
-    please_contact = models.ForeignKey(Person, 
+    enquiries = models.ManyToManyField(Person, 
         related_name = '%(class)s_person', 
         help_text = u'The person to whom enquiries about this should be directed ', 
         null = True, blank = True

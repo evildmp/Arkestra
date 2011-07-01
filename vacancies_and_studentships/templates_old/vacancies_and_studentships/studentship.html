@@ -2,12 +2,6 @@
 {% load link_tags %}
 {% load placeholder_tags %}
 
-{% block columns %}	
-    {% get_links as links %}
-	{% if links %}@import url("/media/css/_layout/horiz/80_20.css");
-	{% else %}@import url("/media/css/_layout/horiz/100.css");
-    {% endif %}
-{% endblock columns %}
 
 {% block meta %}
 	<meta name="description" content="{{studentship.summary}}"/>
@@ -22,6 +16,7 @@
 
 {% block pagetitle %}
 		<h{{PAGE_TITLE_HEADING_LEVEL}}> {{ studentship }}{% if studentship.hosted_by %}<br /><span class = "subtitle"{% if studentship.hosted_by.get_website_url %}<a href = "{{studentship.hosted_by.get_website_url }}">{{ studentship.hosted_by }}</a>{% else %}{{ studentship.hosted_by }}{% endif %}{% endif %}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+   		<p class= "standout"><strong>{{ event.summary }}</strong></p>
 {% endblock pagetitle %}
 
 {% block main_page_body %}
@@ -31,9 +26,8 @@
 	
 	<div class = "row columns2">
 		<div class ="column firstcolumn ">
-			<p>{{ studentship.summary }}</p>
+			<p>*{{ studentship.summary }}</p>
 			
-			<div>{{ studentship.description|safe }}</div>
 			<div>{% render_placeholder studentship.body %}</div>
 		</div>
 		<div class = "column lastcolumn">

@@ -30,10 +30,9 @@
 {% block entity_information %}
 <div class = "row columns2">
 	<div class ="column firstcolumn ">
-		<p>{{ vacancy.summary }}</p>
+		<p>@{{ vacancy.summary }}</p>
 		
 		<div>{% render_placeholder vacancy.body %}</div>
-		<div>{{ vacancy.description|safe }}</div>
 	</div>
 	<div class = "column lastcolumn">
 		<div class = "tint1">
