@@ -18,11 +18,5 @@ urlpatterns = patterns('',
     (r'^forthcoming-events/$', "news_and_events.views.all_forthcoming_events"),
     (r'^news-and-events/$', "news_and_events.views.news_and_events"),
 
-    # the old ways of doing this
-    (r"^entity/(?P<slug>[-\w]+)/news-and-events/$", "news_and_events.views.news_and_events"),
-    (r"^entity/(?P<slug>[-\w]+)/news-and-events/news-archive/$", "news_and_events.views.news_archive"),
-    (r"^entity/(?P<slug>[-\w]+)/news-and-events/previous-events/$", "news_and_events.views.previous_events"),
-    (r"^entity/(?P<slug>[-\w]+)/news-and-events/all-forthcoming/$", "news_and_events.views.all_forthcoming_events"),
     )
-
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development

@@ -219,7 +219,7 @@ def set_layout_classes(instance):
     # if news and events will be side-by-side
     if instance.layout == "sidebyside":
         instance.news_div_class = instance.events_div_class = "column firstcolumn" # if both news & events we set the events column a few lines later
-        if instance.news and instance.events:
+        if (instance.news or instance.other_news) and (instance.events or instance.other_events):
             instance.row_class=instance.row_class+" columns2"
             instance.events_div_class = "column lastcolumn"
         # if just news or events, and it needs an index     

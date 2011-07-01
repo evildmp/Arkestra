@@ -15,6 +15,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 # for tabbed interface
 from arkestra_utilities import admin_tabs_extension
+from arkestra_utilities.admin import AutocompleteMixin
 
 class NewsAndEventsPluginForm(forms.ModelForm):
     class Meta:
@@ -32,7 +33,7 @@ class NewsAndEventsPluginForm(forms.ModelForm):
             self.cleaned_data["limit_to"] = None
         return self.cleaned_data
 
-class CMSNewsAndEventsPlugin(CMSPluginBase):
+class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
     model = NewsAndEventsPlugin
     name = _("News & events")
     text_enabled = True
@@ -71,24 +72,6 @@ class CMSNewsAndEventsPlugin(CMSPluginBase):
 
     # autocomplete fields
     related_search_fields = ['entity',]
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(CMSNewsAndEventsPlugin, self).formfield_for_dbfield(db_field, **kwargs)
-    class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js', # we already load jquery for the tabs
-            '/media/cms/js/lib/ui.core.js',
-            '/media/arkestra/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
 
     def render(self, context, instance, placeholder):
         #print self.render_template
