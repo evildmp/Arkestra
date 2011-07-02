@@ -31,7 +31,7 @@ class AdjusterPool(object):
         self.discovered = True
 
     def register_adjuster(self, modifier_class):
-        print "registering", modifier_class
+        # print "registering", modifier_class
         assert issubclass(modifier_class, WidthAdjuster)
         # should we check if it's already registered?
         self.adjusters.setdefault(modifier_class.kind, []).append(modifier_class)

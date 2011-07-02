@@ -7,11 +7,11 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 from contacts_and_people.models import Membership
 
 # for autocomplete search
-from widgetry import fk_lookup
-from django.db.models import ForeignKey
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 
+# for tabbed interface
+from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin import AutocompleteMixin
 
 class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):

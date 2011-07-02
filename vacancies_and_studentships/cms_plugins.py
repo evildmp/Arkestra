@@ -1,22 +1,17 @@
-from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
+from cms.plugin_pool import plugin_pool
 from models import VacanciesPlugin, Vacancy, Studentship
 from django.utils.translation import ugettext as _
 from django import forms
 
-from django.db.models import Q
-
-from django.conf import settings
-
-from datetime import date,timedelta
 
 from contacts_and_people.templatetags.entity_tags import work_out_entity
+from functions import get_vacancies_and_studentships
 
-items_expire_after =  date.today() - timedelta(days = getattr(settings, "VACANCIES_EXPIRY_AFTER", 31))
+# for tabbed interface
+from arkestra_utilities import admin_tabs_extension
 
 from arkestra_utilities.admin import AutocompleteMixin
-
-from functions import get_vacancies_and_studentships
 
 class VacanciesPluginForm(forms.ModelForm):
     class Meta:
@@ -33,6 +28,7 @@ class VacanciesPluginForm(forms.ModelForm):
         if self.cleaned_data["limit_to"] == 0: # that's a silly number, and interferes with the way we calculate later
             self.cleaned_data["limit_to"] = None
         return self.cleaned_data
+
 
 class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
     model = VacanciesPlugin
@@ -76,5 +72,5 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
 
     def icon_src(self, instance):
         return "/static/plugin_icons/vacancies_and_studentships.png"
-            
+
 plugin_pool.register_plugin(CMSVacanciesPlugin)

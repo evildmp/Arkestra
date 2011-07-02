@@ -16,9 +16,8 @@ IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
 
 def common_settings(request, slug):
     # general values - entity, request, template
-    entity = Entity.objects.get(slug=slug)
-    # request.current_page = entity.get_website() # for the menu, so it knows where we are
-    request.current_page = default_entity.get_website()
+    entity = Entity.objects.get(slug=slug) or default_entity
+    request.current_page = entity.get_website() # for the menu, so it knows where we are
     context = RequestContext(request)
     instance = NewsAndEventsPlugin()
     instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -148,7 +147,9 @@ def newsarticle(request, slug):
     
     return render_to_response(
         "news_and_events/newsarticle.html",
-        {"newsarticle":newsarticle,
+        {
+        "newsarticle":newsarticle,
+        "entity": newsarticle.hosted_by,
         "meta": {"description": newsarticle.subtitle,}
         },
         RequestContext(request),
@@ -167,6 +168,7 @@ def event(request, slug):
     return render_to_response(
         "news_and_events/event.html",
         {"event": event,
+        "entity": event.hosted_by,
         "meta": {"description": event.subtitle,},
         },
         RequestContext(request),

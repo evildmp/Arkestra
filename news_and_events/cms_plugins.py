@@ -3,15 +3,10 @@ from cms.plugin_pool import plugin_pool
 from models import NewsAndEventsPlugin, NewsArticle, Event
 from django.utils.translation import ugettext as _
 from django import forms
+
 from itertools import chain
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 from functions import get_news_and_events
-
-# for autocomplete search
-from widgetry import fk_lookup
-from django.db.models import ForeignKey
-from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
 
 # for tabbed interface
 from arkestra_utilities import admin_tabs_extension
@@ -94,5 +89,5 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
 
     def icon_src(self, instance):
         return "/static/plugin_icons/news_and_events.png"
-            
+
 plugin_pool.register_plugin(CMSNewsAndEventsPlugin)

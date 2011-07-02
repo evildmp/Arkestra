@@ -3,6 +3,7 @@ body    {
     background: gray;
     border: 1px solid black;
     width: 1000px;
+    font-family: Baskerville, Garamond, Palatino, "Palatino Linotype", "Hoefler Text", "Times New Roman", serif;
     }
 
 div#outer-wrapper   {
@@ -19,3 +20,5 @@ div#inner-wrapper   {
 div.footer  {
     border-top: 1px solid black;
 }
+
+ul, ol  {}

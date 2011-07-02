@@ -8,7 +8,6 @@ from datetime import datetime
 
 # for the WYMeditor fields
 from arkestra_utilities.widgets.wym_editor import WYMEditor
-
 # for tabbed interface
 from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
@@ -79,14 +78,6 @@ class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin
             }
     # autocomplete fields
     related_search_fields = ['hosted_by', 'external_url',]
-
-    class Media:
-        js = (
-            '/static/jquery/ui/ui.tabs.js',
-        )
-        css = {
-            'all': ('/static/jquery/themes/base/ui.all.css',)
-        }
 
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -347,4 +338,3 @@ admin.site.register(Event,EventAdmin)
 admin.site.register(NewsSource,NewsSourceAdmin)
 admin.site.register(EventType,EventTypeAdmin)
 admin.site.register(NewsArticle,NewsArticleAdmin)
-#admin.site.register(NewsArticle,PlaceholderAdmin)

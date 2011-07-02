@@ -1,5 +1,4 @@
 # register all interesting models for search
-#print "LOADING link_schemas.py for %s" % __name__
 
 from news_and_events import models, admin
 from links import schema, LinkWrapper

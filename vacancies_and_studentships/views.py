@@ -16,9 +16,8 @@ IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
 
 def common_settings(request, slug):
     # general values - entity, request, template
-    entity = Entity.objects.get(slug=slug)
-    # request.current_page = entity.get_website() # for the menu, so it knows where we are
-    request.current_page = default_entity.get_website()
+    entity = Entity.objects.get(slug=slug) or default_entity
+    request.current_page = entity.get_website() # for the menu, so it knows where we are
     context = RequestContext(request)
     instance = VacanciesPlugin()
     instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -172,6 +171,7 @@ def vacancy(request, slug):
     return render_to_response(
         "vacancies_and_studentships/vacancy.html",
         {"vacancy":vacancy,
+        "entity": vacancy.hosted_by,
         "meta": {"description": vacancy.description,}
         },
         RequestContext(request),
@@ -190,6 +190,7 @@ def studentship(request, slug):
     return render_to_response(
         "vacancies_and_studentships/studentship.html",
         {"studentship": studentship,
+        "entity": studentship.hosted_by,
         "meta": {"description": studentship.description,},
         },
         RequestContext(request),

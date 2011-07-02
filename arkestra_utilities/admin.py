@@ -35,13 +35,6 @@ class SupplyRequestMixin(object):
         form_class.request = request
         return form_class
 
- 
-def send_info_message(request, message):
-    messages.add_message(request, messages.INFO, message)
-
-def send_warning_message(request, message):
-    messages.add_message(request, messages.WARNING, message)
-
 class InsertForm(forms.ModelForm):
     class Meta:
         model = Insert
@@ -50,4 +43,4 @@ class InsertForm(forms.ModelForm):
             ),  
         }
     
-admin.site.register(Insert, PlaceholderAdmin)
+# admin.site.register(Insert, PlaceholderAdmin)

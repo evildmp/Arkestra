@@ -15,13 +15,24 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'arkestra_medic_dev',                      # Or path to database file if using sqlite3.
+#         'USER': 'arkestra',                      # Not used with sqlite3.
+#         'PASSWORD': 'yodelay',                  # Not used with sqlite3.
+#         'HOST': '/tmp/mysql.sock',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'example.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'NAME': 'test.db',                      # Or path to database file if using sqlite3.
+        'USER': 'arkestra',                      # Not used with sqlite3.
+        'PASSWORD': 'yodelay',                  # Not used with sqlite3.
+        'HOST': '/tmp/mysql.sock',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -189,8 +200,8 @@ INSTALLED_APPS = (
     # Arkestra applications
     
     'contacts_and_people',
-    'news_and_events',
     'vacancies_and_studentships',
+    'news_and_events',
     'links',
     'arkestra_utilities',
     'arkestra_utilities.widgets.combobox', # so that static-files picks it up
