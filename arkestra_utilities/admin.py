@@ -2,6 +2,12 @@ from django.db.models import ForeignKey
 from widgetry import fk_lookup
 from django.contrib import messages
 
+from django.contrib import admin
+from django import forms
+from cms.admin.placeholderadmin import PlaceholderAdmin
+
+from models import Insert
+
 class AutocompleteMixin(object):
     class Media:
         js = (
@@ -35,3 +41,13 @@ def send_info_message(request, message):
 
 def send_warning_message(request, message):
     messages.add_message(request, messages.WARNING, message)
+
+class InsertForm(forms.ModelForm):
+    class Meta:
+        model = Insert
+        widgets = {'description': forms.Textarea(
+              attrs={'cols':80, 'rows':5,},
+            ),  
+        }
+    
+admin.site.register(Insert, PlaceholderAdmin)

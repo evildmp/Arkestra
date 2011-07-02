@@ -1,5 +1,5 @@
 {% block doctype %}<!DOCTYPE html>{% endblock doctype %} 
-{% load cache cms_tags link_tags menu_tags typogrify_tags %}
+{% load cache cms_tags link_tags menu_tags typogrify_tags insert_tags %}
 {% block html_tag %}<html lang="en" >{% endblock html_tag %}
 {% block head %}
 <head>
@@ -73,12 +73,12 @@
 		{% endblock pagetitle %}
 		
 		{% block main_page_body %}
+			{% insert "newsflash" %}
 	   		{% placeholder body %}
 	  	{% endblock main_page_body %}
-     
-		{% block footer %}
-			<div class = "footer row"><ul><li class="arkestra">This website is powered by <a href="http://medicine.cardiff.ac.uk/">Arkestra</a>.</li></ul></div>
-		{% endblock footer %}
+     	
+		{% insert "footer" %}
+
 	</div>
 </div>		
 
