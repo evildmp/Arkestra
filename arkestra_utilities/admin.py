@@ -4,7 +4,6 @@ from django.contrib import messages
 
 from django.contrib import admin
 from django import forms
-from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from models import Insert
 
@@ -35,6 +34,7 @@ class SupplyRequestMixin(object):
         form_class.request = request
         return form_class
 
+
 class InsertForm(forms.ModelForm):
     class Meta:
         model = Insert
@@ -42,5 +42,10 @@ class InsertForm(forms.ModelForm):
               attrs={'cols':80, 'rows':5,},
             ),  
         }
+
+from cms.admin.placeholderadmin import PlaceholderAdmin # if it's at the start of the file, it breaks imports somehow
+
+class InsertAdmin(PlaceholderAdmin):
+    pass
     
-# admin.site.register(Insert, PlaceholderAdmin)
+admin.site.register(Insert, InsertAdmin)
