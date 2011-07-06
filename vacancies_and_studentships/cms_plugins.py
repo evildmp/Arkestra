@@ -53,18 +53,17 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         #print self.render_template
-        print "-- in render of CMSVacanciesPlugin --"
+        print "=======================  in render of CMSVacanciesPlugin ======================= "
         instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
+        
         instance.type = getattr(instance, "type", "plugin")
-        instance.show_images = getattr(instance, "show_images", True)
-        print "instance.show_images", instance.show_images
         try:
             render_template = instance.render_template
         except AttributeError:
             pass
         get_vacancies_and_studentships(instance)
         context.update({ 
-            'get_vacancies_and_studentships': instance,
+            'vacancies_and_studentships': instance,
             'placeholder': placeholder,
             })
         print "returning context"

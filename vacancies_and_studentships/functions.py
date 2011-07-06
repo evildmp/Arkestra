@@ -34,6 +34,7 @@ def get_vacancies_and_studentships(instance):
         sub_page        archive, all forthcoming
         plugin          produced by a plugin
         for_person      raised by a {% person_studentships %} tag in a person template
+        menu            the menu needs to know for the auto vacancies & studentships page
         
     vacanciesindex
     studentshipsindex
@@ -56,42 +57,42 @@ def get_vacancies_and_studentships(instance):
 
     if "vacancies" in instance.display:          # have we been asked to get vacancies?
         print
-        print "============ Getting vacancies ============"
+        print "---------------- Getting vacancies ----------------"
         get_vacancies(instance)            # go and get vacancies
         if instance.view == "archive":
             instance.vacancies = instance.archived_vacancies
-        elif instance.order_by == "importance/date" and instance.view == "current":
-            instance.vacancies = instance.all_current_vacancies.order_by('importance').reverse()
+        elif instance.order_by == "importance/date":
+            instance.vacancies = instance.current_vacancies.order_by('importance').reverse()
         else: 
-            instance.vacancies = instance.all_current_vacancies
-            
+            instance.vacancies = instance.current_vacancies
+
     if "studentships" in instance.display:    # have we been asked to get studentships?
         print
-        print "============ Getting studentships ============"
+        print "---------------- Getting studentships ----------------"
         get_studentships(instance)            # go and get studentships
         if instance.view == "archive":
             instance.studentships = instance.archived_studentships
-        # keep top studentships together where appropriate - not in long lists if COLLECT_TOP_ALL_FORTHCOMING_EVENTS is False
-        elif instance.order_by == "importance/date" and (instance.view == "current" or COLLECT_TOP_ALL_FORTHCOMING_EVENTS):
-            instance.studentships = instance.all_current_studentships.order_by('importance').reverse()
+        elif instance.order_by == "importance/date":
+            instance.studentships = instance.current_studentships.order_by('importance').reverse()
         else: 
-            instance.studentships = instance.all_current_studentships
+            instance.studentships = instance.current_studentships
             
-        build_indexes(instance)
+    build_indexes(instance)
     set_links_to_more_views(instance)       # limit lists, set links to previous/archived/etc items as needed
     set_limits_and_indexes(instance)
     determine_layout_settings(instance)     # work out a layout
     set_templates(instance)                 # choose template files
     set_layout_classes(instance)            # apply CSS classes
+
     return instance
 
 def set_defaults(instance):
     # set defaults
     instance.vacancies, instance.studentships = None, None
-    instance.all_current_vacancies, instance.all_current_studentships = [], []
+    instance.current_vacancies, instance.current_studentships = [], []
     instance.archived_vacancies, instance.archived_studentships = [], []
     instance.other_vacancies, instance.other_studentships = [], []
-    instance.all_current_vacancies, instance.all_current_studentships = [], []        # actual forthcoming studentships
+    instance.current_vacancies, instance.current_studentships = [], []        # actual forthcoming studentships
     instance.show_vacancies_when = instance.show_studentships_when = True # show date groupers?
     instance.vacanciesindex = instance.studentshipsindex = False # show an index?
     instance.vacancies_index_items, instance.studentships_index_items = [], []
@@ -119,17 +120,17 @@ def set_links_to_more_views(instance):
             instance.link_to_vacancies_and_studentships_page = instance.entity.get_related_info_page_url("vacancies-and-studentships")
 
     # not a plugin, but showing current studentships items on main page
-    if instance.type == "main_page" or instance.type == "sub_page":
+    if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
         if instance.view == "current":
 
             # studentships
-            if instance.archived_studentships or instance.all_current_studentships:
+            if instance.archived_studentships or instance.current_studentships:
                 if instance.limit_to and len(instance.studentships) > instance.limit_to:
-                    if instance.all_current_studentships.count() > instance.limit_to:
+                    if instance.current_studentships.count() > instance.limit_to:
                         instance.other_studentships.append({
                             "link":instance.entity.get_related_info_page_url("all-current-studentships"), 
                             "title":"all forthcoming studentships", 
-                            "count": instance.all_current_studentships.count(),}
+                            "count": instance.current_studentships.count(),}
                             )
             if instance.archived_studentships:
                 instance.other_studentships.append({
@@ -139,13 +140,13 @@ def set_links_to_more_views(instance):
                     )    
 
             # vacancies
-            if instance.archived_vacancies or instance.all_current_vacancies:
+            if instance.archived_vacancies or instance.current_vacancies:
                 if instance.limit_to and len(instance.vacancies) > instance.limit_to:
-                    if instance.all_current_vacancies.count() > instance.limit_to:
+                    if instance.current_vacancies.count() > instance.limit_to:
                         instance.other_vacancies.append({
                             "link":instance.entity.get_related_info_page_url("all-current-vacancies"), 
                             "title":"all forthcoming vacancies", 
-                            "count": instance.all_current_vacancies.count(),}
+                            "count": instance.current_vacancies.count(),}
                             )
             if instance.archived_vacancies:
                 instance.other_vacancies.append({
@@ -157,17 +158,18 @@ def set_links_to_more_views(instance):
         # an archive
         elif instance.view == "archive":
 
-            if instance.all_current_vacancies[instance.default_limit:]:
+            if instance.current_vacancies[instance.default_limit:]:
                 instance.other_vacancies = [{
                     "link":instance.entity.get_related_info_page_url("all-current-vacancies"), 
                     "title":"all current vacancies", 
-                    "count": instance.all_current_vacancies.count(),}]                
+                    "count": instance.current_vacancies.count(),}]                
 
-            if instance.all_current_studentships[instance.default_limit:]:
+            if instance.current_studentships[instance.default_limit:]:
                 instance.other_studentships = [{
                     "link":instance.entity.get_related_info_page_url("all-current-studentships"), 
                     "title":"all current studentships", 
-                    "count": instance.all_current_studentships.count(),}]                
+                    "count": instance.current_studentships.count(),}]                
+    
     return
 
 def set_limits_and_indexes(instance):
@@ -250,31 +252,9 @@ def set_layout_classes(instance):
             instance.row_class=instance.row_class+" columns1"
     return
                     
-def get_actual_studentships(instance):
-    actual_studentships = get_all_studentships(instance).filter(
-        # if it's (not a series and not a child) or if its parent is a series ....
-        Q(series = False, parent = None) | Q(parent__series = True,  parent__do_not_advertise_children = False), 
-        # ... and it's (a single-day studentship starting after today) or (not a single-day studentship and ends after today)     
-        Q(single_day_studentship = True, start_date__gte = datetime.now()) | Q(single_day_studentship = False, end_date__gte = datetime.now())
-        ).order_by('start_date')
-    print "_____________________________________________________"
-    print "Actual studentships", actual_studentships.count()
-    return actual_studentships
-
-def get_archived_studentships(instance):
-    archived_studentships = get_all_studentships(instance).filter(
-        # if it's (not a series and not a child) or if its parent is a series ....
-        Q(series = False, parent = None) | Q(parent__series = True,  parent__do_not_advertise_children = False), 
-        # ... and it's (a single-day studentship starting after today) or (not a single-day studentship and ends after today)     
-        Q(single_day_studentship = True, start_date__lt = datetime.now()) | Q(single_day_studentship = False, end_date__lt = datetime.now())
-        )
-    print "_____________________________________________________"
-    print "Previous studentships", archived_studentships.count()
-    return archived_studentships        
-
 def get_studentships(instance):
     """
-    returns all_current_studentships, archived_studentships, series_studentships
+    returns current_studentships, archived_studentships, series_studentships
     """
     print "____ get_studentships() ____"
     if instance.type == "for_person":
@@ -293,45 +273,19 @@ def get_studentships(instance):
         #     all_studentships = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
     print "All studentships", instance.type, all_studentships.count()
             
-    instance.all_current_studentships = all_studentships.filter(closing_date__gte = datetime.now())
+    instance.current_studentships = all_studentships.filter(closing_date__gte = datetime.now())
     instance.archived_studentships = all_studentships.exclude(closing_date__gte = datetime.now())
         
     print "Previous studentships", instance.archived_studentships.count()
         
     return 
     
-def get_actual_vacancies(instance):
-    print "get_actual_vacancies"
-    actual_vacancies = get_vacancies(instance).filter(
-        # if it's (not a series and not a child) or if its parent is a series ....
-        Q(series = False, parent = None) | Q(parent__series = True,  parent__do_not_advertise_children = False), 
-        # ... and it's (a single-day vacancy starting after today) or (not a single-day vacancy and ends after today)     
-        Q(single_day_vacancy = True, start_date__gte = datetime.now()) | Q(single_day_vacancy = False, end_date__gte = datetime.now())
-        ).order_by('start_date')
-    print "_____________________________________________________"
-    print "Actual vacancies", actual_vacancies.count()
-    return actual_vacancies
-
-def get_archived_vacancies(instance):
-    archived_vacancies = get_vacancies(instance).filter(
-        # if it's (not a series and not a child) or if its parent is a series ....
-        Q(series = False, parent = None) | Q(parent__series = True,  parent__do_not_advertise_children = False), 
-        # ... and it's (a single-day vacancy starting after today) or (not a single-day vacancy and ends after today)     
-        Q(single_day_vacancy = True, start_date__lt = datetime.now()) | Q(single_day_vacancy = False, end_date__lt = datetime.now())
-        )
-    print "_____________________________________________________"
-    print "Previous vacancies", archived_vacancies.count()
-    return archived_vacancies        
-
 def get_vacancies(instance):
     """
-    returns all_current_vacancies, archived_vacancies, series_vacancies
     """
     print "____ get_vacancies() ____"
     if instance.type == "for_person":
         all_vacancies = instance.person.vacancy_featuring.all()
-    elif instance.type == "for_place":
-        all_vacancies = instance.place.vacancy_set.all()
     # most likely, we're getting vacancies related to an entity
     elif MULTIPLE_ENTITY_MODE and instance.entity:
         all_vacancies = Vacancy.objects.filter( \
@@ -342,13 +296,10 @@ def get_vacancies(instance):
 
         # if an entity should automatically publish its descendants' items
         #     all_vacancies = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-    print "All vacancies", instance.type, all_vacancies.count()
+    print "All vacancies", all_vacancies.count()
             
-    instance.all_current_vacancies = all_vacancies.filter(closing_date__gte = datetime.now())
+    instance.current_vacancies = all_vacancies.filter(closing_date__gte = datetime.now())
     instance.archived_vacancies = all_vacancies.exclude(closing_date__gte = datetime.now())
-        
-    print "Archived vacancies", instance.archived_vacancies.count()
-        
     return 
 
 

@@ -28,7 +28,7 @@
 			</ul>
 			{% ifequal vacancies_and_studentships.type "main_page" %}
 			    {% if vacancies_and_studentships.other_vacancies %}
-    				<ul class="fancy close top-border">
+    				<ul class="fancy close other-items">
     					{% for item in vacancies_and_studentships.other_vacancies %}
     						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
@@ -70,7 +70,7 @@
 
 			{% ifequal vacancies_and_studentships.type "main_page" %}
     			{% if vacancies_and_studentships.other_studentships %}
-    				<ul class="fancy close top-border">
+    				<ul class="fancy close other-items">
     					{% for item in vacancies_and_studentships.other_studentships %}
     						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}

@@ -99,7 +99,7 @@ class VacanciesPlugin(CMSPlugin):
         )
     layout = models.CharField(max_length=25, choices = LAYOUTS, default = "sidebyside")
     DISPLAY = (
-        (u"vacancie_and_studentships", u"Vacancies and studentships"),
+        (u"vacancies studentships", u"Vacancies and studentships"),
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
         )

@@ -25,7 +25,7 @@ def common_settings(request, slug):
     instance.entity = entity
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "vacancies-and-studentships"
-    instance.format = "details"
+    instance.format = "details image"
     instance.layout = layout
     instance.view = "current"
     return instance, context, entity
@@ -35,7 +35,6 @@ def vacancies_and_studentships(request, slug = getattr(default_entity,"slug", No
     main_page_body_file = "vacancies_and_studentships_lists.html"
 
     instance.type = "main_page"
-    instance.show_images = True
     get_vacancies_and_studentships(instance)
 
     meta = {"description": "Vacancies and studentships",}
