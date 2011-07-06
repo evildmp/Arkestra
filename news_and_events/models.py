@@ -74,15 +74,15 @@ class NewsAndEvents(models.Model):
         else:
             return None
     
+    def external_site(self):
+        return self.external_url.external_site
+            
     def get_importance(self):
-        if self.importance and not COLLECT_TOP_ALL_FORTHCOMING_EVENTS: # if they are not being gathered together, mark them as important
+        if self.importance: # if they are not being gathered together, mark them as important
             return "important"
         else:
             return ""
 
-    def external_site(self):
-        return self.external_url.external_site
-            
     def save(self, *args, **kwargs):
         print "saving news/event", self
                 # print "ext url", self.input_url
@@ -251,6 +251,9 @@ class Event(NewsAndEvents):
             else:
                 times = time(start_time)
             return times
+    def get_image(self):
+        return self.image or (self.parent.get_image() if self.parent else None)
+
     def check_date(self): # we need somehow to send a message to the user about this
         if not self.children.all():
             return
@@ -408,32 +411,35 @@ class NewsAndEventsPlugin(CMSPlugin):
         ("sidebyside", u"Side-by-side"),
         ("stacked", u"Stacked"),
         )
-    layout = models.CharField(max_length=25, choices = LAYOUTS, default = "sidebyside")
+    layout = models.CharField("Plugin layout", max_length=25, choices = LAYOUTS, default = "sidebyside")
     DISPLAY = (
         ("news_and_events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
-    display = models.CharField(max_length=25,choices = DISPLAY, default = "news_and_events")
+    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news_and_events")
     FORMATS = (
         ("title", u"Title only"),
-        ("details", u"Details"),
-        ("featured horizontal", u"Featured items (horizontal)"),
-        ("featured vertical", u"Featured items (vertical)"),
+        ("details image", u"Details"),
         )
-    format = models.CharField(max_length=25,choices = FORMATS, default = "title")
-    
+    format = models.CharField("Item format", max_length=25,choices = FORMATS, default = "details image")    
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
     ORDERING = (
-        ("date", u"Date"),
+        ("date", u"Date alone"),
         ("importance/date", u"Importance & date"),
         )
-    order_by = models.CharField(max_length = 25, choices=ORDERING, default="date")
+    order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
+    LIST_FORMATS = (
+        ("vertical", u"Vertical"),
+        ("horizontal", u"Horizontal"),
+        )
+    list_format = models.CharField("List format", max_length = 25, choices=LIST_FORMATS, default="vertical")
+    group_dates = models.BooleanField("Show date groups", default = True)
     entity = models.ForeignKey(Entity, null = True, blank = True, 
         help_text = "Leave blank for autoselect", 
         related_name = "news_events_plugin")
     show_previous_events = models.BooleanField()
-    limit_to = models.PositiveSmallIntegerField(default = 5, null = True, blank = True, 
+    limit_to = models.PositiveSmallIntegerField("Maximum number of items", default = 5, null = True, blank = True, 
         help_text = u"Leave blank for no limit")
     news_heading_text = models.CharField(max_length = 25, default = "News")
     events_heading_text = models.CharField(max_length = 25, default = "Events")

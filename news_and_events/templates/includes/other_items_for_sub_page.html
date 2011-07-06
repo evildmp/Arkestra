@@ -1,13 +1,13 @@
 {% ifequal news_and_events.type "sub_page" %}
-	<ul class="fancy close top-border">
+	<ul class="close icons other-items">
 		{% for item in news_and_events.other_news %}
-			<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+			<li><a href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
 		{% endfor %}
 		{% for item in news_and_events.other_events %}
-			<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+			<li><a href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
 		{% endfor %}
         {% if news_and_events.link_to_news_and_events_page %}
-            <li><strong><a class = "linkIcon" href = "{{news_and_events.link_to_news_and_events_page}}">{{ news_and_events.entity.short_name }} {{ news_and_events.entity.news_page_menu_title|lower }} page</a></strong></li>
+            <li><strong><a href = "{{news_and_events.link_to_news_and_events_page}}">{{ news_and_events.entity.short_name }} {{ news_and_events.entity.news_page_menu_title|lower }} page</a></strong></li>
     	{% endif %}
 	</ul>
 {% endifequal %}

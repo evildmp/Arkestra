@@ -9,29 +9,29 @@
 				<h{{ news_and_events.heading_level }}>{{ news_and_events.news_heading_text }}</h{{ news_and_events.heading_level }}>
 			{% endif %}
 
-			<ul class="{{ news_and_events.news_list_class}}">
+			<ul class="{{ news_and_events.list_format}} plugin-list">
 		        {% if news_and_events.show_news_when %}
 						{% regroup news_and_events.news by get_when as newslist %}
 						{% for get_when in newslist %}
 							<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
 							    <ul>
 					        		{% for news_article in get_when.list %}
-										{% include news_and_events.news_list_item_template %}
+										{% include "includes/news_list_item.html" %}
 					        	    {% endfor %}
 					        	</ul>
 					    	</li>
 					{% endfor %}
 		    	{% else %}
 					{% for news_article in news_and_events.news %}
-						{% include news_and_events.news_list_item_template %}
+						{% include "includes/news_list_item.html" %}
 					{% endfor %}
 				{% endif %}
 			</ul>
 			{% ifequal news_and_events.type "main_page" %}
 			    {% if news_and_events.other_news %}
-    				<ul class="fancy close top-border">
+    				<ul class="close other-items icons">
     					{% for item in news_and_events.other_news %}
-    						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
     					{% endfor %}
     				</ul>
     			{% endif %}
@@ -49,14 +49,14 @@
 			{% endif %}
 
 			{% if news_and_events.events %}
-			    <ul class="{{ news_and_events.events_list_class}}">
+			    <ul class="{{ news_and_events.list_format}} plugin-list">
 				    {% if news_and_events.show_events_when %}	        	
 			    	    {% regroup news_and_events.events by get_when as eventlist %}
 			       	    {% for get_when in eventlist %}
 			        		<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
 			    				<ul>
 			    		    		{% for event in get_when.list %}
-			    						{% include news_and_events.events_list_item_template %}
+										{% include "includes/events_list_item.html" %}
 			    		    	    {% endfor %}
 			    				</ul>
 			    			</li>
@@ -64,7 +64,7 @@
 
 				    {% else %}
 				    		{% for event in news_and_events.events %}
-								{% include news_and_events.events_list_item_template %}
+								{% include "includes/events_list_item.html" %}
 				    	    {% endfor %}
 				    {% endif %}
 				</ul>	
@@ -85,9 +85,9 @@
 
 			{% ifequal news_and_events.type "main_page" %}
     			{% if news_and_events.other_events %}
-    				<ul class="fancy close top-border">
+    				<ul class="close other-items icons">
     					{% for item in news_and_events.other_events %}
-    						<li><a class = "linkIcon" href = "{{item.link}}">{{item.title|capfirst }} ({{ item.count }} item{{ item.count|pluralize }})</a></li>
+    						<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
     					{% endfor %}
     				</ul>
     			{% endif %}

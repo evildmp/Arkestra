@@ -26,7 +26,7 @@ def common_settings(request, slug):
     instance.entity = entity
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "news-and-events"
-    instance.format = "details"
+    instance.format = "details image"
     instance.layout = layout
     instance.view = "current"
     return instance, context, entity
@@ -36,7 +36,6 @@ def news_and_events(request, slug = getattr(default_entity,"slug", None)):
     main_page_body_file = "news_and_event_lists.html"
 
     instance.type = "main_page"
-    instance.show_images = True
     get_news_and_events(instance)
 
     meta = {"description": "Recent news and forthcoming events",}

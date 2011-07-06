@@ -146,7 +146,6 @@ class EventForm(NewsAndEventsForm):
         model = Event
 
     def clean(self):
-        super(EventForm, self).clean()
         # 1. obtain missing information from parent
         parent = self.cleaned_data['parent']
         if parent:
@@ -170,6 +169,9 @@ class EventForm(NewsAndEventsForm):
                     messages.add_message(self.request, messages.INFO, message)
                 else:
                     raise forms.ValidationError("I'm terribly sorry, I can't work out when this event is supposed to start. You'll have to enter that information yourself.")
+
+        # 2. go and do the checks in the parent class
+        super(EventForm, self).clean()
         
         # 3. check dates
         if self.cleaned_data["start_date"]:

@@ -26,16 +26,23 @@ def get_news_and_events(instance):
         importance/date:    show important items first, then by date
         date:               by date only
 
+    instance.group_dates    show get_whens to group items
+        
     instance.format
-        featured horizontal:    limited to 3, layout stacked, importance/date, use images
-        featured vertical:      limited to 3, importance/date, use images
+        title
+        details
 
-    instance.type
+    instance.list_format    
+        horizontal:         limited to 3, layout: stacked, format: details 
+        vertical:
+
+    instance.type       
         main_page       a main news and events page
         sub_page        news archive, events archive, all forthcoming events (the only kind that has indexes)
         plugin          produced by a plugin
         for_person      raised by a {% person_events %} tag in a person template
         for_place       raised by a {% place_events %} tag in a place template
+        menu            the menu needs to know for the auto news & events page
         
     newsindex
     eventsindex
@@ -46,11 +53,13 @@ def get_news_and_events(instance):
     print "___________________________ Getting news and events _______________________"
     print 
     set_defaults(instance)                  # initialise some variables
+    print "instance.type", instance.type
     print "instance.display", instance.display
     print "instance.view", instance.view
     print "instance.order_by", instance.order_by
+    print "instance.group_dates", instance.group_dates
     print "instance.format", instance.format
-    print "instance.type", instance.type
+    print "instance.list_format", instance.list_format
     print "instance.limit_to", instance.limit_to
     print "instance.layout", instance.layout
  
@@ -58,7 +67,7 @@ def get_news_and_events(instance):
 
     if "news" in instance.display:          # have we been asked to get news?
         print
-        print "============ Getting news ============"
+        print "---------------- Getting news ----------------"
         if instance.order_by == "importance/date":
             top_news, ordinary_news = get_news_ordered_by_importance_and_date(instance)
             instance.news =  top_news + ordinary_news
@@ -67,39 +76,39 @@ def get_news_and_events(instance):
         
     if "events" in instance.display:    # have we been asked to get events?
         print
-        print "============ Getting events ============"
+        print "---------------- Getting events ----------------"
         get_events(instance)            # go and get events
         if instance.view == "archive":
-            instance.events = instance.previous_events
+            instance.events = list(instance.previous_events)
         # keep top events together where appropriate - not in long lists if COLLECT_TOP_ALL_FORTHCOMING_EVENTS is False
         elif instance.order_by == "importance/date" and (instance.view == "current" or COLLECT_TOP_ALL_FORTHCOMING_EVENTS):
             get_events_ordered_by_importance_and_date(instance)
             instance.events = instance.top_events + instance.ordinary_events
         else: 
-            instance.events = instance.forthcoming_events
-        build_indexes(instance)
+            instance.events = list(instance.forthcoming_events)
+
+    build_indexes(instance)
     set_links_to_more_views(instance)       # limit lists, set links to previous/archived/etc items as needed
     set_limits_and_indexes(instance)
     determine_layout_settings(instance)     # work out a layout
-    set_templates(instance)                 # choose template files
     set_layout_classes(instance)            # apply CSS classes
+
     return instance
 
 def set_defaults(instance):
     # set defaults
-    instance.news = instance.events = None
+    instance.news, instance.events = [], []
     instance.link_to_news_and_events_page = None # link to more news and/or events for this entity
     instance.other_events = []  # a list of dicts recording what other events are available
     instance.forthcoming_events = []        # actual forthcoming events
     instance.other_news = []                # dicts recording kinds of other news available
     instance.show_news_when = instance.show_events_when = True # show date groupers?
     instance.newsindex = instance.eventsindex = False # show an index?
-    instance.news_index_items = instance.events_index_items = []
+    instance.news_index_items, instance.events_index_items = [], []
     instance.limit_to = getattr(instance, "limit_to", None)
     instance.layout = getattr(instance, "layout", "sidebyside")
-    instance.show_images = getattr(instance, "show_images", True)
+    instance.list_format = getattr(instance, "list_format", "vertical")
     instance.show_venue = getattr(instance, "show_venue", True)
-    instance.at_venue = getattr(instance, "at_venue", None) # if specified, only show venue's events
     # are we looking at current or archived items?
     try:
         instance.view
@@ -113,16 +122,15 @@ def set_links_to_more_views(instance):
     if this is a plugin, create the "More news/events" link
     limits "current" views to the number of items specified in settings
     """
-    if instance.type == "plugin":
+    if instance.type == "plugin" or instance.type == "sub_page":
         if (instance.news or instance.events) and instance.entity.auto_news_page:
             instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
 
     # not a plugin, but showing current events items on main page
-    if instance.type == "main_page" or instance.type == "sub_page":
+    if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
         if instance.view == "current":
             if instance.previous_events or instance.forthcoming_events:
                 if instance.limit_to and len(instance.events) > instance.limit_to:
-                    # instance.events = instance.events[:instance.limit_to]
                     if instance.forthcoming_events.count() > instance.limit_to:
                         instance.other_events.append({
                             "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
@@ -138,14 +146,15 @@ def set_links_to_more_views(instance):
             if instance.news:
                 all_news_count = len(instance.news)
                 if instance.limit_to and all_news_count > instance.limit_to:
-                    # instance.news = instance.news[:instance.limit_to]
                     instance.other_news = [{
                         "link":instance.entity.get_related_info_page_url("news-archive"), 
                         "title":"news archive",
                         "count": all_news_count,}]
         # an archive
         elif instance.view == "archive":
-            if instance.forthcoming_events[instance.default_limit:]:
+            print ">>>>>>>>", instance.forthcoming_events
+
+            if instance.forthcoming_events:
                 instance.other_events = [{
                     "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
                     "title":"all forthcoming events", 
@@ -155,67 +164,65 @@ def set_links_to_more_views(instance):
 def set_limits_and_indexes(instance):
     if instance.news and len(instance.news) > instance.limit_to:
         instance.news = instance.news[:instance.limit_to]
-        instance.news_index_items = [newsitem for newsitem in instance.news if not getattr(newsitem, 'sticky', False)] # put non-top items in it
+
+    instance.news_index_items = [newsitem for newsitem in instance.news if not getattr(newsitem, 'sticky', False)] # put non-top items in it
     no_of_news_get_whens = len(set(newsarticle.get_when() for newsarticle in instance.news_index_items))
+
     if instance.type == "sub_page" and len(set(newsarticle.get_when() for newsarticle in instance.news_index_items)) > 1: # more than get_when()?
         instance.newsindex = True   # show an index
-    if "featured" in instance.format or no_of_news_get_whens < 2:
-        instance.show_news_when = False
+    instance.show_news_when = instance.group_dates and not ("horizontal" in instance.list_format or no_of_news_get_whens < 2)
 
     if instance.events and len(instance.events) > instance.limit_to:
         instance.events = instance.events[:instance.limit_to]
-        instance.events_index_items = [event for event in instance.events if not getattr(event, 'sticky', False)]
+
+    instance.events_index_items = [event for event in instance.events if not getattr(event, 'sticky', False)]
     no_of_event_get_whens = len(set(event.get_when() for event in instance.events_index_items))
-    print no_of_event_get_whens
     if instance.type == "sub_page" and no_of_event_get_whens > 1:
         instance.eventsindex = True
-    if "featured" in instance.format or no_of_event_get_whens < 2:
-        instance.show_events_when = False
+    instance.show_events_when = instance.group_dates and not ("horizontal" in instance.list_format or no_of_event_get_whens < 2)
 
 def determine_layout_settings(instance):
-    # determine layout and other settings
-    # instance.image_size
-    # show_news_when, instance.show_events_when
-    
-    if "featured" in instance.format:
-        instance.image_size = (75,75)
-
-        if "horizontal" in instance.format:
-            instance.news_list_class = instance.events_list_class = "row columns" + str(instance.limit_to) + " " + instance.format
-
-            if instance.news:
-                for item in instance.news:
-                    item.column_class = "column"
-                    item.list_item_template = "includes/news_list_item_featured.html"
-                instance.news[0].column_class = instance.news[0].column_class + " firstcolumn"
-                instance.news[-1].column_class = instance.news[-1].column_class + " lastcolumn"
-
-            if instance.events:
-                for item in instance.events:
-                    item.column_class = "column"
-                instance.events[0].column_class = instance.events[0].column_class + " firstcolumn"
-                instance.events[-1].column_class = instance.events[-1].column_class + " lastcolumn"               
+    """
+    Sets:
+        image_size
+        list_format
         
-        elif "vertical" in instance.format:
-            instance.news_list_class = instance.events_list_class = "row columns1"
-        instance.format = "featured"
-    else:
+    
+    """
+    if "image" in instance.format:
         instance.image_size = (75,75)
-        instance.news_list_class = instance.events_list_class = "news-and-events"
-        # instance.show_events_when = True    # no when group in featured style
-    return
 
-def set_templates(instance):
-    # set the templates for the list items
-    instance.news_list_item_template = "includes/news_list_item_" + instance.format + ".html"
-    instance.events_list_item_template = "includes/event_list_item_" + instance.format + ".html"
+    # set columns for horizontal lists
+    if "horizontal" in instance.list_format:
+        instance.list_format = "row columns" + str(instance.limit_to) + " " + instance.list_format
+
+        if instance.news:
+            for item in instance.news:
+                item.column_class = "column"
+                item.list_item_template = "includes/news_list_item_featured.html"
+            instance.news[0].column_class = instance.news[0].column_class + " firstcolumn"
+            instance.news[-1].column_class = instance.news[-1].column_class + " lastcolumn"
+
+        if instance.events:
+            for item in instance.events:
+                item.column_class = "column"
+            instance.events[0].column_class = instance.events[0].column_class + " firstcolumn"
+            instance.events[-1].column_class = instance.events[-1].column_class + " lastcolumn"               
+    
+    elif "vertical" in instance.format:
+        instance.list_format = "row columns1"
+
+    # else:
+    #     instance.image_size = (75,75)
+    #     instance.list_format = "news-and-events"
+    #     # instance.show_events_when = True    # no when group in featured style
     return
 
 def set_layout_classes(instance):
     """
     Lays out the plugin's news and events divs
     """
-    instance.row_class="plugin row"
+    instance.row_class="row"
     # if news and events will be side-by-side
     if instance.layout == "sidebyside":
         instance.news_div_class = instance.events_div_class = "column firstcolumn" # if both news & events we set the events column a few lines later

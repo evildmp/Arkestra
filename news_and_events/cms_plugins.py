@@ -16,10 +16,11 @@ class NewsAndEventsPluginForm(forms.ModelForm):
     class Meta:
         model = NewsAndEventsPlugin
     def clean(self):
-        if "featured" in self.cleaned_data["format"]:
+        if "horizontal" in self.cleaned_data["list_format"]:
             self.cleaned_data["order_by"] = "importance/date"
-        if self.cleaned_data["format"] == "featured horizontal":
+            self.cleaned_data["format"] = "details image"
             self.cleaned_data["layout"] = "stacked"
+            self.cleaned_data["group_dates"] = False
             if self.cleaned_data["limit_to"] >3:
                 self.cleaned_data["limit_to"] = 3
             if self.cleaned_data["limit_to"] < 2:
@@ -38,7 +39,7 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
     
     fieldsets = (
         (None, {
-        'fields': (('display', 'layout',),  ( 'format', 'order_by',), 'limit_to')
+        'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
     }),
         ('Advanced options', {
         'classes': ('collapse',),
@@ -46,35 +47,15 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
     }),
     )
 
-    
-    """
-    fieldset_basic = (
-        (None, {
-        'fields': (('display', 'layout',),  ( 'format', 'order_by',), 'limit_to')
-    }),)
-    fieldset_advanced = (
-        ('Advanced options', {
-        'classes': ('collapse',),
-        'fields': ('entity', 'heading_level', ('news_heading_text', 'events_heading_text'), ('show_previous_events', ),)
-    }),
-    )
-
-    tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
-        )
-    """
 
     # autocomplete fields
     related_search_fields = ['entity',]
 
     def render(self, context, instance, placeholder):
         #print self.render_template
-        print "-- in render of CMSNewsAndEventsPlugin --"
+        print "======================= in render of CMSNewsAndEventsPlugin =================="
         instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
         instance.type = getattr(instance, "type", "plugin")
-        instance.show_images = getattr(instance, "show_images", True)
-        print "instance.show_images", instance.show_images
         try:
             render_template = instance.render_template
         except AttributeError:
