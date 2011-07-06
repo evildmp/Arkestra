@@ -111,10 +111,11 @@ def get_or_create_external_link(request, input_url, external_url, title, descrip
 
     return external_url
 
-def check_urls(request, url, allowed_schemes = [kind.scheme for kind in LinkType.objects.all()]):
+def check_urls(request, url, allowed_schemes = None):
     """
     Checks and reports on a URL that might end up in the database
     """
+    allowed_schemes = allowed_schemes or [kind.scheme for kind in LinkType.objects.all()]
     # parse the url and get some attributes
     purl = urlparse(url)
     scheme = purl.scheme
@@ -156,7 +157,6 @@ def check_urls(request, url, allowed_schemes = [kind.scheme for kind in LinkType
 class ExternalLinkForm(forms.ModelForm):
     class Meta:
         model = ExternalLink
-    allowed_schemes = [kind.scheme for kind in LinkType.objects.all()]
 
     def clean(self):
         url = self.cleaned_data.get('url', "")
