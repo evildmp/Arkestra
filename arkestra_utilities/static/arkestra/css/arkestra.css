@@ -1,6 +1,6 @@
 /* Within each row, columns are floated (all floated left, except for the last one which is floated right. We need the row to expand downwards to the bottom of the columns it contains, and it won't do this automatically because the columns are floated. So, this is a technique to insert some invisible content after the elements, and which pull down the bottom of the row. */
 
-.row:after, .expands:after	{
+.row:after, .expands:after, ul.plugin-list li:after	{
 		content: ".";
 		display: block;
 		height: 0;
@@ -115,18 +115,53 @@ li.column.lastcolumn	{
 
 /* we really need to fix some of these styles. the idea of a div.plugin ul li is quite out of date now and a nuisance */
 
-ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
-	
 ul, ol, dl  {margin-left: 0; padding-left: 0;}	
 ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}	
+
+ul	{margin-bottom: 1em;}
+ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
+
+
+
+ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
+ul.entity-tree li {margin: 0; padding: 0;}
+ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
+ul.entity-tree li {list-style: none;}
+
+
+/* icons */
+ul.icons    {
+    list-style: square; url(/media/images/hand-right.png);
+    padding-left: 20px;
+}
+
+/* plugin list items */
+ul.plugin-list.vertical li {list-style: none; padding-bottom: 0.6em;}
+ul.plugin-list.vertical li.important {padding: .5em; margin-bottom: 1em;	background: #ffe792;}
+
+/* groupers in plugin lists */
+ul.plugin-list li.grouper {font-weight: bold; color: #903;  }
+ul.plugin-list li.grouper ul {font-weight: normal; color: black;}
+
+
+/* list for links to other items, (e.g. news and events) */ 
+ul.other-items  {
+    border-top: 1px solid #999;
+    padding-top: 0.5em;
+    }
+
 	
+/*
+
+ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
+
 ul.linkIcon,
 ul.plugin,
 .fancy ul {
-		margin: 0;
-		padding: 0;
-		list-style:none;
-	}
+        margin: 0;
+        padding: 0;
+        list-style:none;
+    }
 
 ul.linkIcon li, 
 ul.plugin_list li,
@@ -138,7 +173,6 @@ ul.plugin_list li,
 div.plugin ul {
     font-weight: normal;
     list-style:none;
-    /* font-size: 1em; */
     }
 
 div.plugin ul li {
@@ -161,31 +195,21 @@ ul.none {list-style-type: none;}
 ul.linkIcon li, 
 .fancy li,  
 li.key   {
-	background: url(/media/images/hand-right.png) left .5ex no-repeat;
-	padding-left: 30px;
-	display: block;
-	}
+    background: url(/media/images/hand-right.png) left .5ex no-repeat;
+    padding-left: 30px;
+    display: block;
+    }
 
 .fancy li li,  
 li.key li    {
-	background: none;
-	padding-left: 20px;
-	display: block;
-	}
-	
-li.grouper {font-weight: bold; color: #903;  }
-li.grouper ul {font-weight: normal; color: black;}
-	
-li.key	{font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;}	
+    background: none;
+    padding-left: 20px;
+    display: block;
+    }
+    
+    
+li.key  {font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;} */
 
-ul	{margin-bottom: 1em;}
-ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
-
-li.grouper.top-news ul li , li.grouper.top-events ul li {padding: .5em; margin-bottom: 1em;	background: #eee;}
-ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
-ul.entity-tree li {margin: 0; padding: 0;}
-ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
-ul.entity-tree li {list-style: none;}
 
 /* used only in entity trees, I think */
 
