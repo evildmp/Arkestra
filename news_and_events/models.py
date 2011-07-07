@@ -91,6 +91,9 @@ class NewsAndEvents(models.Model):
         #     print created, self.external_url     
         super(NewsAndEvents, self).save(*args, **kwargs)
 
+    @property
+    def summary(self):
+        return self.subtitle
 
 
 class NewsArticle(NewsAndEvents):
@@ -204,6 +207,9 @@ class Event(NewsAndEvents):
             for child_event in self.children.all():
                 featuring.update(child_event.get_featuring(featuring))
         return featuring
+    @property
+    def date(self):
+        return self.start_date
     def get_date_if_needed_and_time_heading(self):
         date_time_heading = []
         if not self.series:
@@ -413,7 +419,7 @@ class NewsAndEventsPlugin(CMSPlugin):
         )
     layout = models.CharField("Plugin layout", max_length=25, choices = LAYOUTS, default = "sidebyside")
     DISPLAY = (
-        ("news_and_events", u"News and events"),
+        ("news & events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )

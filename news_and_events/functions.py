@@ -92,13 +92,38 @@ def get_news_and_events(instance):
     set_limits_and_indexes(instance)
     determine_layout_settings(instance)     # work out a layout
     set_layout_classes(instance)            # apply CSS classes
+    
 
+    instance.lists = [
+        {
+        "items": instance.news,
+        "other_items": instance.other_news,
+        "index_file": "arkestra/universal_date_index.html",
+        "index": instance.newsindex,
+        "index_items": instance.news_index_items,
+        "div_class": instance.news_div_class,
+        "heading_text": instance.news_heading_text,
+        "show_when": instance.show_news_when,
+        "item_file": "arkestra/universal_plugin_list_item.html",
+        },
+        {
+        "items": instance.events,
+        "other_items": instance.other_events,
+        "index_file": "arkestra/universal_date_index.html",
+        "index": instance.eventsindex,
+        "index_items": instance.events_index_items,
+        "div_class": instance.events_div_class,
+        "heading_text": instance.events_heading_text,
+        "show_when": instance.show_events_when,
+        "item_file": "arkestra/universal_plugin_list_item.html",
+        },
+    ]
     return instance
 
 def set_defaults(instance):
     # set defaults
     instance.news, instance.events = [], []
-    instance.link_to_news_and_events_page = None # link to more news and/or events for this entity
+    instance.link_to_main_page = None # link to more news and/or events for this entity
     instance.other_events = []  # a list of dicts recording what other events are available
     instance.forthcoming_events = []        # actual forthcoming events
     instance.other_news = []                # dicts recording kinds of other news available
@@ -109,6 +134,7 @@ def set_defaults(instance):
     instance.layout = getattr(instance, "layout", "sidebyside")
     instance.list_format = getattr(instance, "list_format", "vertical")
     instance.show_venue = getattr(instance, "show_venue", True)
+    instance.news_div_class = instance.events_div_class = ""
     # are we looking at current or archived items?
     try:
         instance.view
@@ -124,11 +150,13 @@ def set_links_to_more_views(instance):
     """
     if instance.type == "plugin" or instance.type == "sub_page":
         if (instance.news or instance.events) and instance.entity.auto_news_page:
-            instance.link_to_news_and_events_page = instance.entity.get_related_info_page_url("news-and-events")
+            instance.link_to_main_page = instance.entity.get_related_info_page_url("news-and-events")
+            instance.main_page_name = instance.entity.news_page_menu_title
 
     # not a plugin, but showing current events items on main page
     if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
         if instance.view == "current":
+            
             if instance.previous_events or instance.forthcoming_events:
                 if instance.limit_to and len(instance.events) > instance.limit_to:
                     if instance.forthcoming_events.count() > instance.limit_to:
@@ -152,7 +180,6 @@ def set_links_to_more_views(instance):
                         "count": all_news_count,}]
         # an archive
         elif instance.view == "archive":
-            print ">>>>>>>>", instance.forthcoming_events
 
             if instance.forthcoming_events:
                 instance.other_events = [{
@@ -450,7 +477,7 @@ def convert_and_save_old_format(instance):
         instance.format = "details"
         instance.save()
     if instance.display == "0":
-        instance.display = "news_and_events"
+        instance.display = "news & events"
         instance.save()
     if instance.display == "1":
         instance.display = "news"

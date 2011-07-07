@@ -34,7 +34,7 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
     name = _("News & events")
     text_enabled = True
     form = NewsAndEventsPluginForm
-    render_template = "news_and_event_lists.html"
+    render_template = "arkestra/universal_plugin_lister.html"
     admin_preview = False
     
     fieldsets = (
@@ -62,7 +62,7 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
             pass
         get_news_and_events(instance)
         context.update({ 
-            'news_and_events': instance,
+            'everything': instance,
             'placeholder': placeholder,
             })
         print "returning context"

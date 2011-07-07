@@ -33,7 +33,7 @@ def common_settings(request, slug):
 
 def news_and_events(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)    
-    main_page_body_file = "news_and_event_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     instance.type = "main_page"
     get_news_and_events(instance)
@@ -48,7 +48,7 @@ def news_and_events(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "news_and_events": instance,
+        'everything': instance,
         },
         context,
         )
@@ -64,7 +64,7 @@ def previous_events(request, slug = getattr(default_entity,"slug", None)):
     meta = {"description": "Archive of previous events",}
     title = str(entity)  + " previous events"
     pagetitle = str(entity) + " previous events"
-    main_page_body_file = "news_and_event_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -73,7 +73,7 @@ def previous_events(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "news_and_events": instance,
+        'everything': instance,
         },
         context,
         )
@@ -89,7 +89,7 @@ def all_forthcoming_events(request, slug = getattr(default_entity,"slug", None))
     meta = {"description": "All forthcoming events",}
     title = str(entity)  + " forthcoming events"
     pagetitle = str(entity) + " forthcoming events"
-    main_page_body_file = "news_and_event_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -98,7 +98,7 @@ def all_forthcoming_events(request, slug = getattr(default_entity,"slug", None))
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "news_and_events": instance,
+        'everything': instance,
         },
         context,
         )
@@ -115,7 +115,7 @@ def news_archive(request, slug = getattr(default_entity,"slug", None)):
     meta = {"description": "Archive of news items",}
     title = str(entity)  + " - news archive"
     pagetitle = str(entity) + " - news archive"
-    main_page_body_file = "news_and_event_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -124,7 +124,7 @@ def news_archive(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "news_and_events": instance,
+        'everything': instance,
         },
         context,
         )
