@@ -1,8 +1,0 @@
-{% load thumbnail humanize %}
-<li class = "{{ studentship_class }} {{vacancies.get_when|slugify}} news-list-item row">
-    {% if studentship.external_url %}<strong><a class = "external" href="{{ studentship.get_absolute_url }}">{{studentship.short_title}}</a></strong> - <span class="site-name">{{ studentship.external_url.external_site }}</span>
-    {% else %}<strong><a href="{{ studentship.get_absolute_url }}">{{studentship.short_title}}</a></strong>{% endif %}
-    {% if studentship.image %}{% thumbnail studentship.image.file vacancies_and_studentships.image_size crop subject_location=studentship.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />{% endif %}
-    {% if studentship.subtitle %}<div class = "subtitle">{{ studentship.subtitle }}</div>{% endif %}
-    <div class = "date">{{ studentship.date|naturalday|capfirst }}</div>
-</li>

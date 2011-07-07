@@ -25,13 +25,19 @@ def get_vacancies_and_studentships(instance):
         importance/date:    show important items first, then by date
         date:               by date only
 
+    instance.group_dates    show get_whens to group items
+        
     instance.format
-        featured horizontal:    limited to 3, layout stacked, importance/date, use images
-        featured vertical:      limited to 3, importance/date, use images
+        title
+        details
+
+    instance.list_format    
+        horizontal:         limited to 3, layout: stacked, format: details 
+        vertical:
 
     instance.type
         main_page       a main vacancies and studentships page
-        sub_page        archive, all forthcoming
+        sub_page        archive, all forthcoming (the only kind that has indexes)
         plugin          produced by a plugin
         for_person      raised by a {% person_studentships %} tag in a person template
         menu            the menu needs to know for the auto vacancies & studentships page
@@ -45,11 +51,13 @@ def get_vacancies_and_studentships(instance):
     print "___________________________ Getting vacancies and studentships _______________________"
     print 
     set_defaults(instance)                  # initialise some variables
+    print "instance.type", instance.type
     print "instance.display", instance.display
     print "instance.view", instance.view
     print "instance.order_by", instance.order_by
+    print "instance.group_dates", instance.group_dates
     print "instance.format", instance.format
-    print "instance.type", instance.type
+    print "instance.list_format", instance.list_format
     print "instance.limit_to", instance.limit_to
     print "instance.layout", instance.layout
  
@@ -60,22 +68,22 @@ def get_vacancies_and_studentships(instance):
         print "---------------- Getting vacancies ----------------"
         get_vacancies(instance)            # go and get vacancies
         if instance.view == "archive":
-            instance.vacancies = instance.archived_vacancies
-        elif instance.order_by == "importance/date":
-            instance.vacancies = instance.current_vacancies.order_by('importance').reverse()
+            instance.vacancies = list(instance.archived_vacancies)
+        elif instance.order_by == "importance/date" and instance.view == "current":
+            instance.vacancies = list(instance.current_vacancies.order_by('importance').reverse())
         else: 
-            instance.vacancies = instance.current_vacancies
+            instance.vacancies = list(instance.current_vacancies)
 
     if "studentships" in instance.display:    # have we been asked to get studentships?
         print
         print "---------------- Getting studentships ----------------"
         get_studentships(instance)            # go and get studentships
         if instance.view == "archive":
-            instance.studentships = instance.archived_studentships
-        elif instance.order_by == "importance/date":
-            instance.studentships = instance.current_studentships.order_by('importance').reverse()
+            instance.studentships = list(instance.archived_studentships)
+        elif instance.order_by == "importance/date" and instance.view == "current":
+            instance.studentships = list(instance.current_studentships.order_by('importance').reverse())
         else: 
-            instance.studentships = instance.current_studentships
+            instance.studentships = list(instance.current_studentships)
             
     build_indexes(instance)
     set_links_to_more_views(instance)       # limit lists, set links to previous/archived/etc items as needed
@@ -84,6 +92,30 @@ def get_vacancies_and_studentships(instance):
     set_templates(instance)                 # choose template files
     set_layout_classes(instance)            # apply CSS classes
 
+    instance.lists = [
+        {
+        "items": instance.vacancies,
+        "other_items": instance.other_vacancies,
+        "index_file": "arkestra/universal_date_index.html",
+        "index": instance.vacanciesindex,
+        "index_items": instance.vacancies_index_items,
+        "div_class": instance.vacancies_div_class,
+        "heading_text": instance.vacancies_heading_text,
+        "show_when": instance.show_vacancies_when,
+        "item_file": "arkestra/universal_plugin_list_item.html",
+        },
+        {
+        "items": instance.studentships,
+        "other_items": instance.other_studentships,
+        "index_file": "arkestra/universal_date_index.html",
+        "index": instance.studentshipsindex,
+        "index_items": instance.studentships_index_items,
+        "div_class": instance.studentships_div_class,
+        "heading_text": instance.studentships_heading_text,
+        "show_when": instance.show_studentships_when,
+        "item_file": "arkestra/universal_plugin_list_item.html",
+        },
+    ]
     return instance
 
 def set_defaults(instance):
@@ -96,7 +128,6 @@ def set_defaults(instance):
     instance.show_vacancies_when = instance.show_studentships_when = True # show date groupers?
     instance.vacanciesindex = instance.studentshipsindex = False # show an index?
     instance.vacancies_index_items, instance.studentships_index_items = [], []
-    instance.link_to_vacancies_and_studentships_page = None
     instance.limit_to = getattr(instance, "limit_to", None)
     instance.layout = getattr(instance, "layout", "sidebyside")
     instance.show_images = getattr(instance, "show_images", True)
@@ -115,10 +146,11 @@ def set_links_to_more_views(instance):
     if this is a plugin, create the "More vacancies/studentships" link
     limits "current" views to the number of items specified in settings
     """
-    if instance.type == "plugin":
+    if instance.type == "plugin"or instance.type == "sub_page":
         if (instance.vacancies or instance.studentships) and instance.entity.auto_vacancies_page:
-            instance.link_to_vacancies_and_studentships_page = instance.entity.get_related_info_page_url("vacancies-and-studentships")
-
+            instance.link_to_main_page = instance.entity.get_related_info_page_url("vacancies-and-studentships")
+            instance.main_page_name = instance.entity.vacancies_page_menu_title
+            
     # not a plugin, but showing current studentships items on main page
     if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
         if instance.view == "current":
@@ -158,13 +190,13 @@ def set_links_to_more_views(instance):
         # an archive
         elif instance.view == "archive":
 
-            if instance.current_vacancies[instance.default_limit:]:
+            if instance.current_vacancies:
                 instance.other_vacancies = [{
                     "link":instance.entity.get_related_info_page_url("all-current-vacancies"), 
                     "title":"all current vacancies", 
                     "count": instance.current_vacancies.count(),}]                
 
-            if instance.current_studentships[instance.default_limit:]:
+            if instance.current_studentships:
                 instance.other_studentships = [{
                     "link":instance.entity.get_related_info_page_url("all-current-studentships"), 
                     "title":"all current studentships", 

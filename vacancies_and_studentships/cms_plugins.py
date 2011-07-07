@@ -40,7 +40,7 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
     
     fieldsets = (
         (None, {
-        'fields': (('display', 'layout',),  ( 'format', 'order_by',), 'limit_to')
+        'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
     }),
         ('Advanced options', {
         'classes': ('collapse',),
@@ -63,7 +63,7 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
             pass
         get_vacancies_and_studentships(instance)
         context.update({ 
-            'vacancies_and_studentships': instance,
+            'everything': instance,
             'placeholder': placeholder,
             })
         print "returning context"

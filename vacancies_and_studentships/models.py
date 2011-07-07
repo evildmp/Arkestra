@@ -67,6 +67,10 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         get_when = nice_date(self.closing_date, date_format)
         return get_when
 
+    @property
+    def date(self):
+        return self.closing_date
+
     def __unicode__(self):
         return self.title    
 
@@ -106,16 +110,20 @@ class VacanciesPlugin(CMSPlugin):
     display = models.CharField(max_length=25,choices = DISPLAY, default = "news_and_events")
     FORMATS = (
         ("title", u"Title only"),
-        ("details", u"Details"),
-        ("featured horizontal", u"Featured items (horizontal)"),
-        ("featured vertical", u"Featured items (vertical)"),
+        ("details image", u"Details"),
         )
-    format = models.CharField(max_length=25,choices = FORMATS, default = "featured vertical")
+    format = models.CharField("Item format", max_length=25,choices = FORMATS, default = "details image")    
     ORDERING = (
         ("date", u"Date"),
         ("importance/date", u"Importance & date"),
         )
     order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
+    LIST_FORMATS = (
+        ("vertical", u"Vertical"),
+        ("horizontal", u"Horizontal"),
+        )
+    list_format = models.CharField("List format", max_length = 25, choices=LIST_FORMATS, default="vertical")
+    group_dates = models.BooleanField("Show date groups", default = True)
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
     entity = models.ForeignKey(Entity, null = True, blank = True, 
         help_text = "Leave blank for autoselect",

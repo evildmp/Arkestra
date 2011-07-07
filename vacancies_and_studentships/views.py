@@ -32,7 +32,7 @@ def common_settings(request, slug):
 
 def vacancies_and_studentships(request, slug = getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)    
-    main_page_body_file = "vacancies_and_studentships_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     instance.type = "main_page"
     get_vacancies_and_studentships(instance)
@@ -47,7 +47,7 @@ def vacancies_and_studentships(request, slug = getattr(default_entity,"slug", No
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "vacancies_and_studentships": instance,
+        'everything': instance,
         },
         context,
         )
@@ -63,7 +63,7 @@ def archived_vacancies(request, slug = getattr(default_entity,"slug", None)):
     meta = {"description": "Archive of vacancies",}
     title = str(entity)  + " archived vacancies"
     pagetitle = str(entity) + " archived vacancies"
-    main_page_body_file = "vacancies_and_studentships_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -72,7 +72,7 @@ def archived_vacancies(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "vacancies_and_studentships": instance,
+        'everything': instance,
         },
         context,
         )
@@ -88,7 +88,7 @@ def all_current_vacancies(request, slug = getattr(default_entity,"slug", None)):
     meta = {"description": "All current vacancies",}
     title = str(entity)  + " current vacancies"
     pagetitle = str(entity) + " current vacancies"
-    main_page_body_file = "vacancies_and_studentships_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -97,7 +97,7 @@ def all_current_vacancies(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "vacancies_and_studentships": instance,
+        'everything': instance,
         },
         context,
         )
@@ -113,7 +113,7 @@ def archived_studentships(request, slug = getattr(default_entity,"slug", None)):
     meta = {"description": "Archive of studentships",}
     title = str(entity)  + " archived studentships"
     pagetitle = str(entity) + " archived studentships"
-    main_page_body_file = "vacancies_and_studentships_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -122,7 +122,7 @@ def archived_studentships(request, slug = getattr(default_entity,"slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "vacancies_and_studentships": instance,
+        'everything': instance,
         },
         context,
         )
@@ -138,7 +138,7 @@ def all_current_studentships(request, slug = getattr(default_entity,"slug", None
     meta = {"description": "All current studentships",}
     title = str(entity)  + " current studentships"
     pagetitle = str(entity) + " current studentships"
-    main_page_body_file = "vacancies_and_studentships_lists.html"
+    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     return render_to_response(
         "contacts_and_people/entity_information.html",
@@ -147,7 +147,7 @@ def all_current_studentships(request, slug = getattr(default_entity,"slug", None
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": main_page_body_file,
-        "vacancies_and_studentships": instance,
+        'everything': instance,
         },
         context,
         )
