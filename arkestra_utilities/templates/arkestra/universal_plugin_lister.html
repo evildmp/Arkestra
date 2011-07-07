@@ -1,0 +1,45 @@
+<div class="{{ everything.row_class }} {{ everything.type }}">
+	{% for list in everything.lists %}
+		{% if list.items or list.other_items %}
+		
+			{% include list.index_file %}
+
+			<div class = "{{ list.div_class }}">
+				{% if everything.heading_level %}
+					<h{{ everything.heading_level }}>{{ list.heading_text }}</h{{ everything.heading_level }}>
+				{% endif %}
+
+				<ul class="{{ everything.list_format}} plugin-list">
+			        {% if list.show_when %}
+							{% regroup list.items by get_when as itemlist %}
+							{% for get_when in itemlist %}
+								<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
+								    <ul>
+						        		{% for item in get_when.list %}
+											{% include list.item_file %}
+						        	    {% endfor %}
+						        	</ul>
+						    	</li>
+						{% endfor %}
+			    	{% else %}
+						{% for item in list.items %}
+							{% include list.item_file %}
+						{% endfor %}
+					{% endif %}
+				</ul>
+				{% ifequal everything.type "main_page" %}
+				    {% if list.other_items %}
+	    				<ul class="close other-items icons">
+	    					{% for item in list.other_items %}
+	    						<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
+	    					{% endfor %}
+	    				</ul>
+	    			{% endif %}
+				{% endifequal %}
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
+
+{% include "arkestra/universal_other_items_for_sub_page.html" %}
+{% include "arkestra/universal_other_items_for_plugin.html" %}

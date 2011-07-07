@@ -1,0 +1,20 @@
+{% if everything.newsindex %}
+	<div class = "{{ everything.index_div_class }}">
+		<div>
+			<h{{ everything.heading_level }} id = "index">Index</h{{ everything.heading_level }}>
+			<ul class = "none">
+				{% regroup list.index_items by date.year as yearlist %}
+				{% for year in yearlist %}
+					<li><strong>{{ year.grouper }}</strong>
+						{% regroup year.list by date|date:"F" as monthlist %}
+						<ul class = "close">
+							{% for month in monthlist %}
+							<li><a href = "#{{ month.grouper|slugify }}-{{ year.grouper}}">{{ month.grouper}}</a></li>
+							{% endfor %}
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endif %}
