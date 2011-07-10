@@ -17,10 +17,11 @@ class VacanciesPluginForm(forms.ModelForm):
     class Meta:
         model = VacanciesPlugin
     def clean(self):
-        if "featured" in self.cleaned_data["format"]:
+        if "horizontal" in self.cleaned_data["list_format"]:
             self.cleaned_data["order_by"] = "importance/date"
-        if self.cleaned_data["format"] == "featured horizontal":
+            self.cleaned_data["format"] = "details image"
             self.cleaned_data["layout"] = "stacked"
+            self.cleaned_data["group_dates"] = False
             if self.cleaned_data["limit_to"] >3:
                 self.cleaned_data["limit_to"] = 3
             if self.cleaned_data["limit_to"] < 2:
@@ -35,7 +36,7 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
     name = _("Vacancies & Studentships")
     text_enabled = True
     form = VacanciesPluginForm
-    render_template = "vacancies_and_studentships_lists.html"
+    render_template = "arkestra/universal_plugin_lister.html"
     admin_preview = False
     
     fieldsets = (
