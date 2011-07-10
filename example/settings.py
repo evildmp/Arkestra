@@ -17,25 +17,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'arkestra_medic_dev',                      # Or path to database file if using sqlite3.
-        'USER': 'arkestra',                      # Not used with sqlite3.
-        'PASSWORD': 'yodelay',                  # Not used with sqlite3.
-        'HOST': '/tmp/mysql.sock',                      # Set to empty string for localhost. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'example.db',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#         'NAME': 'test.db',                      # Or path to database file if using sqlite3.
-#         'USER': 'arkestra',                      # Not used with sqlite3.
-#         'PASSWORD': 'yodelay',                  # Not used with sqlite3.
-#         'HOST': '/tmp/mysql.sock',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#     }
-# }
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -180,6 +169,29 @@ CMS_PAGE_FLAGS = (
     ('no_page_title', "Don't display page title") ,
     )
 
+CMS_PLACEHOLDER_CONF = {                        
+    'body': {
+        "plugins": (
+            'SemanticTextPlugin', 
+            'CMSVacanciesPlugin', 
+            'CMSNewsAndEventsPlugin', 
+            'SnippetPlugin', 
+            'LinksPlugin', 
+            'CMSPublicationsPlugin', 
+            'ImagePlugin', 
+            'EntityAutoPageLinkPluginPublisher', 
+            'FilerImagePlugin', 
+            'EntityDirectoryPluginPublisher', 
+            'CarouselPluginPublisher',
+            'FocusOnPluginPublisher',
+            ),
+        "extra_context": {            
+            "width":"749",
+            },
+        "name": gettext("body"),
+    },
+}
+
 LANGUAGES = (
 ('en', gettext('English')),
 ('cy', gettext('Cymraeg')),
@@ -195,7 +207,6 @@ INSTALLED_APPS = (
     'appmedia',
     'cms.plugins.text',
     'cms.plugins.snippet',
-    'arkestra_image_plugin',    
 
     # Arkestra applications
     
@@ -205,6 +216,7 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities',
     'arkestra_utilities.widgets.combobox', # so that static-files picks it up
+    'arkestra_image_plugin',    
 
     # other applications
     
