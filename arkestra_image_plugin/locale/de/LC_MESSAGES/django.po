@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-16 09:12+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: cms_plugins.py:12
+msgid "Image"
+msgstr ""
+
+#: cms_plugins.py:21
+msgid "Image resizing options"
+msgstr ""
+
+#: cms_plugins.py:31
+msgid "More"
+msgstr ""
+
+#: models.py:15
+msgid "left"
+msgstr ""
+
+#: models.py:16
+msgid "right"
+msgstr ""
+
+#: models.py:18
+msgid "caption"
+msgstr ""
+
+#: models.py:20
+msgid "alternative image url"
+msgstr ""
+
+#: models.py:21
+msgid "alt text"
+msgstr ""
+
+#: models.py:22 models.py:80
+msgid "thumbnail option"
+msgstr ""
+
+#: models.py:23
+msgid "use automatic scaling"
+msgstr ""
+
+#: models.py:24
+msgid "tries to auto scale the image based on the placeholder context"
+msgstr ""
+
+#: models.py:25 models.py:73
+msgid "width"
+msgstr ""
+
+#: models.py:26 models.py:74
+msgid "height"
+msgstr ""
+
+#: models.py:27 models.py:75
+msgid "crop"
+msgstr ""
+
+#: models.py:28 models.py:76
+msgid "upscale"
+msgstr ""
+
+#: models.py:29
+msgid "image alignment"
+msgstr ""
+
+#: models.py:31
+msgid "link"
+msgstr ""
+
+#: models.py:32 models.py:34
+msgid "if present image will be clickable"
+msgstr ""
+
+#: models.py:35
+msgid "page link"
+msgstr ""
+
+#: models.py:36
+msgid "description"
+msgstr ""
+
+#: models.py:39
+msgid "filer image"
+msgstr ""
+
+#: models.py:40
+msgid "filer images"
+msgstr ""
+
+#: models.py:46
+msgid "Either an image or an image url must be selected."
+msgstr ""
+
+#: models.py:53
+#, python-format
+msgid "Image Publication %(caption)s"
+msgstr ""
+
+#: models.py:72
+msgid "name"
+msgstr ""
+
+#: models.py:73
+msgid "width in pixel."
+msgstr ""
+
+#: models.py:74
+msgid "height in pixel."
+msgstr ""
+
+#: models.py:81
+msgid "thumbnail options"
+msgstr ""

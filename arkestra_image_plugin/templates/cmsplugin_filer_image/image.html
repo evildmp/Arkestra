@@ -1,0 +1,7 @@
+{% load thumbnail filer_tags filer_image_tags %}{% spaceless %}
+<span class = "image {{object.float}}"><img alt="{% if object.alt %}{{ object.alt }}{% endif %}" class="plugin" src="{% thumbnail object.image.file image_size crop subject_location=object.image.subject_location %}" />
+	{% if object.caption %}<span style="width: {{caption_width}}px" class="image_caption">{{ object.caption }}</span>{% endif %}
+	{% if object.show_author %}
+	    <span class="image_author">(Author: {{ object.image.author }})</span>
+	{% endif %}
+</span>{% endspaceless %}
