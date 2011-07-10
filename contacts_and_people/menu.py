@@ -57,7 +57,7 @@ class ArkestraPages(Modifier):
                         # invoke the plugin to find out more
                         instance = NewsAndEventsPlugin()
                         instance.entity = entity
-                        instance.type = "main_page"
+                        instance.type = "menu"
                         instance.limit_to = news_and_events_list_default_limit
                         instance.view = "current"
                         get_news_and_events(instance)
