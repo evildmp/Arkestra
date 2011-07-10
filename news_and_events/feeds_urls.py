@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns
 from news_and_events import feeds
 
 # inlcude this in your base urls.py:

@@ -20,16 +20,14 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
     render_template = "entity-auto-page-link.html"
     text_enabled = True
  
-     # autocomplete fields
+    # autocomplete fields
     related_search_fields = ['entity',]
     
     def render(self, context, instance, placeholder):
-        print "-- in render of CMSContactsAndPeoplePlugin --"
 
         # get a tuple containing for example:
         # (u'Contacts & people', 'contact', 'contacts_page_menu_title')
         LINK_TUPLE = EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to]
-        print "LINK_TUPLE", LINK_TUPLE
         kind = LINK_TUPLE[1]
         field_name = LINK_TUPLE[2]
         
@@ -42,12 +40,12 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
                 link_title = getattr(instance.entity, field_name)
             if instance.text_override:
                 link_title = instance.text_override
-            print EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to][2]
             context.update({ 
                 'link': link,
                 'link_title': link_title,
-                })
+            })
             return context
+    
     def icon_src(self, instance):
         return "/static/plugin_icons/entity_auto_page_link.png"
 
@@ -57,7 +55,7 @@ class EntityDirectoryPluginPublisher(AutocompleteMixin, CMSPluginBase):
     render_template = "directory.html"
     text_enabled = True
  
-     # autocomplete fields
+    # autocomplete fields
     related_search_fields = ['entity',]
 
     def icon_src(self, instance):
@@ -69,7 +67,6 @@ class EntityDirectoryPluginPublisher(AutocompleteMixin, CMSPluginBase):
             entity = instance.entity
         else:
             entity = work_out_entity(context, None)
-        root_entity = entity
         descendants = entity.get_descendants()
         if descendants:
             # find our base level
@@ -88,8 +85,9 @@ class EntityDirectoryPluginPublisher(AutocompleteMixin, CMSPluginBase):
         context.update({
             'entities': descendants,
             'directory': instance,
-            })
+        })
         return context
+
 
 class EntityMembersPluginPublisher(AutocompleteMixin, CMSPluginBase):
     """
@@ -99,7 +97,7 @@ class EntityMembersPluginPublisher(AutocompleteMixin, CMSPluginBase):
     render_template = "entity_members_plugin.html"
     text_enabled = True
  
-     # autocomplete fields
+    # autocomplete fields
     related_search_fields = ['entity',]
 
     def icon_src(self, instance):

@@ -112,3 +112,4 @@ class WYMEditor(forms.Textarea):
                 });
             });
             </script>''' % context)
+        

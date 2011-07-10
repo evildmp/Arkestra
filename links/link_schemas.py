@@ -3,7 +3,6 @@
 
 from links import models, admin
 from links import schema, LinkWrapper
-from django.utils.encoding import smart_unicode
 from django.conf import settings
 
 schema.register(models.ExternalLink, search_fields=admin.ExternalLinkAdmin.search_fields, 

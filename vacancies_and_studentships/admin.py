@@ -2,16 +2,6 @@ import models
 from django import forms
 from django.contrib import admin
 
-# for the WYMeditor fields
-from arkestra_utilities.widgets.wym_editor import WYMEditor
-
-# for tabbed interface
-from arkestra_utilities import admin_tabs_extension
-from django.db.models import ForeignKey
-# for autocomplete search
-#from arkestra_utilities.widgets.widgets import ForeignKeySearchInput
-#from arkestra_utilities.views import search
-
 from widgetry import fk_lookup
 from links.admin import ObjectLinkInline
 
@@ -22,14 +12,16 @@ from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
 
 COMMON_SEARCH_FIELDS = ['short_title','title','summary','description','slug','url']
 
+
 class VacancyStudentshipForm(forms.ModelForm):
+    input_url = forms.CharField(max_length=255, required=False)
+    
     class Meta:
         widgets = {'summary': forms.Textarea(
               attrs={'cols':80, 'rows':2,},
             ),  
         }
-
-    input_url = forms.CharField(max_length=255, required = False)
+    
     def clean(self):
         if not self.cleaned_data["short_title"] or self.cleaned_data["short_title"] == '':
             self.cleaned_data["short_title"] = self.cleaned_data["title"]
@@ -54,10 +46,12 @@ class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, admin.Model
         'enquiries',
     )
 
+
 class VacancyForm(VacancyStudentshipForm):
     class Meta(VacancyStudentshipForm.Meta):
         model = models.Vacancy
     
+
 # class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
 class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
     search_fields = COMMON_SEARCH_FIELDS + ['job_number']
@@ -99,7 +93,9 @@ class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
         ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
     ) 
          
+
 admin.site.register(models.Vacancy,VacancyAdmin)
+
 
 class StudentshipForm(VacancyStudentshipForm):
     class Meta(VacancyStudentshipForm.Meta):
@@ -157,4 +153,3 @@ class StudentshipAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
         ]
     
 admin.site.register(models.Studentship,StudentshipAdmin)
-

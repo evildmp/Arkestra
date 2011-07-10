@@ -3,7 +3,6 @@ from cms.plugins.text.models import Text
 from arkestra_utilities.modifier_pool import adjuster_pool
 
 def get_placeholder_width(context, plugin):
-    
     """
     Gets the width placeholder in which a plugin finds itself
         
@@ -24,10 +23,10 @@ def get_placeholder_width(context, plugin):
     {% endwith %}
 
     """
-    # try to get placeholder_width context variable; if not, then width; if not, use 100 (100 is for admin)
+    # try to get placeholder_width context variable; if not, then width;
+    # if not, use 100 (100 is for admin)
     
     placeholder_width = float(context.get("placeholder_width", context.get("width", 100.0))) 
-    print "placeholder width:", placeholder_width
 
     for cls in adjuster_pool.adjusters["placeholder_width"]:
         inst = cls()
@@ -46,17 +45,17 @@ def get_plugin_ancestry(plugin):
         plugin = plugin.parent 
     return reversed(plugins)
 
-def calculate_container_width(instance, width, auto = False):
-    markers={}
+def calculate_container_width(instance, width, auto=False):
+    markers = {}
 
-    plugins = get_plugin_ancestry(instance) # we could in theory have nested text/layout plugins, but in practice probably never will - it's not necessary, given the inner row/column capabilities of the semantic editor - so this list of plugins will usually just contain the plugin we're working on 
+    # we could in theory have nested text/layout plugins, but in practice
+    # probably never will - it's not necessary, given the inner row/column
+    # capabilities of the semantic editor - so this list of plugins willusually just contain the plugin we're working on 
+    plugins = get_plugin_ancestry(instance)
     
     for plugin in plugins:
-        print "start width", width
-        print "plugin:", plugin, "id:", plugin.id, "type:", type(plugin) 
         # get the body field (i.e. output HTML) of the Text object this item is inserted into
         body = Text.objects.get(id=plugin.parent_id).body 
-        print "parent id:",plugin.parent_id
         # soup it up
         soup = BeautifulSoup(''.join(body)) 
         # find the element with that id in the HTML

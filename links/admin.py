@@ -2,11 +2,10 @@ from django.contrib import admin
 from django.contrib.contenttypes import generic
 from django.contrib import messages
 
-from links.models import Link, ObjectLink, ExternalLink, GenericLinkListPluginItem, ExternalSite, LinkType
+from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
 
 
 # imports for FK search box
-from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound
 from django.db.models import ForeignKey
 #from arkestra_utilities.widgets.widgets import ForeignKeySearchInput, GenericForeignKeySearchInput
 #from arkestra_utilities.views import search
@@ -17,16 +16,15 @@ from widgetry.views import search
 
 from django import forms
 
-from django.conf import settings
 #LINK_SCHEMA = getattr(settings, 'LINK_SCHEMA', {})
 
 from links import schema
 from urlparse import urlparse 
 from urllib import urlopen
-from django.core.exceptions import ObjectDoesNotExist
 
 class LinkAdmin(admin.ModelAdmin):        
     related_search_fields = ['destination_content_type']
+    
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
         Overrides the default widget for Foreignkey fields if they are
@@ -37,7 +35,11 @@ class LinkAdmin(admin.ModelAdmin):
             kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
         return super(LinkAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
+
 class ObjectLinkInlineForm(forms.ModelForm):
+    class Meta:
+        model=ObjectLink
+        
     def __init__(self, *args, **kwargs):
         super(ObjectLinkInlineForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
@@ -48,9 +50,8 @@ class ObjectLinkInlineForm(forms.ModelForm):
         #self.fields['destination_object_id'].widget = GenericForeignKeySearchInput(LINK_SCHEMA, 'id_%s-destination_content_type' % self.prefix, destination_content_type)
         self.fields['destination_object_id'].widget = fk_lookup.GenericFkLookup('id_%s-destination_content_type' % self.prefix, destination_content_type)
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
-    class Meta:
-        model=ObjectLink
-    
+
+
 class ObjectLinkAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
@@ -61,6 +62,7 @@ class ObjectLinkAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             }),
         )
+
 
 class ObjectLinkInline(generic.GenericStackedInline):
     model = ObjectLink
@@ -79,6 +81,7 @@ class ObjectLinkInline(generic.GenericStackedInline):
             'classes': ('collapse',),
         })
     )
+
 
 def get_or_create_external_link(request, input_url, external_url, title, description=""):
     """
@@ -177,6 +180,7 @@ class ExternalLinkForm(forms.ModelForm):
 
         return self.cleaned_data    
 
+
 class ExternalLinkAdmin(SupplyRequestMixin, admin.ModelAdmin):
     readonly_fields = ('external_site', 'kind',)
     search_fields = ('title', 'external_site__site','description', 'url')
@@ -184,15 +188,17 @@ class ExternalLinkAdmin(SupplyRequestMixin, admin.ModelAdmin):
     form = ExternalLinkForm
 
     def save_model(self, request, obj, form, change):
-        print ">>>>>>> Admin.save_model of ExtLink"
         return super(ExternalLinkAdmin, self).save_model(request, obj, form, change)
+
 
 class LinkTypeAdmin(admin.ModelAdmin):
     pass
 
+
 class ExternalSiteForm(forms.ModelForm):
     class Meta:
         model = ExternalSite
+        
     def clean(self):
         # if the site isn't named, use the domain name
         site = self.cleaned_data.get("site", None)
@@ -201,9 +207,11 @@ class ExternalSiteForm(forms.ModelForm):
             self.cleaned_data["site"] = domain
         return self.cleaned_data    
 
+
 class ExternalSiteAdmin(admin.ModelAdmin):
     readonly_fields = ('parent',)
     form = ExternalSiteForm
+    
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context.update({
@@ -213,7 +221,6 @@ class ExternalSiteAdmin(admin.ModelAdmin):
                 # 'has_delete_permission': request.user.has_perm('links.delete_link'),
         })
         return super(ExternalSiteAdmin, self).changelist_view(request, extra_context)
-
 
     
 #admin.site.register(ObjectLink, ObjectLinkAdmin)

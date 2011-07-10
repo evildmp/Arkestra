@@ -4,8 +4,8 @@ unittest). These will both pass when you run "manage.py test".
 
 Replace these with more appropriate tests for your application.
 """
+from django.test import TestCase
 from django.utils import unittest
-from contacts_and_people.models import Person
 
 class PersonTestCase(unittest.TestCase):
     def setUp(self):
@@ -16,7 +16,6 @@ class PersonTestCase(unittest.TestCase):
         self.assertEqual(self.lion.speak(), 'The lion says "roar"')
         self.assertEqual(self.cat.speak(), 'The cat says "meow"')
 
-from django.test import TestCase
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):

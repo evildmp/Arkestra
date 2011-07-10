@@ -4,7 +4,7 @@ from django.db.utils import DatabaseError
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify, join
+from django.template.defaultfilters import slugify
 from django.conf import settings
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
@@ -19,47 +19,66 @@ CMSPlugin = models.get_model('cms', 'CMSPlugin')
 
 class Site(models.Model):
     """Maintains a list of an institution's geographical sites"""
-    class Meta:
-        ordering = ('country','site_name', 'post_town',)
     site_name = models.CharField(max_length=50, unique=True)
     post_town = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    description = models.TextField(max_length = 500, null = True, blank=True)
+    description = models.TextField(max_length=500, null=True, blank=True)
+    
+    class Meta:
+        ordering = ('country','site_name', 'post_town',)
+    
     def __unicode__(self):
         return self.site_name
 
+
 class Building(models.Model):
     """Each Building is on a Site."""
-    class Meta:
-        ordering = ('site', 'street', 'number', 'name',)
-    name = models.CharField(max_length=100, null = True, blank=True)
-    number = models.CharField(max_length=10, null = True, blank=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    number = models.CharField(max_length=10, null=True, blank=True)
     street = models.CharField("Street name", max_length=100, null = True, blank=True)
-    additional_street_address = models.CharField(help_text=u"If required", max_length=100, null = True, blank=True)
-    postcode = models.CharField(max_length=9, null = True, blank=True)
+    additional_street_address = models.CharField(help_text=u"If required",
+        max_length=100, null=True, blank=True)
+    postcode = models.CharField(max_length=9, null=True, blank=True)
     site = models.ForeignKey(Site)
-    slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", max_length=255, null=True, unique=True,)
+    slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
+        max_length=255, null=True, unique=True,)
     image = FilerImageField(null=True, blank=True)
     # for the place page
-    summary =  models.TextField(
-        verbose_name = "Summary",
-        max_length=256, 
-        help_text = "A very short description of this building (maximum two lines)",)
-    description = PlaceholderField('body', 
-        related_name = "building_description",
-        help_text = "A fuller description",)
+    summary =  models.TextField(verbose_name="Summary", max_length=256, 
+        help_text="A very short description of this building (maximum two lines)",)
+    description = PlaceholderField('body', related_name="building_description",
+        help_text="A fuller description",)
     getting_here = PlaceholderField('simple', 
-        related_name = "getting_here",
-        help_text = "How to get here",)
+        related_name="getting_here",
+        help_text="How to get here",)
     access_and_parking = PlaceholderField('simple', 
-        related_name = "building_access_and_parking",
-        help_text = "Where to park, how to get in, etc",)
-    map = models.BooleanField(
-        "Show map",
-        default=False)
-    latitude = models.FloatField(null = True, blank = True,)
-    longitude = models.FloatField(null = True, blank = True,)
-    zoom = models.IntegerField(blank = True, null = True, default = 17)
+        related_name="building_access_and_parking",
+        help_text="Where to park, how to get in, etc")
+    map = models.BooleanField("Show map", default=False)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    zoom = models.IntegerField(blank=True, null=True, default=17)
+    
+    class Meta:
+        ordering = ('site', 'street', 'number', 'name',)
+    
+    def __unicode__(self):
+        if self.name:
+            building_identifier = str(self.site) + ": " + self.name
+        elif self.street:
+            building_identifier = str(self.site) + ": " + self.number + " " + self.street
+        else:
+            building_identifier = str(self.site) + ": " + self.postcode
+        return building_identifier
+    
+    def get_absolute_url(self):
+        return "/place/%s/" % self.slug
+    
+    def save(self):
+        if not self.slug or self.slug == '':
+            self.slug = slugify(self.__unicode__())
+        super(Building, self).save()
+    
     def get_name(self):
         """
         Assembles a half-decent name for a building
@@ -71,6 +90,7 @@ class Building(models.Model):
         else:
             building_identifier = str(self.site) + ": " + self.postcode
         return building_identifier
+    
     def get_postal_address(self):
         """
         Assembles the postal (external) parts of an address
@@ -90,16 +110,10 @@ class Building(models.Model):
         elif self.postcode:
             address.append(self.postcode)
         return address
+
     def has_map(self):
         return self.map and self.latitude and self.longitude and self.zoom
-    def __unicode__(self):
-        if self.name:
-            building_identifier = str(self.site) + ": " + self.name
-        elif self.street:
-            building_identifier = str(self.site) + ": " + self.number + " " + self.street
-        else:
-            building_identifier = str(self.site) + ": " + self.postcode
-        return building_identifier
+    
     def events(self):
         instance = CMSNewsAndEventsPlugin()
         instance.display = "events"
@@ -109,22 +123,12 @@ class Building(models.Model):
         instance.place = self
         instance.show_venue = False
         events = get_news_and_events(instance)
-        print ">> forthcoming events", events.forthcoming_events
         return events
-    def save(self):
-        if not self.slug or self.slug == '':
-            self.slug = slugify(self.__unicode__())
-        print "Building slug:", self.slug
-        super(Building, self).save()
-    def get_absolute_url(self):
-        return "/place/%s/" % self.slug
 
     def get_website(self):
         return None
         
 class PhoneContact(models.Model):
-    class Meta:
-        ordering = ('label',)
     LABEL_CHOICES = ( ('','-----'),
                     ('Office', 'Office'),
                     ('Laboratory', 'Laboratory'),
@@ -134,64 +138,89 @@ class PhoneContact(models.Model):
                     ('Pager','Pager'),
                     )
     label = models.CharField(max_length=64, choices=LABEL_CHOICES, default=LABEL_CHOICES[0][0], null=True, blank=True)
-    country_code = models.CharField(max_length=5, default = "44")
-    area_code = models.CharField(max_length=5, default = "029", help_text = "Not 02920")
+    country_code = models.CharField(max_length=5, default="44")
+    area_code = models.CharField(max_length=5, default="029", help_text="Not 02920")
     number = models.CharField(max_length=12)
-    internal_extension = models.CharField(max_length=6, null = True, blank = True)
+    internal_extension = models.CharField(max_length=6, null=True, blank=True)
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
+    
+    class Meta:
+        ordering = ('label',)
+        
     def __unicode__(self):
         return u"%s: %s" % (self.label, self.number)
+
         
 class CommonFields(models.Model):
+    precise_location = models.CharField(help_text=u"Precise location <em>within</em> the building, for visitors",
+        max_length=255, null=True, blank=True)
+    access_note = models.CharField(help_text = u"Notes on access/visiting hours/etc",
+        max_length=255, null=True, blank=True)
+    email = models.EmailField(verbose_name="Email address", null=True, blank=True)
+    phone_contacts = generic.GenericRelation(PhoneContact)
+    url = models.URLField(null=True, blank=True, verify_exists=True, 
+        help_text=u"To be used <strong>only</strong> for external items. Use with caution!")
+    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True)
+    image = FilerImageField(null=True, blank=True)
+    slug = models.SlugField(unique= True, help_text=u"Do not meddle with this unless you know exactly what you're doing!")
+    
     class Meta:
         abstract = True
-    precise_location = models.CharField(help_text=u"Precise location <em>within</em> the building, for visitors",
-        max_length=255, null = True, blank=True
-        )
-    access_note = models.CharField(help_text = u"Notes on access/visiting hours/etc",
-        max_length=255, null = True, blank=True
-        )
-    email = models.EmailField(verbose_name="Email address", null = True, blank=True)
-    phone_contacts = generic.GenericRelation(PhoneContact)
-    url = models.URLField(null = True, blank = True, 
-        verify_exists=True, 
-        help_text = u"To be used <strong>only</strong> for external items. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
-    image = FilerImageField(null=True, blank=True)
-    slug=models.SlugField(unique= True, help_text=u"Do not meddle with this unless you know exactly what you're doing!")
     
+
 class EntityLite(models.Model):
-    name = models.CharField(max_length= 100, help_text = "e.g. Section of Haematology")
+    name = models.CharField(max_length=100, help_text="e.g. Section of Haematology")
+    
     def __unicode__(self):
         return str(self.name)
 
+
 class Entity(EntityLite, CommonFields):
+    short_name = models.CharField(blank=True, help_text="e.g. Haematology",
+        max_length=100, null=True, verbose_name="Short name for menus")
+    abstract_entity = models.BooleanField("Group", default=False,
+        help_text =u"A <em>group</em> of entities, not an entity itself",)
+    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
+    display_parent = models.BooleanField(default=True, help_text=u"Include parent entity's name in address")
+    building = models.ForeignKey(Building, null=True, blank=True, on_delete=models.SET_NULL)
+    website = models.ForeignKey(Page, verbose_name="Home page",
+        related_name='entity', unique=True, null=True, blank=True,
+        on_delete=models.SET_NULL)
+    
+    if 'news_and_events' in settings.INSTALLED_APPS:
+        auto_news_page = models.BooleanField(default=False)
+        news_page_menu_title = models.CharField(max_length= 50,
+            default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
+    
+    if 'contacts_and_people' in settings.INSTALLED_APPS:
+        auto_contacts_page = models.BooleanField(default=False)
+        contacts_page_menu_title = models.CharField(max_length=50,
+            default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
+        
+    if 'vacancies_and_studentships' in settings.INSTALLED_APPS:
+        auto_vacancies_page = models.BooleanField(default=False)
+        vacancies_page_menu_title = models.CharField(max_length=50,
+            default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
+        
+    if 'publications' in settings.INSTALLED_APPS:
+        auto_publications_page = models.BooleanField(default=False)
+        publications_page_menu_title = models.CharField(max_length=50,
+            default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"))
+    
     class Meta:
         verbose_name_plural = "Entities"
         ordering = ['tree_id', 'lft']
-    short_name = models.CharField(blank=True, help_text = "e.g. Haematology", max_length= 100, null=True, verbose_name = "Short name for menus",)
-    abstract_entity = models.BooleanField(
-        "Group",
-        help_text =u"A <em>group</em> of entities, not an entity itself",
-        default=False)
-    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
-    display_parent = models.BooleanField(default=True, help_text=u"Include parent entity's name in address")
-    building = models.ForeignKey(Building, null = True, blank=True, on_delete=models.SET_NULL)
-    website = models.ForeignKey(Page, verbose_name = "Home page", related_name = 'entity', unique = True, null = True, blank=True, on_delete=models.SET_NULL)
-    if 'news_and_events' in settings.INSTALLED_APPS:
-        auto_news_page = models.BooleanField(default = False)
-        news_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"),)
-    if 'contacts_and_people' in settings.INSTALLED_APPS:
-        auto_contacts_page = models.BooleanField(default = False)
-        contacts_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"),)
-    if 'vacancies_and_studentships' in settings.INSTALLED_APPS:
-        auto_vacancies_page = models.BooleanField(default = False)
-        vacancies_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"),)
-    if 'publications' in settings.INSTALLED_APPS:
-        auto_publications_page = models.BooleanField(default = False)
-        publications_page_menu_title = models.CharField(max_length= 50, default = getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"),)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        if self.external_url:
+            return self.external_url.url
+        else:
+            return "/entity/%s/" % self.slug
 
     def get_real_ancestor(self):
         """
@@ -233,21 +262,18 @@ class Entity(EntityLite, CommonFields):
         """
         Return the Django CMS page that this Entity has attached to it (or to its nearest parent)
         """
-        print "get_website", self
         if self.website:
             return self.website
         else:
             try:
                 return self.parent.get_website()
             except AttributeError: # I think this is right                
-                print "couldn't find a website, so returning None"
                 return None
 
     def get_website_url(self):
         """
         Return the Django CMS page's url that this Entity has attached to it (or to its nearest parent)
         """
-        print "------ get_website_url -------"
         if self.website:
             return self.website.get_absolute_url()
         elif self.external_url:
@@ -262,7 +288,6 @@ class Entity(EntityLite, CommonFields):
         """
         Returns a template for any pages that need to render based on this entity
         """
-        print "------ get_template -------"
         if self.get_website():
             return self.get_website().get_template()
         else:
@@ -320,32 +345,25 @@ class Entity(EntityLite, CommonFields):
         The roles returned are in alphabetical order by Person.
         """
         for member in members:
-            print "Person:", member
-            memberships = []
             ms = Membership.objects.filter(person = member)
-            print "... has", len(ms), "memberships"        
             # get the best named membership in the entity
             named_memberships = list(ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person'))
             if named_memberships:
                 member.membership = named_memberships[0]
-                print "... and she has a specified role here, the best of which is", member.membership
             else:            
                 # see if there's a display_role membership - actually this one should go first
                 display_role_memberships = list(ms.filter(entity=self).exclude(display_role = None).order_by('-importance_to_person',)) 
                 if display_role_memberships:
                     member.membership = display_role_memberships[0].display_role
-                    print "... she doesn't have a specified role in this enitity, but does have a display_role, which is", member.membership
                 else:                 
                     # find the best named membership anywhere we can
                     best_named_membership = list(ms.exclude(role = "").order_by('-importance_to_person',)) 
                     if best_named_membership:
                         member.membership = best_named_membership[0]
-                        print "... she doesn't have a role here, or a display_role, but the very best membership is", member.membership
                     else:                        
                         # add the unnamed membership for this entity - it's all we have
                         unnamed_memberships = list(ms.order_by('-importance_to_person',)) 
                         member.membership = unnamed_memberships[0]
-                        print "... I didn't find any named memberships for", member                    
         return members
 
     def get_people(self, letter = None):
@@ -379,15 +397,6 @@ class Entity(EntityLite, CommonFields):
             initials = None
         return (people, initials)
 
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/entity/%s/" % self.slug
-
     def get_related_info_page_url(self, kind):
         """
         Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
@@ -397,28 +406,32 @@ class Entity(EntityLite, CommonFields):
         if self.external_url:
             return ""
         elif self == default_entity:
-            return "/" + kind + "/"
+            return "/%s/" % kind
         else:
-            return "/" + kind + "/" + self.slug + "/"
+            return "/%s/%s/" % (kind, self.slug)
+
 
 class Title(models.Model):
+    title = models.CharField(max_length=50, unique=True)
+    abbreviation = models.CharField(max_length=20, unique=True)
+    
     class Meta:
         ordering = ['title',]
-    title = models.CharField (max_length = 50, unique = True)
-    abbreviation = models.CharField (max_length = 20, unique = True)
+    
     def __unicode__(self):
         return self.abbreviation
 
+
 class PersonLite(models.Model):
-    title = models.ForeignKey(
-        'contacts_and_people.Title', 
-        to_field = "abbreviation", 
-        blank = True, 
-        null = True,
-        on_delete=models.SET_NULL)
-    given_name = models.CharField(max_length=50, blank = True, null = True)
-    middle_names = models.CharField(max_length=100, blank = True, null = True)
+    title = models.ForeignKey('contacts_and_people.Title', 
+        to_field="abbreviation", blank=True, null=True, on_delete=models.SET_NULL)
+    given_name = models.CharField(max_length=50, blank=True, null=True)
+    middle_names = models.CharField(max_length=100, blank=True, null=True)
     surname = models.CharField(max_length=50)
+    
+    def __unicode__(self):
+        return str(self.given_name + " " + self.middle_names + " " + self.surname)
+    
     def __getInitials(self):
         if self.given_name <> '' and self.middle_names <> '':
             return self.given_name[0] + '.' + self.middle_names[0] + '.'
@@ -426,29 +439,41 @@ class PersonLite(models.Model):
             return self.given_name[0] + '.'
         else:
             return ''
-    initials = property(__getInitials,)  
-    def __unicode__(self):
-        return str(self.given_name + " " + self.middle_names + " " + self.surname)        
+    initials = property(__getInitials,)     
+
 
 class Person(PersonLite, CommonFields):
+    user = models.ForeignKey(User, related_name='person_user', unique=True,
+        blank=True, null=True, verbose_name='Arkestra User', on_delete=models.SET_NULL)
+    institutional_username = models.CharField(max_length=10, blank=True, null=True)
+    active = models.BooleanField(default=True,)
+    description = PlaceholderField('body')
+    entities = models.ManyToManyField(Entity, related_name='people',
+        through='Membership', blank=True, null=True)
+    building = models.ForeignKey(Building, verbose_name='Specify building',
+        help_text=u"Specify a building for contact information - over-rides postal address", 
+        blank=True, null=True, on_delete=models.SET_NULL)
+    override_entity = models.ForeignKey(Entity, verbose_name='Specify entity',
+        help_text=u"Specify an entity for contact information - over-rides entity and postal address",
+        related_name='people_override', blank=True, null=True, on_delete=models.SET_NULL)
+    please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person",
+        related_name='contact_for', blank=True, null=True, on_delete=models.SET_NULL)
+    staff_id = models.CharField(null=True, blank=True, max_length=20)
+    data_feed_locked = models.BooleanField(default=False)
+    
     class Meta:
         ordering = ['surname', 'given_name', 'user',]
         verbose_name_plural = "People"
-    user = models.ForeignKey(User, related_name = 'person_user', unique=True, blank = True, null = True, verbose_name='Arkestra User',
-        on_delete=models.SET_NULL)
-    institutional_username = models.CharField(max_length = 10, blank = True, null = True)
-    active = models.BooleanField(
-        default=True,)
-    description = PlaceholderField('body',)
-    entities = models.ManyToManyField(Entity, related_name = 'people', through ='Membership', blank = True, null = True)
-    building = models.ForeignKey(Building, verbose_name = 'Specify building', help_text = u"Specify a building for contact information - over-rides postal address",blank = True, null = True,
-        on_delete=models.SET_NULL)
-    override_entity = models.ForeignKey(Entity, verbose_name = 'Specify entity', help_text= u"Specify an entity for contact information - over-rides entity and postal address", related_name = 'people_override', blank = True, null = True,
-        on_delete=models.SET_NULL)
-    please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person", related_name='contact_for', blank = True, null = True,
-        on_delete=models.SET_NULL)
-    staff_id = models.CharField(null=True, blank = True, max_length=20)
-    data_feed_locked = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        title = self.title or ""
+        return " ".join(name_part for name_part in [str(title), self.given_name, self.surname] if name_part)
+
+    def get_absolute_url(self):
+        if self.external_url:
+            return self.external_url.url
+        else:
+            return "/person/%s/" % self.slug
 
     def get_role(self):
         """
@@ -508,16 +533,7 @@ class Person(PersonLite, CommonFields):
             entitylist.add(entity)
             entitylist.update(entity.get_ancestors())
         return entitylist #set(entity for entity in entitylist if not entity.abstract_entity)
-
-    def __unicode__(self):
-        title = self.title or ""
-        return " ".join(name_part for name_part in [str(title), self.given_name, self.surname] if name_part)
-
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/person/%s/" % self.slug
+    
     def check_please_contact_has_loop(self, compare_to, person_list=None):
         if person_list==None:
             person_list=[compare_to]
@@ -536,8 +552,7 @@ class Person(PersonLite, CommonFields):
         if do_check_please_contact_loop and self.check_please_contact_has_loop(compare_to=self)==True:
             raise Exception # TODO: raise a more appropriate exception
         return super(Person, self).save(*args, **kwargs)
-#    def authoreds(self):
-#        return self.researcher.authored.filter(visible = True).order_by('publication__type', 'reverse_sort_cue')
+
 
 class Teacher(models.Model):
     person = models.ForeignKey(Person, related_name = 'teacher', unique=True, blank = True, null = True)
@@ -545,8 +560,6 @@ class Teacher(models.Model):
     dummy_field_two = models.CharField(max_length=100, blank = True, null = True)
 
 class Membership(models.Model):
-    class Meta:
-        ordering = ('-importance_to_entity', 'person__surname')
     PERSON_DISPLAY_PRIORITY = (
         (1, 'No role'),
         (2, 'Significant'),
@@ -561,15 +574,29 @@ class Membership(models.Model):
         (4, 'Keyer member'),
         (5, 'Keyest member'),
         )
-    person = models.ForeignKey(Person, related_name = 'member_of')
-    entity = models.ForeignKey(Entity, related_name='members',)
-    display_role = models.ForeignKey('self', related_name = "display_roles", null = True, blank = True) # this is currently too complex to manage - in this version it remains unused
-    #home = models.BooleanField(default=False)
-    #key_member = models.BooleanField(default=False)
+    person = models.ForeignKey(Person, related_name='member_of')
+    entity = models.ForeignKey(Entity, related_name='members')
+    # this is currently too complex to manage - in this version it remains unused
+    display_role = models.ForeignKey('self', related_name="display_roles",
+        null=True, blank=True) 
     key_contact = models.BooleanField(default=False)
-    role = models.CharField(max_length = 50, null = True, blank = True)
-    importance_to_person = models.IntegerField(blank = True, null = True, choices = PERSON_DISPLAY_PRIORITY, default = 1) # how important the role is to the person
-    importance_to_entity = models.IntegerField(blank = True, null = True, choices = ENTITY_DISPLAY_PRIORITY, default = 1) # how important the role is to the entity
+    role = models.CharField(max_length=50, null=True, blank=True)
+    # how important the role is to the person
+    importance_to_person = models.IntegerField(blank=True, null=True,
+        choices=PERSON_DISPLAY_PRIORITY, default=1) 
+    # how important the role is to the entity
+    importance_to_entity = models.IntegerField(blank=True, null=True,
+        choices=ENTITY_DISPLAY_PRIORITY, default=1) 
+    
+    class Meta:
+        ordering = ('-importance_to_entity', 'person__surname')
+    
+    def __unicode__(self):
+        if self.display_role:
+            return str(self.entity.short_name) + "-" + str(self.display_role)
+        else:
+            return str(self.role)
+    
     def save(self):
         """
         The rules:
@@ -581,32 +608,23 @@ class Membership(models.Model):
         """
         # if there's just one membership, make it home; if this one is home, make home on all the others false
         memberships = Membership.objects.filter(person = self.person)
-        print "I think that", self.person, "has", len(memberships), "memberships"
         if self.importance_to_person == 5:
-            print "this one's home"
             for membership in memberships:
                 if membership.importance_to_person == 5:
                     membership.importance_to_person = 4
                 super(Membership, membership).save()
-            print self
             self.importance_to_person = 5
         # if no role is set, then it can't be home or a key membership, and orders must be the lowest
         if not self.role: 
             self.importance_to_person = 1
-        #     self.importance_to_entity = 1
         # if there is a role set, orders must be > 1
         else:
-            print self, self.importance_to_entity
             if self.importance_to_person < 2: # with a role, order must be at least 2
                 self.importance_to_person = 2
             if self.importance_to_entity < 2:  
                 self.importance_to_entity = 2 # and importance_to_entity must be 2
         super(Membership, self).save()
-    def __unicode__(self):
-        if self.display_role:
-            return str(self.entity.short_name) + "-" + str(self.display_role)
-        else:
-            return str(self.role)
+
 
 class EntityAutoPageLinkPluginEditor(CMSPlugin):
     AUTO_PAGES = {
@@ -619,42 +637,37 @@ class EntityAutoPageLinkPluginEditor(CMSPlugin):
         'publications':
             (u'Publications', 'publications', 'publications_page_menu_title'),
         }
-    link_to = models.CharField(max_length=50, choices=[(x,y[0]) for x,y in sorted(AUTO_PAGES.items())])
-    entity = models.ForeignKey(Entity, null = True, blank = True, 
-        help_text = "Leave blank for autoselect", 
-        related_name = "auto_page_plugin",
-        on_delete=models.SET_NULL
-        )
-    text_override = models.CharField(
-        max_length=256, null = True, blank = True, 
-        help_text = "Override the default link text"
-        )
+    link_to = models.CharField(max_length=50, choices=[(x, y[0]) for x, y in sorted(AUTO_PAGES.items())])
+    entity = models.ForeignKey(Entity, null=True, blank=True, 
+        help_text="Leave blank for autoselect", 
+        related_name="auto_page_plugin", on_delete=models.SET_NULL)
+    text_override = models.CharField(max_length=256, null=True, blank=True, 
+        help_text="Override the default link text")
+
 
 class EntityDirectoryPluginEditor(CMSPlugin):
     DIRECTORY_TYPE = (
         ('children', u'Immediate children only'),
         ('descendants', u'All descendants'),
         )
-    entity = models.ForeignKey(Entity, null = True, blank = True, 
-        help_text = "Leave blank for autoselect", 
-        related_name = "directory_plugin",
-        on_delete=models.SET_NULL
-        )
+    entity = models.ForeignKey(Entity, null=True, blank=True, 
+        help_text="Leave blank for autoselect", related_name="directory_plugin",
+        on_delete=models.SET_NULL)
     #display = models.CharField(max_length=50, choices = DIRECTORY_TYPE, default = 'children',)
-    levels = models.PositiveSmallIntegerField(help_text = u'Leave blank/set to 0 if all sub-levels are to be displayed', null = True, blank = True)
-    display_descriptions_to_level = models.PositiveSmallIntegerField(default = 0, help_text = u'Blank for all levels, 0 for none, 1 for first', null = True, blank = True)
-    link_icons = models.BooleanField(
-        help_text =u"Display link icons (first level only)",
+    levels = models.PositiveSmallIntegerField(help_text=u'Leave blank/set to 0 if all sub-levels are to be displayed',
+        null=True, blank=True)
+    display_descriptions_to_level = models.PositiveSmallIntegerField(default=0,
+        help_text=u'Blank for all levels, 0 for none, 1 for first', null=True,
+        blank=True)
+    link_icons = models.BooleanField(help_text=u"Display link icons (first level only)",
         default=True)
-    use_short_names = models.BooleanField(
-        default=True)
+    use_short_names = models.BooleanField(default=True)
+
 
 class EntityMembersPluginEditor(CMSPlugin):
-    entity = models.ForeignKey(Entity, null = True, blank = True, 
-        help_text = "Leave blank for autoselect", 
-        related_name = "entity_members_plugin",
-        on_delete=models.SET_NULL
-        )
+    entity = models.ForeignKey(Entity, null=True, blank=True, 
+        help_text="Leave blank for autoselect", 
+        related_name="entity_members_plugin", on_delete=models.SET_NULL)
 
 try:
     mptt.register(Entity)

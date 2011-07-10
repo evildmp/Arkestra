@@ -1,21 +1,15 @@
 #app = news_and_events
 from news_and_events.models import NewsArticle, NewsSource, Event, EventType
-from links.models import ExternalLink
-from links.admin import ExternalLinkForm, get_or_create_external_link
+from links.admin import get_or_create_external_link
 from django.contrib import admin, messages
 from django import forms
 from datetime import datetime
 
-# for the WYMeditor fields
-from arkestra_utilities.widgets.wym_editor import WYMEditor
 # for tabbed interface
-from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
 
 # for autocomplete search
 from widgetry import fk_lookup
-from django.db.models import ForeignKey
-from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 
 # for the generic object links
@@ -25,13 +19,14 @@ from cms.admin.placeholderadmin import PlaceholderAdmin
 
 class NewsAndEventsForm(forms.ModelForm):
     # a shared form for news and events
+
+    input_url = forms.CharField(max_length=255, required=False)
+    
     class Meta:
         widgets = {'subtitle': forms.Textarea(
               attrs={'cols':80, 'rows':2,},
             ),  
         }
-
-    input_url = forms.CharField(max_length=255, required = False)
     
     def clean(self):
         # create the short_title automatically if necessary
@@ -61,8 +56,6 @@ class NewsAndEventsForm(forms.ModelForm):
 
 
 class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
-    class Meta:
-        abstract = True
     inlines = (ObjectLinkInline,)
     exclude = ('content', 'url')
     # for the change list pages
@@ -78,6 +71,7 @@ class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin
             }
     # autocomplete fields
     related_search_fields = ['hosted_by', 'external_url',]
+    
 
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -100,6 +94,7 @@ class NewsArticleForm(NewsAndEventsForm):
         elif self.cleaned_data['sticky_until'] < datetime.date(self.cleaned_data['date']):
             self.cleaned_data['sticky_until'] = datetime.date(self.cleaned_data['date'])
         return self.cleaned_data
+
 
 class NewsArticleAdmin(NewsAndEventsAdmin):
     # some general settings
@@ -140,6 +135,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         ('Links', {'inlines': ('ObjectLinkInline',),}),
         ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
         )
+
 
 class EventForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -228,6 +224,7 @@ class EventForm(NewsAndEventsForm):
         return data
     '''
 
+
 class EventAdmin(NewsAndEventsAdmin):
     # some general settings
     form = EventForm
@@ -290,7 +287,8 @@ class EventAdmin(NewsAndEventsAdmin):
         ('People', {'fieldsets': fieldset_people,}),
         ('Links', {'inlines': ('ObjectLinkInline',),}),
         ('Advanced Options', {'fieldsets': fieldset_advanced,}),
-        )
+    )
+    
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context.update({
@@ -300,6 +298,7 @@ class EventAdmin(NewsAndEventsAdmin):
                 'has_delete_permission': request.user.has_perm('news_and_events.delete_event'),
         })
         return super(EventAdmin, self).changelist_view(request, extra_context)
+    
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
         urls = super(EventAdmin, self).get_urls()
@@ -312,6 +311,7 @@ class EventAdmin(NewsAndEventsAdmin):
         )
         url_patterns.extend(urls)
         return url_patterns
+    
     def move_event(self, request, event_id, extra_context=None):
         target = request.POST.get('target', None)
         position = request.POST.get('position', None)
@@ -330,11 +330,14 @@ class EventAdmin(NewsAndEventsAdmin):
         event.save()
         return HttpResponse("ok")
 
+
 class EventTypeAdmin(admin.ModelAdmin):
     pass
 
+
 class NewsSourceAdmin(admin.ModelAdmin):
     pass
+
 
 admin.site.register(Event,EventAdmin)
 admin.site.register(NewsSource,NewsSourceAdmin)

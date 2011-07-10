@@ -1,8 +1,6 @@
 from django.db import models
 from contacts_and_people.models import Entity, Person, default_entity_id
 from links.models import ExternalLink
-from cms.models import Page
-from datetime import datetime
 from cms.models.fields import PlaceholderField
 
 from cms.models import CMSPlugin
@@ -14,42 +12,43 @@ PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
 class CommonVacancyAndStudentshipInformation(models.Model):
-    class Meta:
-        abstract = True
-        ordering = ['-closing_date']
-    short_title = models.CharField(blank=True, max_length = 50, null=True)
-    title = models.CharField(max_length = 250)
-    closing_date = models.DateField()
-    summary = models.TextField(
-        help_text = "Maximum two lines",
-        )
-    description = models.TextField(help_text = "Not used or required for external items", null= True, blank = True)
-    image = FilerImageField(null=True, blank=True)
-    body = PlaceholderField('description',)
-    hosted_by = models.ForeignKey(Entity, 
-        default = default_entity_id, 
-        related_name = '%(class)s_hosted_events', 
-        null = True, blank = True, 
-        help_text = u"The research group or department responsible for this vacancy")
-    url = models.URLField(verify_exists=True, blank=True, null=True, help_text = u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name = "%(class)s_item", blank = True, null = True,)
-    enquiries = models.ManyToManyField(Person, 
-        related_name = '%(class)s_person', 
-        help_text = u'The person to whom enquiries about this should be directed ', 
-        null = True, blank = True
-        )
-    publish_to = models.ManyToManyField(Entity, 
-        related_name = "%(class)s_advertise_on",
-        help_text = u"Other research groups or departments where this should be advertised", 
-        null = True, blank = True
-        )
     IMPORTANCES = (
         (0, u"Normal"),
         (1, u"More important"),
         (10, u"Most important"),
-        )
-    importance = models.PositiveIntegerField(null=True, blank = False, default = 0, choices = IMPORTANCES, help_text = u"Important items will be featured in lists")
-    slug=models.SlugField(unique = True)  
+    )
+    short_title = models.CharField(blank=True, max_length=50, null=True)
+    title = models.CharField(max_length=250)
+    closing_date = models.DateField()
+    summary = models.TextField(help_text="Maximum two lines")
+    description = models.TextField(null=True, blank=True,
+        help_text="Not used or required for external items")
+    image = FilerImageField(null=True, blank=True)
+    body = PlaceholderField('description')
+    hosted_by = models.ForeignKey(Entity, default=default_entity_id, 
+        related_name='%(class)s_hosted_events', 
+        null=True, blank=True, 
+        help_text=u"The research group or department responsible for this vacancy")
+    url = models.URLField(verify_exists=True, blank=True, null=True,
+        help_text=u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
+    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item",
+        blank=True, null=True)
+    enquiries = models.ManyToManyField(Person, related_name='%(class)s_person', 
+        help_text=u'The person to whom enquiries about this should be directed ', 
+        null=True, blank=True)
+    publish_to = models.ManyToManyField(Entity, related_name="%(class)s_advertise_on",
+        help_text=u"Other research groups or departments where this should be advertised", 
+        null=True, blank=True)
+    importance = models.PositiveIntegerField(null=True, blank=False, default=0,
+        choices=IMPORTANCES, help_text=u"Important items will be featured in lists")
+    slug=models.SlugField(unique=True)
+    
+    class Meta:
+        abstract = True
+        ordering = ['-closing_date']  
+
+    def __unicode__(self):
+        return self.title
 
     def get_when(self):
         """
@@ -71,67 +70,72 @@ class CommonVacancyAndStudentshipInformation(models.Model):
     def date(self):
         return self.closing_date
 
-    def __unicode__(self):
-        return self.title    
 
 class Vacancy(CommonVacancyAndStudentshipInformation):
+    job_number = models.CharField(max_length=9)
+    salary = models.CharField(blank=True, max_length=255, null=True,
+        help_text=u"Please include currency symbol")
+    
     class Meta:
         verbose_name_plural = "Vacancies"
-    job_number = models.CharField(max_length = 9)
-    salary = models.CharField(blank=True, help_text=u"Please include currency symbol", max_length=255, null=True,)
+        
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
         else:
             return "/vacancy/%s/" % self.slug
 
+
 class Studentship(CommonVacancyAndStudentshipInformation):
-    supervisors = models.ManyToManyField(Person, 
-        related_name="%(class)s_people", 
-        null = True, blank = True
-        )
+    supervisors = models.ManyToManyField(Person, null=True, blank=True,
+        related_name="%(class)s_people")
+
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
         else:
             return "/studentship/%s/" % self.slug
 
+
 class VacanciesPlugin(CMSPlugin):
     LAYOUTS = (
         ("sidebyside", u"Side-by-side"),
         ("stacked", u"Stacked"),
-        )
-    layout = models.CharField(max_length=25, choices = LAYOUTS, default = "sidebyside")
+    )
     DISPLAY = (
         (u"vacancies studentships", u"Vacancies and studentships"),
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
-        )
-    display = models.CharField(max_length=25,choices = DISPLAY, default = "news_and_events")
+    )
     FORMATS = (
         ("title", u"Title only"),
         ("details image", u"Details"),
-        )
-    format = models.CharField("Item format", max_length=25,choices = FORMATS, default = "details image")    
+    )
     ORDERING = (
         ("date", u"Date"),
         ("importance/date", u"Importance & date"),
-        )
-    order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
+    )
     LIST_FORMATS = (
         ("vertical", u"Vertical"),
         ("horizontal", u"Horizontal"),
-        )
-    list_format = models.CharField("List format", max_length = 25, choices=LIST_FORMATS, default="vertical")
-    group_dates = models.BooleanField("Show date groups", default = True)
-    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
-    entity = models.ForeignKey(Entity, null = True, blank = True, 
-        help_text = "Leave blank for autoselect",
-        related_name = "vacs_studs_plugin")
-    limit_to = models.PositiveSmallIntegerField(default = 5, null = True, blank = True, 
-        help_text = u"Leave blank for no limit")
-    vacancies_heading_text = models.CharField(max_length = 25, default = "Vacancies")
-    studentships_heading_text = models.CharField(max_length = 25, default = "Studentships")
+    )
+    layout = models.CharField(max_length=25, choices=LAYOUTS, default="sidebyside")
+    display = models.CharField(max_length=25,choices=DISPLAY, default="news_and_events")
+    format = models.CharField("Item format", max_length=25,choices=FORMATS,
+        default="details image")
+    order_by = models.CharField(max_length=25, choices=ORDERING, default="importance/date")
+    list_format = models.CharField("List format", max_length=25,
+        choices=LIST_FORMATS, default="vertical")
+    group_dates = models.BooleanField("Show date groups", default=True)
+    heading_level = models.PositiveSmallIntegerField(choices=PLUGIN_HEADING_LEVELS,
+        default=PLUGIN_HEADING_LEVEL_DEFAULT)
+    entity = models.ForeignKey(Entity, null=True, blank=True, 
+        help_text="Leave blank for autoselect", related_name="vacs_studs_plugin")
+    limit_to = models.PositiveSmallIntegerField(default=5, null=True, blank=True, 
+        help_text=u"Leave blank for no limit")
+    vacancies_heading_text = models.CharField(max_length=25, default="Vacancies")
+    studentships_heading_text = models.CharField(max_length=25, default="Studentships")
+    
     def sub_heading_level(self): # requires that we change 0 to None in the database
         if self.heading_level == None: # this means the user has chosen "No heading"
             return 6 # we need to give sub_heading_level a value

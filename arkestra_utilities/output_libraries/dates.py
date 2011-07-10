@@ -1,6 +1,6 @@
 from django.contrib.humanize.templatetags.humanize import naturalday
 
-def nice_date(date, date_format = None):
+def nice_date(date, date_format=None):
     """
     For date values that are tomorrow, today or yesterday compared to
     present day returns representing string. Otherwise, returns a string

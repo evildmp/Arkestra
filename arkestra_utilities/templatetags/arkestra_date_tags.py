@@ -6,10 +6,11 @@ from arkestra_utilities.output_libraries.dates import nice_date
 
 register = template.Library()
 
-@register.simple_tag(takes_context = True)
-def date(context, date = date):
+@register.simple_tag(takes_context=True)
+def date(context, date=date):
     """
-    The `date` argument is a context attribute containing the date you want published; if not specified, the "date" will be used by default.
+    The `date` argument is a context attribute containing the date you want
+    published; if not specified, the "date" will be used by default.
     """
     date_format = "jS F Y"
     now = datetime.now()

@@ -1,29 +1,20 @@
-from django.contrib.admin.options import *
 from django import forms, template
-from django.forms.formsets import all_valid
-from django.forms.models import modelform_factory, modelformset_factory, inlineformset_factory
-from django.forms.models import BaseInlineFormSet
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.admin import widgets
 from django.contrib.admin import helpers
-from django.contrib.admin.util import unquote, flatten_fieldsets, get_deleted_objects, model_ngettext, model_format_dict
+from django.contrib.admin.options import ModelAdmin
+from django.contrib.admin.util import unquote
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
-from django.db.models.fields import BLANK_CHOICE_DASH
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response
-from django.utils.datastructures import SortedDict
-from django.utils.functional import update_wrapper
+from django.forms.formsets import all_valid
+from django.http import Http404
+from django.shortcuts import render_to_response
+from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.functional import curry
-from django.utils.text import capfirst, get_text_list
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext, ugettext_lazy
-from django.utils.encoding import force_unicode
 
 try:
-    set
+    set11
 except NameError:
     from sets import Set as set     # Python 2.3 fallback
 

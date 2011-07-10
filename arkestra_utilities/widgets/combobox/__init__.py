@@ -47,8 +47,10 @@ class ComboboxField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         kwargs.update({'widget': Combobox})
         return super(ComboboxField, self).__init__(*args, **kwargs)
+    
     def clean(self, value):
         return super(ComboboxField, self).clean(value)
+    
     def valid_value(self, value):
         "Check to see if the provided value is a valid choice"
         # all values are valid

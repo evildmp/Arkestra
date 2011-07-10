@@ -1,26 +1,20 @@
 from django import template
-from django.shortcuts import render_to_response
-from django.db.models import Q
-from news_and_events.models import Event, NewsArticle, NewsAndEventsPlugin
-from contacts_and_people.models import Entity
+from news_and_events.models import NewsAndEventsPlugin
 # from entity_tags import work_out_entity
-from cms.models import Page
-from datetime import datetime
-from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
-from itertools import chain
 #from django.template.defaultfilters import date
 
 register = template.Library()
     
-@register.inclusion_tag('news_and_event_lists.html', takes_context = True)
-def news_and_events(context, display = "news-and-events", heading = 3, format = "details", current_or_archive = "current", max_items = None, order_by = "importance/date", entity = None):
+@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
+def news_and_events(context, display="news-and-events", heading=3,
+        format="details", current_or_archive="current", max_items=None,
+        order_by="importance/date", entity=None):
     """
     Depends on Cardiff's row/column CSS
     Publishes a date-ordered list of news and events
     """
-    print "news_and_events_tags.news_and_events"
     instance = NewsAndEventsPlugin()
     if not entity:
         entity = work_out_entity(context, entity)
@@ -28,7 +22,6 @@ def news_and_events(context, display = "news-and-events", heading = 3, format = 
     instance.entity = entity
     instance.heading_level = heading
     instance.display = display
-    print "instance.display", instance.display
     instance.limit_to = max_items
     instance.format = format
     instance.layout = "sidebyside"
@@ -37,7 +30,7 @@ def news_and_events(context, display = "news-and-events", heading = 3, format = 
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context
     
-@register.inclusion_tag('news_and_event_lists.html', takes_context = True)
+@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
 def person_events(context):
     """
     Depends on Cardiff's row/column CSS
@@ -57,7 +50,7 @@ def person_events(context):
     return context
     
 
-@register.inclusion_tag('news_and_event_lists.html', takes_context = True)
+@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
 def place_events(context):
     """
     Depends on Cardiff's row/column CSS
@@ -77,11 +70,10 @@ def place_events(context):
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context
     
-@register.inclusion_tag('event_index.html', takes_context = True)
+@register.inclusion_tag('event_index.html', takes_context=True)
 def event_index(context):
     """
     """
-    events = context["news_and_events"].events
     index_items = context["news_and_events"].events_index_items
     return {
         "index_items": index_items,

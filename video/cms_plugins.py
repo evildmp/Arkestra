@@ -1,9 +1,8 @@
 print "in VideoPluginPlublisher"
-from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
+from cms.plugin_pool import plugin_pool
 from django.utils.translation import ugettext_lazy as _
 import models
-from arkestra_utilities.output_libraries.plugin_widths import *
 
 class VideoPluginPublisher(CMSPluginBase):
     model = models.VideoPluginEditor

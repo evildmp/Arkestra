@@ -2,7 +2,7 @@
 #print "LOADING link_schemas.py for %s" % __name__
 
 from vacancies_and_studentships import models, admin
-from links import schema, LinkWrapper
+from links import schema
 from django.utils.encoding import smart_unicode
 
 from datetime import datetime
@@ -13,7 +13,7 @@ def smart_description(obj):
     r = []
     date_format = "jS F Y"
     now = datetime.now()
-    if obj.closing_date.year == now.year:                                     # this year
+    if obj.closing_date.year == now.year: # this year
         date_format = "jS F"
     closing_date = date(obj.closing_date, date_format) 
     
