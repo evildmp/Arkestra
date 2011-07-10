@@ -1,7 +1,6 @@
 from django.conf import settings
 
 def arkestra_templates(request):
-    print "------arkestra_templates context processor-------"
     """
     Adds useful Arkestra information to the context.
     """

@@ -1,8 +1,6 @@
 from django import template
-from django.shortcuts import render_to_response
 from django.contrib.contenttypes.models import ContentType
 
-import operator
 import re
 
 from links.models import ObjectLink
@@ -61,7 +59,6 @@ def get_links(parser, token):
     
     There doesn't seem to be much point in using for views that we can easily edit.
     """
-    print "---- in get_links -----"
     try:
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
@@ -75,6 +72,7 @@ def get_links(parser, token):
 class LinksNode(template.Node):
     def __init__(self, var_name):
         self.var_name = var_name
+    
     def render(self, context):
         content_object = context.get('content_object', None)
         if content_object:

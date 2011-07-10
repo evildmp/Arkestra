@@ -23,4 +23,4 @@ urlpatterns = patterns('',
 
     (r'^studentship-archive/$', "vacancies_and_studentships.views.archived_studentships"),
     (r'^current-studentships/$', "vacancies_and_studentships.views.all_current_studentships"),
-    )
+)

@@ -1,12 +1,8 @@
 import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.exceptions import ViewDoesNotExist
-from models import Person, Building, Site, Membership, Entity, default_entity
+from models import Person, Building, Membership, Entity, default_entity
 from links.link_functions import object_links
-
-from django.contrib.contenttypes.models import ContentType
-from links.models import Link
 
 from django.conf import settings
 
@@ -16,11 +12,11 @@ if 'publications' in applications:
     from publications.models import BibliographicRecord
     from publications.models import Researcher # required for publications
 
-def contacts_and_people(request, slug = getattr(default_entity,"slug", None)):
-    print "-------- views.contacts_and_people --------"
+def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
-    request.page_path = request.path # for the menu, because next we mess up the path
+    # for the menu, because next we mess up the path
+    request.page_path = request.path
     request.path = entity.get_website().get_absolute_url()
     template = entity.get_template()
     main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
@@ -64,7 +60,6 @@ def people(request, slug, letter=None):
     """
     Responsible for lists of people
     """
-    print "-------- views.people --------"
     # general values - entity, request, template
     entity = Entity.objects.get(slug=slug)
     request.page_path = request.path # for the menu, because next we mess up the path
@@ -97,34 +92,28 @@ def people(request, slug, letter=None):
             "letter": letter,
         },
         RequestContext(request),
-        )
+    )
 
 def publications(request, slug):
     entity = Entity.objects.get(slug=slug)
     request.current_page = entity.website
-    meta = {
-        "description": "Publications by people in %s" % entity,
-        }
     return render_to_response(
         "contacts_and_people/publications.html",
         {"entity":entity,},
         RequestContext(request),
     )        
 
-def person(request, slug, active_tab = ""):
+def person(request, slug, active_tab=""):
     """
     Responsible for the person pages
     """
     person = get_object_or_404(Person,slug=slug)
     links = object_links(person)
-    print "^^^^^"
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
     home_role = person.get_role()
-    print "&&&"
     if home_role:
         entity = home_role.entity
     entity = person.get_entity() # don't rely on home_role.entity - could be None or overridden
-    print "***"
     # address = person.get_address()
    
     contact = person.get_please_contact()
@@ -146,7 +135,7 @@ def person(request, slug, active_tab = ""):
 
     meta = {
         "description": ": ".join((person.__unicode__(), description))
-        }
+    }
     
     if entity:
         template = entity.get_template() 
@@ -181,17 +170,14 @@ def person(request, slug, active_tab = ""):
             "links": links,
         },
         RequestContext(request),
-        )
+    )
 
-def place(request, slug, active_tab = ""):
+def place(request, slug, active_tab=""):
     """
     Receives active_tab from the slug.
     
     The template receives "_" + active_tab to identify the correct template (from includes).
-    
-    
     """
-    print "place(request, slug):"
     place = Building.objects.get(slug=slug)
     places_dict = { # information for each kind of place page
         "about": {
@@ -248,39 +234,39 @@ def place(request, slug, active_tab = ""):
         
         
 def ajaxGetMembershipForPerson(request):
-  #Which person was/is selected
+    #Which person was/is selected
     try:
-      person_id = int( request.GET.get("person_id") )
+        person_id = int( request.GET.get("person_id") )
     except ValueError:
-      person_id = 0
-  #If editing a current displayrole
+        person_id = 0
+    #If editing a current displayrole
     try:
-      displayrole_id = int( request.GET.get("displayrole_id") )
+        displayrole_id = int( request.GET.get("displayrole_id") )
     except ValueError:
-      displayrole_id = 0      
-  #If editing a current membership
+        displayrole_id = 0      
+    #If editing a current membership
     try:
-      membership_id = int( request.GET.get("membership_id") )
+        membership_id = int( request.GET.get("membership_id") )
     except ValueError:
-      membership_id = 0
-  #Server response to AJAX
+        membership_id = 0
+    #Server response to AJAX
     response = http.HttpResponse()
-  #BLANK option
+    #BLANK option
     response.write ('<option value="">---------</option>')
-  #If valid person selected make <option> list of all their existing memberships
+    #If valid person selected make <option> list of all their existing memberships
     if (person_id > 0 ):
-      membership_forperson_list = Membership.objects.filter(person__id = person_id).order_by('entity__name')
-      for membership in membership_forperson_list:
-        #dont include this membership if it is the one we are editing
-        if membership.id != membership_id:
-          #add a SELECTED clause if this is the display_role that was previously chosen
-            if membership.id == displayrole_id:
-              is_selected = " selected "
-            else:
-              is_selected = ""
-          #return an <option> entry for that membership
-            response.write('<option ' + is_selected + ' value="' + str(membership.id) + '">' + \
-                               str(membership.entity) + ' - ' + str(membership.role) + \
-                           '</option>')
-  #Done
+        membership_forperson_list = Membership.objects.filter(person__id = person_id).order_by('entity__name')
+        for membership in membership_forperson_list:
+            #dont include this membership if it is the one we are editing
+            if membership.id != membership_id:
+                #add a SELECTED clause if this is the display_role that was previously chosen
+                if membership.id == displayrole_id:
+                    is_selected = " selected "
+                else:
+                    is_selected = ""
+                #return an <option> entry for that membership
+                response.write('<option ' + is_selected + ' value="' + str(membership.id) + '">' + \
+                                     str(membership.entity) + ' - ' + str(membership.role) + \
+                                 '</option>')
+    #Done
     return response        

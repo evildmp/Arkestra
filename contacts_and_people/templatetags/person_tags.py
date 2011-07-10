@@ -1,17 +1,15 @@
 from django import template
-from django.shortcuts import render_to_response
 from contacts_and_people.models import Membership
-from cms.models import Page
 
-from contacts_and_people.models import Entity
 register = template.Library()
 
 @register.inclusion_tag('entitytrees.html', takes_context=True)
 def membership_tree_roots(context, person):
     """
-    Produces a list of tree roots. For each of these, uses make_membership_tree to display the entities in the tree that the person belongs to.
+    Produces a list of tree roots. For each of these, uses
+    make_membership_tree to display the entities in the tree that the person
+    belongs to.
     """
-    print person.entities.all()
     roots = set()
     for entity in person.entities.all():
         # get the closest-to-root non-abstract entity
@@ -31,9 +29,11 @@ def make_membership_tree(person, node):
     """
     Builds a tree representation of the entities that the person belongs to.
     
-    This function recurses, by using the template entitytree.html which in turn calls this function
+    This function recurses, by using the template entitytree.html which in turn
+    calls this function
     
-    This can certainly be made more efficient - it renders to the template far too many times
+    This can certainly be made more efficient - it renders to the template far
+    too many times
     """    
     if node in person.gather_entities():
         if not node.abstract_entity or node.is_root_node():
@@ -45,21 +45,8 @@ def make_membership_tree(person, node):
                 if membership.importance_to_person == 5:
                     node.home = True
                 roles.append(membership.role)
-                print "appending: " + str(membership.role)
         return {
             'node': node,
             'person': person,
             'roles': roles,
-            }
-
-# @register.inclusion_tag('address.html', takes_context=True)
-# def address(context):
-#     """
-#     Publishes address for a person.
-#     """
-#     print " -------- person_tags.address --------"
-#     person = context.get('person')
-#     entity = person.get_entity()        
-#     address = entity.get_address()
-#     return {'address': address, 'entity': entity}
-#     
+        }

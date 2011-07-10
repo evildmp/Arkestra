@@ -1,10 +1,4 @@
 from django import template
-from django.shortcuts import render_to_response
-from django.db.models import Q
-from news_and_events.models import Event
-from contacts_and_people.models import Entity
-from cms.models import Page
-from datetime import datetime
 
 register = template.Library()
     

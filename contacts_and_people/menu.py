@@ -1,6 +1,5 @@
-from menus.base import Menu, NavigationNode
+from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
-from django.utils.translation import ugettext_lazy as _
 from menus.base import Modifier
 from django.utils.safestring import mark_safe 
 

@@ -1,11 +1,9 @@
-import django.http as http
 from django.shortcuts import render_to_response, get_object_or_404
 from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle 
 from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
 from links.link_functions import object_links
-from django.template import RequestContext, Context
-from datetime import datetime
+from django.template import RequestContext
 from functions import get_news_and_events
 
 news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
@@ -31,7 +29,7 @@ def common_settings(request, slug):
     instance.view = "current"
     return instance, context, entity
 
-def news_and_events(request, slug = getattr(default_entity,"slug", None)):
+def news_and_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)    
     main_page_body_file = "arkestra/universal_plugin_lister.html"
 
@@ -53,7 +51,7 @@ def news_and_events(request, slug = getattr(default_entity,"slug", None)):
         context,
         )
 
-def previous_events(request, slug = getattr(default_entity,"slug", None)):
+def previous_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -78,7 +76,7 @@ def previous_events(request, slug = getattr(default_entity,"slug", None)):
         context,
         )
         
-def all_forthcoming_events(request, slug = getattr(default_entity,"slug", None)):
+def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "current"
@@ -103,7 +101,7 @@ def all_forthcoming_events(request, slug = getattr(default_entity,"slug", None))
         context,
         )
 
-def news_archive(request, slug = getattr(default_entity,"slug", None)):
+def news_archive(request, slug=getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -140,7 +138,6 @@ def newsarticle(request, slug):
     """
     Responsible for publishing news article
     """
-    print " -------- views.newsarticle --------"
     newsarticle = get_object_or_404(NewsArticle, slug=slug)
     newsarticle = newsarticle_and_event(newsarticle)
     

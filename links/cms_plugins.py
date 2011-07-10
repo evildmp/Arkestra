@@ -1,10 +1,12 @@
-from cms.plugin_pool import plugin_pool
+from arkestra_utilities.output_libraries.plugin_widths import (
+    get_placeholder_width, get_plugin_ancestry, calculate_container_width)
 from cms.plugin_base import CMSPluginBase
-from links.models import GenericLinkListPlugin, GenericLinkListPluginItem, CarouselPlugin, CarouselPluginItem, FocusOnPluginEditor, FocusOnPluginItemEditor
-from django.conf import settings
-from links.admin import ObjectLinkInlineForm
+from cms.plugin_pool import plugin_pool
 from django.contrib import admin
-from arkestra_utilities.output_libraries.plugin_widths import *
+from links.admin import ObjectLinkInlineForm
+from links.models import (GenericLinkListPlugin, GenericLinkListPluginItem, 
+    CarouselPlugin, CarouselPluginItem, FocusOnPluginEditor, 
+    FocusOnPluginItemEditor)
 
 class FocusOnInlineForm(ObjectLinkInlineForm):
     class Meta:
@@ -33,18 +35,15 @@ class FocusOnPluginPublisher(CMSPluginBase):
     text_enabled = True
     inlines = (FocusOnInlineItemAdmin,)
     def icon_src(self, instance):
-        print "getting icon image for links plugin"
         return "/static/plugin_icons/focus_on.png"
+    
     def render(self, context, instance, placeholder):
-        print "--------------------------"
-        print "in render of FocusOnPlugin"
         focuson = instance.focuson_items.order_by('?')[0]
         focuson.heading_level = instance.heading_level
         context.update({
             'focuson':focuson,
             'placeholder':placeholder,
             })
-        print "returning context of FocusOnPlugin"
         return context
 
 plugin_pool.register_plugin(FocusOnPluginPublisher)
@@ -53,6 +52,7 @@ plugin_pool.register_plugin(FocusOnPluginPublisher)
 class PluginLinkInlineForm(ObjectLinkInlineForm):
     class Meta:
         model=GenericLinkListPluginItem
+
 
 class PluginInlineLink(admin.StackedInline):
     extra=10
@@ -72,6 +72,7 @@ class PluginInlineLink(admin.StackedInline):
         })
     )
 
+
 class LinksPlugin(CMSPluginBase):
     model = GenericLinkListPlugin
     name = "Link(s)"
@@ -87,12 +88,12 @@ class LinksPlugin(CMSPluginBase):
         }),
     )
     inlines = (PluginInlineLink,)
+    
     def icon_src(self, instance):
         return "/static/plugin_icons/links.png"
+    
     def render(self, context, instance, placeholder):
-        print "in render of LinksPlugin"
         all_links = instance.links.all()
-        links = []
         links = [link for link in all_links if link.destination_content_object]
         # are there at least two items? if so, the second-last has a final_separator
         if len(links) > 1:
@@ -111,11 +112,13 @@ class LinksPlugin(CMSPluginBase):
         return context
 plugin_pool.register_plugin(LinksPlugin)
 
+
 class PluginCarouselItemForm(ObjectLinkInlineForm):
     """
     """
     class Meta:
         model=CarouselPluginItem
+
 
 class PluginInlineCarousel(admin.StackedInline):
     model = CarouselPluginItem
@@ -131,6 +134,7 @@ class PluginInlineCarousel(admin.StackedInline):
         }),
     )
    
+
 class CarouselPluginPublisher(CMSPluginBase):
     model = CarouselPlugin
     name = "Carousel"
@@ -138,19 +142,16 @@ class CarouselPluginPublisher(CMSPluginBase):
     text_enabled = True
     raw_id_fields = ('image',)
     inlines = (PluginInlineCarousel,)
+    
     def icon_src(self, instance):
-        print "returning carousel icon"
         return "/static/plugin_icons/carousel.png"
         
     def render(self, context, instance, placeholder):
-        print "----------------- Carousel plugin ------------------------"
         segments = list(instance.carousel_item.all())
         if len(segments) < 2:
             return # because it would be silly to have a carousel with only one segment
         # TODO: this scaling code needs to be in a common place
         # use the placeholder width as a hint for sizing
-        placeholder_width = context.get('width', None)
-        
         placeholder_width = get_placeholder_width(context, instance)
         if instance.width <= 10:     
             width = placeholder_width/instance.width
@@ -162,19 +163,13 @@ class CarouselPluginPublisher(CMSPluginBase):
             width = calculate_container_width(plugins, width)
         
         width = int(width) -2 # make room for left/right borders
-        print "width (with room for borders):", width
         label_width = width/len(segments)
         
-        print "label width:", label_width, width%len(segments)
         heights = []
         for segment in segments:
-            print "------"
-            print "segment size", segment.image.width, segment.image.height
             divider = 1.0/float(segment.image.width)
             height_multiplier = float(segment.image.height)*divider
             heights.append(height_multiplier)
-            print "Segment details", segment, segment.url()
-            print "label length", len(segment.link_title), ((width * label_width)/100.0) /float(len(segment.link_title))
             if ((width * label_width)/100.0) /float(len(segment.link_title)) > 6.0: # if the label width divided by no. of characters in label is > 10 (i.e. we allow about 10px width per character, then we'll assume the label can fit on a single line)
                 segment.line_class = "single-line"
             else:
@@ -185,16 +180,11 @@ class CarouselPluginPublisher(CMSPluginBase):
         segments[-1].label_class = "right"
         segments[-1].label_width = int(label_width + width%len(segments))
 
-        print "--"
-        print "heights", heights, height_multiplier
         if instance.aspect_ratio:
             height = width / instance.aspect_ratio
         else:
             height = width * height_multiplier
-        print "height:", height 
-        print "widths:", width/len(segments)
         size= (int(width),int(height))
-        print "size", size
         context.update({
             'carousel':instance,
             'segments':segments, 

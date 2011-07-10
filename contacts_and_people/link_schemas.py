@@ -7,6 +7,7 @@ from django.utils.encoding import smart_unicode
 from easy_thumbnails.files import get_thumbnailer
 from widgetry.views import search
 
+
 class PersonWrapper(LinkWrapper):
     search_fields = admin.PersonAdmin.search_fields
 
@@ -41,6 +42,7 @@ class PersonWrapper(LinkWrapper):
         return "Related people"
 schema.register_wrapper(models.Person,PersonWrapper)
 
+
 class EntityWrapper(LinkWrapper):
     search_fields = admin.EntityAdmin.search_fields
     link_attributes = models.EntityAutoPageLinkPluginEditor.AUTO_PAGES["contacts-and-people"]
@@ -67,6 +69,7 @@ class EntityWrapper(LinkWrapper):
     def short_text(self):
         return str(self.obj.short_name)      
 schema.register_wrapper([models.Entity],EntityWrapper)
+
 
 class BuildingWrapper(LinkWrapper):
     search_fields = admin.BuildingAdmin.search_fields

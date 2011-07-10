@@ -1,8 +1,6 @@
 # register all interesting models for search
 
 from news_and_events import models, admin
-from links import schema, LinkWrapper
-from django.utils.encoding import smart_unicode
 
 
 schema.register(models.NewsArticle, search_fields=admin.NewsArticleAdmin.search_fields,

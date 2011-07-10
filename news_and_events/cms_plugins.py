@@ -1,20 +1,20 @@
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from models import NewsAndEventsPlugin, NewsArticle, Event
+from models import NewsAndEventsPlugin
 from django.utils.translation import ugettext as _
 from django import forms
 
-from itertools import chain
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 from functions import get_news_and_events
 
 # for tabbed interface
-from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin import AutocompleteMixin
+
 
 class NewsAndEventsPluginForm(forms.ModelForm):
     class Meta:
         model = NewsAndEventsPlugin
+    
     def clean(self):
         if "horizontal" in self.cleaned_data["list_format"]:
             self.cleaned_data["order_by"] = "importance/date"
@@ -28,6 +28,7 @@ class NewsAndEventsPluginForm(forms.ModelForm):
         if self.cleaned_data["limit_to"] == 0: # that's a silly number, and interferes with the way we calculate later
             self.cleaned_data["limit_to"] = None
         return self.cleaned_data
+
 
 class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
     model = NewsAndEventsPlugin
@@ -53,7 +54,6 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         #print self.render_template
-        print "======================= in render of CMSNewsAndEventsPlugin =================="
         instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
         instance.type = getattr(instance, "type", "plugin")
         try:
@@ -65,7 +65,6 @@ class CMSNewsAndEventsPlugin(AutocompleteMixin, CMSPluginBase):
             'everything': instance,
             'placeholder': placeholder,
             })
-        print "returning context"
         return context
 
     def icon_src(self, instance):

@@ -1,5 +1,4 @@
 from django import template
-from django.shortcuts import render_to_response
 from vacancies_and_studentships.models import Studentship, Vacancy, VacanciesPlugin
 from entity_tags import work_out_entity, entity_for_page
 
@@ -10,8 +9,8 @@ from django.db.models import Q
 
 register = template.Library()
 
-@register.inclusion_tag('vacancies_and_studentships_list.html', takes_context = True)
-def vacancies_and_studentships(context, heading = 3, format = 0, max_items = 20, entity = None):
+@register.inclusion_tag('vacancies_and_studentships_list.html', takes_context=True)
+def vacancies_and_studentships(context, heading=3, format=0, max_items=20, entity=None):
     """
     Depends on Cardiff's row/column CSS
     Publishes a date-ordered list of vacancies and studentships
@@ -68,8 +67,8 @@ def vacancies_and_studentships(context, heading = 3, format = 0, max_items = 20,
         }
     """
     
-@register.inclusion_tag('vacancylist.html', takes_context = True)
-def vacancies(context, entity = None, max_items = 20):
+@register.inclusion_tag('vacancylist.html', takes_context=True)
+def vacancies(context, entity=None, max_items=20):
     """
     Publishes a date-ordered list of vacancies
     """
@@ -79,8 +78,8 @@ def vacancies(context, entity = None, max_items = 20):
         'vacancies': vacancies,
         }
 
-@register.inclusion_tag('studentshiplist.html', takes_context = True)
-def studentships(context, entity = None, max_items = 20):
+@register.inclusion_tag('studentshiplist.html', takes_context=True)
+def studentships(context, entity=None, max_items=20):
     """
     Publishes a date-ordered list of studentships
     """
@@ -120,14 +119,16 @@ def list_studentships_for_entity(context, page):
 
 def gather_vacancies(entity):
     vacancylist = Vacancy.objects.filter(
-        Q(hosted_by__in=entity.get_descendants(include_self = True)) | Q(also_advertise_on__in=entity.get_descendants(include_self = True))
-        )
+        Q(hosted_by__in=entity.get_descendants(include_self=True)) |
+        Q(also_advertise_on__in=entity.get_descendants(include_self=True))
+    )
     return vacancylist
 
 def gather_studentships(entity):
     studentshiplist = Studentship.objects.filter(
-        Q(hosted_by__in=entity.get_descendants(include_self = True)) | Q(also_advertise_on__in=entity.get_descendants(include_self = True))
-        )
+        Q(hosted_by__in=entity.get_descendants(include_self=True)) |
+        Q(also_advertise_on__in=entity.get_descendants(include_self=True))
+    )
     """for item in studentshiplist:
         print item
     

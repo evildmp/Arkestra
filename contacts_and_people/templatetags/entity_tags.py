@@ -1,9 +1,5 @@
 from django import template
-from django.db.models import Q
-from django.shortcuts import render_to_response
 from contacts_and_people.models import Membership, Entity
-from cms.models import Page
-import operator
 #import DoesNotExistError
 
 register = template.Library()
@@ -37,13 +33,12 @@ def people_with_roles(context, letter = None):
    For an Entity, returns a list of members who have roles. 
     """
     entity = work_out_entity(context, None)
-    print "I am working out the members for:", entity
     members = list(entity.get_people(letter))
     people = entity.get_roles_for_members(members)
     return {
         'entity' : entity,
         'people': people,
-            }  
+    }  
 
 # think we need some error checking here, in case we get to the last ancestor page without having found an entity
 def entity_for_page(page):
@@ -51,7 +46,6 @@ def entity_for_page(page):
     Given a page, returns the entity that has selected the page as its website.
     If the page doesn't have an entity attached to it, will try for the page's parent, and so on.
     """
-    print "entity_for_page()"
     if page:
         try:
             return page.entity.get() # return the entity associated with that page
@@ -67,21 +61,15 @@ def work_out_entity(context,entity):
     """
     # first, try to get the entity from the context
     entity = context.get('entity', None)
-    print "> entity from context: ", entity
     if not entity:
         # otherwise, see if we can get it from a cms page
         request = context['request']
         if request.current_page:
-            print "We're in a page"
             entity = entity_for_page(request.current_page)
-            print "> entity from page: ", entity
         else: # we must be in a plugin, either in the page or in admin
-            print "We're in a plugin"
-            print context['plugin']
             page = context['plugin'].get("page", None)
             if page:
                 entity = entity_for_page(page)
             else:
                 entity = None
-            print "> entity from plugin: ", entity
     return entity

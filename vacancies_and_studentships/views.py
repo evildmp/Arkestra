@@ -4,8 +4,7 @@ from vacancies_and_studentships.models import VacanciesPlugin, Vacancy, Students
 from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
 from links.link_functions import object_links
-from django.template import RequestContext, Context
-from datetime import datetime
+from django.template import RequestContext
 from functions import get_vacancies_and_studentships
 
 news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
@@ -30,7 +29,7 @@ def common_settings(request, slug):
     instance.view = "current"
     return instance, context, entity
 
-def vacancies_and_studentships(request, slug = getattr(default_entity,"slug", None)):
+def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)    
     main_page_body_file = "arkestra/universal_plugin_lister.html"
 
@@ -50,9 +49,9 @@ def vacancies_and_studentships(request, slug = getattr(default_entity,"slug", No
         'everything': instance,
         },
         context,
-        )
+    )
 
-def archived_vacancies(request, slug = getattr(default_entity,"slug", None)):
+def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -75,9 +74,9 @@ def archived_vacancies(request, slug = getattr(default_entity,"slug", None)):
         'everything': instance,
         },
         context,
-        )
+    )
         
-def all_current_vacancies(request, slug = getattr(default_entity,"slug", None)):
+def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "current"
@@ -100,9 +99,9 @@ def all_current_vacancies(request, slug = getattr(default_entity,"slug", None)):
         'everything': instance,
         },
         context,
-        )
+    )
 
-def archived_studentships(request, slug = getattr(default_entity,"slug", None)):
+def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "archive"
@@ -125,9 +124,9 @@ def archived_studentships(request, slug = getattr(default_entity,"slug", None)):
         'everything': instance,
         },
         context,
-        )
+    )
         
-def all_current_studentships(request, slug = getattr(default_entity,"slug", None)):
+def all_current_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
     instance.type = "sub_page"
     instance.view = "current"
@@ -150,7 +149,7 @@ def all_current_studentships(request, slug = getattr(default_entity,"slug", None
         'everything': instance,
         },
         context,
-        )
+    )
 
 def vacancy_and_studentship(item):
     item.links = object_links(item) # not needed if using get_links templatetag
@@ -163,7 +162,6 @@ def vacancy(request, slug):
     """
     Responsible for publishing vacancy
     """
-    print " -------- views.vacancy --------"
     vacancy = get_object_or_404(Vacancy, slug=slug)
     vacancy = vacancy_and_studentship(vacancy)
     
@@ -174,13 +172,12 @@ def vacancy(request, slug):
         "meta": {"description": vacancy.description,}
         },
         RequestContext(request),
-        )
+    )
 
 def studentship(request, slug):
     """
     Responsible for publishing a studentship
     """
-    print " -------- views.studentship --------"
     studentship = get_object_or_404(Studentship, slug=slug)
     studentship = vacancy_and_studentship(studentship)
     
@@ -193,4 +190,4 @@ def studentship(request, slug):
         "meta": {"description": studentship.description,},
         },
         RequestContext(request),
-        )
+    )

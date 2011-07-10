@@ -1,7 +1,5 @@
 from django.conf.urls.defaults import patterns, url
 
-from django.db.models.query import QuerySet
-from django.db.models import get_model
 from django.db.models import Q
 
 from django.conf import settings
@@ -11,13 +9,10 @@ from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 
 from django import forms
-from django.forms import ValidationError
 
 from django.utils.safestring import mark_safe 
-from django.utils.encoding import smart_str
-from django.utils.encoding import smart_unicode
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse
 
 # from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.widgets.combobox import ComboboxField
@@ -25,25 +20,27 @@ from arkestra_utilities.widgets.combobox import ComboboxField
 
 from contacts_and_people import models
 
-from links.admin import ExternalLinkForm, get_or_create_external_link
-from links.models import ExternalLink
+from links.admin import get_or_create_external_link
 from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
-from arkestra_utilities.widgets.wym_editor import WYMEditor
 
 from arkestra_utilities.admin import AutocompleteMixin, SupplyRequestMixin
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
+
 if HAS_PUBLICATIONS:
     from publications.admin import ResearcherInline
 
+
 # ------------------------- Membership admin -------------------------
-class MembershipForm(forms.ModelForm): # cleans up membership & role information
+class MembershipForm(forms.ModelForm):
+    # cleans up membership & role information
     class Meta:
         model = models.Membership
 
-class MembershipInline(AutocompleteMixin, admin.TabularInline): # for all membership inline admin
+class MembershipInline(AutocompleteMixin, admin.TabularInline):
+    # for all membership inline admin
     form = MembershipForm    
     model = models.Membership
     extra = 1
@@ -51,17 +48,18 @@ class MembershipInline(AutocompleteMixin, admin.TabularInline): # for all member
         'person': ('surname',),
         'entity': ('name',),
     }
-    editable_search_fields = (
-        'person','entity',
-        )
+    editable_search_fields = ('person', 'entity',)
+
 
 class MembershipForEntityInline(MembershipInline): # for Entity admin
     exclude = ('importance_to_person', 'display_role')
     extra = 3
 
+
 class MembershipForPersonInline(MembershipInline): # for Person admin
     exclude = ('importance_to_entity', 'display_role')
-    
+
+
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ('person', 'entity', 'importance_to_person', 'importance_to_entity',)
     ordering = ['person',]
@@ -74,18 +72,21 @@ class MembershipAdmin(admin.ModelAdmin):
 # ------------------------- Phone contact admin -------------------------
 
 class PhoneContactInlineForm(forms.ModelForm):
-    class Meta:
-        model = models.PhoneContact
     label = ComboboxField(label = "label", choices=models.PhoneContact.LABEL_CHOICES, required=False)
     country_code = forms.CharField(label="Country code", widget=forms.TextInput(attrs={'size':'4'}))
     area_code = forms.CharField(label="Area code", widget=forms.TextInput(attrs={'size':'5'}))
     number = forms.CharField(label="Number", widget=forms.TextInput(attrs={'size':'10'}))
     internal_extension = forms.CharField(label="Internal extension", widget=forms.TextInput(attrs={'size':'6'}), required=False)
+    
+    class Meta:
+        model = models.PhoneContact
+
 
 class PhoneContactInline(generic.GenericTabularInline):
     extra = 3
     model = models.PhoneContact
     form = PhoneContactInlineForm
+
 
 class PhoneContactAdmin(admin.ModelAdmin):
     pass
@@ -99,7 +100,8 @@ class PersonLiteForm(forms.ModelForm):
         if hasattr(self.instance, "person"):
             raise forms.ValidationError(mark_safe(u"A PersonLite who is also a Person must be edited using the Person Admin Interface"))
         return self.cleaned_data    
-        
+    
+
 class PersonLiteAdmin(admin.ModelAdmin):
     search_fields = ('surname', 'given_name',)
     form = PersonLiteForm
@@ -112,8 +114,6 @@ class PersonLiteAdmin(admin.ModelAdmin):
         """
         if not hasattr(obj, "person"):         
             obj.save()
-        else:
-            print "***ERROR: See",type(self), ".save_model()"
           
 # admin.site.register(models.PersonLite, PersonLiteAdmin)     
 
@@ -168,12 +168,15 @@ class PersonForm(forms.ModelForm):
             )          
 
         return self.cleaned_data
-        
+
+
 class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
+    
     if HAS_PUBLICATIONS:
         inlines.append(ResearcherInline)
+    
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
     #list_editable = ('user',)
@@ -215,9 +218,11 @@ class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
         ('Researcher', {'inlines': ('ResearcherInline',)}),
     )
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
-            
+
+
 class TitleAdmin(admin.ModelAdmin):
     pass
+
 
 class DisplayUsernameWidget(forms.TextInput):
     def render(self, name, value, attrs=None):
@@ -234,7 +239,8 @@ class EntityLiteForm(forms.ModelForm):
         if hasattr(self.instance, "entity"):
             raise forms.ValidationError(mark_safe(u"An EntityLite who is also a full Entity must be edited using the Entity Admin Interface"))
         return self.cleaned_data    
-       
+
+
 class EntityLiteAdmin(admin.ModelAdmin):
     form = EntityLiteForm
 
@@ -246,9 +252,8 @@ class EntityLiteAdmin(admin.ModelAdmin):
         """
         if not hasattr(obj, "entity"):         
             obj.save()
-        else:
-            print "***ERROR: See",type(self), ".save_model()"
-          
+
+
 # admin.site.register(models.EntityLite, EntityLiteAdmin)          
         
 # ------------------------- Entity admin -------------------------
@@ -258,8 +263,6 @@ class EntityForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
 
     def clean(self):
-        # set the title
-        link_title = self.cleaned_data["name"]
 
         # check ExternalLink-related issues
         self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
@@ -267,7 +270,7 @@ class EntityForm(forms.ModelForm):
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
             self.cleaned_data.get("link_title"), # link title
             "", # link description
-            )          
+        )
 
         if not self.cleaned_data["website"]:
             message = "This entity doesn't have a home page. Are you sure you want to do that?"
@@ -275,6 +278,7 @@ class EntityForm(forms.ModelForm):
         if not self.cleaned_data["short_name"]:
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
         return self.cleaned_data 
+
 
 class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin): 
     search_fields = ['name']
@@ -306,29 +310,33 @@ class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin):
             ('Contacts', {
                 'fields': (('auto_contacts_page', 'contacts_page_menu_title',),)
             }),
-            ]
+        ]
     if "news_and_events" in settings.INSTALLED_APPS:
-          tab_automatic_pages.append(  
+        tab_automatic_pages.append(  
             ('News', {
                 'fields': (('auto_news_page', 'news_page_menu_title',),),
-            }),)
+            }),
+        )
     if "vacancies_and_studentships" in settings.INSTALLED_APPS:
-          tab_automatic_pages.append(  
+        tab_automatic_pages.append(  
             ('Vacancies', {
                 'fields': (('auto_vacancies_page', 'vacancies_page_menu_title',),)
-            }),)
+            }),
+        )
     if 'publications' in settings.INSTALLED_APPS:
-          tab_automatic_pages.append(  
-                ('Publications', {
+        tab_automatic_pages.append(  
+            ('Publications', {
                     'fields': (('auto_publications_page', 'publications_page_menu_title',),)
-                }),)
+                }
+            ),
+        )
     tabs = (
             ('Basic information', {'fieldsets':tab_basic}),
             ('Contact information', {'fieldsets':tab_contact,'inlines':('PhoneContactInline',)}),
             ('Advanced options', {'fieldsets':tab_advanced}),
             ('Automatic pages', {'fieldsets':tab_automatic_pages}),
             ('Memberships', {'inlines':('MembershipForEntityInline',)}),
-        )
+        )Q
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -376,10 +384,11 @@ class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin):
 # ------------------------- Building and site admin -------------------------
 
 class BuildingAdminForm(forms.ModelForm):
-    class Meta:
-        model = models.Building
     # getting_here = forms.CharField(widget=WYMEditor, required = False)
     # access_and_parking = forms.CharField(widget=WYMEditor, required = False)
+    
+    class Meta:
+        model = models.Building
 
     def clean(self):
         if self.cleaned_data["number"] and not self.cleaned_data["street"]:
@@ -391,9 +400,11 @@ class BuildingAdminForm(forms.ModelForm):
             raise forms.ValidationError("That's not much of an address, is it?")
         return self.cleaned_data
 
+
 class BuildingInline(admin.StackedInline):
     model = models.Building
     extra = 1
+
 
 class SiteAdmin(AutocompleteMixin, admin.ModelAdmin):
     list_display = ('site_name', 'post_town', 'country',)
@@ -410,6 +421,7 @@ class SiteAdmin(AutocompleteMixin, admin.ModelAdmin):
                     'inlines': ('BuildingInline',),
             }),
     )
+
 
 class BuildingAdmin(PlaceholderAdmin):
     search_fields = ['name','number','street','postcode','site__site_name']
@@ -495,6 +507,8 @@ if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
     
     user_admin_fieldsets = list(UserAdmin.fieldsets)
     user_admin_fieldsets[0] = (None, {'fields': ('username', ('password', 'has_password',),)})
+    
+    
     class MyUserAdmin(UserAdmin):
         fieldsets = user_admin_fieldsets
         form = MyNoPasswordCapableUserChangeForm

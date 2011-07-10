@@ -4,14 +4,6 @@ from models import Category, SubCategory, Product
 
 #first create a custom form to use in admin
 class ProductAdminForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ProductAdminForm, self).__init__(*args, **kwargs)
-#        print dir(self.instance)
-        #try:
-            #Try and set the selected_cat field from instance if it exists
-        self.fields['selected_cat'].initial = self.instance.subcategory.category.id
-        #except:
-            #pass
     #The product model is defined with out the category, so add one in for display
     category = forms.ModelChoiceField(queryset=Category.objects.all().order_by('name'), widget=forms.Select(attrs={'id':'category'}), required=False)
     #This field is used exclusively for the javascript so that I can select the 
@@ -27,6 +19,10 @@ class ProductAdminForm(forms.ModelForm):
             'js/mootools-1.2.3-core-yc.js',
             'js/products.js',
         )
+    
+    def __init__(self, *args, **kwargs):
+        super(ProductAdminForm, self).__init__(*args, **kwargs)
+        self.fields['selected_cat'].initial = self.instance.subcategory.category.id
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
