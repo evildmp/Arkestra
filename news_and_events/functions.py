@@ -52,18 +52,7 @@ def get_news_and_events(instance):
     print "___________________________ Getting news and events _______________________"
     print 
     set_defaults(instance)                  # initialise some variables
-    print "instance.type", instance.type
-    print "instance.display", instance.display
-    print "instance.view", instance.view
-    print "instance.order_by", instance.order_by
-    print "instance.group_dates", instance.group_dates
-    print "instance.format", instance.format
-    print "instance.list_format", instance.list_format
-    print "instance.limit_to", instance.limit_to
-    print "instance.layout", instance.layout
- 
-    convert_and_save_old_format(instance)   # old-style values might need to be converted (surely no longer required)
-
+    print_settings(instance)
     if "news" in instance.display:          # have we been asked to get news?
         print
         print "---------------- Getting news ----------------"
@@ -134,12 +123,24 @@ def set_defaults(instance):
     instance.list_format = getattr(instance, "list_format", "vertical")
     instance.show_venue = getattr(instance, "show_venue", True)
     instance.news_div_class = instance.events_div_class = ""
-    # are we looking at current or archived items?
-    try:
-        instance.view
-    except AttributeError:
-        instance.view = "current"
+    instance.view = getattr(instance, "view", "current")
+    instance.group_dates = getattr(instance, "group_dates", False)
+    instance.news_heading_text = getattr(instance, "news_heading_text", "News")
+    instance.events_heading_text = getattr(instance, "events_heading_text", "News")
     return
+
+
+def print_settings(instance):
+    print "instance.type", instance.type
+    print "instance.display", instance.display
+    print "instance.view", instance.view
+    print "instance.order_by", instance.order_by
+    print "instance.group_dates", instance.group_dates
+    print "instance.format", instance.format
+    print "instance.list_format", instance.list_format
+    print "instance.limit_to", instance.limit_to
+    print "instance.layout", instance.layout
+
 
 def set_links_to_more_views(instance):
     """
@@ -153,7 +154,7 @@ def set_links_to_more_views(instance):
             instance.main_page_name = instance.entity.news_page_menu_title
 
     # not a plugin, but showing current events items on main page
-    if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
+    if instance.type == "main_page" or instance.type == "sub_page":
         if instance.view == "current":
             
             if instance.previous_events or instance.forthcoming_events:
@@ -465,26 +466,7 @@ def get_all_news(instance):
         all_news = NewsArticle.objects.all()
     print "All news", all_news.count()
     return all_news
-
-
-def convert_and_save_old_format(instance):
-    # the older version used integers; this will convert and save them
-    if instance.format == "0":
-        instance.format = "title"
-        instance.save()
-    if instance.format == "1":
-        instance.format = "details"
-        instance.save()
-    if instance.display == "0":
-        instance.display = "news & events"
-        instance.save()
-    if instance.display == "1":
-        instance.display = "news"
-        instance.save()
-    if instance.display == "2":
-        instance.display = "events"
-        instance.save()
-    return
+    
     
 def build_indexes(instance):
     """docstring for build_indexes"""
