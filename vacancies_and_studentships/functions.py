@@ -58,8 +58,6 @@ def get_vacancies_and_studentships(instance):
     print "instance.limit_to", instance.limit_to
     print "instance.layout", instance.layout
  
-    convert_and_save_old_format(instance)   # old-style values might need to be converted (surely no longer required)
-
     if "vacancies" in instance.display:          # have we been asked to get vacancies?
         print
         print "---------------- Getting vacancies ----------------"
@@ -86,7 +84,6 @@ def get_vacancies_and_studentships(instance):
     set_links_to_more_views(instance)       # limit lists, set links to previous/archived/etc items as needed
     set_limits_and_indexes(instance)
     determine_layout_settings(instance)     # work out a layout
-    set_templates(instance)                 # choose template files
     set_layout_classes(instance)            # apply CSS classes
 
     instance.lists = [
@@ -117,7 +114,7 @@ def get_vacancies_and_studentships(instance):
 
 def set_defaults(instance):
     # set defaults
-    instance.vacancies, instance.studentships = None, None
+    instance.vacancies, instance.studentships = [], []
     instance.current_vacancies, instance.current_studentships = [], []
     instance.archived_vacancies, instance.archived_studentships = [], []
     instance.other_vacancies, instance.other_studentships = [], []
@@ -130,6 +127,7 @@ def set_defaults(instance):
     instance.show_images = getattr(instance, "show_images", True)
     instance.show_venue = getattr(instance, "show_venue", True)
     instance.at_venue = getattr(instance, "at_venue", None) # if specified, only show venue's studentships
+    instance.vacancies_div_class = instance.studentships_div_class = ""
     # are we looking at current or archived items?
     try:
         instance.view
@@ -226,45 +224,34 @@ def determine_layout_settings(instance):
     # instance.image_size
     # show_vacancies_when, instance.show_studentships_when
     
-    if "featured" in instance.format:
+    if "image" in instance.format:
         instance.image_size = (75,75)
 
-        if "horizontal" in instance.format:
-            instance.vacancies_list_class = instance.studentships_list_class = "row columns" + str(instance.limit_to) + " " + instance.format
+    if "horizontal" in instance.list_format:
+        instance.list_format = "row columns" + str(instance.limit_to) + " " + instance.list_format
 
-            if instance.vacancies:
-                for item in instance.vacancies:
-                    item.column_class = "column"
-                    item.list_item_template = "includes/vacancies_list_item_featured.html"
-                instance.vacancies[0].column_class = instance.vacancies[0].column_class + " firstcolumn"
-                instance.vacancies[-1].column_class = instance.vacancies[-1].column_class + " lastcolumn"
+        if instance.vacancies:
+            for item in instance.vacancies:
+                item.column_class = "column"
+            instance.vacancies[0].column_class = instance.vacancies[0].column_class + " firstcolumn"
+            instance.vacancies[-1].column_class = instance.vacancies[-1].column_class + " lastcolumn"
 
-            if instance.studentships:
-                for item in instance.studentships:
-                    item.column_class = "column"
-                instance.studentships[0].column_class = instance.studentships[0].column_class + " firstcolumn"
-                instance.studentships[-1].column_class = instance.studentships[-1].column_class + " lastcolumn"               
+        if instance.studentships:
+            for item in instance.studentships:
+                item.column_class = "column"
+            instance.studentships[0].column_class = instance.studentships[0].column_class + " firstcolumn"
+            instance.studentships[-1].column_class = instance.studentships[-1].column_class + " lastcolumn"               
         
-        elif "vertical" in instance.format:
-            instance.vacancies_list_class = instance.studentships_list_class = "row columns1"
-        instance.format = "featured"
-    else:
-        instance.image_size = (75,75)
-        instance.vacancies_list_class = instance.studentships_list_class = "vacancies-and-studentships"
-        # instance.show_studentships_when = True    # no when group in featured style
-    return
+    elif "vertical" in instance.list_format:
+        instance.list_format = "row columns1"
 
-def set_templates(instance):
-    # set the templates for the list items
-    instance.vacancies_list_item_template = "includes/vacancies_list_item_" + instance.format + ".html"
-    instance.studentships_list_item_template = "includes/studentship_list_item_" + instance.format + ".html"
     return
 
 def set_layout_classes(instance):
     """
     Lays out the plugin's vacancies and studentships divs
     """
-    instance.row_class="plugin row"
+    instance.row_class="row"
     # if vacancies and studentships will be side-by-side
     if instance.layout == "sidebyside":
         instance.vacancies_div_class = instance.studentships_div_class = "column firstcolumn" # if both vacancies & studentships we set the studentships column a few lines later
@@ -330,26 +317,6 @@ def get_vacancies(instance):
     instance.current_vacancies = all_vacancies.filter(closing_date__gte = datetime.now())
     instance.archived_vacancies = all_vacancies.exclude(closing_date__gte = datetime.now())
     return 
-
-
-def convert_and_save_old_format(instance):
-    # the older version used integers; this will convert and save them
-    if instance.format == "0":
-        instance.format = "title"
-        instance.save()
-    if instance.format == "1":
-        instance.format = "details"
-        instance.save()
-    if instance.display == "0":
-        instance.display = "vacancies_and_studentships"
-        instance.save()
-    if instance.display == "1":
-        instance.display = "vacancies"
-        instance.save()
-    if instance.display == "2":
-        instance.display = "studentships"
-        instance.save()
-    return
     
 def build_indexes(instance):
     """docstring for build_indexes"""

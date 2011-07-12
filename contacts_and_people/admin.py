@@ -336,7 +336,7 @@ class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin):
             ('Advanced options', {'fieldsets':tab_advanced}),
             ('Automatic pages', {'fieldsets':tab_automatic_pages}),
             ('Memberships', {'inlines':('MembershipForEntityInline',)}),
-        )Q
+        )
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}

@@ -1,7 +1,7 @@
 # register all interesting models for search
 
 from news_and_events import models, admin
-
+from links import schema, LinkWrapper
 
 schema.register(models.NewsArticle, search_fields=admin.NewsArticleAdmin.search_fields,
     metadata='subtitle', heading='"Related news"',
