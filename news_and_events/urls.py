@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+# from  news_and_events.views import NewsAndEventsViews
 
 urlpatterns = patterns('',
     
@@ -17,6 +18,7 @@ urlpatterns = patterns('',
     (r'^previous-events/$', "news_and_events.views.previous_events"),
     (r'^forthcoming-events/$', "news_and_events.views.all_forthcoming_events"),
     (r'^news-and-events/$', "news_and_events.views.news_and_events"),
+    # (r'^news-and-events/$', NewsAndEventsViews.test),
 
     )
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development

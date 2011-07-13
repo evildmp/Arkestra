@@ -49,7 +49,7 @@ def get_news_and_events(instance):
     events_index_items 
     """
     print
-    print "___________________________ Getting news and events _______________________"
+    print "___________________________ Getting news and events from functions.get_news_and_events() _______________________"
     print 
     set_defaults(instance)                  # initialise some variables
     print_settings(instance)

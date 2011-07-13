@@ -2,7 +2,7 @@
 	{% for list in everything.lists %}
 		{% if list.items or list.other_items %}
 		
-			{% include list.index_file %}
+			{% include "arkestra/universal_date_index.html" %}
 
 			<div class = "{{ list.div_class }}">
 				{% if everything.heading_level %}
@@ -16,14 +16,14 @@
 								<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
 								    <ul>
 						        		{% for item in get_when.list %}
-											{% include list.item_file %}
+											{% include "arkestra/universal_plugin_list_item.html" %}
 						        	    {% endfor %}
 						        	</ul>
 						    	</li>
 						{% endfor %}
 			    	{% else %}
 						{% for item in list.items %}
-							{% include list.item_file %}
+							{% include "arkestra/universal_plugin_list_item.html" %}
 						{% endfor %}
 					{% endif %}
 				</ul>

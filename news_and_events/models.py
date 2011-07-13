@@ -12,6 +12,7 @@ from filer.fields.image import FilerImageField
 import mptt
 from cms.models import CMSPlugin
 from django.conf import settings
+from news_and_events.managers import NewsArticleManager, EventManager
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
@@ -103,6 +104,7 @@ class NewsArticle(NewsAndEvents):
     enquiries = models.ManyToManyField(Person, related_name='%(class)s_person', 
         help_text=u'The person to whom enquiries about this should be directed ', 
         null=True, blank=True)
+    objects = NewsArticleManager()
     
     class Meta:
         ordering = ['-date']
@@ -168,6 +170,7 @@ class Event(NewsAndEvents):
     jumps_queue_on = models.DateField(null=True, blank=True,
         help_text=u"Will become a featured item on this date") 
     jumps_queue_everywhere = models.BooleanField(default=False)
+    objects = EventManager()
     
     class Meta:
         ordering = ['type', 'start_date', 'start_time']
