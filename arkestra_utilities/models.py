@@ -11,18 +11,12 @@ class ArkestraUser(User):
         return LogEntry.objects.filter(user = self).order_by('-id')
         
     def last_10_edits(self):
-        try:
-            last_edit = self.edits()[10]
-        except IndexError:
-            last_edit = "Never"
+        last_edit = self.edits()[10]
 
         return last_edit
         
     def last_edit(self):    
-        try:
-            last_edit = self.edits()[0].action_time
-        except IndexError:
-            last_edit = "Never"
+        last_edit = self.edits()[0].action_time
         
         return last_edit
 

@@ -2,16 +2,14 @@ from django.conf import settings
 from django.utils.importlib import import_module
 
 class WidthAdjuster(object):
-    def mark(self):
+    def mark():
         return
-    
-    def modify(self):
+    def modify():
         return
 
 class AdjusterPool(object):
     """
-    Contains the set of adjusters that can provide Arkestra with hints about
-    the widths (or other attributes) of placeholders and their contents
+    Contains the set of adjusters that can provide Arkestra with hints about the widths (or other attributes) of placeholders and their contents
     """
     def __init__(self):
         self.adjusters = {}
