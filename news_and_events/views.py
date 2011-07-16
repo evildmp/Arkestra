@@ -1,18 +1,16 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from news_and_events.models import NewsAndEventsPlugin, Event, NewsArticle 
-from cms_plugins import CMSNewsAndEventsPlugin
-from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
-from links.link_functions import object_links
 from django.template import RequestContext
-from functions import get_news_and_events
 
-news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
+from models import NewsAndEventsPlugin, Event, NewsArticle 
+from contacts_and_people.models import Entity, default_entity
+from links.link_functions import object_links
+# from functions import get_news_and_events
+
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
-
 class NewsAndEventsViews(object):
     def test(self):
         pass
@@ -192,3 +190,5 @@ def event(request, slug):
         },
         RequestContext(request),
         )
+
+print "end of views"

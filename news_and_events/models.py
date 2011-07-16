@@ -1,18 +1,27 @@
-from django.db import models
-from django.db.models import Q
-from contacts_and_people.models import Entity, Person, Building, default_entity_id
-from links.models import ExternalLink
-from cms.models.fields import PlaceholderField
 from datetime import datetime
 from datetime import date as pythondate
+
+from django.conf import settings
+from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.template.defaultfilters import date, time, slugify
-from arkestra_utilities.output_libraries.dates import nice_date
-from filer.fields.image import FilerImageField
+
 import mptt
+
 from cms.models import CMSPlugin
-from django.conf import settings
-from news_and_events.managers import NewsArticleManager, EventManager
+from cms.models.fields import PlaceholderField
+
+from filer.fields.image import FilerImageField
+
+from contacts_and_people.models import Entity, Person, Building, default_entity_id
+
+from links.models import ExternalLink
+
+from arkestra_utilities.output_libraries.dates import nice_date
+from arkestra_utilities.universal_plugins import UniversalPluginOptions
+
+from managers import NewsArticleManager, EventManager
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
@@ -373,51 +382,20 @@ def receiver_function(sender, **kwargs):
 post_save.connect(receiver_function, sender = Event)
 
 
-class NewsAndEventsPlugin(CMSPlugin):
-    LAYOUTS = (
-        ("sidebyside", u"Side-by-side"),
-        ("stacked", u"Stacked"),
-        )
-    layout = models.CharField("Plugin layout", max_length=25, choices = LAYOUTS, default = "sidebyside")
+class NewsAndEventsPlugin(CMSPlugin, UniversalPluginOptions):
     DISPLAY = (
         ("news & events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
     display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news_and_events")
-    FORMATS = (
-        ("title", u"Title only"),
-        ("details image", u"Details"),
-        )
-    format = models.CharField("Item format", max_length=25,choices = FORMATS, default = "details image")    
-    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
-    ORDERING = (
-        ("date", u"Date alone"),
-        ("importance/date", u"Importance & date"),
-        )
-    order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
-    LIST_FORMATS = (
-        ("vertical", u"Vertical"),
-        ("horizontal", u"Horizontal"),
-        )
-    list_format = models.CharField("List format", max_length=25,
-        choices=LIST_FORMATS, default="vertical")
-    group_dates = models.BooleanField("Show date groups", default=True)
     entity = models.ForeignKey(Entity, null=True, blank=True, 
         help_text="Leave blank for autoselect", 
         related_name="news_events_plugin")
     show_previous_events = models.BooleanField()
-    limit_to = models.PositiveSmallIntegerField("Maximum number of items",
-        default=5, null=True, blank=True, 
-        help_text = u"Leave blank for no limit")
     news_heading_text = models.CharField(max_length=25, default="News")
     events_heading_text = models.CharField(max_length=25, default="Events")
     
-    def sub_heading_level(self): # requires that we change 0 to None in the database
-        if self.heading_level == None: # this means the user has chosen "No heading"
-            return 6 # we need to give sub_heading_level a value
-        else:
-            return self.heading_level + 1 # so if headings are h3, sub-headings are h4
 try:
     mptt.register(Event)
 except mptt.AlreadyRegistered:
