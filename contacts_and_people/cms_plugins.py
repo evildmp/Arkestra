@@ -1,18 +1,17 @@
+from django.conf import settings
+from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.translation import ugettext as _
+
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from models import EntityAutoPageLinkPluginEditor, EntityDirectoryPluginEditor, EntityMembersPluginEditor
-from django.utils.translation import ugettext as _
 
-from contacts_and_people.templatetags.entity_tags import work_out_entity
-from contacts_and_people.models import Membership
-
-# for autocomplete search
-from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
-
-# for tabbed interface
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.admin import AutocompleteMixin
+from arkestra_utilities.mixins import AutocompleteMixin
+
+from templatetags.entity_tags import work_out_entity
+from models import Membership
+
 
 class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
     model = EntityAutoPageLinkPluginEditor

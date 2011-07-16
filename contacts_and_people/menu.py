@@ -1,14 +1,19 @@
+from django.utils.safestring import mark_safe 
+from django.template import RequestContext
+from django.conf import settings
+
+from cms.models import Page
+
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier
-from django.utils.safestring import mark_safe 
 
-from django.conf import settings
+from news_and_events.models import NewsAndEventsPlugin        
+from news_and_events.mixins import NewsAndEventsPluginMixin
+from vacancies_and_studentships.models import VacanciesPlugin        
+from vacancies_and_studentships.mixins import VacancyStudentshipPluginMixin
 
-from news_and_events.models import NewsAndEventsPlugin
-from news_and_events.functions import get_news_and_events
-from news_and_events.views import news_and_events_list_default_limit
-from cms.models import Page
+MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 
 # we're expecting modifiers: contacts, news, news_archive, forthcoming_events, previous_events, vacancies, publications
 menu_modifiers = getattr(settings, 'MENU_MODIFIERS', None)
@@ -57,10 +62,11 @@ class ArkestraPages(Modifier):
                         instance = NewsAndEventsPlugin()
                         instance.entity = entity
                         instance.type = "menu"
-                        instance.limit_to = news_and_events_list_default_limit
+                        instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
                         instance.view = "current"
-                        get_news_and_events(instance)
-                        
+                        context = RequestContext(request)
+                        NewsAndEventsPluginMixin().get_items(instance)   
+                                             
                         # are there actually any new/events items to show? if not, no menu
                         if instance.news or instance.other_news or instance.events or instance.other_events:
                         
@@ -104,6 +110,20 @@ class ArkestraPages(Modifier):
                         child.children.append(new_node)
 
                     if getattr(entity, "auto_vacancies_page", None)  and "vacancies" in menu_tests:
+
+                        # # this requires some work on the vacancies_and_studentships manager before it can be enabled
+                        # 
+                        # instance = VacanciesPlugin()
+                        # instance.entity = entity
+                        # instance.type = "menu"
+                        # instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+                        # instance.view = "current"
+                        # context = RequestContext(request)
+                        # VacancyStudentshipPluginMixin().get_items(instance)   
+                        #                      
+                        # # are there actually any vacancies/studentships items to show? if not, no menu
+                        # if instance.vacancies or instance.studentships:
+
                         menutitle = entity.vacancies_page_menu_title
                         new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
                         if request.page_path == new_node.get_absolute_url():
