@@ -1,64 +1,85 @@
-import models
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.db.models import ForeignKey
 
-from widgetry import fk_lookup
-from links.admin import ObjectLinkInline
-
-# for the plugin system
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from arkestra_utilities.admin import SupplyRequestMixin, AutocompleteMixin
+from widgetry import fk_lookup
 
-COMMON_SEARCH_FIELDS = ['short_title','title','summary','description','slug','url']
+from arkestra_utilities.widgets.wym_editor import WYMEditor
+from arkestra_utilities import admin_tabs_extension
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin
 
+from links.admin import ObjectLinkInline
+
+from models import Vacancy, Studentship
 
 class VacancyStudentshipForm(forms.ModelForm):
-    input_url = forms.CharField(max_length=255, required=False)
-    
+    # a shared form for vacancies & studentships
     class Meta:
         widgets = {'summary': forms.Textarea(
               attrs={'cols':80, 'rows':2,},
             ),  
         }
+
+    input_url = forms.CharField(max_length=255, required = False)
     
     def clean(self):
-        if not self.cleaned_data["short_title"] or self.cleaned_data["short_title"] == '':
-            self.cleaned_data["short_title"] = self.cleaned_data["title"]
-        #must have hosted-by or url
-        if not self.cleaned_data["hosted_by"] and not self.cleaned_data["url"]:
-            raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or a URL")                              
-        return self.cleaned_data    
+        # create the short_title automatically if necessary
+        if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
+            if len(self.cleaned_data["title"]) > 70:
+                raise forms.ValidationError("Please provide a short (less than 70 characters) version of the Title for the Short title field.")     
+            else:
+                self.cleaned_data["short_title"] = self.cleaned_data["title"]
+                
+        # check ExternalLink-related issues
+        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
+            self.cleaned_data.get("input_url", None), # a manually entered url
+            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
+            self.cleaned_data.get("title"), # link title
+            self.cleaned_data.get("summary"), # link description
+            )          
+
+        # misc checks
+        if not self.cleaned_data["external_url"]:
+            if not self.cleaned_data["hosted_by"]:
+                raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
+            # must have content or url in order to be published
+            # not currently working, because self.cleaned_data["body"] = None
+            if not self.cleaned_data["body"]:          
+                message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+                messages.add_message(self.request, messages.WARNING, message)
 
 
-class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, admin.ModelAdmin):
-    exclude = ('description', 'url',)
-    search_fields = COMMON_SEARCH_FIELDS
-    list_display = ('short_title', 'hosted_by', 'closing_date',)
+class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
     inlines = (ObjectLinkInline,)
+    exclude = ('description', 'url',)
+    search_fields = ['short_title','title','summary','description','slug','url']
+    list_display = ('short_title', 'hosted_by', 'closing_date',)
+    list_display = ('short_title', 'closing_date', 'hosted_by',)
     related_search_fields = [
         'hosted_by',
         'please_contact',
         'external_url',
         ]
     filter_horizontal = (
-        'publish_to', 
         'enquiries',
-    )
-
-
-class VacancyForm(VacancyStudentshipForm):
-    class Meta(VacancyStudentshipForm.Meta):
-        model = models.Vacancy
-    
-
-# class VacancyAdmin(admin_tabs_extension.ModelAdminWithTabs):
-class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
-    search_fields = COMMON_SEARCH_FIELDS + ['job_number']
-    form = VacancyForm
+        'publish_to', 
+        )
     prepopulated_fields = {
         'slug': ('title',)
             }
+
+class VacancyForm(VacancyStudentshipForm):
+    class Meta(VacancyStudentshipForm.Meta):
+        model = Vacancy
+    
+class VacancyAdmin(VacancyStudentshipAdmin):
+    # def __init__(self):
+    #     super(VacancyAdmin, self).__init__(self)
+    #     search_fields.append('job_number')
+
+    form = VacancyForm
     fieldset_basic = (
         ('', {
             'fields': (('title', 'short_title',), 'closing_date', 'salary', 'job_number',),
@@ -94,25 +115,19 @@ class VacancyAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
     ) 
          
 
-admin.site.register(models.Vacancy,VacancyAdmin)
-
-
 class StudentshipForm(VacancyStudentshipForm):
     class Meta(VacancyStudentshipForm.Meta):
-        model = models.Studentship        
+        model = Studentship        
 
 
 # class StudentshipAdmin(admin_tabs_extension.ModelAdminWithTabs):
-class StudentshipAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
+class StudentshipAdmin(VacancyStudentshipAdmin):
     form = StudentshipForm
     filter_horizontal = (
         'publish_to', 
         'supervisors', 
         'enquiries',
     )
-    prepopulated_fields = {
-        'slug': ('title',)
-            }
     fieldset_basic = (
         ('', {
             'fields': (('title', 'short_title',),  'closing_date',),
@@ -151,5 +166,6 @@ class StudentshipAdmin(PlaceholderAdmin, VacancyStudentshipAdmin):
         'hosted_by',
         'please_contact',
         ]
-    
-admin.site.register(models.Studentship,StudentshipAdmin)
+
+admin.site.register(Vacancy,VacancyAdmin)
+admin.site.register(Studentship,StudentshipAdmin)

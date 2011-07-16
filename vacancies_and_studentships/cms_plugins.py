@@ -1,41 +1,34 @@
-from cms.plugin_base import CMSPluginBase
-from cms.plugin_pool import plugin_pool
-from models import VacanciesPlugin
 from django.utils.translation import ugettext as _
 from django import forms
 
+from cms.plugin_base import CMSPluginBase
+from cms.plugin_pool import plugin_pool
+
+from arkestra_utilities.universal_plugins import UniversalPlugin
+from arkestra_utilities.universal_plugins import UniversalPluginForm
+from arkestra_utilities import admin_tabs_extension
+from arkestra_utilities.mixins import AutocompleteMixin
 
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 from functions import get_vacancies_and_studentships
 
-from arkestra_utilities.admin import AutocompleteMixin
+from models import VacanciesPlugin, Vacancy, Studentship
+from mixins import VacancyStudentshipPluginMixin
 
-class VacanciesPluginForm(forms.ModelForm):
+# for tabbed interface
+
+class VacanciesStudentshipsPluginForm(UniversalPluginForm, forms.ModelForm):
     class Meta:
         model = VacanciesPlugin
-    
-    def clean(self):
-        if "horizontal" in self.cleaned_data["list_format"]:
-            self.cleaned_data["order_by"] = "importance/date"
-            self.cleaned_data["format"] = "details image"
-            self.cleaned_data["layout"] = "stacked"
-            self.cleaned_data["group_dates"] = False
-            if self.cleaned_data["limit_to"] >3:
-                self.cleaned_data["limit_to"] = 3
-            if self.cleaned_data["limit_to"] < 2:
-                self.cleaned_data["limit_to"] = 2
-        if self.cleaned_data["limit_to"] == 0: # that's a silly number, and interferes with the way we calculate later
-            self.cleaned_data["limit_to"] = None
-        return self.cleaned_data
 
 
-class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
+class CMSVacanciesPlugin(UniversalPlugin, VacancyStudentshipPluginMixin, AutocompleteMixin, CMSPluginBase):
     model = VacanciesPlugin
     name = _("Vacancies & Studentships")
-    text_enabled = True
-    form = VacanciesPluginForm
-    render_template = "arkestra/universal_plugin_lister.html"
-    admin_preview = False
+    form = VacanciesStudentshipsPluginForm
+    auto_page_attribute = "auto_vacancies_page"
+    auto_page_slug = "vacancies-and-studentships"
+    auto_page_menu_title = "vacancies_page_menu_title"
     
     fieldsets = (
         (None, {
@@ -51,19 +44,23 @@ class CMSVacanciesPlugin(AutocompleteMixin, CMSPluginBase):
     related_search_fields = ['entity',]
 
     def render(self, context, instance, placeholder):
-        #print self.render_template
+        self.set_defaults(instance)
+
         instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
-        
         instance.type = getattr(instance, "type", "plugin")
-        try:
-            render_template = instance.render_template
-        except AttributeError:
-            pass
-        get_vacancies_and_studentships(instance)
+        render_template = getattr(instance, "render_template", "")
+        self.get_items(instance)
+        self.add_link_to_main_page(instance)
+        self.add_links_to_other_items(instance)
+        self.set_limits_and_indexes(instance)
+        self.determine_layout_settings(instance)
+        self.set_layout_classes(instance)
+        instance.lists = self.lists
         context.update({ 
             'everything': instance,
             'placeholder': placeholder,
             })
+        print "returning context"
         return context
 
     def icon_src(self, instance):
