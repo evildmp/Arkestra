@@ -132,13 +132,8 @@ class NewsArticle(NewsAndEvents):
         get_when() provides a human-readable attribute under which items can be grouped.
         Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
         """
-        try:
-            # The render function of CMSNewsAndEventsPlugin can set a temporary sticky attribute for Top news items
-            if self.sticky:
-                return "Top news"
-        except AttributeError:
-            pass
-        
+        if getattr(self, "sticky", None):
+            return "Top news"        
         date_format = "F Y"
         get_when = nice_date(self.date, date_format)
         return get_when
@@ -328,12 +323,8 @@ class Event(NewsAndEvents):
             
     def get_when(self):
         if self.start_date:
-            try:
-            # The render function of CMSNewsAndEventsPlugin can set a sticky attribute for Top news items
-                if self.sticky:
-                    return "Top events"
-            except AttributeError:
-                pass
+            if getattr(self, "sticky", None):
+                return "Top events"
             
             #return self.start_date
             #now = datetime.now()

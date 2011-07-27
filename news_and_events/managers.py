@@ -58,6 +58,9 @@ class NewsArticleManager(models.Manager):
             ordinary_news.extend(remaining_items)
             for item in top_news:
                 item.sticky = True
+                print instance.format
+                if instance.format == "title":
+                    item.importance = None
             print "Top news", len(top_news)
             print "Ordinary news", len(ordinary_news)
             ordinary_news.sort(key=operator.attrgetter('date'), reverse = True)
@@ -189,6 +192,8 @@ class EventManager(models.Manager):
             ordinary_events = list(ordinary_events)
             for item in top_events:
                 item.sticky = True
+                if instance.format == "title":
+                    item.importance = None
         
         instance.top_events, instance.ordinary_events = list(top_events), ordinary_events
     

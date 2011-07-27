@@ -52,6 +52,9 @@ class UniversalPluginForm(object):
                 self.cleaned_data["limit_to"] = 2
         if self.cleaned_data["limit_to"] == 0: # that's a silly number, and interferes with the way we calculate later
             self.cleaned_data["limit_to"] = None
+        # if self.cleaned_data["format"] == "title":
+        #     print self.cleaned_data["format"]
+        #     self.cleaned_data["group_dates"] = False
         return self.cleaned_data
 
 
@@ -96,7 +99,7 @@ class UniversalPlugin(object):
                 this_list["items"] = this_list["items"][:instance.limit_to]
 
             this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)] # put non-top items in it
-            this_list["no_of_get_whens"] = len(set(item.get_when() for item in this_list["index_items"]))
+            this_list["no_of_get_whens"] = len(set(item.get_when() for item in this_list["items"]))
             if instance.type == "sub_page" and this_list["no_of_get_whens"] > 1: # more than 1 get_when()?
                 this_list["index"] = True   # show an index
             this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
