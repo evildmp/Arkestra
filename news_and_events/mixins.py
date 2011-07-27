@@ -2,6 +2,7 @@ from models import NewsArticle, Event
 
 class NewsAndEventsPluginMixin(object):
     def news_style_other_links(self, instance, this_list):
+        this_list["other_items"] = []
         if this_list["items"] and instance.view == "current":
             all_items_count = len(this_list["items"])
             if instance.limit_to and all_items_count > instance.limit_to:
@@ -47,6 +48,7 @@ class NewsAndEventsPluginMixin(object):
             this_list["items"] = NewsArticle.objects.get_items(instance)
             this_list["links_to_other_items"] = self.news_style_other_links
             this_list["heading_text"] = instance.news_heading_text
+            print "##", this_list
             self.lists.append(this_list)
 
         if "events" in instance.display:

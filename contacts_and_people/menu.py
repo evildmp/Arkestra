@@ -8,8 +8,10 @@ from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier
 
-from news_and_events.models import NewsAndEventsPlugin        
+from news_and_events.models import NewsAndEventsPlugin, NewsArticle        
 from news_and_events.mixins import NewsAndEventsPluginMixin
+from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
+
 from vacancies_and_studentships.models import VacanciesPlugin        
 from vacancies_and_studentships.mixins import VacancyStudentshipPluginMixin
 
@@ -65,40 +67,46 @@ class ArkestraPages(Modifier):
                         instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
                         instance.view = "current"
                         context = RequestContext(request)
-                        NewsAndEventsPluginMixin().get_items(instance)   
-                                             
-                        # are there actually any new/events items to show? if not, no menu
-                        if instance.news or instance.other_news or instance.events or instance.other_events:
                         
-                            menutitle = entity.news_page_menu_title
-                            new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('news-and-events'), None)
-                            if new_node.get_absolute_url() in request.page_path:
-
-                                new_node.selected = True
-                                child.selected=False
-
-                                if instance.other_news  and "news_archive" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("News archive"), entity.get_related_info_page_url('news-archive'), None )
-                                    if request.page_path == new_sub_node.get_absolute_url():
-                                        new_sub_node.selected = True
-                                        new_node.selected=False
-                                    new_node.children.append(new_sub_node)
-
-                                if any("all-forthcoming" in d.itervalues() for d in instance.other_events) and "forthcoming_events" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("All forthcoming events"), entity.get_related_info_page_url('forthcoming-events'), None )
-                                    if request.page_path == new_sub_node.get_absolute_url():
-                                        new_sub_node.selected = True
-                                        new_node.selected=False
-                                    new_node.children.append(new_sub_node)
-                
-                                if any("previous-events" in d.itervalues() for d in instance.other_events) and "previous_events" in menu_tests:
-                                    new_sub_node = NavigationNode(mark_safe("Previous events"), entity.get_related_info_page_url('previous-events'), None )
-                                    if request.page_path == new_sub_node.get_absolute_url():
-                                        new_sub_node.selected = True
-                                        new_node.selected=False
-                                    new_node.children.append(new_sub_node)
-
-                            child.children.append(new_node)
+                        # news_and_events = CMSNewsAndEventsPlugin()   
+                        # news_and_events.get_items(instance)
+                        # news_and_events.add_link_to_main_page(instance)
+                        # news_and_events.add_links_to_other_items(instance)    
+                        # 
+                        # for item in news_and_events.lists:
+                        #     print "##", item["heading_text"]
+                        # # are there actually any new/events items to show? if not, no menu
+                        # if instance.news or instance.other_news or instance.events or instance.other_events:
+                        # 
+                        #     menutitle = entity.news_page_menu_title
+                        #     new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('news-and-events'), None)
+                        #     if new_node.get_absolute_url() in request.page_path:
+                        # 
+                        #         new_node.selected = True
+                        #         child.selected=False
+                        # 
+                        #         if instance.other_news  and "news_archive" in menu_tests:
+                        #             new_sub_node = NavigationNode(mark_safe("News archive"), entity.get_related_info_page_url('news-archive'), None )
+                        #             if request.page_path == new_sub_node.get_absolute_url():
+                        #                 new_sub_node.selected = True
+                        #                 new_node.selected=False
+                        #             new_node.children.append(new_sub_node)
+                        # 
+                        #         if any("all-forthcoming" in d.itervalues() for d in instance.other_events) and "forthcoming_events" in menu_tests:
+                        #             new_sub_node = NavigationNode(mark_safe("All forthcoming events"), entity.get_related_info_page_url('forthcoming-events'), None )
+                        #             if request.page_path == new_sub_node.get_absolute_url():
+                        #                 new_sub_node.selected = True
+                        #                 new_node.selected=False
+                        #             new_node.children.append(new_sub_node)
+                        #                 
+                        #         if any("previous-events" in d.itervalues() for d in instance.other_events) and "previous_events" in menu_tests:
+                        #             new_sub_node = NavigationNode(mark_safe("Previous events"), entity.get_related_info_page_url('previous-events'), None )
+                        #             if request.page_path == new_sub_node.get_absolute_url():
+                        #                 new_sub_node.selected = True
+                        #                 new_node.selected=False
+                        #             new_node.children.append(new_sub_node)
+                        # 
+                        #     child.children.append(new_node)
 
                     if entity.auto_contacts_page and "contacts" in menu_tests:
                         menutitle = entity.contacts_page_menu_title

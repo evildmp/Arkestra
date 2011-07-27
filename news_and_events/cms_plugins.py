@@ -47,6 +47,8 @@ class CMSNewsAndEventsPlugin(UniversalPlugin, NewsAndEventsPluginMixin, Autocomp
         self.get_items(instance)
         self.add_link_to_main_page(instance)
         self.add_links_to_other_items(instance)
+        # for item in self.lists:
+        #     print "##", item["heading_text"], len(item["other_items"])
         self.set_limits_and_indexes(instance)
         self.determine_layout_settings(instance)
         self.set_layout_classes(instance)

@@ -52,9 +52,6 @@ class UniversalPluginForm(object):
                 self.cleaned_data["limit_to"] = 2
         if self.cleaned_data["limit_to"] == 0: # that's a silly number, and interferes with the way we calculate later
             self.cleaned_data["limit_to"] = None
-        # if self.cleaned_data["format"] == "title":
-        #     print self.cleaned_data["format"]
-        #     self.cleaned_data["group_dates"] = False
         return self.cleaned_data
 
 

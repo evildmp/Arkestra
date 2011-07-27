@@ -2,10 +2,11 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from django.template import RequestContext
 
-from models import NewsAndEventsPlugin, Event, NewsArticle 
 from contacts_and_people.models import Entity, default_entity
 from links.link_functions import object_links
-# from functions import get_news_and_events
+
+from models import NewsAndEventsPlugin, Event, NewsArticle
+from cms_plugins import CMSNewsAndEventsPlugin
 
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 
@@ -38,7 +39,7 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
-    get_news_and_events(instance)
+    # get_news_and_events(instance)
 
     meta = {"description": "Recent news and forthcoming events",}
     title = str(entity)  + " news & events"
