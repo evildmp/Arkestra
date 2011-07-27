@@ -10,6 +10,7 @@ class NewsAndEventsPluginMixin(object):
                     "link":instance.entity.get_related_info_page_url("news-archive"), 
                     "title":"news archive",
                     "count": all_items_count,}]
+            print "###", this_list["other_items"]
             return this_list
             
     def events_style_other_links(self, instance, this_list):

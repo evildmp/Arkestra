@@ -85,7 +85,8 @@ class UniversalPlugin(object):
         print "self.layout", self.layout
 
     def add_links_to_other_items(self, instance):
-        if instance.type == "main_page" or instance.type == "sub_page":       
+        if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":     
+            print "### adding other items"  
             for this_list in self.lists:
                 this_list["links_to_other_items"](instance, this_list)
                  
