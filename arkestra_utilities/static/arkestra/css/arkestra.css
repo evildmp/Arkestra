@@ -16,8 +16,7 @@ div.row {
     height:100%;
     }
 
-.row ul.row ,
-.row .row {
+div.row div.row {
     margin: 0 0 .5em; 
     height: 100%; /* why do we do this? */
     }
@@ -136,12 +135,21 @@ ul.icons    {
 }
 
 /* plugin list items */
+
+ul.plugin-list {margin-top: 0;}
+
 ul.plugin-list.vertical li {list-style: none; padding-bottom: 0.6em;}
-ul.plugin-list.vertical li.important {padding: .5em; margin-bottom: 1em;	background: #ffe792;}
+ul.plugin-list.vertical li.grouper li.important {
+    padding: .5em; 
+    margin: 1px 0 1em; 
+    }
 
 /* groupers in plugin lists */
-ul.plugin-list li.grouper {font-weight: bold; color: #903;  }
-ul.plugin-list li.grouper ul {font-weight: normal; color: black;}
+ul.plugin-list li.grouper {font-weight: bold;}
+ul.plugin-list li.grouper ul {
+    font-weight: normal; 
+    padding-left: 0;
+    }
 
 
 /* list for links to other items, (e.g. news and events) */ 
@@ -423,11 +431,7 @@ div.contact_information .entity {font-weight: bold;}
 
 dt  {color: gray;}
 
-/* subtitle for news, events, etc */
-.subtitle   {color: gray; size: 120%;} /* probably looks best at <h2> size, since that's what is used in Events and other pages */
-.plugin .subtitle   {color: black;}  /* font-size: 95%; for the ones in lists */
 
-.date   {color: #666; font-weight: lighter;}
 
 /* styles for publications */
 

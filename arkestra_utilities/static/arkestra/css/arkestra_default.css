@@ -1,14 +1,17 @@
+/* ----------------- brand new styles ----------------- */
+
 body    {
     margin: 30px auto;
-    background: gray;
+    background: #def58c;
     border: 1px solid black;
     width: 1000px;
-    font-family: Baskerville, Garamond, Palatino, "Palatino Linotype", "Hoefler Text", "Times New Roman", serif;
-    }
+    font-family: "Hoefler Text", Garamond, Palatino, "Palatino Linotype", "Times New Roman", serif;
+    line-height: 1.2;
+    color: #222}
 
 div#outer-wrapper   {
     padding: 30px;
-    background: #aaa;
+    background: white;
     }
     
 div#inner-wrapper   {
@@ -21,4 +24,72 @@ div.footer  {
     border-top: 1px solid black;
 }
 
-ul, ol  {}
+h1  {font-size: 260%; color: #412fd9; font-variant: small-caps;}
+h2  {font-size: 170%; font-style: italic; font-weight: normal; color: #7e991e; border-bottom: 1px solid gray;}
+h3  {font-size: 150%; margin-bottom: 0;}
+h4  {font-size: 112%}
+h5  {font-size: 86%}
+h6  {font-size: 75%}
+
+/* ----------------- arkestra.css ----------------- */
+
+/* background of important items */
+ul.plugin-list.vertical li.grouper li.important {
+    background: #fffd92;
+    }
+
+/* groupers in plugin lists */
+ul.plugin-list li.grouper {color: #ff7f37;}
+ul.plugin-list li.grouper ul {
+    color: #444;
+    }
+    
+/* subtitle for news, events, etc */
+.subtitle   {color: gray; size: 200%;}
+.date   {color: #666; font-weight: lighter; font-style: italic;}
+
+/* ----------------- arkestra_navigation.css ----------------- */
+
+ul.menu	{ /* the whole thing */
+    background: #def58c;
+    padding: 8px;
+    padding-right: 8px;
+    border-bottom: 1px solid gray;
+	} 
+	
+li.menu_item	{ /* all items */
+    background: #def58c;
+	padding-bottom: 8px;
+	}
+
+ul.menu ul { /* 2nd level list */
+}
+	
+ul.menu ul li { /* 2nd level items */
+    padding-left: 12px; 
+}
+
+ul.menu ul ul { /* 3rd level list */
+	padding: 7px 0 0;
+}
+
+ul.menu ul li:hover ul {
+}
+
+ul.menu ul ul li {
+	padding-top: 8px;
+	border-top: 1px solid gray;
+    list-style: square inside;
+}
+
+li.menu_item a	{
+    color: black;
+}
+	
+li.menu_item a:hover	{
+	}
+	
+
+
+
+
