@@ -73,8 +73,10 @@
 		{% endblock pagetitle %}
 		
 		{% block main_page_body %}
-			{% insert "newsflash" %}
-	   		{% placeholder body %}
+			{% filter typogrify %}
+				{% insert "newsflash" %}
+		   		{% placeholder body %}
+			{% endfilter %}
 	  	{% endblock main_page_body %}
      	
 		{% insert "footer" %}
