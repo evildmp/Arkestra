@@ -3,9 +3,9 @@
 	{% comment %}everything.all_columns: {{ everything.all_columns }}, item.column_class: {{item.column_class}}, news_item_class: {{ news_item_class }}, news.get_when|slugify: {{news.get_when|slugify}}{% endcomment %}
 
     {% if item.external_url %}
-		<strong><a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a></strong> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
     {% else %}
-		<strong><a href="{{ item.get_absolute_url }}">{{item.short_title}}</a></strong>
+		<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
 	{% endif %}
     {% if "image" in everything.format and item.image %}
 		{% thumbnail item.image.file everything.image_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
