@@ -1,26 +1,20 @@
-from django.contrib import admin
-from django.contrib.contenttypes import generic
-from django.contrib import messages
+from urlparse import urlparse 
+from urllib import urlopen
 
-from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
-
-
-# imports for FK search box
+from django import forms
 from django.db.models import ForeignKey
-#from arkestra_utilities.widgets.widgets import ForeignKeySearchInput, GenericForeignKeySearchInput
-#from arkestra_utilities.views import search
-from arkestra_utilities.admin import SupplyRequestMixin
+from django.contrib import admin, messages
+from django.contrib.contenttypes import generic
 
 from widgetry import fk_lookup
 from widgetry.views import search 
 
-from django import forms
+from arkestra_utilities.mixins import SupplyRequestMixin
+
+from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
+from links import schema
 
 #LINK_SCHEMA = getattr(settings, 'LINK_SCHEMA', {})
-
-from links import schema
-from urlparse import urlparse 
-from urllib import urlopen
 
 class LinkAdmin(admin.ModelAdmin):        
     related_search_fields = ['destination_content_type']
