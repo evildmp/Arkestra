@@ -268,14 +268,15 @@ ul.index li a:hover {
     }
 
 /* date indexes for plugin lists */
-ul.plugin-index {
-}
-
 ul.plugin-index li {
     list-style: none;
     margin-bottom: 1em;
     padding-bottom: 1em;
-    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+
+ul.plugin-index li:first-child {
+    border-top: none;
 }
 
 ul.plugin-index ul {
@@ -284,7 +285,7 @@ ul.plugin-index ul {
     }
 
 ul.plugin-index ul li {
-    border-bottom: none;
+    border-top: none;
     padding-bottom: .2em;
     margin-bottom: 0;
 }
@@ -409,14 +410,14 @@ images: float left/right - left/right floats can be applied either directly to i
 .images-left span.image,
 span.image.left {
     float: left; 
-    margin-right: 10%; 
+    margin-right: 5px; 
     clear: none;
     }
 
 .images-right span.image,
 span.image.right {
     float: right; 
-    margin-left: 10%; 
+    margin-left: 5px; 
     clear: none;
     }
 

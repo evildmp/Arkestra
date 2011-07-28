@@ -70,7 +70,6 @@ class ReduceForBackground(WidthAdjuster):
             width = width - 32
         return width
 
-
 class ColumnWidths(WidthAdjuster):
     kind="image_width"
     """

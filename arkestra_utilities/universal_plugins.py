@@ -141,7 +141,6 @@ class UniversalPlugin(object):
         instance.row_class="row"
         # if divs will be side-by-side
         if instance.layout == "sidebyside":
-            print "## lists", self.lists
             if len(self.lists) > 1:
                 instance.row_class=instance.row_class+" columns" + str(len(self.lists))
                 self.lists[0]["div_class"] = "column firstcolumn"

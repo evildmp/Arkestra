@@ -107,7 +107,7 @@ class ArkestraPages(Modifier):
 
                         if show_menu_item:
                             # is this node the one we are currently looking at?
-                            if new_node.get_absolute_url() in request.page_path:
+                            if new_node.get_absolute_url() == request.page_path:
                                 new_node.selected = True
                                 child.selected = False
                             child.children.append(new_node)
