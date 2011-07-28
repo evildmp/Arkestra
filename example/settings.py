@@ -186,7 +186,7 @@ CMS_PLACEHOLDER_CONF = {
             'FocusOnPluginPublisher',
             ),
         "extra_context": {            
-            "width":"749",
+            "width":"880",
             },
         "name": gettext("body"),
     },
