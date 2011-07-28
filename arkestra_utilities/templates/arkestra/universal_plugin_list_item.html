@@ -1,4 +1,5 @@
-{% load thumbnail humanize %}
+{% load thumbnail humanize typogrify_tags %}
+{% filter typogrify %}
 <li class = "{{ item.column_class }} {{ item.get_importance}}">
 	{% comment %}everything.all_columns: {{ everything.all_columns }}, item.column_class: {{item.column_class}}, news_item_class: {{ news_item_class }}, news.get_when|slugify: {{news.get_when|slugify}}{% endcomment %}
 
@@ -16,3 +17,4 @@
     	<div class = "date">{{ item.date|naturalday|capfirst }}</div>
 	{% endif %}
 </li>
+{% endfilter %}

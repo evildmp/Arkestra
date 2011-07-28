@@ -27,7 +27,7 @@ MULTIPLE_ENTITY_MODE = True
 # such as /news-and-events
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = 6
 
-# in All forthcoming events lisys, gather top events  together
+# in All forthcoming events lists, gather top events  together
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = True
 
 # show event type (e.g. "Seminar")
@@ -62,6 +62,10 @@ CMS_MENU_TITLE_OVERWRITE = True
 # Built in menu modifiers are in contacts_and_people.menu
 
 MENU_MODIFIERS  = {"ArkestraPages": ("contacts", "news", "vacancies")}
+
+# Do you want all menu branches to expand? 
+
+EXPAND_ALL_MENU_BRANCHES = True
 
 # -------- Semantic editor ----------------------
 

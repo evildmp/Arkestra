@@ -86,20 +86,24 @@ class UniversalPlugin(object):
 
     def add_links_to_other_items(self, instance):
         if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":     
-            print "### adding other items"  
             for this_list in self.lists:
                 this_list["links_to_other_items"](instance, this_list)
                  
     def set_limits_and_indexes(self, instance):
         for this_list in self.lists:
         
+            # cut the list down to size if necessaryt
             if this_list["items"] and len(this_list["items"]) > instance.limit_to:
                 this_list["items"] = this_list["items"][:instance.limit_to]
 
-            this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)] # put non-top items in it
+            # gather non-top items into a list to be indexed
+            this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)]
+            # extract a list of dates for the index
             this_list["no_of_get_whens"] = len(set(item.get_when() for item in this_list["items"]))
-            if instance.type == "sub_page" and this_list["no_of_get_whens"] > 1: # more than 1 get_when()?
-                this_list["index"] = True   # show an index
+            # more than one date in the list: show an index
+            if instance.type == "sub_page" and this_list["no_of_get_whens"] > 1:
+                this_list["index"] = True
+            # we only show date groups when warranted    
             this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
 
     def determine_layout_settings(self, instance):
@@ -137,6 +141,7 @@ class UniversalPlugin(object):
         instance.row_class="row"
         # if divs will be side-by-side
         if instance.layout == "sidebyside":
+            print "## lists", self.lists
             if len(self.lists) > 1:
                 instance.row_class=instance.row_class+" columns" + str(len(self.lists))
                 self.lists[0]["div_class"] = "column firstcolumn"
