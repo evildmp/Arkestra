@@ -111,8 +111,6 @@ class UniversalPlugin(object):
         Sets:
             image_size
             list_format
-        
-    
         """
         if "image" in instance.format:
             instance.image_size = (75,75)

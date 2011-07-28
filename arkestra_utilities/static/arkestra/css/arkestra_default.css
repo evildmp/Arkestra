@@ -63,7 +63,13 @@ ul.menu li	{ /* all items */
 	}
 
 ul.menu li li li li {
-    background: #edf9c0
+    background: #ecf9ba;
+    padding: 6px;
+    font-size: 90%;
+    }
+
+ul.menu li li li li li {
+    background: #f3fbd2;
     }
 
 ul.menu ul { /* 2nd level list */
@@ -84,7 +90,6 @@ ul.menu ul li:hover ul {
 ul.menu ul ul li {
 	padding-top: 8px;
 	border-top: 1px solid gray;
-    list-style: square inside;
 }
 
 li.menu_item a	{
