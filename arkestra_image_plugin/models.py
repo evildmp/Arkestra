@@ -29,7 +29,7 @@ class FilerImage(CMSPlugin):
             )
         ),
         (u'Absolute widths', (
-            (-50.0, u'50 pixels (square - overrides Aspect Ratio)'),
+            (-50.0, u'50 pixels square, cropped'),
             (-175.0, u'175 pixels'),
             (-350.0, u'350 pixels'),
             )
