@@ -57,16 +57,21 @@ ul.menu	{ /* the whole thing */
     border-bottom: 1px solid gray;
 	} 
 	
-li.menu_item	{ /* all items */
+ul.menu li	{ /* all items */
     background: #def58c;
 	padding-bottom: 8px;
 	}
+
+ul.menu li li li li {
+    background: #edf9c0
+    }
 
 ul.menu ul { /* 2nd level list */
 }
 	
 ul.menu ul li { /* 2nd level items */
-    padding-left: 12px; 
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 ul.menu ul ul { /* 3rd level list */
@@ -86,7 +91,12 @@ li.menu_item a	{
     color: black;
 }
 	
+li.menu_item a.selected	{
+    color: #412fd9;
+	}
+
 li.menu_item a:hover	{
+	color: #ff7f37;
 	}
 	
 

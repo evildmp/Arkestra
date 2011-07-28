@@ -5,7 +5,8 @@
 {#% cache CMS_CONTENT_CACHE_DURATION menu page.id lang current_page.id %#}
 {% for child in children %}
 <li class="menu_item">
-    <a href="{{ child.get_absolute_url }}">
+    <a href="{{ child.get_absolute_url }}"
+    {% if child.selected %}class = "selected"{% endif %}>
         {{ child.get_menu_title|amp|smartypants|caps|initial_quotes }}</a>
         {% if child.children %}
             <ul>{% show_menu from_level to_level extra_inactive extra_active template "" ""  child %}</ul>

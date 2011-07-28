@@ -267,6 +267,28 @@ ul.index li a:hover {
     background: white;
     }
 
+/* date indexes for plugin lists */
+ul.plugin-index {
+}
+
+ul.plugin-index li {
+    list-style: none;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #aaa;
+}
+
+ul.plugin-index ul {
+    text-align: right;
+    float: right;
+    }
+
+ul.plugin-index ul li {
+    border-bottom: none;
+    padding-bottom: .2em;
+    margin-bottom: 0;
+}
+
 ul.boxed li {
     border: 1px solid #ccc;
     background: #ecf1ff;

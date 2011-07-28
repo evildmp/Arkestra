@@ -4,6 +4,14 @@ ul.menu	{ /* the whole thing */
 	text-align: left;
 	} 
 	
+li.menu_item a	{
+	text-decoration: none; 
+	border: none;
+}
+	
+li.menu_item a:hover	{
+	}
+
 li.menu_item	{ /* all items */
 	display: inline; 
 	width: 100%;
@@ -20,7 +28,7 @@ ul.menu ul li { /* 2nd level items */
    	position: relative; /* for the absolute drop-down */
 }
 
-ul.menu ul ul { /* 3rd level list */
+ul.menu ul ul { /* 3rd level list - off by default */
 	display: none;
     text-align: left;
 	position: absolute;
@@ -28,7 +36,7 @@ ul.menu ul ul { /* 3rd level list */
     width: 100%;
 }
 
-ul.menu ul li:hover ul {
+ul.menu ul li:hover ul { /* hovering over 2nd level displays third */
 	display: block;
 }
 
@@ -36,14 +44,24 @@ ul.menu ul ul li {
     display: list-item;
 }
 
-li.menu_item a	{
-	text-decoration: none; 
-	border: none;
+ul.menu ul ul ul   {
+    top: -1px;
+    left: 100%;
+    padding-top: 0;
 }
-	
-li.menu_item a:hover	{
-	}
 
+ul.menu ul ul ul li {
+}
+
+ul.menu ul ul li:hover ul    {
+    display: block;
+}
+
+ul.menu li li:hover ul ul,
+ul.menu li li:hover ul ul
+   {display:none;}
+ul.menu li li:hover ul,
+ul.menu li li li:hover ul    {display:block;}
 
 /* the default tab menu, as used for People and Places */
 
