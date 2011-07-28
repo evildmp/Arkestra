@@ -8,9 +8,8 @@ class NewsAndEventsPluginMixin(object):
             if instance.limit_to and all_items_count > instance.limit_to:
                 this_list["other_items"] = [{
                     "link":instance.entity.get_related_info_page_url("news-archive"), 
-                    "title":"news archive",
+                    "title":"News archive",
                     "count": all_items_count,}]
-            print "###", this_list["other_items"]
             return this_list
             
     def events_style_other_links(self, instance, this_list):
@@ -22,13 +21,13 @@ class NewsAndEventsPluginMixin(object):
                     if instance.forthcoming_events.count() > instance.limit_to:
                         this_list["other_items"].append({
                             "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
-                            "title":"all forthcoming events", 
+                            "title":"All forthcoming events", 
                             "count": instance.forthcoming_events.count(),}
                             )
             if instance.previous_events:
                 this_list["other_items"].append({
                     "link":instance.entity.get_related_info_page_url("previous-events"), 
-                    "title":"previous events",
+                    "title":"Previous events",
                     "count": instance.previous_events.count(),}
                     )    
                 
@@ -37,7 +36,7 @@ class NewsAndEventsPluginMixin(object):
             if instance.forthcoming_events:
                 this_list["other_items"] = [{
                     "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
-                    "title":"all forthcoming events", 
+                    "title":"All forthcoming events", 
                     "count": instance.forthcoming_events.count(),}]                
         return this_list
 
@@ -49,12 +48,16 @@ class NewsAndEventsPluginMixin(object):
             this_list["items"] = NewsArticle.objects.get_items(instance)
             this_list["links_to_other_items"] = self.news_style_other_links
             this_list["heading_text"] = instance.news_heading_text
-            print "##", this_list
-            self.lists.append(this_list)
+            # the following should *also* check this_list["links_to_other_items"] - 
+            # but then get_items() will need to call self.add_links_to_other_items() itself
+            # this will then mean that news and events pages show two columns if one has links to other items
+            if this_list["items"]: 
+                self.lists.append(this_list)
 
         if "events" in instance.display:
             this_list = {"model": Event,}
             this_list["items"] = Event.objects.get_items(instance)
             this_list["links_to_other_items"] = self.events_style_other_links
             this_list["heading_text"] = instance.events_heading_text
-            self.lists.append(this_list)
+            if this_list["items"]:
+                self.lists.append(this_list)

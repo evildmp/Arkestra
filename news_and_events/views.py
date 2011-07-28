@@ -181,8 +181,6 @@ def event(request, slug):
     event = get_object_or_404(Event, slug=slug)
     event = newsarticle_and_event(event)
     
-    # featuring = event.get_featuring()
-
     return render_to_response(
         "news_and_events/event.html",
         {"event": event,
