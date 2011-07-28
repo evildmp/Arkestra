@@ -10,7 +10,7 @@ Arkestra comes with a bundled example project - in the `example` folder - which 
 
 * `cd example`
 * `python manage.py syncdb` (answer `no` when asked to create a super user)
-* `python manage.py reset contenttypes' (otherwise the database won't load properly)
+* `python manage.py reset contenttypes` (otherwise the database won't load properly)
 * `python manage.py loaddata example.json`
 * `python manage.py runserver 0.0.0.0:8000`
 
