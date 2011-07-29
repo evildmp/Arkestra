@@ -32,7 +32,7 @@
 
 	    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-			var placeMarker = setMarkers(map);
+		var placeMarker = setMarkers(map);
 
         infowindow = new google.maps.InfoWindow({maxWidth: 300})
         
@@ -44,7 +44,9 @@
 
 	    var latlngbounds = new google.maps.LatLngBounds( );
 
-		{% for p in place.site.building_set.all %}{% if p.latitude and p.longitude and p.zoom and p.map %}
+		{% for p in place.site.building_set.all %}
+		
+		{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
 			var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
 
@@ -66,7 +68,9 @@
 
 
 		    google.maps.event.addListener(marker, "click", function () {
-			    infowindow.setContent('{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
+			    infowindow.setContent('{% spaceless %}
+					{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}
+					{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}{% endspaceless %}');
 	            infowindow.open(map, this);
 	        });
 		
@@ -74,14 +78,16 @@
 			    pMarker = marker;
 	        {%endifequal%}
 			
-	    {% endif %}{% endfor %}
+	    {% endif %}
+	
+		{% endfor %}
     
    		{% if place.site.building_set.count > 1 %}
 			map.fitBounds( latlngbounds );
 		{% endif %}
-		
+
 	    return pMarker;
-    }	
+	    }	
 </script>
 {% endif %}
 {% endblock scripts %}
@@ -99,7 +105,7 @@
 	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.get_name }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
-{% block place_information %}
+{% block place_information %}{{ place.events }}
 	{% if place.getting_here.get_plugins %}
 		<div class="{{ place.row_class }}">
 			<h2>Getting here</h2>

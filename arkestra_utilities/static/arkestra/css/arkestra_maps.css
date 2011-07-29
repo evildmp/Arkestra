@@ -7,15 +7,17 @@ div#map_canvas {
 
 div#map_canvas h2 {
     margin: 0;
-    padding: 0;}
+    padding: 0;
+    font-size: 120%;
+    border-bottom: none;}
 
 div#map_canvas div.labels {
-     color: black;
-     background-color: white;
-     font-size: 10px;
-     padding: 1px;
-     font-weight: bold;
-     text-align: center;
-     border: 1px solid black;
-     white-space: nowrap;
+    font-family: "gill sans", "gill sans mt", "Trebuchet MS", sans-serif;
+    color: white;
+    background-color: black;
+    font-size: 13px;
+    padding: 1px 2px;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
    }
