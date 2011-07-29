@@ -4,12 +4,12 @@
 	    {% if node.display %}
     		<ul class="entity-tree">
     	        <li><div>
-	    	            {% if node.website or node.url %}<a href="{{ node.get_website_url }}">{% endif %}
+	    	            {% if node.website or node.external_url %}<a href="{{ node.get_website_url }}">{% endif %}
 	    	                {% if node.home %}<strong>{{node}}</strong>
 	    	                {% else %}
 	    	                    {{node}}
 	    	            {% endif %}
-	    	            {% if node.website or node.url %}</a>{% endif %}
+	    	            {% if node.website or node.external_url %}</a>{% endif %}
 						{% for role in roles %}
 							{% if node.home %}<br /><strong><span class = "grey italic">{{ role }}</span></strong>
 							{% else %}<br /><span class = "grey italic">{{ role }}</span>

@@ -75,8 +75,7 @@ class BuildingWrapper(LinkWrapper):
     search_fields = admin.BuildingAdmin.search_fields
 
     def description(self):
-        description = lambda obj: ", ".join(obj.get_postal_address())
-        return "description not yet available"
+        return self.obj.get_postal_address()
 
     def heading(self):
         return "Places"

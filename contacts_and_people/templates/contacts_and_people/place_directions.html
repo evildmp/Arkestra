@@ -32,7 +32,7 @@
 
 	    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-		var placeMarker = setMarkers(map);
+			var placeMarker = setMarkers(map);
 
         infowindow = new google.maps.InfoWindow({maxWidth: 300})
         
@@ -40,45 +40,47 @@
 
 	function setMarkers(map, latlngbounds) {
 
-    var pMarker = null;
+	    var pMarker = null;
 
-    var latlngbounds = new google.maps.LatLngBounds( );
+	    var latlngbounds = new google.maps.LatLngBounds( );
 
-	{% for p in place.site.building_set.all %}{% if p.latitude and p.longitude and p.zoom and p.map %}
+		{% for p in place.site.building_set.all %}{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
-		var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
+			var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
 
-        latlngbounds.extend(siteLatLng);
+	        latlngbounds.extend(siteLatLng);
 	
-	    var marker = new MarkerWithLabel({
-       		position: siteLatLng,
-       		map: map,
-            {% ifequal place p %}
-            animation: google.maps.Animation.DROP,
-            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
-            zIndex: 10000,
-            {% endifequal %}
-			labelContent: "{{p.get_name}}",
-			labelAnchor: new google.maps.Point(50, -5),
-			labelClass: "labels", // the CSS class for the label
-			labelStyle: {opacity: 0.85}
-   		});
+		    var marker = new MarkerWithLabel({
+	       		position: siteLatLng,
+	       		map: map,
+	            {% ifequal place p %}
+	            animation: google.maps.Animation.DROP,
+	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
+	            zIndex: 10000,
+	            {% endifequal %}
+				labelContent: "{{p.get_name}}",
+				labelAnchor: new google.maps.Point(50, -5),
+				labelClass: "labels", // the CSS class for the label
+				labelStyle: {opacity: 0.85}
+	   		});
 
 
-	    google.maps.event.addListener(marker, "click", function () {
-		    infowindow.setContent('{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
-            infowindow.open(map, this);
-        });
+		    google.maps.event.addListener(marker, "click", function () {
+			    infowindow.setContent('{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}');
+	            infowindow.open(map, this);
+	        });
 		
-		{%ifequal p place%}
-		    pMarker = marker;
-        {%endifequal%}
+			{%ifequal p place%}
+			    pMarker = marker;
+	        {%endifequal%}
 			
-    {% endif %}{% endfor %}
+	    {% endif %}{% endfor %}
     
-    map.fitBounds( latlngbounds );
-
-    return pMarker;
+   		{% if place.site.building_set.count > 1 %}
+			map.fitBounds( latlngbounds );
+		{% endif %}
+		
+	    return pMarker;
     }	
 </script>
 {% endif %}

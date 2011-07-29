@@ -8,11 +8,11 @@ from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier
 
-from news_and_events.models import NewsAndEventsPlugin, NewsArticle        
+from news_and_events.models import NewsAndEventsPlugin        
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from vacancies_and_studentships.models import VacanciesPlugin        
-from vacancies_and_studentships.mixins import VacancyStudentshipPluginMixin
+from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
@@ -61,7 +61,6 @@ class ArkestraPages(Modifier):
                     
                     # does this entity have a news page?
                     if entity.auto_news_page and "news" in menu_tests:
-                        
                         # invoke the plugin to find out more
                         instance = NewsAndEventsPlugin()
                         instance.entity = entity
@@ -123,25 +122,26 @@ class ArkestraPages(Modifier):
 
                     if getattr(entity, "auto_vacancies_page", None)  and "vacancies" in menu_tests:
 
-                        # # this requires some work on the vacancies_and_studentships manager before it can be enabled
-                        # 
-                        # instance = VacanciesPlugin()
-                        # instance.entity = entity
-                        # instance.type = "menu"
-                        # instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-                        # instance.view = "current"
-                        # context = RequestContext(request)
-                        # VacancyStudentshipPluginMixin().get_items(instance)   
-                        #                      
-                        # # are there actually any vacancies/studentships items to show? if not, no menu
-                        # if instance.vacancies or instance.studentships:
+                        instance = VacanciesPlugin()
+                        instance.entity = entity
+                        instance.type = "menu"
+                        instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+                        instance.view = "current"
+                        context = RequestContext(request)
+                                             
+                        # create an instance of the plugin to see if the menu should have items
+                        plugin = CMSVacanciesPlugin()   
+                        plugin.get_items(instance)
+                        plugin.add_links_to_other_items(instance)    
 
-                        menutitle = entity.vacancies_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
-                        if request.page_path == new_node.get_absolute_url():
-                            new_node.selected = True
-                            child.selected=False
-                        child.children.append(new_node)
+                        # are there actually any vacancies/studentships items to show? if not, no menu                        
+                        if plugin.lists:
+                            menutitle = entity.vacancies_page_menu_title
+                            new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
+                            if request.page_path == new_node.get_absolute_url():
+                                new_node.selected = True
+                                child.selected=False
+                            child.children.append(new_node)
             
                     if getattr(entity, "auto_publications_page", None) and entity.auto_publications_page and "publications" in menu_tests:
                         menutitle = entity.publications_page_menu_title

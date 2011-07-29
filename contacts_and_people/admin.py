@@ -52,12 +52,12 @@ class MembershipInline(AutocompleteMixin, admin.TabularInline):
 
 
 class MembershipForEntityInline(MembershipInline): # for Entity admin
-    exclude = ('importance_to_person', 'display_role')
+    exclude = ('display_role',)
     extra = 3
 
 
 class MembershipForPersonInline(MembershipInline): # for Person admin
-    exclude = ('importance_to_entity', 'display_role')
+    exclude = ('display_role',)
 
 
 class MembershipAdmin(admin.ModelAdmin):
@@ -203,7 +203,7 @@ class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
     advanced_fieldsets = (
         ('Advanced options', {
             #'classes': ('collapse',),
-            'fields': ('active', 'user', 'institutional_username', 'slug', 'url',),
+            'fields': ('active', 'user', 'institutional_username', 'slug',),
         }),
     )
     tabs = (
@@ -263,17 +263,16 @@ class EntityForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
 
     def clean(self):
-
         # check ExternalLink-related issues
         self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            self.cleaned_data.get("link_title"), # link title
+            self.cleaned_data.get("name"), # link title
             "", # link description
         )
 
-        if not self.cleaned_data["website"]:
-            message = "This entity doesn't have a home page. Are you sure you want to do that?"
+        if not self.cleaned_data["website"] and not self.cleaned_data["external_url"]:
+            message = "This entity has neither a home page nor an External URL. Are you sure you want to do that?"
             messages.add_message(self.request, messages.WARNING, message)
         if not self.cleaned_data["short_name"]:
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
@@ -303,7 +302,7 @@ class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin):
         )
     tab_advanced = (
             ('', {
-                'fields': ('slug', 'url',)
+                'fields': ('slug',)
             }),
         )
     tab_automatic_pages = [
