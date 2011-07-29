@@ -43,26 +43,6 @@ class CMSVacanciesPlugin(UniversalPlugin, VacancyStudentshipPluginMixin, Autocom
     # autocomplete fields
     related_search_fields = ['entity',]
 
-    def render(self, context, instance, placeholder):
-        self.set_defaults(instance)
-
-        instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
-        instance.type = getattr(instance, "type", "plugin")
-        render_template = getattr(instance, "render_template", "")
-        self.get_items(instance)
-        self.add_link_to_main_page(instance)
-        self.add_links_to_other_items(instance)
-        self.set_limits_and_indexes(instance)
-        self.determine_layout_settings(instance)
-        self.set_layout_classes(instance)
-        instance.lists = self.lists
-        context.update({ 
-            'everything': instance,
-            'placeholder': placeholder,
-            })
-        print "returning context"
-        return context
-
     def icon_src(self, instance):
         return "/static/plugin_icons/vacancies_and_studentships.png"
 

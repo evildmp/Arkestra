@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from contacts_and_people.templatetags.entity_tags import work_out_entity
+
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
@@ -93,7 +95,7 @@ class UniversalPlugin(object):
     def set_limits_and_indexes(self, instance):
         for this_list in self.lists:
         
-            # cut the list down to size if necessaryt
+            # cut the list down to size if necessary
             if this_list["items"] and len(this_list["items"]) > instance.limit_to:
                 this_list["items"] = this_list["items"][:instance.limit_to]
 
@@ -107,15 +109,19 @@ class UniversalPlugin(object):
             # we only show date groups when warranted    
             this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
 
-    def determine_layout_settings(self, instance):
+    def set_image_format(self, instance):
         """
         Sets:
             image_size
-            list_format
         """
         if "image" in instance.format:
             instance.image_size = (75,75)
 
+    def determine_layout_settings(self, instance):
+        """
+        Sets:
+            list_format
+        """
         # set columns for horizontal lists
         if "horizontal" in instance.list_format:
             instance.list_format = "row columns" + str(instance.limit_to) + " " + instance.list_format
@@ -154,3 +160,23 @@ class UniversalPlugin(object):
                     # and if it doesn't need an index    
                     else: 
                         instance.row_class=instance.row_class+" columns1"
+
+    def render(self, context, instance, placeholder):
+        self.set_defaults(instance)
+
+        instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
+        instance.type = getattr(instance, "type", "plugin")
+        render_template = getattr(instance, "render_template", "")
+        self.get_items(instance)
+        self.add_link_to_main_page(instance)
+        self.add_links_to_other_items(instance)
+        self.set_limits_and_indexes(instance)
+        self.set_image_format(instance)
+        self.determine_layout_settings(instance)
+        self.set_layout_classes(instance)
+        instance.lists = self.lists
+        context.update({ 
+            'everything': instance,
+            'placeholder': placeholder,
+            })
+        return context
