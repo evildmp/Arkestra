@@ -1,7 +1,7 @@
 {% regroup links by wrapped_destination_obj.heading as link_types %}
 {% for kind in link_types %}
     <h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
-    <ul class= "none">
+    <ul class= "object-links">
     	{% for link in kind.list %}
     		<li>
     			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
