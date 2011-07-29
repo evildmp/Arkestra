@@ -309,7 +309,7 @@ dl dd {padding: 0; margin: 0 0 0 15px;}
 /* link system */
 
 li div.link-description  {padding: 0 0 0 0;}
-ul.object-links li  {margin-bottom: 1em; }
+ul.object-links li  {margin-bottom: 1em; list-style: none;}
 
 /* images */
 
