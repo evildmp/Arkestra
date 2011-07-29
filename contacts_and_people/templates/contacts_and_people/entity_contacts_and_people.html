@@ -23,7 +23,7 @@ Called up by entity_information.html
 	                {% include "includes/email.html" %}
 	   		        {% include "includes/phone_contacts.html" %}
 			    </dl>
-			    {% thumbnail entity.image.file 426x426 subject_location=entity.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt = "" />{% endif %}
+			    {% thumbnail entity.image.file 426x426 subject_location=entity.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt = "" class="right"/>{% endif %}
 			</div>
 		</div>
 		{% if entity.get_people_with_roles or initials_list or people %}
