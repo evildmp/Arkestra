@@ -305,17 +305,11 @@ dl dd {padding: 0; margin: 0 0 0 15px;}
 
 /* for the sub column - the right hand column in some pages - that contains lists of links etc */
 
-div#sub ul.none li  {margin-bottom: 1em; }
-div#sub h3  {font-size: 1em;}
 
 /* link system */
 
 li div.link-description  {padding: 0 0 0 0;}
-
-/*because IE 6 is rubbish - moved this to the fixes file*/
-	
-/* h2, h3, h4, h5, h6 {clear: left;} 
-.row	{height: 0%; } */
+ul.object-links li  {margin-bottom: 1em; }
 
 /* images */
 
