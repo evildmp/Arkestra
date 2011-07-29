@@ -6,10 +6,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
+
 from cms.models.fields import PlaceholderField
-from filer.fields.image import FilerImageField
-from links.models import ExternalLink
+
 import mptt
+
+from filer.fields.image import FilerImageField
+
+from links.models import ExternalLink
 
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 base_entity_id = settings.ARKESTRA_BASE_ENTITY
@@ -115,15 +119,23 @@ class Building(models.Model):
         return self.map and self.latitude and self.longitude and self.zoom
     
     def events(self):
-        instance = CMSNewsAndEventsPlugin()
+        from news_and_events.models import NewsAndEventsPlugin
+        # invoke the plugin to find out more
+        instance = NewsAndEventsPlugin()
         instance.display = "events"
-        instance.order_by = "date"
-        instance.format = "details"
         instance.type = "for_place"
         instance.place = self
-        instance.show_venue = False
-        events = get_news_and_events(instance)
-        return events
+        instance.view = "current"
+        instance.format = "details image"
+        
+        # create an instance of the plugin to see if the menu should have items
+        plugin = CMSNewsAndEventsPlugin()   
+        plugin.get_items(instance)
+        plugin.add_links_to_other_items(instance)    
+        plugin.set_image_format(instance)
+        plugin.set_limits_and_indexes(instance)
+        instance.lists = plugin.lists
+        return instance
 
     def get_website(self):
         return None

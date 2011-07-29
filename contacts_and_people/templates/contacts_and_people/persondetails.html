@@ -1,5 +1,4 @@
 {% extends template %}
-
 {% load mptt_tags person_tags link_tags thumbnail typogrify_tags news_and_events_tags placeholder_tags %}
 
 {% block meta %}
@@ -26,6 +25,7 @@
 	{% endif %}{% endblock pagetitle %}
 
 {% block main_page_body %}
+{% thumbnail person.image.file 426x426 subject_location=person.image.subject_location crop as image %}
 	{% block entity_information %}
 		{% if tabs %}
 			<ul id="tab_menu">
@@ -70,14 +70,14 @@
 				</div>
 				<div class="column lastcolumn">
 					<div class = "">
-						{% thumbnail person.image.file 426x426 subject_location=person.image.subject_location crop as image %}{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
+						{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
 						{% if person.entities.count > 1 %}
 							<h{{ IN_BODY_HEADING_LEVEL }}>Roles & memberships</h{{ IN_BODY_HEADING_LEVEL }}>
-								{% membership_tree_roots person %}
+							{% membership_tree_roots person %}
 						{% endif %}	
 						{% if links %}
-								{% regroup links by wrapped_destination_obj.heading as link_types %}
-								{% for kind in link_types %}
+							{% regroup links by wrapped_destination_obj.heading as link_types %}
+							{% for kind in link_types %}
 								<h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
 				                <ul class= "none">
 				                	{% for link in kind.list %}
@@ -89,7 +89,7 @@
 				                		</li>
 				                	{% endfor %}
 				                </ul>
-								{% endfor %}
+							{% endfor %}
 				        {% endif %}
 						{% person_events %}
 					</div>

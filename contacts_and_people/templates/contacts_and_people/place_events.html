@@ -1,13 +1,5 @@
 {% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify_tags %}
 
 	{% block place_information %}
-    <div class="row columns3">
-		<div class="column firstcolumn">
-			<h2>Address</h2>
-		   {{ place.get_postal_address|join:"<br />" }}
-		</div>
-		<div class="column lastcolumn doublecolumn"> 
-			{% with place.events as news_and_events %}{% include "news_and_event_lists.html" %}{% endwith %}
-		</div>
-	</div>	
+		{% with place.events as everything %}{% include "arkestra/universal_plugin_lister.html" %}{% endwith %}
 	{% endblock place_information %}

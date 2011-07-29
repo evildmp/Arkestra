@@ -7,7 +7,7 @@ from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 register = template.Library()
     
-@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
+@register.inclusion_tag('arkestra/universal_plugin_lister.html', takes_context=True)
 def news_and_events(context, display="news-and-events", heading=3,
         format="details", current_or_archive="current", max_items=None,
         order_by="importance/date", entity=None):
@@ -30,7 +30,7 @@ def news_and_events(context, display="news-and-events", heading=3,
     CMSNewsAndEventsPlugin().render(context, instance, None)
     return context
     
-@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
+@register.inclusion_tag('arkestra/universal_plugin_lister.html', takes_context=True)
 def person_events(context):
     """
     Depends on Cardiff's row/column CSS
@@ -50,7 +50,7 @@ def person_events(context):
     return context
     
 
-@register.inclusion_tag('news_and_event_lists.html', takes_context=True)
+@register.inclusion_tag('arkestra/universal_plugin_lister.html', takes_context=True)
 def place_events(context):
     """
     Depends on Cardiff's row/column CSS

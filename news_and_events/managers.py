@@ -58,7 +58,6 @@ class NewsArticleManager(models.Manager):
             ordinary_news.extend(remaining_items)
             for item in top_news:
                 item.sticky = True
-                print instance.format
                 if instance.format == "title":
                     item.importance = None
             print "Top news", len(top_news)

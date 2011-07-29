@@ -19,6 +19,35 @@ class NewsAndEventsPluginForm(UniversalPluginForm, forms.ModelForm):
 
 
 class CMSNewsAndEventsPlugin(UniversalPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
+    """
+    How to use and abuse this plugin:
+    
+    first create an instance of the plugin model:
+    
+        instance = NewsAndEventsPlugin()
+    
+    set the attributes as required:
+    
+        instance.display = "events"
+        instance.type = "for_place"
+        instance.place = self
+        instance.view = "current"
+        instance.format = "details image"
+        
+    render it to get back the items you want in instance.lists, if you have the context:
+    
+        CMSNewsAndEventsPlugin().render(context, instance, None)
+
+    alternatively (this is used in the menus, for example):
+    
+        plugin = CMSNewsAndEventsPlugin()   
+        plugin.get_items(instance)
+        plugin.add_links_to_other_items(instance)    
+        ... and any operations tests as required
+        
+    and the NewsAndEventsPlugin() needs to have the lists attribute of CMSNewsAndEventsPlugin()
+
+    """
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm
@@ -38,25 +67,6 @@ class CMSNewsAndEventsPlugin(UniversalPlugin, NewsAndEventsPluginMixin, Autocomp
     # autocomplete fields
     related_search_fields = ['entity',]
     
-    def render(self, context, instance, placeholder):
-        self.set_defaults(instance)
-
-        instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
-        instance.type = getattr(instance, "type", "plugin")
-        render_template = getattr(instance, "render_template", "")
-        self.get_items(instance)
-        self.add_link_to_main_page(instance)
-        self.add_links_to_other_items(instance)
-        self.set_limits_and_indexes(instance)
-        self.determine_layout_settings(instance)
-        self.set_layout_classes(instance)
-        instance.lists = self.lists
-        context.update({ 
-            'everything': instance,
-            'placeholder': placeholder,
-            })
-        return context
-
     def icon_src(self, instance):
         return "/static/plugin_icons/news_and_events.png"
 
