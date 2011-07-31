@@ -4,7 +4,7 @@ body    {
     margin: 30px auto;
     background: #def58c;
     border: 1px solid black;
-    width: 1000px;
+    width: 1120px;
     font-family: "Hoefler Text", Garamond, Palatino, "Palatino Linotype", "Times New Roman", serif;
     line-height: 1.2;
     color: #222}
@@ -47,6 +47,33 @@ ul.plugin-list li.grouper ul {
 /* subtitle for news, events, etc */
 .subtitle   {color: gray; size: 200%;}
 .date   {color: #666; font-weight: lighter; font-style: italic;}
+
+ul.plugin-list li span.site-name    {
+    font-family: "gill sans", "gill sans mt", "Trebuchet MS", sans-serif;
+    font-variant: small-caps;
+    color: #666;
+}
+
+*[class|="has-background"] {
+    padding: 8px;
+    border: none;
+}
+
+*.has-background-green  {
+    background: #edfac1; 
+    color: black;
+    }
+
+*.has-background-yellow  {
+    background: #fffec5; 
+    color: black;
+    }
+
+*[class|="has-background"] .plugin h2 {
+    border-bottom: none;
+    margin-top: 0;
+    color: black;
+}
 
 /* ----------------- arkestra_navigation.css ----------------- */
 
