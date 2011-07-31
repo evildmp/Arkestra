@@ -88,17 +88,20 @@ class ColumnWidths(WidthAdjuster):
     two_fifths     = 2.0/5
     three_fifths   = 3.0/5
 
+    """
+    See the column widths styles in arkestra.css - they need to match these */
+    """
     column_widths = {
         one: 1.0,
-        half: 48.5,
-        one_third: 31.4,
-        one_quarter: 22.85,
-        one_fifth: 17.72,
-        one_sixth: 14.23,
-        two_thirds: 65.7,
-        three_quarters: 74.5,
-        two_fifths: 38.5,
-        three_fifths: 58.9,
+        half: 48.0,
+        one_third: 30.6667,
+        one_quarter: 22.0,
+        one_fifth: 16.8,
+        one_sixth: 13.3333,
+        two_thirds: 65.4,
+        three_quarters: 74.0,
+        two_fifths: 37.73,
+        three_fifths: 58.4,
     }
     
     def modify(self, element, width):

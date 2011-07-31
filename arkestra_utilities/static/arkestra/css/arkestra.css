@@ -44,53 +44,67 @@ Secondly, if a column has *both* double and triple columns:
 .column .columns1 .column   { width: 100%;}
 
 .columns2 .column, 
-.column .columns2 .column   {width: 48.5%;}
+.column .columns2 .column   {width: 48%;}
 
 .columns3 .column,
-.column .columns3 .column   {width: 31.4%; }
+.column .columns3 .column   {width: 30.67%; }
 
 .columns4 .column,
-.column .columns4 .column	{width: 22.85%;}
+.column .columns4 .column	{width: 22%;}
 
 .columns5 .column,
-.column .columns5 .column 	{width: 17.72%;}
+.column .columns5 .column 	{width: 16.8%;}
 
 .columns6 .column,
-.column .columns6 .column	{width: 14.23%;}
+.column .columns6 .column	{width: 13.33%;}
+
+/* note to self - there is a reason for this inefficient multiplicity of styles that could be rationalised: IE6. */
 
 /* triple widths */
 
 .columns4 .triplecolumn,
-.column .columns4 .triplecolumn     {width: 74.5%;}
+.column .columns4 .triplecolumn     {width: 74%;}
 
 .columns5 .triplecolumn,
-.column .columns5 .triplecolumn     {width: 58.9%;}
+.column .columns5 .triplecolumn     {width: 58.4%;}
 
 .columns6 .triplecolumn,
-.column .columns6 .triplecolumn     {width: 48.5%;}
+.column .columns6 .triplecolumn     {width: 48%;}
 
 /* double widths */
 
 .columns3 .doublecolumn,
-.column .columns3 .doublecolumn     {width: 65.7%;}
+.column .columns3 .doublecolumn     {width: 65.4%;}
 
 .columns4 .doublecolumn,
-.column .columns4 .doublecolumn     {width: 48.5%;}
+.column .columns4 .doublecolumn     {width: 48%;}
 
 .columns5 .doublecolumn,
-.column .columns5 .doublecolumn     {width: 38.5%;}
+.column .columns5 .doublecolumn     {width: 37.73%;}
 
 .columns6 .doublecolumn,
-.column .columns6 .doublecolumn     {width: 31.4%; }
+.column .columns6 .doublecolumn     {width: 30.67%; }
 
 /* all rows float left except the last, which floats right
 all rows have a left margin except the first, which has none */
 
 .row .column	{
 	float: left;
-	margin-left: 2.8%; 
+	margin-left: 4%; 
 	}
 	
+/* hand adjustments to tweak spaces between columns */
+
+.row.columns2 .column-2,
+.row.columns6 .column-3,
+.row.columns3 .column-2	{
+	margin-left: 4.1%; 
+	}
+
+.row.columns6 .column-5	{
+	margin-left: 3.9%; 
+	}
+
 .row li.column {
     list-style: none; 
     font-size: 1em; 
@@ -110,225 +124,58 @@ li.column.lastcolumn	{
 	margin-left: 0 !important; 
 	} 
 
-/* lists */	
-
-/* we really need to fix some of these styles. the idea of a div.plugin ul li is quite out of date now and a nuisance */
-
-ul, ol, dl  {margin-left: 0; padding-left: 0;}	
-ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}	
-
-ul	{margin-bottom: 1em;}
-ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
-
-
-
-ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
-ul.entity-tree li {margin: 0; padding: 0;}
-ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
-ul.entity-tree li {list-style: none;}
-
-
-/* icons */
-ul.icons    {
-    list-style: square; url(/media/images/hand-right.png);
-    padding-left: 20px;
-}
-
-/* plugin list items */
-
-ul.plugin-list {margin-top: 0;}
-
-ul.plugin-list.vertical li {list-style: none; padding-bottom: 0.6em;}
-ul.plugin-list.vertical li.grouper li.important {
-    padding: .5em; 
-    margin: 1px 0 1em; 
-    }
-
-/* groupers in plugin lists */
-ul.plugin-list li.grouper {font-weight: bold;}
-ul.plugin-list li.grouper ul {
-    font-weight: normal; 
-    padding-left: 0;
-    }
-
-
-/* list for links to other items, (e.g. news and events) */ 
-ul.other-items  {
-    border-top: 1px solid #999;
-    padding-top: 0.5em;
-    }
-
-	
-/*
-
-ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
-
-ul.linkIcon,
-ul.plugin,
-.fancy ul {
-        margin: 0;
-        padding: 0;
-        list-style:none;
-    }
-
-ul.linkIcon li, 
-ul.plugin_list li,
-.fancy li   {
-    list-style:none;
-    margin: 0;
-    }
-
-div.plugin ul {
-    font-weight: normal;
-    list-style:none;
-    }
-
-div.plugin ul li {
-    margin: 0;
-    }
-
-div.plugin li.pluslistitem   {
-    clear: right;
-    padding: 0 0 .4em;
-}    
-
-.plugin li    {
-    line-height: 1.25; 
-    padding-bottom: .6em;
-    clear: both;
-    }
-
-ul.none {list-style-type: none;}
-
-ul.linkIcon li, 
-.fancy li,  
-li.key   {
-    background: url(/media/images/hand-right.png) left .5ex no-repeat;
-    padding-left: 30px;
-    display: block;
-    }
-
-.fancy li li,  
-li.key li    {
-    background: none;
-    padding-left: 20px;
-    display: block;
-    }
-    
-    
-li.key  {font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;} */
-
-
-/* used only in entity trees, I think */
-
-.grey   {color: gray;}
-.italic {font-style: italic;}
-.bold   {font-weight: bold;}
-
-/* directories */
-
-div.directory ul {list-style: none; }
-div.directory li {margin-left: 0;}
-div.directory li li {margin-left: 1.5em;}
-div.directory ul li .entity {font-weight: bold; }
-div.directory ul li li .entity {font-weight: normal;}
-
-/* inline lists */
-
-ul.horizontal li, ul.horizontal a  {
-    display: inline;
-    list-style-type: none;
-    }
-
-ul.horizontal.grid li {
-        padding-right: 1em;}
-
-li.horizontal   {float: left; list-style-type: none;}
-
-ul.index li  {
-    font-weight: bold;
-    display: inline;
-    float: left;
-    margin: 0px 0.3em 0.4em 0px
-    }
-
-ul.index li a {display: block;
-    padding: 0.1em;
-    width: 2.1em;
-    color: white;
-    background: #666;
-    text-align: center;
-    border: 1px solid black !important; /* important because otherwise site's links styles can affect it */
-    }
-
-ul.index li a:hover {
-    text-decoration: none;
-    color: #666;
-    background: white;
-    }
-
-/* date indexes for plugin lists */
-ul.plugin-index li {
-    list-style: none;
-    margin-bottom: 1em;
-    padding-bottom: 1em;
-    border-top: 1px solid #aaa;
-}
-
-ul.plugin-index li:first-child {
-    border-top: none;
-}
-
-ul.plugin-index ul {
-    text-align: right;
-    float: right;
-    }
-
-ul.plugin-index ul li {
-    border-top: none;
-    padding-bottom: .2em;
-    margin-bottom: 0;
-}
-
-ul.boxed li {
-    border: 1px solid #ccc;
-    background: #ecf1ff;
-    list-style:none;
-    padding: .5em;
-    margin: 0 0 1em;
-    }
-    
-ul.boxed li li {border: none;}
-ul.boxed li dl {margin:0;}
-
-dl dd {padding: 0; margin: 0 0 0 15px;}
-
-/* for the sub column - the right hand column in some pages - that contains lists of links etc */
-
-
-/* link system */
-
-li div.link-description  {padding: 0 0 0 0;}
-ul.object-links li  {margin-bottom: 1em; list-style: none;}
-
 /* images */
-
-/* an image from a plugin will be inside a span.image, along with its span.image_caption */
-
-span.image {display: block; clear: both;}
-span.image img {padding: 5px 0; }
-span.image_caption,
-p.image_caption  {font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
-
-a img {border: none;}
 
 /* images as used in news plugins etc are usually floated right */
 
 img.left    {float: left; margin-right: 1em; margin-bottom: .5em;}
 img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
 
+/* image plugin - an image will be inside a span.image, along with its span.image_caption */
+
+a img {border: none;}
+
+span.image {display: block; clear: both;}
+span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
+span.image_caption {font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+
 /* styles available to the presentation editor */
 
+/* images: float left/right - left/right floats can be applied either directly to image plugins or their containers */
+
+.images-left span.image,
+span.image.left {
+    float: left; 
+    margin-right: 5px; 
+    clear: none;
+    }
+
+.images-right span.image,
+span.image.right {
+    float: right; 
+    margin-left: 5px; 
+    clear: none;
+    }
+
+/* images: have borders - appplied to the elements containing images/carousels
+
+it's a bit awkward when non-floated images can have borders, because then the border area is the width of the containing element, which can be rather wide*/
+
+.image-borders span.image,
+*[class|="has-background"]  {
+    background: #efefef; 
+    padding: 7px; 
+    border: 1px solid #888;
+    }
+
+.image-borders div.carousel-envelope
+  {
+    background: #efefef; 
+    padding: 4px 7px; 
+    border: 1px solid #888;
+    }
+    
+    
 /* 
 standout - large type
 big-quotes - fancy quotes - implies standout */
@@ -398,44 +245,6 @@ p.drop-cap:first-letter  {
     margin-bottom:-0.1em;
 }
 
-/* 
-images: float left/right - left/right floats can be applied either directly to image plugins or their containers */
-
-.images-left span.image,
-span.image.left {
-    float: left; 
-    margin-right: 5px; 
-    clear: none;
-    }
-
-.images-right span.image,
-span.image.right {
-    float: right; 
-    margin-left: 5px; 
-    clear: none;
-    }
-
-/* 
-
-images: have borders - appplied to the elements containing images/carousels
-
-it's a bit awkward when non-floated images can have borders, because then the border area is the width of the containing element, which can be rather wide*/
-
-.image-borders span.image
-  {
-    background: #efefef; 
-    padding: 4px 7px; 
-    border: 1px solid #EBD4DB;
-    margin-bottom: 2px;
-    }
-
-.image-borders div.carousel-envelope
-  {
-    background: #efefef; 
-    padding: 4px 7px; 
-    border: 1px solid #EBD4DB;
-    margin-bottom: 2px;
-    }
 
 /* typogrify_tags */
 
