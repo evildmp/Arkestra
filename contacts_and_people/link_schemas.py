@@ -50,12 +50,12 @@ class EntityWrapper(LinkWrapper):
     def description(self):
         if self.obj.abstract_entity:
             return "Abstract entity - description unavailable"
-        if self.obj.url:
-            return "External entity - description unavailable"
-        try:
+        if self.obj.external_url:
+            return "External entity at " + self.obj.external_url.url
+        if self.obj.get_website().get_meta_description():
             return self.obj.get_website().get_meta_description()
-        except AttributeError:
-            return "Entity has no website"
+        else:
+            return self.obj.get_website() + "has no metadata - very bad"
 
     def heading(self):
         return "Related pages"
