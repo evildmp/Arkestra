@@ -10,6 +10,7 @@ from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin
 
+from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
 
 from models import Vacancy, Studentship
@@ -49,12 +50,12 @@ class VacancyStudentshipForm(forms.ModelForm):
             if not self.cleaned_data["body"]:          
                 message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
                 messages.add_message(self.request, messages.WARNING, message)
-
+        return self.cleaned_data
 
 class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
     inlines = (ObjectLinkInline,)
     exclude = ('description', 'url',)
-    search_fields = ['short_title','title','summary','description','slug','url']
+    search_fields = ['short_title','title','summary', 'slug','url']
     list_display = ('short_title', 'hosted_by', 'closing_date',)
     list_display = ('short_title', 'closing_date', 'hosted_by',)
     related_search_fields = [

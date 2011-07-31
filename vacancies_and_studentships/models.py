@@ -114,7 +114,7 @@ class VacanciesPlugin(CMSPlugin, UniversalPluginOptions):
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
     )
-    display = models.CharField(max_length=25,choices=DISPLAY, default="news_and_events")
+    display = models.CharField(max_length=25,choices=DISPLAY, default="vacancies studentships")
     entity = models.ForeignKey(Entity, null=True, blank=True, 
         help_text="Leave blank for autoselect", related_name="vacs_studs_plugin")
     vacancies_heading_text = models.CharField(max_length=25, default="Vacancies")
