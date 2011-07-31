@@ -14,7 +14,6 @@ from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin
 
-from links.models import ExternalLink
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
 
