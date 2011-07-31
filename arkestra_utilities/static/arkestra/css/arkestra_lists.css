@@ -1,0 +1,201 @@
+/* lists */	
+
+/* we really need to fix some of these styles. the idea of a div.plugin ul li is quite out of date now and a nuisance */
+
+ul, ol, dl  {margin-left: 0; padding-left: 0;}	
+ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}	
+
+ul	{margin-bottom: .2em;}
+ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
+
+
+
+ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
+ul.entity-tree li {margin: 0; padding: 0;}
+ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
+ul.entity-tree li {list-style: none;}
+
+
+/* icons */
+ul.icons    {
+    list-style: square; url(/media/images/hand-right.png);
+    padding-left: 20px;
+}
+
+/* plugin list items */
+
+ul.plugin-list {margin-top: 0;}
+
+ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em;}
+ul.plugin-list.vertical li:first-child {padding-top: 0;}
+ul.plugin-list.vertical li.grouper li.important {
+    padding: .5em; 
+    margin: 1px 0 1em; 
+    }
+
+/* groupers in plugin lists */
+ul.plugin-list li.grouper {font-weight: bold;}
+ul.plugin-list li.grouper ul {
+    font-weight: normal; 
+    padding-left: 0;
+    }
+
+
+/* list for links to other items, (e.g. news and events) */ 
+ul.other-items  {
+    border-top: 1px solid #999;
+    padding-top: 0.5em;
+    }
+
+	
+/*
+
+ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
+
+ul.linkIcon,
+ul.plugin,
+.fancy ul {
+        margin: 0;
+        padding: 0;
+        list-style:none;
+    }
+
+ul.linkIcon li, 
+ul.plugin_list li,
+.fancy li   {
+    list-style:none;
+    margin: 0;
+    }
+
+div.plugin ul {
+    font-weight: normal;
+    list-style:none;
+    }
+
+div.plugin ul li {
+    margin: 0;
+    }
+
+div.plugin li.pluslistitem   {
+    clear: right;
+    padding: 0 0 .4em;
+}    
+
+.plugin li    {
+    line-height: 1.25; 
+    padding-bottom: .6em;
+    clear: both;
+    }
+
+ul.none {list-style-type: none;}
+
+ul.linkIcon li, 
+.fancy li,  
+li.key   {
+    background: url(/media/images/hand-right.png) left .5ex no-repeat;
+    padding-left: 30px;
+    display: block;
+    }
+
+.fancy li li,  
+li.key li    {
+    background: none;
+    padding-left: 20px;
+    display: block;
+    }
+    
+    
+li.key  {font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;} */
+
+
+/* used only in entity trees, I think */
+
+.grey   {color: gray;}
+.italic {font-style: italic;}
+.bold   {font-weight: bold;}
+
+/* directories */
+
+div.directory ul {list-style: none; }
+div.directory li {margin-left: 0;}
+div.directory li li {margin-left: 1.5em;}
+div.directory ul li .entity {font-weight: bold; }
+div.directory ul li li .entity {font-weight: normal;}
+
+/* inline lists */
+
+ul.horizontal li, ul.horizontal a  {
+    display: inline;
+    list-style-type: none;
+    }
+
+ul.horizontal.grid li {
+        padding-right: 1em;}
+
+li.horizontal   {float: left; list-style-type: none;}
+
+ul.index li  {
+    font-weight: bold;
+    display: inline;
+    float: left;
+    margin: 0px 0.3em 0.4em 0px
+    }
+
+ul.index li a {display: block;
+    padding: 0.1em;
+    width: 2.1em;
+    color: white;
+    background: #666;
+    text-align: center;
+    border: 1px solid black !important; /* important because otherwise site's links styles can affect it */
+    }
+
+ul.index li a:hover {
+    text-decoration: none;
+    color: #666;
+    background: white;
+    }
+
+/* date indexes for plugin lists */
+ul.plugin-index li {
+    list-style: none;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-top: 1px solid #aaa;
+}
+
+ul.plugin-index li:first-child {
+    border-top: none;
+}
+
+ul.plugin-index ul {
+    text-align: right;
+    float: right;
+    }
+
+ul.plugin-index ul li {
+    border-top: none;
+    padding-bottom: .2em;
+    margin-bottom: 0;
+}
+
+ul.boxed li {
+    border: 1px solid #ccc;
+    background: #ecf1ff;
+    list-style:none;
+    padding: .5em;
+    margin: 0 0 1em;
+    }
+    
+ul.boxed li li {border: none;}
+ul.boxed li dl {margin:0;}
+
+dl dd {padding: 0; margin: 0 0 0 15px;}
+
+/* for the sub column - the right hand column in some pages - that contains lists of links etc */
+
+
+/* link system */
+
+li div.link-description  {padding: 0 0 0 0;}
+ul.object-links li  {margin-bottom: 1em; list-style: none;}
