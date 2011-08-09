@@ -34,3 +34,4 @@ Best currently installed from source
 
 * `the Semantic Presentation Editor <https://bitbucket.org/spookylukey/semanticeditor/>`_
 * `Arkestra <https://github.com/evildmp/Arkestra/>`_
+* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version)
