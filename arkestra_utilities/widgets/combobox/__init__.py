@@ -7,9 +7,9 @@ from django.utils.safestring import mark_safe
 class Combobox(forms.Select):
     class Media:
         js = [join(settings.CMS_MEDIA_URL, path) for path in (
-            #'js/lib/jquery.js',
-            #'js/lib/ui.core.js',
-            #'js/placeholder_editor_registry.js',
+            'js/lib/jquery.js',
+            'js/lib/ui.core.js',
+            'js/placeholder_editor_registry.js',
         )] + ['combobox/ui.combobox.js']
         css = {'all': ['combobox/ui.combobox.css']}
 
