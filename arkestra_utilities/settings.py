@@ -11,7 +11,7 @@
 # 2. make sure it's correct
 # 3. very rarely, you might have to change it to keep it correct
 
-ARKESTRA_BASE_ENTITY = 1
+ARKESTRA_BASE_ENTITY = None
 
 # MULTIPLE_ENTITY_MODE is for projects hosting the site of more than one entity
 # This does not necessarily entail a site for complex organisation,

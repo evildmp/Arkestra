@@ -48,7 +48,7 @@ class Building(models.Model):
         max_length=255, null=True, unique=True,)
     image = FilerImageField(null=True, blank=True)
     # for the place page
-    summary =  models.TextField(verbose_name="Summary", max_length=256, 
+    summary =  models.TextField(verbose_name="Summary", max_length=256, default ="",
         help_text="A very short description of this building (maximum two lines)",)
     description = PlaceholderField('body', related_name="building_description",
         help_text="A fuller description",)
@@ -692,12 +692,14 @@ except mptt.AlreadyRegistered:
 default_entity_id = default_entity = None
 try:
     if not MULTIPLE_ENTITY_MODE and Entity.objects.all():
-        default_entity_id = base_entity_id # default_entity_id is used to fill in admin fields automatically
-    default_entity = Entity.objects.get(id = base_entity_id)
+        # default_entity_id is used to fill in admin fields automatically when not in MULTIPLE_ENTITY_MODE
+        default_entity_id = base_entity_id
+    if base_entity_id:
+        # set the default entity using the id
+        default_entity = Entity.objects.get(id = base_entity_id)
 except (Entity.DoesNotExist, DatabaseError):
     pass
     
-from news_and_events.functions import get_news_and_events
 from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 # crazymaniac's wild monkeypatch# 
