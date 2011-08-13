@@ -1,13 +1,17 @@
-from arkestra_utilities.output_libraries.plugin_widths import (
-    get_placeholder_width, get_plugin_ancestry, calculate_container_width)
+from django.contrib import admin
+
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from django.contrib import admin
+
+from arkestra_utilities.output_libraries.plugin_widths import (
+    get_placeholder_width, get_plugin_ancestry, calculate_container_width)
+
 from links.admin import ObjectLinkInlineForm
 from links.models import (GenericLinkListPlugin, GenericLinkListPluginItem, 
     CarouselPlugin, CarouselPluginItem, FocusOnPluginEditor, 
     FocusOnPluginItemEditor)
 
+  
 class FocusOnInlineForm(ObjectLinkInlineForm):
     class Meta:
         model=FocusOnPluginItemEditor
@@ -142,6 +146,7 @@ class CarouselPluginPublisher(CMSPluginBase):
     text_enabled = True
     raw_id_fields = ('image',)
     inlines = (PluginInlineCarousel,)
+    admin_preview = False        
     
     def icon_src(self, instance):
         return "/static/plugin_icons/carousel.png"
@@ -152,15 +157,27 @@ class CarouselPluginPublisher(CMSPluginBase):
             return # because it would be silly to have a carousel with only one segment
         # TODO: this scaling code needs to be in a common place
         # use the placeholder width as a hint for sizing
+        # unlike the image plugin, we only use relative widths
+
+        # widths a fraction of nominal container width (deprecated)
         placeholder_width = get_placeholder_width(context, instance)
         if instance.width <= 10:     
             width = placeholder_width/instance.width
 
+        # widths relative to placeholder width
         else:
-            plugins = get_plugin_ancestry(instance)
-            width = placeholder_width/100.0 * instance.width
-            print width, placeholder_width, instance.width              
-            width = calculate_container_width(plugins, width)
+            # widths a percentage of placeholder width
+            if instance.width <= 100:
+                width = placeholder_width/100.0 * instance.width
+                auto = False
+        
+            # automatic width      
+            elif instance.width == 1000:
+                width = placeholder_width
+                auto = True
+            
+            # calculate the width of the block the image will be in
+            width = calculate_container_width(instance, width, auto)
         
         width = int(width) -2 # make room for left/right borders
         label_width = width/len(segments)
