@@ -1,12 +1,16 @@
 import os
-from cms.plugin_pool import plugin_pool
-from cms.plugin_base import CMSPluginBase
+
 from django.utils.translation import ugettext_lazy as _
-import models
 from django.conf import settings
 
+from cms.plugin_pool import plugin_pool
+from cms.plugin_base import CMSPluginBase
+
 from filer.settings import FILER_STATICMEDIA_PREFIX
+
 from arkestra_utilities.output_libraries.plugin_widths import *
+import models
+
 
 class FilerImagePlugin(CMSPluginBase):
     model = models.FilerImage
@@ -14,7 +18,8 @@ class FilerImagePlugin(CMSPluginBase):
     render_template = "cmsplugin_filer_image/image.html"
     text_enabled = True
     raw_id_fields = ('image',)
-    admin_preview = False        
+    admin_preview = False   
+         
     def render(self, context, instance, placeholder):
         """
         if width => 0: image width will be relative to placeholder's width
