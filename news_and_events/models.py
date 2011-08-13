@@ -52,6 +52,9 @@ class NewsAndEvents(models.Model):
     hosted_by = models.ForeignKey(Entity, default=default_entity_id,
         related_name='%(class)s_hosted_events', null=True, blank=True,
         help_text=u"The entity responsible for publishing this item")
+    please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
+        help_text=u'The person to whom enquiries about this should be directed ', 
+        null=True, blank=True)
     importance = models.PositiveIntegerField(null=True, blank=False,
         default=0, choices=IMPORTANCES,
         help_text=u"Important items will be featured in lists")
@@ -82,7 +85,7 @@ class NewsAndEvents(models.Model):
         for internal Arkestra purposes only
         """
         if self.get_entity():
-                return self.get_entity().get_website()
+            return self.get_entity().get_website()
         else:
             return None
     
@@ -110,9 +113,6 @@ class NewsArticle(NewsAndEvents):
     sticky_until = models.DateField(null=True, blank=True, default=pythondate.today,
         help_text=u"Will be a  featured item until this date")
     is_sticky_everywhere = models.BooleanField(default=False, help_text=u"Will be sticky for other entities") 
-    enquiries = models.ManyToManyField(Person, related_name='%(class)s_person', 
-        help_text=u'The person to whom enquiries about this should be directed ', 
-        null=True, blank=True)
     objects = NewsArticleManager()
     
     class Meta:
@@ -174,6 +174,10 @@ class Event(NewsAndEvents):
     jumps_queue_on = models.DateField(null=True, blank=True,
         help_text=u"Will become a featured item on this date") 
     jumps_queue_everywhere = models.BooleanField(default=False)
+    registration_enquiries = models.ManyToManyField(Person, 
+        related_name = '%(class)s_registration', 
+        null = True, blank = True
+        )
     objects = EventManager()
     
     class Meta:

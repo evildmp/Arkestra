@@ -64,7 +64,7 @@ class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin
     list_editable = ('hosted_by',)
     related_search_fields = ['hosted_by', 'external_url',]
     filter_horizontal = (
-        'enquiries',
+        'please_contact',
         'publish_to', 
         )
     prepopulated_fields = {
@@ -118,7 +118,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         }),)
     fieldset_people = (
         ('People', {
-            'fields': ('enquiries',),
+            'fields': ('please_contact',),
         }),)
     fieldset_advanced = (
         ('Advanced Options', {
@@ -224,9 +224,9 @@ class EventAdmin(NewsAndEventsAdmin):
     # some general settings
     form = EventForm
     filter_horizontal = (
-        # 'enquiries',
+        'please_contact',
         'publish_to', 
-        # 'registration_enquiries',
+        'registration_enquiries',
         #'organisers', 
         'featuring', 
         )
@@ -267,7 +267,7 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_people = (    
         ('People', {
             'fields': (
-            'featuring', #'enquiries', 'registration_enquiries', #'organisers', 
+            'featuring', 'please_contact', 'registration_enquiries', #'organisers', 
             ),
         }),)    
     fieldset_advanced = (    
