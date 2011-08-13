@@ -73,11 +73,11 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class PhoneContactInlineForm(forms.ModelForm):
     label = ComboboxField(label = "label", choices=models.PhoneContact.LABEL_CHOICES, required=False)
-    country_code = forms.CharField(label="Country code", widget=forms.TextInput(attrs={'size':'4'}))
-    area_code = forms.CharField(label="Area code", widget=forms.TextInput(attrs={'size':'5'}))
+    country_code = forms.CharField(label="Country code", initial = "44", widget=forms.TextInput(attrs={'size':'4'}))
+    area_code = forms.CharField(label="Area code", initial = "29", widget=forms.TextInput(attrs={'size':'5'}))
     number = forms.CharField(label="Number", widget=forms.TextInput(attrs={'size':'10'}))
     internal_extension = forms.CharField(label="Internal extension", widget=forms.TextInput(attrs={'size':'6'}), required=False)
-    
+
     class Meta:
         model = models.PhoneContact
 
