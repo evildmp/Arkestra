@@ -44,12 +44,13 @@ class VacancyStudentshipForm(forms.ModelForm):
         # misc checks
         if not self.cleaned_data["external_url"]:
             if not self.cleaned_data["hosted_by"]:
-                raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
+                message = "This vacancy is not Hosted by and Entity and has no External URL. Are you sure you want to do that?"
+                messages.add_message(self.request, messages.WARNING, message)
             # must have content or url in order to be published
             # not currently working, because self.cleaned_data["body"] = None
-            if not self.cleaned_data["body"]:          
-                message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
-                messages.add_message(self.request, messages.WARNING, message)
+            # if not self.cleaned_data["body"]:          
+            #     message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+            #     messages.add_message(self.request, messages.WARNING, message)
         return self.cleaned_data
 
 class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):

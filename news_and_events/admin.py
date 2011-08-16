@@ -51,9 +51,9 @@ class NewsAndEventsForm(forms.ModelForm):
                 raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
             # must have content or url in order to be published
             # not currently working, because self.cleaned_data["body"] = None
-            if not self.cleaned_data["body"]:          
-                message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
-                messages.add_message(self.request, messages.WARNING, message)
+            # if not self.cleaned_data["body"]:          
+            #     message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+            #     messages.add_message(self.request, messages.WARNING, message)
 
 
 class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
