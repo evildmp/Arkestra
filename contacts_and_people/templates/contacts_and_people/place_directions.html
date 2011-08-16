@@ -105,7 +105,7 @@
 	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.get_name }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
-{% block place_information %}{{ place.events }}
+{% block place_information %}
 	{% if place.getting_here.get_plugins %}
 		<div class="{{ place.row_class }}">
 			<h2>Getting here</h2>
