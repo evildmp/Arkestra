@@ -9,7 +9,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}}>Vacancy ({{ vacancy.hosted_by.short_name }}): {{ vacancy }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>Vacancy: {{ vacancy }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 
    		<p class= "standout"><strong>{{ vacancy.summary }}</strong></p>
 {% endblock pagetitle %}
@@ -28,7 +28,10 @@
 				    {% thumbnail vacancy.image.file 227x0 subject_location=vacancy.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
-				<dl>
+				<dl> {% if vacancy.hosted_by %}
+    				    <dt>Where</dt>
+    				    <dd><a href="{{ vacancy.hosted_by.get_absolute_url }}">{{ vacancy.hosted_by.short_name }}</a></dd>
+				    {% endif %}
 					<dt>Closing date</dt>
 					<dd>{% date vacancy.closing_date %}</dd>
 				    {% if vacancy.salary %}
