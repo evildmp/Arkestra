@@ -134,8 +134,17 @@ class ArkestraPages(Modifier):
                         plugin.get_items(instance)
                         plugin.add_links_to_other_items(instance)    
 
-                        # are there actually any vacancies/studentships items to show? if not, no menu                        
-                        if plugin.lists:
+                        # assume there's no menu item required
+                        show_menu_item = False
+
+                        # are there actually any vacancies/studentships items to show? if not, no menu
+                        for item in plugin.lists:
+                            if item["items"]:
+                                show_menu_item = True
+                                
+                        if show_menu_item:
+                            print "menu"
+                            print plugin.lists
                             menutitle = entity.vacancies_page_menu_title
                             new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
                             if request.page_path == new_node.get_absolute_url():
