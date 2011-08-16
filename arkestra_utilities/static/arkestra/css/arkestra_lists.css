@@ -47,7 +47,20 @@ ul.other-items  {
     padding-top: 0.5em;
     }
 
-	
+/* "fancy" means links have link icons" - obviously a <p> is not really a list, but it's being displayed as a list item */
+
+ul.fancy,
+p.fancy    {margin-left: 30px;}
+
+ul.fancy li,
+p.fancy   {
+    list-style: square url(/static/arkestra/images/default_styles/hand-right.png/);
+    }
+
+p.fancy   {
+    display: list-item;
+    }
+
 /*
 
 ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
@@ -197,5 +210,5 @@ dl dd {padding: 0; margin: 0 0 0 15px;}
 
 /* link system */
 
-li div.link-description  {padding: 0 0 0 0;}
+li div.link-description  {padding: 0 0 .2em 0;}
 ul.object-links li  {margin-bottom: 1em; list-style: none;}

@@ -2,20 +2,20 @@
 
 body    {
     margin: 30px auto;
-    background: #def58c;
+    background: #def58c ;
     border: 1px solid black;
-    width: 1120px;
+    width: 1020px;
     font-family: "Hoefler Text", Garamond, Palatino, "Palatino Linotype", "Times New Roman", serif;
     line-height: 1.2;
     color: #222}
 
 div#outer-wrapper   {
-    padding: 30px;
+    padding: 30px 30px 5px;
     background: white;
     }
     
 div#inner-wrapper   {
-    padding: 30px;
+    padding: 0 0 10px;
     margin: 0;
     background: white;
 }

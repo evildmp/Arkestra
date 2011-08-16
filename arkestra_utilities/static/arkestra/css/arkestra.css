@@ -166,6 +166,7 @@ it's a bit awkward when non-floated images can have borders, because then the bo
     background: #efefef; 
     padding: 7px; 
     border: 1px solid #888;
+    margin-bottom: 5px;
     }
 
 .image-borders div.carousel-envelope
