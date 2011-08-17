@@ -44,8 +44,6 @@ Arkestra itself
 
 Arkestra is a collection of applications, each of which needs to be installed:
 
-* `Arkestra <https://github.com/evildmp/Arkestra/>`_
-
 * arkestra_image_plugin
 * arkestra_utilities
 * contacts_and_people
