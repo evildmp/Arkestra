@@ -38,7 +38,7 @@ For now, this is the best way to get hold of these items:
 * `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version)
 
 Arkestra itself
----------------
+===============
 
 * `Arkestra <https://github.com/evildmp/Arkestra/>`_
 
