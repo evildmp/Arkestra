@@ -21,6 +21,10 @@ urlpatterns = patterns('',
     (r'^', include('news_and_events.urls')),
     (r'^', include('vacancies_and_studentships.urls')),
 
+    # housekeeping
+    (r'^', include('housekeeping.urls')),
+
+
     )
 
     # the old ways
