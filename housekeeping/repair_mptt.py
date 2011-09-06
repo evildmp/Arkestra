@@ -116,7 +116,7 @@ def fix(request,slug):
     print "all done"
     #return http.HttpResponse("fixed")
     return shortcuts.render_to_response(
-        "housekeeping/mptt_fix.html",
+        "housekeeping/test.html",
         {"tree_report":tree_report,
         "level_report":level_report,
         "leftright_report":leftright_report,},

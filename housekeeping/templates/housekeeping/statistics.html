@@ -1,5 +1,4 @@
 {% extends "housekeeping/housekeeping.html" %}
-{% load statistics_tags %}
 
 {% block title %}
     <title>Arkestra admin statistics</title>
@@ -41,7 +40,7 @@
                         <dd>{{ group }}</dd>
                     {% endfor %}
                     <dd>last login: {{ user.last_login|date:"D d M Y" }}</dd>
-                    <dd>last edit: {{ user.last_edit }} {{ user.test }}</dd>
+                    <dd>last edit: {{ user.last_editxxx }}</dd>
                 {% endfor %}
             </dl>
         </div>

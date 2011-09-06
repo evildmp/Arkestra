@@ -1,22 +1,23 @@
 {% extends "arkestra.html" %}
-{% block columns %}
-    @import url("/media/css/_layout/horiz/100.css");
-{% endblock columns %}
 
-{% block horizontal_navigation_css %}
-	@import url("/media/css/_layout/vert/no_nav_horiz.css");
-{% endblock horizontal_navigation_css %}
+{% block columns %}{% endblock columns %}
+
+{% block menu %}{% endblock menu %}
+
+{% block title %}
+    <title>Arkestra admin housekeeping</title>
+{% endblock title %}
 
 {% block main_page_body %}
 <h3>Housekeeping options</h3>
 <ul>
+    <li><a href="/housekeeping/">Housekeeping main menu</a></li>
     <li><a href="/housekeeping/statistics/">Statistics</a></li>
-    <li><a href="/housekeeping/repair_mptt/">Repair MPTT</a></li>
-    <li><a href="/housekeeping/convert_to_placeholders/dryrun/">Convert text fields to text/layout plugins</a> - warning: will only work for a single language</li>
     <li><a href="/housekeeping/clean_plugins/dryrun/">Clean plugins</a> - removes junk from plugins</li>
+    <li><a href="/housekeeping/convert_to_placeholders/dryrun/">Convert text fields to text/layout plugins</a> - warning: will only work for a single language</li>
+    <li><a href="/housekeeping/repair_mptt/">Repair MPTT</a></li>
     <li><a href="/housekeeping/tidy_links/dryrun/">Tidy links</a></li>
     <li><a href="/housekeeping/update_ancient_plugins/dryrun/">Update fields on ancient plugins</a></li>
 </ul>
 {% block operations %}{% endblock operations %}
 {% endblock main_page_body %}
-

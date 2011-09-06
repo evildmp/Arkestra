@@ -97,7 +97,7 @@ def clean(request, slug = "dryrun"):
             plugin.save()
             
     return shortcuts.render_to_response(
-        "housekeeping/clean_plugins.html", {
+        "housekeeping/statistics.html", {
             "execute": execute,
             "trashed_styles": trashed_styles,
             "trashed_nbsps": trashed_nbsps,

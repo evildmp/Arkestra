@@ -20,7 +20,6 @@ def stats(request):
     events = Event.objects.count() 
     users = ArkestraUser.objects.filter(is_active = True, is_staff = True) 
     groups = Group.objects.all().order_by("name")
-
     plugins = CMSPlugin.objects.count() 
     return shortcuts.render_to_response(
         "housekeeping/statistics.html", {
@@ -30,11 +29,11 @@ def stats(request):
             "entities": entities,
             "newsarticles": newsarticles,
             "events": events,
-            "events": events,
             "users": users,
             "plugins": plugins,
             "groups": groups,
-            }
+            },
+        RequestContext(request),
         )
         
 @login_required

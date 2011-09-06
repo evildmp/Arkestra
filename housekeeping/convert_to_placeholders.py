@@ -167,7 +167,7 @@ def convert(request, slug = "dryrun"):
                                 placeholder=placeholder, 
                                 position=1, 
                                 language=settings.LANGUAGES[0][0]) # we assume the original field was in the first language
-                            plugin_base.insert_at(None, position='last-child', commit=False)
+                            plugin_base.insert_at(None, position='last-child')
         
                             # create a text plugin
                             plugin = Text(body='')
