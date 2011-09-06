@@ -38,7 +38,7 @@ class NewsAndEvents(models.Model):
         help_text="e.g. Outrage as man bites dog in unprovoked attack")
     short_title = models.CharField(max_length=70,  null=True, blank=True,
         help_text= u"e.g. Man bites dog (if left blank, will be copied from Title)")
-    subtitle =  models.TextField(verbose_name="Summary",max_length=256,
+    subtitle = models.TextField(verbose_name="Summary",max_length=256,
         null=True, blank=False, 
         help_text="e.g. Cardiff man arrested in latest wave of man-on-dog violence (maximum two lines)",)
     body = PlaceholderField('body')
@@ -379,7 +379,7 @@ post_save.connect(receiver_function, sender = Event)
 
 class NewsAndEventsPlugin(CMSPlugin, UniversalPluginOptions):
     DISPLAY = (
-        ("news & events", u"News and events"),
+        ("news events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
