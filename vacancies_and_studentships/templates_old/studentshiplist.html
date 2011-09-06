@@ -1,8 +1,0 @@
-<ul class="plugin">{% for studentship in studentships %}
-    <li>
-        <strong>**<a href="{{ studentship.get_absolute_url }}">{{studentship.short_title}}</a></strong>
-        {{entity}}<div><a href="{{ studentship.hosted_by.get_absolute_url }}">{{ studentship.hosted_by }}</a></div>
-        <div>{{ studentship.summary }}</div>   
-    </li>
-    {% endfor %}
-</ul>
