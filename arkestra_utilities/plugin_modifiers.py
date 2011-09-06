@@ -1,6 +1,31 @@
 from modifier_pool import adjuster_pool, WidthAdjuster
 import re
 
+"""
+
+There are various kinds of WidthAdjuster modifiers:
+
+* placeholder_width
+
+works out the width of the cms placeholder
+
+
+
+* plugin_width
+
+works out the overall width of the plugin (image, carousel, video, whatever) including its borders etc
+
+* image_width
+
+works out the exact size of the images required
+
+* mark_and_modify
+
+
+
+"""
+
+
 class SimplePlaceholderWidthAdjuster(WidthAdjuster):
     kind="placeholder_width"
     
@@ -15,6 +40,8 @@ class SimplePlaceholderWidthAdjuster(WidthAdjuster):
             print "need to adjust"
             if adjuster == "divider":
                 placeholder_width = placeholder_width/adjustment
+            elif adjuster == "multiplier":
+                placeholder_width = placeholder_width * adjustment
             elif adjuster == "percent":
                 placeholder_width = placeholder_width * adjustment/100
             elif adjuster == "relative":
@@ -26,7 +53,7 @@ class SimplePlaceholderWidthAdjuster(WidthAdjuster):
         return placeholder_width
 
 
-class KeyReducer(WidthAdjuster):
+class AutoSpaceFloat(WidthAdjuster):
     """
     this truth table gives us clues about how to decide on width reductions.
     The three conditions that make up the key are: 
@@ -50,7 +77,7 @@ class KeyReducer(WidthAdjuster):
     floated = False
     kind="plugin_width"
 
-    def modify(self, target, width, auto):
+    def modify(self, context, target, width, auto):
         # check for attributes that use the reduce_key
         grandparent = target.parent.parent
         if grandparent: 
@@ -63,18 +90,21 @@ class KeyReducer(WidthAdjuster):
         
 class ReduceForBackground(WidthAdjuster):
     kind="image_width"
-    
-    def modify(self, element, width):
+    """
+    Do any of the elements containing this image have a background? If so, reduce the width.
+    """
+    def modify(self, context, element, width):
         element_class = element.get("class", "") # and its HTML class
-        if "outline" in element_class or "tint" in element_class:
-            width = width - 32
+        background_classes = context.get("background_classes", "outline tint")
+        if any((word in element_class for word in background_classes.split())):
+            width = width - context.get("background_reduction", 32)
         return width
 
 class ColumnWidths(WidthAdjuster):
     kind="image_width"
     """
     These values are given as variables here because we never quite know how
-    values such as 2/0/5 will be calculated - this way, we need not worry what
+    values such as 2.0/5 will be calculated - this way, we need not worry what
     the values will be
     """
     one            = 1.0
@@ -104,7 +134,8 @@ class ColumnWidths(WidthAdjuster):
         three_fifths: 58.4,
     }
     
-    def modify(self, element, width):
+    def modify(self, context, element, width):
+        print "============ ColumnWidths "
         element_class = element.get("class", "") # and its HTML class
         # if this is a column whose parent is a row        
         if re.search(r"\column\b", element_class) and "columns" in element.parent.get("class", ""):
@@ -122,26 +153,29 @@ class ColumnWidths(WidthAdjuster):
             width = width * self.column_widths[columnwidth/columns]/100
         return width
 
-class Markers(WidthAdjuster):
+class ImageBorders(WidthAdjuster):
     kind="mark_and_modify"
     
-    def mark(self, element, markers):
+    def mark(self, context, element, markers):
+        image_border_class = context.get("image_border_class", "image-borders")
+        no_image_border_class = context.get("no_image_border_class", "no-image-borders")
         element_class = element.get("class", "") # and its HTML class
-        if "image-borders" in element_class:
+        if image_border_class in element_class:
+            print "has borders"
             markers["has_borders"] = True
-        if "no-image-borders" in element_class:     
+        if no_image_border_class in element_class:     
             markers["has_borders"] = False
         return markers
     
-    def modify(self, markers, width):
+    def modify(self, context, markers, width):
         if markers.get("has_borders"):
             print "-16 for borders"
-            width = width - 16
+            width = width - context.get("image_border_reduction", 16)
         return width
 
 def register():
     adjuster_pool.register_adjuster(SimplePlaceholderWidthAdjuster)
-    adjuster_pool.register_adjuster(KeyReducer)
+    adjuster_pool.register_adjuster(AutoSpaceFloat)
     adjuster_pool.register_adjuster(ReduceForBackground)
     adjuster_pool.register_adjuster(ColumnWidths)
-    adjuster_pool.register_adjuster(Markers)
+    adjuster_pool.register_adjuster(ImageBorders)

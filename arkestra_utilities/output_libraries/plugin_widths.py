@@ -7,13 +7,11 @@ def get_placeholder_width(context, plugin):
     Gets the width placeholder in which a plugin finds itself
         
 	{% with
-	    adjust_width=current_page.flags.no_page_title 
-	    width_adjuster="absolute" 
-	    width_adjustment=200 %
+	    adjust_width=current_page.flags.no_page_title   # adjust_width depends on some context variable
+	    width_adjuster="absolute"                       # the adjustment will be to an absolute value
+	    width_adjustment=200                            # the value in pixels
 	    
-	    border_classes="image_borders"
-	    border_adjuster="px"
-	    border_adjustment=16
+	    image_border_reduction=8
 	    
 	    background_classes="background"
 	    background_adjuster="px"
@@ -28,6 +26,7 @@ def get_placeholder_width(context, plugin):
     
     placeholder_width = float(context.get("placeholder_width", context.get("width", 100.0))) 
 
+    # run all registered placeholder_width modifiers
     for cls in adjuster_pool.adjusters["placeholder_width"]:
         inst = cls()
         placeholder_width = inst.modify(context, placeholder_width)
@@ -45,12 +44,12 @@ def get_plugin_ancestry(plugin):
         plugin = plugin.parent 
     return reversed(plugins)
 
-def calculate_container_width(instance, width, auto=False):
+def calculate_container_width(context, instance, width, auto=False):
     markers = {}
 
     # we could in theory have nested text/layout plugins, but in practice
     # probably never will - it's not necessary, given the inner row/column
-    # capabilities of the semantic editor - so this list of plugins willusually just contain the plugin we're working on 
+    # capabilities of the semantic editor - so this list of plugins will usually just contain the plugin we're working on 
     plugins = get_plugin_ancestry(instance)
     
     for plugin in plugins:
@@ -61,27 +60,30 @@ def calculate_container_width(instance, width, auto=False):
         # find the element with that id in the HTML
         target = soup.find(id="plugin_obj_"+str(plugin.id)) 
                     
-        # check for attributes that use the reduce_key
+        # run plugin_width modifiers
         for cls in adjuster_pool.adjusters["plugin_width"]:
             inst = cls()
-            width = inst.modify(target, width, auto)
+            width = inst.modify(context, target, width, auto)
 
         elements = reversed(target.findParents()) # get the tree of elements and reverse it
         # we start with the root (i.e. document)
 
         for element in elements:
+            # run image_width modifiers
             # check for attributes that have a cumulative adjusting affect - we need to act each time we find one
             for cls in adjuster_pool.adjusters["image_width"]:
                 inst = cls()
-                width = inst.modify(element, width)
+                width = inst.modify(context, element, width)
 
+            # run mark_and_modify modifiers, to mark only
             # check for attributes that have an effect only once - act after the loop
             for cls in adjuster_pool.adjusters["mark_and_modify"]:
                 inst = cls()
-                markers = inst.mark(element, markers)
+                markers = inst.mark(context, element, markers)
             
+    # run mark_and_modify modifiers, to modify
     for cls in adjuster_pool.adjusters["mark_and_modify"]:
         inst = cls()
-        width = inst.modify(markers, width)
+        width = inst.modify(context, markers, width)
         
     return width
