@@ -6,6 +6,12 @@ Getting Started
 Using the bundled example project
 *********************************
 
+*Note* - at present, the database included with the example project requires a slightly older, and slightly tweaked, version of Django CMS.
+
+That version can be obtained from: https://github.com:evildmp/django-cms.git
+
+This is a temporary nuisance, and will be remedied as soon as possible.
+
 Arkestra comes with a bundled example project - in the `example` folder - which is ready to go, complete with database (the media files are not yet included; sorry).
 
 * `cd example`
@@ -42,6 +48,4 @@ In production
 
 Run `collectstatic` - https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/- and the equivalent `symlinkmedia` -https://github.com/divio/django-appmedia - for media files to get them into the right place.
 
-For deployment, point your web hosting platform not at `settings.py`, but `deployment_settings.py`.
-
-It turns off various debug modes. 
+For deployment, point your web hosting platform not at `settings.py`, but `deployment_settings.py`, which turns off various debug modes. 
