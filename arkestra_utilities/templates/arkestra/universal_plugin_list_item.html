@@ -2,7 +2,6 @@
 {% filter typogrify %}
 <li class = "{{ item.column_class }} {{ item.get_importance}}">
 	{% comment %}everything.all_columns: {{ everything.all_columns }}, item.column_class: {{item.column_class}}, news_item_class: {{ news_item_class }}, news.get_when|slugify: {{news.get_when|slugify}}{% endcomment %}
-
     {% if item.external_url %}
 		<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
     {% else %}
@@ -13,7 +12,7 @@
 	{% endif %}
 
     {% if "details" in everything.format %}
-		{% if item.summary %}<div class = "summary">{{ item.summary }}</div>{% endif %}
+		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:25 }}</div>{% endif %}
     	<div class = "date">{{ item.date|naturalday|capfirst }}</div>
 	{% endif %}
 </li>

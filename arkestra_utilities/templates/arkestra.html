@@ -49,6 +49,7 @@
 	styles in arkestra_default.css that are provided to get you started.
 	
 	{% endcomment %}
+	
     {% block arkestra_default_styles %}
 		<style media="screen" type="text/css"><!--@import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css"); --></style>
 	{% endblock arkestra_default_styles %}
@@ -63,26 +64,28 @@
 {% endblock head %}
 
 {% block body %}<body {% block body_attributes %}{% endblock body_attributes %}>
-<div id="outer-wrapper">
-	<div id="inner-wrapper">
-		{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
+	{% block body_content %}
+		<div id="outer-wrapper">
+			<div id="inner-wrapper">
+				{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
 
-		{% block pagetitle %}
-			{% if not current_page.flags.no_page_title %}
-	           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
-			{% endif %}
-		{% endblock pagetitle %}
+				{% block pagetitle %}
+					{% if not current_page.flags.no_page_title %}
+			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
+					{% endif %}
+				{% endblock pagetitle %}
 		
-		{% block main_page_body %}
-			{% filter typogrify %}
-				{% insert "newsflash" %}
-		   		{% placeholder body %}
-			{% endfilter %}
-	  	{% endblock main_page_body %}
+				{% block main_page_body %}
+					{% filter typogrify %}
+						{% insert "newsflash" %}
+				   		{% placeholder body %}
+					{% endfilter %}
+			  	{% endblock main_page_body %}
    
-	</div>
-	{% insert "footer" %}
-</div>		
+			</div>
+			{% insert "footer" %}
+		</div>		
+	{% endblock body_content %}
 
 </body>
 {% endblock body %}
