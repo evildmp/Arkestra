@@ -177,7 +177,7 @@ class CarouselPluginPublisher(CMSPluginBase):
                 auto = True
             
             # calculate the width of the block the image will be in
-            width = calculate_container_width(instance, width, auto)
+            width = calculate_container_width(context, instance, width, auto)
         
         width = int(width) -2 # make room for left/right borders
         label_width = width/len(segments)
