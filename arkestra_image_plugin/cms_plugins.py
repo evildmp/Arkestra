@@ -76,7 +76,7 @@ class FilerImagePlugin(CMSPluginBase):
                     auto = True
                 
                 # calculate the width of the block the image will be in
-                width = calculate_container_width(instance, width, auto)
+                width = calculate_container_width(context, instance, width, auto)
                        
             # shave off 5 point if the image is floated, to make room for a margin
             # see arkestra.css, span.image.left and span.image.right
