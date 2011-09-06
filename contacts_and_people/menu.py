@@ -17,6 +17,8 @@ from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
 
+
+
 # we're expecting modifiers: contacts, news, news_archive, forthcoming_events, previous_events, vacancies, publications
 menu_modifiers = getattr(settings, 'MENU_MODIFIERS', None)
 if menu_modifiers:
