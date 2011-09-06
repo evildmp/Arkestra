@@ -29,9 +29,9 @@ class CommonVacancyAndStudentshipInformation(models.Model):
     closing_date = models.DateField()
     summary = models.TextField(help_text="Maximum two lines")
     description = models.TextField(null=True, blank=True,
-        help_text="Not used or required for external items")
+        help_text="No longer used")
     image = FilerImageField(null=True, blank=True)
-    body = PlaceholderField('description')
+    body = PlaceholderField('description', help_text="Not used or required for external items")
     hosted_by = models.ForeignKey(Entity, default=default_entity_id, 
         related_name='%(class)s_hosted_events', 
         null=True, blank=True, 
@@ -40,7 +40,7 @@ class CommonVacancyAndStudentshipInformation(models.Model):
         help_text=u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
     external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item",
         blank=True, null=True)
-    enquiries = models.ManyToManyField(Person, related_name='%(class)s_person', 
+    please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
         help_text=u'The person to whom enquiries about this should be directed ', 
         null=True, blank=True)
     publish_to = models.ManyToManyField(Entity, related_name="%(class)s_advertise_on",
@@ -110,7 +110,7 @@ class Studentship(CommonVacancyAndStudentshipInformation):
 
 class VacanciesPlugin(CMSPlugin, UniversalPluginOptions):
     DISPLAY = (
-        (u"vacancies & studentships", u"Vacancies and studentships"),
+        (u"vacancies studentships", u"Vacancies and studentships"),
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
     )

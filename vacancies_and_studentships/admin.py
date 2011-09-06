@@ -65,7 +65,7 @@ class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, Placeholder
         'external_url',
         ]
     filter_horizontal = (
-        'enquiries',
+        'please_contact',
         'publish_to', 
         )
     prepopulated_fields = {
@@ -128,7 +128,7 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
     filter_horizontal = (
         'publish_to', 
         'supervisors', 
-        'enquiries',
+        'please_contact',
     )
     fieldset_basic = (
         ('', {
