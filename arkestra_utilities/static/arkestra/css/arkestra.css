@@ -17,7 +17,7 @@ div.row {
     }
 
 div.row div.row {
-    margin: 0 0 .5em; 
+    margin: .25em 0 .25em; 
     height: 100%; /* why do we do this? */
     }
 
@@ -32,9 +32,14 @@ Firstly, single-width columns - .column - need to come before double and triple-
 
 Secondly, if a column has *both* double and triple columns:
 
-    the semantic editor treats it a s a double, so:
+    the semantic editor treats it as a double, so:
     the presentation system in arkestra_utilities/output_libraries/plugin_widths.py will do the same, so:
     doublecolumns must come last
+    
+A different issue here is that WebKit has rounding errors. Mostly they don't matter, but they are cumulative. So, 
+a 48% of a 960px width should be 460.8 (i.e. 461); Safari computes this as 460.
+
+As the columns add up, so do the rounding errors.
 
  */
 
@@ -93,18 +98,18 @@ all rows have a left margin except the first, which has none */
 	margin-left: 4%; 
 	}
 	
-/* hand adjustments to tweak spaces between columns */
+/* hand adjustments to tweak spaces between columns because of WebKit rounding errors */
 
-.row.columns2 .column-2,
+/*.row.columns2 .column-2,
 .row.columns6 .column-3,
-.row.columns3 .column-2	{
-	margin-left: 4.1%; 
-	}
+.row.columns3 .column-2 {
+    margin-left: 4.1%; 
+    }
 
-.row.columns6 .column-5	{
-	margin-left: 3.9%; 
-	}
-
+.row.columns6 .column-5 {
+    margin-left: 3.9%; 
+    }
+*/
 .row li.column {
     list-style: none; 
     font-size: 1em; 
