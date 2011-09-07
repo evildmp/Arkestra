@@ -5,8 +5,8 @@ from django.db.models import ForeignKey
 class AutocompleteMixin(object):
     class Media:
         js = (
-            '/static/jquery/jquery.js', # we already load jquery for the tabs
-            '/static/jquery/ui/ui.core.js',
+            '/static/cms/js/lib/jquery.js',
+            '/static/cms/js/lib/ui.core.js',
             '/static/jquery/ui/ui.tabs.js',
         )
         css = {
