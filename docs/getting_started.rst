@@ -8,7 +8,9 @@ Using the bundled example project
 
 *Note* - at present, the database included with the example project requires a slightly older, and slightly tweaked, version of Django CMS.
 
-That version can be obtained from: https://github.com:evildmp/django-cms.git
+That version can be obtained from: https://github.com/evildmp/django-cms
+
+and: git checkout feature/pageflags
 
 This is a temporary nuisance, and will be remedied as soon as possible.
 
