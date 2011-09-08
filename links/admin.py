@@ -123,7 +123,7 @@ def check_urls(request, url, allowed_schemes = None):
         if scheme:
             message = "Sorry, link type %s is not permitted. Permitted types are %s." % (scheme, permitted_schemes)
         else:
-            message = "Please provide a complete URL of the form http://example.com/. Permitted schemes are %s." % permitted_schemes
+            message = 'Please provide a complete URL, such as "http://example.com/" or "mailto:example@example.com". Permitted schemes are %s.' % permitted_schemes
 
         raise forms.ValidationError(message)
     
@@ -158,6 +158,8 @@ class ExternalLinkForm(forms.ModelForm):
     def clean(self):
         url = self.cleaned_data.get('url', "")
         title = self.cleaned_data.get('title', "")
+
+        check_urls(self.request, url)
         
         # check if the url is a duplicate
         # if the url exists, and this would be a new instance in the database, it's a duplicate
