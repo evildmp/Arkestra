@@ -110,7 +110,7 @@ class Studentship(CommonVacancyAndStudentshipInformation):
 
 class VacanciesPlugin(CMSPlugin, UniversalPluginOptions):
     DISPLAY = (
-        (u"vacancies studentships", u"Vacancies and studentships"),
+        (u"vacancies & studentships", u"Vacancies and studentships"),
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
     )

@@ -1,0 +1,16 @@
+{% extends "arkestra/universal_plugin_list_item.html" %}
+{% block item_title %}
+	{% if item.parent.series %}
+		<a href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
+		  {% if item.parent.no_direct_access_to_children %}<div><span class = "grey italic">{{item.get_short_title}}</span></div>
+		{% else%}<div><a href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a></div>{% endif %}
+		{% else %}
+		  {% if item.external_url %}
+		<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		  {% else %}
+		<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+		{% endif %}
+	{% endif %}	
+{% endblock item_title %}
+
+{% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}{% if item.building %}, <a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a>{% endif %}</div>{% endblock item_date %}

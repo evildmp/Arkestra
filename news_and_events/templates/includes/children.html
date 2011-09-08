@@ -10,7 +10,7 @@
 		<ul class = "none">
 		    {% for child_event in event.get_children_forthcoming %}
     			<li>
-					{% if event.no_direct_access_to_children and not child_event.content %}
+					{% if event.no_direct_access_to_children %}
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
@@ -50,7 +50,7 @@
 		<ul class = "none">
 		    {% for child_event in event.get_children_previous %}
     			<li>
-					{% if event.no_direct_access_to_children and not child_event.content %}
+					{% if event.no_direct_access_to_children %}
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>

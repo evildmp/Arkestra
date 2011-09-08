@@ -1,19 +1,29 @@
 {% load thumbnail humanize typogrify_tags %}
 {% filter typogrify %}
+{% block list_item %}
 <li class = "{{ item.column_class }} {{ item.get_importance}}">
-	{% comment %}everything.all_columns: {{ everything.all_columns }}, item.column_class: {{item.column_class}}, news_item_class: {{ news_item_class }}, news.get_when|slugify: {{news.get_when|slugify}}{% endcomment %}
-    {% if item.external_url %}
-		<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
-    {% else %}
-		<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-	{% endif %}
-    {% if "image" in everything.format and item.image %}
-		{% thumbnail item.image.file everything.image_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
-	{% endif %}
 
-    {% if "details" in everything.format %}
+    {% block item_title %}
+		{% if item.external_url %}
+			<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		   {% else %}
+			<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+		{% endif %}
+	{% endblock item_title %}
+
+	{% block item_image %}
+    	{% if "image" in everything.format and item.image %}
+			{% thumbnail item.image.file everything.image_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
+		{% endif %}
+	{% endblock item_image %}
+	
+    {% block item_details %}
+		{% if "details" in everything.format %}
 		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:25 }}</div>{% endif %}
-    	<div class = "date">{{ item.date|naturalday|capfirst }}</div>
-	{% endif %}
+    	{% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst }}</div>{% endblock item_date %}
+		{% endif %}
+	{% endblock item_details %}
+	
 </li>
+{% endblock list_item %}
 {% endfilter %}

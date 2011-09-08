@@ -151,7 +151,7 @@ class Event(NewsAndEvents):
         help_text=u"If this event has child events, don't link to them - just display them")
     do_not_advertise_children = models.BooleanField(default=False,
         verbose_name="Hide children",
-        help_text=u"In events lists, display this parent, instead of all of its children (useful for events with many children)")
+        help_text=u"In events lists, display this parent, instead of all of its children (don't use with series)")
     always_display_series = models.BooleanField(
         help_text="Display the series even if there are no future events in this series - use with caution")
     inherit_name = models.BooleanField(verbose_name="Inherit name",
@@ -379,7 +379,7 @@ post_save.connect(receiver_function, sender = Event)
 
 class NewsAndEventsPlugin(CMSPlugin, UniversalPluginOptions):
     DISPLAY = (
-        ("news events", u"News and events"),
+        ("news & events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
