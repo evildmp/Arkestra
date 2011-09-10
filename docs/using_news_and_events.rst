@@ -56,9 +56,46 @@ So Arkestra can record an event as being a `series`. Any event that doesn't have
 What gets shown in Events lists?
 ================================
 
-In a list of forthcoming events, what information will be shown?
+In a list of events, such as on a News & Events page, which items will be listed?
 
 * actual events (not series events) that do not have an actual event parent
 
+So, Tour de France 1969 will show up in the list, but not all its children. If someone wants to see details of all the children, they can visit the Tour de France 1969 page.
+
+Similarly, we would want to show a conference, but not all of its sessions.
+
+Each item in the list has this basic structure:
+
+[title of series, link to series]
+[title of event, link to event]
+[summary of event]
+[date]
+[venue]
+
+or:
+
+Public Health lecture series [links to the page for the series]
+"The health benefits & risks of milk" [links to the page for this particular item]
+A debate between two leading researchers
+12th January, 19:00
+UHW Main Building
+
+We don't always need to show all of these. [title of series, link to series] can't be shown if the item isn't part of a series, for example.
+
+For our Tour de France example, this would look silly though:
+
+Tour de France [links to the page for the series]
+Tour de France 1969 [links to the page for this particular item]
+The 1969 edition of the Tour opens with [...]
+June 28th to July 20th, 1969
+
+don't link to children [children contain little extra information]
+
+For events in this series:
+* series name, child name, child summary
+* series name, child summary
+* series name, series summary
+* child name
 
 
+So, for the series we could choose the option:
