@@ -21,5 +21,7 @@
 {% endblock pagetitle %}
 
 {% block main_page_body %}
+	{% with placeholder_width=200 %}
 	{% include main_page_body_file %}
+	{% endwith %}
 {% endblock main_page_body %}

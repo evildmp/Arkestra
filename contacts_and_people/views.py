@@ -200,8 +200,9 @@ def place(request, slug, active_tab=""):
     places_dict[active_tab or "about"]["active"] = True
     tabs = []
     if place.events().forthcoming_events:
-        tabs.append(places_dict["events"])        
-    if place.getting_here or place.access_and_parking or (place.map and place.zoom and place.latitude and place.longitude):
+        tabs.append(places_dict["events"])  
+    print place.getting_here.cmsplugin_set.all() , place.access_and_parking.cmsplugin_set.all() , place.has_map
+    if place.getting_here.cmsplugin_set.all() or place.access_and_parking.cmsplugin_set.all() or place.has_map:
         tabs.append(places_dict["directions"])
     # if we're going to show tabs, put the about tab first
     if tabs:

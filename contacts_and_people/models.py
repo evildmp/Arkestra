@@ -13,7 +13,12 @@ import mptt
 
 from filer.fields.image import FilerImageField
 
+# from news_and_events.models import NewsAndEventsPlugin
+# from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
+
 from links.models import ExternalLink
+
+import news_and_events
 
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 base_entity_id = settings.ARKESTRA_BASE_ENTITY
@@ -115,13 +120,13 @@ class Building(models.Model):
             address.append(self.postcode)
         return address
 
+    @property
     def has_map(self):
         return self.map and self.latitude and self.longitude and self.zoom
     
     def events(self):
-        from news_and_events.models import NewsAndEventsPlugin
         # invoke the plugin to find out more
-        instance = NewsAndEventsPlugin()
+        instance = news_and_events.models.NewsAndEventsPlugin()
         instance.display = "events"
         instance.type = "for_place"
         instance.place = self
@@ -129,7 +134,7 @@ class Building(models.Model):
         instance.format = "details image"
         
         # create an instance of the plugin to see if the menu should have items
-        plugin = CMSNewsAndEventsPlugin()   
+        plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
         plugin.get_items(instance)
         plugin.add_links_to_other_items(instance)    
         plugin.set_image_format(instance)
@@ -700,7 +705,6 @@ try:
 except (Entity.DoesNotExist, DatabaseError):
     pass
     
-from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 # crazymaniac's wild monkeypatch# 
 # """

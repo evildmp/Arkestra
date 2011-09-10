@@ -1,3 +1,9 @@
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logging.error("at start of menu!")
+
 from django.utils.safestring import mark_safe 
 from django.template import RequestContext
 from django.conf import settings
@@ -8,16 +14,22 @@ from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier
 
-from news_and_events.models import NewsAndEventsPlugin        
-from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
+logging.error("OK so far")
 
-from vacancies_and_studentships.models import VacanciesPlugin        
-from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
+import news_and_events
+import vacancies_and_studentships
+
+# from news_and_events.models import NewsAndEventsPlugin        
+# from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
+# 
+# from vacancies_and_studentships.models import VacanciesPlugin        
+# from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
+
+logging.error("finished imports of menu!")
+
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
-
-
 
 # we're expecting modifiers: contacts, news, news_archive, forthcoming_events, previous_events, vacancies, publications
 menu_modifiers = getattr(settings, 'MENU_MODIFIERS', None)
@@ -64,7 +76,7 @@ class ArkestraPages(Modifier):
                     # does this entity have a news page?
                     if entity.auto_news_page and "news" in menu_tests:
                         # invoke the plugin to find out more
-                        instance = NewsAndEventsPlugin()
+                        instance = news_and_events.models.NewsAndEventsPlugin()
                         instance.entity = entity
                         instance.type = "menu"
                         instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -72,7 +84,7 @@ class ArkestraPages(Modifier):
                         context = RequestContext(request)
                         
                         # create an instance of the plugin to see if the menu should have items
-                        plugin = CMSNewsAndEventsPlugin()   
+                        plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
                         plugin.get_items(instance)
                         plugin.add_links_to_other_items(instance)    
                         
@@ -93,18 +105,19 @@ class ArkestraPages(Modifier):
                             if item["items"]:
                                 show_menu_item = True
 
-                            # and go through the other_items lists for each
-                            for other_item in item["other_items"]:
-                                new_sub_node = NavigationNode(
-                                    mark_safe(other_item["title"]), 
-                                    other_item["link"], 
-                                    None )
-                                if request.page_path == new_sub_node.get_absolute_url():
-                                    new_sub_node.selected = True
-                                    new_node.selected = False
+                            if EXPAND_ALL_MENU_BRANCHES:
+                                # and go through the other_items lists for each
+                                for other_item in item["other_items"]:
+                                    new_sub_node = NavigationNode(
+                                        mark_safe(other_item["title"]), 
+                                        other_item["link"], 
+                                        None )
+                                    if request.page_path == new_sub_node.get_absolute_url():
+                                        new_sub_node.selected = True
+                                        new_node.selected = False
 
-                                show_menu_item = True
-                                new_node.children.append(new_sub_node)
+                                    show_menu_item = True
+                                    new_node.children.append(new_sub_node)
 
                         if show_menu_item:
                             # is this node the one we are currently looking at?
@@ -124,7 +137,7 @@ class ArkestraPages(Modifier):
 
                     if getattr(entity, "auto_vacancies_page", None)  and "vacancies" in menu_tests:
 
-                        instance = VacanciesPlugin()
+                        instance = vacancies_and_studentships.models.VacanciesPlugin()
                         instance.entity = entity
                         instance.type = "menu"
                         instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -132,7 +145,7 @@ class ArkestraPages(Modifier):
                         context = RequestContext(request)
                                              
                         # create an instance of the plugin to see if the menu should have items
-                        plugin = CMSVacanciesPlugin()   
+                        plugin = vacancies_and_studentships.cms_plugin.CMSVacanciesPlugin()   
                         plugin.get_items(instance)
                         plugin.add_links_to_other_items(instance)    
 

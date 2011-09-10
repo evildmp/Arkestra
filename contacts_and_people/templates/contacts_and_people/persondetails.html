@@ -25,7 +25,7 @@
 	{% endif %}{% endblock pagetitle %}
 
 {% block main_page_body %}
-{% thumbnail person.image.file 426x426 subject_location=person.image.subject_location crop as image %}
+{% thumbnail person.image.file contacts_image_size subject_location=person.image.subject_location crop as image %}
 	{% block entity_information %}
 		{% if tabs %}
 			<ul id="tab_menu">
