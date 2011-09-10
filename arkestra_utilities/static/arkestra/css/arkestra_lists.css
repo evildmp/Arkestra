@@ -18,15 +18,17 @@ ul.entity-tree li {list-style: none;}
 
 /* icons */
 ul.icons    {
-    list-style: square; url(/media/images/hand-right.png);
-    padding-left: 20px;
+    list-style: square url(/media/images/hand-right.png);
+    padding-left: 30px;
 }
 
 /* plugin list items */
 
 ul.plugin-list {margin-top: 0;}
 
-ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em;}
+ul.plugin-list .title   {font-weight: bold;}
+
+ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em; padding-bottom: 0.5em;}
 ul.plugin-list.vertical li:first-child {padding-top: 0;}
 ul.plugin-list.vertical li.grouper li.important {
     padding: .5em; 
