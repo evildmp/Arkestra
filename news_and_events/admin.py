@@ -231,8 +231,8 @@ class EventAdmin(NewsAndEventsAdmin):
         'featuring', 
         )
     change_list_template = "admin/news_and_events/event/change_list.html"
-    list_display = ('short_title','parent',  'inherit_name',  'start_date', 'series', 'slug',)
-    list_editable = ('parent', 'inherit_name',  'start_date',  'series', 'slug',)
+    list_display = ('short_title','parent',   'start_date', 'series', 'slug',)
+    list_editable = ('parent',  'start_date',  'series', 'slug',)
     search_fields = ['title',]
     list_filter = ('start_date',)
     save_as = True
@@ -262,7 +262,7 @@ class EventAdmin(NewsAndEventsAdmin):
         )
     fieldset_relationships = (
         ('Relationships with other Events', {
-            'fields': ('always_display_series', 'parent', 'child_list_heading', 'do_not_advertise_children', 'no_direct_access_to_children',), 
+            'fields': ('parent', 'child_list_heading', 'link_to_series', 'display_series_name', 'display_series_summary',), 
         }),)        
     fieldset_people = (    
         ('People', {

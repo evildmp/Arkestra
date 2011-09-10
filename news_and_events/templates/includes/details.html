@@ -20,9 +20,9 @@
 			    				    {% endif %}
 								{% endwith %}
 						    {% endif %}
-						    {% if event.enquiries.all %}
+						    {% if event.please_contact.all %}
 		    				    <dt>General enquiries</dt>
-									{% for person in event.enquiries.all %}
+									{% for person in event.please_contact.all %}
 										<dd>
 											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
 										</dd>
@@ -31,14 +31,6 @@
 						    {% if event.registration_enquiries.all %}
 		    				    <dt>Registration enquiries</dt>
 									{% for person in event.registration_enquiries.all %}
-										<dd>
-											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
-										</dd>
-									{% endfor %}
-						    {% endif %}
-						    {% if event.organisers.all %}
-		    				    <dt>Organisers</dt>
-									{% for person in event.organisers.all %}
 										<dd>
 											<a href = "{{ person.get_absolute_url }}"> {{ person }}</a>
 										</dd>

@@ -1,7 +1,7 @@
 {% load i18n adminmedia arkestra_filters %}
 <div class="cont">
 	<div class="col1">
-		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{{ event.type }}: {{ event.title }}</a></span>	
+		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{% if event.series %}Series{% else %}{{ event.type }}{% endif %}: {{ event.title }}</a></span>	
 		<a href="{{ url }}{{ event.id }}" class="changelink" title="edit">edit</a>
 	</div>
 	<div class="col2">

@@ -26,7 +26,7 @@ from managers import NewsArticleManager, EventManager
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
-
+DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
 
 class NewsAndEvents(models.Model):
     IMPORTANCES = (
@@ -134,8 +134,7 @@ class NewsArticle(NewsAndEvents):
         """
         if getattr(self, "sticky", None):
             return "Top news"        
-        date_format = "F Y"
-        get_when = nice_date(self.date, date_format)
+        get_when = nice_date(self.date, DATE_FORMAT["date_groups"])
         return get_when
 
 
@@ -144,19 +143,35 @@ class Event(NewsAndEvents):
     featuring = models.ManyToManyField(Person, related_name='%(class)s_featuring',
         null=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
-    series = models.BooleanField(default=False,
-        help_text=u"A series of regular or repeating events, but not an event itself")
-    no_direct_access_to_children = models.BooleanField(default=False,
-        verbose_name="No links to children",
-        help_text=u"If this event has child events, don't link to them - just display them")
-    do_not_advertise_children = models.BooleanField(default=False,
-        verbose_name="Hide children",
-        help_text=u"In events lists, display this parent, instead of all of its children (don't use with series)")
-    always_display_series = models.BooleanField(
-        help_text="Display the series even if there are no future events in this series - use with caution")
-    inherit_name = models.BooleanField(verbose_name="Inherit name",
+    SERIES = (
+        (False, u"an actual event"),
+        (True, u"a series of events"),
+    )
+    series = models.BooleanField("This is", default=False, choices=SERIES)
+    DO_NOT_LINK_TO_CHILDREN = (
+        (False, u"have their own pages"),
+        (True, u"are displayed within this item"),
+    )
+    do_not_link_to_children = models.BooleanField(u"Child events",
         default=False,
-        help_text="This event will inherit its name from its parent. You'll have to customise the slug yourself")
+        choices=DO_NOT_LINK_TO_CHILDREN,
+        )
+    DISPLAY_SERIES_NAME = (
+        (False, u"display children's names only"),
+        (True, u"also display series name"),
+    )
+    display_series_name = models.BooleanField(u"In lists",
+        default=False,
+        choices=DISPLAY_SERIES_NAME,
+        )
+    DISPLAY_SERIES_SUMMARY = (
+        (False, u"display children's summaries"),
+        (True, u"display the summary for the series"),
+    ) 
+    display_series_summary = models.BooleanField(u"In lists",
+        default=False,
+        choices=DISPLAY_SERIES_SUMMARY,
+        )
     child_list_heading = models.CharField(max_length=50, null=True, blank=True, 
         help_text= u"e.g. Conference sessions; Lectures in this series")
     start_date = models.DateField(null=True, blank=True,
@@ -187,10 +202,34 @@ class Event(NewsAndEvents):
         return self.title
     
     def get_absolute_url(self):
+        # should we link to the parent?
         if self.external_url:
             return self.external_url.url
+        elif self.parent and self.parent.do_not_link_to_children:
+            return self.parent.get_absolute_url()
         else:
             return "/event/%s/" % self.slug
+  
+    @property
+    def show_parent_series(self):
+        """
+        checks whether we should show the parent series too in lists
+        """
+        if self.parent and self.parent.series and self.parent.display_series_name:
+            return True
+
+    @property
+    def has_page(self):
+        """
+        checks if this Event deserves its own page
+        """
+        if self.parent:
+            if self.parent.do_not_link_to_children:
+                return self.parent.get_absolute_url()
+            else:
+                return self.get_absolute_url()
+        else:
+            return self.get_absolute_url()
         
     def save(self):
         def slug_is_bad(self):
@@ -258,20 +297,21 @@ class Event(NewsAndEvents):
         if time:
             date_and_time.append(time)        
         return date_and_time
+        
     def get_dates(self):
         if not self.series:
             start_date = self.start_date
             end_date = self.end_date
             if not end_date or self.single_day_event:
                 end_date = start_date
-            start_date_format = end_date_format = "l jS F Y"
+            start_date_format = end_date_format = DATE_FORMAT["not_this_year"]
             now = datetime.now()
             if start_date.year == end_date.year:            # start and end in the same year, so:
-                start_date_format = "l jS F"                  # start format example: "3rd May"
+                start_date_format = DATE_FORMAT["not_this_month"]                  # start format example: "3rd May"
                 if start_date.month == end_date.month:      # start and end in the same month, so:
-                    start_date_format = "l jS"                # start format example: "21st" 
+                    start_date_format = DATE_FORMAT["this_month"]                # start format example: "21st" 
                 if end_date.year == now.year:               # they're both this year, so:
-                    end_date_format = "l jS F"                # end format example: "23rd May"
+                    end_date_format = DATE_FORMAT["not_this_month"]                # end format example: "23rd May"
             if self.single_day_event:
                 dates = nice_date(start_date, end_date_format)
             else:

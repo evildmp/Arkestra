@@ -33,6 +33,16 @@ COLLECT_TOP_ALL_FORTHCOMING_EVENTS = True
 # show event type (e.g. "Seminar")
 SHOW_EVENT_TYPES = False
 
+# -------- Date formats ----------------------
+
+ARKESTRA_DATE_FORMAT={
+    "date_groups": "F Y",
+    "not_this_year": "jS F Y",
+    "not_this_month": "jS F",    
+    "this_month": "jS",
+    }
+
+
 # -------- Headings ----------------------
 
 # global value for the heading level for page titles (e.g. entity names in entity pages)

@@ -1,1 +1,54 @@
-{% extends "news_and_events/newsarticle_base.html" %}
+{% extends newsarticle.template %}
+{% load arkestra_date_tags typogrify_tags humanize link_tags thumbnail placeholder_tags %}
+
+{% block title %}
+	<title>{{ newsarticle }}</title>
+{% endblock %}
+
+{% block nav_local %}
+{% endblock nav_local %}
+
+{% block pagetitle %}
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+
+	{% if newsarticle.subtitle %}
+   		<p class= "standout"><strong>{{ newsarticle.subtitle }}</strong></p>
+	{% endif %}
+{% endblock pagetitle %}
+
+
+{% block main_page_body %}
+{% with placeholder_width=main_item_width %}
+    {% block entity_information %}
+        <div class="row columns3">
+        	<div class="column firstcolumn doublecolumn">
+				{% block placeholder %}
+				    {% render_placeholder newsarticle.body %}
+				{% endblock placeholder %}
+			</div>
+			<div class="column lastcolumn">
+				{% block image %}
+				    {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location as image %}
+				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
+				{% endblock image %}				
+				<dl>
+					<dt>Date</dt>
+					<dd>{% date newsarticle.date %}</dd>
+					{% if newsarticle.enquiries.all %}
+	 				    <dt>General enquiries</dt>
+	 				    {% for person in newsarticle.enquiries.all %}
+							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
+						{% endfor %}
+					{% endif %}
+				</dl>    
+				{% with newsarticle.links as links %}
+				    {% include "includes/related_links_list.html" %}
+		        {% endwith %}
+			</div>
+		</div>
+		<ul class = "news icons">
+			<li><a href = "{{ newsarticle.link_to_news_and_events_page }}">More {{ newsarticle.hosted_by.short_name }} news</a></li>
+		</ul>
+    {% endblock entity_information %}
+{% endwith %}
+{% endblock main_page_body %}

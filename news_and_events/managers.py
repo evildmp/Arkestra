@@ -127,7 +127,7 @@ class EventManager(models.Manager):
             # the child's parent is a series and its children can be advertised
             # tough luck if it's the child of a series and can't be advertised
             Q(series = False, parent = None) | \
-            Q(parent__series = True,  parent__do_not_advertise_children = False), 
+            Q(parent__series = True), 
             )
         
         instance.forthcoming_events = actual_events.filter(  

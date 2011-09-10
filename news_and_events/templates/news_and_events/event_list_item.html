@@ -1,16 +1,25 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
 {% block item_title %}
-	{% if item.parent.series %}
-		<a href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
-		  {% if item.parent.no_direct_access_to_children %}<div><span class = "grey italic">{{item.get_short_title}}</span></div>
-		{% else%}<div><a href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a></div>{% endif %}
+	{% if item.parent.series and item.parent.display_series_name %}
+		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
+	{% endif %}
+	
+	{% if item.external_url %}
+		<a class="external {% if not item.show_parent_series %}title{% endif %}" href="{{ item.external_url.url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+	{% else %}
+		{% if item.show_parent_series %}
+			{% ifequal item.get_absolute_url item.parent.get_absolute_url %}
+				{{ item.get_short_title }}
+			{% else %}
+				<a {% href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
+			{% endifequal %}			
 		{% else %}
-		  {% if item.external_url %}
-		<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
-		  {% else %}
-		<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+			<a {% class="title" href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
 		{% endif %}
-	{% endif %}	
+	{% endif %}
 {% endblock item_title %}
 
-{% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}{% if item.building %}, <a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a>{% endif %}</div>{% endblock item_date %}
+{% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
+
+{% block item_details %}
+{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div class = "date"><a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
