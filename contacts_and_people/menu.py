@@ -145,7 +145,7 @@ class ArkestraPages(Modifier):
                         context = RequestContext(request)
                                              
                         # create an instance of the plugin to see if the menu should have items
-                        plugin = vacancies_and_studentships.cms_plugin.CMSVacanciesPlugin()   
+                        plugin = vacancies_and_studentships.cms_plugins.CMSVacanciesPlugin()   
                         plugin.get_items(instance)
                         plugin.add_links_to_other_items(instance)    
 
