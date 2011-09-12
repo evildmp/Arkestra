@@ -32,7 +32,7 @@ Either copy these, or if you know what you're doing, copy the relevant parts to 
 
 Start with the Python runserver, and get that going.
 
-In order to make anything work, you'll need to do log in to Admin and do three things.
+In order to make anything work, you'll need to do log in to Admin (username and password are both `arkestra`) and do three things.
 
 * create a Page
 * create an Entity
