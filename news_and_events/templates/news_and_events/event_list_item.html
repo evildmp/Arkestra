@@ -1,6 +1,6 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
 {% block item_title %}
-	{% if item.parent.series and item.parent.display_series_name %}
+	{% if item.show_parent_series %}
 		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
 	{% endif %}
 	
