@@ -27,8 +27,9 @@ Available through pip
 * django-typogrify
 * pyquery
 * easy-thumbnails
+* django-appmedia
 
-`pip install BeautifulSoup django-typogrify pyquery easy-thumbnails`
+`pip install BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
 Best currently installed from source
 ------------------------------------
