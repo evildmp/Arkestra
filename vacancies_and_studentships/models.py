@@ -1,61 +1,32 @@
 from django.db import models
 from django.conf import settings
 
-from cms.models.fields import PlaceholderField
+# from cms.models.fields import PlaceholderField
 from cms.models import CMSPlugin
 
-from filer.fields.image import FilerImageField
+# from filer.fields.image import FilerImageField
 
 from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.universal_plugins import UniversalPluginOptions
+from arkestra_utilities.mixins import UniversalPluginModelMixin, URLModelMixin
+from contacts_and_people.models import Entity, Person #, default_entity_id
 
-from contacts_and_people.models import Entity, Person, default_entity_id
-
-from links.models import ExternalLink
+# from links.models import ExternalLink
 
 from managers import VacancyManager, StudentshipManager
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
-class CommonVacancyAndStudentshipInformation(models.Model):
-    IMPORTANCES = (
-        (0, u"Normal"),
-        (1, u"More important"),
-        (10, u"Most important"),
-    )
-    short_title = models.CharField(blank=True, max_length=50, null=True)
-    title = models.CharField(max_length=250)
-    closing_date = models.DateField()
-    summary = models.TextField(help_text="Maximum two lines")
-    description = models.TextField(null=True, blank=True,
-        help_text="No longer used")
-    image = FilerImageField(null=True, blank=True)
-    body = PlaceholderField('description', help_text="Not used or required for external items")
-    hosted_by = models.ForeignKey(Entity, default=default_entity_id, 
-        related_name='%(class)s_hosted_events', 
-        null=True, blank=True, 
-        help_text=u"The research group or department responsible for this vacancy")
-    url = models.URLField(verify_exists=True, blank=True, null=True,
-        help_text=u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item",
-        blank=True, null=True)
-    please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
-        help_text=u'The person to whom enquiries about this should be directed ', 
-        null=True, blank=True)
-    publish_to = models.ManyToManyField(Entity, related_name="%(class)s_advertise_on",
-        help_text=u"Other research groups or departments where this should be advertised", 
-        null=True, blank=True)
-    importance = models.PositiveIntegerField(null=True, blank=False, default=0,
-        choices=IMPORTANCES, help_text=u"Important items will be featured in lists")
-    slug=models.SlugField(unique=True)
-    
+class CommonVacancyAndStudentshipInformation(UniversalPluginModelMixin, URLModelMixin):
     class Meta:
         abstract = True
         ordering = ['-closing_date']  
 
-    def __unicode__(self):
-        return self.title
+    closing_date = models.DateField()
+    
+    description = models.TextField(null=True, blank=True,
+        help_text="No longer used")
 
     def get_when(self):
         """
@@ -79,6 +50,8 @@ class CommonVacancyAndStudentshipInformation(models.Model):
 
 
 class Vacancy(CommonVacancyAndStudentshipInformation):
+    url_path = "vacancy"
+    
     job_number = models.CharField(max_length=9)
     salary = models.CharField(blank=True, max_length=255, null=True,
         help_text=u"Please include currency symbol")
@@ -88,24 +61,14 @@ class Vacancy(CommonVacancyAndStudentshipInformation):
     class Meta:
         verbose_name_plural = "Vacancies"
         
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/vacancy/%s/" % self.slug
-
 
 class Studentship(CommonVacancyAndStudentshipInformation):
+    url_path = "studentship"
+    
     supervisors = models.ManyToManyField(Person, null=True, blank=True,
         related_name="%(class)s_people")
 
     objects = StudentshipManager()
-
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/studentship/%s/" % self.slug
 
 
 class VacanciesPlugin(CMSPlugin, UniversalPluginOptions):

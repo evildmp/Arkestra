@@ -22,7 +22,7 @@ from models import NewsArticle, NewsSource, Event, EventType
 class NewsAndEventsForm(forms.ModelForm):
     # a shared form for news and events
     class Meta:
-        widgets = {'subtitle': forms.Textarea(
+        widgets = {'summary': forms.Textarea(
               attrs={'cols':80, 'rows':2,},
             ),  
         }
@@ -42,7 +42,7 @@ class NewsAndEventsForm(forms.ModelForm):
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
             self.cleaned_data.get("title"), # link title
-            self.cleaned_data.get("subtitle"), # link description
+            self.cleaned_data.get("summary"), # link description
             )          
 
         # misc checks
@@ -101,7 +101,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         
     fieldset_basic = (
         ('Basic', {
-            'fields': (('title', 'image',), 'short_title', 'subtitle','hosted_by',),
+            'fields': (('title', 'image',), 'short_title', 'summary','hosted_by',),
         }),)
     fieldset_placeholder = (
         ('Placeholder', {
@@ -241,7 +241,7 @@ class EventAdmin(NewsAndEventsAdmin):
     # the tabs
     fieldset_basic = (
         ('', {
-            'fields': ('type', ('title',  'short_title',),  'image', 'subtitle', 'hosted_by', ),
+            'fields': ('type', ('title',  'short_title',),  'image', 'summary', 'hosted_by', ),
         }),
     )
     fieldset_where_to_publish = (    

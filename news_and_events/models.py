@@ -20,6 +20,7 @@ from links.models import ExternalLink
 
 from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.universal_plugins import UniversalPluginOptions
+from arkestra_utilities.mixins import UniversalPluginModelMixin, URLModelMixin
 
 from managers import NewsArticleManager, EventManager
 
@@ -28,40 +29,8 @@ PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
 
-class NewsAndEvents(models.Model):
-    IMPORTANCES = (
-        (0, u"Normal"),
-        (1, u"More important"),
-        (10, u"Most important"),
-    )
-    title = models.CharField(max_length=255,
-        help_text="e.g. Outrage as man bites dog in unprovoked attack")
-    short_title = models.CharField(max_length=70,  null=True, blank=True,
-        help_text= u"e.g. Man bites dog (if left blank, will be copied from Title)")
-    subtitle = models.TextField(verbose_name="Summary",max_length=256,
-        null=True, blank=False, 
-        help_text="e.g. Cardiff man arrested in latest wave of man-on-dog violence (maximum two lines)",)
-    body = PlaceholderField('body')
-    url = models.URLField(verify_exists=True, blank=True, null=True,
-        help_text=u"To be used <strong>only</strong> for items external to Arkestra. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item",
-        blank=True, null=True,)
-    publish_to = models.ManyToManyField(Entity, null=True, blank=True,
-        help_text=u"Use these sensibly - don't send minor items to the home page, for example")
-    # though in fact the .save() and the admin between them won't allow null = True
-    hosted_by = models.ForeignKey(Entity, default=default_entity_id,
-        related_name='%(class)s_hosted_events', null=True, blank=True,
-        help_text=u"The entity responsible for publishing this item")
-    please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
-        help_text=u'The person to whom enquiries about this should be directed ', 
-        null=True, blank=True)
-    importance = models.PositiveIntegerField(null=True, blank=False,
-        default=0, choices=IMPORTANCES,
-        help_text=u"Important items will be featured in lists")
+class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
 
-    image = FilerImageField(null=True, blank=True)
-    slug=models.SlugField(unique=True, max_length=60, blank=True,
-        help_text="Do not meddle with this unless you know exactly what you're doing!")
     content = models.TextField(null=True, blank=True, 
         help_text="Not used or required for external items")
     
@@ -69,9 +38,6 @@ class NewsAndEvents(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        # if self.external_url:
-        #     self.external_url, created = ExternalLink.objects.get_or_create(url=self.url, defaults={'title': self.title, 'description': self.subtitle})   
-        #     print created, self.external_url     
         super(NewsAndEvents, self).save(*args, **kwargs)
     
     def get_entity(self):
@@ -89,18 +55,7 @@ class NewsAndEvents(models.Model):
         else:
             return None
     
-    def external_site(self):
-        return self.external_url.external_site
-            
-    def get_importance(self):
-        if self.importance: # if they are not being gathered together, mark them as important
-            return "important"
-        else:
-            return ""
 
-    @property
-    def summary(self):
-        return self.subtitle
 
 
 class NewsArticle(NewsAndEvents):
@@ -118,9 +73,6 @@ class NewsArticle(NewsAndEvents):
     class Meta:
         ordering = ['-date']
         
-    def __unicode__(self):
-        return self.title
-
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
@@ -197,9 +149,6 @@ class Event(NewsAndEvents):
     
     class Meta:
         ordering = ['type', 'start_date', 'start_time']
-    
-    def __unicode__(self):
-        return self.title
     
     def get_absolute_url(self):
         # should we link to the parent?
