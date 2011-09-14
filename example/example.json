@@ -547,7 +547,7 @@
         "pk": 69,
         "model": "cms.placeholder",
         "fields": {
-            "slot": "description",
+            "slot": "body",
             "default_width": null
         }
     },
@@ -579,7 +579,7 @@
         "pk": 73,
         "model": "cms.placeholder",
         "fields": {
-            "slot": "description",
+            "slot": "body",
             "default_width": null
         }
     },
@@ -939,7 +939,7 @@
         "pk": 118,
         "model": "cms.placeholder",
         "fields": {
-            "slot": "description",
+            "slot": "body",
             "default_width": null
         }
     },
