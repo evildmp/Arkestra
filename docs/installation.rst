@@ -35,8 +35,9 @@ Available through pip
 * pyquery
 * easy-thumbnails
 * django-appmedia
+* PIL
 
-`pip install django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
+`pip install django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
 
 Best currently installed from source
 ------------------------------------
