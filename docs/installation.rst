@@ -45,7 +45,7 @@ For now, this is the best way to get hold of these items:
 
 * `the Semantic Presentation Editor <https://bitbucket.org/spookylukey/semanticeditor/>`_: `hg clone https://bitbucket.org/spookylukey/semanticeditor`
 * `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git@github.com:evildmp/django-widgetry.git`
-* `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone https://github.com/stefanfoulis/django-filer.git`
+* `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone git://github.com/stefanfoulis/django-filer.git`
 
 Arkestra itself
 ===============
