@@ -51,7 +51,7 @@ For now, this is the best way to get hold of these items:
 Arkestra itself
 ===============
 
-* `Arkestra <https://github.com/evildmp/Arkestra/>`_
+* `Arkestra <https://github.com/evildmp/Arkestra/>`_: `git@github.com:evildmp/Arkestra.git`
 
 Arkestra is a collection of applications, each of which needs to be put on your PYTHONPATH:
 
