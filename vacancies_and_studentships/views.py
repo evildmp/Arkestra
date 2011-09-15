@@ -1,13 +1,13 @@
-import django.http as http
 from django.shortcuts import render_to_response, get_object_or_404
-from vacancies_and_studentships.models import VacanciesPlugin, Vacancy, Studentship 
-from contacts_and_people.models import Entity, default_entity
 from django.conf import settings
-from links.link_functions import object_links
 from django.template import RequestContext
-from functions import get_vacancies_and_studentships
 
-news_and_events_list_default_limit = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 8)
+from contacts_and_people.models import Entity, default_entity
+from links.link_functions import object_links
+
+from models import VacanciesPlugin, Vacancy, Studentship 
+from cms_plugins import CMSVacanciesPlugin
+
 layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -27,129 +27,145 @@ def common_settings(request, slug):
     instance.format = "details image"
     instance.layout = layout
     instance.view = "current"
+    instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity
 
 def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)    
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     instance.type = "main_page"
-    get_vacancies_and_studentships(instance)
 
     meta = {"description": "Vacancies and studentships",}
     title = str(entity)  + " vacancies & studentships"
     pagetitle = str(entity) + " vacancies & studentships"
-    return render_to_response(
-        "contacts_and_people/entity_information.html",
-        {"entity":entity,
+
+    CMSVacanciesPlugin().render(context, instance, None)
+
+    context.update({
+        "entity":entity,
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": main_page_body_file,
-        'everything': instance,
-        },
+        "main_page_body_file": instance.main_page_body_file,
+        'everything': instance,}
+        )
+
+    return render_to_response(
+        "contacts_and_people/entity_information.html",
         context,
-    )
+        )
+
+
 
 def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
+
     instance.type = "sub_page"
     instance.view = "archive"
     instance.display = "vacancies"
     instance.limit_to = None
-    get_vacancies_and_studentships(instance)
 
     meta = {"description": "Archive of vacancies",}
     title = str(entity)  + " archived vacancies"
     pagetitle = str(entity) + " archived vacancies"
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
-    return render_to_response(
-        "contacts_and_people/entity_information.html",
-        {"entity":entity,
+    context.update({
+        "entity":entity,
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": main_page_body_file,
-        'everything': instance,
-        },
+        "main_page_body_file": instance.main_page_body_file,
+        'everything': instance,}
+        )
+    
+    return render_to_response(
+        "contacts_and_people/entity_information.html",
         context,
-    )
+        )
         
 def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
+
     instance.type = "sub_page"
     instance.view = "current"
     instance.display = "vacancies"
     instance.limit_to = None
-    get_vacancies_and_studentships(instance)
+
+    CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "All current vacancies",}
     title = str(entity)  + " current vacancies"
     pagetitle = str(entity) + " current vacancies"
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
-    return render_to_response(
-        "contacts_and_people/entity_information.html",
-        {"entity":entity,
+    context.update({
+        "entity":entity,
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": main_page_body_file,
-        'everything': instance,
-        },
+        "main_page_body_file": instance.main_page_body_file,
+        'everything': instance,}
+        )
+    
+    return render_to_response(
+        "contacts_and_people/entity_information.html",
         context,
-    )
+        )
 
 def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
+
     instance.type = "sub_page"
     instance.view = "archive"
     instance.display = "studentships"
     instance.limit_to = None
-    get_vacancies_and_studentships(instance)
+
+    CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "Archive of studentships",}
     title = str(entity)  + " archived studentships"
     pagetitle = str(entity) + " archived studentships"
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
-    return render_to_response(
-        "contacts_and_people/entity_information.html",
-        {"entity":entity,
+    context.update({
+        "entity":entity,
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": main_page_body_file,
-        'everything': instance,
-        },
+        "main_page_body_file": instance.main_page_body_file,
+        'everything': instance,}
+        )
+    
+    return render_to_response(
+        "contacts_and_people/entity_information.html",
         context,
-    )
+        )
         
 def all_current_studentships(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
+
     instance.type = "sub_page"
     instance.view = "current"
     instance.display = "studentships"
     instance.limit_to = None
-    get_vacancies_and_studentships(instance)
+
+    CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "All current studentships",}
     title = str(entity)  + " current studentships"
     pagetitle = str(entity) + " current studentships"
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
-    return render_to_response(
-        "contacts_and_people/entity_information.html",
-        {"entity":entity,
+    context.update({
+        "entity":entity,
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": main_page_body_file,
-        'everything': instance,
-        },
+        "main_page_body_file": instance.main_page_body_file,
+        'everything': instance,}
+        )
+    
+    return render_to_response(
+        "contacts_and_people/entity_information.html",
         context,
-    )
+        )
 
 def vacancy_and_studentship(item):
     item.links = object_links(item) # not needed if using get_links templatetag

@@ -47,6 +47,7 @@ class VacancyStudentshipPluginMixin(object):
             this_list["links_to_other_items"] = self.other_links
             this_list["heading_text"] = instance.vacancies_heading_text
             this_list["item_template"] = "arkestra/universal_plugin_list_item.html"
+            print "---------huh!"
             self.lists.append(this_list)
 
         if "studentships" in instance.display:

@@ -12,6 +12,7 @@ layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
+
 class NewsAndEventsViews(object):
     def test(self):
         pass
@@ -39,14 +40,12 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
-    # get_news_and_events(instance)
 
     meta = {"description": "Recent news and forthcoming events",}
     title = str(entity)  + " news & events"
     pagetitle = str(entity) + " news & events"
     
     CMSNewsAndEventsPlugin().render(context, instance, None)
-    # get_news_and_events(instance)
     
     context.update({
         "entity":entity,
@@ -92,7 +91,6 @@ def previous_events(request, slug=getattr(default_entity, "slug", None)):
         
 def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
     instance, context, entity = common_settings(request, slug)
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     instance.type = "sub_page"
     instance.view = "current"
@@ -121,7 +119,6 @@ def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
 
 def news_archive(request, slug=getattr(default_entity,"slug", None)):
     instance, context, entity = common_settings(request, slug)
-    main_page_body_file = "arkestra/universal_plugin_lister.html"
 
     instance.type = "sub_page"
     instance.view = "archive"
