@@ -6,20 +6,9 @@ Getting Started
 Using the bundled example project
 *********************************
 
-*Note* - at present, the database included with the example project requires a slightly older, and slightly tweaked, version of Django CMS.
-
-That version can be obtained from: https://github.com/evildmp/django-cms
-
-and: git checkout feature/pageflags
-
-This is a temporary nuisance, and will be remedied as soon as possible.
-
-Arkestra comes with a bundled example project - in the `example` folder - which is ready to go, complete with database (the media files are not yet included; sorry).
+Arkestra comes with a bundled example project - in the `example` folder - which is ready to go, complete with database and media files.
 
 * `cd example`
-* `python manage.py syncdb` (answer `no` when asked to create a super user)
-* `python manage.py reset contenttypes` (otherwise the database won't load properly)
-* `python manage.py loaddata example.json`
 * `python manage.py runserver 0.0.0.0:8000`
 
 ************************
