@@ -8,8 +8,11 @@ Using the bundled example project
 
 Arkestra comes with a bundled example project - in the `example` folder - which is ready to go, complete with database and media files.
 
-* `cd example`
-* `python manage.py runserver 0.0.0.0:8000`
+Once you have the example project running, have a look at the site.
+
+The admin interface is at `/admin`; username and password are both `arkestra`.
+
+Once logged in to the admin, set your `Site` appropriately - `/admin/sites/site/`.
 
 ************************
 Running your own project
