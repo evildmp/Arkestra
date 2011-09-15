@@ -65,7 +65,7 @@ The actual installation steps
 Set up a virtual environment 
 ----------------------------
 
-* `virtualenv arkestra
+* `virtualenv arkestra`
 * `cd arkestra/`
 * `source bin/activate`
 
