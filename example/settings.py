@@ -70,7 +70,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/topdog/html/arkestra_medic/static'
+STATIC_ROOT = os.path.join(BASE_PATH, "static")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -113,10 +113,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     'django.core.context_processors.static',
-    'django.core.context_processors.csrf',
+    # 'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
 
     "cms.context_processors.media",
+    'sekizai.context_processors.sekizai',
 
     "arkestra_utilities.context_processors.arkestra_templates",
 )
@@ -130,8 +131,8 @@ MIDDLEWARE_CLASSES = (
 
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.media.PlaceholderMediaMiddleware',
+    # 'cms.middleware.toolbar.ToolbarMiddleware',
+    # 'cms.middleware.media.PlaceholderMediaMiddleware',
     
 )
 
@@ -159,6 +160,7 @@ gettext = lambda s: s
 CMS_MEDIA_URL = STATIC_URL + 'cms/'
 
 CMS_TEMPLATES = (
+    # ('basic.html', gettext('Basic')),
     ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
 )
@@ -192,6 +194,8 @@ CMS_PLACEHOLDER_CONF = {
     },
 }
 
+CMS_PERMISSION = True
+
 LANGUAGES = (
 ('en', gettext('English')),
 ('cy', gettext('Cymraeg')),
@@ -207,7 +211,8 @@ INSTALLED_APPS = (
     'appmedia',
     'cms.plugins.text',
     'cms.plugins.snippet',
-
+    'sekizai',
+    
     # Arkestra applications
     
     'contacts_and_people',
