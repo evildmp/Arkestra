@@ -110,5 +110,5 @@ From this point you can wrestle Arkestra into submission on your own, or get sta
 Fire up the server
 ------------------
 
-cd ../../../Arkestra/example/
-python manage.py runserver 0.0.0.0:8000
+* cd ../../../Arkestra/example/
+* python manage.py runserver 0.0.0.0:8000
