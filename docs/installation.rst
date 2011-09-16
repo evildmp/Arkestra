@@ -8,7 +8,7 @@ Requirements
 
 Akestra requires installation of:
 
-* `Django CMS <http://django-cms.org/>`
+* `Django CMS <http://django-cms.org/>`_
 * Django Filer
 * Django Widgetry
 * Semantic Presentation Editor
