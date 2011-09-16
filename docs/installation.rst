@@ -21,19 +21,19 @@ Akestra requires installation of:
 * PIL (note: I have had better results installing PIL using other methods)
 
 
-*********************************
-Obtaining the required components
-*********************************
+*********************
+Installing components
+*********************
 
-Installing components via PIP
-=============================
+Via PIP
+=======
 
 Most of these items are available via PIP:
 
 `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
 
-Installing components from source
-=================================
+From source
+===========
 
 Others are currently best installed from source:
 
@@ -41,8 +41,8 @@ Others are currently best installed from source:
 * `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.comevildmp/django-widgetry.git`
 * `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone git://github.com/stefanfoulis/django-filer.git`
 
-Installing Arkestra itself
-==========================
+Installing Arkestra
+===================
 
 * `Arkestra <https://github.com/evildmp/Arkestra/>`_: `git clone git://github.com/evildmp/Arkestra.git`
 
@@ -57,9 +57,9 @@ Arkestra is a collection of applications, each of which needs to be put on your 
 * vacancies_and_studentships
 * video
 
-*******************************************
-Suggested step-by-step installation process
-*******************************************
+********************
+Step-by-step process
+********************
 
 Set up a virtual environment 
 ============================
