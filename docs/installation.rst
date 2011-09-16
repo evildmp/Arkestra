@@ -38,7 +38,7 @@ From source
 Others are currently best installed from source:
 
 * `the Semantic Presentation Editor <https://bitbucket.org/spookylukey/semanticeditor/>`_: `hg clone https://bitbucket.org/spookylukey/semanticeditor`
-* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.comevildmp/django-widgetry.git`
+* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.com/evildmp/django-widgetry.git`
 * `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone git://github.com/stefanfoulis/django-filer.git`
 
 Installing Arkestra
