@@ -18,7 +18,7 @@ Akestra requires installation of:
 * pyquery
 * easy-thumbnails
 * django-appmedia
-* PIL (note: I have had better results installing PIL using other methods)
+* PIL
 
 
 *********************
@@ -31,6 +31,8 @@ Via PIP
 Most of these items are available via PIP:
 
 `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
+
+Note that on some systems at least PIL does not install adequately via pip (it will not handle any image format other than PNG).
 
 From source
 ===========
@@ -70,7 +72,7 @@ Set up a virtual environment
 Install PIP components
 ======================
 
-* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
+* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia pil`
 
 Download components from source
 ===============================
