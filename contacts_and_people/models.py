@@ -154,7 +154,7 @@ class PhoneContact(models.Model):
                     ('Out of hours','Out of hours'),
                     ('Pager','Pager'),
                     )
-    label = models.CharField(max_length=64, choices=LABEL_CHOICES, default=LABEL_CHOICES[0][0], null=True, blank=True)
+    label = models.CharField(max_length=64, null=True, blank=True)
     country_code = models.CharField(max_length=5, default="44")
     area_code = models.CharField(max_length=5, default="029", help_text="Not 02920")
     number = models.CharField(max_length=12)
