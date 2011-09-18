@@ -56,7 +56,6 @@ WYM_STYLES = getattr(settings, "WYM_STYLES", WYM_STYLES)
 class WYMEditor(forms.Textarea):
     class Media:
         js = [join(settings.CMS_MEDIA_URL, path) for path in (
-            #'js/lib/jquery.js',
             'wymeditor/jquery.wymeditor.js',
             'wymeditor/plugins/resizable/jquery.wymeditor.resizable.js',
             'js/wymeditor.placeholdereditor.js',

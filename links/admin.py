@@ -9,25 +9,15 @@ from django.contrib.contenttypes import generic
 from widgetry import fk_lookup
 from widgetry.views import search 
 
-from arkestra_utilities.mixins import SupplyRequestMixin
+from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin
 
 from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
 from links import schema
 
 #LINK_SCHEMA = getattr(settings, 'LINK_SCHEMA', {})
 
-class LinkAdmin(admin.ModelAdmin):        
+class LinkAdmin(admin.ModelAdmin, AutocompleteMixin):        
     related_search_fields = ['destination_content_type']
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if isinstance(db_field, ForeignKey) and \
-                db_field.name in self.related_search_fields:
-            kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
-        return super(LinkAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class ObjectLinkInlineForm(forms.ModelForm):

@@ -3,12 +3,15 @@ from itertools import chain
 from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
+from django.conf import settings
+
+from cms.utils import cms_static_url
 
 class Combobox(forms.Select):
     class Media:
         js = [
-            settings.CMS_MEDIA_URL + 'js/lib/jquery.js',
-            settings.CMS_MEDIA_URL + 'js/lib/ui.core.js',
+            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            cms_static_url('js/libs/jquery.ui.core.js'),
             settings.CMS_MEDIA_URL + 'js/placeholder_editor_registry.js',
             'combobox/ui.combobox.js',
             ]

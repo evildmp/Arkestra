@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models import ForeignKey
+from django.conf import settings
 
 from cms.models.fields import PlaceholderField
+from cms.utils import cms_static_url
 
 from filer.fields.image import FilerImageField
 
@@ -13,11 +15,11 @@ from links.models import ExternalLink
 
 class AutocompleteMixin(object):
     class Media:
-        js = (
-            '/static/cms/js/lib/jquery.js',
-            '/static/cms/js/lib/ui.core.js',
-            '/static/jquery/ui/ui.tabs.js',
-        )
+        js = [
+            # '/static/jquery/jquery.js',
+            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            cms_static_url('js/libs/jquery.ui.core.js'),
+        ]
         css = {
             'all': ('/static/jquery/themes/base/ui.all.css',)
         }    
