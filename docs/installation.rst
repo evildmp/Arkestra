@@ -18,7 +18,7 @@ Akestra requires installation of:
 * pyquery
 * easy-thumbnails
 * django-appmedia
-* PIL (note: I have had better results installing PIL using other methods)
+* PIL
 
 
 *********************
@@ -32,13 +32,15 @@ Most of these items are available via PIP:
 
 `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
 
+Note that on some systems at least PIL does not install adequately via pip (it will not handle any image format other than PNG).
+
 From source
 ===========
 
 Others are currently best installed from source:
 
 * `the Semantic Presentation Editor <https://bitbucket.org/spookylukey/semanticeditor/>`_: `hg clone https://bitbucket.org/spookylukey/semanticeditor`
-* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.comevildmp/django-widgetry.git`
+* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.com/evildmp/django-widgetry.git`
 * `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone git://github.com/stefanfoulis/django-filer.git`
 
 Installing Arkestra
@@ -70,7 +72,7 @@ Set up a virtual environment
 Install PIP components
 ======================
 
-* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
+* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia pil`
 
 Download components from source
 ===============================
