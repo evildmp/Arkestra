@@ -16,8 +16,8 @@ from links.models import ExternalLink
 class AutocompleteMixin(object):
     class Media:
         js = [
-            # '/static/jquery/jquery.js',
-            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            '/static/jquery/jquery.js',
+            # settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
             cms_static_url('js/libs/jquery.ui.core.js'),
         ]
         css = {
