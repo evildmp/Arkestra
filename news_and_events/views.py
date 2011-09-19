@@ -165,7 +165,7 @@ def newsarticle(request, slug):
         {
         "newsarticle":newsarticle,
         "entity": newsarticle.hosted_by,
-        "meta": {"description": newsarticle.subtitle,}
+        "meta": {"description": newsarticle.summary,}
         },
         RequestContext(request),
         )
@@ -182,7 +182,7 @@ def event(request, slug):
         "news_and_events/event.html",
         {"event": event,
         "entity": event.hosted_by,
-        "meta": {"description": event.subtitle,},
+        "meta": {"description": event.summary,},
         },
         RequestContext(request),
         )

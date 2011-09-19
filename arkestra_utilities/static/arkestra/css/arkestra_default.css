@@ -44,8 +44,8 @@ ul.plugin-list li.grouper ul {
     color: #444;
     }
     
-/* subtitle for news, events, etc */
-.subtitle   {color: gray; size: 200%;}
+/* summary for news, events, etc */
+.summary   {color: gray; size: 200%;}
 .date   {color: #666; font-weight: lighter; font-style: italic;}
 
 ul.plugin-list li span.site-name    {

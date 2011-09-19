@@ -17,34 +17,34 @@
 			<li style = "float: left;">
 				<a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
 				{{news_item.short_title}}</a>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 			</li>
 			<li style = "width: 45%; float: left; display: block">
 				<a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
 				{{news_item.short_title}}</a>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 			</li>
 			<li style = "width: 45%; float: left; display: block">
 				<a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
 				{{news_item.short_title}}</a>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 			</li>
 		</ul>
 		<div class = "row columns2">
 			<h{{ IN_BODY_HEADING_LEVEL }}><a href="#">{% thumbnail news_item.image 225x200 as image %}{% if image %}<img src="{{ image }}" style="float: left" />{% endif %}
 				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 		</div>	
 		<div class = "row columns2">
 			<div class = "column  firstcolumn">
 				<h{{ IN_BODY_HEADING_LEVEL }} style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
 				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 			</div>
 			<div class = "column  lastcolumn">
 				<h{{ IN_BODY_HEADING_LEVEL }} style="font-size: 100%;"><a href="#">{% thumbnail news_item.image 75x75 as image %}{% if image %}<img src="{{ image }}" style="float: left"/>{% endif %}
 				{{news_item.short_title}}</a></h{{ IN_BODY_HEADING_LEVEL }}>
-				<p>{{news_item.subtitle}}</p>
+				<p>{{news_item.summary}}</p>
 			</div>
 		</div>
 	</div>

@@ -120,7 +120,7 @@ class EventManager(models.Manager):
             all_events = self.model.objects.filter(Q(hosted_by=instance.entity) | \
             Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
         else:
-            all_events = self.model.objects.all()
+            all_events = self.model.objects.all().order_by('start_date', 'start_time')
     
         actual_events = all_events.filter(
             # if it's (not a series and not a child) - series events are excluded, children too unless:

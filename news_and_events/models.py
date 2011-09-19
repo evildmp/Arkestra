@@ -156,7 +156,7 @@ class Event(NewsAndEvents):
             return self.external_url.url
         elif self.parent and self.parent.do_not_link_to_children:
             return self.parent.get_absolute_url()
-        else:
+        elif self.body.cmsplugin_set.all():
             return "/event/%s/" % self.slug
   
     @property

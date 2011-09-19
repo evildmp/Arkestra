@@ -11,8 +11,8 @@
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 
-	{% if newsarticle.subtitle %}
-   		<p class= "standout"><strong>{{ newsarticle.subtitle }}</strong></p>
+	{% if newsarticle.summary %}
+   		<p class= "standout"><strong>{{ newsarticle.summary }}</strong></p>
 	{% endif %}
 {% endblock pagetitle %}
 

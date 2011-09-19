@@ -230,6 +230,7 @@ class EventAdmin(NewsAndEventsAdmin):
         #'organisers', 
         'featuring', 
         )
+    ordering = ['type',]
     change_list_template = "admin/news_and_events/event/change_list.html"
     list_display = ('short_title','parent',   'start_date', 'series', 'slug',)
     list_editable = ('parent',  'start_date',  'series', 'slug',)

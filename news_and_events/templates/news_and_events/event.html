@@ -7,7 +7,7 @@
 {% load thumbnail %}
 
 {% block meta %}
-	<meta name="description" content="{{event.subtitle}}"/>
+	<meta name="description" content="{{event.summary}}"/>
 {% endblock meta %}
 
 {% block title %}
@@ -20,8 +20,8 @@
 
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-	{% if event.subtitle %}
-   		<p class= "standout"><strong>{{ event.subtitle }}</strong></p>
+	{% if event.summary %}
+   		<p class= "standout"><strong>{{ event.summary }}</strong></p>
 	{% endif %}
 {% endblock pagetitle %}
 

@@ -21,7 +21,7 @@
 
     {% block item_details %}
 		{% if "details" in everything.format %}
-		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:25 }}</div>{% endif %}
+		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30 }}</div>{% endif %}
 		{% endif %}
 	{% endblock item_details %}
 	

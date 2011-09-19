@@ -24,7 +24,7 @@ When an object that can have an External URL is saved, the ModelAdmin.clean() of
 * self.cleaned_data.get("input_url", None), # a manually entered url
 * self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
 * self.cleaned_data.get("title"), # link title
-* self.cleaned_data.get("subtitle"), # link description
+* self.cleaned_data.get("summary"), # link description
 
 `links.admin.get_or_create_external_link()` checks that information against the database:
 
