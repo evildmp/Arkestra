@@ -62,6 +62,7 @@
 </head>
 
 <body {% block body_attributes %}{% endblock body_attributes %}>
+    {% cms_toolbar %}
 	{% block body_content %}
         {% with placeholder_width=960 main_item_width=523 sidebar_image_size="294x196" contacts_image_size="445x384" %}
     		<div id="outer-wrapper">
