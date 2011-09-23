@@ -184,6 +184,8 @@ CMS_PLACEHOLDER_CONF = {
             'EntityDirectoryPluginPublisher', 
             'CarouselPluginPublisher',
             'FocusOnPluginPublisher',
+            # 'VideoPluginPublisher',
+            'FilerVideoPluginPublisher',
             ),
         "extra_context": {            
             "width":"880",
@@ -219,7 +221,9 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities',
     'arkestra_utilities.widgets.combobox', # so that static-files picks it up
-    'arkestra_image_plugin',    
+    'arkestra_image_plugin',
+    # 'video',
+    'cmsplugin_filer_video',  
 
     # other applications
     

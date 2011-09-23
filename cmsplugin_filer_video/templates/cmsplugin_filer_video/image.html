@@ -1,0 +1,4 @@
+{% load thumbnail %}
+{% if link %}<a href="{{ link }}">{% endif %}
+<img {% if object.float %}class="{{ object.float }}" {% endif %}alt="{% if object.alt %}{{ object.alt }}{% endif %}" src="{% thumbnail object.image image_size crop,upscale %}" />
+{% if link %}</a>{% endif %}

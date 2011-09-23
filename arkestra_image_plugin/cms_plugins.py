@@ -1,15 +1,11 @@
-import os
+import os, models
 
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 
-from filer.settings import FILER_STATICMEDIA_PREFIX
-
 from arkestra_utilities.output_libraries.plugin_widths import *
-import models
 
 
 class FilerImagePlugin(CMSPluginBase):
@@ -83,45 +79,6 @@ class FilerImagePlugin(CMSPluginBase):
             if instance.float:
                 print "-5 for float"
                 width = width - 5   
-
-        # # widths => 0 are relative to the placeholder or container
-        # if instance.width > 0:
-        #     # calculate the width of the placeholder
-        #     placeholder_width = get_placeholder_width(context, instance)
-        #     
-        #     # widths <= 10 are relative to the placeholder (deprecated)
-        #     if instance.width <= 10:     
-        #         width = placeholder_width/instance.width
-        # 
-        #     else:
-        # 
-        #         # widths > 10 and <= 100 are a percentage of column width
-        #         if instance.width <= 100:
-        #             width = placeholder_width/100.0 * instance.width
-        #             auto = False
-        #         elif instance.width == 1000:
-        #             width = placeholder_width
-        #             auto = True
-        # 
-        #         # calculate the width of the block the image will be in
-        #         width = calculate_container_width(instance, width, auto)
-        # 
-        #     # shave off 5 point if the image is floated, to make room for a margin    
-        #     if instance.float:
-        #         print "-5 for float"
-        #         width = width - 5   
-        #  
-        #         
-        # # if the instance has a negative width, it means it's an absolute width 
-        # elif instance.width and instance.width < 0:
-        #     width = -instance.width
-        #     # a special case: 50px images are square
-        #     if width == 50:
-        #         instance.aspect_ratio = 1
-        # 
-        # # if the instance has no width we use the image's width
-        # else: 
-        #     width = float(instance.image.width) # is float needed?
                             
         # if the instance has an aspect ratio, use that to calculate the height
         if instance.aspect_ratio: 

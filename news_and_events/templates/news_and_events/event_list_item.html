@@ -7,11 +7,15 @@
 	{% if item.external_url %}
 		<a class="external {% if not item.show_parent_series %}title{% endif %}" href="{{ item.external_url.url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
 	{% else %}
-		{% if item.get_absolute_url %}
-			<a {% href="{{ item.get_absolute_url }}" class="{{ item.title_class }}">{{item.get_short_title}}</a>
+		{% if item.show_parent_series %}
+			{% ifequal item.get_absolute_url item.parent.get_absolute_url %}
+				{{ item.get_short_title }}
+			{% else %}
+				<a {% href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
+			{% endifequal %}			
 		{% else %}
-    		<span class="{{ item.title_class }}">{{item.get_short_title}}</span>
-		{% endif %}			
+			<a {% class="title" href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
+		{% endif %}
 	{% endif %}
 {% endblock item_title %}
 
