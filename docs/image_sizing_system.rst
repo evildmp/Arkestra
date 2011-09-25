@@ -6,22 +6,9 @@ The image sizing system
 The problem
 ***********
 
-Suppose we have a page with two columns, and an image, 500px wide, in the second column, which happens to be 500px wide itself:
+Suppose we have a page with two columns, and an image, 500px wide, in the second column, which happens to be 500px wide itself.
 
- ________________________________________
-|					   ________________  |
-| this first column   |				   | |
-| 				      |	 an image	   | |
-| contains text and   |   500 px wide  | |  
-| 		              |	 --------	   | |
-| whatever else one   |________________| |
-|				 					     |
-| might want it to    the second column  |
-|					  contains text as   |
-| contain		 	  well as an image   |	
-|________________________________________|
-
-At the moment, that 500px width is correct for that image, but any one of a number of things could change that, for example:
+At the moment, a 500px width is correct for that image, but any one of a number of things could change that, for example:
 
 * if the editor decides the layout should no longer be two columns but three
 * ... or that the text column should be twice the width of the image columns
