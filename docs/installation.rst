@@ -85,18 +85,20 @@ Download components from source
 Put them on your PYTHONPATH
 ===========================
 
-* `cd lib/python2.5/site-packages/` (note - might be some other version of Python)
-* `ln -s ../../../Arkestra/arkestra_image_plugin/`
-* `ln -s ../../../Arkestra/arkestra_utilities/`
-* `ln -s ../../../Arkestra/contacts_and_people/`
-* `ln -s ../../../Arkestra/news_and_events/`
-* `ln -s ../../../Arkestra/vacancies_and_studentships/`
-* `ln -s ../../../Arkestra/housekeeping/`
-* `ln -s ../../../Arkestra/links/`
-* `ln -s ../../../Arkestra/video/`
-* `ln -s ../../../semanticeditor/semanticeditor/`
-* `ln -s ../../../django-filer/filer/`
-* `ln -s ../../../django-widgetry/widgetry/`
+There are other, probably better, ways of doing this, but it works.
+
+* `cd lib/python2.5/site-packages` (note - might be some other version of Python)
+* `ln -s ../../../Arkestra/arkestra_image_plugin`
+* `ln -s ../../../Arkestra/arkestra_utilities`
+* `ln -s ../../../Arkestra/contacts_and_people`
+* `ln -s ../../../Arkestra/news_and_events`
+* `ln -s ../../../Arkestra/vacancies_and_studentships`
+* `ln -s ../../../Arkestra/housekeeping`
+* `ln -s ../../../Arkestra/links`
+* `ln -s ../../../Arkestra/video`
+* `ln -s ../../../semanticeditor/semanticeditor`
+* `ln -s ../../../django-filer/filer`
+* `ln -s ../../../django-widgetry/widgetry`
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included, as described in `Getting started`
 
