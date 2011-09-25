@@ -72,7 +72,7 @@ Each item in the list has this basic structure:
 * `[date]`
 * `[venue]`
 
-or in other words:
+or for a concrete example:
 
 * Public Health lecture series `[links to the page for the series]`
 * "The health benefits & risks of milk" `[links to the page for this particular item]`
