@@ -25,14 +25,25 @@ Akestra requires installation of:
 Installing components
 *********************
 
+Prerequisites
+=============
+
+These steps assume that you have the following available on your system:
+
+* pip
+* Git
+* Mercurial
+
+In addition, Arkestra will need the Python Imaging Library (PIL) to be installed on your system.
+
 Via PIP
 =======
 
 Most of these items are available via PIP:
 
-`pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
+`pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
-Note that on some systems at least PIL does not install adequately via pip (it will not handle any image format other than PNG).
+You can try `pip install PIL`, but it doesn't always seem to work very well.
 
 From source
 ===========
