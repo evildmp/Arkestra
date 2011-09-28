@@ -22,6 +22,10 @@ Contents:
    installation
    getting_started
 
+   using_news_and_events
+   image_sizing_system
+   links_system
+
 Indices and tables
 ==================
 

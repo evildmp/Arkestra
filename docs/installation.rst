@@ -25,14 +25,25 @@ Akestra requires installation of:
 Installing components
 *********************
 
+Prerequisites
+=============
+
+These steps assume that you have the following available on your system:
+
+* pip
+* Git
+* Mercurial
+
+In addition, Arkestra will need the Python Imaging Library (PIL) to be installed on your system.
+
 Via PIP
 =======
 
 Most of these items are available via PIP:
 
-`pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia PIL`
+`pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
-Note that on some systems at least PIL does not install adequately via pip (it will not handle any image format other than PNG).
+You can try `pip install PIL`, but it doesn't always seem to work very well.
 
 From source
 ===========
@@ -85,18 +96,20 @@ Download components from source
 Put them on your PYTHONPATH
 ===========================
 
-* `cd lib/python2.5/site-packages/` (note - might be some other version of Python)
-* `ln -s ../../../Arkestra/arkestra_image_plugin/`
-* `ln -s ../../../Arkestra/arkestra_utilities/`
-* `ln -s ../../../Arkestra/contacts_and_people/`
-* `ln -s ../../../Arkestra/news_and_events/`
-* `ln -s ../../../Arkestra/vacancies_and_studentships/`
-* `ln -s ../../../Arkestra/housekeeping/`
-* `ln -s ../../../Arkestra/links/`
-* `ln -s ../../../Arkestra/video/`
-* `ln -s ../../../semanticeditor/semanticeditor/`
-* `ln -s ../../../django-filer/filer/`
-* `ln -s ../../../django-widgetry/widgetry/`
+There are other, probably better, ways of doing this, but it works.
+
+* `cd lib/python2.5/site-packages` (note - might be some other version of Python)
+* `ln -s ../../../Arkestra/arkestra_image_plugin`
+* `ln -s ../../../Arkestra/arkestra_utilities`
+* `ln -s ../../../Arkestra/contacts_and_people`
+* `ln -s ../../../Arkestra/news_and_events`
+* `ln -s ../../../Arkestra/vacancies_and_studentships`
+* `ln -s ../../../Arkestra/housekeeping`
+* `ln -s ../../../Arkestra/links`
+* `ln -s ../../../Arkestra/video`
+* `ln -s ../../../semanticeditor/semanticeditor`
+* `ln -s ../../../django-filer/filer`
+* `ln -s ../../../django-widgetry/widgetry`
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included, as described in `Getting started`
 
