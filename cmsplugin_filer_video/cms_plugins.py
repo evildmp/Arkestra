@@ -16,6 +16,7 @@ class FilerVideoPluginPublisher(CMSPluginBase):
     name = _("Video")
     render_template = "cmsplugin_filer_video/video.html"
     text_enabled = True
+    admin_preview = False
     raw_id_fields = ('video',)
             
     def render(self, context, instance, placeholder):
@@ -56,22 +57,25 @@ class FilerVideoPluginPublisher(CMSPluginBase):
         
         if instance.use_description_as_caption:
             instance.caption = instance.caption or instance.image.description
-
-        instance.float = instance.float or ""   # used as a CSS class
         
         # given the width we want to show the video at, we have to find the most suitable (i.e. closest larger) video file version we have created
         index = bisect.bisect_left(SIZES,width)
+        print "sizes", SIZES, width, index
         if index < len(SIZES): # not larger than the largest preset size?
-            size = SIZES[index+1] # get the exact or closest larger size
+            size = SIZES[index] # get the exact or closest larger size
         else:
             # choose the widest, if we don't have one wider
             size = SIZES[-1]
+
         # create the lists of missing and available items
         instance.missing_versions = []
         instance.available_versions =[]
+
         # get the video's status dictionary
         version_status = instance.video.get_status()
-        print "checking status of the video"
+        print
+        print ">>> checking status of the video"
+
         for codec, codec_dictionary in CODECS.items():
             print "    checking...", codec, size
             # get the version's codec_and_size identifier
@@ -80,10 +84,12 @@ class FilerVideoPluginPublisher(CMSPluginBase):
             videofilepath = instance.video.outputpath(codec, size)
             print "        Status:", instance.video.check_status(codec,size)
             print "        Filepath:", videofilepath
+
             # does the file exist?
             if os.path.exists(videofilepath):
                 print "        the file exists"
                 # if it does, check that the status dictionary agrees
+
                 if instance.video.check_status(codec,size) == "OK":
                     print "        the file is there and marked as present"
                     # and add the version to available_versions
@@ -97,12 +103,20 @@ class FilerVideoPluginPublisher(CMSPluginBase):
                     else:
                         # if it's not "OK" and not "encoding", it must be "missing" or "failed"- so let's try to encode it
                         print "        but it's marked as missing or failed, so we'd better re-create it"
+                        print "        instance.video.create_version:", instance.video.create_version
+                        print "        videofilepath:", videofilepath
+                        print "        codec:", codec
+                        
                         thread = Thread(target=instance.video.create_version, name=videofilepath, args=(codec, size))
                         print "        launching thread"
                         thread.start()
+
             # if the file doesn't exist
             else:
                 print "        the file doesn't exist, so we need to create the missing version"
+                print "        instance.video.create_version:", instance.video.create_version
+                print "        videofilepath:", videofilepath
+                print "        codec:", codec
                 # add the version of missing versions
                 instance.missing_versions.append(codec)
                 thread = Thread(target=instance.video.create_version, name=videofilepath, args=(codec, size))
