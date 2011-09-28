@@ -134,8 +134,8 @@ def check_urls(request, url, allowed_schemes = None):
             messages.add_message(request, messages.WARNING, message)            
         else:
             if code == 404:
-            message = "Warning: the link %s appears not to work. Please check that it is correct." %url
-            messages.add_message(request, messages.WARNING, message)            
+                message = "Warning: the link %s appears not to work. Please check that it is correct." %url
+                messages.add_message(request, messages.WARNING, message)            
         
         # check for a redirect
         if url_test.geturl() != url:
