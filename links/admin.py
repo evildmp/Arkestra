@@ -127,7 +127,13 @@ def check_urls(request, url, allowed_schemes = None):
             raise forms.ValidationError(message)
 
         # check for a 404 (needs python 2.6)
-        if url_test.getcode() == 404:
+        try:
+            code = url_test.getcode()
+        except AttributeError:
+            message = "Warning: I couldn't check your link %s. Please check that it is works." %url
+            messages.add_message(request, messages.WARNING, message)            
+        else:
+            if code == 404:
             message = "Warning: the link %s appears not to work. Please check that it is correct." %url
             messages.add_message(request, messages.WARNING, message)            
         
