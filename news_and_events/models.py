@@ -55,8 +55,20 @@ class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
         else:
             return None
     
-
-
+    @property
+    def is_uninformative(self):
+        print "---"
+        print self.external_url
+        print self.body.cmsplugin_set.all()
+        print self.please_contact.all()
+        print self.links()
+        print "+++"
+    
+        if self.external_url or self.body.cmsplugin_set.all() or self.please_contact.all() or self.links.all():
+            return False
+        else:
+            return True
+    
 
 class NewsArticle(NewsAndEvents):
     date = models.DateTimeField(default=datetime.now,
@@ -168,7 +180,7 @@ class Event(NewsAndEvents):
             return True
 
     @property
-    def has_page(self):
+    def is_uninformative(self):
         """
         checks if this Event deserves its own page
         """

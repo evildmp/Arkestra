@@ -147,7 +147,6 @@ def news_archive(request, slug=getattr(default_entity,"slug", None)):
         )
 
 def newsarticle_and_event(item):
-    item.links = object_links(item) # not needed if using get_links templatetag
     item.hosted_by = item.hosted_by or default_entity
     item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
     item.template = item.hosted_by.get_template()

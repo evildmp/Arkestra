@@ -12,6 +12,8 @@ from widgetry import fk_lookup
 from contacts_and_people.models import Entity, Person, default_entity_id
 
 from links.models import ExternalLink
+from links.link_functions import object_links
+
 
 class AutocompleteMixin(object):
     class Media:
@@ -82,6 +84,9 @@ class UniversalPluginModelMixin(models.Model):
         else:
             return ""
 
+    @property
+    def links(self):
+        return object_links(self)
 
 class URLModelMixin(models.Model):
     class Meta:

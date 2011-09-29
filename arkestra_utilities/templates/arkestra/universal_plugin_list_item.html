@@ -1,7 +1,7 @@
 {% load thumbnail humanize typogrify_tags %}
 {% filter typogrify %}
 {% block list_item %}
-<li class = "{{ item.column_class }} {{ item.get_importance}}">
+<li class = "{{ item.column_class }} {{ item.get_importance}}">{{ item.is_uninformative }}
 
     {% block item_title %}
 		{% if item.external_url %}
