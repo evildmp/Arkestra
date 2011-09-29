@@ -1,9 +1,3 @@
-# import the logging library
-import logging
-
-# Get an instance of a logger
-logging.error("at start of menu!")
-
 from django.utils.safestring import mark_safe 
 from django.template import RequestContext
 from django.conf import settings
@@ -14,8 +8,6 @@ from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier
 
-logging.error("OK so far")
-
 import news_and_events
 import vacancies_and_studentships
 
@@ -24,9 +16,6 @@ import vacancies_and_studentships
 # 
 # from vacancies_and_studentships.models import VacanciesPlugin        
 # from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
-
-logging.error("finished imports of menu!")
-
 
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
@@ -158,8 +147,6 @@ class ArkestraPages(Modifier):
                                 show_menu_item = True
                                 
                         if show_menu_item:
-                            print "menu"
-                            print plugin.lists
                             menutitle = entity.vacancies_page_menu_title
                             new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
                             if request.page_path == new_node.get_absolute_url():
