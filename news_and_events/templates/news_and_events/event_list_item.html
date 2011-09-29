@@ -1,18 +1,33 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
 {% block item_title %}
+
 	{% if item.show_parent_series %}
-		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
-	{% endif %}
-	
-	{% if item.external_url %}
-		<a class="external {% if not item.show_parent_series %}title{% endif %}" href="{{ item.external_url.url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a><br />
+
+        {% if item.is_uninformative %}
+            <span >{{ item.short_title }}</span>
+        {% else %}
+    		{% if item.external_url %}
+    			<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+    		   {% else %}
+    			<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+    		{% endif %}
+    	{% endif %}
+    	
 	{% else %}
-		{% if item.get_absolute_url %}
-			<a {% href="{{ item.get_absolute_url }}" class="{{ item.title_class }}">{{item.get_short_title}}</a>
-		{% else %}
-    		<span class="{{ item.title_class }}">{{item.get_short_title}}</span>
-		{% endif %}			
-	{% endif %}
+	
+        {% if "details" in everything.format and item.is_uninformative  %}
+            <span class="title">{{ item.short_title }}</span>
+        {% else %}
+    		{% if item.external_url %}
+    			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+    		   {% else %}
+    			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+    		{% endif %}
+    	{% endif %}
+    
+    {% endif %}
+	
 {% endblock item_title %}
 
 {% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}

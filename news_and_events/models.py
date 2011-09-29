@@ -54,21 +54,7 @@ class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
             return self.get_entity().get_website()
         else:
             return None
-    
-    @property
-    def is_uninformative(self):
-        print "---"
-        print self.external_url
-        print self.body.cmsplugin_set.all()
-        print self.please_contact.all()
-        print self.links()
-        print "+++"
-    
-        if self.external_url or self.body.cmsplugin_set.all() or self.please_contact.all() or self.links.all():
-            return False
-        else:
-            return True
-    
+        
 
 class NewsArticle(NewsAndEvents):
     date = models.DateTimeField(default=datetime.now,
@@ -112,14 +98,14 @@ class Event(NewsAndEvents):
         (True, u"a series of events"),
     )
     series = models.BooleanField("This is", default=False, choices=SERIES)
-    DO_NOT_LINK_TO_CHILDREN = (
-        (False, u"have their own pages"),
-        (True, u"are displayed within this item"),
-    )
-    do_not_link_to_children = models.BooleanField(u"Child events",
-        default=False,
-        choices=DO_NOT_LINK_TO_CHILDREN,
-        )
+    # DO_NOT_LINK_TO_CHILDREN = (
+    #     (False, u"have their own pages"),
+    #     (True, u"are displayed within this item"),
+    # )
+    # do_not_link_to_children = models.BooleanField(u"Child events",
+    #     default=False,
+    #     choices=DO_NOT_LINK_TO_CHILDREN,
+    #     )
     DISPLAY_SERIES_NAME = (
         (False, u"display children's names only"),
         (True, u"also display series name"),
@@ -166,9 +152,7 @@ class Event(NewsAndEvents):
         # should we link to the parent?
         if self.external_url:
             return self.external_url.url
-        elif self.parent and self.parent.do_not_link_to_children:
-            return self.parent.get_absolute_url()
-        elif self.body.cmsplugin_set.all():
+        else:
             return "/event/%s/" % self.slug
   
     @property
@@ -181,16 +165,10 @@ class Event(NewsAndEvents):
 
     @property
     def is_uninformative(self):
-        """
-        checks if this Event deserves its own page
-        """
-        if self.parent:
-            if self.parent.do_not_link_to_children:
-                return self.parent.get_absolute_url()
-            else:
-                return self.get_absolute_url()
+        if self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
+            return False
         else:
-            return self.get_absolute_url()
+            return True
         
     def save(self):
         def slug_is_bad(self):

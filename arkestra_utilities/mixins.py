@@ -88,6 +88,19 @@ class UniversalPluginModelMixin(models.Model):
     def links(self):
         return object_links(self)
 
+    @property
+    def external_url(self):
+        # if the inheriting model doesn't have an external_url attribute, we'll give it a None one just in case this is needed
+        return None
+    
+    @property
+    def is_uninformative(self):
+        if self.external_url or self.body.cmsplugin_set.all() or self.please_contact.all() or self.links:
+            return False
+        else:
+            return True
+
+
 class URLModelMixin(models.Model):
     class Meta:
         abstract = True
