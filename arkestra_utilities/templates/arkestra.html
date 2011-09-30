@@ -83,7 +83,9 @@
         			  	{% endblock main_page_body %}
    
         			</div>
-        			{% insert "footer" %}
+					{% block footer %}
+						{% insert "footer" %}
+					{% endblock footer %}
         		</div>		
     	{% endblock body_content %}
     {% endwith %}
