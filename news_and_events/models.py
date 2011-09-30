@@ -159,11 +159,23 @@ class Event(NewsAndEvents):
         ordering = ['type', 'start_date', 'start_time']
     
     def get_absolute_url(self):
-        # should we link to the parent?
         if self.external_url:
             return self.external_url.url
         else:
             return "/event/%s/" % self.slug
+
+    @property
+    def informative_url(self):
+        """ 
+        An event has an 'informative_url' if it itself is uninformative, but it is a child of a series
+        """
+        print self, "checking"
+        if self.is_uninformative and self.parent and self.parent.series:
+            print self, "parent!"
+            return self.parent.get_absolute_url()
+        else:
+            print self, "self!"
+            return self.get_absolute_url()
   
     @property
     def show_parent_series(self):
@@ -175,9 +187,20 @@ class Event(NewsAndEvents):
 
     @property
     def is_uninformative(self):
-        if (self.body and self.body.cmsplugin_set.all()) or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
+        print "+++"
+        print 1, "checking is_uninformativeness"
+        print 2, type(self.body)
+        print 3, type(self.body.cmsplugin_set.all())
+        print 4, self.external_url
+        print 5, self.please_contact.all()
+        print 6, self.registration_enquiries.all()
+        print 7, self.links
+        print "---"
+        if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
+            print "uninformative"
             return False
         else:
+            return "informative"
             return True
         
     def save(self):
