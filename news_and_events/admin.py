@@ -263,7 +263,7 @@ class EventAdmin(NewsAndEventsAdmin):
         )
     fieldset_relationships = (
         ('Relationships with other Events', {
-            'fields': ('parent', 'child_list_heading', 'link_to_series', 'display_series_name', 'display_series_summary',), 
+            'fields': ('parent', 'child_list_heading', 'link_to_series', 'show_titles', 'display_series_summary',), 
         }),)        
     fieldset_people = (    
         ('People', {

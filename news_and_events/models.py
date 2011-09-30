@@ -106,13 +106,23 @@ class Event(NewsAndEvents):
     #     default=False,
     #     choices=DO_NOT_LINK_TO_CHILDREN,
     #     )
-    DISPLAY_SERIES_NAME = (
-        (False, u"display children's names only"),
-        (True, u"also display series name"),
+    # DISPLAY_SERIES_NAME = (
+    #     (False, u"display children's names only"),
+    #     (True, u"also display series name"),
+    # )
+    # display_series_name = models.BooleanField(u"In lists",
+    #     default=False,
+    #     choices=DISPLAY_SERIES_NAME,
+    #     )
+    SHOW_TITLES = (
+        ("series children", u"show title of series followed by title of children"),
+        ("series", u"show title of series only"),
+        ("children", u"show title of children only"),
     )
-    display_series_name = models.BooleanField(u"In lists",
-        default=False,
-        choices=DISPLAY_SERIES_NAME,
+    show_titles = models.CharField(u"In lists",
+        max_length = 25,
+        default="children",
+        choices=SHOW_TITLES,
         )
     DISPLAY_SERIES_SUMMARY = (
         (False, u"display children's summaries"),
@@ -160,12 +170,12 @@ class Event(NewsAndEvents):
         """
         checks whether we should show the parent series too in lists
         """
-        if self.parent and self.parent.series and self.parent.display_series_name:
-            return True
+        if self.parent and self.parent.series:
+            return self.parent.show_titles
 
     @property
     def is_uninformative(self):
-        if self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
+        if (self.body and self.body.cmsplugin_set.all()) or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
             return False
         else:
             return True

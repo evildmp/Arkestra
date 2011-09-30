@@ -1,32 +1,35 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
 {% block item_title %}
 
-	{% if item.show_parent_series %}
+	{% if "series" in item.show_parent_series %}
 		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a><br />
+	
+		{% if "children" in item.show_parent_series %}
+	        {% if "details" in everything.format and item.is_uninformative %}
+	            <span>{{ item.short_title }}</span>
+	        {% else %}
+	    		{% if item.external_url %}
+	    			<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+	    		   {% else %}
+	    			<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+	    		{% endif %}
+	    	{% endif %}
+	    {% endif %}
 
-        {% if item.is_uninformative %}
-            <span >{{ item.short_title }}</span>
-        {% else %}
-    		{% if item.external_url %}
-    			<a class = "external" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
-    		   {% else %}
-    			<a href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-    		{% endif %}
-    	{% endif %}
-    	
 	{% else %}
 	
-        {% if "details" in everything.format and item.is_uninformative  %}
-            <span class="title">{{ item.short_title }}</span>
-        {% else %}
-    		{% if item.external_url %}
-    			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
-    		   {% else %}
-    			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-    		{% endif %}
-    	{% endif %}
-    
-    {% endif %}
+   		{% if item.external_url %}
+   			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		{% else %}
+			{% if item.is_uninformative %}
+	   			<a class = "title" href="{{ item.parent.get_absolute_url }}">{{item.short_title}}</a>
+			{% else %}
+	   			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+			{% endif %}
+   		{% endif %}
+   	{% endif %}
+	
+   
 	
 {% endblock item_title %}
 
