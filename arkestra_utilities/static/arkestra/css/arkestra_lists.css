@@ -18,7 +18,7 @@ ul.entity-tree li {list-style: none;}
 
 /* icons */
 ul.icons    {
-    list-style: square url(/static/arkestra/images/default_styles/hand-right.png/);
+    list-style: square url(/static/arkestra/images/default_styles/hand-right.png);
     padding-left: 30px;
 }
 

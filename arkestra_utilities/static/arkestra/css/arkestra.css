@@ -142,7 +142,7 @@ a img {border: none;}
 
 span.image {display: block; clear: both;}
 span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
-span.image_caption {font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+span.image_caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
 
 /* styles available to the presentation editor */
 
