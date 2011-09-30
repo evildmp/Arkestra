@@ -32,9 +32,9 @@
 
 			{% else %}
 			
-				{% if not "details" in everything.format or not item.is_uninformative %}
+				{% if item.parent.series or not "details" in everything.format or not item.is_uninformative %}
 				
-		   			<a class = "{{ class }}" href="{{ item.informative_url }}*">{{item.short_title}}</a>
+		   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
 
 				{% else %}
 				
