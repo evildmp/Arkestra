@@ -21,15 +21,13 @@
    		{% if item.external_url %}
    			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
 		{% else %}
-			{% if item.is_uninformative %}
-	   			<a class = "title" href="{{ item.parent.get_absolute_url }}">{{item.short_title}}</a>
-			{% else %}
+	        {% if "details" in everything.format and item.is_uninformative %}
+	            <span class="title">{{ item.short_title }}</span>
+	        {% else %}
 	   			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
 			{% endif %}
    		{% endif %}
    	{% endif %}
-	
-   
 	
 {% endblock item_title %}
 
