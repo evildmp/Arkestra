@@ -1,3 +1,6 @@
+import logging
+logging.error("ok so far")
+
 #app = contacts_and_people
 from django.db import models
 from django.db.utils import DatabaseError
@@ -7,6 +10,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
+from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
 
 import mptt
@@ -23,8 +27,8 @@ import news_and_events
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 base_entity_id = settings.ARKESTRA_BASE_ENTITY
 
-Page = models.get_model('cms', 'Page')
-CMSPlugin = models.get_model('cms', 'CMSPlugin')
+# Page = models.get_model('cms', 'Page')
+# CMSPlugin = models.get_model('cms', 'CMSPlugin')
 
 class Site(models.Model):
     """Maintains a list of an institution's geographical sites"""
