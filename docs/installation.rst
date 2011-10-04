@@ -120,7 +120,7 @@ Set up the supplied example database
 
 Answer `no` to the question about setting up a superuser.
 
-* `python managepy reset contenttypes`
+* `python manage.py reset contenttypes`
 
 Answer `yes`.
 
