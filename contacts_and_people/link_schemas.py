@@ -45,7 +45,7 @@ schema.register_wrapper(models.Person,PersonWrapper)
 
 class EntityWrapper(LinkWrapper):
     search_fields = admin.EntityAdmin.search_fields
-    link_attributes = models.EntityAutoPageLinkPluginEditor.AUTO_PAGES["contacts-and-people"]
+    # link_attributes = models.EntityAutoPageLinkPluginEditor.AUTO_PAGES["contacts-and-people"]
 
     def description(self):
         if self.obj.abstract_entity:
