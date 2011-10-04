@@ -113,6 +113,19 @@ There are other, probably better, ways of doing this, but it works.
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included, as described in `Getting started`
 
+Set up the supplied example database
+====================================
+
+* `python manage.py syncdb`
+
+Answer `no` to the question about setting up a superuser.
+
+* `python managepy reset contenttypes`
+
+Answer `yes`.
+
+* `python manage.py loaddata example_database.json`
+
 Fire up the server
 ==================
 
