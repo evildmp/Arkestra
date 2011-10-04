@@ -224,20 +224,26 @@ class Entity(EntityLite, CommonFields):
         related_name='entity', unique=True, null=True, blank=True,
         on_delete=models.SET_NULL)
     
-    if 'news_and_events' in settings.INSTALLED_APPS:
-        auto_news_page = models.BooleanField(default=False)
-        news_page_menu_title = models.CharField(max_length= 50,
-            default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
+    auto_news_page = models.BooleanField(default=False)
+    news_page_menu_title = models.CharField(max_length= 50,
+        default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
+    news_page_intro = PlaceholderField('body', 
+        related_name="news_page_intro",
+        )
+
+    auto_contacts_page = models.BooleanField(default=False)
+    contacts_page_menu_title = models.CharField(max_length=50,
+        default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
+    contacts_page_intro = PlaceholderField('body',
+        related_name="contacts_page_intro",
+        )
     
-    if 'contacts_and_people' in settings.INSTALLED_APPS:
-        auto_contacts_page = models.BooleanField(default=False)
-        contacts_page_menu_title = models.CharField(max_length=50,
-            default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
-        
-    if 'vacancies_and_studentships' in settings.INSTALLED_APPS:
-        auto_vacancies_page = models.BooleanField(default=False)
-        vacancies_page_menu_title = models.CharField(max_length=50,
-            default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
+    auto_vacancies_page = models.BooleanField(default=False)
+    vacancies_page_menu_title = models.CharField(max_length=50,
+        default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
+    vacancies_page_intro = PlaceholderField('body',
+        related_name="vacancies_page_intro",
+        )
         
     if 'publications' in settings.INSTALLED_APPS:
         auto_publications_page = models.BooleanField(default=False)
@@ -732,7 +738,7 @@ try:
     if base_entity_id:
         # set the default entity using the id
         default_entity = Entity.objects.get(id = base_entity_id)
-except (Entity.DoesNotExist, DatabaseError):
+except:
     pass
     
 

@@ -47,7 +47,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
             "email": entity.email,
             "title": title,
             "meta": meta,
-            "location": entity.precise_location,
+            "location": entity.precise_location, 
+            "intro_page_placeholder": entity.contacts_page_intro,
 
             "people": people,
             "people_list_heading": people_list_heading,

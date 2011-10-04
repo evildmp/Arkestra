@@ -1,3 +1,4 @@
+{% load placeholder_tags %}
 {% comment %}
 
 Publishes entity contacts and people page and views.contacts_and_people
@@ -10,6 +11,7 @@ Called up by entity_information.html
 {% load typogrify_tags %}
 {% block entity_information %}
 	<div class="row columns2">
+	    {% render_placeholder intro_page_placeholder %}
 	   	<div class="column firstcolumn">
 			<div class = "">
 			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>

@@ -45,8 +45,10 @@ def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", Non
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
+        "main_page_body_file": instance.main_page_body_file, 
+        "intro_page_placeholder": entity.vacancies_page_intro,
+        'everything': instance,
+        }
         )
 
     return render_to_response(

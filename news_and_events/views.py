@@ -53,7 +53,9 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
         "meta": meta,
         "pagetitle": pagetitle,
         "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
+        "intro_page_placeholder": entity.news_page_intro,
+        'everything': instance,
+        }
         )
     
     return render_to_response(

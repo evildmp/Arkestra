@@ -297,7 +297,7 @@ class EntityForm(forms.ModelForm):
         return self.cleaned_data 
 
 
-class EntityAdmin(SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin): 
+class EntityAdmin(PlaceholderAdmin, SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin): 
     search_fields = ['name']
     inlines = (MembershipForEntityInline,PhoneContactInline)
     form = EntityForm
