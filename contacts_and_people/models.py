@@ -43,9 +43,14 @@ class Site(models.Model):
     def __unicode__(self):
         return self.site_name
 
+class BuildingManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
 
 class Building(models.Model):
     """Each Building is on a Site."""
+    objects=BuildingManager()
     name = models.CharField(max_length=100, null=True, blank=True)
     number = models.CharField(max_length=10, null=True, blank=True)
     street = models.CharField("Street name", max_length=100, null = True, blank=True)
@@ -75,6 +80,9 @@ class Building(models.Model):
     class Meta:
         ordering = ('site', 'street', 'number', 'name',)
     
+    def natural_key(self):
+        return (self.slug)
+
     def __unicode__(self):
         if self.name:
             building_identifier = str(self.site) + ": " + self.name
@@ -198,7 +206,13 @@ class EntityLite(models.Model):
         return str(self.name)
 
 
+class EntityManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class Entity(EntityLite, CommonFields):
+    objects=EntityManager()
     short_name = models.CharField(blank=True, help_text="e.g. Haematology",
         max_length=100, null=True, verbose_name="Short name for menus")
     abstract_entity = models.BooleanField("Group", default=False,
@@ -233,6 +247,9 @@ class Entity(EntityLite, CommonFields):
     class Meta:
         verbose_name_plural = "Entities"
         ordering = ['tree_id', 'lft']
+
+    def natural_key(self):
+        return (self.slug)
 
     def __unicode__(self):
         return self.name
@@ -463,7 +480,13 @@ class PersonLite(models.Model):
     initials = property(__getInitials,)     
 
 
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class Person(PersonLite, CommonFields):
+    objects=PersonManager()
     user = models.ForeignKey(User, related_name='person_user', unique=True,
         blank=True, null=True, verbose_name='Arkestra User', on_delete=models.SET_NULL)
     institutional_username = models.CharField(max_length=10, blank=True, null=True)
@@ -482,6 +505,9 @@ class Person(PersonLite, CommonFields):
     staff_id = models.CharField(null=True, blank=True, max_length=20)
     data_feed_locked = models.BooleanField(default=False)
     
+    def natural_key(self):
+        return (self.slug)
+
     class Meta:
         ordering = ['surname', 'given_name', 'user',]
         verbose_name_plural = "People"

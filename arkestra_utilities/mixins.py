@@ -44,6 +44,11 @@ class SupplyRequestMixin(object):
         return form_class
 
         
+class UniversalPluginModelManagerMixin(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class UniversalPluginModelMixin(models.Model):
     class Meta:
         abstract = True

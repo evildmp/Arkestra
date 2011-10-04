@@ -4,10 +4,13 @@ from django.conf import settings
 from datetime import datetime
 import operator
 
+from arkestra_utilities.mixins import UniversalPluginModelManagerMixin
+
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
-class NewsArticleManager(models.Manager):
+
+class NewsArticleManager(UniversalPluginModelManagerMixin):
     def get_news_ordered_by_importance_and_date(self, instance):
         ordinary_news = []
 
@@ -94,7 +97,7 @@ class NewsArticleManager(models.Manager):
         return instance.news
 
 
-class EventManager(models.Manager):
+class EventManager(UniversalPluginModelManagerMixin):
     def get_items(self, instance):    
         self.get_events(instance) # gets previous_events, forthcoming_events, top_events, ordinary_events
         if instance.view == "archive":
