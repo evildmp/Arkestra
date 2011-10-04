@@ -111,7 +111,7 @@ There are other, probably better, ways of doing this, but it works.
 * `ln -s ../../../django-filer/filer`
 * `ln -s ../../../django-widgetry/widgetry`
 
-From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included, as described in `Getting started`
+From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included.
 
 Set up the supplied example database
 ====================================
