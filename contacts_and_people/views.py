@@ -218,23 +218,17 @@ def place(request, slug, active_tab=""):
     if tabs:
         if not active_tab:
             # find out what to add to the url for this tab
-            active_tab=tabs[0]["tab"]
+            active_tab=tabs[0]["address"]
             # mark the tab as active for the template
             tabs[0]["active"]=True
         # fewer than 2? not worth having tabs!
         if len(tabs)==1:
             tabs=[]
-    else:
-        # oh dear, someone created a place with useful information - just use "about"
-        # tabs.append(places_dict["about"])                  
-        pass
-        
-    # # if we're going to show tabs, put the about tab first
-    # if tabs:
-    #     tabs.insert(0, places_dict["about"])
+
     meta_description_content = places_dict[active_tab or "about"]["meta_description_content"] 
     if active_tab:
         active_tab = "_" + active_tab
+        
     meta = {
         "description": meta_description_content,
         }
