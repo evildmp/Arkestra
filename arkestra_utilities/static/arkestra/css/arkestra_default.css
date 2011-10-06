@@ -1,17 +1,26 @@
 /* ----------------- brand new styles ----------------- */
 
+
 body    {
-    margin: 30px auto;
     background: #def58c ;
-    border: 1px solid black;
-    width: 1020px;
+    
     font-family: "Hoefler Text", Garamond, Palatino, "Palatino Linotype", "Times New Roman", serif;
     line-height: 1.2;
     color: #222}
 
+p{margin-bottom: 1em;}
+
+/* it there is no horiz nav, you don't need all that top padding */
+.no_nav_horiz div#outer-wrapper   {
+    padding: 0px 30px 5px;
+    }
+    
 div#outer-wrapper   {
     padding: 30px 30px 5px;
+    margin: 30px auto;
     background: white;
+    width: 1020px;
+    border: 1px solid black;
     }
     
 div#inner-wrapper   {
@@ -23,8 +32,9 @@ div#inner-wrapper   {
 div.footer  {
     border-top: 1px solid black;
 }
+h1,h2,h3,h4,h5,h6 {margin: 0.6em 0 0.8em 0;}
 
-h1  {font-size: 220%; color: #412fd9; font-variant: small-caps; font-weight: normal; text-align: center;}
+h1  {font-size: 220%; color: #412fd9; font-variant: small-caps; font-weight: normal; text-align: center; }
 h2  {font-size: 170%; font-style: italic; font-weight: normal; color: #7e991e; border-bottom: 1px solid gray;}
 h3  {font-size: 150%; margin-bottom: 0;}
 h4  {font-size: 112%}
@@ -130,8 +140,3 @@ li.menu_item a.selected	{
 li.menu_item a:hover	{
 	color: #ff7f37;
 	}
-	
-
-
-
-

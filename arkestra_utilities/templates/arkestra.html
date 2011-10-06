@@ -23,15 +23,14 @@
 {% endblock favicon %}
 
 {% block styles %}
-  <style media="screen" type="text/css"><!--
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_lists.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_layout.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_navigation.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css");
-    @import url("{{ STATIC_URL }}arkestra/css/temporaryhacks.css");
-    @import url("{{ STATIC_URL }}arkestra/css/carousel.css");
-		--></style>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_lists.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_layout.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_navigation.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
+ 
   <!--[if IE]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
   <!--[if IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
   <!--[if IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -50,7 +49,7 @@
 	{% endcomment %}
 	
     {% block arkestra_default_styles %}
-		<style media="screen" type="text/css"><!--@import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css"); --></style>
+                <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_default.css" />
 	{% endblock arkestra_default_styles %}
 
 
