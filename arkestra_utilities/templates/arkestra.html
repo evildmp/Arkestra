@@ -38,21 +38,7 @@
 
     {% block extrastyles %}
     {% endblock extrastyles %}
-  
-	{% comment %} if you inherit arkestra.html, add an empty:
-	
-	 	{% block arkestra_default_styles %}{% endblock arkestra_default_styles %} 
-	
-	to your template to avoid importing and having to overwrite the default 
-	styles in arkestra_default.css that are provided to get you started.
-	
-	{% endcomment %}
-	
-    {% block arkestra_default_styles %}
-                <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_default.css" />
-	{% endblock arkestra_default_styles %}
-
-
+  	
 {% endblock styles %}
 
 
