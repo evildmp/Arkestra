@@ -1,5 +1,4 @@
 import logging
-logging.error("ok so far")
 
 #app = contacts_and_people
 from django.db import models
