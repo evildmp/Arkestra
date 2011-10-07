@@ -83,7 +83,7 @@ Set up a virtual environment
 Install PIP components
 ======================
 
-* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia pil`
+* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
 Download components from source
 ===============================
