@@ -116,6 +116,7 @@ From this point you can wrestle Arkestra into submission on your own, or get sta
 Set up the supplied example database
 ====================================
 
+* `cd ../../../Arkestra/example/`
 * `python manage.py syncdb`
 
 Answer `no` to the question about setting up a superuser.
@@ -129,5 +130,6 @@ Answer `yes`.
 Fire up the server
 ==================
 
-* `cd ../../../Arkestra/example/`
 * `python manage.py runserver 0.0.0.0:8000`
+
+Username and password are both `arkestra`.
