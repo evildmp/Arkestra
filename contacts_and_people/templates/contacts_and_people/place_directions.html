@@ -14,8 +14,6 @@
 <script type="text/javascript">
 	var infowindow = null;
 
-	$(document).ready(initialize);
-
 	function initialize() {
 		var latlng = new google.maps.LatLng({{ place.latitude }}, {{place.longitude}});
 
@@ -56,13 +54,15 @@
 	       		position: siteLatLng,
 	       		map: map,
 	            {% ifequal place p %}
-	            animation: google.maps.Animation.DROP,
-	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
-	            zIndex: 10000,
+    	            animation: google.maps.Animation.DROP,
+    	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
+    	            zIndex: 10000,
+    				labelClass: "labels main-label", // the CSS class for the label
+	            {% else %}
+    				labelClass: "labels", // the CSS class for the label
 	            {% endifequal %}
 				labelContent: "{{p.get_name}}",
-				labelAnchor: new google.maps.Point(50, -5),
-				labelClass: "labels", // the CSS class for the label
+				labelAnchor: new google.maps.Point(-15, 30),
 				labelStyle: {opacity: 0.85}
 	   		});
 

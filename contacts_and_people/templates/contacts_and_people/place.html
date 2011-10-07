@@ -35,11 +35,12 @@
 	{% block place_information %}
 		<p class="standout">{{ place.summary|typogrify }}</p>
         <div class="row columns3">
-    		<div class="column firstcolumn">
-    			<h2>Address</h2>
-    		   {{ place.get_postal_address|join:"<br />" }}
-			
-    		</div>
+		    {% if place.postcode or place.street %}
+        		<div class="column firstcolumn">
+        			<h2>Address</h2>
+        		   {{ place.get_postal_address|join:"<br />" }}
+        		</div>
+    		{% endif %}
     		<div class="column lastcolumn doublecolumn"> 
 				{% render_placeholder place.description %}
 				{% thumbnail place.image.file 426x426 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img class="right" src="{{ image.url }}" alt="" /></p>{% endif %}

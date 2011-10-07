@@ -14,10 +14,17 @@ div#map_canvas h2 {
 div#map_canvas div.labels {
     font-family: "gill sans", "gill sans mt", "Trebuchet MS", sans-serif;
     color: white;
-    background-color: black;
+    background-color: gray;
     font-size: 13px;
-    padding: 1px 2px;
+    padding: 2px 3px;
     font-weight: normal;
     text-align: center;
     white-space: nowrap;
+    border-radius: 2px;
+   }
+
+div#map_canvas div.labels.main-label {
+    background-color: black;
+    font-weight: bold;
+
    }
