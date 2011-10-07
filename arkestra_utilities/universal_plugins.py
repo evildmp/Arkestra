@@ -134,7 +134,7 @@ class UniversalPlugin(object):
                     if this_list["items"]:
                         this_list["items"][0].column_class = this_list["items"][0].column_class + " firstcolumn"
                         if len(this_list["items"]) > 1:
-                            " ".join([this_list["items"][-1].column_class, "lastcolumn"])
+                            this_list["items"][-1].column_class = this_list["items"][-1].column_class + " lastcolumn"
     
         elif "vertical" in instance.format:
             instance.list_format = "row columns1"
