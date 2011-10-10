@@ -172,10 +172,25 @@ class PersonForm(forms.ModelForm):
 
         return self.cleaned_data
 
+def create_action(entity):
+    def action(modeladmin,request,queryset):
+        print "add to ",entity
+        print queryset
+        for person in queryset:
+            m = models.Membership(person=person,entity=entity,role="Member") 
+            m.save()
+        pass
+    name="entity_%s" % (entity,)
+    return (name, (action, name,"Add to %s " % (entity,)))
+
 
 class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
+    
+    def get_actions(self,request):
+    return dict(create_action(e) for e in models.Entity.objects.all())
+
     
     if HAS_PUBLICATIONS:
         inlines.append(ResearcherInline)
