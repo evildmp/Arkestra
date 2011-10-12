@@ -5,10 +5,11 @@ from django.db.models import ForeignKey
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from widgetry import fk_lookup
+from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
@@ -53,8 +54,8 @@ class VacancyStudentshipForm(forms.ModelForm):
             #     messages.add_message(self.request, messages.WARNING, message)
         return self.cleaned_data
 
-class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
-    inlines = (ObjectLinkInline,)
+class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, ModelAdminWithTabsAndCMSPlaceholder):
+    # inlines = (ObjectLinkInline,)
     exclude = ('description', 'url',)
     search_fields = ['short_title','title','summary', 'slug','url']
     list_display = ('short_title', 'hosted_by', 'closing_date',)
@@ -72,6 +73,11 @@ class VacancyStudentshipAdmin(AutocompleteMixin, SupplyRequestMixin, Placeholder
         'slug': ('title',)
             }
 
+    def _media(self):
+        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+    media = property(_media)
+
+        
 class VacancyForm(VacancyStudentshipForm):
     class Meta(VacancyStudentshipForm.Meta):
         model = Vacancy
@@ -82,39 +88,17 @@ class VacancyAdmin(VacancyStudentshipAdmin):
     #     search_fields.append('job_number')
 
     form = VacancyForm
-    fieldset_basic = (
-        ('', {
-            'fields': (('title', 'short_title',), 'closing_date', 'salary', 'job_number',),
-        }),
-        ('', {
-            'fields': ('summary',),
-        }),
-        ('', {
-            'fields': ('description',),
-        }),
-    )
-    fieldset_institution = (
-        ('Institutional details', {
-            'fields': ('hosted_by',)
-        }), 
-    )
-    fieldset_furtherinfo = (
-        ('', {
-            'fields': ('please_contact', 'also_advertise_on',)
-        }),
-    )
-    fieldset_advanced = (
-        ('', {
-            'fields': ('url', 'slug',),
-        }),
-    )
+    fieldset_vacancy = ('', {'fields': ('salary', 'job_number')})
+        
     tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Institution', {'fieldsets': fieldset_institution,}),
-        ('Further Information', {'fieldsets': fieldset_furtherinfo,}),
-        ('Links', {'inlines': ('ObjectLinkInline',),}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
-    ) 
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy)}),
+            ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
+            ('Body', {'fieldsets': (fieldsets["body"],)}),
+            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
+            ('Please contact', {'fieldsets': (fieldsets["people"],)}),
+            ('Links', {'inlines': (ObjectLinkInline,),}),
+            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+        ) 
          
 
 class StudentshipForm(VacancyStudentshipForm):
@@ -130,39 +114,19 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
         'supervisors', 
         'please_contact',
     )
-    fieldset_basic = (
-        ('', {
-            'fields': (('title', 'short_title',),  'closing_date',),
-        }),
-        ('', {
-            'fields': ('summary',),
-        }),
-        ('', {
-            'fields': ('description',),
-        }),
-    )
-    fieldset_supervision = (
-        ('', {
-            'fields': ('supervisors','hosted_by',)
-        }), 
-    )
-    fieldset_where_to_publish = (
-        ('', {
-            'fields': ('please_contact', 'also_advertise_on',)
-        }),
-    )
-    fieldset_advanced = (
-        ('', {
-            'fields': ('url', 'slug',),
-        }),
-    )
+
+    fieldset_supervision = ('', {'fields': ('supervisors',)})
     tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Where to Publish', {'fieldsets': fieldset_where_to_publish,}),
-        ('Supervision', {'fieldsets': fieldset_supervision,}),
-        ('Links', {'inlines': ('ObjectLinkInline',),}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
-    )    
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"])}),
+            ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
+            ('Body', {'fieldsets': (fieldsets["body"],)}),
+            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
+            ('Supervisors', {'fieldsets': (fieldset_supervision,)}),
+            ('Please contact', {'fieldsets': (fieldsets["people"],)}),
+            ('Links', {'inlines': (ObjectLinkInline,),}),
+            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+        ) 
+
     # autocomplete fields
     related_search_fields = [
         'hosted_by',

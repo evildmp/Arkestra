@@ -18,8 +18,8 @@ from links.link_functions import object_links
 class AutocompleteMixin(object):
     class Media:
         js = [
-            '/static/jquery/jquery.js',
-            # settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            # '/static/jquery/jquery.js',
+            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
             cms_static_url('js/libs/jquery.ui.core.js'),
         ]
         css = {
@@ -27,6 +27,7 @@ class AutocompleteMixin(object):
         }    
 
     def formfield_for_dbfield(self, db_field, **kwargs):
+        print "def formfield_for_dbfield(self, db_field, **kwargs):"
         """
         Overrides the default widget for Foreignkey fields if they are
         specified in the related_search_fields class attribute.
@@ -70,7 +71,6 @@ class UniversalPluginModelMixin(models.Model):
         help_text=u"The entity responsible for publishing this item")
     publish_to = models.ManyToManyField(Entity, null=True, blank=True, related_name="%(class)s_publish_to",
         help_text=u"Use these sensibly - don't send minor items to the home page, for example")
-    # though in fact the .save() and the admin between them won't allow null = True
     please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
         help_text=u'The person to whom enquiries about this should be directed ', 
         null=True, blank=True)
@@ -113,7 +113,9 @@ class URLModelMixin(models.Model):
     # url fields
     url = models.URLField(null=True, blank=True, verify_exists=True, 
         help_text=u"To be used <strong>only</strong> for external items. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True)
+    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True,
+        help_text=u"For external items only.",
+        )                              
     slug = models.SlugField(unique=True, max_length=60, blank=True, help_text=u"Do not meddle with this unless you know exactly what you're doing!")
 
     def __unicode__(self):
@@ -132,3 +134,22 @@ class LocationModelMixin(object):
         max_length=255, null=True, blank=True)
     access_note = models.CharField(help_text = u"Notes on access/visiting hours/etc",
         max_length=255, null=True, blank=True)
+        
+fieldsets = {
+    'basic': ('', {'fields': ('title',  'short_title', 'summary')}),
+    'host': ('', {'fields': ('hosted_by',)}),
+    'image': ('', {'fields': ('image',)}),
+    'body':  ('', {
+        'fields': ('body',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage',)
+        }),
+    'where_to_publish': ('', {'fields': ('publish_to',)}),
+    'people': ('People to contact about this item', {'fields': ('please_contact',)}),
+    'date': ('', {'fields': ('date',)}),
+    'closing_date': ('', {'fields': ('closing_date',)}),
+    'importance': ('', {'fields': ('importance',)}),
+    'url': ('URL-related settings', {'fields': ('external_url', 'slug',)}),         
+
+    'location': ('', {'fields': ('precise_location', 'access_note',)}),
+    'email': ('', {'fields': ('email',)}),
+    }

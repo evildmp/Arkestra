@@ -58,14 +58,16 @@ class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
 
 class NewsArticle(NewsAndEvents):
     date = models.DateTimeField(default=datetime.now,
-        help_text=u"Dateline for the item - it won't appear until then" ,  )
+        help_text=u"Dateline for the item (the item will not be published until then" ,  )
     display_indefinitely = models.BooleanField(
         help_text=u"Important news; it won't expire from news lists" , )    
     external_news_source = models.ForeignKey('NewsSource', null=True, blank=True, 
         help_text=u"If this news item is from an external source")
-    sticky_until = models.DateField(null=True, blank=True, default=pythondate.today,
-        help_text=u"Will be a  featured item until this date")
-    is_sticky_everywhere = models.BooleanField(default=False, help_text=u"Will be sticky for other entities") 
+    sticky_until = models.DateField(u"Featured until", 
+        null=True, blank=True, default=pythondate.today,
+        help_text=u"Will remain a featured item until this date")
+    is_sticky_everywhere = models.BooleanField(u"Featured everywhere",
+        default=False, help_text=u"Will be featured in other entities's news lists") 
     objects = NewsArticleManager()
     
     class Meta:
@@ -91,35 +93,20 @@ class NewsArticle(NewsAndEvents):
 class Event(NewsAndEvents):
     type = models.ForeignKey('EventType')
     featuring = models.ManyToManyField(Person, related_name='%(class)s_featuring',
-        null=True, blank=True)
+        null=True, blank=True,
+        help_text="The speakers, lecturers, instructors or other people featured in this event")
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     SERIES = (
         (False, u"an actual event"),
         (True, u"a series of events"),
     )
     series = models.BooleanField("This is", default=False, choices=SERIES)
-    # DO_NOT_LINK_TO_CHILDREN = (
-    #     (False, u"have their own pages"),
-    #     (True, u"are displayed within this item"),
-    # )
-    # do_not_link_to_children = models.BooleanField(u"Child events",
-    #     default=False,
-    #     choices=DO_NOT_LINK_TO_CHILDREN,
-    #     )
-    # DISPLAY_SERIES_NAME = (
-    #     (False, u"display children's names only"),
-    #     (True, u"also display series name"),
-    # )
-    # display_series_name = models.BooleanField(u"In lists",
-    #     default=False,
-    #     choices=DISPLAY_SERIES_NAME,
-    #     )
     SHOW_TITLES = (
         ("series children", u"show title of series followed by title of children"),
         ("series", u"show title of series only"),
         ("children", u"show title of children only"),
     )
-    show_titles = models.CharField(u"In lists",
+    show_titles = models.CharField(u"Titles",
         max_length = 25,
         default="children",
         choices=SHOW_TITLES,
@@ -128,7 +115,7 @@ class Event(NewsAndEvents):
         (False, u"display children's summaries"),
         (True, u"display the summary for the series"),
     ) 
-    display_series_summary = models.BooleanField(u"In lists",
+    display_series_summary = models.BooleanField(u"Summaries",
         default=False,
         choices=DISPLAY_SERIES_SUMMARY,
         )
@@ -151,8 +138,9 @@ class Event(NewsAndEvents):
     jumps_queue_everywhere = models.BooleanField(default=False)
     registration_enquiries = models.ManyToManyField(Person, 
         related_name = '%(class)s_registration', 
-        null = True, blank = True
-        )
+        null = True, blank = True,
+        help_text=u"The people who responsible for registration, if different from those in <em>Please contact</em>"
+        ) 
     objects = EventManager()
     
     class Meta:
