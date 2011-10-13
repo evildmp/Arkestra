@@ -6,13 +6,11 @@ from django.db.models import ForeignKey
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 
-from cms.admin.placeholderadmin import PlaceholderAdmin
-
-from widgetry import fk_lookup
+from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
@@ -56,20 +54,21 @@ class NewsAndEventsForm(forms.ModelForm):
                 messages.add_message(self.request, messages.WARNING, message)
 
 
-class NewsAndEventsAdmin(AutocompleteMixin, SupplyRequestMixin, PlaceholderAdmin):
-    inlines = (ObjectLinkInline,)
+class NewsAndEventsAdmin(AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder, SupplyRequestMixin):
     exclude = ('content', 'url')
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     related_search_fields = ['hosted_by', 'external_url',]
-    filter_horizontal = (
-        'please_contact',
-        'publish_to', 
-        )
     prepopulated_fields = {
         'slug': ('title',)
             }
+        
+    def _media(self):
+        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+    media = property(_media)
+
+
 
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -93,44 +92,26 @@ class NewsArticleForm(NewsAndEventsForm):
             self.cleaned_data['sticky_until'] = datetime.date(self.cleaned_data['date'])
         return self.cleaned_data
 
+
 class NewsArticleAdmin(NewsAndEventsAdmin):
     # some general settings
     form = NewsArticleForm
     list_filter = ('date',)
     read_only_fields = ('sticky_until')
+    filter_horizontal = (
+        'please_contact',
+        'publish_to', 
+        )
         
-    fieldset_basic = (
-        ('Basic', {
-            'fields': (('title', 'image',), 'short_title', 'summary','hosted_by',),
-        }),)
-    fieldset_placeholder = (
-        ('Placeholder', {
-            'fields': ('body',),
-          'classes': ('plugin-holder', 'plugin-holder-nopage'),
-        }),)
-    fieldset_date = (
-        ('Date & significance', {
-            'fields': ('date', 'importance', ('sticky_until', 'is_sticky_everywhere',), ),
-        }),)
-    fieldset_where_to_publish = (    
-        ('Where to publish', {
-            'fields': ('publish_to',),
-        }),)
-    fieldset_people = (
-        ('People', {
-            'fields': ('please_contact',),
-        }),)
-    fieldset_advanced = (
-        ('Advanced Options', {
-            'fields': ('external_news_source', 'slug',),
-        }),)
+    fieldset_stickiness = ('How this item should behave in lists', {'fields': ('sticky_until', 'is_sticky_everywhere',)})
     tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Date & significance', {'fieldsets': fieldset_date,}),
-        ('Where to Publish', {'fieldsets': fieldset_where_to_publish,}),
-        ('People', {'fieldsets': fieldset_people,}),
-        ('Links', {'inlines': ('ObjectLinkInline',),}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),        
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"])}),
+            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"], fieldset_stickiness)}),
+            ('Body', {'fieldsets': (fieldsets["body"],)}),
+            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
+            ('Related people', {'fieldsets': (fieldsets["people"],)}),
+            ('Links', {'inlines': (ObjectLinkInline,),}),
+            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
         )
 
 class EventForm(NewsAndEventsForm):
@@ -227,7 +208,6 @@ class EventAdmin(NewsAndEventsAdmin):
         'please_contact',
         'publish_to', 
         'registration_enquiries',
-        #'organisers', 
         'featuring', 
         )
     ordering = ['type',]
@@ -239,51 +219,29 @@ class EventAdmin(NewsAndEventsAdmin):
     save_as = True
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']
+
     # the tabs
-    fieldset_basic = (
-        ('', {
-            'fields': ('type', ('title',  'short_title',),  'image', 'summary', 'hosted_by', ),
-        }),
-    )
-    fieldset_where_to_publish = (    
-        ('', {
-            'fields': ('publish_to',)
-        }),)
-    fieldset_where_and_when = (    
-        ('Where', {
-            'fields': (('building', 'precise_location',), 'access_note'),
-        }),
-        ('When', {
-            'fields': ('series', 'single_day_event', ('start_date', 'start_time',), ('end_date', 'end_time',),),
-        }),
-         ('Significance', {
-            'fields': (('jumps_queue_on', 'importance',), ('jumps_queue_everywhere',),),
-        }),
-       
+    fieldset_when = ('When', {'fields': ('series', 'single_day_event', ('start_date', 'start_time'), ('end_date', 'end_time'))})
+    fieldsets_relationships = (
+        ('Parent & children', {
+            'fields': ('parent', 'child_list_heading',),},),
+        ('When displaying the children of this item in lists', {
+            'fields': ('show_titles', 'display_series_summary',),},),
         )
-    fieldset_relationships = (
-        ('Relationships with other Events', {
-            'fields': ('parent', 'child_list_heading', 'link_to_series', 'show_titles', 'display_series_summary',), 
-        }),)        
-    fieldset_people = (    
-        ('People', {
-            'fields': (
-            'featuring', 'please_contact', 'registration_enquiries', #'organisers', 
-            ),
-        }),)    
-    fieldset_advanced = (    
-        ('', {
-            'fields': ('url', 'slug',),
-        }),)
+    fieldset_registration = ('Registration enquiries', {'fields': ('registration_enquiries',)})   
+    fieldset_featuring = ('Featured people', {'fields': ('featuring',)})   
+    fieldset_jumpiness = ('How this item should behave in lists', {'fields': ('jumps_queue_on', 'jumps_queue_everywhere')})
     tabs = (
-        ('Basic', {'fieldsets': fieldset_basic,}),
-        ('Where to publish', {'fieldsets': fieldset_where_to_publish,}),
-        ('Where & when', {'fieldsets': fieldset_where_and_when,}),
-        ('Relationships', {'fieldsets': fieldset_relationships,}),
-        ('People', {'fieldsets': fieldset_people,}),
-        ('Links', {'inlines': ('ObjectLinkInline',),}),
-        ('Advanced Options', {'fieldsets': fieldset_advanced,}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"])}),
+            ('Date & significance', {'fieldsets': (fieldset_when, fieldsets["importance"], fieldset_jumpiness)}),
+            ('Parent & children', {'fieldsets': fieldsets_relationships}),
+            ('Body', {'fieldsets': (fieldsets["body"],)}),
+            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
+            ('People', {'fieldsets': (fieldset_featuring, fieldsets["people"], fieldset_registration)}),
+            ('Links', {'inlines': (ObjectLinkInline,),}),
+            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
         )
+
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context.update({

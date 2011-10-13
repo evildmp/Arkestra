@@ -2398,7 +2398,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "institute.html", 
             "tree_id": 1, 
             "placeholders": [
                 1
@@ -2497,7 +2497,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 31
@@ -2530,7 +2530,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 61
@@ -2563,7 +2563,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 19
@@ -2596,7 +2596,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 29
@@ -2629,7 +2629,7 @@
             "created_by": "sagdp6", 
             "publication_end_date": null, 
             "moderator_state": 0, 
-            "template": "arkestra.html", 
+            "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 30

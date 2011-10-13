@@ -14,9 +14,8 @@ from django.utils.safestring import mark_safe
 
 from django.http import HttpResponseRedirect, HttpResponse
 
-# from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.widgets.combobox import ComboboxField
-# from widgetry.tabs.admin import ModelAdminWithTabs
+from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from contacts_and_people import models
 
@@ -25,7 +24,7 @@ from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin
+from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin, fieldsets
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
@@ -90,6 +89,11 @@ class PhoneContactInline(generic.GenericTabularInline):
 
 class PhoneContactAdmin(admin.ModelAdmin):
     pass
+
+class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):    
+    def _media(self):
+        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+    media = property(_media)
 
 # ------------------------- PersonLite admin -------------------------
 
@@ -173,53 +177,40 @@ class PersonForm(forms.ModelForm):
         return self.cleaned_data
 
 
-class PersonAdmin(SupplyRequestMixin, AutocompleteMixin, PlaceholderAdmin):
+class PersonAdmin(PersonAndEntityAdmin):
     search_fields = ['given_name','surname','institutional_username',]
-    inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
+    # inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
     
-    if HAS_PUBLICATIONS:
-        inlines.append(ResearcherInline)
+    # if HAS_PUBLICATIONS:
+    #         inlines.append(ResearcherInline)
     
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
-    #list_editable = ('user',)
+    # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
-    personal_fieldsets = (
-        ('Name and image', {
-            'fields': (('title','image',), ('given_name', 'middle_names', 'surname',),),
-        }),
-        ('Contact information', {
-            'fields': ('email',
-                       ('precise_location','access_note',), 
-                      ),
-        }),
-        ('Over-ride default output', {
-            'fields': ('please_contact',
-                       ('override_entity', 'building',),
-                      ),
-        }),
-        (None, {
-            'fields': ('about',)
+
+    name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
+    override_fieldset = ('Over-ride default output', {
+        'fields': ('please_contact', 'override_entity', 'building',),
+        'classes': ('collapse',)
         })
-    )
-    advanced_fieldsets = (
-        ('Advanced options', {
-            #'classes': ('collapse',),
-            'fields': ('active', 'user', 'institutional_username', 'slug',),
-        }),
-    )
-    tabs = (
-        ('Personal', {
-                      'fieldsets': personal_fieldsets,
-                      'inlines': ('PhoneContactInline',),
-                      }),
-        ('Advanced Options', {
-                      'fieldsets': advanced_fieldsets,
-                      }),
-        ('Memberships', {'inlines': ('MembershipForPersonInline',)}),
-        ('Researcher', {'inlines': ('ResearcherInline',)}),
-    )
+    advanced_fieldset =  (
+        'Institutional settings', {
+            'fields': ('active', 'user', 'institutional_username', 'staff_id',),
+        })
+    
+    tabs = [
+        ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
+        ('Contact information', {
+                'fieldsets': (fieldsets["email"], override_fieldset),
+                'inlines': (PhoneContactInline,)
+                }),
+        ('Entities', {'inlines':(MembershipForPersonInline,)}),
+        ('Links', {'inlines': (ObjectLinkInline,),}),
+        ('Advanced settings', {'fieldsets': (fieldsets["url"], advanced_fieldset)}),
+    ]
+
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
 
 
@@ -297,9 +288,9 @@ class EntityForm(forms.ModelForm):
         return self.cleaned_data 
 
 
-class EntityAdmin(PlaceholderAdmin, SupplyRequestMixin, AutocompleteMixin, admin.ModelAdmin): 
+class EntityAdmin(PersonAndEntityAdmin): 
     search_fields = ['name']
-    inlines = (MembershipForEntityInline,PhoneContactInline)
+    # inlines = (MembershipForEntityInline,PhoneContactInline)
     form = EntityForm
     list_display = ('name', 'parent', 'building', 'abstract_entity','website', )
     list_editable = ('website', )
@@ -308,51 +299,65 @@ class EntityAdmin(PlaceholderAdmin, SupplyRequestMixin, AutocompleteMixin, admin
     prepopulated_fields = {
             'slug': ('name',)
             }
-    tab_basic = (
-            ('', {
-                'fields': (('name', 'short_name','image',), 'abstract_entity', ('parent', 'display_parent',), ),
-            }),
+
+    name_fieldset = ('Name', {'fields': ('name', 'short_name')})
+    website_fieldset = ('', {'fields': ('website',)})
+    entity_hierarchy_fieldset = ('Entity hierarchy', {
+        'fields': ('parent', 'display_parent', 'abstract_entity'),
+        'classes': ('collapse',)
+    })
+    building_fieldset = ('', {'fields': ('building',),})
+
+    contact_page_fieldset = (
+        ('Automatic contacts & people page', {
+            'fields': ('auto_contacts_page', 'contacts_page_menu_title',),
+        }),
+        ('Text for the contacts & people page', {
+            'fields': ('contacts_page_intro',),
+            'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),
         )
-    tab_contact = (
-            ('', {
-                'fields': (('website', 'email',), ('building', 'precise_location',), 'access_note', )
-            }),
+    news_page_fieldset = (
+        ('Automatic news & events page', {
+            'fields': ('auto_news_page', 'news_page_menu_title',),
+        }),
+        ('Text for the news & events page', {
+            'fields': ('news_page_intro',),
+            'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),
         )
-    tab_advanced = (
-            ('', {
-                'fields': ('slug',)
-            }),
+    vacancies_page_fieldset = (
+        ('Automatic vacancies & studentships page', {
+            'fields': ('auto_vacancies_page', 'vacancies_page_menu_title',),
+        }),
+        ('Text for the vacancies & studentships page', {
+            'fields': ('vacancies_page_intro',),
+            'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),
         )
-    tab_automatic_pages = [
-            ('Contacts', {
-                'fields': (('auto_contacts_page', 'contacts_page_menu_title',),)
-            }),
+
+    tabs = [
+        ('Basic information', {'fieldsets': (name_fieldset, fieldsets["image"], website_fieldset, entity_hierarchy_fieldset)}),
+        ('Location', {'fieldsets': (building_fieldset, fieldsets["location"],)}),
+        ('Contact', {
+            'fieldsets': (fieldsets["email"],),
+            'inlines': (PhoneContactInline,)
+        }),
+        ('Contacts & people', {'fieldsets': contact_page_fieldset}),
+        ('News & events', {'fieldsets': news_page_fieldset}),
+        ('Vacancies & studentships', {'fieldsets': vacancies_page_fieldset}),
+        ('People', {'inlines':(MembershipForEntityInline,)}),
+        ('Advanced settings', {'fieldsets': (fieldsets["url"],) }),
         ]
-    if "news_and_events" in settings.INSTALLED_APPS:
-        tab_automatic_pages.append(  
-            ('News', {
-                'fields': (('auto_news_page', 'news_page_menu_title',),),
-            }),
-        )
-    if "vacancies_and_studentships" in settings.INSTALLED_APPS:
-        tab_automatic_pages.append(  
-            ('Vacancies', {
-                'fields': (('auto_vacancies_page', 'vacancies_page_menu_title',),)
-            }),
-        )
+
+
     if 'publications' in settings.INSTALLED_APPS:
-        tab_automatic_pages.append(  
-            ('Publications', {
+        tabs.append(  
+            ('Contacts & people page', {'fieldsets': ('Publications', {
                     'fields': (('auto_publications_page', 'publications_page_menu_title',),)
                 }
-            ),
-        )
-    tabs = (
-            ('Basic information', {'fieldsets':tab_basic}),
-            ('Contact information', {'fieldsets':tab_contact,'inlines':('PhoneContactInline',)}),
-            ('Advanced options', {'fieldsets':tab_advanced}),
-            ('Automatic pages', {'fieldsets':tab_automatic_pages}),
-            ('Memberships', {'inlines':('MembershipForEntityInline',)}),
+            ),}),
+            
         )
 
     def changelist_view(self, request, extra_context=None):
@@ -440,9 +445,32 @@ class SiteAdmin(AutocompleteMixin, admin.ModelAdmin):
     )
 
 
-class BuildingAdmin(PlaceholderAdmin):
+class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
+    address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site'),}),)
+    details_fieldsets = (('', {'fields': ('summary', 'image',),}),)
+    description_fieldsets = (('', {
+        'fields': ('description',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),)
+    getting_here_fieldsets = (('', {
+        'fields': ('getting_here',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),)
+    access_and_parking_fieldsets = (('', {
+        'fields': ('access_and_parking',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage'),
+        }),)
+    map_fieldsets = (('', {'fields': ('map', 'latitude', 'longitude', 'zoom',),}),)
+    tabs = (
+        ('Address', {'fieldsets': address_fieldsets,}),
+        ('Details', {'fieldsets': details_fieldsets,}),
+        ('Description', {'fieldsets': description_fieldsets,}),
+        ('Getting here', {'fieldsets': getting_here_fieldsets,}),
+        ('Access and parking', {'fieldsets': access_and_parking_fieldsets,}),
+        ('Map', {'fieldsets': map_fieldsets,}),
+    )
 
 admin.site.register(models.Person,PersonAdmin)
 admin.site.register(models.Building,BuildingAdmin)

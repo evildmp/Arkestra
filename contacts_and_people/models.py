@@ -1,5 +1,4 @@
 import logging
-logging.error("ok so far")
 
 #app = contacts_and_people
 from django.db import models
@@ -224,30 +223,41 @@ class Entity(EntityLite, CommonFields):
         related_name='entity', unique=True, null=True, blank=True,
         on_delete=models.SET_NULL)
     
-    auto_news_page = models.BooleanField(default=False)
-    news_page_menu_title = models.CharField(max_length= 50,
+    auto_news_page = models.BooleanField(u"Publish a news & events page for this entity automatcally",
+        default=False,
+        )
+    news_page_menu_title = models.CharField(u"Title",
+        max_length= 50,
         default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
     news_page_intro = PlaceholderField('body', 
         related_name="news_page_intro",
         )
 
-    auto_contacts_page = models.BooleanField(default=False)
-    contacts_page_menu_title = models.CharField(max_length=50,
+    auto_contacts_page = models.BooleanField(u"Publish a contacts & people page for this entity automatcally",default=False,
+        )
+    contacts_page_menu_title = models.CharField(u"Title",
+        max_length=50,
         default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
     contacts_page_intro = PlaceholderField('body',
         related_name="contacts_page_intro",
+        help_text = "Text for the Contacts & people page"
         )
     
-    auto_vacancies_page = models.BooleanField(default=False)
-    vacancies_page_menu_title = models.CharField(max_length=50,
+    auto_vacancies_page = models.BooleanField(u"Publish a vacancies & studentships page for this entity automatcally",
+        default=False,
+        )
+    vacancies_page_menu_title = models.CharField(u"Title",
+        max_length=50,
         default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
     vacancies_page_intro = PlaceholderField('body',
         related_name="vacancies_page_intro",
         )
         
     if 'publications' in settings.INSTALLED_APPS:
-        auto_publications_page = models.BooleanField(default=False)
-        publications_page_menu_title = models.CharField(max_length=50,
+        auto_publications_page = models.BooleanField(u"Publish a publications page for this entity automatcally",
+            default=False)
+        publications_page_menu_title = models.CharField(u"Title",
+            max_length=50,
             default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"))
     
     class Meta:
@@ -506,7 +516,7 @@ class Person(PersonLite, CommonFields):
     override_entity = models.ForeignKey(Entity, verbose_name='Specify entity',
         help_text=u"Specify an entity for contact information - over-rides entity and postal address",
         related_name='people_override', blank=True, null=True, on_delete=models.SET_NULL)
-    please_contact = models.ForeignKey('self', help_text=u"Publish alternative contact details for this person",
+    please_contact = models.ForeignKey('self', help_text=u"Publish another person's details as contact information for this person",
         related_name='contact_for', blank=True, null=True, on_delete=models.SET_NULL)
     staff_id = models.CharField(null=True, blank=True, max_length=20)
     data_feed_locked = models.BooleanField(default=False)
