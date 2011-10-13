@@ -222,8 +222,7 @@ INSTALLED_APPS = (
     'arkestra_utilities',
     'arkestra_utilities.widgets.combobox', # so that static-files picks it up
     'arkestra_image_plugin',
-    # 'video',
-    'cmsplugin_filer_video',  
+    'video',
 
     # other applications
     

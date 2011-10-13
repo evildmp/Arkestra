@@ -1,21 +1,40 @@
-<!-- first try HTML5 playback: if serving as XML, expand `controls` to `controls="controls"` and autoplay likewise       -->
-<!-- warning: playback does not work on iPad/iPhone if you include the poster attribute! fixed in iOS4.0                 -->
-<video width="640" height="360" controls>
-	<!-- MP4 must be first for iPad! -->
-	<source src="__VIDEO__.MP4" type="video/mp4" /><!-- WebKit video    -->
-	<source src="__VIDEO__.OGV" type="video/ogg" /><!-- Firefox / Opera -->
-	<!-- fallback to Flash: -->
-	<object width="640" height="360" type="application/x-shockwave-flash" data="__FLASH__.SWF">
-		<!-- Firefox uses the `data` attribute above, IE/Safari uses the param below -->
-		<param name="movie" value="__FLASH__.SWF" />
-		<param name="flashvars" value="controlbar=over&amp;image=__POSTER__.JPG&amp;file=__VIDEO__.MP4" />
-		<!-- fallback image. note the title field below, put the title of the video there -->
-		<img src="__VIDEO__.JPG" width="640" height="360" alt="__TITLE__"
-		     title="No video playback capabilities, please download the video below" />
-	</object>
-</video>
-<!-- you *must* offer a download link as they may be able to play the file locally. customise this bit all you want -->
-<p>	<strong>Download Video:</strong>
-	Closed Format:	<a href="__VIDEO__.MP4">"MP4"</a>
-	Open Format:	<a href="__VIDEO__.OGV">"Ogg"</a>
-</p>
+{% load i18n filermedia %}
+{% if object.formats.HTML5 %}<video width="{{ object.width }}" controls>
+	{% for codec in object.formats.HTML5 %}
+	{% autoescape off %}<source src="{{codec.url}}" />{% endautoescape %}
+	{% endfor %}
+	{% if object.formats.FLASH %}<object width="{{object.width}}" height="{{object.height}}" type="application/x-shockwave-flash" data="{% filer_staticmedia_prefix %}flash/player.swf">
+		<param name="movie" value="{% filer_staticmedia_prefix %}flash/player.swf" />
+		{% for codec in object.formats.FLASH %}
+        	<param name="flashvars" value="controlbar=over&amp;file={{codec.url}}" />
+    	{% endfor %}{% endif %}
+	</object>{% endif %}
+
+{% if object.formats.HTML5 %}</video>{% endif %}
+{% if object.missing_versions %}
+	{% if not object.available_versions %}
+		<div style="border: 1px solid black; width: {{object.width}}px; height:{{object.height}}px;">
+			<div style="text-align: center; padding: 15%">
+				<p>The files for this video are being encoded and are not yet ready.</p>
+				<p><strong>Please wait a few moments, then reload this page.</strong></p>
+			</div>
+		</div>
+	{% else %}
+		<p><strong>Having problems playing this video?</strong></p>
+		<p>Some of the files are still being encoded.</p>
+		<p>Please <strong>wait a few moments and reload this page</strong>
+		{% if object.all_formats %}
+			, or try one of the following files:
+		{% else%}
+			.</p>
+		{% endif %}
+	{% endif %}
+{% endif %}
+	<p>Video available as:</p>
+{% if object.all_formats %}
+	<ul>
+		{% for codec in object.all_formats %}
+    		<li><a href="{{codec.url}}">{{ codec.description }}</a></li>
+		{% endfor %}
+	</ul>
+{% endif %}
