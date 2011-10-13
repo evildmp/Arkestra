@@ -10,7 +10,7 @@
 		<ul class = "vertical plugin-list">
 		    {% for child_event in event.get_children_forthcoming %}
     			<li>
-					{% if event.do_not_link_to_children %}
+					{% if child_event.is_uninformative %}
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
@@ -38,7 +38,7 @@
 		<ul class = "vertical plugin-list">
 		    {% for child_event in event.get_children_previous %}
     			<li>
-					{% if event.do_not_link_to_children %}
+					{% if child_event.is_uninformative %}
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>

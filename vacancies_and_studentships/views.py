@@ -3,7 +3,6 @@ from django.conf import settings
 from django.template import RequestContext
 
 from contacts_and_people.models import Entity, default_entity
-from links.link_functions import object_links
 
 from models import VacanciesPlugin, Vacancy, Studentship 
 from cms_plugins import CMSVacanciesPlugin
@@ -46,8 +45,10 @@ def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", Non
         "title": title,
         "meta": meta,
         "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
+        "main_page_body_file": instance.main_page_body_file, 
+        "intro_page_placeholder": entity.vacancies_page_intro,
+        'everything': instance,
+        }
         )
 
     return render_to_response(
@@ -168,7 +169,6 @@ def all_current_studentships(request, slug=getattr(default_entity, "slug", None)
         )
 
 def vacancy_and_studentship(item):
-    item.links = object_links(item) # not needed if using get_links templatetag
     entity = item.hosted_by or default_entity
     item.link_to_vacancies_and_studentships_page = entity.get_related_info_page_url("vacancies-and-studentships")
     item.template = entity.get_template()

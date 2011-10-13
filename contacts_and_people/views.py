@@ -47,7 +47,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
             "email": entity.email,
             "title": title,
             "meta": meta,
-            "location": entity.precise_location,
+            "location": entity.precise_location, 
+            "intro_page_placeholder": entity.contacts_page_intro,
 
             "people": people,
             "people_list_heading": people_list_heading,
@@ -181,35 +182,53 @@ def place(request, slug, active_tab=""):
     place = Building.objects.get(slug=slug)
     places_dict = { # information for each kind of place page
         "about": {
+            "tab": "about",
             "title": "About",
             "address": "",
             "meta_description_content": place.summary,
         },
         "directions": {
+            "tab": "directions",
             "title": "Directions etc.",
             "address": "directions",
             "meta_description_content": "How to get to " + place.get_name(),
         },
         "events": {
-            "title": "What's on",
+            "tab": "events",
+            "title": "What's on here",
             "address": "events",
             "meta_description_content": "What's on at " + place.get_name(),
         },
     }
-    # mark the active tab (no active_tab must be "about")
-    places_dict[active_tab or "about"]["active"] = True
+    
+    # mark the active tab, if there is one
+    if active_tab:
+        places_dict[active_tab]["active"] = True
+
+    # add tabs to the list of tabs
     tabs = []
-    if place.events().forthcoming_events:
-        tabs.append(places_dict["events"])  
-    print place.getting_here.cmsplugin_set.all() , place.access_and_parking.cmsplugin_set.all() , place.has_map
+    if place.postcode or place.street or place.description.cmsplugin_set.all():
+        tabs.append(places_dict["about"])          
     if place.getting_here.cmsplugin_set.all() or place.access_and_parking.cmsplugin_set.all() or place.has_map:
         tabs.append(places_dict["directions"])
-    # if we're going to show tabs, put the about tab first
+    if place.events().forthcoming_events:
+        tabs.append(places_dict["events"])  
+    
+    # were there any tabs created?
     if tabs:
-        tabs.insert(0, places_dict["about"])
+        if not active_tab:
+            # find out what to add to the url for this tab
+            active_tab=tabs[0]["address"]
+            # mark the tab as active for the template
+            tabs[0]["active"]=True
+        # fewer than 2? not worth having tabs!
+        if len(tabs)==1:
+            tabs=[]
+
     meta_description_content = places_dict[active_tab or "about"]["meta_description_content"] 
     if active_tab:
         active_tab = "_" + active_tab
+        
     meta = {
         "description": meta_description_content,
         }
@@ -221,7 +240,7 @@ def place(request, slug, active_tab=""):
         page =  entity.get_website()
         request.current_page = page # for the menu, so it knows where we are
         template = page.get_template()
-        
+
     return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
         {

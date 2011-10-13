@@ -1,3 +1,62 @@
+/* ------------------------------------------------------------- 
+   Reset default browser CSS.
+   Based on work by Eric Meyer:
+   http://meyerweb.com/eric/tools/css/reset/index.html  
+-------------------------------------------------------------- */
+/* v1.0 | 20080212 */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body {
+    background:#fff;
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a img { border: none; }
+/* ------------------------------------------------------------- 
+   End Reset CSS  
+-------------------------------------------------------------- */
+
 /* Within each row, columns are floated (all floated left, except for the last one which is floated right. We need the row to expand downwards to the bottom of the columns it contains, and it won't do this automatically because the columns are floated. So, this is a technique to insert some invisible content after the elements, and which pull down the bottom of the row. */
 
 .row:after, .expands:after, ul.plugin-list li:after	{
@@ -142,7 +201,7 @@ a img {border: none;}
 
 span.image {display: block; clear: both;}
 span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
-span.image_caption {font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+span.image_caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
 
 /* styles available to the presentation editor */
 

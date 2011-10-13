@@ -12,6 +12,8 @@ from widgetry import fk_lookup
 from contacts_and_people.models import Entity, Person, default_entity_id
 
 from links.models import ExternalLink
+from links.link_functions import object_links
+
 
 class AutocompleteMixin(object):
     class Media:
@@ -42,6 +44,11 @@ class SupplyRequestMixin(object):
         return form_class
 
         
+class UniversalPluginModelManagerMixin(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class UniversalPluginModelMixin(models.Model):
     class Meta:
         abstract = True
@@ -81,6 +88,22 @@ class UniversalPluginModelMixin(models.Model):
             return "important"
         else:
             return ""
+
+    @property
+    def links(self):
+        return object_links(self)
+
+    @property
+    def external_url(self):
+        # if the inheriting model doesn't have an external_url attribute, we'll give it a None one just in case this is needed
+        return None
+    
+    @property
+    def is_uninformative(self):
+        if self.external_url or self.body.cmsplugin_set.all() or self.please_contact.all() or self.links:
+            return False
+        else:
+            return True
 
 
 class URLModelMixin(models.Model):

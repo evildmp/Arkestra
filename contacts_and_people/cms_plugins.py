@@ -107,7 +107,6 @@ class EntityMembersPluginPublisher(AutocompleteMixin, CMSPluginBase):
             entity = instance.entity
         else:
             entity = work_out_entity(context, None)
-        print "ok so far"
 
         entities = entity.get_descendants(include_self = True)
         

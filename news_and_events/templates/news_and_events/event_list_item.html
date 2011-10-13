@@ -1,25 +1,55 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
 {% block item_title %}
-	{% if item.show_parent_series %}
-		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a>
-	{% endif %}
+
+	{% if "series" in item.show_parent_series %}
+		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a><br />
 	
-	{% if item.external_url %}
-		<a class="external {% if not item.show_parent_series %}title{% endif %}" href="{{ item.external_url.url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+		{% if "children" in item.show_parent_series %}
+				
+	        {% if "details" in everything.format and item.is_uninformative %}
+	            <span class="{{ class }}">{{ item.short_title }}</span>
+
+	        {% else %}
+
+	    		{% if item.external_url %}
+
+	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+
+    		   {% else %}
+	    			<a class = "{{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+	    		{% endif %}
+
+	    	{% endif %}
+	    {% endif %}
+
 	{% else %}
-		{% if item.show_parent_series %}
-			{% ifequal item.get_absolute_url item.parent.get_absolute_url %}
-				{{ item.get_short_title }}
+	
+		{% with class="title" %}
+	
+	   		{% if item.external_url %}
+
+	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+
 			{% else %}
-				<a {% href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
-			{% endifequal %}			
-		{% else %}
-			<a {% class="title" href="{{ item.get_absolute_url }}">{{item.get_short_title}}</a>
-		{% endif %}
-	{% endif %}
+			
+				{% if item.parent.series or not "details" in everything.format or not item.is_uninformative %}
+				
+		   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
+
+				{% else %}
+				
+		            <span class="{{ class }}">{{ item.short_title }}</span>
+
+				{% endif %}
+				
+	   		{% endif %}
+
+		{% endwith %}
+   	{% endif %}
+	
 {% endblock item_title %}
 
 {% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
 
 {% block item_details %}
-{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div class = "date"><a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
+{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div>Venue: <span class = "date"><a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}

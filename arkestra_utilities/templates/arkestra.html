@@ -23,15 +23,14 @@
 {% endblock favicon %}
 
 {% block styles %}
-  <style media="screen" type="text/css"><!--
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_lists.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_layout.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_navigation.css");
-    @import url("{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css");
-    @import url("{{ STATIC_URL }}arkestra/css/temporaryhacks.css");
-    @import url("{{ STATIC_URL }}arkestra/css/carousel.css");
-		--></style>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_lists.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_layout.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_navigation.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
+ 
   <!--[if IE]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
   <!--[if IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
   <!--[if IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -39,20 +38,9 @@
 
     {% block extrastyles %}
     {% endblock extrastyles %}
-  
-	{% comment %} if you inherit arkestra.html, add an empty:
-	
-	 	{% block arkestra_default_styles %}{% endblock arkestra_default_styles %} 
-	
-	to your template to avoid importing and having to overwrite the default 
-	styles in arkestra_default.css that are provided to get you started.
-	
-	{% endcomment %}
-	
-    {% block arkestra_default_styles %}
-		<style media="screen" type="text/css"><!--@import url("{{ STATIC_URL }}arkestra/css/arkestra_default.css"); --></style>
-	{% endblock arkestra_default_styles %}
-
+  	
+    {% block site_styles %}
+	{% endblock site_styles %}
 
 {% endblock styles %}
 
@@ -63,31 +51,32 @@
 
 <body {% block body_attributes %}{% endblock body_attributes %}>
     {% cms_toolbar %}
-	{% block body_content %}
-        {% with placeholder_width=960 main_item_width=523 sidebar_image_size="294x196" contacts_image_size="445x384" %}
-    		<div id="outer-wrapper">
-    			<div id="inner-wrapper">
-    				{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
+    {% with placeholder_width=960 main_item_width=523 sidebar_image_size="294x196" contacts_image_size="445x384" %}
+    	{% block body_content %}
+        		<div id="outer-wrapper">
+        			<div id="inner-wrapper">
+        				{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
 				
-    				{% block pagetitle %}
-    					{% if not current_page.flags.no_page_title %}
-    			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
-    					{% endif %}
-    				{% endblock pagetitle %}
+        				{% block pagetitle %}
+        					{% if not current_page.flags.no_page_title %}
+        			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
+        					{% endif %}
+        				{% endblock pagetitle %}
 		
-    				{% block main_page_body %}
-                        {% filter typogrify %}
-    						{% insert "newsflash" %}
-    				   		{% placeholder body %}
-    					{% endfilter %}
-    			  	{% endblock main_page_body %}
+        				{% block main_page_body %}
+                            {% filter typogrify %}
+        						{% insert "newsflash" %}
+        				   		{% placeholder body %}
+        					{% endfilter %}
+        			  	{% endblock main_page_body %}
    
-    			</div>
-    			{% insert "footer" %}
-    		</div>		
-        {% endwith %}
-	{% endblock body_content %}
-
+        			</div>
+					{% block footer %}
+						{% insert "footer" %}
+					{% endblock footer %}
+        		</div>		
+    	{% endblock body_content %}
+    {% endwith %}
 {% render_block "js" %}
 </body>
 </html>

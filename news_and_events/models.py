@@ -54,9 +54,7 @@ class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
             return self.get_entity().get_website()
         else:
             return None
-    
-
-
+        
 
 class NewsArticle(NewsAndEvents):
     date = models.DateTimeField(default=datetime.now,
@@ -100,21 +98,31 @@ class Event(NewsAndEvents):
         (True, u"a series of events"),
     )
     series = models.BooleanField("This is", default=False, choices=SERIES)
-    DO_NOT_LINK_TO_CHILDREN = (
-        (False, u"have their own pages"),
-        (True, u"are displayed within this item"),
+    # DO_NOT_LINK_TO_CHILDREN = (
+    #     (False, u"have their own pages"),
+    #     (True, u"are displayed within this item"),
+    # )
+    # do_not_link_to_children = models.BooleanField(u"Child events",
+    #     default=False,
+    #     choices=DO_NOT_LINK_TO_CHILDREN,
+    #     )
+    # DISPLAY_SERIES_NAME = (
+    #     (False, u"display children's names only"),
+    #     (True, u"also display series name"),
+    # )
+    # display_series_name = models.BooleanField(u"In lists",
+    #     default=False,
+    #     choices=DISPLAY_SERIES_NAME,
+    #     )
+    SHOW_TITLES = (
+        ("series children", u"show title of series followed by title of children"),
+        ("series", u"show title of series only"),
+        ("children", u"show title of children only"),
     )
-    do_not_link_to_children = models.BooleanField(u"Child events",
-        default=False,
-        choices=DO_NOT_LINK_TO_CHILDREN,
-        )
-    DISPLAY_SERIES_NAME = (
-        (False, u"display children's names only"),
-        (True, u"also display series name"),
-    )
-    display_series_name = models.BooleanField(u"In lists",
-        default=False,
-        choices=DISPLAY_SERIES_NAME,
+    show_titles = models.CharField(u"In lists",
+        max_length = 25,
+        default="children",
+        choices=SHOW_TITLES,
         )
     DISPLAY_SERIES_SUMMARY = (
         (False, u"display children's summaries"),
@@ -151,34 +159,49 @@ class Event(NewsAndEvents):
         ordering = ['type', 'start_date', 'start_time']
     
     def get_absolute_url(self):
-        # should we link to the parent?
         if self.external_url:
             return self.external_url.url
-        elif self.parent and self.parent.do_not_link_to_children:
-            return self.parent.get_absolute_url()
         else:
             return "/event/%s/" % self.slug
+
+    @property
+    def informative_url(self):
+        """ 
+        An event has an 'informative_url' if it itself is uninformative, but it is a child of a series
+        """
+        print self, "checking"
+        if self.is_uninformative and self.parent and self.parent.series:
+            print self, "parent!"
+            return self.parent.get_absolute_url()
+        else:
+            print self, "self!"
+            return self.get_absolute_url()
   
     @property
     def show_parent_series(self):
         """
         checks whether we should show the parent series too in lists
         """
-        if self.parent and self.parent.series and self.parent.display_series_name:
-            return True
+        if self.parent and self.parent.series:
+            return self.parent.show_titles
 
     @property
-    def has_page(self):
-        """
-        checks if this Event deserves its own page
-        """
-        if self.parent:
-            if self.parent.do_not_link_to_children:
-                return self.parent.get_absolute_url()
-            else:
-                return self.get_absolute_url()
+    def is_uninformative(self):
+        print "+++"
+        print 1, "checking is_uninformativeness"
+        print 2, type(self.body)
+        print 3, type(self.body.cmsplugin_set.all())
+        print 4, self.external_url
+        print 5, self.please_contact.all()
+        print 6, self.registration_enquiries.all()
+        print 7, self.links
+        print "---"
+        if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
+            print "uninformative"
+            return False
         else:
-            return self.get_absolute_url()
+            return "informative"
+            return True
         
     def save(self):
         def slug_is_bad(self):

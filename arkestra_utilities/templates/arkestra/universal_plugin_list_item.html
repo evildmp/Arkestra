@@ -4,11 +4,15 @@
 <li class = "{{ item.column_class }} {{ item.get_importance}}">
 
     {% block item_title %}
-		{% if item.external_url %}
-			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
-		   {% else %}
-			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-		{% endif %}
+        {% if "details" in everything.format and item.is_uninformative %}
+            <span class="title">{{ item.short_title }}</span>
+        {% else %}
+    		{% if item.external_url %}
+    			<a class = "external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+    		   {% else %}
+    			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+    		{% endif %}
+    	{% endif %}
 	{% endblock item_title %}
 
 	{% block item_image %}
@@ -17,11 +21,11 @@
 		{% endif %}
 	{% endblock item_image %}
 	
-    {% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst }}</div>{% endblock item_date %}
 
     {% block item_details %}
 		{% if "details" in everything.format %}
-		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30 }}</div>{% endif %}
+            {% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst }}</div>{% endblock item_date %}
+    		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30 }}</div>{% endif %}
 		{% endif %}
 	{% endblock item_details %}
 	
