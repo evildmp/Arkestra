@@ -161,6 +161,7 @@ CMS_TEMPLATES = (
     # ('basic.html', gettext('Basic')),
     ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
+    ('no_menu.html', gettext('No menu')),
 )
 
 CMS_PAGE_FLAGS = (
@@ -200,7 +201,6 @@ LANGUAGES = (
 ('en', gettext('English')),
 ('cy', gettext('Cymraeg')),
 )
-
 
 INSTALLED_APPS = (
 
