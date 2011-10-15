@@ -26,7 +26,7 @@ class VideoVersionAdmin(admin.ModelAdmin):
 class MyVideoAdmin(VideoAdmin):
     inlines = (VideoVersionInline,)
 
-class ArkestraVideoAdmin(VideoAdmin):
+class ArkestraVideoAdmin(admin.ModelAdmin):
     inlines = (VideoVersionInline,)
 
 
