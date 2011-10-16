@@ -61,6 +61,10 @@ PLUGIN_HEADING_LEVELS = (
     (4, u"Heading 4"),
     (5, u"Heading 5"),
     )
+                                    
+# The video processing system
+
+USE_CELERY_FOR_VIDEO_ENCODING = False
 
 # -------- Django CMS ----------------------
 

@@ -16,6 +16,9 @@ ARKESTRA_BASE_ENTITY = 1
 
 MULTIPLE_ENTITY_MODE = True
 
+USE_CELERY_FOR_VIDEO_ENCODING = True
+                                  
+
 # ------------------------ Semantic editor
 
 import os

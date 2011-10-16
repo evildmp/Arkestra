@@ -92,13 +92,7 @@ class VideoVersion(models.Model):
 
     def encode(self):
         # we're going to create an encoded version of our video
-        
-        # this is always called by multiprocessing.Process - so:
-        # close the database connection, because otherwise the database will hate us 
-        from django.db import connection    
-        connection.close()
-        # now we've been asked to create a version
-        # let's find out from the dictionaries what 
+        # let's find out from the dictionaries what's required
         codec_profile = VERSIONS[self.codec][self.size]
         codec_code = CODECS[self.codec]["code"]
         encoder = codec_profile["encoder"]

@@ -3,6 +3,7 @@ import os, models, bisect
 from threading import Thread
 
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
@@ -11,6 +12,7 @@ from arkestra_utilities.output_libraries.plugin_widths import *
 
 from models import FilerVideoEditor, VideoVersion, CODECS, VERSIONS, SIZES, PLAYERS
 
+from tasks import encodevideo
 
 class FilerVideoPluginPublisher(CMSPluginBase):
     model = FilerVideoEditor
@@ -71,11 +73,6 @@ class FilerVideoPluginPublisher(CMSPluginBase):
         # create the lists of missing and available items
         instance.missing_versions = []
         instance.available_versions = []
-
-        # # get the video's status dictionary
-        # version_status = instance.video.get_status()
-        # print
-        # print ">>> checking status of the video"
         
         for codec, codec_dictionary in CODECS.items():
             print "    checking...", codec, size
@@ -113,9 +110,12 @@ class FilerVideoPluginPublisher(CMSPluginBase):
                         print "        videofilepath:", videofilepath
                         print "        codec:", version.codec
 
-                        thread = Thread(target=version.encode, name=videofilepath)
-                        print "        launching thread"
-                        thread.start()
+                        if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+                            encodevideo.delay(source = instance.video, size = size, codec = codec)
+                        else:
+                            thread = Thread(target=version.encode, name=videofilepath)
+                            print "        launching thread"
+                            thread.start()
         
             # if the file doesn't exist
             else:
@@ -123,9 +123,12 @@ class FilerVideoPluginPublisher(CMSPluginBase):
                 print "        videofilepath:", videofilepath
                 print "        codec:", version.codec
 
-                thread = Thread(target=version.encode, name=videofilepath)
-                print "        launching thread"
-                thread.start()
+                if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+                    encodevideo.delay(source = instance.video, size = size, codec = codec)
+                else:
+                    thread = Thread(target=version.encode, name=videofilepath)
+                    print "        launching thread"
+                    thread.start()
 
         # now we need to list the versions available to the different players (HTML5 and Flash so far, but we could have others if we wanted). The same version (H.264) is currently used for both HTML5 and Flash
         instance.html5_formats = []

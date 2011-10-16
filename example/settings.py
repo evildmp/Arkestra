@@ -150,6 +150,18 @@ TEMPLATE_DIRS = (
     BASE_PATH+'/templates/',
 )
 
+# ------------------------ Django Celery
+
+import djcelery
+djcelery.setup_loader()
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+
+
 # ------------------------ Django CMS
 
 gettext = lambda s: s
@@ -226,6 +238,7 @@ INSTALLED_APPS = (
 
     # other applications
     
+    'djcelery',
     'polymorphic',
     'semanticeditor',
     'mptt',
