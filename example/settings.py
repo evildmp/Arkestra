@@ -150,6 +150,14 @@ TEMPLATE_DIRS = (
     BASE_PATH+'/templates/',
 )
 
+# ------------------------ Django Celery
+import djcelery
+djcelery.setup_loader()
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+
 # ------------------------ Django CMS
 
 gettext = lambda s: s
@@ -161,7 +169,7 @@ CMS_TEMPLATES = (
     # ('basic.html', gettext('Basic')),
     ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
-    ('no_menu.html', gettext('No menu')),
+    # ('no_menu.html', gettext('No menu')),
 )
 
 CMS_PAGE_FLAGS = (
@@ -212,6 +220,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
+    'djcelery',
     
     # Arkestra applications
     

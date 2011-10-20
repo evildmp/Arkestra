@@ -79,8 +79,8 @@ class Building(models.Model):
     class Meta:
         ordering = ('site', 'street', 'number', 'name',)
     
-    def natural_key(self):
-        return (self.slug)
+    # def natural_key(self):
+    #     return (self.slug)
 
     def __unicode__(self):
         if self.name:
@@ -264,8 +264,8 @@ class Entity(EntityLite, CommonFields):
         verbose_name_plural = "Entities"
         ordering = ['tree_id', 'lft']
 
-    def natural_key(self):
-        return (self.slug)
+    # def natural_key(self):
+    #     return (self.slug)
 
     def __unicode__(self):
         return self.name
@@ -521,8 +521,8 @@ class Person(PersonLite, CommonFields):
     staff_id = models.CharField(null=True, blank=True, max_length=20)
     data_feed_locked = models.BooleanField(default=False)
     
-    def natural_key(self):
-        return (self.slug)
+    # def natural_key(self):
+    #     return (self.slug)
 
     class Meta:
         ordering = ['surname', 'given_name', 'user',]
