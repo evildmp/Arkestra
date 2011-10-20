@@ -8,7 +8,7 @@ Welcome to Arkestra's documentation!
 
 Arkestra is an intelligent, semantic web content management system for organisations and institutions.
 
-Arkestra builds on `Django CMS <https://www.django-cms.org/>` with modules that handle contacts & people, news & events, 
+Arkestra builds on `Django CMS <https://www.django-cms.org/>`_ with modules that handle contacts & people, news & events, 
 automatic image publishing and management, maps and more. At the same time it uses a completely standard version of 
 Django CMS, and can easily be added to an existing Django CMS installation.
 
