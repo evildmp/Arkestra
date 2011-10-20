@@ -260,16 +260,17 @@ class EntityForm(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False)
             
     def clean(self):
-        try:
-            # does an instance exist in the database with the same website?
-            entity = models.Entity.objects.get(website=self.cleaned_data["website"]) 
-        except:
-            # nothing matched, so we can safely go ahead with this one
-            pass
-        else:
-            # one existed already - if it's this one that's OK
-            if not self.instance.pk == entity.pk:
-                raise forms.ValidationError('Another entity (%s) already has the same home page (%s).' % (entity, self.cleaned_data["website"]))    
+        if self.cleaned_data["website"]:
+            try:
+                # does an instance exist in the database with the same website?
+                entity = models.Entity.objects.get(website=self.cleaned_data["website"]) 
+            except:
+                # nothing matched, so we can safely go ahead with this one
+                pass
+            else:
+                # one existed already - if it's this one that's OK
+                if not self.instance.pk == entity.pk:
+                    raise forms.ValidationError('Another entity (%s) already has the same home page (%s).' % (entity, self.cleaned_data["website"]))    
         
         
         # check ExternalLink-related issues
