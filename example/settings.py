@@ -173,7 +173,7 @@ CMS_TEMPLATES = (
     # ('basic.html', gettext('Basic')),
     ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
-    ('no_menu.html', gettext('No menu')),
+    # ('no_menu.html', gettext('No menu')),
 )
 
 CMS_PAGE_FLAGS = (
@@ -224,6 +224,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
+    'djcelery',
     
     # Arkestra applications
     
@@ -238,7 +239,6 @@ INSTALLED_APPS = (
 
     # other applications
     
-    'djcelery',
     'polymorphic',
     'semanticeditor',
     'mptt',
