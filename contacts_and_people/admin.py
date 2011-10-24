@@ -162,7 +162,6 @@ class PersonForm(forms.ModelForm):
     def clean(self):
 
         # set the title
-        print self.cleaned_data
         title = self.cleaned_data["title"] or ""
         link_title = " ".join(name_part for name_part in [str(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
 
@@ -176,6 +175,14 @@ class PersonForm(forms.ModelForm):
 
         return self.cleaned_data
 
+def create_action(entity):
+    def action(modeladmin,request,queryset):
+        for person in queryset:
+            m = models.Membership(person=person,entity=entity,role="Member") 
+            m.save()
+    name="entity_%s" % (entity,)
+    return (name, (action, name,"Add selected Person to %s as 'Member'" % (entity,)))
+
 
 class PersonAdmin(PersonAndEntityAdmin):
     search_fields = ['given_name','surname','institutional_username',]
@@ -183,6 +190,7 @@ class PersonAdmin(PersonAndEntityAdmin):
     
     # if HAS_PUBLICATIONS:
     #         inlines.append(ResearcherInline)
+    
     
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
@@ -212,6 +220,9 @@ class PersonAdmin(PersonAndEntityAdmin):
     ]
 
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
+
+    def get_actions(self,request):
+        return dict(create_action(e) for e in models.Entity.objects.all())
 
 
 class TitleAdmin(admin.ModelAdmin):
