@@ -1,40 +1,22 @@
 {% load i18n filermedia %}
-{% if object.formats.HTML5 %}<video width="{{ object.width }}" controls>
-	{% for codec in object.formats.HTML5 %}
-	{% autoescape off %}<source src="{{codec.url}}" />{% endautoescape %}
-	{% endfor %}
-	{% if object.formats.FLASH %}<object width="{{object.width}}" height="{{object.height}}" type="application/x-shockwave-flash" data="{% filer_staticmedia_prefix %}flash/player.swf">
-		<param name="movie" value="{% filer_staticmedia_prefix %}flash/player.swf" />
-		{% for codec in object.formats.FLASH %}
-        	<param name="flashvars" value="controlbar=over&amp;file={{codec.url}}" />
-    	{% endfor %}{% endif %}
-	</object>{% endif %}
+{% if not video.unready_versions %}
+    <video width="{{ video.width }}" controls>
+    	{% for codec in video.formats.HTML5 %}}<source src="{{ codec.url}}" />{% endfor %}
+    	{% if video.formats.FLASH %}
+    	    <object width="{{video.width}}" type="application/x-shockwave-flash" data="{% filer_staticmedia_prefix %}flash/player.swf">
+        		<param name="movie" value="{% filer_staticmedia_prefix %}flash/player.swf" />
+        		{% for codec in video.formats.FLASH %}
+                	<param name="flashvars" value="controlbar=over&amp;file={{codec.url}}" />
+            	{% endfor %}
+            </object>
+        {% endif %}
+    </video>
 
-{% if object.formats.HTML5 %}</video>{% endif %}
-{% if object.missing_versions %}
-	{% if not object.available_versions %}
-		<div style="border: 1px solid black; width: {{object.width}}px; height:{{object.height}}px;">
-			<div style="text-align: center; padding: 15%">
-				<p>The files for this video are being encoded and are not yet ready.</p>
-				<p><strong>Please wait a few moments, then reload this page.</strong></p>
-			</div>
+{% else %}
+	<div style="border: 1px solid black; border-radius: 5px; width: {{video.width}}px; height:{{video.height}}px;">
+		<div style="text-align: center; padding: 15%">
+			<p>This video is not yet ready.</p>
+			<p>Please try again in a few moments.</p>
 		</div>
-	{% else %}
-		<p><strong>Having problems playing this video?</strong></p>
-		<p>Some of the files are still being encoded.</p>
-		<p>Please <strong>wait a few moments and reload this page</strong>
-		{% if object.all_formats %}
-			, or try one of the following files:
-		{% else%}
-			.</p>
-		{% endif %}
-	{% endif %}
-{% endif %}
-	<p>Video available as:</p>
-{% if object.all_formats %}
-	<ul>
-		{% for codec in object.all_formats %}
-    		<li><a href="{{codec.url}}">{{ codec.description }}</a></li>
-		{% endfor %}
-	</ul>
+	</div>
 {% endif %}

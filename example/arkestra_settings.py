@@ -16,7 +16,12 @@ ARKESTRA_BASE_ENTITY = 1
 
 MULTIPLE_ENTITY_MODE = True
 
-USE_CELERY_FOR_VIDEO_ENCODING = True
+
+# how will video be encoded? by a thread? well, that's OK just for proof of concept
+# but not really viable for anything else. We can use celery instead - but you have 
+# to set it up - see the Django Celery section in settings
+
+USE_CELERY_FOR_VIDEO_ENCODING = False
                                   
 
 # ------------------------ Semantic editor

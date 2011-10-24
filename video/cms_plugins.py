@@ -55,7 +55,6 @@ class FilerVideoPluginPublisher(CMSPluginBase):
         # shave off 5 point if the image is floated, to make room for a margin
         # see arkestra.css, span.image.left and span.image.right
         if instance.float:
-            print "-5 for float"
             width = width - 5   
         
         if instance.use_description_as_caption:
@@ -63,7 +62,6 @@ class FilerVideoPluginPublisher(CMSPluginBase):
         
         # given the width we want to show the video at, we have to find the most suitable (i.e. closest larger) video file version we have created
         index = bisect.bisect_left(SIZES,width)
-        print "sizes", SIZES, width, index
         if index < len(SIZES): # not larger than the largest preset size?
             size = SIZES[index] # get the exact or closest larger size
         else:
@@ -71,82 +69,65 @@ class FilerVideoPluginPublisher(CMSPluginBase):
             size = SIZES[-1]
 
         # create the lists of missing and available items
-        instance.missing_versions = []
-        instance.available_versions = []
+        instance.ready_versions = []
+        instance.unready_versions = []
         
         for codec, codec_dictionary in CODECS.items():
-            print "    checking...", codec, size
             version, created = VideoVersion.objects.get_or_create(source = instance.video, size = size, codec = codec)
-            print version, version.status
 
-            # get the version's codec_and_size identifier
+            # get the version's codec_and_size identifier string
             codec_and_size = version.codec_and_size()
-            
-            print codec_and_size
-            
+                        
             # get the file path for the version
             videofilepath = version.outputpath()
-            print "        Status:", version.status
-            print "        Filepath:", videofilepath
         
             # does the file exist?
             if os.path.exists(videofilepath):
-                print "        the file exists"
                 # if it does, check that the status dictionary agrees
-
                 if version.status == "ready":
-                    print "        the file is there and marked as present"
+
                     # and add the version to available_versions
-                    instance.available_versions.append(codec)
+                    instance.ready_versions.append(codec)
                 else:
-                    # # what if the status dictionary doesn't say that the file is ready?
-                    instance.missing_versions.append(codec)
-                    # if status check says it's encoding, leave it alone
-                    if version.status == "encoding":
-                        print "        but it must be still encoding"
-                    else:
-                        # if it's not "ready" and not "encoding", it must be "missing" or "failed"- so let's try to encode it
-                        print "        but it's not marked as ready or encoding, so we'd better re-create it"
-                        print "        videofilepath:", videofilepath
-                        print "        codec:", version.codec
+                    # what if the status dictionary doesn't say that the file is ready?
+                    instance.unready_versions.append(codec)
+
+                    # unless status check says it's encoding, it must be "missing" or "failed"- so let's try to encode it
+                    if version.status != "encoding":
 
                         if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
                             encodevideo.delay(source = instance.video, size = size, codec = codec)
-                        else:
                             thread = Thread(target=version.encode, name=videofilepath)
-                            print "        launching thread"
                             thread.start()
         
             # if the file doesn't exist
             else:
-                print "        the file doesn't exist, so we need to create the missing version"
-                print "        videofilepath:", videofilepath
-                print "        codec:", version.codec
+                version.status = "missing"
+                instance.unready_versions.append(codec)
 
                 if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
                     encodevideo.delay(source = instance.video, size = size, codec = codec)
                 else:
                     thread = Thread(target=version.encode, name=videofilepath)
-                    print "        launching thread"
                     thread.start()
 
-        # now we need to list the versions available to the different players (HTML5 and Flash so far, but we could have others if we wanted). The same version (H.264) is currently used for both HTML5 and Flash
+        # now we need to list the formats available to the different players (HTML5 and Flash so far, 
+        # but we could have others if we wanted). The same format (H.264) is currently used for both 
+        # HTML5 and Flash
+        
         instance.html5_formats = []
         instance.flash_formats = []
         # all_formats is a list of versions without any duplications
         instance.all_formats = []
-        instance.available_versions = set(instance.available_versions)
+        instance.ready_versions = set(instance.ready_versions)
         
-        # let's assemble the list of versions available for HTML5
+        # let's assemble the list of versions available for the HTML5 player
+        # instance.formats is a dict of players, containing the appropriate codec dicts from ready_versions
         instance.formats = {}
-        print "available versions", instance.available_versions
         for player, player_codecs in PLAYERS.items():
-            print "player", player, "player_codecs", player_codecs
             instance.formats[player] = []
             for codec in player_codecs:
-                print "codec is", codec
-                if codec in instance.available_versions:
-                    print "adding", codec
+                if codec in instance.ready_versions:
                     # add all the information we'll need about this version to a dictionary
                     description = {"url": VideoVersion.objects.get(source = instance.video, codec = codec, size = size).url(), "type": VERSIONS[codec][size]["type"], "description": CODECS[codec]["description"], "implications": CODECS[codec]["implications"],}
                     instance.formats[player].append(description)
@@ -154,16 +135,15 @@ class FilerVideoPluginPublisher(CMSPluginBase):
                         instance.all_formats.append(description)
         
         instance.width = int(width)
-        instance.height = int(width/1.5)
+        instance.size = size
         context.update({
-            'object':instance,
+            'video':instance,
             #'link':instance.link, 
             #'image_url':instance.scaled_image_url,
             'width': int(width),
             'caption_width': int(width),
             'placeholder':placeholder,
         })
-        print "returning from video plugin render"
         return context
 
 plugin_pool.register_plugin(FilerVideoPluginPublisher)

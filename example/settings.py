@@ -60,13 +60,11 @@ BASE_PATH = os.path.normpath(os.path.dirname(__file__))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = BASE_PATH+'/media'
-# MEDIA_ROOT = "/mnt/sshfs/v029_dev_media/media"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = 'media/'
-# MEDIA_URL = 'http://v029.medcn.uwcm.ac.uk/media/'
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -154,14 +152,15 @@ TEMPLATE_DIRS = (
 
 # ------------------------ Django Celery
 
-import djcelery
-djcelery.setup_loader()
+if USE_CELERY_FOR_VIDEO_ENCODING:
+    import djcelery
+    djcelery.setup_loader()
 
-BROKER_HOST = "localhost"
-BROKER_PORT = 5672
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/"
+    BROKER_HOST = "localhost"
+    BROKER_PORT = 5672
+    BROKER_USER = "guest"
+    BROKER_PASSWORD = "guest"
+    BROKER_VHOST = "/"
 
 
 # ------------------------ Django CMS
@@ -173,7 +172,7 @@ CMS_MEDIA_URL = STATIC_URL + 'cms/'
 
 CMS_TEMPLATES = (
     # ('basic.html', gettext('Basic')),
-    ('arkestra.html', gettext('Arkestra')),
+    # ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
     # ('no_menu.html', gettext('No menu')),
 )
@@ -199,7 +198,6 @@ CMS_PLACEHOLDER_CONF = {
             'EntityDirectoryPluginPublisher', 
             'CarouselPluginPublisher',
             'FocusOnPluginPublisher',
-            # 'VideoPluginPublisher',
             'FilerVideoPluginPublisher',
             ),
         "extra_context": {            
@@ -226,7 +224,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
-    'djcelery',
+    # 'djcelery',
     
     # Arkestra applications
     
