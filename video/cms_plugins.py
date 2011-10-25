@@ -23,6 +23,9 @@ class VideoPluginPublisher(CMSPluginBase):
     admin_preview = False
     raw_id_fields = ('video',)
             
+    def icon_src(self, instance):
+        return "/static/plugin_icons/video.png"
+
     def render(self, context, instance, placeholder):
         """
         Arkestra can calculate the exact pixel width of any column in any placeholder; however, this isn't available to all applications that might use the filer.
