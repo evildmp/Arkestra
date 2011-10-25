@@ -12,7 +12,8 @@ from arkestra_utilities.output_libraries.plugin_widths import *
 
 from models import FilerVideoEditor, VideoVersion, CODECS, VERSIONS, SIZES, PLAYERS
 
-from tasks import encodevideo
+if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+    from tasks import encodevideo
 
 class FilerVideoPluginPublisher(CMSPluginBase):
     model = FilerVideoEditor

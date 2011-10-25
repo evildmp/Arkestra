@@ -171,10 +171,7 @@ gettext = lambda s: s
 CMS_MEDIA_URL = STATIC_URL + 'cms/'
 
 CMS_TEMPLATES = (
-    # ('basic.html', gettext('Basic')),
-    # ('arkestra.html', gettext('Arkestra')),
     ('institute.html', gettext('Institute of Mediaeval Medicine')),
-    # ('no_menu.html', gettext('No menu')),
 )
 
 CMS_PAGE_FLAGS = (
@@ -224,7 +221,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
-    # 'djcelery',
+    # 'djcelery',     # will need to be enabled for celery processing
     
     # Arkestra applications
     
@@ -233,7 +230,7 @@ INSTALLED_APPS = (
     'news_and_events',
     'links',
     'arkestra_utilities',
-    'arkestra_utilities.widgets.combobox', # so that static-files picks it up
+    'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
     'video',
 
