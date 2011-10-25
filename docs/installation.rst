@@ -90,7 +90,7 @@ Download components from source
 
 * `hg clone https://bitbucket.org/spookylukey/semanticeditor`
 * `git clone git://github.com/evildmp/django-widgetry.git`
-* `git clone git://github.com/stefanfoulis/django-filer.git`
+* `git clone -b video git://github.com/evildmp/django-filer.git`
 * `git clone git://github.com/evildmp/Arkestra.git`
 
 Put them on your PYTHONPATH
