@@ -43,7 +43,6 @@ class FilerVideoEditor(CMSPlugin):
         ('', u"Video's native width - on your head be it"),
     )
     width = models.FloatField(null=True, blank=True, choices = VIDEO_WIDTHS, default = 1000.0)
-    wait = models.BooleanField(default=False) # not implemented yet - will make the plugin wait until all the video files are OK and present before rendering anything
 
 #   end of cardiff amendments
     use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
