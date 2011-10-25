@@ -10,13 +10,13 @@ from cms.plugin_base import CMSPluginBase
 
 from arkestra_utilities.output_libraries.plugin_widths import *
 
-from models import FilerVideoEditor, VideoVersion, CODECS, VERSIONS, SIZES, PLAYERS
+from models import VideoPluginEditor, VideoVersion, CODECS, VERSIONS, SIZES, PLAYERS
 
 if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
     from tasks import encodevideo
 
-class FilerVideoPluginPublisher(CMSPluginBase):
-    model = FilerVideoEditor
+class VideoPluginPublisher(CMSPluginBase):
+    model = VideoPluginEditor
     name = _("Video")
     render_template = "video/video.html"
     text_enabled = True
@@ -147,4 +147,4 @@ class FilerVideoPluginPublisher(CMSPluginBase):
         })
         return context
 
-plugin_pool.register_plugin(FilerVideoPluginPublisher)
+plugin_pool.register_plugin(VideoPluginPublisher)

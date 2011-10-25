@@ -21,7 +21,7 @@ class ArkestraVideo(Video):
         verbose_name = "Video"
         
 
-class FilerVideoEditor(CMSPlugin):
+class VideoPluginEditor(CMSPlugin):
     LEFT = "left"
     RIGHT = "right"
     FLOAT_CHOICES = ((LEFT, _("left")),

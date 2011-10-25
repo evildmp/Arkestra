@@ -195,7 +195,7 @@ CMS_PLACEHOLDER_CONF = {
             'EntityDirectoryPluginPublisher', 
             'CarouselPluginPublisher',
             'FocusOnPluginPublisher',
-            'FilerVideoPluginPublisher',
+            'VideoPluginPublisher',
             ),
         "extra_context": {            
             "width":"880",
@@ -243,7 +243,7 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',    
     'widgetry',
-#    'south',
+   # 'south',
 
     # core Django applications
 
