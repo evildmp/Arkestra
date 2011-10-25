@@ -24,7 +24,7 @@ from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin, fieldsets
+from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
@@ -130,11 +130,9 @@ class TeacherInline(admin.StackedInline):
     model = models.Teacher
 """
 
-class PersonForm(forms.ModelForm):
+class PersonForm(InputURLMixin):
     class Meta:
         model = models.Person
-
-    input_url = forms.CharField(max_length=255, required = False)
 
     def __init__(self, *args, **kwargs):
         # disable the user combo if a user aleady has been assigned
@@ -216,7 +214,7 @@ class PersonAdmin(PersonAndEntityAdmin):
                 }),
         ('Entities', {'inlines':(MembershipForPersonInline,)}),
         ('Links', {'inlines': (ObjectLinkInline,),}),
-        ('Advanced settings', {'fieldsets': (fieldsets["url"], advanced_fieldset)}),
+        ('Advanced settings', {'fieldsets': (fieldsets["url"], fieldsets["slug"], advanced_fieldset)}),
     ]
 
     related_search_fields = ('external_url', 'please_contact', 'override_entity', 'user', 'building')
@@ -264,12 +262,10 @@ class EntityLiteAdmin(admin.ModelAdmin):
         
 # ------------------------- Entity admin -------------------------
 
-class EntityForm(forms.ModelForm):
+class EntityForm(InputURLMixin):
     class Meta:
         model = models.Entity
-    
-    input_url = forms.CharField(max_length=255, required = False)
-            
+                
     def clean(self):
         if self.cleaned_data["website"]:
             try:
@@ -316,7 +312,6 @@ class EntityAdmin(PersonAndEntityAdmin):
     website_fieldset = ('', {'fields': ('website',)})
     entity_hierarchy_fieldset = ('Entity hierarchy', {
         'fields': ('parent', 'display_parent', 'abstract_entity'),
-        'classes': ('collapse',)
     })
     building_fieldset = ('', {'fields': ('building',),})
 
@@ -359,7 +354,7 @@ class EntityAdmin(PersonAndEntityAdmin):
         ('News & events', {'fieldsets': news_page_fieldset}),
         ('Vacancies & studentships', {'fieldsets': vacancies_page_fieldset}),
         ('People', {'inlines':(MembershipForEntityInline,)}),
-        ('Advanced settings', {'fieldsets': (fieldsets["url"],) }),
+        ('Advanced settings', {'fieldsets': (fieldsets["url"], fieldsets["slug"],) }),
         ]
 
 

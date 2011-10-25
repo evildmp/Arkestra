@@ -9,14 +9,14 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, fieldsets
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
 
 from models import Vacancy, Studentship
 
-class VacancyStudentshipForm(forms.ModelForm):
+class VacancyStudentshipForm(InputURLMixin):
     # a shared form for vacancies & studentships
     class Meta:
         widgets = {'summary': forms.Textarea(
@@ -97,7 +97,7 @@ class VacancyAdmin(VacancyStudentshipAdmin):
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
             ('Please contact', {'fieldsets': (fieldsets["people"],)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
         ) 
          
 
@@ -124,7 +124,7 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
             ('Supervisors', {'fieldsets': (fieldset_supervision,)}),
             ('Please contact', {'fieldsets': (fieldsets["people"],)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
         ) 
 
     # autocomplete fields

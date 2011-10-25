@@ -4,7 +4,7 @@ from django.conf import settings
 from datetime import datetime
 import operator
 
-from arkestra_utilities.mixins import UniversalPluginModelManagerMixin
+from arkestra_utilities.universal_plugins import UniversalPluginModelManagerMixin
 
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS

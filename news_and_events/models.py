@@ -19,8 +19,8 @@ from contacts_and_people.models import Entity, Person, Building, default_entity_
 from links.models import ExternalLink
 
 from arkestra_utilities.output_libraries.dates import nice_date
-from arkestra_utilities.universal_plugins import UniversalPluginOptions
-from arkestra_utilities.mixins import UniversalPluginModelMixin, URLModelMixin
+from arkestra_utilities.universal_plugins import UniversalPluginModelMixin, UniversalPluginOptions
+from arkestra_utilities.mixins import URLModelMixin
 
 from managers import NewsArticleManager, EventManager
 

@@ -10,22 +10,20 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, fieldsets
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
 
 from models import NewsArticle, NewsSource, Event, EventType
 
-class NewsAndEventsForm(forms.ModelForm):
+class NewsAndEventsForm(InputURLMixin):
     # a shared form for news and events
     class Meta:
         widgets = {'summary': forms.Textarea(
               attrs={'cols':80, 'rows':2,},
             ),  
         }
-
-    input_url = forms.CharField(max_length=255, required = False)
     
     def clean(self):
         # create the short_title automatically if necessary
@@ -111,7 +109,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
             ('Related people', {'fieldsets': (fieldsets["people"],)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
         )
 
 class EventForm(NewsAndEventsForm):
@@ -239,7 +237,7 @@ class EventAdmin(NewsAndEventsAdmin):
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
             ('People', {'fieldsets': (fieldset_featuring, fieldsets["people"], fieldset_registration)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
         )
 
     def changelist_view(self, request, extra_context=None):

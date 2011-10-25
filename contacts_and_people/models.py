@@ -19,6 +19,8 @@ from filer.fields.image import FilerImageField
 # from news_and_events.models import NewsAndEventsPlugin
 # from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
+from arkestra_utilities.mixins import URLModelMixin
+
 from links.models import ExternalLink
 
 import news_and_events
@@ -71,7 +73,7 @@ class Building(models.Model):
     access_and_parking = PlaceholderField('simple', 
         related_name="building_access_and_parking",
         help_text="Where to park, how to get in, etc")
-    map = models.BooleanField("Show map", default=False)
+    map = models.BooleanField("Show map", default=False, help_text = "Use Google Maps to <a target='_blank' style='text-decoration: underline;'  href='http://universimmedia.pagesperso-orange.fr/geo/loc.htm'>look up Latitude & Longitude</a>")
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     zoom = models.IntegerField(blank=True, null=True, default=17)
@@ -181,18 +183,14 @@ class PhoneContact(models.Model):
         return u"%s: %s" % (self.label, self.number)
 
         
-class CommonFields(models.Model):
+class CommonFields(URLModelMixin):
     precise_location = models.CharField(help_text=u"Precise location <em>within</em> the building, for visitors",
         max_length=255, null=True, blank=True)
     access_note = models.CharField(help_text = u"Notes on access/visiting hours/etc",
         max_length=255, null=True, blank=True)
     email = models.EmailField(verbose_name="Email address", null=True, blank=True)
     phone_contacts = generic.GenericRelation(PhoneContact)
-    url = models.URLField(null=True, blank=True, verify_exists=True, 
-        help_text=u"To be used <strong>only</strong> for external items. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True)
     image = FilerImageField(null=True, blank=True)
-    slug = models.SlugField(unique= True, help_text=u"Do not meddle with this unless you know exactly what you're doing!")
     
     class Meta:
         abstract = True

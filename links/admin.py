@@ -77,7 +77,16 @@ def get_or_create_external_link(request, input_url, external_url, title, descrip
         # run checks - doesn't return anything 
         check_urls(request, input_url or external_url.url, ["https", "http"])
 
-    if input_url:
+    if external_url:
+        message = "This is an external item: %s." % external_url.url
+        messages.add_message(request, messages.INFO, message)
+        
+        if input_url:
+            message = "You can't have both External URL and Input URL fields, so I have ignored your Input URL."
+            messages.add_message(request, messages.WARNING, message)
+
+
+    elif input_url:
         # get or create the external_link based on the url
         external_url, created = ExternalLink.objects.get_or_create(url=input_url, defaults = {
             "url": input_url,
@@ -92,9 +101,6 @@ def get_or_create_external_link(request, input_url, external_url, title, descrip
             message = "Using existing External Link: %s." % external_url.url
             messages.add_message(request, messages.INFO, message)
 
-    elif external_url:
-        message = "This is an external item: %s." % external_url.url
-        messages.add_message(request, messages.INFO, message)
 
     return external_url
 
@@ -130,7 +136,7 @@ def check_urls(request, url, allowed_schemes = None):
         try:
             code = url_test.getcode()
         except AttributeError:
-            message = "Warning: I couldn't check your link %s. Please check that it is works." %url
+            message = "Warning: I couldn't check your link %s. Please check that it works." %url
             messages.add_message(request, messages.WARNING, message)            
         else:
             if code == 404:

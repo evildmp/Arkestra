@@ -7,8 +7,8 @@ from cms.models import CMSPlugin
 # from filer.fields.image import FilerImageField
 
 from arkestra_utilities.output_libraries.dates import nice_date
-from arkestra_utilities.universal_plugins import UniversalPluginOptions
-from arkestra_utilities.mixins import UniversalPluginModelMixin, URLModelMixin
+from arkestra_utilities.universal_plugins import UniversalPluginOptions, UniversalPluginModelMixin
+from arkestra_utilities.mixins import URLModelMixin
 from contacts_and_people.models import Entity, Person #, default_entity_id
 
 # from links.models import ExternalLink
