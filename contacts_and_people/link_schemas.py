@@ -55,7 +55,7 @@ class EntityWrapper(LinkWrapper):
         if self.obj.get_website().get_meta_description():
             return self.obj.get_website().get_meta_description()
         else:
-            return self.obj.get_website() + "has no metadata - very bad"
+            return "<span class='errornote'>The page " + str(self.obj.get_website()) + " has no description metadata. <strong>This is very bad.</strong></span>"
 
     def heading(self):
         return "Related pages"
