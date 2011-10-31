@@ -31,14 +31,17 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
         field_name = LINK_TUPLE[2]
         
         entity = work_out_entity(context, None)
-        if entity or instance.entity:
-            link = instance.entity.get_related_info_page_url(kind)
-            if instance.entity and instance.entity != entity:
-                link_title = instance.entity.short_name + ': ' + getattr(instance.entity,field_name)
+        link_entity = instance.entity or entity
+        if link_entity:
+            #  instance.entity not set, or instance.entity = entity
+            if entity == link_entity:
+                link_title = getattr(entity, field_name)
+                link = entity.get_related_info_page_url(kind)
+            #  instance.entity set and instance.entity != entity (so we provide its name)
             else:
-                link_title = getattr(instance.entity, field_name)
-            if instance.text_override:
-                link_title = instance.text_override
+                link_title = instance.entity.short_name + ': ' + getattr(instance.entity,field_name)
+                link = instance.entity.get_related_info_page_url(kind)
+            link_title = instance.text_override or link_title
             context.update({ 
                 'link': link,
                 'link_title': link_title,
