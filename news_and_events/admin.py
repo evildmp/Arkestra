@@ -17,7 +17,7 @@ from links.admin import ObjectLinkInline
 
 from models import NewsArticle, NewsSource, Event, EventType
 
-class NewsAndEventsForm(InputURLMixin):
+class NewsAndEventsForm(InputURLMixin, SupplyRequestMixin):
     # a shared form for news and events
     class Meta:
         widgets = {'summary': forms.Textarea(
