@@ -41,7 +41,7 @@ def get_plugin_ancestry(plugin):
     Builds a list of plugins, from the instance downwards, but excluding the root plugin
     """
     plugins = []
-    print "plugin", type(plugin)
+    # print "plugin", type(plugin)
     while plugin.parent:
         plugins.append(plugin)
         plugin = plugin.parent 
