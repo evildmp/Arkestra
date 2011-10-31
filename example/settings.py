@@ -165,6 +165,8 @@ if USE_CELERY_FOR_VIDEO_ENCODING:
 
 # ------------------------ Django CMS
 
+CMS_SOFTROOT = True
+
 gettext = lambda s: s
 
 # this is only here because I don't know how to make other apps find it otherwise, and they rely on it.
