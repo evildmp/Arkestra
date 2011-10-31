@@ -6,163 +6,119 @@ from cms.models import Page
 
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
-from menus.base import Modifier
+from menus.base import Modifier, Menu
 
-import news_and_events
-import vacancies_and_studentships
 
-# from news_and_events.models import NewsAndEventsPlugin        
-# from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
-# 
-# from vacancies_and_studentships.models import VacanciesPlugin        
-# from vacancies_and_studentships.cms_plugins import CMSVacanciesPlugin
+main_news_events_page_list_length = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+arkestra_menus = settings.ARKESTRA_MENUS
 
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
+for menu in arkestra_menus:
+    if menu["cms_plugin_model_name"]:
+        plugin = __import__(menu["plugins_module"], globals(), locals(), [menu["cms_plugin_model_name"],], -1)
+        menu["cms_plugin_model"] = getattr(plugin, menu["cms_plugin_model_name"])
 
-# we're expecting modifiers: contacts, news, news_archive, forthcoming_events, previous_events, vacancies, publications
-menu_modifiers = getattr(settings, 'MENU_MODIFIERS', None)
-if menu_modifiers:
-    menu_tests = menu_modifiers.get("ArkestraPages")
-else:
-    menu_tests = []
-    
+# ArkestraPages(Modifier) checks whether there are Entities that have automatic pages 
+# (contacts & people, news & events, etc) that should be featured in the menu.
+#
+# These menu might have this structure:
+#
+#   Department of Witchcraft    [the home page of the Entity]
+#       About witchcraft        [an ordinary CMS Page]
+#       Cats & hats             [an ordinary CMS Page]
+#       News & Events           [an Arkestra automatic page]
+#           Previous Events     [an Arkestra automatic page - won't appear in menu unless News & Events is selected]
+#           News Archive        [an Arkestra automatic page - won't appear in menu unless News & Events is selected] 
+#       Contacts & People       [an Arkestra automatic page]   
+
 class ArkestraPages(Modifier):
-    post_cut = True
-
-    def modify(self, request, navigation_tree, namespace, root_id, post_cut, breadcrumb):
-        # only bother doing this once the tree has been cut
-        if not (post_cut and menu_tests):
-            return navigation_tree
-
-        else:
-            # we need to know the current page
-            page = getattr(request, "current_page", None)
-            # cms Pages won't have request.page_path, so set that using request.path
-            request.page_path = getattr(request, "page_path", request.path)  
-            self.recursive(request, navigation_tree)  
-            return navigation_tree
-
-    def recursive(self, request, nodes):
-        for child in nodes:
+    def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
+        if arkestra_menus and not post_cut:              
             
-            try:
-                ancestor = child.ancestor
-            except AttributeError:
-                ancestor = False
-            try:
-                selected = child.selected
-            except AttributeError:
-                selected = False
-            
-            # expand branches selectvely, or expand all    
-            if selected or ancestor or EXPAND_ALL_MENU_BRANCHES:
-                # does the entity have an entity?
+            self.auto_page_url = getattr(request, "auto_page_url", None)
+            self.request = request
+            self.nodes = nodes
+
+            for node in self.nodes: 
+                # for each node, try to find a matching Page that is an Entity's home page
                 try:
-                    page = Page.objects.get(id=child.id, entity__isnull=False)
-                    entity = page.entity.all()[0]
-                    
-                    # does this entity have a news page?
-                    if entity.auto_news_page and "news" in menu_tests:
-                        # invoke the plugin to find out more
-                        instance = news_and_events.models.NewsAndEventsPlugin()
-                        instance.entity = entity
-                        instance.type = "menu"
-                        instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-                        instance.view = "current"
-                        context = RequestContext(request)
-                        
-                        # create an instance of the plugin to see if the menu should have items
-                        plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
-                        plugin.get_items(instance)
-                        plugin.add_links_to_other_items(instance)    
-                        
-                        # assume there's no menu item required
-                        show_menu_item = False
-                                               
-                        menutitle = entity.news_page_menu_title
-
-                        # create a new node
-                        new_node = NavigationNode(
-                            mark_safe(menutitle), 
-                            entity.get_related_info_page_url('news-and-events'), 
-                            None
-                            )
-                            
-                        # go through the lists of items
-                        for item in plugin.lists:
-                            if item["items"]:
-                                show_menu_item = True
-
-                            if EXPAND_ALL_MENU_BRANCHES:
-                                # and go through the other_items lists for each
-                                for other_item in item["other_items"]:
-                                    new_sub_node = NavigationNode(
-                                        mark_safe(other_item["title"]), 
-                                        other_item["link"], 
-                                        None )
-                                    if request.page_path == new_sub_node.get_absolute_url():
-                                        new_sub_node.selected = True
-                                        new_node.selected = False
-
-                                    show_menu_item = True
-                                    new_node.children.append(new_sub_node)
-
-                        if show_menu_item:
-                            # is this node the one we are currently looking at?
-                            if new_node.get_absolute_url() == request.page_path:
-                                new_node.selected = True
-                                child.selected = False
-                            child.children.append(new_node)
-
-                    if entity.auto_contacts_page and "contacts" in menu_tests:
-                        menutitle = entity.contacts_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('contact'), None)
-                        if new_node.get_absolute_url() in request.page_path:
-                            new_node.selected = True
-                            child.selected=False
-                            
-                        child.children.append(new_node)
-
-                    if getattr(entity, "auto_vacancies_page", None)  and "vacancies" in menu_tests:
-
-                        instance = vacancies_and_studentships.models.VacanciesPlugin()
-                        instance.entity = entity
-                        instance.type = "menu"
-                        instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-                        instance.view = "current"
-                        context = RequestContext(request)
-                                             
-                        # create an instance of the plugin to see if the menu should have items
-                        plugin = vacancies_and_studentships.cms_plugins.CMSVacanciesPlugin()   
-                        plugin.get_items(instance)
-                        plugin.add_links_to_other_items(instance)    
-
-                        # assume there's no menu item required
-                        show_menu_item = False
-
-                        # are there actually any vacancies/studentships items to show? if not, no menu
-                        for item in plugin.lists:
-                            if item["items"]:
-                                show_menu_item = True
-                                
-                        if show_menu_item:
-                            menutitle = entity.vacancies_page_menu_title
-                            new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('vacancies-and-studentships'), None)
-                            if request.page_path == new_node.get_absolute_url():
-                                new_node.selected = True
-                                child.selected=False
-                            child.children.append(new_node)
-            
-                    if getattr(entity, "auto_publications_page", None) and entity.auto_publications_page and "publications" in menu_tests:
-                        menutitle = entity.publications_page_menu_title
-                        new_node = NavigationNode(mark_safe(menutitle), entity.get_related_info_page_url('publications'), None)
-                        if request.page_path == new_node.get_absolute_url():
-                            new_node.selected = True
-                            child.selected=False
-                        child.children.append(new_node)
+                    page = Page.objects.get(id=node.id, entity__isnull=False)
                 except Page.DoesNotExist:
                     pass
-            self.recursive(request, child.children)
-            
+                else:            
+                    entity = page.entity.all()[0]  
+                    for menu in arkestra_menus:
+                        self.do_menu(node, menu, entity)
+                                                                               
+            return self.nodes
+        else:
+            return nodes
+
+    def do_menu(self, node, menu, entity):
+        if getattr(entity, menu["flag_attribute"]):
+
+            cms_plugin_model = menu.get("cms_plugin_model")
+            if cms_plugin_model:
+                instance = cms_plugin_model.model(
+                    entity = entity, 
+                    limit_to = main_news_events_page_list_length
+                    )
+                instance.type = "menu"
+                instance.view = "current"
+                # create an instance of the plugin to see if the menu should have items
+                plugin = cms_plugin_model()   
+                plugin.get_items(instance)
+                plugin.add_node = any(d['items'] for d in plugin.lists) 
+                
+                if plugin.add_node:
+                    new_node = self.create_new_node(
+                        title = getattr(entity, menu["title_attribute"]),
+                        url = entity.get_related_info_page_url(menu["url_attribute"]), 
+                        parent = node
+                        )
+                    plugin.add_links_to_other_items(instance)
+                    for item in plugin.lists:
+                        # and go through the other_items lists for each, creating a node for each
+                        for other_item in item["other_items"]:
+                            self.create_new_node(
+                                title = other_item["title"], 
+                                url = other_item["link"], 
+                                parent = new_node, 
+                            )
+
+            else:
+                new_node = self.create_new_node(
+                    title = getattr(entity, menu["title_attribute"]),
+                    url = entity.get_related_info_page_url(menu["url_attribute"]), 
+                    parent = node, 
+                    )
+                pass
+            if new_node:
+                for sub_menu in menu["sub_menus"]:
+                    self.do_menu(node, sub_menu, entity)
+
+    def create_new_node(self, title, url, parent):
+        # create a new node for the menu
+        new_node = NavigationNode(
+            title=mark_safe(title), 
+            url= url, 
+            id=None,                           
+            )
+    
+        new_node.parent = parent
+        parent.children.append(new_node)
+        self.nodes.append(new_node) 
+    
+        # is this node selected?
+        if new_node.get_absolute_url() == self.auto_page_url:
+    
+            new_node.selected = True
+            node_to_mark = new_node
+            while node_to_mark.parent:
+                node_to_mark.parent.selected = False
+                node_to_mark.parent.ancestor = True
+                node_to_mark = node_to_mark.parent
+        else:
+            new_node.selected = False
+        return new_node                        
+
 menu_pool.register_modifier(ArkestraPages)

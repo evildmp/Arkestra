@@ -16,8 +16,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
-    request.page_path = request.path
-    request.path = entity.get_website().get_absolute_url()
+    request.auto_page_url = request.path
+    request.path = entity.get_website().get_absolute_url() # for the menu, so it knows where we are
     template = entity.get_template()
     main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
 
