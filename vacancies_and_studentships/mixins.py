@@ -9,7 +9,7 @@ class VacancyStudentshipPluginMixin(object):
         #             "link":instance.entity.get_related_info_page_url("news-archive"), 
         #             "title":"news archive",
         #             "count": all_items_count,}]
-            return this_list
+        return this_list
             
     def events_style_other_links(self, instance, this_list):
         this_list["other_items"] = []
@@ -44,15 +44,16 @@ class VacancyStudentshipPluginMixin(object):
         if "vacancies" in instance.display:
             this_list = {"model": Vacancy,}
             this_list["items"] = Vacancy.objects.get_items(instance)
+            this_list["other_items"] = []
             this_list["links_to_other_items"] = self.other_links
             this_list["heading_text"] = instance.vacancies_heading_text
             this_list["item_template"] = "arkestra/universal_plugin_list_item.html"
-            print "---------huh!"
             self.lists.append(this_list)
 
         if "studentships" in instance.display:
             this_list = {"model": Studentship,}
             this_list["items"] = Studentship.objects.get_items(instance)
+            this_list["other_items"] = []
             this_list["links_to_other_items"] = self.other_links
             this_list["heading_text"] = instance.studentships_heading_text
             this_list["item_template"] = "arkestra/universal_plugin_list_item.html"
