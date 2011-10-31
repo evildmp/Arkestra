@@ -130,7 +130,7 @@ def gather_studentships(entity):
         Q(also_advertise_on__in=entity.get_descendants(include_self=True))
     )
     """for item in studentshiplist:
-        print item
+        # print item
     
     studentshiplist = set()
     for entity in entity.get_descendants(include_self = True):

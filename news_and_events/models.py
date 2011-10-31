@@ -157,12 +157,12 @@ class Event(NewsAndEvents):
         """ 
         An event has an 'informative_url' if it itself is uninformative, but it is a child of a series
         """
-        print self, "checking"
+        # print self, "checking"
         if self.is_uninformative and self.parent and self.parent.series:
-            print self, "parent!"
+            # print self, "parent!"
             return self.parent.get_absolute_url()
         else:
-            print self, "self!"
+            # print self, "self!"
             return self.get_absolute_url()
   
     @property
@@ -175,17 +175,8 @@ class Event(NewsAndEvents):
 
     @property
     def is_uninformative(self):
-        print "+++"
-        print 1, "checking is_uninformativeness"
-        print 2, type(self.body)
-        print 3, type(self.body.cmsplugin_set.all())
-        print 4, self.external_url
-        print 5, self.please_contact.all()
-        print 6, self.registration_enquiries.all()
-        print 7, self.links
-        print "---"
         if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
-            print "uninformative"
+            # print "uninformative"
             return False
         else:
             return "informative"
@@ -202,20 +193,20 @@ class Event(NewsAndEvents):
             suffix = slugify(date(self.start_date, "Y"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
-                print "adding suffix:", suffix, self.slug
+                # print "adding suffix:", suffix, self.slug
         if slug_is_bad(self):
             suffix = slugify(date(self.start_date, "F"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
-                print "adding suffix:", suffix, self.slug
+                # print "adding suffix:", suffix, self.slug
         if slug_is_bad(self):
             suffix = slugify(date(self.start_date, "d"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
-                print "adding suffix:", suffix, self.slug
+                # print "adding suffix:", suffix, self.slug
         while slug_is_bad(self):
             self.slug=self.slug + "-x"
-            print "adding suffix:", "-x"
+            # print "adding suffix:", "-x"
         super(Event, self).save()
         
     def get_children_forthcoming(self):

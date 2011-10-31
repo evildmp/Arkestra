@@ -37,7 +37,7 @@ class SimplePlaceholderWidthAdjuster(WidthAdjuster):
         adjustment = float(context.get("width_adjustment", 0))
     
         if adjust_width:
-            print "need to adjust"
+            # print "need to adjust"
             if adjuster == "divider":
                 placeholder_width = placeholder_width/adjustment
             elif adjuster == "multiplier":
@@ -49,7 +49,7 @@ class SimplePlaceholderWidthAdjuster(WidthAdjuster):
             elif adjuster == "absolute":
                 placeholder_width = adjustment
             placeholder_width = int(placeholder_width)
-            print "adjusted placeholder width:", placeholder_width
+            # print "adjusted placeholder width:", placeholder_width
         return placeholder_width
 
 
@@ -135,13 +135,13 @@ class ColumnWidths(WidthAdjuster):
     }
     
     def modify(self, context, element, width):
-        print "============ ColumnWidths "
+        # print "============ ColumnWidths "
         element_class = element.get("class", "") # and its HTML class
         # if this is a column whose parent is a row        
         if re.search(r"\column\b", element_class) and "columns" in element.parent.get("class", ""):
             # columns is the number of columns, or 1 if not specified
             columns = float(element.parent.get("class", "").split("columns")[1][0] or 1)
-            print "    this is a column:", element_class
+            # print "    this is a column:", element_class
             # if double or triplewidth
             if "triplecolumn" in element_class:
                 columnwidth = 3.0
@@ -161,7 +161,7 @@ class ImageBorders(WidthAdjuster):
         no_image_border_class = context.get("no_image_border_class", "no-image-borders")
         element_class = element.get("class", "") # and its HTML class
         if image_border_class in element_class:
-            print "has borders"
+            # print "has borders"
             markers["has_borders"] = True
         if no_image_border_class in element_class:     
             markers["has_borders"] = False
@@ -169,7 +169,7 @@ class ImageBorders(WidthAdjuster):
     
     def modify(self, context, markers, width):
         if markers.get("has_borders"):
-            print "-16 for borders"
+            # print "-16 for borders"
             width = width - context.get("image_border_reduction", 16)
         return width
 

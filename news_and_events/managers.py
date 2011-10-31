@@ -24,20 +24,20 @@ class NewsArticleManager(UniversalPluginModelManagerMixin):
             Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
             sticky_until__gte=datetime.today(), 
             )
-        print "Sticky news", sticky_news.count()
-        print "Non-sticky news", non_sticky_news.count()
+        # print "Sticky news", sticky_news.count()
+        # print "Non-sticky news", non_sticky_news.count()
         top_news = list(sticky_news)
 
         # now we have to go through the non-top items, and find any that can be promoted
         # get the set of dates where possible promotable items can be found             
         dates = non_sticky_news.dates('date', 'day').reverse()
-        print "Going through the date set"
+        # print "Going through the date set"
         for date in dates:
-            print "    examining possibles from", date
+            # print "    examining possibles from", date
             # get all non-top items from this date
             possible_top_news = non_sticky_news.filter(date__year=date.year, date__month= date.month, date__day= date.day)
             # promotable items have importance > 0
-            print "        found", possible_top_news.count(), "of which I will promote", possible_top_news.filter(Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),importance__gte = 1).count()
+            # print "        found", possible_top_news.count(), "of which I will promote", possible_top_news.filter(Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),importance__gte = 1).count()
             # add the good ones to the top news list
             top_news.extend(possible_top_news.filter(
                 Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
@@ -51,20 +51,20 @@ class NewsArticleManager(UniversalPluginModelManagerMixin):
             if demotable_items.count() > 0:
                 # put those unimportant items into ordinary news
                 ordinary_news.extend(demotable_items)
-                print "        demoting",  demotable_items.count()
+                # print "        demoting",  demotable_items.count()
                 # and stop looking for any more
                 break
         # and add everything left in non-sticky news before this date
         if dates:
             remaining_items = non_sticky_news.filter(date__lte=date)
-            print "    demoting the remaining", remaining_items.count()
+            # print "    demoting the remaining", remaining_items.count()
             ordinary_news.extend(remaining_items)
             for item in top_news:
                 item.sticky = True
                 if instance.format == "title":
                     item.importance = None
-            print "Top news", len(top_news)
-            print "Ordinary news", len(ordinary_news)
+            # print "Top news", len(top_news)
+            # print "Ordinary news", len(ordinary_news)
             ordinary_news.sort(key=operator.attrgetter('date'), reverse = True)
         return top_news, ordinary_news
 
@@ -85,7 +85,7 @@ class NewsArticleManager(UniversalPluginModelManagerMixin):
                 ).distinct()
         else:
             all_news = self.model.objects.all()
-        print "All news", all_news.count()
+        # print "All news", all_news.count()
         return all_news
 
     def get_items(self, instance):

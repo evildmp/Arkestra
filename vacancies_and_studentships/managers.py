@@ -13,7 +13,7 @@ class StudentshipManager(UniversalPluginModelManagerMixin):
         """
         returns current_studentships, archived_studentships, series_studentships
         """
-        print "____ get_studentships() ____"
+        # print "____ get_studentships() ____"
         if instance.type == "for_person":
             all_studentships = instance.person.studentship_featuring.all()
         elif instance.type == "for_place":
@@ -28,12 +28,12 @@ class StudentshipManager(UniversalPluginModelManagerMixin):
 
             # if an entity should automatically publish its descendants' items
             #     all_studentships = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-        print "All studentships", instance.type, all_studentships.count()
+        # print "All studentships", instance.type, all_studentships.count()
             
         instance.current_studentships = all_studentships.filter(closing_date__gte = datetime.now())
         instance.archived_studentships = all_studentships.exclude(closing_date__gte = datetime.now())
         
-        print "Previous studentships", instance.archived_studentships.count()
+        # print "Previous studentships", instance.archived_studentships.count()
         
         return self.model.objects.all()
     
@@ -41,7 +41,7 @@ class VacancyManager(UniversalPluginModelManagerMixin):
     def get_items(self, instance):
         """
         """
-        print "____ get_vacancies() ____"
+        # print "____ get_vacancies() ____"
         if instance.type == "for_person":
             all_vacancies = instance.person.vacancy_featuring.all()
         # most likely, we're getting vacancies related to an entity
@@ -54,7 +54,7 @@ class VacancyManager(UniversalPluginModelManagerMixin):
 
             # if an entity should automatically publish its descendants' items
             #     all_vacancies = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-        print "All vacancies", all_vacancies.count()
+        # print "All vacancies", all_vacancies.count()
             
         instance.current_vacancies = all_vacancies.filter(closing_date__gte = datetime.now())
         instance.archived_vacancies = all_vacancies.exclude(closing_date__gte = datetime.now())

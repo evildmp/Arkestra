@@ -13,8 +13,6 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 from models import VacanciesPlugin, Vacancy, Studentship
 from mixins import VacancyStudentshipPluginMixin
 
-# for tabbed interface
-
 class VacanciesStudentshipsPluginForm(UniversalPluginForm, forms.ModelForm):
     class Meta:
         model = VacanciesPlugin

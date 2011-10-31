@@ -32,9 +32,9 @@ class FilerImagePlugin(CMSPluginBase):
         """
         # TODO: this scaling code needs to be in a common place
         # use the placeholder width as a hint for sizing
-        print
-        print "----------------- Image plugin ------------------------" 
-        print "image:", instance.image, "image width:", instance.image.width
+        # print
+        # print "----------------- Image plugin ------------------------" 
+        # print "image:", instance.image, "image width:", instance.image.width
         # get the image's aspect ratio, in case we need it later
         aspect_ratio = float(instance.image.width)/instance.image.height
         instance.has_borders = False
@@ -77,7 +77,7 @@ class FilerImagePlugin(CMSPluginBase):
             # shave off 5 point if the image is floated, to make room for a margin
             # see arkestra.css, span.image.left and span.image.right
             if instance.float:
-                print "-5 for float"
+                # print "-5 for float"
                 width = width - 5   
                             
         # if the instance has an aspect ratio, use that to calculate the height
@@ -97,7 +97,7 @@ class FilerImagePlugin(CMSPluginBase):
         else:
             height = width / aspect_ratio
         #else:
-        #    print "doing something funny"
+        #    # print "doing something funny"
             # height was not externally defined: use image's native ratio to scale it by the width
         #    height = int( float(width)*float(instance.image.height)/float(instance.image.width) )
         
@@ -106,8 +106,8 @@ class FilerImagePlugin(CMSPluginBase):
 
         instance.float = instance.float or ""   # used as a CSS class
         
-        print
-        print "final output size", width, "x", height
+        # print
+        # print "final output size", width, "x", height
                 
         context.update({
             'object':instance,
