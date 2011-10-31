@@ -57,7 +57,7 @@ class UniversalPluginModelMixin(models.Model):
 
     @property
     def links(self):
-        return object_links(self)
+        return self.object_links_set.all()
 
     @property
     def external_url(self):
