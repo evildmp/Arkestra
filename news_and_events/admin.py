@@ -52,7 +52,7 @@ class NewsAndEventsForm(InputURLMixin):
                 messages.add_message(self.request, messages.WARNING, message)
 
 
-class NewsAndEventsAdmin(AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder, SupplyRequestMixin):
+class NewsAndEventsAdmin(AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
     exclude = ('content', 'url')
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
