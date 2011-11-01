@@ -32,12 +32,14 @@ for menu in arkestra_menus:
 
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
+        # this currently relies on the pre-cut nodes. Unless CMS_SOFTROOT is True, it may hammer the database
         if arkestra_menus and not post_cut:              
             
             self.auto_page_url = getattr(request, "auto_page_url", None)
             self.request = request
             self.nodes = nodes
 
+            # loop over all the nodes returned by the nodes in the Menu classes
             for node in self.nodes: 
                 # for each node, try to find a matching Page that is an Entity's home page
                 try:
@@ -46,6 +48,7 @@ class ArkestraPages(Modifier):
                     pass
                 else:            
                     entity = page.entity.all()[0]  
+                    # we have found a node for a Page with an Entity, so check it against arkestra_menus
                     for menu in arkestra_menus:
                         self.do_menu(node, menu, entity)
                                                                                
@@ -54,36 +57,38 @@ class ArkestraPages(Modifier):
             return nodes
 
     def do_menu(self, node, menu, entity):
+        # does this entity have this kind of auto-page in the menu?
         if getattr(entity, menu["flag_attribute"]):
 
             cms_plugin_model = menu.get("cms_plugin_model")
             if cms_plugin_model:
+                # create an instance of the plugin class editor with appropriate attributes
                 instance = cms_plugin_model.model(
                     entity = entity, 
                     limit_to = main_news_events_page_list_length
                     )
                 instance.type = "menu"
                 instance.view = "current"
-                # create an instance of the plugin to see if the menu should have items
+                # use the instance to create an instance of the plugin publisher
                 plugin = cms_plugin_model()   
+                # use its get_items method to place publishable items in plugin.lists
                 plugin.get_items(instance)
-                plugin.add_node = any(d['items'] for d in plugin.lists) 
-                
-                if plugin.add_node:
+                if plugin.lists:
                     new_node = self.create_new_node(
                         title = getattr(entity, menu["title_attribute"]),
                         url = entity.get_related_info_page_url(menu["url_attribute"]), 
                         parent = node
                         )
-                    plugin.add_links_to_other_items(instance)
-                    for item in plugin.lists:
-                        # and go through the other_items lists for each, creating a node for each
-                        for other_item in item["other_items"]:
-                            self.create_new_node(
-                                title = other_item["title"], 
-                                url = other_item["link"], 
-                                parent = new_node, 
-                            )
+                    if getattr(new_node, "ancestor", None) or new_node.selected:
+                        plugin.add_links_to_other_items(instance)
+                        for item in plugin.lists:
+                            # and go through the other_items lists for each, creating a node for each
+                            for other_item in item["other_items"]:
+                                self.create_new_node(
+                                    title = other_item["title"], 
+                                    url = other_item["link"], 
+                                    parent = new_node, 
+                                )
 
             else:
                 new_node = self.create_new_node(
@@ -91,10 +96,9 @@ class ArkestraPages(Modifier):
                     url = entity.get_related_info_page_url(menu["url_attribute"]), 
                     parent = node, 
                     )
-                pass
-            if new_node:
-                for sub_menu in menu["sub_menus"]:
-                    self.do_menu(node, sub_menu, entity)
+            # if new_node:
+            #     for sub_menu in menu["sub_menus"]:
+            #         self.do_menu(node, sub_menu, entity)
 
     def create_new_node(self, title, url, parent):
         # create a new node for the menu
