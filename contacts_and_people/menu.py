@@ -32,7 +32,7 @@ for menu in arkestra_menus:
 
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
-        # this currently relies on the pre-cut nodes. Unless CMS_SOFTROOT is True, it may hammer the database
+        # this currently relies on the pre-cut nodes. It *will* hammer the database
         if arkestra_menus and not post_cut:              
             
             self.auto_page_url = getattr(request, "auto_page_url", None)
