@@ -17,7 +17,7 @@ from links.admin import ObjectLinkInline
 
 from models import NewsArticle, NewsSource, Event, EventType
 
-class NewsAndEventsForm(InputURLMixin, SupplyRequestMixin):
+class NewsAndEventsForm(InputURLMixin):
     # a shared form for news and events
     class Meta:
         widgets = {'summary': forms.Textarea(
@@ -52,7 +52,7 @@ class NewsAndEventsForm(InputURLMixin, SupplyRequestMixin):
                 messages.add_message(self.request, messages.WARNING, message)
 
 
-class NewsAndEventsAdmin(AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
+class NewsAndEventsAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
     exclude = ('content', 'url')
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
@@ -75,9 +75,6 @@ class NewsArticleForm(NewsAndEventsForm):
     def clean(self):
         super(NewsArticleForm, self).clean()
         
-        if self.cleaned_data["external_news_source"] and not self.cleaned_data["url"]:
-            raise forms.ValidationError("You can't claim that this is for an external news source unless you include a URL.")     
-
         # sticky_until value must be greater than (later) than date
         date = datetime.date(self.cleaned_data['date'])
         self.cleaned_data['sticky_until'] = self.cleaned_data.get('sticky_until', date) 
