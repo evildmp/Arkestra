@@ -1,0 +1,8 @@
+{% ifnotequal execute "convert" %}
+    <p>This is a <strong>dry run</strong>. Nothing has been changed.</p>
+    <p>Please check the results.</p>
+	<ul><li><a href="/housekeeping/{{ task }}/execute/">Execute</a></li> <li><a href="/housekeeping/{{ task }}/dryrun/">Dry run</a></li></ul>
+{% else %}
+    <p><strong><a href="/housekeeping/{{ task }}/dryrun/">Dry run</a></strong></p>. <p>It's probably too late though.</p>
+
+{% endifnotequal %}  

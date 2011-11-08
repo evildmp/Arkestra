@@ -1,22 +1,16 @@
-"""
-This module will convert existing rich text fields to placeholders
-"""
+from django.db.models import get_model
+
+from django.conf import settings
 
 from cms.models import Placeholder
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugins.text.models import Text
+from cms.api import add_plugin      
 
-import django.http as http
-from django.db.models import get_model
-import django.shortcuts as shortcuts
-from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
-@login_required
-def convert(request, slug = "dryrun"):
+def convert(action = "dryrun"):
     # this dictionary store the information for the conversions
-    execute=slug
+    execute=action
     models_dictionary = {
         "messages": {},                             # a general set of messages for the user
         "modules":  {
@@ -98,9 +92,10 @@ def convert(request, slug = "dryrun"):
             },
         }
 
+    print "------executing --------"
     # loop over the modules
     for module, module_values in models_dictionary["modules"].items():
-
+        
         # loop over the models in the module
         for model, model_values in module_values["models"].items():
             
@@ -113,9 +108,7 @@ def convert(request, slug = "dryrun"):
                                             
             # loop over the fields that need converting
             for field in model_values["fields"]:
-                print field
 
-                
                 old_field = field["old_field"]
                 new_field = field["new_field"]
                 slot = field["slot"]
@@ -135,15 +128,8 @@ def convert(request, slug = "dryrun"):
 
                 # loop over each item in the class
                 for item in actual_model.objects.all():
-
+                    
                     old_field_content = getattr(item, old_field)  # the old field we want to convert
-
-                    # first get rid of junk content (change "<br />" to "")
-                    if old_field_content == "<br />":
-                        old_field_content = ""
-                        setattr(item, old_field, "") # item.content = ""
-                        if execute == "convert":
-                            item.save()
                     
                     # now the serious business of converting the fields
             
@@ -151,45 +137,33 @@ def convert(request, slug = "dryrun"):
                     if old_field_content and not getattr(item, new_field, None):
 
                         # check to see if it's worth converting
-                        if len(old_field_content) > 60:
+                        if len(old_field_content) > 10:
 
                             # create the placeholder
                             placeholder=Placeholder(slot=slot)
-                            if execute == "convert":
+                            if execute == "execute":
                                 placeholder.save()
         
                             # refer to the placeholder from the item
                             setattr(item, new_field, placeholder)
         
-                            # I copied this from one of the test files
-                            plugin_base = CMSPlugin(
-                                plugin_type='TextPlugin',
-                                placeholder=placeholder, 
-                                position=1, 
-                                language=settings.LANGUAGES[0][0]) # we assume the original field was in the first language
-                            plugin_base.insert_at(None, position='last-child')
-        
-                            # create a text plugin
-                            plugin = Text(body='')
-                            plugin_base.set_base_attr(plugin)
-                            plugin.body = getattr(item, old_field)
-                            if execute == "convert":
-                                plugin.save()
-        
-                            # set the old field to ""
-                            setattr(item, old_field, "")
-                            if execute == "convert":
+                            if execute == "execute":
+                                add_plugin(placeholder, "SemanticTextPlugin", settings.LANGUAGES[0][0], body = old_field_content)
+                                                                                                                            
+                            # setattr(item, old_field, "")
+                            if execute == "execute":
                                 item.save()
                                 item.status = "Converted to placeholder"
                             else:
                                 item.status = "Unconverted"
                                         
                         else:
-                            print "too short", old_field_content
                             # this item is so short it must be junk
-                            if execute == "convert":
+                            if execute == "execute":
                                 setattr(item, old_field, "")
+                            
                                 item.status = "Junk field - too short; was deleted instead of converted:" + old_field_content
+                                print item, item.status
                                 item.save()
                             else:    
                                 item.status = "Junk field - too short; will be deleted instead of converted:" + old_field_content
@@ -200,7 +174,7 @@ def convert(request, slug = "dryrun"):
                         moved_items.append(item)    
  
                 # information about junk content items
-                if execute == "convert":
+                if execute == "execute":
                     message = " ".join((str(len(junk_content)), "junk items not converted items"))
                 else:
                     message = " ".join((str(len(junk_content)), "junk items found"))                    
@@ -208,7 +182,7 @@ def convert(request, slug = "dryrun"):
                 models_dictionary["messages"][mmodel][old_field]["Junk fields"]=message
 
                 # information about items that have been/need to be converted
-                if execute == "convert":
+                if execute == "execute":
                     message = str(len(moved_items)) + " items were converted to placeholder " + new_field
                 else:
                     message = str(len(moved_items)) + " items need to be converted to placeholder " + new_field
@@ -216,18 +190,18 @@ def convert(request, slug = "dryrun"):
                 models_dictionary["messages"][mmodel][old_field]["Conversions"]=message
             
                 # list every item that was copied for the full report
-                if execute == "convert":
+                if execute == "execute":
                     action = "Fields that were copied"
                 else:
                     action = "Fields to be copied"
                     
                 models_dictionary["modules"][module]["models"][model]["actions"][action]=moved_items
                 
+    report = {
+        "action": execute,
+        "task": "convert-placeholders",
+        "converted": models_dictionary,
+        "template": "housekeeping/convert_to_placeholders.html"
+        }        
 
-    return shortcuts.render_to_response(
-        "housekeeping/convert_to_placeholders.html", {
-            "execute": execute,
-            "converted": models_dictionary,
-            },
-        RequestContext(request),
-        )
+    return report

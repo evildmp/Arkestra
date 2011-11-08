@@ -16,7 +16,7 @@
 	<li>identify and delete unused sites in the ExternalSite table</li>
 	<li>identify and convert old-style URLFields to ForeignKeys to the ExternalLink table, for:
 	    <ul>
-	        {% for module, module_values in models_dictionary.modules.items %}
+	        {% for module, module_values in report.models_dictionary.modules.items %}
 	            <li><strong>{{module_values.application}}</strong>
 	                <ul>
             	        {% for model in module_values.models %}
@@ -29,21 +29,14 @@
 	</li>    
 </ul>
 
-{% if not execute %}
-    <p>This is a <strong>dry run</strong>. Nothing has been changed.</p>
-    <p>Please check the results. If you are satisfied, <a href="/housekeeping/tidy_links/execute/">perform the actions listed below</a>, or <a href="/housekeeping/tidy_links/dryrun/">do another dry run</a>.</p>
-{% else %}
-    <p><a href="/housekeeping/tidy_links/dryrun/">Perform a dry run instead</a>. It's probably too late though.</p>
-
-{% endif %}  
 <div class = "row columns2">
 	<div class = "column firstcolumn">
 
 <h3>Duplicates</h3>
 <p><em>duplicates will be deleted</em></p>
-<p>{{ de_duplicated_links|length }} links were found with duplicates.</p>
+<p>{{ report.de_duplicated_links|length }} links were found with duplicates.</p>
 <dl>
-    {% for link in de_duplicated_links %}
+    {% for link in report.de_duplicated_links %}
         <dt>{{link}} (kind: {{link.kind}}) had {{ link.duplicates|length }} duplicates</dt>
         {% for duplicate in link.duplicates %}
             <dd>{{ duplicate }}: used on {{ duplicate.objects|length }} objects and in {{ duplicate.plugins|length }} plugins</dd>
@@ -52,13 +45,13 @@
 <dl>
 
 <h3>Unused sites</h3><ul>
-    {% for site in sites_to_be_deleted %}
+    {% for site in report.sites_to_delete %}
         <li>{{site}}</li>
 		{% endfor %}
 <ul>
 <h3>Convert old-style URLFields to ForeignKeys</h3>
 	    <ul>
-	        {% for module, module_values in models_dictionary.modules.items %}
+	        {% for module, module_values in report.models_dictionary.modules.items %}
 	            <li><strong>{{module_values.application}}</strong>
 	                <ul>
             	        {% for model, model_values in module_values.models.items %}
@@ -78,7 +71,7 @@
 </div>
 	<div class = "column lastcolumn"><h3>All links</h3>
 <ul>
-    {% for link in links %}
+    {% for link in report.links %}
 		<li><strong>{{link}}</strong> <em {% if link.kind_warning %}style="color: red;"{% endif %}>type:</em> {{link.kind}} <em {% if not link.external_site %}style="color: red;"{% endif %}>site:</em> {{link.external_site}}<br /><em {% if not link.url %}style="color: red;"{% endif %}>url:</em> {{link.url}}</li>
 	{% endfor %}
 </ul>

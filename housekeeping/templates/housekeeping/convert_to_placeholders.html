@@ -5,20 +5,12 @@
 {% endblock title %}
 
 <h3>Summary</h3>
-{% ifnotequal execute "convert" %}
-    <p>This is a <strong>dry run</strong>. Nothing has been changed.</p>
-    <p>Please check the results. If you are satisfied, <a href="/housekeeping/convert_to_placeholders/convert/">perform the actions listed below</a>, or <a href="/housekeeping/convert_to_placeholders/dryrun/">do another dry run</a>.</p>
-{% else %}
-    <p><a href="/housekeeping/convert_to_placeholders/dryrun/">Perform a dry run instead</a>. It's probably too late though.</p>
-
-{% endifnotequal %}  
-
 <ul>
-    {% for model, fields in converted.messages.items %}
+    {% for model, fields in report.converted.messages.items %}
         <li>{{ model }}
             <ul>
                 {% for field, issues in fields.items %}
-                    <li><em>{{field }}</em>
+                    <li>Field <em>{{field }}</em>
                         <ul>
                             {% for issue, message in issues.items %}
                                 <li>{{ issue }}: {{ message }}</li>
@@ -32,7 +24,7 @@
 </ul>    
 <h3>Report</h3>
 <ul>
-    {% for module in converted.modules.values %}
+    {% for module in report.converted.modules.values %}
     <li>
         {{ module.application }}
 		<ul>

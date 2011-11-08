@@ -23,9 +23,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # from django.conf import settings
 
-@login_required
-def tidy_links(request, slug = "dryrun"):
-    if slug == "execute":
+def tidy_links(action = "dryrun"):
+    if action == "execute":
         execute = True
     else:
         execute = False
@@ -34,18 +33,19 @@ def tidy_links(request, slug = "dryrun"):
     links, de_duplicated_links = de_duplicate_links(execute) # , messages["Duplicate links"]
     sites_to_delete, unused_sites  = check_sites(execute) #, messages["External sites"] 
     models_dictionary = convert_url_fields(execute) # summary["Fields requiring conversion"] = 
+        
+    report = {
+        "action": execute,
+        "links": links,
+        "de_duplicated_links": de_duplicated_links,
+        "unused_sites": unused_sites,
+        "sites_to_delete": sites_to_delete,
+        "models_dictionary": models_dictionary,
+        "template": "housekeeping/tidy_links.html"
+        }        
+
+    return report
     
-    return shortcuts.render_to_response(
-        "housekeeping/tidy_links.html", {
-            "execute": execute,
-            "links": links,
-            "de_duplicated_links": de_duplicated_links,
-            "unused_sites": unused_sites,
-            "sites_to_delete": sites_to_delete,
-            "models_dictionary": models_dictionary,
-            },
-        RequestContext(request),
-        )
 
 def de_duplicate_links(execute):
     # a message to summarise state
@@ -74,7 +74,7 @@ def de_duplicate_links(execute):
         
         # to help find duplicates, remove the trailing slash if there is one
         if link.url:
-            # we don't actually want to touch link.url, so we create a temporary variable 
+            # we don't actually want to touch link.url, so we create a temporary variable
             url = link.url
             if url[-1] == "/":
                 url = url[0:-1]
@@ -83,41 +83,50 @@ def de_duplicate_links(execute):
             link.objects = []
             link.plugins = []
 
-            # is it a duplicate?
-            if good_link and (good_link.url.lower() == url.lower()):
-                
-                # add this to the list of duplicates for the good_link
-                good_link.duplicates.append(link)
+            # do we already have a good_link to compare with?
+            if good_link:
+                # is it a duplicate
+                print good_link.url.lower(), url.lower()
+                if (good_link.url.lower() == url.lower()) or  (good_link.url.lower()[0:-1] == url.lower()):
+                    print "duplicate", url
+                    # add this to the list of duplicates for the good_link
+                    good_link.duplicates.append(link)
                                                 
-                # for each one, change it so it uses the good_link instead
-                for object_link in object_links.filter(destination_object_id = link.id):
-                    object_link.destination_object_id = good_link.id
+                    # for each one, change it so it uses the good_link instead
+                    for object_link in object_links.filter(destination_object_id = link.id):
+                        object_link.destination_object_id = good_link.id
                     
-                    if execute:
-                        object_link.save()
-                    link.objects.append(object_link)
+                        if execute:
+                            object_link.save()
+                        link.objects.append(object_link)
                 
-                # for each one, change it so it uses the good_link instead
-                for plugin_link in plugin_links.filter(destination_object_id = link.id):
-                    plugin_link.destination_object_id = good_link.id
+                    # for each one, change it so it uses the good_link instead
+                    for plugin_link in plugin_links.filter(destination_object_id = link.id):
+                        plugin_link.destination_object_id = good_link.id
 
+                        if execute:
+                            plugin_link.save()
+                        link.plugins.append(plugin_link)
+
+                    # delete the duplicate
                     if execute:
-                        plugin_link.save()
-                    link.plugins.append(plugin_link)
+                        print "    deleting", link
+                        link.delete()
 
-                # delete the duplicate
-                if execute:
-                    link.delete()
-
-                de_duplicated_links.append(good_link)
-            # this link wasn't a duplicate
+                    de_duplicated_links.append(good_link)
+                # this link wasn't a duplicate
+                else:
+                    if execute:
+                        # force a save, to trigger the code in save()
+                        link.save()
+                    good_link = link
+                    # each good link starts off with no duplicates
+                    good_link.duplicates = []
             else:
-                if execute:
-                    # force a save, to trigger the code in save()
-                    link.save()
+                # the first time we find a good link, assign it
+                print "assigning link"
                 good_link = link
-                # each good link starts off with no duplicates
-                good_link.duplicates = []
+
         else:
             # delete this link because it's blank
             link.blank = True
@@ -156,7 +165,7 @@ def convert_url_fields(execute):
                             {                       # a dictionary for each field
                                 "url_field": "url",
                                 "title_field": "title",
-                                "description_field": "subtitle", # unlike the others this is optional
+                                "description_field": "summary", # unlike the others this is optional
                                 "new_field": "external_url",                
                                 },
                             ],
@@ -168,7 +177,7 @@ def convert_url_fields(execute):
                             {                       
                                 "url_field": "url",
                                 "title_field": "title",
-                                "description_field": "subtitle",
+                                "description_field": "summary",
                                 "new_field": "external_url",                
                                 },
                             ],
@@ -298,11 +307,9 @@ def convert_url_fields(execute):
                                 message = "Created new link: " + url_field_content
                                 messages.append(message)
                         else:
-                            try:
-                                ExternalLink.objects.get(url=url_field_content)
-                            except ExternalLink.DoesNotExist:
-                                message = "Need to create new link: " + url_field_content
-                                messages.append(message)
+                            matches = ExternalLink.objects.filter(url=url_field_content).count()
+                            message = "Need to create new link: " + url_field_content, matches
+                            messages.append(message)
                 message = "Items requiring conversion: " + str(len(items_to_convert))
                 messages.insert(1, message)                    
             models_dictionary["modules"][module]["models"][model]["messages"]=messages

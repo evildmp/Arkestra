@@ -1,4 +1,4 @@
-{% extends "arkestra.html" %}
+{% extends base_template %}
 
 {% block columns %}{% endblock columns %}
 
@@ -8,16 +8,25 @@
     <title>Arkestra admin housekeeping</title>
 {% endblock title %}
 
+{% block col_class %}col_100{% endblock col_class %} 
+
+{% block nav_local %}{% endblock nav_local %}
+
+
 {% block main_page_body %}
-<h3>Housekeeping options</h3>
+<h3>Housekeeping options</h3> 
 <ul>
     <li><a href="/housekeeping/">Housekeeping main menu</a></li>
-    <li><a href="/housekeeping/statistics/">Statistics</a></li>
+    <li><a href="/housekeeping/convert-placeholders/dryrun/">Convert text fields to text/layout plugins</a></li>
+    <li><a href="/housekeeping/tidy-links/dryrun/">Tidy links</a></li>
+
+    <!-- <li><a href="/housekeeping/statistics/">Statistics</a></li>
     <li><a href="/housekeeping/clean_plugins/dryrun/">Clean plugins</a> - removes junk from plugins</li>
-    <li><a href="/housekeeping/convert_to_placeholders/dryrun/">Convert text fields to text/layout plugins</a> - warning: will only work for a single language</li>
     <li><a href="/housekeeping/repair_mptt/">Repair MPTT</a></li>
-    <li><a href="/housekeeping/tidy_links/dryrun/">Tidy links</a></li>
-    <li><a href="/housekeeping/update_ancient_plugins/dryrun/">Update fields on ancient plugins</a></li>
+    <li><a href="/housekeeping/update_ancient_plugins/dryrun/">Update fields on ancient plugins</a></li> -->
 </ul>
+
+{% if report.template %}{% include "housekeeping/includes/action_or_not.html" %}{% endif %}
+
 {% block operations %}{% endblock operations %}
 {% endblock main_page_body %}

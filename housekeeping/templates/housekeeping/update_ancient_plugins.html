@@ -1,9 +1,0 @@
-{% extends "housekeeping/housekeeping.html" %}
-{% block operations %}
-
-<h3>Summary</h3>
-{% if not execute %}
-    <p>Nothing has been changed.</p>
-    <p><a href="/housekeeping/update_ancient_plugins/execute/">Do it for real</a></p>
-{% endif %}  
-{% endblock operations %}
