@@ -17,21 +17,7 @@
 {% endblock pagetitle %}
 
 {% block main_page_body %}
-    {% if tabs %}
-		<ul id="tab_menu">
-			{% for tab in tabs %}
-				{% if tab.active %}
-					<li class="active"> 
-						<span>{{tab.title|capfirst}}</span>
-					</li>
-				{% else %}
-					<li> 
-						<a href="{{ place.get_absolute_url }}{{tab.address}}">{{tab.title|capfirst}}</a>
-					</li>            
-				{% endif %}        
-			{% endfor %}
-		</ul>    
-	{% endif %}
+    {% include "arkestra/tabbed_menu.html" %}
 	{% block place_information %}
 		<p class="standout">{{ place.summary|typogrify }}</p>
         <div class="row columns3">

@@ -144,16 +144,64 @@ def person(request, slug, active_tab=""):
         print "no memberships, no useful information"
         template = default_entity.get_template()
 
+    tabs_dict = { # information for each kind of person tab
+        "default": {
+            "tab": "contact",
+            "title": "Contact information",
+            "address": "",
+            "meta_description_content": person,
+        },
+        "research": {
+            "tab": "research",
+            "title": "Research",
+            "address": "research",
+            "meta_description_content": str(person) + "- research interests",
+        },
+        "publications": {
+            "tab": "publications",
+            "title": "Publications",
+            "address": "publications",
+            "meta_description_content": str(person) + "- publications",
+        },
+    }
+    
+    # mark the active tab, if there is one
+    if active_tab:
+        tabs_dict[active_tab]["active"] = True
+
+    # add tabs to the list of tabs
     tabs = []
+    tabs.append(tabs_dict["default"])          
     if 'publications' in applications:
         try:
             if person.researcher and person.researcher.publishes:
-                tabs.extend(("research","publications"))
+                tabs.append(tabs_dict["research"])
+                tabs.append(tabs_dict["publications"])
         except Researcher.DoesNotExist:
             pass
 
+    # were there any tabs created?
+    if tabs:
+        if not active_tab:
+            # find out what to add to the url for this tab
+            print tabs[0]
+            active_tab=tabs[0]["address"]
+            # mark the tab as active for the template
+            tabs[0]["active"]=True
+        # fewer than 2? not worth having tabs!
+        if len(tabs)==1:
+            tabs=[]
+
+    meta_description_content = tabs_dict[active_tab or "default"]["meta_description_content"] 
+    if active_tab:
+        active_tab = "_" + active_tab
+        
+    meta = {
+        "description": meta_description_content,
+        }
+
     return render_to_response(
-        "contacts_and_people/persondetails" + str(active_tab) + ".html",
+        "contacts_and_people/person%s.html" % active_tab,
         {
             "person":person, # personal information
             "home_role": home_role, # entity and position
@@ -166,6 +214,7 @@ def person(request, slug, active_tab=""):
             "phone": phone,
             "access_note": access_note, # from person
             "tabs": tabs,
+            "tab_object": person,
             "active_tab": active_tab,
             "meta": meta,
             "links": links,
@@ -180,7 +229,7 @@ def place(request, slug, active_tab=""):
     The template receives "_" + active_tab to identify the correct template (from includes).
     """
     place = Building.objects.get(slug=slug)
-    places_dict = { # information for each kind of place page
+    tabs_dict = { # information for each kind of place page
         "about": {
             "tab": "about",
             "title": "About",
@@ -203,16 +252,16 @@ def place(request, slug, active_tab=""):
     
     # mark the active tab, if there is one
     if active_tab:
-        places_dict[active_tab]["active"] = True
+        tabs_dict[active_tab]["active"] = True
 
     # add tabs to the list of tabs
     tabs = []
     if place.postcode or place.street or place.description.cmsplugin_set.all():
-        tabs.append(places_dict["about"])          
+        tabs.append(tabs_dict["about"])          
     if place.getting_here.cmsplugin_set.all() or place.access_and_parking.cmsplugin_set.all() or place.has_map:
-        tabs.append(places_dict["directions"])
+        tabs.append(tabs_dict["directions"])
     if place.events().forthcoming_events:
-        tabs.append(places_dict["events"])  
+        tabs.append(tabs_dict["events"])  
     
     # were there any tabs created?
     if tabs:
@@ -225,7 +274,7 @@ def place(request, slug, active_tab=""):
         if len(tabs)==1:
             tabs=[]
 
-    meta_description_content = places_dict[active_tab or "about"]["meta_description_content"] 
+    meta_description_content = tabs_dict[active_tab or "about"]["meta_description_content"] 
     if active_tab:
         active_tab = "_" + active_tab
         
@@ -246,6 +295,7 @@ def place(request, slug, active_tab=""):
         {
         "place":place,
         "tabs": tabs,
+        "tab_object": place,
         "active_tab": active_tab,
         "template": template,
         "meta": meta,
