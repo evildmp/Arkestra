@@ -1,0 +1,15 @@
+{% if tabs %}
+    <ul id="tab_menu">
+    	{% for tab in tabs %}
+    		{% if tab.active %}
+    			<li class="active"> 
+    				<span>{{tab.title|capfirst}}</span>
+    			</li>
+    		{% else %}
+    			<li> 
+    				<a href="{{ tab_object.get_absolute_url }}{{tab.address}}">{{tab.title|capfirst}}</a>
+    			</li>            
+    		{% endif %}        
+    	{% endfor %}
+    </ul>
+{% endif %}
