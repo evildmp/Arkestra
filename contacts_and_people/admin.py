@@ -28,9 +28,6 @@ from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin, Inp
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
-if HAS_PUBLICATIONS:
-    from publications.admin import ResearcherInline
-
 
 # ------------------------- Membership admin -------------------------
 class MembershipForm(forms.ModelForm):
@@ -184,10 +181,6 @@ def create_action(entity):
 
 class PersonAdmin(PersonAndEntityAdmin):
     search_fields = ['given_name','surname','institutional_username',]
-    # inlines = [MembershipForPersonInline, PhoneContactInline, ObjectLinkInline,]
-    
-    # if HAS_PUBLICATIONS:
-    #         inlines.append(ResearcherInline)
     
     
     form = PersonForm
@@ -210,8 +203,9 @@ class PersonAdmin(PersonAndEntityAdmin):
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
         ('Contact information', {
                 'fieldsets': (fieldsets["email"], override_fieldset),
-                'inlines': (PhoneContactInline,)
+                'inlines': [PhoneContactInline,]
                 }),
+        ('Description', {'fieldsets': (('', {'fields': ('description',),}),)}),
         ('Entities', {'inlines':(MembershipForPersonInline,)}),
         ('Links', {'inlines': (ObjectLinkInline,),}),
         ('Advanced settings', {'fieldsets': (fieldsets["url"], fieldsets["slug"], advanced_fieldset)}),
@@ -479,7 +473,7 @@ class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
         ('Map', {'fieldsets': map_fieldsets,}),
     )
 
-admin.site.register(models.Person,PersonAdmin)
+# admin.site.register(models.Person,PersonAdmin)
 admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)
 admin.site.register(models.Site,SiteAdmin)
