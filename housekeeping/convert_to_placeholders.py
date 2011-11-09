@@ -152,7 +152,6 @@ def convert(action = "dryrun"):
                                                                                                                             
                             # setattr(item, old_field, "")
                             if execute == "execute":
-                                item.save()
                                 item.status = "Converted to placeholder"
                             else:
                                 item.status = "Unconverted"
@@ -163,15 +162,17 @@ def convert(action = "dryrun"):
                                 setattr(item, old_field, "")
                             
                                 item.status = "Junk field - too short; was deleted instead of converted:" + old_field_content
-                                print item, item.status
-                                item.save()
                             else:    
                                 item.status = "Junk field - too short; will be deleted instead of converted:" + old_field_content
                             # make a note that this was a junk item
                             junk_content.append(item)
                                 # make a note that we moved this item
 
-                        moved_items.append(item)    
+                        moved_items.append(item)
+
+                    if execute == "execute":
+                        item.save()
+                        
  
                 # information about junk content items
                 if execute == "execute":
