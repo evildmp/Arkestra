@@ -258,7 +258,9 @@ def place(request, slug, active_tab=""):
     tabs = []
     if place.postcode or place.street or place.description.cmsplugin_set.all():
         tabs.append(tabs_dict["about"])          
-    if place.getting_here.cmsplugin_set.all() or place.access_and_parking.cmsplugin_set.all() or place.has_map:
+    if (place.getting_here and place.getting_here.cmsplugin_set.all()) \
+        or (place.access_and_parking and place.access_and_parking.cmsplugin_set.all()) \
+        or place.has_map:
         tabs.append(tabs_dict["directions"])
     if place.events().forthcoming_events:
         tabs.append(tabs_dict["events"])  
