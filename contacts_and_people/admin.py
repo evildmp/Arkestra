@@ -351,14 +351,13 @@ class EntityAdmin(PersonAndEntityAdmin):
         ('Advanced settings', {'fieldsets': (fieldsets["url"], fieldsets["slug"],) }),
         ]
 
-
     if 'publications' in settings.INSTALLED_APPS:
-        tabs.append(  
-            ('Contacts & people page', {'fieldsets': ('Publications', {
-                    'fields': (('auto_publications_page', 'publications_page_menu_title',),)
-                }
-            ),}),
-            
+        publications_fieldset = (
+            'Publications', {
+                'fields': ('auto_publications_page', 'publications_page_menu_title',),
+             }),
+        tabs.append(
+            ('Publications', {'fieldsets': publications_fieldset})
         )
 
     def changelist_view(self, request, extra_context=None):
