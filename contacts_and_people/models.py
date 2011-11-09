@@ -743,12 +743,16 @@ try:
     if not MULTIPLE_ENTITY_MODE and Entity.objects.all():
         # default_entity_id is used to fill in admin fields automatically when not in MULTIPLE_ENTITY_MODE
         default_entity_id = base_entity_id
+except:
+    pass
+    print "Disaster! I couldn't set default_entity!"
+else:
     if base_entity_id:
         # set the default entity using the id
         default_entity = Entity.objects.get(id = base_entity_id)
-except:
-    pass
-    
+        print "Hooray! default_entity is", default_entity
+    else:
+        print "base_entity_id is not set"
 
 # crazymaniac's wild monkeypatch# 
 # """
