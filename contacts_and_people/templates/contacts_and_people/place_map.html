@@ -1,4 +1,4 @@
-{% extends "contacts_and_people/place.html" %}{% load thumbnail news_and_events_tags typogrify_tags placeholder_tags %}
+{% extends "contacts_and_people/place.html" %}{% load thumbnail placeholder_tags %}
 
 {% block extrastyles %}
 {{ block.super }}
@@ -92,7 +92,7 @@
 {% endif %}
 {% endblock scripts %}
 
-{% block body_attributes %}onload="initialize()"{% endblock body_attributes %}
+{% block body_attributes %}{{ block.super }}onload="initialize()"{% endblock body_attributes %}
 
 {% block skip_and_language %}
 {% endblock %}
@@ -106,21 +106,5 @@
 {% endblock pagetitle %}
 
 {% block place_information %}
-	{% if place.getting_here.get_plugins %}
-		<div class="{{ place.row_class }}">
-			<h2>Getting here</h2>
-			{% render_placeholder place.getting_here %}
-		</div>	
-	{% endif %}	
-	{% if place.access_and_parking.get_plugins %}
-		<div class="{{ place.row_class }}">
-			<h2>Access & parking</h2>
-			{% render_placeholder place.access_and_parking %}
-		</div>
-	{% endif %}
-	{% if place.has_map %}
-		<div class="row">
-			<div id="map_canvas"></div>
-		</div>	
-	{% endif %}
+	<div id="map_canvas"></div>
 {% endblock place_information %}
