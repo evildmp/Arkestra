@@ -17,16 +17,16 @@
 	function initialize() {
 		var latlng = new google.maps.LatLng({{ place.latitude }}, {{place.longitude}});
 
-	    var myOptions = {
-  		  panControl: false,
-	      zoom: {{ place.zoom }},
-	      center: latlng,
-	      mapTypeId: google.maps.MapTypeId.ROADMAP,
-		  scaleControl: true,
-    	  scaleControlOptions: {
-          position: google.maps.ControlPosition.BOTTOM_RIGHT
-     	  }		
-		}
+    var myOptions = {
+        panControl: false,
+        zoom: {{ place.zoom }},
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        scaleControl: true,
+        scaleControlOptions: {
+            position: google.maps.ControlPosition.BOTTOM_RIGHT
+        }		
+    }
 
 	    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
@@ -82,7 +82,7 @@
 	
 		{% endfor %}
     
-   		{% if place.site.building_set.count > 1 %}
+   		{% if place.site.maps.count > 1 %}
 			map.fitBounds( latlngbounds );
 		{% endif %}
 

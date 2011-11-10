@@ -44,6 +44,10 @@ class Site(models.Model):
     def __unicode__(self):
         return self.site_name
 
+    @property
+    def maps(self):
+        return [map for building in building_set.all() if building.has_map]
+         
 class BuildingManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
