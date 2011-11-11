@@ -52,4 +52,4 @@
 {% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
 
 {% block item_details %}
-{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div>Venue: <span class = "date"><a href="{{item.building.get_absolute_url}}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
+{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div>Venue: <span class = "date"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
