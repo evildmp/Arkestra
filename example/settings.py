@@ -235,7 +235,8 @@ INSTALLED_APPS = (
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
     'video',
-
+    # 'housekeeping',
+    
     # other applications
     
     'polymorphic',

@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     (r'^', include('vacancies_and_studentships.urls')),
 
     # housekeeping
-    (r'^', include('housekeeping.urls')),
+    # (r'^', include('housekeeping.urls')),
 
 
     )
