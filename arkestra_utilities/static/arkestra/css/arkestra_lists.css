@@ -205,7 +205,8 @@ ul.boxed li {
 ul.boxed li li {border: none;}
 ul.boxed li dl {margin:0;}
 
-dl dd {padding: 0; margin: 0 0 0 15px;}
+dl dd {padding: 0; margin: 0 0 5px 10px;}
+dl dd.not-indented {padding: 0; margin-left: 0;}
 
 /* for the sub column - the right hand column in some pages - that contains lists of links etc */
 
