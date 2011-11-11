@@ -211,6 +211,22 @@ class EntityManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
+    def base_entity(self):
+        try:
+            # are Entities available at all?
+            Entity.objects.all()
+        except DatabaseError:
+            # no - the database isn't 
+            raise Exception("Can't get Entity objects")
+        else:
+            # we managed to get Entity.objects.all()
+            # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
+            if not MULTIPLE_ENTITY_MODE:
+                try:
+                    return Entity.objects.get(id = base_entity_id)
+                # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
+                except Entity.DoesNotExist:
+                    pass
 
 class Entity(EntityLite, CommonFields):
     objects=EntityManager()
@@ -739,24 +755,15 @@ try:
 except mptt.AlreadyRegistered:
     pass
 
-# contacts_and_people.models.default_entity and default_entity_id is a key value, and used throughout the system
-
 # default_entity_id is used to autofill the default entity where required, when MULTIPLE_ENTITY_MODE = False
-default_entity_id = default_entity = None
-try:
-    if not MULTIPLE_ENTITY_MODE and Entity.objects.all():
-        # default_entity_id is used to fill in admin fields automatically when not in MULTIPLE_ENTITY_MODE
-        default_entity_id = base_entity_id
-except:
-    pass
-    print "Disaster! I couldn't set default_entity!"
+# default_entity is used throughout the system
+# make default_entity and default_entity_id available
+default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
+if default_entity:
+    default_entity_id = base_entity_id
 else:
-    if base_entity_id:
-        # set the default entity using the id
-        default_entity = Entity.objects.get(id = base_entity_id)
-        print "Hooray! default_entity is", default_entity
-    else:
-        print "base_entity_id is not set"
+    default_entity_id = None
+
 
 # crazymaniac's wild monkeypatch# 
 # """
