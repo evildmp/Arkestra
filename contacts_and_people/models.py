@@ -221,12 +221,11 @@ class EntityManager(models.Manager):
         else:
             # we managed to get Entity.objects.all()
             # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
-            if not MULTIPLE_ENTITY_MODE:
-                try:
-                    return Entity.objects.get(id = base_entity_id)
-                # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
-                except Entity.DoesNotExist:
-                    pass
+            try:
+                return Entity.objects.get(id = base_entity_id)
+            # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
+            except Entity.DoesNotExist:
+                pass
 
 class Entity(EntityLite, CommonFields):
     objects=EntityManager()
@@ -759,7 +758,7 @@ except mptt.AlreadyRegistered:
 # default_entity is used throughout the system
 # make default_entity and default_entity_id available
 default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
-if default_entity:
+if default_entity and not MULTIPLE_ENTITY_MODE:
     default_entity_id = base_entity_id
 else:
     default_entity_id = None
