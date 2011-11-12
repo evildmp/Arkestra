@@ -472,7 +472,11 @@ class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
         ('Map', {'fieldsets': map_fieldsets,}),
     )
 
-admin.site.register(models.Person,PersonAdmin)
+try:
+    admin.site.register(models.Person,PersonAdmin)
+except AlreadyRegistered:
+    pass
+
 admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)
 admin.site.register(models.Site,SiteAdmin)

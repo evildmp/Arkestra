@@ -64,7 +64,6 @@ class EntityDirectoryPluginPublisher(AutocompleteMixin, CMSPluginBase):
         return "/static/plugin_icons/entity_directory.png"
         
     def render(self, context, instance, placeholder):
-        print "in EntityDirectoryPluginPublisher"
         if instance.entity:
             entity = instance.entity
         else:
@@ -116,9 +115,7 @@ class EntityMembersPluginPublisher(AutocompleteMixin, CMSPluginBase):
         memberships = Membership.objects.filter(entity__in = entities).order_by('entity', '-importance_to_entity')
 
         nest = memberships.values('entity',).distinct().count() > 1 or False
-        print nest
 
-        print "returning context"
         context.update({
             'entity': entity,
             'memberships': memberships,
