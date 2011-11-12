@@ -290,14 +290,20 @@ def place(request, slug, active_tab=""):
     meta = {
         "description": meta_description_content,
         }
-    if default_entity:
-        page =  default_entity.get_website()
-        request.current_page = page
-        template = page.get_template()
-    else:
-        page =  entity.get_website()
-        request.current_page = page # for the menu, so it knows where we are
-        template = page.get_template()
+    page = default_entity.get_website()
+    request.current_page = page
+    template = page.get_template()
+
+    # the three lines above were those below - which look quite wrong
+
+    # if default_entity:
+    #     page = default_entity.get_website()
+    #     request.current_page = page
+    #     template = page.get_template()
+    # else:
+    #     page =  entity.get_website()
+    #     request.current_page = page # for the menu, so it knows where we are
+    #     template = page.get_template()
 
     return render_to_response(
         "contacts_and_people/place%s.html" % active_tab,
