@@ -214,18 +214,19 @@ class EntityManager(models.Manager):
     def base_entity(self):
         try:
             # are Entities available at all?
-            Entity.objects.all()
-        except DatabaseError:
-            # no - the database isn't 
-            raise Exception("Can't get Entity objects")
+            entity = Entity.objects.all()
+        except Exception, e:
+            # no - the database isn't ready 
+            print e      
         else:
             # we managed to get Entity.objects.all()
             # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
             try:
                 return Entity.objects.get(id = base_entity_id)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
-            except Entity.DoesNotExist:
+            except (Entity.DoesNotExist, DatabaseError):
                 pass
+
 
 class Entity(EntityLite, CommonFields):
     objects=EntityManager()
