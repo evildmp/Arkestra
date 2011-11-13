@@ -98,7 +98,7 @@ Put them on your PYTHONPATH
 
 There are other, probably better, ways of doing this, but it works.
 
-* `cd lib/python2.5/site-packages` (note - might be some other version of Python)
+* `cd lib/python2.6/site-packages` 
 * `ln -s ../../../Arkestra/arkestra_image_plugin`
 * `ln -s ../../../Arkestra/arkestra_utilities`
 * `ln -s ../../../Arkestra/contacts_and_people`
