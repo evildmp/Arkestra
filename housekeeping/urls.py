@@ -4,8 +4,8 @@ from django.contrib import admin
 urlpatterns = patterns('',
     # first, try to match /housekeeping/<task>/<execute>
     (r"^housekeeping/(?P<task>[^/]+)/(?P<action>[^/]+)/$", "housekeeping.tasks.tasks"),
-    # no match? 
-    (r"^housekeeping/", "housekeeping.housekeeping.options"),
+    # # no match? 
+    (r"^housekeeping/", "housekeeping.tasks.tasks"),
 
 
     # (r"^housekeeping/statistics/", "housekeeping.statistics.stats"),

@@ -9,7 +9,7 @@ from convert_to_placeholders import convert
 from tidy_links import tidy_links 
 
 @login_required
-def tasks(request, task, action = "dryrun"):
+def tasks(request, task = None, action = "dryrun"):
     report = {}
 
     if task == "convert-placeholders":
@@ -17,7 +17,7 @@ def tasks(request, task, action = "dryrun"):
     elif task == "tidy-links":
         report = tidy_links(action)
     else:
-        # nothing matched, so just do the menue
+        # nothing matched, so just do the menu
         return shortcuts.render_to_response(
         "housekeeping/housekeeping.html", {
                 "base_template": settings.CMS_TEMPLATES[0][0],
