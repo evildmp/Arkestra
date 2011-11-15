@@ -157,7 +157,12 @@ class Event(NewsAndEvents):
         """ 
         An event has an 'informative_url' if it itself is uninformative, but it is a child of a series
         """
-        # print self, "checking"
+        # print 
+        # print "========================================"
+        # print "checking", self
+        # print "is_uninformative", self.is_uninformative
+        # print "self.parent", self.parent
+        # 
         if self.is_uninformative and self.parent and self.parent.series:
             # print self, "parent!"
             return self.parent.get_absolute_url()
@@ -175,11 +180,20 @@ class Event(NewsAndEvents):
 
     @property
     def is_uninformative(self):
-        if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all() or self.links:
-            # print "uninformative"
+        print 
+        print "============================"
+        print self.body
+        if self.body:
+            print 1, self.body.cmsplugin_set.all()
+            print 2, self.external_url
+            print 3, self.please_contact.all()
+            print 4, self.registration_enquiries.all()
+        print "----------------------------"
+        if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all(): # or self.links_set.all():
+            print "uninformative"
             return False
         else:
-            return "informative"
+            print "informative"
             return True
         
     def save(self):
