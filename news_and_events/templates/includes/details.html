@@ -42,7 +42,7 @@
 								{% if event.building.map %}
 								    <dt>Map & directions</dt>
 								    <dd class="not-indented">
-								        <a href ="{{event.building.get_absolute_url}}directions"><img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.building.latitude }},{{ event.building.longitude }}&zoom={{ event.building.zoom }}&size={{ sidebar_map_size }}&markers=color:red|{{ event.building.latitude }},{{ event.building.longitude }}&sensor=false" /></a>
+								        <a href ="{{event.building.get_absolute_url}}map"><img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.building.latitude }},{{ event.building.longitude }}&zoom={{ event.building.zoom }}&size={{ sidebar_map_size }}&markers=color:red|{{ event.building.latitude }},{{ event.building.longitude }}&sensor=false" /></a>
 								    </dd>
 							    {% endif %}
 						    {% endif %}
