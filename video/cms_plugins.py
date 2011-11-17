@@ -100,7 +100,9 @@ class VideoPluginPublisher(CMSPluginBase):
                     if version.status != "encoding":
 
                         if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+                            print "** launching encodevideo()"
                             encodevideo.delay(source = instance.video, size = size, codec = codec)
+                        else:
                             thread = Thread(target=version.encode, name=videofilepath)
                             thread.start()
         
@@ -111,6 +113,7 @@ class VideoPluginPublisher(CMSPluginBase):
 
                 if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
                     encodevideo.delay(source = instance.video, size = size, codec = codec)
+                    print "** launching encodevideo()"
                 else:
                     thread = Thread(target=version.encode, name=videofilepath)
                     thread.start()
