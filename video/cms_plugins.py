@@ -86,14 +86,19 @@ class VideoPluginPublisher(CMSPluginBase):
             videofilepath = version.outputpath()
         
             # does the file exist?
-            if os.path.exists(videofilepath):
+            print "** version", codec_and_size
+            print "** version status", version.status
+            if os.path.exists(videofilepath): 
+                print "** file exists", videofilepath
                 # if it does, check that the status dictionary agrees
                 if version.status == "ready":
+                    print "** version is ready"
 
                     # and add the version to available_versions
                     instance.ready_versions.append(codec)
                 else:
                     # what if the status dictionary doesn't say that the file is ready?
+                    print "** version is not ready"
                     instance.unready_versions.append(codec)
 
                     # unless status check says it's encoding, it must be "missing" or "failed"- so let's try to encode it
@@ -108,12 +113,13 @@ class VideoPluginPublisher(CMSPluginBase):
         
             # if the file doesn't exist
             else:
+                print "** file doesn't exist", videofilepath
                 version.status = "missing"
                 instance.unready_versions.append(codec)
 
                 if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
                     encodevideo.delay(source = instance.video, size = size, codec = codec)
-                    print "** launching encodevideo()"
+                    print "** launching encodevideo() for", codec_and_size
                 else:
                     thread = Thread(target=version.encode, name=videofilepath)
                     thread.start()
@@ -142,6 +148,7 @@ class VideoPluginPublisher(CMSPluginBase):
                         instance.all_formats.append(description)
         
         instance.width = int(width)
+        instance.dumb_height = instance.width * .75
         instance.size = size
         context.update({
             'video':instance,
