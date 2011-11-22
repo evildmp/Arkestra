@@ -30,14 +30,40 @@ for menu in arkestra_menus:
 #           News Archive        [an Arkestra automatic page - won't appear in menu unless News & Events is selected] 
 #       Contacts & People       [an Arkestra automatic page]   
 
+# class ArkestraPages(Modifier):
+#     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
+#         # this currently relies on the pre-cut nodes. It *will* hammer the database
+#         if arkestra_menus and not post_cut:              
+#             
+#             self.auto_page_url = getattr(request, "auto_page_url", None)
+#             self.request = request
+#             self.nodes = nodes
+# 
+#             # loop over all the nodes returned by the nodes in the Menu classes
+#             for node in self.nodes: 
+#                 # for each node, try to find a matching Page that is an Entity's home page
+#                 try:
+#                     page = Page.objects.get(id=node.id, entity__isnull=False)
+#                 except Page.DoesNotExist:
+#                     pass
+#                 else:            
+#                     entity = page.entity.all()[0]  
+#                     # we have found a node for a Page with an Entity, so check it against arkestra_menus
+#                     for menu in arkestra_menus:
+#                         self.do_menu(node, menu, entity)
+#                                                                                
+#             return self.nodes
+#         else:
+#             return nodes
+
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
         # this currently relies on the pre-cut nodes. It *will* hammer the database
+        self.nodes = nodes                                                            
+        self.auto_page_url = getattr(request, "auto_page_url", None)
+        self.request = request
+        
         if arkestra_menus and not post_cut:              
-            
-            self.auto_page_url = getattr(request, "auto_page_url", None)
-            self.request = request
-            self.nodes = nodes
 
             # loop over all the nodes returned by the nodes in the Menu classes
             for node in self.nodes: 
@@ -45,22 +71,29 @@ class ArkestraPages(Modifier):
                 try:
                     page = Page.objects.get(id=node.id, entity__isnull=False)
                 except Page.DoesNotExist:
-                    pass
+                    node.entity = False
                 else:            
-                    entity = page.entity.all()[0]  
-                    # we have found a node for a Page with an Entity, so check it against arkestra_menus
+                    node.entity = page.entity.all()[0]  
                     for menu in arkestra_menus:
-                        self.do_menu(node, menu, entity)
+                        self.do_menu(node, menu, node.entity) 
                                                                                
             return self.nodes
         else:
-            return nodes
+            print "** post_cut"
+            for node in self.nodes:
+                # we have found a node for a Page with an Entity, so check it against arkestra_menus
+                for menu in arkestra_menus:
+                    # self.do_menu(node, menu, node.entity) 
+                    pass
+            return self.nodes      
 
     def do_menu(self, node, menu, entity):
         # does this entity have this kind of auto-page in the menu?
         if getattr(entity, menu["flag_attribute"]):
-
             cms_plugin_model = menu.get("cms_plugin_model")
+            
+            new_nodes = []
+            
             if cms_plugin_model:
                 # create an instance of the plugin class editor with appropriate attributes
                 instance = cms_plugin_model.model(
@@ -79,7 +112,7 @@ class ArkestraPages(Modifier):
                         url = entity.get_related_info_page_url(menu["url_attribute"]), 
                         parent = node
                         )
-                    if getattr(new_node, "ancestor", None) or new_node.selected:
+                    if getattr(new_node, "ancestor", None) or True:
                         plugin.add_links_to_other_items(instance)
                         for item in plugin.lists:
                             # and go through the other_items lists for each, creating a node for each
@@ -100,6 +133,8 @@ class ArkestraPages(Modifier):
             #     for sub_menu in menu["sub_menus"]:
             #         self.do_menu(node, sub_menu, entity)
 
+        # return new_nodes
+
     def create_new_node(self, title, url, parent):
         # create a new node for the menu
         new_node = NavigationNode(
@@ -107,7 +142,7 @@ class ArkestraPages(Modifier):
             url= url, 
             id=None,                           
             )
-    
+        print "** creating ", new_node
         new_node.parent = parent
         parent.children.append(new_node)
         self.nodes.append(new_node) 
