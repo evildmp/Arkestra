@@ -222,7 +222,7 @@ VERSIONS = {
     "H.264": {
         SIZES[0]:    {
                 "encoder": "HandBrakeCLI",
-                "type": "video/mp4; codecs='avc1.42E01E, .mp4a.40.2'", #supposedly, we should use the codecs attribute of the type attribute, but all it does for me is make Theora video stop working in Firefox
+                "type": 'video/mp4; codecs="avc1.42E01E, .mp4a.40.2"',  #supposedly, we should use the codecs attribute of the type attribute, but all it does for me is make Theora video stop working in Firefox
                 "options": {
                     "--preset": "iPhone & iPod Touch", 
                     "--width": SIZES[0], #"--vb": "600",  
@@ -233,7 +233,7 @@ VERSIONS = {
                 },
         SIZES[1]:    {
                 "encoder": "HandBrakeCLI",
-                "type": "video/mp4; codecs='avc1.42E01E, .mp4a.40.2'",
+                "type": 'video/mp4; codecs="avc1.42E01E, .mp4a.40.2"',
                 "options": {
                     "--preset": "iPhone & iPod Touch", 
                     "--width": SIZES[1], #"--vb": "600",  
@@ -246,7 +246,7 @@ VERSIONS = {
     "Theora": {
         SIZES[0]:   {
                 "encoder": "ffmpeg2theora",
-                "type": "video/ogg; codecs='theo, vorb'",
+                "type": 'video/ogg; codecs="theora, vorbis"',
                 "options": {
                     "--videoquality": "5", 
                     "--audioquality": "1", 
@@ -255,7 +255,7 @@ VERSIONS = {
             },
         SIZES[1]:   {
                 "encoder": "ffmpeg2theora",
-                "type": "video/ogg; codecs='theo, vorb'",
+                "type": 'video/ogg; codecs="theora, vorbis"',
                 "options": {
                     "--videoquality": "5", 
                     "--audioquality": "1", 

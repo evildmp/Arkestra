@@ -1,13 +1,16 @@
-{% load i18n filermedia %}
+{% load i18n filermedia %}{{video.height}}
 {% if not video.unready_versions %}
     <video width="{{ video.width }}" controls>
-    	{% for codec in video.formats.HTML5 %}}<source src="{{ codec.url}}" />{% endfor %}
+    	{% for codec in video.formats.HTML5 %}
+    	    <source src="{{ codec.url }}" type="{{ codec.type|safe }}" />
+    	{% endfor %}
     	{% if video.formats.FLASH %}
-    	    <object width="{{video.width}}" type="application/x-shockwave-flash" data="{% filer_staticmedia_prefix %}flash/player.swf">
-        		<param name="movie" value="{% filer_staticmedia_prefix %}flash/player.swf" />
+    	    <object width="{{video.width}}" height="{{ video.dumb_height }}" type="application/x-shockwave-flash" data="{{ STATIC_URL }}swf/player.swf">
+        		<param name="movie" value="{{ STATIC_URL }}swf/player.swf" />
+                <param name="allowfullscreen" value="true" /> 
         		{% for codec in video.formats.FLASH %}
-                	<param name="flashvars" value="controlbar=over&amp;file={{codec.url}}" />
-            	{% endfor %}
+                    <param name="flashvars" value="movie={{ codec.url }}" />            	
+                {% endfor %}
             </object>
         {% endif %}
     </video>
@@ -15,8 +18,8 @@
 {% else %}
 	<div style="border: 1px solid black; border-radius: 5px; width: {{video.width}}px; height:{{video.height}}px;">
 		<div style="text-align: center; padding: 15%">
-			<p>This video is not yet ready.</p>
-			<p>Please try again in a few moments.</p>
+			<p>This video is being encoded.</p>
+			<p>Please try again in a few minutes.</p>
 		</div>
 	</div>
 {% endif %}

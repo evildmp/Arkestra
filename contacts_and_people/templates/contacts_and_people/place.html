@@ -19,7 +19,7 @@
 {% block main_page_body %}
     {% include "arkestra/tabbed_menu.html" %}
 	{% block place_information %}
-		<p class="standout">{{ place.summary|typogrify }}</p>
+		<p class="subtitle">{{ place.summary|typogrify }}</p>
         <div class="row columns3">
 		    {% if place.postcode or place.street %}
         		<div class="column firstcolumn">

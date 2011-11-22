@@ -75,12 +75,12 @@ def convert(action = "dryrun"):
                         "fields": [                 
                             {                       
                                 "old_field": "research_synopsis",
-                                "new_field": "synopsis_of_research",                
+                                "new_field": "synopsis",                
                                 "slot": "body",
                                 },
                             {                       
                                 "old_field": "research_description",
-                                "new_field": "description_of_research",                
+                                "new_field": "description",                
                                 "slot": "body",
                                 },
                             ],
