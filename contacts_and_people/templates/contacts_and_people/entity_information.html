@@ -1,17 +1,16 @@
 {% extends entity.get_template %}
-{ % load mptt_tags %}
-{ % load entity_tags %}
-{% load cms_tags %}
 {% load typogrify_tags %}
 
 {% block title %}
 	<title>{{ title }}</title>
 {% endblock %}
-
-{% block columns %}	
-	@import url("/media/css/_layout/horiz/20_80.css");
-{% endblock columns %}
   
+{% block col_class %}
+	{% with is_menu_node="True" %}
+		{{ block.super }}
+	{% endwith %}
+{% endblock col_class %}
+
 {% block skip_and_language %}
 {% endblock %}
 
