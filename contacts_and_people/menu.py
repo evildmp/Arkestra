@@ -1,6 +1,7 @@
 from django.utils.safestring import mark_safe 
 from django.template import RequestContext
 from django.conf import settings
+from django.core.cache import cache
 
 from cms.models import Page
 
@@ -8,6 +9,7 @@ from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier, Menu
 
+from datetime import datetime
 
 main_news_events_page_list_length = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 arkestra_menus = settings.ARKESTRA_MENUS
@@ -58,12 +60,19 @@ for menu in arkestra_menus:
 
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
+        start_time = datetime.now()
         # this currently relies on the pre-cut nodes. It *will* hammer the database
         self.nodes = nodes                                                            
         self.auto_page_url = getattr(request, "auto_page_url", None)
         self.request = request
         
-        if arkestra_menus and not post_cut:              
+
+        if arkestra_menus and not post_cut:
+            key = "ArkestraPages.modify()" + request.path + "pre_cut"
+            cached_pre_cut_nodes = cache.get(key, None)
+            if cached_pre_cut_nodes: 
+                print "    ++ got cache", key, settings.CMS_CACHE_DURATIONS['menus']
+                return cached_pre_cut_nodes
 
             # loop over all the nodes returned by the nodes in the Menu classes
             for node in self.nodes: 
@@ -77,14 +86,17 @@ class ArkestraPages(Modifier):
                     for menu in arkestra_menus:
                         self.do_menu(node, menu, node.entity) 
                                                                                
+            print "    ++ saving cache", key
+            cache.set(key, self.nodes, settings.CMS_CACHE_DURATIONS['menus'])
+            print "    **", len(self.nodes), "nodes in", datetime.now() - start_time, "for ArkestraPages.modify()"
             return self.nodes
         else:
             print "** post_cut"
-            for node in self.nodes:
-                # we have found a node for a Page with an Entity, so check it against arkestra_menus
-                for menu in arkestra_menus:
-                    # self.do_menu(node, menu, node.entity) 
-                    pass
+            # for node in self.nodes:
+            #     # we have found a node for a Page with an Entity, so check it against arkestra_menus
+            #     for menu in arkestra_menus:
+            #         # self.do_menu(node, menu, node.entity) 
+            #         pass
             return self.nodes      
 
     def do_menu(self, node, menu, entity):
@@ -142,7 +154,7 @@ class ArkestraPages(Modifier):
             url= url, 
             id=None,                           
             )
-        print "** creating ", new_node
+
         new_node.parent = parent
         parent.children.append(new_node)
         self.nodes.append(new_node) 

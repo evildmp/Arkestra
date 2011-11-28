@@ -16,7 +16,7 @@ def common_settings(request, slug):
     # general values - entity, request, template
     entity = Entity.objects.get(slug=slug) or default_entity
     request.auto_page_url = request.path
-    request.path = entity.get_website().get_absolute_url() # for the menu, so it knows where we are
+    # request.path = entity.get_website().get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website()
     context = RequestContext(request)
     instance = VacanciesPlugin()
