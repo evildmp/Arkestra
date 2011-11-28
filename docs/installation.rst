@@ -43,7 +43,12 @@ Most of these items are available via PIP:
 
 `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
-You can try `pip install PIL`, but it doesn't always seem to work very well.
+You can try `pip install PIL`, but it doesn't always seem to work very well. This is often because
+pip installs PIL from source, and if you don't have the development packages (C headers) then it won't
+compile it with support for all required file formats. Make sure you get the `-dev` packages first. On
+a Debian system doing `apt-get install libjpg-dev libpng-dev` before getting PIL via pip fixed a big 
+problem with image uploads because thumbnails weren't being generated.
+ 
 
 From source
 ===========
