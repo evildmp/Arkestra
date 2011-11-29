@@ -91,7 +91,7 @@ class VacancyAdmin(VacancyStudentshipAdmin):
     fieldset_vacancy = ('', {'fields': ('salary', 'job_number')})
         
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy)}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy, fieldsets["image"])}),
             ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
@@ -117,7 +117,7 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
 
     fieldset_supervision = ('', {'fields': ('supervisors',)})
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"])}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"])}),
             ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
