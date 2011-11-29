@@ -228,7 +228,7 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_featuring = ('Featured people', {'fields': ('featuring',)})   
     fieldset_jumpiness = ('How this item should behave in lists', {'fields': ('jumps_queue_on', 'jumps_queue_everywhere')})
     tabs = (
-            ('Basic', {'fieldsets': (fieldset_type, fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"])}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"])}),
             ('Date & significance', {'fieldsets': (fieldset_when, fieldsets["importance"], fieldset_jumpiness)}),
             ('Parent & children', {'fieldsets': fieldsets_relationships}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
