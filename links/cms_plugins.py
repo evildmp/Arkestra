@@ -155,9 +155,6 @@ class CarouselPluginPublisher(CMSPluginBase):
         segments = list(instance.carousel_item.all())
         if len(segments) < 2:
             return # because it would be silly to have a carousel with only one segment
-        # TODO: this scaling code needs to be in a common place
-        # use the placeholder width as a hint for sizing
-        # unlike the image plugin, we only use relative widths
 
         # widths a fraction of nominal container width (deprecated)
         placeholder_width = get_placeholder_width(context, instance)
