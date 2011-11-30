@@ -26,6 +26,7 @@
 
 {% block main_page_body %}
 {% thumbnail person.image.file contacts_image_size subject_location=person.image.subject_location crop as image %}
+	{% with placeholder_width=person_description_width %}
 	{% block entity_information %}
     {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}				    
@@ -75,4 +76,5 @@
 		{% endwith %}	
 		{% endblock person_information %}
 	{% endblock entity_information %}
+	{% endwith %}   
 {% endblock main_page_body %}
