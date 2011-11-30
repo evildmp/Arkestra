@@ -198,6 +198,11 @@ class PersonAdmin(PersonAndEntityAdmin):
         'Institutional settings', {
             'fields': ('active', 'user', 'institutional_username', 'staff_id',),
         })
+    description_fieldset = (
+        '', {
+        'fields': ('description',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage',)
+        })
     
     tabs = [
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
@@ -205,7 +210,7 @@ class PersonAdmin(PersonAndEntityAdmin):
                 'fieldsets': (fieldsets["email"], override_fieldset),
                 'inlines': [PhoneContactInline,]
                 }),
-        ('Description', {'fieldsets': (('', {'fields': ('description',),}),)}),
+        ('Description', {'fieldsets': (description_fieldset,)}),
         ('Entities', {'inlines':(MembershipForPersonInline,)}),
         ('Links', {'inlines': (ObjectLinkInline,),}),
         ('Advanced settings', {'fieldsets': (fieldsets["url"], fieldsets["slug"], advanced_fieldset)}),
