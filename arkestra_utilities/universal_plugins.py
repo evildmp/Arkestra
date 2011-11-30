@@ -124,7 +124,6 @@ class UniversalPluginForm(object):
 
 
 class UniversalPlugin(object):
-    text_enabled = True
     def __init__(self, model = None, admin_site = None):
         self.render_template = "arkestra/universal_plugin_lister.html"
         self.admin_preview = False
