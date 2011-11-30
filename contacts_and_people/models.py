@@ -225,8 +225,8 @@ class EntityManager(models.Manager):
             try:
                 return Entity.objects.get(id = base_entity_id)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
-            except (Entity.DoesNotExist, DatabaseError):
-                print "*******"
+            except (Entity.DoesNotExist, DatabaseError), e:
+                print "*******", e
                 pass
 
 

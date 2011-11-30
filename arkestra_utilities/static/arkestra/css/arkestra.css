@@ -239,7 +239,11 @@ it's a bit awkward when non-floated images can have borders, because then the bo
     padding: 4px 7px; 
     border: 1px solid #888;
     }
-    
+
+/* fancybox */
+div.fancybox:hover img.fancybox-icon { opacity: .3;}
+img.fancybox-icon {padding: 3px}   
+div.fancybox:hover img.fancybox-icon:hover {opacity: 1; outline: 1px solid black;}   
     
 /* 
 standout - large type
