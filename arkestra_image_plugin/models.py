@@ -12,11 +12,7 @@ from django.conf import settings
 class FilerImage(CMSPlugin):
     LEFT = "left"
     RIGHT = "right"
-    FLOAT_CHOICES = ((LEFT, _("left")),
-                     (RIGHT, _("right")),
-                     )
     image = FilerImageField()
-    #   added for cardiff template calculations
     IMAGE_WIDTHS = (
         (1000.0, u"Automatic"),
         (u'Widths relative to the containing column', (
@@ -49,12 +45,14 @@ class FilerImage(CMSPlugin):
         (3.0, u'3x1'),
         )
     aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
-#   end of cardiff amendments
     alt_text = models.CharField(null=True, blank=True, max_length=255)
     use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
     caption = models.TextField(_("Caption"), blank=True, null=True)
     use_autoscale = models.BooleanField(_("use automatic scaling"), default=False, 
                                         help_text=_('tries to auto scale the image based on the placeholder context'))
+    FLOAT_CHOICES = ((LEFT, _("left")),
+                     (RIGHT, _("right")),
+                     )
     float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
     
     '''
@@ -82,3 +80,70 @@ class FilerImage(CMSPlugin):
             return self.page_link.get_absolute_url()
         else:
             return ''
+
+class ImageSetPlugin(CMSPlugin):
+    IMAGESET_KINDS = (
+        ("basic", "Basic"),
+        ("lightbox", "LightBox"),
+        ("slider", "Slider"),
+        )
+    kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")
+    IMAGE_WIDTHS = (
+        (1000.0, u"Automatic"),
+        (u'Relative to column', (
+            (100.0, u"100%"),
+            (75.0, u"75%"),
+            (66.7, u"66%"),
+            (50.0, u"50%"),
+            (33.3, u"33%"),
+            (25.0, u"25%"),
+            )
+        ),
+        (u'Absolute widths', (
+            (-50.0, u'50 pixels square'),
+            (-175.0, u'175 pixels'),
+            (-350.0, u'350 pixels'),
+            )
+        ),    
+        ('', u"Image's native width"),
+    )
+    width = models.FloatField(null=True, blank=True, choices = IMAGE_WIDTHS, default = 1000.0)
+    height = models.PositiveIntegerField(null=True, blank=True)
+    ASPECT_RATIOS = (
+        (0, u'Native'),
+        (1.5, u'3x2'),
+        (1.333, u'4x3'),
+        (1.0, u'Square'),
+        (.75, u'3x4'),
+        (.667, u'2x3'),
+        (.3, u'1x3'),
+        (3.0, u'3x1'),
+        )
+    aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
+    LEFT = "left"
+    RIGHT = "right"
+    FLOAT_CHOICES = ((LEFT, _("left")),
+                     (RIGHT, _("right")),
+                     )
+    float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
+    def __unicode__(self):
+        return u"image-set-%s" % self.kind
+    
+
+class ImageSetItem(models.Model):
+    plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
+    image = FilerImageField()
+    alt_text = models.CharField(null=True, blank=True, max_length=255)
+    use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
+    caption = models.TextField(_("Caption"), blank=True, null=True)
+
+    def __unicode__(self):
+        if self.image:
+            return self.image.label
+        else:
+            return u"Image Publication %s" % self.caption
+        return ''
+
+    @property
+    def alt(self): 
+        return self.alt_text
