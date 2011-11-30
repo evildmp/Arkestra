@@ -156,8 +156,7 @@ class FilerImagePlugin(CMSPluginBase):
 
 class ImageSetItemEditor(admin.TabularInline):
     model = ImageSetItem
-    extra=0
-    # caption = 
+    extra=1
     fieldset_basic = ('', {'fields': (('image', 'alt_text',),)})
     fieldset_advanced = ('Caption', {'fields': (( 'use_description_as_caption', 'caption'),), 'classes': ('collapse',)})
     fieldsets = (fieldset_basic, fieldset_advanced)
@@ -314,7 +313,7 @@ class ImageSetPublisher(CMSPluginBase):
 
     def icon_src(self, instance):
         if instance.imageset_item.count() == 1:
-            return instance.instanceimageset_item.all()[0].image.thumbnails['admin_tiny_icon']
+            return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
         elif instance.kind == "basic":
             return "/static/plugin_icons/imageset_basic.png"
         elif instance.kind == "lightbox":
