@@ -90,6 +90,9 @@ class VideoVersion(models.Model):
         return os.path.dirname(str(self.source.file)) 
 
     def encode(self):
+        print
+        print "======== encoding video ========="
+        print 
         # we're going to create an encoded version of our video
         # let's find out from the dictionaries what's required
         codec_profile = VERSIONS[self.codec][self.size]
@@ -98,6 +101,12 @@ class VideoVersion(models.Model):
         schema = ENCODERS[encoder]["schema"]
         command = [encoder]
 
+        print "codec_profile", codec_profile
+        print "codec_code", codec_code
+        print "encoder", encoder
+        print "schema", schema
+        print "command", command
+        
         # check the output folder exists; create it if not
         if not os.path.exists(self.abs_directory_path()):
             print ">>> the output folder doesn't exist:", self.abs_directory_path()
@@ -128,7 +137,7 @@ class VideoVersion(models.Model):
         
         # now do the encoding and don't let anything after this happen until we finish executing command:
         print ">>> saved status"
-        print "command:", command
+        print "command:", str(command)
         exit_status = subprocess.call(command) 
         print ">>> exited from", command
         if exit_status == 0: # it's OK, so mark the version OK

@@ -20,7 +20,7 @@ class VideoVersionInline(admin.TabularInline):
 
 
 class VideoVersionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('size', 'codec', 'status')
 
 
 class MyVideoAdmin(VideoAdmin):

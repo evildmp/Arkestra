@@ -16,9 +16,9 @@
     </video>
 
 {% else %}
-	<div style="border: 1px solid black; border-radius: 5px; width: {{video.width}}px; height:{{video.height}}px;">
+	<div style="background: #bbb; border-radius: 10px; width: {{video.width}}px; height:{{video.height}}px;">
 		<div style="text-align: center; padding: 15%">
-			<p>This video is being encoded.</p>
+			<p>The video <em>{{ video }}</em> is being encoded.</p>
 			<p>Please try again in a few minutes.</p>
 		</div>
 	</div>
