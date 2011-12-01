@@ -117,8 +117,8 @@ def person(request, slug, active_tab=""):
     if home_role:
         entity = home_role.entity
     entity = person.get_entity() # don't rely on home_role.entity - could be None or overridden
-    # address = person.get_address()
-   
+    address = person.get_address()
+
     contact = person.get_please_contact()
     email = contact.email
     phone = contact.phone_contacts
@@ -209,7 +209,7 @@ def person(request, slug, active_tab=""):
             "home_role": home_role, # entity and position
             "entity": entity,
             "template": template, # from entity
-            # "address": address, # from entity
+            "address": address, # from entity
             "email": email, # from person or please_contact
             "location": location, # from person, or None 
             "contact": contact, # from person or please_contact

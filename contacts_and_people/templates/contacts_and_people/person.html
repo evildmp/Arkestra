@@ -30,7 +30,6 @@
 	{% block entity_information %}
     {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}				    
-		{% with address=entity.address %}
     		<div class="row columns2">
     			<div class="column firstcolumn">
     				<div>
@@ -73,7 +72,6 @@
 					</div>
 				</div>
 			</div>	
-		{% endwith %}	
 		{% endblock person_information %}
 	{% endblock entity_information %}
 	{% endwith %}   
