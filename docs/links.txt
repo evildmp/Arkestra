@@ -1,0 +1,62 @@
+Generic Links App
+
+The links app allows generic links between any models. You need to add a setting similar to this:
+
+To register specific models that they can be links, a link_schema.py module needs to be created in
+your app. The registry system is comparable with how django.contrib.admin works.
+Every linkable needs a certain list of attributes. Either defined on the model itself or provided with a wrapper.
+A list of the needed attributes is in `links.schema_registry.ATTRIBUTES`. Be aware that 'title' and 'description'
+are also used in the autocomplete widget.
+
+There a multiple ways how you can define a link/wrapper:
+
+`from links import schema
+from news_and_events import models
+from news_and_events import admin`
+
+1. Very simple case. Your model has all the needed attributes already
+
+`schema.register(models.Event, search_fields=admin.EventAdmin.search_fields)`
+
+
+2. The attributes on the model are named different:
+
+`schema.register(models.Event, search_fields=admin.EventADmin.search_fields,
+	title='name', description='some_foreign_key.title', heading='"Event"')`
+
+Each named argument after search_fields represents a attribute the wrapper will have.
+A string means the dot noted path will be used to traverse through object, starting from
+the linked object. `description='some_foreign_key.title'` will result in using
+`theobj.some_foreign_key.title` for the title. It does not matter if the attributes are properties
+or callable methods, both work.
+
+`heading='"Event"'` will use a static string for the heading. Both `"'foo'"` and `'"bar"'` work.
+
+3. You want to do some extra calculation.
+
+This works by providing a callable that takes one argument: the linked object
+It can be a lamda function or a external function
+
+`def some_very_complicated_function(obj):
+	r = []
+	for x in obj.something.all():
+		if x.y:
+			r.append(u"foo: %s" % x.bar)
+		else:
+			r.append(u"stuff: %s" % x.bar)
+	return "<br />".join(r)
+schema.register(models.Event, search_fields=admin.EventAdmin.search_fields,
+	title=lambda obj: u"%s (%s)" % (unicode(obj), obj.active_count),
+	description=some_very_complicated_function)`
+
+
+4. You have a quite complex wrapper: make your own Wrapper subclass
+
+`from links import LinkWrapper
+class MyEventLinkWrapper(LinkWrapper):
+	search_fields = admin.EventAdmin.search_fields
+	def title(self):
+		return self.obj.something(extra=' asdfsadf')
+	def description(self):
+		return "static description"
+schema.register_wrapper(Event, MyEventLinkWrapper)`

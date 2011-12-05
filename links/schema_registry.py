@@ -24,7 +24,7 @@ class LinkWrapper(SearchItemWrapper):
         return call_if_callable(getattr(self.obj, 'metatag', 'no metatag defined'))
     
     def heading(self):
-        return call_if_callable(getattr(self.obj, 'heading', 'no heading defined'))
+        return call_if_callable(getattr(self.obj, 'heading', ''))
 
 
 ATTRIBUTES = [

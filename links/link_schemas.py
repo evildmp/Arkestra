@@ -38,20 +38,30 @@ if 'cms' in settings.INSTALLED_APPS:
 if 'filer' in settings.INSTALLED_APPS:
     from filer.models import File
     from filer.admin import FileAdmin
+
     def the_path(obj, items=[]):
         items[0:0] = [obj.name]
         if obj.parent:
             items = the_path(obj.parent, items)
         return items
-    def file_description(obj):
-        if obj.folder:
-            s = u" &raquo; ".join(the_path(obj.folder))
-        else:
-            s = obj.logical_folder.name
-        #return u"Folder: %s" % s
-        return obj.description
+
+    class FileLinkWrapper(LinkWrapper):
+        search_fields = ['name', 'original_filename', 'sha1', 'description']
+        def description(self):
+            obj = self.obj
+            if obj.folder:
+                s = u" &raquo; ".join(the_path(obj.folder))
+            else:
+                s = obj.logical_folder.name
+            #return u"Folder: %s" % s
+            return obj.description
+        
+        def heading(self):
+            return u"Files"    
+            
+    schema.register_wrapper(File, FileLinkWrapper)
     
-    schema.register(File, FileAdmin.search_fields, title="label", description=file_description, heading="'Files'", url="url", #short_text = 'name'
-     )
+    # schema.register(File, FileAdmin.search_fields, title="label", description="'file_description'", heading="'Files'", url="url", #short_text = 'name'
+    #  )
     
     
