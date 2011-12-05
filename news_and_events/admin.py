@@ -217,6 +217,7 @@ class EventAdmin(NewsAndEventsAdmin):
 
     # the tabs
     fieldset_type = ('Type', {'fields': ('type',)},)
+    fieldset_building = ('Building', {'fields': ('building',)},)
     fieldset_when = ('When', {'fields': ('series', 'single_day_event', ('start_date', 'start_time'), ('end_date', 'end_time'))})
     fieldsets_relationships = (
         ('Parent & children', {
@@ -229,7 +230,13 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_jumpiness = ('How this item should behave in lists', {'fields': ('jumps_queue_on', 'jumps_queue_everywhere')})
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"])}),
-            ('Date & significance', {'fieldsets': (fieldset_when, fieldsets["importance"], fieldset_jumpiness)}),
+            ('Date & significance', {'fieldsets': 
+                ( 
+                    fieldset_when, 
+                    fieldsets["importance"], 
+                    fieldset_jumpiness,)}
+                    ),
+            ('Location', {'fieldsets': (fieldset_building, fieldsets["location"],)}),
             ('Parent & children', {'fieldsets': fieldsets_relationships}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
