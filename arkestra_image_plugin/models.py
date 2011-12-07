@@ -46,7 +46,7 @@ class FilerImage(CMSPlugin):
         )
     aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
     alt_text = models.CharField(null=True, blank=True, max_length=255)
-    use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
+    use_description_as_caption = models.BooleanField(verbose_name = "Show caption", default=False, help_text = "Use image's description field as caption; override using <em>Caption</em> field below")
     caption = models.TextField(_("Caption"), blank=True, null=True)
     use_autoscale = models.BooleanField(_("use automatic scaling"), default=False, 
                                         help_text=_('tries to auto scale the image based on the placeholder context'))
