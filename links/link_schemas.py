@@ -5,6 +5,8 @@ from links import models, admin
 from links import schema, LinkWrapper
 from django.conf import settings
 
+permitted_filetypes = getattr(settings, "PERMITTED_FILETYPES", ["pdf",])
+
 schema.register(models.ExternalLink, search_fields=admin.ExternalLinkAdmin.search_fields, 
                 #url='url', description=lambda obj: u"%s<br />%s" % (obj.url, obj.description), metadata='description', heading='"External links"'
                 url='url', description = 'description', 
@@ -23,6 +25,9 @@ if 'cms' in settings.INSTALLED_APPS:
         def short_text(self):
             return self.obj.get_menu_title()
         def description(self):
+            if not self.obj.get_meta_description():
+                return "<span class='errornote'>The Page <em>" + str(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
+
             return self.obj.get_meta_description()
         def metadata(self):
             ancestors = self.obj.get_cached_ancestors()
@@ -38,30 +43,64 @@ if 'cms' in settings.INSTALLED_APPS:
 if 'filer' in settings.INSTALLED_APPS:
     from filer.models import File
     from filer.admin import FileAdmin
-
-    def the_path(obj, items=[]):
-        items[0:0] = [obj.name]
-        if obj.parent:
-            items = the_path(obj.parent, items)
-        return items
+    
 
     class FileLinkWrapper(LinkWrapper):
         search_fields = ['name', 'original_filename', 'sha1', 'description']
-        def description(self):
-            obj = self.obj
-            if obj.folder:
-                s = u" &raquo; ".join(the_path(obj.folder))
+        def title(self):
+            return self.obj.label
+            
+            # warn the user if the item lacks a Name field
+            if not self.obj.name:
+                item = self.obj.label
+                return "%s <span class='errornote'>This Filer item has an empty <strong>Name</strong> field. If you are responsible for this item, please provide a proper name for it."  % item
+            # otherwise, return its name
             else:
-                s = obj.logical_folder.name
-            #return u"Folder: %s" % s
-            return obj.description
-        
+                return self.obj.name
+
+
+        def description(self):
+            file = self.obj
+            # an empty list for errors to report
+            errors = []
+
+            # find the item's folder_path
+            if file.folder:
+                folder = file.folder
+                path = [str(folder)]
+                while folder.parent:
+                    path.insert(0, str(folder.parent))
+                    folder = folder.parent
+                folder_path = u" &rsaquo; ".join(path)
+            else:
+                folder_path = file.logical_folder.name
+                
+            # improperly filed? warn
+            if folder_path == "unfiled files":
+                errors.append("unfiled, and may be deleted")
+
+            # no file name? warn
+            if not file.name:
+                errors.append("missing Name field")
+                            
+            # errors? list them all together
+            if errors:
+                error_message = "<span class='errornote'>Is this your file?<br />" + "<br />".join(["<em class='item_description'>%s</em>" %e for e in errors]) + "</span>"
+            else:
+                error_message = ""
+                        
+            # if not in allowed types, raises an exception and prevents item from being returned
+            filetype = permitted_filetypes[file.extension]
+            
+            
+            # build the description
+            description = u"%s<br /><em>Folder:</em> %s<br />%s %s" % (
+                 filetype, folder_path, file.description or "No description available", error_message
+                )
+            
+            return description
+                    
         def heading(self):
             return u"Files"    
             
     schema.register_wrapper(File, FileLinkWrapper)
-    
-    # schema.register(File, FileAdmin.search_fields, title="label", description="'file_description'", heading="'Files'", url="url", #short_text = 'name'
-    #  )
-    
-    
