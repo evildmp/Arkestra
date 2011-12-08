@@ -32,6 +32,7 @@ class VideoPluginPublisher(CMSPluginBase):
         
         So, we should make the calculations here optional, and for non-Arkestra implementations do something different
         """        
+        print "****"
         instance.has_borders = False
                     
         # calculate the width of the placeholder
@@ -86,6 +87,7 @@ class VideoPluginPublisher(CMSPluginBase):
             videofilepath = version.outputpath()
         
             # does the file exist?
+            print "**"
             print "** version", codec_and_size
             print "** version status", version.status
             if os.path.exists(videofilepath): 
@@ -106,7 +108,8 @@ class VideoPluginPublisher(CMSPluginBase):
 
                         if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
                             print "** launching encodevideo()"
-                            encodevideo.delay(source = instance.video, size = size, codec = codec)
+                            version_status = encodevideo.delay(source = instance.video, size = size, codec = codec)
+                            print "** got back from encodevideo()", version_status
                         else:
                             thread = Thread(target=version.encode, name=videofilepath)
                             thread.start()

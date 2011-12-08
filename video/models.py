@@ -87,6 +87,11 @@ class VideoVersion(models.Model):
 
     def directory(self):
         # e.g. "filer_private/2010/11/23"
+        print ">> self                 ", self
+        print ">> self.source          ", self.source
+        print ">> self.source.file     ", self.source.file
+        print ">> str(self.source.file)", str(self.source.file)
+        print ">> os.path.dirname(str(self.source.file))", os.path.dirname(str(self.source.file)) 
         return os.path.dirname(str(self.source.file)) 
 
     def encode(self):
@@ -139,6 +144,7 @@ class VideoVersion(models.Model):
         print ">>> saved status"
         print "command:", str(command)
         exit_status = subprocess.call(command) 
+        print exit_status
         print ">>> exited from", command
         if exit_status == 0: # it's OK, so mark the version OK
             self.status = "ready"
@@ -150,7 +156,8 @@ class VideoVersion(models.Model):
             print ">>> save FAILED", exit_status
 
         # we should never return from here with the status still "encoding" - but that has happened - how?
-
+        return self.status
+       
     def url(self):
         # the url for a particular version
         return os.path.join(settings.MEDIA_URL, \
