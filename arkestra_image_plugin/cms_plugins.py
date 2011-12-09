@@ -55,7 +55,7 @@ def width_of_image(context, plugin, image):
             # calculate the width of the block the image will be in
             width = calculate_container_width(context, plugin, width, auto)
 
-        return width, aspect_ratio
+    return width, aspect_ratio
 
 def shave_if_floated(plugin, width):
     # shave off 5 point if the image is floated, to make room for a margin
@@ -122,6 +122,7 @@ class FilerImagePlugin(CMSPluginBase):
         instance.has_borders = False
         
         # calculate its width
+        print "**", width_of_image(context, instance, instance.image)
         width, aspect_ratio = width_of_image(context, instance, instance.image)
                        
         # shave if floated
