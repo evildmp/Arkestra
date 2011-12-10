@@ -1,0 +1,17 @@
+/* Navigation Links */
+.row div.anythingSlider-minimalist-square .anythingControls {
+	float: right;
+	position: relative;
+	bottom: 0;
+	right: 0%;
+	z-index: 100;
+	opacity: 0.75;
+	filter: alpha(opacity=75);
+}
+
+
+.row div.anythingSlider.activeSlider .anythingControls ul.thumbNav li a.cur {
+	background-color: black;
+	color: #333;
+        box-shadow:none;
+}
