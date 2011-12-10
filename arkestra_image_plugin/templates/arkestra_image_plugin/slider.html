@@ -1,7 +1,7 @@
 {% load sekizai_tags thumbnail %}
 <ul id="{{ imageset|default:"slider"}}">
 	{% for item in imageset.items %} 
-    	<li><img src="{% thumbnail item.image icon_size crop subject_location=image.subject_location %}" alt=""></li>			
+    	<li><img src="{% thumbnail item.image icon_size crop subject_location=item.image.subject_location %}" alt=""></li>			
 	{% endfor %}
 </ul>
 	
@@ -29,7 +29,7 @@ div.anythingSlider-minimalist-square.activeSlider .anythingWindow {
 	border-color: red;
 }
 div.anythingSlider-minimalist-square.activeSlider .anythingControls ul a {
-	background-color: white;
+	background-color: gray;
 }
 
 </style>
@@ -54,9 +54,10 @@ div.anythingSlider-minimalist-square.activeSlider .anythingControls ul a {
 			$('#{{ imageset|default:"slider"}}').anythingSlider({
 				theme: "minimalist-square",
 				toggleArrows: true,
-				toggleControls: true,
+				toggleControls: false,
 				autoPlay: true,
-				buildStartStop: false
+				buildStartStop: false,
+				delay: 5000
 				});
 		});
 	</script>

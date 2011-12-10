@@ -111,13 +111,17 @@ class ImageSetPlugin(CMSPlugin):
     height = models.PositiveIntegerField(null=True, blank=True)
     ASPECT_RATIOS = (
         (0, u'Native'),
+        (3.0, u'3x1'),
+        (1.778, u'16x9'),
+        (1.618, u'Golden ratio (horizonal)'),
         (1.5, u'3x2'),
         (1.333, u'4x3'),
         (1.0, u'Square'),
         (.75, u'3x4'),
         (.667, u'2x3'),
-        (.3, u'1x3'),
-        (3.0, u'3x1'),
+        (0.618, u'Golden ratio (vertical)'),
+        (0.563, u'16x9'),
+        (0.3, u'1x3'),
         )
     aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
     LEFT = "left"
