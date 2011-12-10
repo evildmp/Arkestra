@@ -9,6 +9,8 @@ from django.db import models
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 
+from easy_thumbnails.files import get_thumbnailer
+
 from widgetry.tabs.admin import ModelAdminWithTabs
 
 from arkestra_utilities.output_libraries.plugin_widths import *
@@ -230,7 +232,32 @@ class ImageSetPublisher(CMSPluginBase):
                 # set captions
                 items = imageset.imageset_item.all()
                 for imageset_item in items:
+                    thumbnail_options = {} 
+                    
+                    # set a caption for the item
                     imageset_item.caption = set_image_caption(imageset_item)
+                    
+                    # get width, height and lightbox_max_dimension
+                    [width, height] = [imageset_item.image.width, imageset_item.image.height]
+                    lightbox_max_dimension = context.get("lightbox_max_dimension")
+                    
+                    # user has set aspect ratio? apply it, set crop argument for thumbnailer
+                    if imageset.aspect_ratio:
+                        height = width / imageset.aspect_ratio
+                        thumbnail_options.update({'crop': True}) 
+                    
+                    # get scaler value from width, height
+                    scaler = min(lightbox_max_dimension / dimension for dimension in [width, height])
+                    
+                    # set size of thumbnail using scaler
+                    thumbnail_options.update({'size': (width * scaler, height * scaler)})
+
+                    # get thumbnailer object for the image
+                    thumbnailer = get_thumbnailer(imageset_item.image)
+                    
+                    # apply options and get url
+                    imageset_item.url = thumbnailer.get_thumbnail(thumbnail_options).url  
+
                 imageset.items = items
                 num_of_items = len(items)
                 
@@ -250,7 +277,6 @@ class ImageSetPublisher(CMSPluginBase):
                     LIGHTBOX_COLUMNS = {2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
                     divider = LIGHTBOX_COLUMNS.get(num_of_items, 6) 
                     icon_width = container_width / divider 
-                    print "** ", container_width , divider
                     icon_height = imageset.height or icon_width
                      
                     # make the icons small enough to fit neatly on a line; if too small, make them bigger
@@ -263,8 +289,6 @@ class ImageSetPublisher(CMSPluginBase):
                 context.update({
                     'imageset':imageset,
                     'icon_size': (int(icon_width), int(icon_height)),
-                    # 'image_size': u'%sx%s' % (int(width), int(height)),
-                    # 'caption_width': int(width),
                     'placeholder':placeholder,
                 })
 
@@ -287,12 +311,11 @@ class ImageSetPublisher(CMSPluginBase):
                 # set caption
                 imageset_item.caption = set_image_caption(imageset_item)
         
-                print
                 print "final output size", width, "x", height
                 
                 context.update({
                     'imageset':imageset,
-                    'imageset_item': imageset_item,
+                    'imageset_item': imageset_item, 
                     'image_size': u'%sx%s' % (int(width), int(height)),
                     'caption_width': int(width),
                     'placeholder':placeholder,
@@ -312,12 +335,15 @@ class ImageSetPublisher(CMSPluginBase):
         return self
 
     def icon_src(self, instance):
+        print instance.kind
         if instance.imageset_item.count() == 1:
             return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
         elif instance.kind == "basic":
             return "/static/plugin_icons/imageset_basic.png"
         elif instance.kind == "lightbox":
             return "/static/plugin_icons/lightbox.png"
+        elif instance.kind == "slider":
+            return "/static/plugin_icons/image_slider.png"
         
 plugin_pool.register_plugin(ImageSetPublisher)
 plugin_pool.register_plugin(FilerImagePlugin)   
