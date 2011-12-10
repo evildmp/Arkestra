@@ -17,7 +17,7 @@ class BaseLink(models.Model):
     """
     All links, whether placed using the Admin Inline mechanism or as plugins, require this information
     """
-    destination_content_type = models.ForeignKey(ContentType, verbose_name="Item type", related_name = "links_to_%(class)s") 
+    destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s") 
     destination_object_id = models.PositiveIntegerField(verbose_name="Item")
     destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
     
@@ -128,6 +128,10 @@ class ObjectLink(Link):
     """
     When content_object object is rendered via its view, {% links %} in the template will display all the instances of this model that match its content_object field.
     """ 
+
+    class Meta:
+        verbose_name = "Link"
+
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id') # the content object the link is attached to    
