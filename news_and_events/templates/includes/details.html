@@ -37,7 +37,7 @@
 									{% endfor %}
 						    {% endif %}
 						    {% if event.building %}
-		    				    <dt>Venue {% if event.get_children %}(unless otherwise indicated){% endif %}</dt>
+		    				    <dt>Venue {% if event.children_have_different_venues %}(unless otherwise indicated){% endif %}</dt>
 		    				    <dd>{{ event.building.get_postal_address|join:"<br />" }}</dd>
 								{% if event.building.map %}
 								    <dt>Map & directions</dt>
