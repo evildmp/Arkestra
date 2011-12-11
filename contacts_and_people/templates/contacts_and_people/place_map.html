@@ -44,47 +44,45 @@
 
 		{% for p in place.site.building_set.all %}
 		
-		{% if p.latitude and p.longitude and p.zoom and p.map %}
+			{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
-			var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
+				var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
 
-	        latlngbounds.extend(siteLatLng);
+		        latlngbounds.extend(siteLatLng);
 	
-		    var marker = new MarkerWithLabel({
-	       		position: siteLatLng,
-	       		map: map,
-	            {% ifequal place p %}
-    	            animation: google.maps.Animation.DROP,
-    	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
-    	            zIndex: 10000,
-    				labelClass: "labels main-label", // the CSS class for the label
-	            {% else %}
-    				labelClass: "labels", // the CSS class for the label
-	            {% endifequal %}
-				labelContent: "{{p.get_name}}",
-				labelAnchor: new google.maps.Point(-15, 30),
-				labelStyle: {opacity: 0.85}
-	   		});
+			    var marker = new MarkerWithLabel({
+		       		position: siteLatLng,
+		       		map: map,
+		            {% ifequal place p %}
+	    	            animation: google.maps.Animation.DROP,
+	    	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
+	    	            zIndex: 10000,
+	    				labelClass: "labels main-label", // the CSS class for the label
+		            {% else %}
+	    				labelClass: "labels", // the CSS class for the label
+		            {% endifequal %}
+					labelContent: "{{p.get_name}}",
+					labelAnchor: new google.maps.Point(-15, 30),
+					labelStyle: {opacity: 0.85}
+		   		});
 
 
-		    google.maps.event.addListener(marker, "click", function () {
-			    infowindow.setContent('{% spaceless %}
-					{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}
-					{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}{% endspaceless %}');
-	            infowindow.open(map, this);
-	        });
+			    google.maps.event.addListener(marker, "click", function () {
+				    infowindow.setContent('{% spaceless %}
+						{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}
+						{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p.get_name}}</a>{% else %}{{p.get_name}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}{% endspaceless %}');
+		            infowindow.open(map, this);
+		        });
 		
-			{%ifequal p place%}
-			    pMarker = marker;
-	        {%endifequal%}
+				{%ifequal p place%}
+				    pMarker = marker;
+		        {%endifequal%}
 			
-	    {% endif %}
+		    {% endif %}
 	
 		{% endfor %}
-    
-   		{% if place.site.maps.count > 1 %}
+   
 			map.fitBounds( latlngbounds );
-		{% endif %}
 
 	    return pMarker;
 	    }	
