@@ -130,6 +130,7 @@ Same salient points:
 * {% extends newsarticle.get_template %} - see ArkestraGenericModel.get_template, above
 * page furniture, such as the metadata, will be handled by the template it extends 
 
+
 ***********
 managers.py
 ***********
@@ -164,40 +165,44 @@ Go back to your model and add an attribute so it knows about the manager::
 
 
 *******************
-What a plugin needs
+models.py (again)
 *******************
 
-class MyPluginEditor(CMSPlugin, ArkestraGenericPluginOptions):
+Now let's create a plugin that we can use to list a number of the items in the model we have created.
+
+We have already imported arkestra_utilities.ArkestraGenericPluginOptions. This provides::
+
+* entity: the entity whose items we'll publish (can usually be left blan; Arkestra will work out what to do)
+* layout: if there are multiple lists (e.g. news and events), will they be stacked or side-by-side?
+* format: title only? details? image?
+* heading_level: above the list there'll be a heading
+* order_by: date alone, or rank by importance too?
+* list format: horizontal or vertical
+* group dates: group lists into sublists (of months, usually)
+* limit_to: how many items - leave blank for no limit
+
+::
+	class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
+
+Note that this plugin can handle both news and events
+
+    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news events")
+    show_previous_events = models.BooleanField()
+    news_heading_text = models.CharField(max_length=25, default="News")
+    events_heading_text = models.CharField(max_length=25, default="Events")
+
+
+
+
+
+
+
+
+
+class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
 
 This is in effect the model for the plugin, and will inherit:
 
-    entity = models.ForeignKey(Entity, null=True, blank=True, 
-        help_text="Leave blank for autoselect", 
-        related_name="%(class)s_plugin")
-    LAYOUTS = (
-        ("sidebyside", u"Side-by-side"),
-        ("stacked", u"Stacked"),
-        )
-    layout = models.CharField("Plugin layout", max_length=25, choices = LAYOUTS, default = "sidebyside")
-    FORMATS = (
-        ("title", u"Title only"),
-        ("details image", u"Details"),
-        )
-    format = models.CharField("Item format", max_length=25,choices = FORMATS, default = "details image")    
-    heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
-    ORDERING = (
-        ("date", u"Date alone"),
-        ("importance/date", u"Importance & date"),
-        )
-    order_by = models.CharField(max_length = 25, choices=ORDERING, default="importance/date")
-    LIST_FORMATS = (
-        ("vertical", u"Vertical"),
-        ("horizontal", u"Horizontal"),
-        )
-    list_format = models.CharField("List format", max_length = 25, choices=LIST_FORMATS, default="vertical")
-    group_dates = models.BooleanField("Show date groups", default = True)
-    limit_to = models.PositiveSmallIntegerField("Maximum number of items", default = 5, null = True, blank = True, 
-        help_text = u"Leave blank for no limit")
 
 form and admin
 ==============
