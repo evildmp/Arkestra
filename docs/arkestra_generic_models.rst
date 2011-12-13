@@ -12,63 +12,75 @@ models.py
 
 Import the classes you'll need::
 
-	from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
-	from arkestra_utilities.mixins import URLModelMixin
+from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
+from arkestra_utilities.mixins import URLModelMixin
 
-Inherit the ones you need into your new model class:
+Inherit the ones you need into your new model class::
 
-	class MyModel(ArkestraGenericModel, URLModelMixin):
+class NewsArticle(ArkestraGenericModel, URLModelMixin):
 
-You don't need to inherit URLModelMixin, but it can be useful. URLModelMixin provides slug and external_url fields, and __unicode__() and get_absolute_url() methods - handy if your instances of your model will each have their own page on the site. 
+You don't need to inherit URLModelMixin, but it can be useful. URLModelMixin provides fields:
 
-Create your class, subclassing ArkestraGenericModel:
+* slug
+* external_url
+                                                                                            
+and methods:
 
-from arkestra_utilities.generic_models import ArkestraGenericModel
+* __unicode__() 
+* get_absolute_url() 
 
-class Recording(ArkestraGenericModel):
+URLModelMixin handy if your instances of your model will each have their own page on the site. 
 
-This will inherit:
+ArkestraGenericModel provides:
 
-    title			the full title of the item
-    short_title		a short version, for lists
-    summary 	    a brief summary, used in lists and on the item's main page
-    body 			a PlaceholderField    
-    image
+* title:			the full title of the item
+* short_title:		a short version, for lists
+* summary: 	    a brief summary, used in lists and on the item's main page
+* body: 			a PlaceholderField    
+* image:
 
-    hosted_by		the Entity that hosts or publishes the item
-    publish_to		the other Entities to whose pages it should be published
-    please_contact 	a Person
-    importance		
+* hosted_by:		the Entity that hosts or publishes the item
+* publish_to:		the other Entities to whose pages it should be published
+* please_contact: 	a Person
+* importance:		
 
-    def get_importance(self):
-        if self.importance: # if they are not being gathered together, mark them as important
-            return "important"
-        else:
-            return ""
+* get_importance(self):	marks items as important, to help gather them together or highlight them in lists as required
 
-    @property
-    def links(self):
-        return self.object_links_set.all()
+and @properties:
 
-    @property
-    def external_url(self):
-        # if the inheriting model doesn't have an external_url attribute, we'll give it a None one just in case this is needed
-        return None
+*  links
+*  external_url
+*  is_uninformative():	the item bears little information of its own
     
-    @property
-    is_uninformative()	the item bears little information of its own
+And you can add whatever fields of your own that are required. 
     
-Add whatever fields you need of your own - for example:
 
-    release_date
-    artist
-    formats
-    catalogue_number
-    
-* generate a menu item
-* add a url
-* add a view    
-    
+********                                                            
+admin.py
+********
+
+Import some handy mixins::
+
+from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
+      
+* SupplyRequestMixin supplies the context to the admin - you might have a need for it
+* AutocompleteMixin
+* InputURLMixin
+* fieldsets: some handy predefined fieldsets
+
+Define the admin form and class, and do the usual things with them::
+
+class NewsArticleForm(InputURLMixin):
+    class Meta:
+        model = NewsArticle
+
+
+class NewsArticledmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
+    related_search_fields = ['hosted_by', 'external_url',] # autocomplete on these fields
+
+    def _media(self):
+        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+    media = property(_media)
 
 *******************
 What a plugin needs
