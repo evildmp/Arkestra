@@ -52,7 +52,7 @@ and @properties:
 *  external_url
 *  is_uninformative():	the item bears little information of its own
     
-And you can add whatever fields of your own that are required. 
+And you can add whatever fields of your own that are required and ignore the ones that are not.
     
 
 ********                                                            
@@ -81,6 +81,36 @@ Define the admin form and class, and do the usual things with them::
 	    def _media(self):
 	        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
 	    media = property(_media)
+
+
+***********
+managers.py
+***********
+
+It's useful to give your model a manager. You don't *need* to, but it helps keep things tidy, and we'll use one in this example. In particular, if you want to make use of the ArkestraGenericPlugin, that makes use of a `get_items()` method on your manager.
+
+Inherit the generic model manager::
+
+	from arkestra_utilities.managers import ArkestraGenericModelManager
+
+At present this only contains::
+
+	    def get_by_natural_key(self, slug):
+	        return self.get(slug=slug)
+
+but in the future it might acquire more.
+
+Define your manager and give it a `get_items()` method::
+
+	class NewsArticleManager(ArkestraGenericModelManager):
+	    def get_items(self, instance):
+			# just for now, we will return all the objects of this model
+	        return self.model.objects.all()
+
+Go back to your model and add an attribute::
+
+    objects = NewsArticleManager()
+
 
 *******************
 What a plugin needs
