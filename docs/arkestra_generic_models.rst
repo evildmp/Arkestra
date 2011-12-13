@@ -15,7 +15,9 @@ Import the classes you'll need::
 	from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 	from arkestra_utilities.mixins import URLModelMixin
 
-class MyModel(ArkestraGenericModel, URLModelMixin):
+Inherit the ones you need into your new model class:
+
+	class MyModel(ArkestraGenericModel, URLModelMixin):
 
 You don't need to inherit URLModelMixin, but it can be useful. URLModelMixin provides slug and external_url fields, and __unicode__() and get_absolute_url() methods - handy if your instances of your model will each have their own page on the site. 
 
