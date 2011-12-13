@@ -4,8 +4,8 @@ from django.utils.translation import ugettext as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from arkestra_utilities.universal_plugins import UniversalPlugin
-from arkestra_utilities.universal_plugins import UniversalPluginForm
+from arkestra_utilities.generic_models import ArkestraGenericPlugin
+from arkestra_utilities.generic_models import ArkestraGenericPluginForm
 from arkestra_utilities.mixins import AutocompleteMixin
 
 from contacts_and_people.templatetags.entity_tags import work_out_entity
@@ -13,47 +13,18 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 from models import NewsAndEventsPlugin, NewsArticle, Event
 from mixins import NewsAndEventsPluginMixin
 
-class NewsAndEventsPluginForm(UniversalPluginForm, forms.ModelForm):
+from menu import menu_dict
+
+class NewsAndEventsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
     class Meta:
         model = NewsAndEventsPlugin
 
 
-class CMSNewsAndEventsPlugin(UniversalPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
-    """
-    How to use and abuse this plugin:
-    
-    first create an instance of the plugin model:
-    
-        instance = NewsAndEventsPlugin()
-    
-    set the attributes as required:
-    
-        instance.display = "events"
-        instance.type = "for_place"
-        instance.place = self
-        instance.view = "current"
-        instance.format = "details image"
-        
-    render it to get back the items you want in instance.lists, if you have the context:
-    
-        CMSNewsAndEventsPlugin().render(context, instance, None)
-
-    alternatively (this is used in the menus, for example):
-    
-        plugin = CMSNewsAndEventsPlugin()   
-        plugin.get_items(instance)
-        plugin.add_links_to_other_items(instance)    
-        ... and any operations tests as required
-        
-    and the NewsAndEventsPlugin() needs to have the lists attribute of CMSNewsAndEventsPlugin()
-
-    """
+class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm
-    auto_page_attribute = "auto_news_page"
-    auto_page_slug = "news-and-events"
-    auto_page_menu_title = "news_page_menu_title"
+    menu_cues = menu_dict
     fieldsets = (
         (None, {
         'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')

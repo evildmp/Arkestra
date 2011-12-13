@@ -11,12 +11,7 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
-class UniversalPluginModelManagerMixin(models.Manager):
-    def get_by_natural_key(self, slug):
-        return self.get(slug=slug)
-
-
-class UniversalPluginModelMixin(models.Model):
+class ArkestraGenericModel(models.Model):
     class Meta:
         abstract = True
 
@@ -71,10 +66,16 @@ class UniversalPluginModelMixin(models.Model):
         else:
             return True
 
+    def get_items(self, instance=None):
+        return self.objects.all()
 
-class UniversalPluginOptions(models.Model):
+
+class ArkestraGenericPluginOptions(models.Model):
     class Meta:
         abstract = True
+    entity = models.ForeignKey(Entity, null=True, blank=True, 
+        help_text="Leave blank for autoselect", 
+        related_name="%(class)s_plugin")
     LAYOUTS = (
         ("sidebyside", u"Side-by-side"),
         ("stacked", u"Stacked"),
@@ -107,7 +108,7 @@ class UniversalPluginOptions(models.Model):
             return self.heading_level + 1 # so if headings are h3, sub-headings are h4
 
 
-class UniversalPluginForm(object):
+class ArkestraGenericPluginForm(object):
     def clean(self):
         if "horizontal" in self.cleaned_data["list_format"]:
             self.cleaned_data["order_by"] = "importance/date"
@@ -123,12 +124,12 @@ class UniversalPluginForm(object):
         return self.cleaned_data
 
 
-class UniversalPlugin(object):
+class ArkestraGenericPlugin(object):
     text_enabled = True
     def __init__(self, model = None, admin_site = None):
         self.render_template = "arkestra/universal_plugin_lister.html"
         self.admin_preview = False
-        super(UniversalPlugin, self).__init__(model, admin_site)
+        super(ArkestraGenericPlugin, self).__init__(model, admin_site)
 
     def set_defaults(self, instance):
         # set defaults
@@ -137,9 +138,10 @@ class UniversalPlugin(object):
 
     def add_link_to_main_page(self, instance):
         if instance.type == "plugin" or instance.type == "sub_page":
-            if (any(d['items'] for d in self.lists)) and getattr(instance.entity, self.auto_page_attribute, False):
-                instance.link_to_main_page = instance.entity.get_related_info_page_url(self.auto_page_slug)
-                instance.main_page_name = getattr(instance.entity, self.auto_page_menu_title, "")
+            if (any(d['items'] for d in self.lists)) and \
+                getattr(instance.entity, self.menu_cues["auto_page_attribute"], False): 
+                instance.link_to_main_page = instance.entity.get_related_info_page_url(self.menu_cues["url_attribute"])
+                instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])
 
     def print_settings(self):
         print "---- plugin settings ----"

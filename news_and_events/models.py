@@ -19,7 +19,8 @@ from contacts_and_people.models import Entity, Person, Building, default_entity_
 from links.models import ExternalLink
 
 from arkestra_utilities.output_libraries.dates import nice_date
-from arkestra_utilities.universal_plugins import UniversalPluginModelMixin, UniversalPluginOptions
+# from arkestra_utilities.models import ArkestraGenericModel
+from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
 
 from managers import NewsArticleManager, EventManager
@@ -29,7 +30,7 @@ PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
 
-class NewsAndEvents(UniversalPluginModelMixin, URLModelMixin):
+class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
     content = models.TextField(null=True, blank=True, 
         help_text="Not used or required for external items")
@@ -382,16 +383,16 @@ def receiver_function(sender, **kwargs):
 post_save.connect(receiver_function, sender = Event)
 
 
-class NewsAndEventsPlugin(CMSPlugin, UniversalPluginOptions):
+class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     DISPLAY = (
         ("news & events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
     display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news_and_events")
-    entity = models.ForeignKey(Entity, null=True, blank=True, 
-        help_text="Leave blank for autoselect", 
-        related_name="news_events_plugin")
+    # entity = models.ForeignKey(Entity, null=True, blank=True, 
+    #     help_text="Leave blank for autoselect", 
+    #     related_name="%(class)s_plugin")
     show_previous_events = models.BooleanField()
     news_heading_text = models.CharField(max_length=25, default="News")
     events_heading_text = models.CharField(max_length=25, default="Events")

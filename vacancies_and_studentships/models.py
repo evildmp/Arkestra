@@ -7,7 +7,8 @@ from cms.models import CMSPlugin
 # from filer.fields.image import FilerImageField
 
 from arkestra_utilities.output_libraries.dates import nice_date
-from arkestra_utilities.universal_plugins import UniversalPluginOptions, UniversalPluginModelMixin
+# from arkestra_utilities.models import ArkestraGenericModel
+from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
 from contacts_and_people.models import Entity, Person #, default_entity_id
 
@@ -18,7 +19,7 @@ from managers import VacancyManager, StudentshipManager
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
-class CommonVacancyAndStudentshipInformation(UniversalPluginModelMixin, URLModelMixin):
+class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin):
     class Meta:
         abstract = True
         ordering = ['-closing_date']  
@@ -71,14 +72,14 @@ class Studentship(CommonVacancyAndStudentshipInformation):
     objects = StudentshipManager()
 
 
-class VacanciesPlugin(CMSPlugin, UniversalPluginOptions):
+class VacanciesPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     DISPLAY = (
         (u"vacancies & studentships", u"Vacancies and studentships"),
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
     )
     display = models.CharField(max_length=25,choices=DISPLAY, default="vacancies studentships")
-    entity = models.ForeignKey(Entity, null=True, blank=True, 
-        help_text="Leave blank for autoselect", related_name="vacs_studs_plugin")
+    # entity = models.ForeignKey(Entity, null=True, blank=True, 
+    #     help_text="Leave blank for autoselect", related_name="%(class)s_plugin")
     vacancies_heading_text = models.CharField(max_length=25, default="Vacancies")
     studentships_heading_text = models.CharField(max_length=25, default="Studentships")

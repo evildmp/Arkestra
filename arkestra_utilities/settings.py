@@ -75,32 +75,16 @@ CMS_MENU_TITLE_OVERWRITE = True
 
 # Built in menu modifiers are in contacts_and_people.menu
 
+
+from news_and_events.menu import menu_dict as news_and_events_menu
+from contacts_and_people.menu import menu_dict as contacts_and_people_menu
+from vacancies_and_studentships.menu import menu_dict as vacancies_and_studentships_menu
+
+
 ARKESTRA_MENUS = (
-    {
-    "application": "news_and_events", 
-    "flag_attribute": "auto_news_page", 
-    "plugins_module": "news_and_events.cms_plugins",
-    "cms_plugin_model_name": "CMSNewsAndEventsPlugin",
-    "title_attribute": "news_page_menu_title",
-    "url_attribute": "news-and-events",
-    "sub_menus": ()
-    },
-    {
-    "application": "contacts_and_people", 
-    "flag_attribute": "auto_contacts_page", 
-    "cms_plugin_model_name": None,
-    "title_attribute": "contacts_page_menu_title",
-    "url_attribute": "contact",
-    "sub_menus": ()
-    },
-    {
-    "flag_attribute": "auto_vacancies_page", 
-    "plugins_module": "vacancies_and_studentships.cms_plugins",
-    "cms_plugin_model_name": 'CMSVacanciesPlugin',
-    "title_attribute": "vacancies_page_menu_title",
-    "url_attribute": "vacancies-and-studentships",
-    "sub_menus": ()
-    },
+    news_and_events_menu,
+    contacts_and_people_menu,
+    vacancies_and_studentships_menu,
     )
 
 # Do you want all menu branches to expand? 

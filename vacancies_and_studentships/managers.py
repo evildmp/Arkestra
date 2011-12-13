@@ -4,11 +4,11 @@ from django.conf import settings
 from datetime import datetime
 import operator
 
-from arkestra_utilities.universal_plugins import UniversalPluginModelManagerMixin
+from arkestra_utilities.managers import ArkestraGenericModelManager
 
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 
-class StudentshipManager(UniversalPluginModelManagerMixin):
+class StudentshipManager(ArkestraGenericModelManager):
     def get_items(self, instance):
         """
         returns current_studentships, archived_studentships, series_studentships
@@ -37,7 +37,7 @@ class StudentshipManager(UniversalPluginModelManagerMixin):
         
         return self.model.objects.all()
     
-class VacancyManager(UniversalPluginModelManagerMixin):
+class VacancyManager(ArkestraGenericModelManager):
     def get_items(self, instance):
         """
         """

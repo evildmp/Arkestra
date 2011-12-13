@@ -36,5 +36,5 @@ urlpatterns = patterns('',
 
 if "publications" in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
-        url(r'^', include('vacancies_and_studentships.urls')),
+    (r"^entity/(?P<slug>[-\w]+)/publications/$", "contacts_and_people.views.publications"),
     )

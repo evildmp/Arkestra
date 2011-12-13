@@ -4,27 +4,26 @@ from django.utils.translation import ugettext as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from arkestra_utilities.universal_plugins import UniversalPlugin
-from arkestra_utilities.universal_plugins import UniversalPluginForm
+from arkestra_utilities.generic_models import ArkestraGenericPlugin
+from arkestra_utilities.generic_models import ArkestraGenericPluginForm
 from arkestra_utilities.mixins import AutocompleteMixin
 
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 
 from models import VacanciesPlugin, Vacancy, Studentship
 from mixins import VacancyStudentshipPluginMixin
+from menu import menu_dict
 
-class VacanciesStudentshipsPluginForm(UniversalPluginForm, forms.ModelForm):
+class VacanciesStudentshipsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
     class Meta:
         model = VacanciesPlugin
 
 
-class CMSVacanciesPlugin(UniversalPlugin, VacancyStudentshipPluginMixin, AutocompleteMixin, CMSPluginBase):
+class CMSVacanciesPlugin(ArkestraGenericPlugin, VacancyStudentshipPluginMixin, AutocompleteMixin, CMSPluginBase):
     model = VacanciesPlugin
     name = _("Vacancies & Studentships")
     form = VacanciesStudentshipsPluginForm
-    auto_page_attribute = "auto_vacancies_page"
-    auto_page_slug = "vacancies-and-studentships"
-    auto_page_menu_title = "vacancies_page_menu_title"
+    menu_cues = menu_dict
     
     fieldsets = (
         (None, {
