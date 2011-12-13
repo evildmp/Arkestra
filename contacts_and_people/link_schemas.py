@@ -24,7 +24,7 @@ class PersonWrapper(LinkWrapper):
     def description(self):
         data = []
         data.append(smart_unicode(self.obj.get_role()))
-        data.append(smart_unicode(self.obj.get_entity()))
+        data.append(smart_unicode(self.obj.get_entity))
         return ', '.join(data)
 
     def thumbnail_url(self):
@@ -52,10 +52,10 @@ class EntityWrapper(LinkWrapper):
             return "Abstract entity - description unavailable"
         if self.obj.external_url:
             return "External entity at " + self.obj.external_url.url
-        if self.obj.get_website().get_meta_description():
-            return self.obj.get_website().get_meta_description()
+        if self.obj.get_website.get_meta_description():
+            return self.obj.get_website.get_meta_description()
         else:
-            return "<span class='errornote'>The page <em>" + str(self.obj.get_website()) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
+            return "<span class='errornote'>The page <em>" + str(self.obj.get_website) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
 
     def heading(self):
         return "Related pages"

@@ -1,4 +1,4 @@
-{% extends event.template %}
+{% extends event.get_template %}
 {% load events_tags %}
 {% load placeholder_tags %}
 {% load humanize %}
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<ul class = "news icons">
-			<li><a href = "{{ event.link_to_news_and_events_page }}">More {{ entity.short_name }} events</a></li>
+			<li><a href = "{{ event.link_to_more }}">More {{ entity.short_name }} events</a></li>
 		</ul>
     {% endblock entity_information %}
 {% endwith %}

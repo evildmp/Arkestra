@@ -19,9 +19,8 @@ from contacts_and_people.models import Entity, Person, Building, default_entity_
 from links.models import ExternalLink
 
 from arkestra_utilities.output_libraries.dates import nice_date
-# from arkestra_utilities.models import ArkestraGenericModel
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
-from arkestra_utilities.mixins import URLModelMixin
+from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
 
 from managers import NewsArticleManager, EventManager
 
@@ -40,24 +39,14 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
     def save(self, *args, **kwargs):
         super(NewsAndEvents, self).save(*args, **kwargs)
-    
-    def get_entity(self):
-        """
-        Real-world information, can be None
-        """
-        return self.hosted_by or Entity.objects.get(id=default_entity_id)
-    
-    def get_website(self):
-        """
-        for internal Arkestra purposes only
-        """
-        if self.get_entity():
-            return self.get_entity().get_website()
-        else:
-            return None
-        
+
+    def link_to_more(self):
+        return self.get_hosted_by.get_related_info_page_url("news-and-events")        
 
 class NewsArticle(NewsAndEvents):
+    url_path = "news"
+    objects = NewsArticleManager()
+    
     date = models.DateTimeField(default=datetime.now,
         help_text=u"Dateline for the item (the item will not be published until then" ,  )
     display_indefinitely = models.BooleanField(
@@ -69,17 +58,10 @@ class NewsArticle(NewsAndEvents):
         help_text=u"Will remain a featured item until this date")
     is_sticky_everywhere = models.BooleanField(u"Featured everywhere",
         default=False, help_text=u"Will be featured in other entities's news lists") 
-    objects = NewsArticleManager()
     
     class Meta:
         ordering = ['-date']
-        
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/news/%s/" % self.slug
-        
+                
     def get_when(self):
         """
         get_when() provides a human-readable attribute under which items can be grouped.
@@ -91,7 +73,10 @@ class NewsArticle(NewsAndEvents):
         return get_when
 
 
-class Event(NewsAndEvents):
+class Event(NewsAndEvents, LocationModelMixin):
+    url_path = "event"
+    objects = EventManager()
+
     type = models.ForeignKey('EventType')
     featuring = models.ManyToManyField(Person, related_name='%(class)s_featuring',
         null=True, blank=True,
@@ -129,10 +114,6 @@ class Event(NewsAndEvents):
     end_time = models.TimeField(null=True, blank=True)
     single_day_event = models.BooleanField(default=False)
     building = models.ForeignKey(Building, null=True, blank=True)
-    precise_location = models.CharField(max_length=50, null=True, blank=True,
-        help_text=u"Precise location within building, for visitors")
-    access_note = models.CharField(max_length=255, null=True, blank=True,
-        help_text=u"Notes on access/visiting hours/etc")
     # this won't appear in the admin
     jumps_queue_on = models.DateField(null=True, blank=True,
         help_text=u"Will become a featured item on this date") 
@@ -142,17 +123,10 @@ class Event(NewsAndEvents):
         null = True, blank = True,
         help_text=u"The people who responsible for registration, if different from those in <em>Please contact</em>"
         ) 
-    objects = EventManager()
     
     class Meta:
         ordering = ['type', 'start_date', 'start_time']
     
-    def get_absolute_url(self):
-        if self.external_url:
-            return self.external_url.url
-        else:
-            return "/event/%s/" % self.slug
-
     @property
     def informative_url(self):
         """ 
@@ -352,9 +326,7 @@ class Event(NewsAndEvents):
         elif self.series:
             return "Regular events"
         
-    def get_short_title(self):
-        return self.short_title
-    
+            
     def get_admin_title(self):
         return self.title + " (" + self.get_dates() + ")"
 
@@ -385,14 +357,11 @@ post_save.connect(receiver_function, sender = Event)
 
 class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     DISPLAY = (
-        ("news & events", u"News and events"),
+        ("news events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
-    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news_and_events")
-    # entity = models.ForeignKey(Entity, null=True, blank=True, 
-    #     help_text="Leave blank for autoselect", 
-    #     related_name="%(class)s_plugin")
+    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news events")
     show_previous_events = models.BooleanField()
     news_heading_text = models.CharField(max_length=25, default="News")
     events_heading_text = models.CharField(max_length=25, default="Events")

@@ -159,6 +159,7 @@ class Building(models.Model):
         instance.lists = plugin.lists
         return instance
 
+    @property
     def get_website(self):
         return None
         
@@ -334,6 +335,7 @@ class Entity(EntityLite, CommonFields):
             showparent = entity.display_parent
         return ancestors
 
+    @property
     def get_website(self):
         """
         Return the Django CMS page that this Entity has attached to it (or to its nearest parent)
@@ -342,7 +344,7 @@ class Entity(EntityLite, CommonFields):
             return self.website
         else:
             try:
-                return self.parent.get_website()
+                return self.parent.get_website
             except AttributeError: # I think this is right                
                 return None
 
@@ -358,16 +360,16 @@ class Entity(EntityLite, CommonFields):
             # try
             return self.parent.get_website_url()
         else:    # except
-            return default_entity.get_website()
+            return default_entity.get_website
 
     def get_template(self):
         """
         Returns a template for any pages that need to render based on this entity
         """
-        if self.get_website():
-            return self.get_website().get_template()
+        if self.get_website:
+            return self.get_website.get_template()
         else:
-            return default_entity.get_website().get_template()
+            return default_entity.get_website.get_template()
 
     def get_building(self):
         """
@@ -576,6 +578,7 @@ class Person(PersonLite, CommonFields):
         else: # the poor person had no memberships
             return None
             
+    @property
     def get_entity(self):
         """
         Works out a person's best entity, based on get_role
@@ -592,13 +595,13 @@ class Person(PersonLite, CommonFields):
         """
         Works out a person's address, based on their home/best entity or information that overrides this
         """
-        if self.get_entity(): # needs an entity to work
+        if self.get_entity: # needs an entity to work
             if self.building:
-                address = self.get_entity().get_institutional_address()
+                address = self.get_entity.get_institutional_address()
                 address.extend(self.building.get_postal_address())
                 return address
             else:
-                return self.get_entity().get_address()
+                return self.get_entity.get_address()
 
     def get_please_contact(self):
         """

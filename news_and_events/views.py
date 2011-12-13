@@ -21,8 +21,8 @@ class NewsAndEventsViews(object):
 def common_settings(request, slug):
     entity = Entity.objects.get(slug=slug) or default_entity
     request.auto_page_url = request.path
-    # request.path = entity.get_website().get_absolute_url() # for the menu, so it knows where we are
-    request.current_page = entity.get_website()
+    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
+    request.current_page = entity.get_website
     context = RequestContext(request)
     instance = NewsAndEventsPlugin()
     instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
@@ -150,24 +150,18 @@ def news_archive(request, slug=getattr(default_entity,"slug", None)):
         context,
         )
 
-def newsarticle_and_event(item):
-    item.hosted_by = item.hosted_by or default_entity
-    item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
-    item.template = item.hosted_by.get_template()
-    return item
 
 def newsarticle(request, slug):
     """
     Responsible for publishing news article
     """
     newsarticle = get_object_or_404(NewsArticle, slug=slug)
-    newsarticle = newsarticle_and_event(newsarticle)
     
     return render_to_response(
         "news_and_events/newsarticle.html",
         {
         "newsarticle":newsarticle,
-        "entity": newsarticle.hosted_by,
+        "entity": newsarticle.get_hosted_by,
         "meta": {"description": newsarticle.summary,}
         },
         RequestContext(request),
@@ -179,7 +173,6 @@ def event(request, slug):
     """
     print " -------- views.event --------"
     event = get_object_or_404(Event, slug=slug)
-    event = newsarticle_and_event(event)
     
     return render_to_response(
         "news_and_events/event.html",

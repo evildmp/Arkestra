@@ -29,6 +29,9 @@ class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin
     description = models.TextField(null=True, blank=True,
         help_text="No longer used")
 
+    def link_to_more(self):
+        return self.get_hosted_by.get_related_info_page_url("vacancies-and-studentships")        
+
     def get_when(self):
         """
         get_when() provides a human-readable attribute under which items can be grouped.

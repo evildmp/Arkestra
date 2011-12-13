@@ -17,8 +17,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
     request.auto_page_url = request.path
-    # request.path = entity.get_website().get_absolute_url() # for the menu, so it knows where we are
-    request.current_page = entity.get_website()
+    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
+    request.current_page = entity.get_website
     template = entity.get_template()
     main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
 
@@ -65,8 +65,8 @@ def people(request, slug, letter=None):
     # general values - entity, request, template
     entity = Entity.objects.get(slug=slug)
     # request.page_path = request.path # for the menu, because next we mess up the path
-    # request.path = entity.get_website().get_absolute_url()
-    request.current_page = entity.get_website()
+    # request.path = entity.get_website.get_absolute_url()
+    request.current_page = entity.get_website
     template = entity.get_template()
     main_page_body_file = "includes/people_list_with_index.html"
     # meta values - title and meta
@@ -116,7 +116,7 @@ def person(request, slug, active_tab=""):
     home_role = person.get_role()
     if home_role:
         entity = home_role.entity
-    entity = person.get_entity() # don't rely on home_role.entity - could be None or overridden
+    entity = person.get_entity # don't rely on home_role.entity - could be None or overridden
     address = person.get_address()
 
     contact = person.get_please_contact()
@@ -131,10 +131,10 @@ def person(request, slug, active_tab=""):
         
     if home_role:
         description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
-        request.current_page = entity.get_website() 
+        request.current_page = entity.get_website 
     else:
         description = default_entity.__unicode__()
-        request.current_page = default_entity.get_website()
+        request.current_page = default_entity.get_website
 
     meta = {
         "description": ": ".join((person.__unicode__(), description))
@@ -292,18 +292,18 @@ def place(request, slug, active_tab=""):
     meta = {
         "description": meta_description_content,
         }
-    page = default_entity.get_website()
+    page = default_entity.get_website
     request.current_page = page
     template = page.get_template()
 
     # the three lines above were those below - which look quite wrong
 
     # if default_entity:
-    #     page = default_entity.get_website()
+    #     page = default_entity.get_website
     #     request.current_page = page
     #     template = page.get_template()
     # else:
-    #     page =  entity.get_website()
+    #     page =  entity.get_website
     #     request.current_page = page # for the menu, so it knows where we are
     #     template = page.get_template()
 

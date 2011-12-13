@@ -2,7 +2,7 @@
 {% block item_title %}
 
 	{% if "series" in item.show_parent_series %}
-		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.get_short_title}}</a><br />
+		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.short_title}}</a><br />
 	
 		{% if "children" in item.show_parent_series %}
 				

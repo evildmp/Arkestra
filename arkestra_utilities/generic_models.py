@@ -5,7 +5,7 @@ from cms.models.fields import PlaceholderField
 
 from filer.fields.image import FilerImageField
 
-from contacts_and_people.models import Entity, Person, default_entity_id
+from contacts_and_people.models import Entity, Person, default_entity_id, default_entity
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
@@ -44,12 +44,38 @@ class ArkestraGenericModel(models.Model):
         default=0, choices=IMPORTANCES,
         help_text=u"Important items will be featured in lists")
 
+    @property
     def get_importance(self):
         if self.importance: # if they are not being gathered together, mark them as important
             return "important"
         else:
             return ""
 
+    @property
+    def get_hosted_by(self):
+        return self.hosted_by or default_entity
+        
+    @property
+    def get_template(self):
+        return self.get_hosted_by.get_template()    
+        
+    @property
+    def get_entity(self):
+        """
+        Real-world information, can be None
+        """
+        return self.hosted_by or Entity.objects.get(id=default_entity_id)
+    
+    @property
+    def get_website(self):
+        """
+        for internal Arkestra purposes only
+        """
+        if self.get_entity:
+            return self.get_entity.get_website
+        else:
+            return None
+            
     @property
     def links(self):
         return self.object_links_set.all()
@@ -65,9 +91,6 @@ class ArkestraGenericModel(models.Model):
             return False
         else:
             return True
-
-    def get_items(self, instance=None):
-        return self.objects.all()
 
 
 class ArkestraGenericPluginOptions(models.Model):
