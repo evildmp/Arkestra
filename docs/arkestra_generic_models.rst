@@ -83,6 +83,53 @@ Define the admin form and class, and do the usual things with them::
 	    media = property(_media)
 
 
+*******
+urls.py
+*******
+
+We need a way to look at this model that you're now able to edit.
+
+To `urls.py` a url pattern::
+
+    (r"^news/(?P<slug>[-\w]+)/$", "news_and_events.views.newsarticle"),
+
+
+********
+views.py
+********
+
+We need to provide the view the urlpattern points to.
+
+First there's a function that is shared with the view for Events::
+
+	def newsarticle_and_event(item):
+	    # set the hosted_by attribute
+		item.hosted_by = item.hosted_by or default_entity
+	    item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
+	    item.template = item.hosted_by.get_template()
+	    return item
+
+
+	def newsarticle(request, slug):
+	    """
+	    Responsible for publishing news article
+	    """
+	    newsarticle = get_object_or_404(NewsArticle, slug=slug)
+	    newsarticle = newsarticle_and_event(newsarticle)
+    
+	    return render_to_response(
+	        "news_and_events/newsarticle.html",
+	        {
+	        "newsarticle":newsarticle,
+	        "entity": newsarticle.hosted_by,
+	        "meta": {"description": newsarticle.summary,}
+	        },
+	        RequestContext(request),
+	        )
+
+
+
+
 ***********
 managers.py
 ***********
@@ -107,7 +154,11 @@ Define your manager and give it a `get_items()` method::
 			# just for now, we will return all the objects of this model
 	        return self.model.objects.all()
 
-Go back to your model and add an attribute::
+`get_items()` can be very complex - see the news_and_events.EventManager for a particularly complex example.
+
+The `instance` argument for the manager is actually an instance of the plugin model class, which functions as a reasonably convenient API.
+
+Go back to your model and add an attribute so it knows about the manager::
 
     objects = NewsArticleManager()
 
