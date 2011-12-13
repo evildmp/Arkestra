@@ -4,16 +4,20 @@ Arkestra generic models
 
 Arkestra provides a flexible way to query your database for information and have it published - automatically, in the right time, in the right place.
 
-Say you decide that your record company should publish information about new recordings.
+This is a full description of how the news_and_events application does this.
 
-Let's create a model, called "Recording", and assume that it belongs to an application called "recordings". 
+*********
+models.py
+*********
 
-You can give it whatever fields you like, but the ArkestraGenericModel gives you some by default (if you don't need them all, simply don't use them).
+Import the classes you'll need::
 
+	from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
+	from arkestra_utilities.mixins import URLModelMixin
 
-******************
-The model
-******************
+class MyModel(ArkestraGenericModel, URLModelMixin):
+
+You don't need to inherit URLModelMixin, but it can be useful. URLModelMixin provides slug and external_url fields, and __unicode__() and get_absolute_url() methods - handy if your instances of your model will each have their own page on the site. 
 
 Create your class, subclassing ArkestraGenericModel:
 

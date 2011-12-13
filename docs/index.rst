@@ -3,8 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Arkestra's documentation!
-====================================
+########################
+Arkestra - documentation
+########################
 
 These documents are best read at `RTFD <http://readthedocs.org/docs/arkestra/>`_.
 
@@ -20,7 +21,9 @@ Arkestra was developed at `Cardiff University School of Medicine <http://medicin
 
 Arkestra can be obtained from our `GitHub repository <https://github.com/evildmp/Arkestra>`_.
 
-Contents:
+********
+Contents
+********
 
 .. toctree::
    :maxdepth: 2
@@ -31,6 +34,8 @@ Contents:
    using_news_and_events
    image_sizing_system
    links_system
+   video_system
+   arkestra_generic_models
 
 Indices and tables
 ==================
