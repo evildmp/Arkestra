@@ -184,7 +184,9 @@ We have already imported arkestra_utilities.ArkestraGenericPluginOptions. This p
 ::
 	class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
 
-Note that this plugin can handle both news and events
+Note that this plugin can handle both news and events.
+
+And let's add::
 
     display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news events")
     show_previous_events = models.BooleanField()
