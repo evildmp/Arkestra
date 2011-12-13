@@ -43,18 +43,21 @@ ArkestraGenericModel provides:
 * publish_to:		the other Entities to whose pages it should be published
 * please_contact: 	a Person
 * importance:		
-
-* get_importance(self):	marks items as important, to help gather them together or highlight them in lists as required
-
+          
 and @properties:
 
-*  links
-*  external_url
-*  is_uninformative():	the item bears little information of its own
+* get_importance(self):	marks items as important, to help gather them together or highlight them in lists as required
+* links
+* external_url
+* is_uninformative():	the item bears little information of its own
+* get_hosted_by:
+* get_template:	the template of the webpage of the entity of this item
+* get_entity:
+* get_website:
     
 And you can add whatever fields of your own that are required and ignore the ones that are not.
     
-
+          
 ********                                                            
 admin.py
 ********
@@ -87,9 +90,7 @@ Define the admin form and class, and do the usual things with them::
 urls.py
 *******
 
-We need a way to look at this model that you're now able to edit.
-
-To `urls.py` a url pattern::
+To `urls.py` add a url pattern::
 
     (r"^news/(?P<slug>[-\w]+)/$", "news_and_events.views.newsarticle"),
 
@@ -97,17 +98,8 @@ To `urls.py` a url pattern::
 ********
 views.py
 ********
-
-We need to provide the view the urlpattern points to.
-
-First there's a function that is shared with the view for Events::
-
-	def newsarticle_and_event(item):
-	    # set the hosted_by attribute
-		item.hosted_by = item.hosted_by or default_entity
-	    item.link_to_news_and_events_page = item.hosted_by.get_related_info_page_url("news-and-events")
-	    item.template = item.hosted_by.get_template()
-	    return item
+                                                    
+We need to provide the view the urlpattern points to::
 
 
 	def newsarticle(request, slug):
@@ -115,7 +107,6 @@ First there's a function that is shared with the view for Events::
 	    Responsible for publishing news article
 	    """
 	    newsarticle = get_object_or_404(NewsArticle, slug=slug)
-	    newsarticle = newsarticle_and_event(newsarticle)
     
 	    return render_to_response(
 	        "news_and_events/newsarticle.html",
@@ -126,9 +117,18 @@ First there's a function that is shared with the view for Events::
 	        },
 	        RequestContext(request),
 	        )
+                                        
 
+********************************
+news_and_events/newsarticle.html
+********************************
 
+The best thing to do is to have a look at the actual `news_and_events/newsarticle.html`.
 
+Same salient points: 
+
+* {% extends newsarticle.get_template %} - see ArkestraGenericModel.get_template, above
+* page furniture, such as the metadata, will be handled by the template it extends 
 
 ***********
 managers.py
