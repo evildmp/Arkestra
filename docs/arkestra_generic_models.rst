@@ -12,12 +12,12 @@ models.py
 
 Import the classes you'll need::
 
-from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
-from arkestra_utilities.mixins import URLModelMixin
+	from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
+	from arkestra_utilities.mixins import URLModelMixin
 
 Inherit the ones you need into your new model class::
 
-class NewsArticle(ArkestraGenericModel, URLModelMixin):
+	class NewsArticle(ArkestraGenericModel, URLModelMixin):
 
 You don't need to inherit URLModelMixin, but it can be useful. URLModelMixin provides fields:
 
@@ -29,7 +29,7 @@ and methods:
 * __unicode__() 
 * get_absolute_url() 
 
-URLModelMixin handy if your instances of your model will each have their own page on the site. 
+URLModelMixin is handy if your instances of your model will each have their own page on the site. 
 
 ArkestraGenericModel provides:
 
@@ -61,7 +61,7 @@ admin.py
 
 Import some handy mixins::
 
-from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
+	from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
       
 * SupplyRequestMixin supplies the context to the admin - you might have a need for it
 * AutocompleteMixin
@@ -70,17 +70,17 @@ from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, Inp
 
 Define the admin form and class, and do the usual things with them::
 
-class NewsArticleForm(InputURLMixin):
-    class Meta:
-        model = NewsArticle
+	class NewsArticleForm(InputURLMixin):
+	    class Meta:
+	        model = NewsArticle
 
 
-class NewsArticledmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
-    related_search_fields = ['hosted_by', 'external_url',] # autocomplete on these fields
+	class NewsArticledmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
+	    related_search_fields = ['hosted_by', 'external_url',] # autocomplete on these fields
 
-    def _media(self):
-        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
-    media = property(_media)
+	    def _media(self):
+	        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+	    media = property(_media)
 
 *******************
 What a plugin needs
