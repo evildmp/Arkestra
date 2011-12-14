@@ -172,7 +172,7 @@ Now let's create a plugin that we can use to list a number of the items in the m
 
 We have already imported arkestra_utilities.ArkestraGenericPluginOptions. This provides::
 
-* entity: the entity whose items we'll publish (can usually be left blan; Arkestra will work out what to do)
+* entity: the entity whose items we'll publish (can usually be left blank; Arkestra will work out what to do)
 * layout: if there are multiple lists (e.g. news and events), will they be stacked or side-by-side?
 * format: title only? details? image?
 * heading_level: above the list there'll be a heading
