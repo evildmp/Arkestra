@@ -17,7 +17,7 @@
 
 	{% block item_image %}
     	{% if "image" in everything.format and item.image %}
-			{% thumbnail item.image.file everything.image_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
+			{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
 		{% endif %}
 	{% endblock item_image %}
 	

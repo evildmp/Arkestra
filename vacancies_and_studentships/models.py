@@ -32,9 +32,10 @@ class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin
     def link_to_more(self):
         return self.get_hosted_by.get_related_info_page_url("vacancies-and-studentships")        
 
+    @property
     def get_when(self):
         """
-        get_when() provides a human-readable attribute under which items can be grouped.
+        get_when provides a human-readable attribute under which items can be grouped.
         Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
         """
         try:

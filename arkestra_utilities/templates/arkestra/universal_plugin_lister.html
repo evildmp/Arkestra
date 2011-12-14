@@ -1,46 +1,48 @@
-{% load placeholder_tags %}
-<div class="{{ everything.row_class }} {{ everything.type }}">
-	{% render_placeholder intro_page_placeholder %} 
-	{% for list in everything.lists %}
-		{% if list.items or list.other_items %}
+{% if everything.lists %}
+    {% load placeholder_tags %}
+    <div class="{{ everything.row_class }} {{ everything.type }}">
+    	{% render_placeholder intro_page_placeholder %} 
+    	{% for list in everything.lists %}
+    		{% if list.items or list.other_items %}
 		
-			{% include "arkestra/universal_date_index.html" %}
-			<div class = "{{ list.div_class }}">
-				{% if everything.heading_level %}
-					<h{{ everything.heading_level }}>{{ list.heading_text }}</h{{ everything.heading_level }}>
-				{% endif %}
+    			{% include "arkestra/universal_date_index.html" %}
+    			<div class = "{{ list.div_class }}">
+    				{% if everything.heading_level %}
+    					<h{{ everything.heading_level }}>{{ list.heading_text }}</h{{ everything.heading_level }}>
+    				{% endif %}
 
-				<ul class="{{ everything.list_format}} plugin-list">
-			        {% if list.show_when %}
-							{% regroup list.items by get_when as itemlist %}
-							{% for get_when in itemlist %}
-								<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
-								    <ul>
-						        		{% for item in get_when.list %}
-											{% include list.item_template %}
-						        	    {% endfor %}
-						        	</ul>
-						    	</li>
-						{% endfor %}
-			    	{% else %}
-						{% for item in list.items %}
-							{% include list.item_template %}
-						{% endfor %}
-					{% endif %}
-				</ul>
-				{% ifequal everything.type "main_page" %}
-				    {% if list.other_items %}
-	    				<ul class="close other-items icons">
-	    					{% for item in list.other_items %}
-	    						<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
-	    					{% endfor %}
-	    				</ul>
-	    			{% endif %}
-				{% endifequal %}
-			</div>
-		{% endif %}
-	{% endfor %}
-</div>
+    				<ul class="{{ everything.list_format}} plugin-list">
+    			        {% if list.show_when %}
+    							{% regroup list.items by get_when as itemlist %}
+    							{% for get_when in itemlist %}
+    								<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
+    								    <ul>
+    						        		{% for item in get_when.list %}
+    											{% include list.item_template|default:"arkestra/universal_plugin_list_item.html" %}
+    						        	    {% endfor %}
+    						        	</ul>
+    						    	</li>
+    						{% endfor %}
+    			    	{% else %}
+    						{% for item in list.items %}
+    							{% include list.item_template|default:"arkestra/universal_plugin_list_item.html" %}
+    						{% endfor %}
+    					{% endif %}
+    				</ul>
+    				{% ifequal everything.type "main_page" %}
+    				    {% if list.other_items %}
+    	    				<ul class="close other-items icons">
+    	    					{% for item in list.other_items %}
+    	    						<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
+    	    					{% endfor %}
+    	    				</ul>
+    	    			{% endif %}
+    				{% endifequal %}
+    			</div>
+    		{% endif %}
+    	{% endfor %}
+    </div>
 
-{% include "arkestra/universal_other_items_for_sub_page.html" %}
-{% include "arkestra/universal_other_items_for_plugin.html" %}
+    {% include "arkestra/universal_other_items_for_sub_page.html" %}
+    {% include "arkestra/universal_other_items_for_plugin.html" %}
+{% endif %}

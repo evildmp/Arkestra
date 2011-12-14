@@ -62,9 +62,10 @@ class NewsArticle(NewsAndEvents):
     class Meta:
         ordering = ['-date']
                 
+    @property
     def get_when(self):
         """
-        get_when() provides a human-readable attribute under which items can be grouped.
+        get_when provides a human-readable attribute under which items can be grouped.
         Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
         """
         if getattr(self, "sticky", None):
@@ -304,7 +305,7 @@ class Event(NewsAndEvents, LocationModelMixin):
             self.enquiries = set(self.parent.enquiries.all())
             self.save()
         return
-            
+    @property        
     def get_when(self):
         if self.start_date:
             if getattr(self, "sticky", None):
