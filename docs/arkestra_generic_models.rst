@@ -215,9 +215,11 @@ ArkestraGenericPlugin provides a number of methods, mostly called by ``render()`
     * calls set_layout_classes() to work out the overall structure (rows/columns) of the plugin output
     Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
     
+``get_items()`` isn't provided by ArkestraGenericPlugin, except as a dummy that sets an empty ``lists`` - it needs to be provided by whatever subclasses it. This is because ArkestraGenericPlugin won't have any idea how to get items.
+
 ::
 
-    class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
+    class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, CMSPluginBase):
         model = NewsAndEventsPlugin
         name = _("News & events")
         form = NewsAndEventsPluginForm
