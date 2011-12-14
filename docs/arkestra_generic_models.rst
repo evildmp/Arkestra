@@ -205,14 +205,14 @@ ArkestraGenericPlugin provides a number of methods, mostly called by ``render()`
     * works out the entity
     * assumes the ``type`` of the instance is ``plugin`` if not stated otherwise (e.g. a menu generator, a main page generator)
     * changes the render_template from ``arkestra/universal_plugin_lister.html`` if required
-    * calls set_defaults() to set some sensible defaults which may or may not be overridden
-    * calls get_items() to get items in a list of lists, called ``lists``.
-    * calls add_link_to_main_page() to see if we need a link to a main page (e.g. the main news and events page)
-    * calls add_links_to_other_items() to see if we should provide links to archives etc
-    * calls set_limits_and_indexes() to work out whether we need indexes, or how to truncate lists of items
-    * calls set_image_format() to set an image size for thumbnail images
-    * calls determine_layout_settings() to set rows/columns and classes for items in the lists
-    * calls set_layout_classes() to work out the overall structure (rows/columns) of the plugin output
+    * calls ``set_defaults()`` to set some sensible defaults which may or may not be overridden
+    * calls ``get_items()`` to get items in a list of lists, called ``lists``.
+    * calls ``add_link_to_main_page()`` to see if we need a link to a main page (e.g. the main news and events page)
+    * calls ``add_links_to_other_items()`` to see if we should provide links to archives etc
+    * calls ``set_limits_and_indexes()`` to work out whether we need indexes, or how to truncate lists of items
+    * calls ``set_image_format()`` to set an image size for thumbnail images
+    * calls ``determine_layout_settings()`` to set rows/columns and classes for items in the lists
+    * calls ``set_layout_classes()`` to work out the overall structure (rows/columns) of the plugin output
     Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
     
 ``get_items()`` isn't provided by ArkestraGenericPlugin, except as a dummy that sets an empty ``lists`` - it needs to be provided by whatever subclasses it. This is because ArkestraGenericPlugin won't have any idea how to get items.
@@ -220,27 +220,14 @@ ArkestraGenericPlugin provides a number of methods, mostly called by ``render()`
 ::
 
     class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, CMSPluginBase):
-        model = NewsAndEventsPlugin
-        name = _("News & events")
-        form = NewsAndEventsPluginForm
-        menu_cues = menu_dict
-        fieldsets = (
-            (None, {
-            'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
-        }),
-            ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('entity', 'heading_level', ('news_heading_text', 'events_heading_text'), ('show_previous_events', ),)
-        }),
-        )
-
-        # autocomplete fields
-        related_search_fields = ['entity',]
-    
         def icon_src(self, instance):
             return "/static/plugin_icons/news_and_events.png"
 
     plugin_pool.register_plugin(CMSNewsAndEventsPlugin)
+
+You should now be able to insert the plugin into a placeholder, and examine its output - but there won't be anything in there yet, because ``get_items()`` returns ``[]``.
+
+So let's add a method to our plugin:
 
 
 *******************
