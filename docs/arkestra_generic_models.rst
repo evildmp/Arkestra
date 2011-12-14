@@ -90,7 +90,7 @@ Define the admin form and class, and do the usual things with them::
 urls.py
 *******
 
-To `urls.py` add a url pattern::
+To ``urls.py`` add a url pattern::
 
     (r"^news/(?P<slug>[-\w]+)/$", "news_and_events.views.newsarticle"),
 
@@ -123,7 +123,7 @@ We need to provide the view the urlpattern points to::
 news_and_events/newsarticle.html
 ********************************
 
-The best thing to do is to have a look at the actual `news_and_events/newsarticle.html`.
+The best thing to do is to have a look at the actual ``news_and_events/newsarticle.html``.
 
 Same salient points: 
 
@@ -135,7 +135,7 @@ Same salient points:
 managers.py
 ***********
 
-It's useful to give your model a manager. You don't *need* to, but it helps keep things tidy, and we'll use one in this example. In particular, if you want to make use of the ArkestraGenericPlugin, that makes use of a `get_items()` method on your manager.
+It's useful to give your model a manager. You don't *need* to, but it helps keep things tidy, and we'll use one in this example. In particular, if you want to make use of the ArkestraGenericPlugin, that makes use of a ``get_items()`` method on your manager.
 
 Inherit the generic model manager::
 
@@ -148,16 +148,16 @@ At present this only contains::
 
 but in the future it might acquire more.
 
-Define your manager and give it a `get_items()` method::
+Define your manager and give it a ``get_items()`` method::
 
 	class NewsArticleManager(ArkestraGenericModelManager):
 	    def get_items(self, instance):
 			# just for now, we will return all the objects of this model
 	        return self.model.objects.all()
 
-`get_items()` can be very complex - see the news_and_events.EventManager for a particularly complex example.
+``get_items()`` can be very complex - see the news_and_events.EventManager for a particularly complex example.
 
-The `instance` argument for the manager is actually an instance of the plugin model class, which functions as a reasonably convenient API.
+The ``instance`` argument for the manager is actually an instance of the plugin model class, which functions as a reasonably convenient API.
 
 Go back to your model and add an attribute so it knows about the manager::
 
@@ -182,6 +182,7 @@ We have already imported arkestra_utilities.ArkestraGenericPluginOptions. This p
 * limit_to: how many items - leave blank for no limit
 
 ::
+
 	class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
 
 Note that this plugin can handle both news and events.
