@@ -33,31 +33,50 @@ URLModelMixin is handy if your instances of your model will each have their own 
 
 ArkestraGenericModel provides:
 
-title:
+``title``
     the full title of the item
 
-short_title
+``short_title``
     a short version, for lists
 
-* summary: 	    a brief summary, used in lists and on the item's main page
-* body: 			a PlaceholderField    
-* image:
+``summary``
+    a brief summary, used in lists and on the item's main page
 
-* hosted_by:		the Entity that hosts or publishes the item
-* publish_to:		the other Entities to whose pages it should be published
-* please_contact: 	a Person
-* importance:		
-          
+``body``
+    a PlaceholderField    
+
+``image``
+    for the item's page, and to offer a little thumbnail image for lists
+
+``hosted_by``
+    the Entity that hosts or publishes the item
+
+``publish_to``
+    the other Entities to whose pages it should be published
+
+``please_contact``
+    a Person
+
+``importance``
+    so Arkestra can highlight it when appropriate
+
 and @properties:
 
-* get_importance(self):	marks items as important, to help gather them together or highlight them in lists as required
-* links
-* external_url
-* is_uninformative():	the item bears little information of its own
-* get_hosted_by:
-* get_template:	the template of the webpage of the entity of this item
-* get_entity:
-* get_website:
+
+``get_importance``
+    marks items as important, to help gather them together or highlight them in lists as required
+
+``is_uninformative``
+    the item bears little information of its own
+
+``get_template``
+    the template of the webpage of the entity of this item
+
+* ``links``
+* ``external_url``
+* ``get_hosted_by``
+* ``get_entity``
+* ``get_website``
     
 And you can add whatever fields of your own that are required and ignore the ones that are not.
     
@@ -166,6 +185,147 @@ The ``instance`` argument for the manager is actually an instance of the plugin 
 Go back to your model and add an attribute so it knows about the manager::
 
     objects = NewsArticleManager()
+
+
+**************
+cms_plugins.py
+**************
+
+The simplest kind of plugin isn't even configurable. You just insert it into your content, and let it do its work. We'll start with one of those::
+
+    from arkestra_utilities.generic_models import ArkestraGenericPlugin
+
+ArkestraGenericPlugin refers throughout to ``instance``. 
+
+``instance`` is the class that defines the behaviour of the plugin in this particular instance. If the plugin is configurable, the instance is the model instance as set up in the Admin; if not, it's just an instance of the same model class created for the purpose, but not stored in the database.
+
+ArkestraGenericPlugin provides a number of methods::
+
+``__init__()``
+    set the ``render_template`` to ``arkestra/universal_plugin_lister.html`` by default
+
+``set_defaults()``
+    if not already provided, ``instance.view`` is set to "current"    
+
+``render(self, context, instance, placeholder)``
+    * works out the entity
+    * assumes the ``type`` of the instance is ``plugin`` if not stated otherwise (e.g. a menu generator, a main page generator)
+    * changes the render_template from ``arkestra/universal_plugin_lister.html`` if required
+    * calls set_defaults() (below)
+    * calls get_items() to get items in a list of lists, called ``lists``.
+    * calls add_link_to_main_page() to see if we need a link to a main page (e.g. the main news and events page)
+    * calls add_links_to_other_items() to see if we should provide links to archives etc
+    * calls set_limits_and_indexes() to work out whether we need indexes, or how to truncate lists of items
+    * calls set_image_format() to set an image size for thumbnail images
+    * calls determine_layout_settings() to set rows/columns and classes for items in the lists
+    * calls set_layout_classes() to work out the overall structure (rows/columns) of the plugin output
+    Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
+    
+
+``set_limits_and_indexes``
+    
+
+
+    def add_link_to_main_page(self, instance):
+        if instance.type == "plugin" or instance.type == "sub_page":
+            if (any(d['items'] for d in self.lists)) and \
+                getattr(instance.entity, self.menu_cues["auto_page_attribute"], False): 
+                instance.link_to_main_page = instance.entity.get_related_info_page_url(self.menu_cues["url_attribute"])
+                instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])
+
+    def print_settings(self):
+        print "---- plugin settings ----"
+        print "self.display", self.display
+        print "self.view", self.view
+        print "self.order_by", self.order_by
+        print "self.group_dates", self.group_dates
+        print "self.format", self.format
+        print "self.list_format", self.list_format
+        print "self.limit_to", self.limit_to
+        print "self.layout", self.layout
+
+    def add_links_to_other_items(self, instance):
+        if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":     
+            for this_list in self.lists:
+                this_list["links_to_other_items"](instance, this_list)
+                 
+    def set_limits_and_indexes(self, instance):
+        for this_list in self.lists:
+        
+            # cut the list down to size if necessary
+            if this_list["items"] and len(this_list["items"]) > instance.limit_to:
+                this_list["items"] = this_list["items"][:instance.limit_to]
+
+            # gather non-top items into a list to be indexed
+            this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)]
+            # extract a list of dates for the index
+            this_list["no_of_get_whens"] = len(set(item.get_when() for item in this_list["items"]))
+            # more than one date in the list: show an index
+            if instance.type == "sub_page" and this_list["no_of_get_whens"] > 1:
+                this_list["index"] = True
+            # we only show date groups when warranted    
+            this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
+
+    def set_image_format(self, instance):
+        """
+        Sets:
+            image_size
+        """
+        if "image" in instance.format:
+            instance.image_size = (75,75)
+
+    def determine_layout_settings(self, instance):
+        """
+        Sets:
+            list_format
+        """
+        # set columns for horizontal lists
+        if "horizontal" in instance.list_format:
+            instance.list_format = "row columns" + str(instance.limit_to) + " " + instance.list_format
+
+            for this_list in self.lists:
+                this_list["items"] = list(this_list["items"])
+                if this_list["items"]:
+                    for item in this_list["items"]:
+                        item.column_class = "column"
+                    if this_list["items"]:
+                        this_list["items"][0].column_class = this_list["items"][0].column_class + " firstcolumn"
+                        if len(this_list["items"]) > 1:
+                            this_list["items"][-1].column_class = this_list["items"][-1].column_class + " lastcolumn"
+    
+        elif "vertical" in instance.format:
+            instance.list_format = "row columns1"
+
+    def set_layout_classes(self, instance):
+        """
+        Lays out the plugin's divs
+        """
+        instance.row_class="row"
+        # if divs will be side-by-side
+        if instance.layout == "sidebyside":
+            if len(self.lists) > 1:
+                instance.row_class=instance.row_class+" columns" + str(len(self.lists))
+                self.lists[0]["div_class"] = "column firstcolumn"
+                self.lists[-1]["div_class"] = "column lastcolumn"
+            # if just one, and it needs an index     
+            else:
+                for this_list in self.lists:
+                    if this_list.get("index"):
+                        instance.row_class=instance.row_class+" columns3"
+                        instance.index_div_class = "column lastcolumn"
+                        this_list["div_class"] = "column firstcolumn doublecolumn"
+                    # and if it doesn't need an index    
+                    else: 
+                        instance.row_class=instance.row_class+" columns1"
+
+
+
+    class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
+        name = _("News & events")
+        def icon_src(self, instance):
+            return "/static/plugin_icons/news_and_events.png"
+
+    plugin_pool.register_plugin(CMSNewsAndEventsPlugin)
 
 
 *******************
