@@ -33,8 +33,12 @@ URLModelMixin is handy if your instances of your model will each have their own 
 
 ArkestraGenericModel provides:
 
-* title:			the full title of the item
-* short_title:		a short version, for lists
+title:
+    the full title of the item
+
+short_title
+    a short version, for lists
+
 * summary: 	    a brief summary, used in lists and on the item's main page
 * body: 			a PlaceholderField    
 * image:
