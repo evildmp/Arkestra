@@ -199,19 +199,13 @@ ArkestraGenericPlugin refers throughout to ``instance``.
 
 ``instance`` is the class that defines the behaviour of the plugin in this particular instance. If the plugin is configurable, the instance is the model instance as set up in the Admin; if not, it's just an instance of the same model class created for the purpose, but not stored in the database.
 
-ArkestraGenericPlugin provides a number of methods::
-
-``__init__()``
-    set the ``render_template`` to ``arkestra/universal_plugin_lister.html`` by default
-
-``set_defaults()``
-    if not already provided, ``instance.view`` is set to "current"    
+ArkestraGenericPlugin provides a number of methods, mostly called by ``render()``:
 
 ``render(self, context, instance, placeholder)``
     * works out the entity
     * assumes the ``type`` of the instance is ``plugin`` if not stated otherwise (e.g. a menu generator, a main page generator)
     * changes the render_template from ``arkestra/universal_plugin_lister.html`` if required
-    * calls set_defaults() (below)
+    * calls set_defaults() to set some sensible defaults which may or may not be overridden
     * calls get_items() to get items in a list of lists, called ``lists``.
     * calls add_link_to_main_page() to see if we need a link to a main page (e.g. the main news and events page)
     * calls add_links_to_other_items() to see if we should provide links to archives etc
@@ -221,7 +215,28 @@ ArkestraGenericPlugin provides a number of methods::
     * calls set_layout_classes() to work out the overall structure (rows/columns) of the plugin output
     Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
     
+::
 
+    class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
+        model = NewsAndEventsPlugin
+        name = _("News & events")
+        form = NewsAndEventsPluginForm
+        menu_cues = menu_dict
+        fieldsets = (
+            (None, {
+            'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
+        }),
+            ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('entity', 'heading_level', ('news_heading_text', 'events_heading_text'), ('show_previous_events', ),)
+        }),
+        )
+
+        # autocomplete fields
+        related_search_fields = ['entity',]
+    
+        def icon_src(self, instance):
+            return "/static/plugin_icons/news_and_events.png"
 
     plugin_pool.register_plugin(CMSNewsAndEventsPlugin)
 
