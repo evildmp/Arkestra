@@ -197,7 +197,7 @@ The simplest kind of plugin isn't even configurable. You just insert it into you
 
 ArkestraGenericPlugin refers throughout to ``instance``. 
 
-``instance`` is the class that defines the behaviour of the plugin in this particular instance. If the plugin is configurable, the instance is the model instance as set up in the Admin; if not, it's just an instance of the same model class created for the purpose, but not stored in the database.
+``instance`` is the class that defines the behaviour of the plugin in this particular instance. If the plugin is configurable, the instance is the model instance as set up in the Admin; if not, it's just an instance of the same model class created for the purpose, but not stored in the database. If we haven't even created sucha model class ourselves, it will be an instance of ``cms.models.pluginmodel.CMSPlugin``.
 
 ArkestraGenericPlugin provides a number of methods, mostly called by ``render()``:
 
