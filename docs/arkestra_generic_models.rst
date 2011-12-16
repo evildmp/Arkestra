@@ -215,19 +215,80 @@ ArkestraGenericPlugin provides a number of methods, mostly called by ``render()`
     * calls ``set_layout_classes()`` to work out the overall structure (rows/columns) of the plugin output
     Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
     
-``get_items()`` isn't provided by ArkestraGenericPlugin, except as a dummy that sets an empty ``lists`` - it needs to be provided by whatever subclasses it. This is because ArkestraGenericPlugin won't have any idea how to get items.
+``get_items()`` isn't provided by ArkestraGenericPlugin, except as a dummy that sets an empty ``lists`` - it needs to be provided by whatever subclasses it::
+
+	self.lists = []
+
+
+This is because ArkestraGenericPlugin won't have any idea how to get items - it doesn't know about content.
 
 ::
 
     class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, CMSPluginBase):
-        def icon_src(self, instance):
+    	# set text_enabled, admin_preview, render_template if the ArkestraGenericPlugin default are not suitable
+
+        # provide an icon for the admin interface
+		def icon_src(self, instance):
             return "/static/plugin_icons/news_and_events.png"
 
     plugin_pool.register_plugin(CMSNewsAndEventsPlugin)
 
 You should now be able to insert the plugin into a placeholder, and examine its output - but there won't be anything in there yet, because ``get_items()`` returns ``[]``.
 
-So let's add a method to our plugin:
+So let's add a method to our plugin::
+
+    def get_items(self, instance):
+        # call the base get_items() to set up our self.lists
+		super(CMSPublicationsPlugin, self).get_items(instance)
+
+        # create a dict to store information about the news articles
+		news_articles = {}
+
+        # put the actual items in it
+		news_articles["items"] = NewsArticle.objects.all()
+
+        # will the plugin publish links to other items (more news, news archive)?
+		news_articles["links_to_other_items"] = self.news_style_other_links
+		
+        # will the plugin publish links to other items (more news, news archive)?
+		news_articles["heading_text"] = instance.news_heading_text
+            
+		# what template will each item in this list use?
+		news_articles["item_template"] = "arkestra/universal_plugin_list_item.html"
+
+
+        self.lists.append(news_articles)
+
+And if we haven't changed ``render_template``, it will use ``arkestra/universal_plugin_lister.html``.  Use ``arkestra/universal_plugin_lister.html`` as a guide to writing your template.
+ 
+
+add_link_to_main_page()
+=======================
+                     
+To be completed
+
+*******
+urls.py
+*******
+
+We can use the architecture we have been working with to create an automatic page, for each entity, for this - or these - generic models.
+
+We need a URL pattern for this::
+
+    # named entities' news
+    (r"^news/(?P<slug>[-\w]+)/$", "news.views.news"),
+
+    # base entity's news
+    (r'^news/$', "news.views.news"),    
+
+
+
+********
+views.py
+********
+
+
+
 
 
 *******************
