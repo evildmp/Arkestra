@@ -34,7 +34,3 @@ urlpatterns = patterns('',
     # )
 
 
-if "publications" in settings.INSTALLED_APPS:
-    urlpatterns += patterns('',
-    (r"^entity/(?P<slug>[-\w]+)/publications/$", "contacts_and_people.views.publications"),
-    )
