@@ -19,7 +19,7 @@ class VacanciesStudentshipsPluginForm(ArkestraGenericPluginForm, forms.ModelForm
         model = VacanciesPlugin
 
 
-class CMSVacanciesPlugin(ArkestraGenericPlugin, VacancyStudentshipPluginMixin, AutocompleteMixin, CMSPluginBase):
+class CMSVacanciesPlugin(VacancyStudentshipPluginMixin, ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
     model = VacanciesPlugin
     name = _("Vacancies & Studentships")
     form = VacanciesStudentshipsPluginForm

@@ -20,7 +20,7 @@ class NewsAndEventsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
         model = NewsAndEventsPlugin
 
 
-class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, NewsAndEventsPluginMixin, AutocompleteMixin, CMSPluginBase):
+class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm

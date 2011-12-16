@@ -46,7 +46,7 @@ class NewsAndEventsPluginMixin(object):
         if "news" in instance.display:
             this_list = {"model": NewsArticle,}
             this_list["items"] = NewsArticle.objects.get_items(instance)
-            this_list["links_to_other_items"] = self.news_style_other_links
+            this_list["links_to_other_items"] = self.news_style_other_links 
             this_list["heading_text"] = instance.news_heading_text
             this_list["item_template"] = "arkestra/universal_plugin_list_item.html"
             # the following should *also* check this_list["links_to_other_items"] - 

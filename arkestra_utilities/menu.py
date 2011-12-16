@@ -87,11 +87,11 @@ class ArkestraPages(Modifier):
                     for menu in arkestra_menus:
                         self.do_menu(node, menu, node.entity)
 
-                    self.create_new_node(
-                        title = "Publications",
-                        url = node.entity.get_related_info_page_url("publications"), 
-                        parent = node, 
-                        ) 				
+                    # self.create_new_node(
+                    #     title = "Publications",
+                    #     url = node.entity.get_related_info_page_url("publications"), 
+                    #     parent = node, 
+                    #     )                 
                                                                                
             print "    ++ saving cache", key
             cache.set(key, self.nodes, settings.CMS_CACHE_DURATIONS['menus'])
@@ -110,7 +110,6 @@ class ArkestraPages(Modifier):
         # does this entity have this kind of auto-page in the menu?
         if getattr(entity, menu["auto_page_attribute"]):
             cms_plugin_model = menu.get("cms_plugin_model")
-            
             new_nodes = []
             
             if cms_plugin_model:
@@ -121,6 +120,7 @@ class ArkestraPages(Modifier):
                     )
                 instance.type = "menu"
                 instance.view = "current"
+                
                 # use the instance to create an instance of the plugin publisher
                 plugin = cms_plugin_model()   
                 # use its get_items method to place publishable items in plugin.lists
@@ -136,6 +136,7 @@ class ArkestraPages(Modifier):
                         for item in plugin.lists:
                             # and go through the other_items lists for each, creating a node for each
                             for other_item in item["other_items"]:
+
                                 self.create_new_node(
                                     title = other_item["title"], 
                                     url = other_item["link"], 

@@ -13,10 +13,6 @@ layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
 IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
 
-class NewsAndEventsViews(object):
-    def test(self):
-        pass
-
 
 def common_settings(request, slug):
     entity = Entity.objects.get(slug=slug) or default_entity

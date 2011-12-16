@@ -68,7 +68,9 @@ class URLModelMixin(models.Model):
             return "/%s/%s/" % (self.url_path, self.slug)
 
 
-class LocationModelMixin(object):
+class LocationModelMixin(models.Model):
+    class Meta:
+        abstract = True
     # location fields
     precise_location = models.CharField(help_text=u"Precise location <em>within</em> the building, for visitors",
         max_length=255, null=True, blank=True)

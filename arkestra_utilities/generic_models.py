@@ -149,19 +149,38 @@ class ArkestraGenericPluginForm(object):
 
 class ArkestraGenericPlugin(object):
     text_enabled = True
-    def __init__(self, model = None, admin_site = None):
-        self.render_template = "arkestra/universal_plugin_lister.html"
-        self.admin_preview = False
-        super(ArkestraGenericPlugin, self).__init__(model, admin_site)
+    admin_preview = False
+    # default render_template - change it in your ArkestraGenericPlugin if required
+    render_template = "arkestra/universal_plugin_lister.html"
+
+    # def __init__(self, model = None, admin_site = None):
+    #     super(ArkestraGenericPlugin, self).__init__(model, admin_site)  
 
     def set_defaults(self, instance):
-        print "**", type(instance)
         # set defaults
+        # ** important ** - these are set only when the render() function is called
+        instance.display = getattr(instance, "display", "")
         instance.view = getattr(instance, "view", "current")
         instance.list_format = getattr(instance, "list_format", "vertical")
         instance.layout = getattr(instance, "layout", "")
-        instance.limit_to = getattr(instance, "limit_to", 10)
-        instance.group_dates = getattr(instance, "group_dates", False)
+        instance.limit_to = getattr(instance, "limit_to", None)
+        instance.group_dates = getattr(instance, "group_dates", True)
+        instance.format = getattr(instance, "format", "details image")
+        instance.type = getattr(instance, "type", "plugin") # assume it's a plugin unless otherwise stated
+        instance.order_by = getattr(instance, "order_by", "")
+        instance.heading_level = getattr(instance, "heading_level", PLUGIN_HEADING_LEVEL_DEFAULT)
+        instance.type = getattr(instance, "type", "plugin")
+        
+        print "---- plugin settings ----"
+        print "self.display", instance.display
+        print "self.view", instance.view
+        print "self.group_dates", instance.group_dates
+        print "self.format", instance.format
+        print "self.list_format", instance.list_format
+        print "self.order_by", instance.order_by
+        print "self.limit_to", instance.limit_to
+        print "self.layout", instance.layout
+        print "self.heading_level", instance.heading_level
         return
 
     def add_link_to_main_page(self, instance):
@@ -185,11 +204,14 @@ class ArkestraGenericPlugin(object):
     def add_links_to_other_items(self, instance):
         if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":     
             for this_list in self.lists:
-                this_list["links_to_other_items"](instance, this_list)
+                # does this list have a function specified that will add the links we need to other items?
+                if this_list.get("links_to_other_items"):
+                    # call that function
+                    this_list["links_to_other_items"](instance, this_list)
                  
     def set_limits_and_indexes(self, instance):
-        for this_list in self.lists:
         
+        for this_list in self.lists:
             # cut the list down to size if necessary
             if this_list["items"] and len(this_list["items"]) > instance.limit_to:
                 this_list["items"] = this_list["items"][:instance.limit_to]
@@ -204,13 +226,6 @@ class ArkestraGenericPlugin(object):
             # we only show date groups when warranted    
             this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
 
-    # def set_image_format(self, instance):
-    #     """
-    #     Sets:
-    #         image_size
-    #     """
-    #     if "image" in instance.format:
-    #         instance.image_size = (75,75)
 
     def determine_layout_settings(self, instance):
         """
@@ -232,7 +247,7 @@ class ArkestraGenericPlugin(object):
                             this_list["items"][-1].column_class = this_list["items"][-1].column_class + " lastcolumn"
     
         elif "vertical" in instance.list_format:
-            instance.list_format = "row columns1"
+            instance.list_format = "vertical"
 
     def set_layout_classes(self, instance):
         """
@@ -260,16 +275,12 @@ class ArkestraGenericPlugin(object):
         self.lists = []
 
     def render(self, context, instance, placeholder):
-        self.set_defaults(instance)
-
         instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
-        instance.type = getattr(instance, "type", "plugin")
-        render_template = getattr(instance, "render_template", "")
+        self.set_defaults(instance)
         self.get_items(instance)
         self.add_link_to_main_page(instance)
         self.add_links_to_other_items(instance)
         self.set_limits_and_indexes(instance)
-        # self.set_image_format(instance)
         self.determine_layout_settings(instance)
         self.set_layout_classes(instance)
         instance.lists = self.lists
@@ -278,3 +289,6 @@ class ArkestraGenericPlugin(object):
             'placeholder': placeholder,
             })
         return context
+
+    def icon_src(self, instance):
+        return "/static/plugin_icons/generic.png"
