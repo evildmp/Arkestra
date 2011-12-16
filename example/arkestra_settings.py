@@ -29,3 +29,25 @@ USE_CELERY_FOR_VIDEO_ENCODING = False
 import os
 from settings import STATIC_URL
 SEMANTICEDITOR_MEDIA_URL = os.path.join(STATIC_URL, "semanticeditor/")
+PAGE_TITLE_HEADING_LEVEL = 2
+
+# ------------------------ Link system
+                                           
+# what filetypes can the user provide links to?
+PERMITTED_FILETYPES = {
+    "pdf": "Portable Document Format", 
+    "txt": "Plain text", 
+    "doc": "MS Word (avoid using if possible)",
+    "rtf": "Rich Text Format",
+    "csv": "Comma-separated values",
+    }
+    
+
+# -------- Headings ----------------------
+
+# global value for the heading level for page titles (e.g. entity names in entity pages)
+PAGE_TITLE_HEADING_LEVEL = 1 
+
+# The default (typically, the next down from the PAGE_TITLE_HEADING_LEVEL)
+IN_BODY_HEADING_LEVEL = 2
+PLUGIN_HEADING_LEVEL_DEFAULT = 2

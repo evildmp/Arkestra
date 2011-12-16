@@ -1,8 +1,3 @@
-# Before we do anything else, get some default settings built into Arkestra.
-# They are not just Arkestra settings, but settings for other applications
-# that Arkestra requires to be just so.
- 
-from arkestra_utilities.settings import *
 
 # Django settings for arkestra_medic project.
 
@@ -23,6 +18,13 @@ DATABASES = {
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-2'
     }
 }
 
@@ -152,20 +154,21 @@ TEMPLATE_DIRS = (
 
 # ------------------------ Django Celery
 
-if USE_CELERY_FOR_VIDEO_ENCODING:
-    import djcelery
-    djcelery.setup_loader()
+import djcelery
+djcelery.setup_loader()
 
-    BROKER_HOST = "localhost"
-    BROKER_PORT = 5672
-    BROKER_USER = "guest"
-    BROKER_PASSWORD = "guest"
-    BROKER_VHOST = "/"
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
 
 
 # ------------------------ Django CMS
 
 CMS_SOFTROOT = True
+CMS_PERMISSION = True
+CMS_SEO_FIELDS = True
 
 gettext = lambda s: s
 
@@ -192,6 +195,7 @@ CMS_PLACEHOLDER_CONF = {
             'LinksPlugin', 
             'CMSPublicationsPlugin', 
             'ImagePlugin', 
+            'ImageSetPublisher',
             'EntityAutoPageLinkPluginPublisher', 
             'FilerImagePlugin', 
             'EntityDirectoryPluginPublisher', 
@@ -206,8 +210,6 @@ CMS_PLACEHOLDER_CONF = {
     },
 }
 
-CMS_PERMISSION = True
-
 LANGUAGES = (
 ('en', gettext('English')),
 ('cy', gettext('Cymraeg')),
@@ -216,14 +218,15 @@ LANGUAGES = (
 INSTALLED_APPS = (
 
      # Django CMS applications
-
+    
+    'arkestra_utilities',
     'cms',
     'menus',
     'appmedia',
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
-    # 'djcelery',     # will need to be enabled for celery processing
+    'djcelery',     # will need to be enabled for celery processing
     
     # Arkestra applications
     
@@ -231,11 +234,10 @@ INSTALLED_APPS = (
     'vacancies_and_studentships',
     'news_and_events',
     'links',
-    'arkestra_utilities',
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
     'video',
-    # 'housekeeping',
+    'housekeeping',
     
     # other applications
     
@@ -245,9 +247,10 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'typogrify',
     'filer',    
-    'widgetry',
-   # 'south',
-
+    'widgetry',  
+    'south',         
+    # 'adminsortable',
+    
     # core Django applications
 
     'django.contrib.auth',
@@ -285,4 +288,4 @@ LOGGING = {
     }
 }
 
-from arkestra_settings import *
+from arkestra_settings import *# import pdb; pdb.set_trace()
