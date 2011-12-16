@@ -81,11 +81,11 @@ from contacts_and_people.menu import menu_dict as contacts_and_people_menu
 from vacancies_and_studentships.menu import menu_dict as vacancies_and_studentships_menu
 
 
-ARKESTRA_MENUS = (
+ARKESTRA_MENUS = [
     news_and_events_menu,
     contacts_and_people_menu,
     vacancies_and_studentships_menu,
-    )
+    ]
 
 # Do you want all menu branches to expand? 
 
