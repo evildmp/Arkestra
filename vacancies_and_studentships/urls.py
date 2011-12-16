@@ -9,18 +9,18 @@ urlpatterns = patterns('',
     # named entities' vacancies and studentships
     (r"^vacancies-and-studentships/(?P<slug>[-\w]+)/$", "vacancies_and_studentships.views.vacancies_and_studentships"),
 
-    (r'^vacancy-archive/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.archived_vacancies"),
-    (r'^current-vacancies/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.all_current_vacancies"),
+    (r'^archived-vacancies/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.archived_vacancies"),
+    (r'^all-open-vacancies/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.all_current_vacancies"),
 
-    (r'^studentship-archive/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.archived_studentships"),
-    (r'^current-studentships/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.all_current_studentships"),
+    (r'^archived-studentships/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.archived_studentships"),
+    (r'^all-open-studentships/(?P<slug>[-\w]+)/$', "vacancies_and_studentships.views.all_current_studentships"),
 
     # base entity's vacancies and studentships
     (r'^vacancies-and-studentships/$', "vacancies_and_studentships.views.vacancies_and_studentships"),
     
-    (r'^vacancy-archive/$', "vacancies_and_studentships.views.archived_vacancies"),
-    (r'^current-vacancies/$', "vacancies_and_studentships.views.all_current_vacancies"),
+    (r'^archived-vacancies/$', "vacancies_and_studentships.views.archived_vacancies"),
+    (r'^all-open-vacancies/$', "vacancies_and_studentships.views.all_current_vacancies"),
 
-    (r'^studentship-archive/$', "vacancies_and_studentships.views.archived_studentships"),
-    (r'^current-studentships/$', "vacancies_and_studentships.views.all_current_studentships"),
+    (r'^archived-studentships/$', "vacancies_and_studentships.views.archived_studentships"),
+    (r'^all-open-studentships/$', "vacancies_and_studentships.views.all_current_studentships"),
 )

@@ -81,6 +81,8 @@ def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
         'everything': instance,}
         )
     
+    CMSVacanciesPlugin().render(context, instance, None)
+
     return render_to_response(
         "contacts_and_people/entity_information.html",
         context,

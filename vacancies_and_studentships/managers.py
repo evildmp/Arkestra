@@ -7,55 +7,34 @@ import operator
 from arkestra_utilities.managers import ArkestraGenericModelManager
 
 MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
-
-class StudentshipManager(ArkestraGenericModelManager):
-    def get_items(self, instance):
-        """
-        returns current_studentships, archived_studentships, series_studentships
-        """
-        # print "____ get_studentships() ____"
-        if instance.type == "for_person":
-            all_studentships = instance.person.studentship_featuring.all()
-        elif instance.type == "for_place":
-            all_studentships = instance.place.studentship_set.all()
-        # most likely, we're getting studentships related to an entity
-        elif MULTIPLE_ENTITY_MODE and instance.entity:
-            all_studentships = self.model.objects.filter( \
-            Q(hosted_by__in=instance.entity.get_descendants(include_self = True)) | \
-            Q(publish_to=instance.entity)).distinct().order_by('closing_date')
-        else:
-            all_studentships = self.model.objects.all()
-
-            # if an entity should automatically publish its descendants' items
-            #     all_studentships = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-        # print "All studentships", instance.type, all_studentships.count()
-            
-        instance.current_studentships = all_studentships.filter(closing_date__gte = datetime.now())
-        instance.archived_studentships = all_studentships.exclude(closing_date__gte = datetime.now())
-        
-        # print "Previous studentships", instance.archived_studentships.count()
-        
-        return self.model.objects.all()
     
-class VacancyManager(ArkestraGenericModelManager):
+class ItemManager(ArkestraGenericModelManager):
     def get_items(self, instance):
         """
+        returns forthcoming_items, previous_items, series_items
         """
-        # print "____ get_vacancies() ____"
-        if instance.type == "for_person":
-            all_vacancies = instance.person.vacancy_featuring.all()
-        # most likely, we're getting vacancies related to an entity
-        elif MULTIPLE_ENTITY_MODE and instance.entity:
-            all_vacancies = self.model.objects.filter( \
-            Q(hosted_by__in=instance.entity.get_descendants(include_self = True)) | \
-            Q(publish_to=instance.entity)).distinct().order_by('closing_date')
-        else:
-            all_vacancies = self.model.objects.all()
 
-            # if an entity should automatically publish its descendants' items
-            #     all_vacancies = Event.objects.filter(Q(hosted_by__in=instance.entity.get_descendants(include_self=True)) | Q(publish_to=instance.entity)).distinct().order_by('start_date')
-        # print "All vacancies", all_vacancies.count()
-            
-        instance.current_vacancies = all_vacancies.filter(closing_date__gte = datetime.now())
-        instance.archived_vacancies = all_vacancies.exclude(closing_date__gte = datetime.now())
-        return self.model.objects.all()
+        # most likely, we're getting items related to an entity
+        if MULTIPLE_ENTITY_MODE and instance.entity:
+            all_items = self.model.objects.filter(
+            Q(hosted_by__in=instance.entity.get_descendants(include_self = True)) | \
+            Q(publish_to=instance.entity)).distinct().order_by('-closing_date')
+        else:
+            all_items = self.model.objects.all().order_by('-closing_date')
+    
+        instance.forthcoming_items = all_items.filter(closing_date__gte = datetime.now())  
+        instance.previous_items = all_items.exclude(closing_date__gte = datetime.now())  
+        
+        if instance.view == "archive":
+            instance.items = list(instance.previous_items)
+
+        else: 
+            instance.items = list(instance.forthcoming_items)
+
+        return instance.items
+
+class StudentshipManager(ItemManager):
+    pass
+
+class VacancyManager(ItemManager):
+    pass
