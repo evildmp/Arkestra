@@ -1,9 +1,9 @@
 {% ifequal everything.type "plugin" %}
-<div class="{{ everything.type }} ">
-	<ul class="close icons">
-        {% if everything.link_to_main_page %}
+	{% if everything.link_to_main_page %}
+		<div class="{{ everything.type }} ">
+			<ul class="close icons">
             <li><strong><a href = "{{ everything.link_to_main_page}}">More {{ everything.display }}</a></strong></li>
-    	{% endif %}
-	</ul>
-</div>
+			</ul>
+		</div>
+	{% endif %}
 {% endifequal %}
