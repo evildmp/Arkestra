@@ -366,7 +366,6 @@ class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     show_previous_events = models.BooleanField()
     news_heading_text = models.CharField(max_length=25, default="News")
     events_heading_text = models.CharField(max_length=25, default="Events")
-    my_placeholder = PlaceholderField('placeholder_name')
     
 try:
     mptt.register(Event)
