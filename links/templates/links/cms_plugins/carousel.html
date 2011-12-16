@@ -101,7 +101,7 @@
     }
 </script>
 
-<div id="carousel{{carousel.pk}}" class="carousel" style="width:{{size.0}}px;">
+<div id="carousel{{carousel.pk}}" class="carousel" style="width:{{size.0}}px; height:{{size.1}}px;">
   <ul id="carousel{{carousel.pk}}-segments" class="carousel-segments" >
         {% for segment in segments %}
     <li id="carousel{{carousel.pk}}-segment{{forloop.counter}}" name="carousel{{carousel.pk}}-segment" class="carousel-segment" {% if forloop.first %} style="display:block;" {% endif %}>
