@@ -1,3 +1,9 @@
+# Before we do anything else, get some default settings built into Arkestra.
+# They are not just Arkestra settings, but settings for other applications
+# that Arkestra requires to be just so.
+ 
+from arkestra_utilities.settings import *
+
 # These are the only settings you really need.
 # If you need to modify other aspects of Arkestra's behaviour, see the
 # settings that are available in arkestra_utilities.settings; copy them 
@@ -29,6 +35,7 @@ USE_CELERY_FOR_VIDEO_ENCODING = False
 import os
 from settings import STATIC_URL
 SEMANTICEDITOR_MEDIA_URL = os.path.join(STATIC_URL, "semanticeditor/")
+
 PAGE_TITLE_HEADING_LEVEL = 2
 
 # ------------------------ Link system
