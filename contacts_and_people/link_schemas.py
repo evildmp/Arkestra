@@ -54,8 +54,9 @@ class EntityWrapper(LinkWrapper):
             return "External entity at " + self.obj.external_url.url
         if self.obj.get_website.get_meta_description():
             return self.obj.get_website.get_meta_description()
-        else:
-            return "<span class='errornote'>The page <em>" + str(self.obj.get_website) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
+        # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
+        # else:
+        #     return "<span class='errornote'>The page <em>" + str(self.obj.get_website) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
 
     def heading(self):
         return "Related pages"

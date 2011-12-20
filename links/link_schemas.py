@@ -25,8 +25,10 @@ if 'cms' in settings.INSTALLED_APPS:
         def short_text(self):
             return self.obj.get_menu_title()
         def description(self):
-            if not self.obj.get_meta_description():
-                return "<span class='errornote'>The Page <em>" + str(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
+            # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
+
+            # if not self.obj.get_meta_description():
+            #     return "<span class='errornote'>The Page <em>" + str(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
 
             return self.obj.get_meta_description()
         def metadata(self):
@@ -57,9 +59,15 @@ if 'filer' in settings.INSTALLED_APPS:
             # otherwise, return its name
             else:
                 return self.obj.name
-
+ 
+        def url(self):
+            return self.obj.url
 
         def description(self):
+            return self.obj.description
+
+            # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
+
             file = self.obj
             # an empty list for errors to report
             errors = []
