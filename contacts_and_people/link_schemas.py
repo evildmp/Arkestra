@@ -12,12 +12,8 @@ class PersonWrapper(LinkWrapper):
     search_fields = admin.PersonAdmin.search_fields
 
     def title(self):
-        if self.obj.user:
-            return u"%s %s (%s)" % (self.obj.surname, self.obj.given_name, self.obj.user.username) 
-        else:
-            title = self.obj.title or ""
-            return u"%s %s %s" % (title, self.obj.given_name, self.obj.surname)
-
+        return self.obj.__unicode__()
+        
     def short_text(self):
         return u"%s %s" % (self.obj.given_name, self.obj.surname)
 
