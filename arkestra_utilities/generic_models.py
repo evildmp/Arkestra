@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 from cms.models.fields import PlaceholderField
 
 from filer.fields.image import FilerImageField
+
+from links.models import ObjectLink
 
 from contacts_and_people.models import Entity, Person, default_entity_id, default_entity
 from contacts_and_people.templatetags.entity_tags import work_out_entity
@@ -78,7 +81,11 @@ class ArkestraGenericModel(models.Model):
             
     @property
     def links(self):
-        return self.object_links_set.all()
+        model = ContentType.objects.get_for_model(self)
+        print model, self.id
+        links = ObjectLink.objects.filter(content_type__pk=model.id, object_id = self.id).order_by('destination_content_type')
+        print "links", links
+        return links
 
     @property
     def external_url(self):
