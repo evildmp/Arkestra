@@ -154,7 +154,7 @@ class Building(models.Model):
         plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
         plugin.get_items(instance)
         plugin.add_links_to_other_items(instance)    
-        plugin.set_image_format(instance)
+        # plugin.set_image_format(instance)
         plugin.set_limits_and_indexes(instance)
         instance.lists = plugin.lists
         return instance
@@ -717,13 +717,13 @@ class Membership(models.Model):
 class EntityAutoPageLinkPluginEditor(CMSPlugin):
     AUTO_PAGES = {
         'contacts-and-people':
-            (u'Contacts & people', 'contact', 'contacts_page_menu_title',),
+            (u'Contacts & people', 'contact', 'contacts_page_menu_title', 'auto_contacts_page'),
         'news-and-events':
-            (u'News & events', 'news-and-events', 'news_page_menu_title',),
+            (u'News & events', 'news-and-events', 'news_page_menu_title', 'auto_news_page'),
         'vacancies-and-studentships':
-            (u'Vacancies & studentships', 'vacancies-and-studentships', 'vacancies_page_menu_title',),
+            (u'Vacancies & studentships', 'vacancies-and-studentships', 'vacancies_page_menu_title',  'auto_vacancies_page'),
         'publications':
-            (u'Publications', 'publications', 'publications_page_menu_title'),
+            (u'Publications', 'publications', 'publications_page_menu_title',  'auto_publications_page'),
         }
     link_to = models.CharField(max_length=50, choices=[(x, y[0]) for x, y in sorted(AUTO_PAGES.items())])
     entity = models.ForeignKey(Entity, null=True, blank=True, 

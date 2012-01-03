@@ -25,10 +25,12 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
     def render(self, context, instance, placeholder):
 
         # get a tuple containing for example:
-        # (u'Contacts & people', 'contact', 'contacts_page_menu_title')
+        #    Kind                 slug       title_field                 flag for auto page
+        # (u'Contacts & people', 'contact', 'contacts_page_menu_title', 'auto_contacts_page')
         LINK_TUPLE = EntityAutoPageLinkPluginEditor.AUTO_PAGES[instance.link_to]
         kind = LINK_TUPLE[1]
         field_name = LINK_TUPLE[2]
+        auto_page_flag = LINK_TUPLE[3]
         
         entity = work_out_entity(context, None)
         link_entity = instance.entity or entity
@@ -36,16 +38,19 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
             #  instance.entity not set, or instance.entity = entity
             if entity == link_entity:
                 link_title = getattr(entity, field_name)
-                link = entity.get_related_info_page_url(kind)
             #  instance.entity set and instance.entity != entity (so we provide its name)
             else:
                 link_title = instance.entity.short_name + ': ' + getattr(instance.entity,field_name)
-                link = instance.entity.get_related_info_page_url(kind)
-            link_title = instance.text_override or link_title
-            context.update({ 
-                'link': link,
-                'link_title': link_title,
-            })
+                entity = instance.entity
+
+            if getattr(entity, auto_page_flag):
+                link = entity.get_related_info_page_url(kind)               
+                link_title = instance.text_override or link_title
+            
+                context.update({ 
+                    'link': link,
+                    'link_title': link_title,
+                })
             return context
     
     def icon_src(self, instance):

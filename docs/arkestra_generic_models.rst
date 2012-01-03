@@ -210,7 +210,6 @@ ArkestraGenericPlugin provides a number of methods, mostly called by ``render()`
     * calls ``add_link_to_main_page()`` to see if we need a link to a main page (e.g. the main news and events page)
     * calls ``add_links_to_other_items()`` to see if we should provide links to archives etc
     * calls ``set_limits_and_indexes()`` to work out whether we need indexes, or how to truncate lists of items
-    * calls ``set_image_format()`` to set an image size for thumbnail images
     * calls ``determine_layout_settings()`` to set rows/columns and classes for items in the lists
     * calls ``set_layout_classes()`` to work out the overall structure (rows/columns) of the plugin output
     Everything it needs to set for the overall information about what's going on in the plugin is set as an attribute of ``instance``, which is then passed to the template as ``everything``. ``lists`` is made an attribute of ``instance``.
