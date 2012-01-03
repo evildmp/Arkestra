@@ -39,7 +39,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     people = entity.get_roles_for_members(people) # convert the list of Persons into a list of Members
 
     return render_to_response(
-        "contacts_and_people/entity_information.html", # this is a catch-all template, that then uses includes to bring in extra information
+        "contacts_and_people/arkestra_page.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
             "entity":entity,
             "pagetitle": entity,
@@ -80,7 +80,7 @@ def people(request, slug, letter=None):
         people = entity.get_people(letter)
         title = "%s, people by surname: %s" % (entity, letter.upper())
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         {
             "entity":entity,
             "pagetitle": entity,

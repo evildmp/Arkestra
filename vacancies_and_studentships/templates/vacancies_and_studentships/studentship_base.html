@@ -16,7 +16,7 @@
 
 
 {% block main_page_body %}
-    {% block entity_information %}
+    {% block arkestra_content %}
         <div class="row columns3">
         	<div class="column firstcolumn doublecolumn">
 				{% block placeholder %}
@@ -52,5 +52,5 @@
 		<ul class = "news icons">
 			<li><a href = "{{ studentship.link_to_vacancies_and_studentships_page }}">More {{ studentship.hosted_by.short_name }} vacancies</a></li>
 		</ul>
-    {% endblock entity_information %}
+    {% endblock arkestra_content %}
 {% endblock main_page_body %}

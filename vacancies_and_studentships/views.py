@@ -54,7 +54,7 @@ def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", Non
         )
 
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 
@@ -84,7 +84,7 @@ def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
     CMSVacanciesPlugin().render(context, instance, None)
 
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
         
@@ -112,7 +112,7 @@ def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 
@@ -140,7 +140,7 @@ def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
         
@@ -168,7 +168,7 @@ def all_current_studentships(request, slug=getattr(default_entity, "slug", None)
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 

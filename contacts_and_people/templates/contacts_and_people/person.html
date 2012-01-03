@@ -27,7 +27,7 @@
 {% block main_page_body %}
 {% thumbnail person.image.file contacts_image_size subject_location=person.image.subject_location crop as image %}
 	{% with placeholder_width=person_description_width %}
-	{% block entity_information %}
+	{% block arkestra_content %}
     {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}				    
     		<div class="row columns2">
@@ -57,6 +57,6 @@
 				</div>
 			</div>	
 		{% endblock person_information %}
-	{% endblock entity_information %}
+	{% endblock arkestra_content %}
 	{% endwith %}   
 {% endblock main_page_body %}

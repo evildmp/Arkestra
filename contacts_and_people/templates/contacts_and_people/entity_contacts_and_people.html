@@ -3,13 +3,13 @@
 
 Publishes entity contacts and people page and views.contacts_and_people
 
-Called up by entity_information.html
+Called up by arkestra_content.html
 
 {% endcomment %}
 {% load entity_tags %}
 {% load thumbnail %}
 {% load typogrify_tags %}
-{% block entity_information %}
+{% block arkestra_content %}
 	<div class="row columns2">
 	    {% render_placeholder intro_page_placeholder %}
 	   	<div class="column firstcolumn">
@@ -52,4 +52,4 @@ Called up by entity_information.html
 		{% endif %}
 	</div>
 	
-{% endblock entity_information %}
+{% endblock arkestra_content %}

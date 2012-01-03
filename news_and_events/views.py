@@ -57,7 +57,7 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 
@@ -85,7 +85,7 @@ def previous_events(request, slug=getattr(default_entity, "slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
         
@@ -113,7 +113,7 @@ def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 
@@ -142,7 +142,7 @@ def news_archive(request, slug=getattr(default_entity,"slug", None)):
         )
     
     return render_to_response(
-        "contacts_and_people/entity_information.html",
+        "contacts_and_people/arkestra_page.html",
         context,
         )
 

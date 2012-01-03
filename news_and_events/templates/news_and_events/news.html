@@ -1,4 +1,4 @@
-{% extends "contacts_and_people/entity_information.html" %}
+{% extends "contacts_and_people/arkestra_page.html" %}
 {% load news_and_events_tags %}
 {% load thumbnail %}
 
@@ -10,7 +10,7 @@
 	<title>News for {{ entity }}</title>
 {% endblock %}
 
-{% block entity_information %}
+{% block arkestra_content %}
 <div class = "row columns4">
 	<div class="column firstcolumn triplecolumn">
 		<ul style="list-style: none;">
@@ -50,4 +50,4 @@
 	</div>
 </div>	
 
-{% endblock entity_information %}
+{% endblock arkestra_content %}

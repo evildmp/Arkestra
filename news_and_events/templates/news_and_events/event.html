@@ -27,7 +27,7 @@
 
 {% block main_page_body %}
 {% with placeholder_width=main_item_width %}
-    {% block entity_information %}
+    {% block arkestra_content %}
         <div class="row columns3">
         	<div class="column firstcolumn doublecolumn">
 				{% block placeholder %}
@@ -50,7 +50,7 @@
 		<ul class = "news icons">
 			<li><a href = "{{ event.link_to_more }}">More {{ entity.short_name }} events</a></li>
 		</ul>
-    {% endblock entity_information %}
+    {% endblock arkestra_content %}
 {% endwith %}
 {% endblock main_page_body %}
 {% block sub %}{% endblock sub %}
