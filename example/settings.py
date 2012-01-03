@@ -1,14 +1,14 @@
-
 # Django settings for arkestra_medic project.
+
+import os
+import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
+# ------------------------  admin settings
 
-MANAGERS = ADMINS
+# ------------------------  databases
 
 DATABASES = {
     'default': {
@@ -53,8 +53,6 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-import os
-import os.path
 
 BASE_PATH = os.path.normpath(os.path.dirname(__file__))
 
@@ -166,11 +164,12 @@ BROKER_VHOST = "/"
 
 # ------------------------ Django CMS
 
+gettext = lambda s: s
+
 CMS_SOFTROOT = True
 CMS_PERMISSION = True
 CMS_SEO_FIELDS = True
 
-gettext = lambda s: s
 
 # this is only here because I don't know how to make other apps find it otherwise, and they rely on it.
 CMS_MEDIA_URL = STATIC_URL + 'cms/'
@@ -197,6 +196,7 @@ CMS_PLACEHOLDER_CONF = {
             'ImagePlugin', 
             'ImageSetPublisher',
             'EntityAutoPageLinkPluginPublisher', 
+            'EntityMembersPluginPublisher', 
             'FilerImagePlugin', 
             'EntityDirectoryPluginPublisher', 
             'CarouselPluginPublisher',
