@@ -1,30 +1,11 @@
 {% load i18n adminmedia arkestra_filters %}
 <div class="cont">
 	<div class="col1">
-		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{% if event.series %}Series{% else %}{{ event.type }}{% endif %}: {{ event.title }}</a></span>	
+		<a href="{{ url }}{{ event.id }}" class="title" title="edit">{{ event.title }} ({% if event.series %}Series{% else %}{{ event.type }}{% endif %})</a>	
 		<a href="{{ url }}{{ event.id }}" class="changelink" title="edit">edit</a>
 	</div>
 	<div class="col2">
 	    <div class="col-actions">{{ event.hosted_by.short_name }}</div>
-	    <div class="col-actions">{{ event.importance }}</div>
 	    <div class="col-actions">{{ event.get_dates }}</div>
-		<div class="col-actions">{{ event.start_time }}-{{ event.end_time }}</div>
-		<span id="move-target-{{ event.id }}" class="move-target-container" >
-			{% if has_add_permission %}
-				<a href="#" class="move-target left" title="{% trans "insert above" %}"><img alt="" src="{% admin_media_prefix %}img/admin/arrow-up.gif"/></a><span class="line first"> |</span>
-				<a href="#" class="move-target right" title="{% trans "insert below" %}"><img alt="" src="{% admin_media_prefix %}img/admin/arrow-down.gif"/></a><span class="line second"> |</span>
-				<a href="#" class="move-target first-child" title="{% trans "insert inside" %}">↘</a>
-			{% endif %}
-		</span>
-		
-		<div class="col-actions">{% if not filtered %}
-			{% if has_change_permission %}<a href="#" class="move" title="{% trans "Cut" %}" id="move-link-{{ event.id }}"><span>{% trans "cut" %}</span></a>{% endif %}{% endif %}
-			{# {% if has_change_permission %}<a href="#" class="copy" title="{% trans "Copy" %}" id="copy-link-{{ event.id }}"><span>{% trans "copy" %}</span></a>{% endif %} #}
-			
-			{% if has_add_permission %}
-				<a href="add/?parent={{ event.id }}" class="addlink" title="{% trans "Add Child" %}" id="add-link-{{ event.id }}"><span>{% trans "add" %}</span></a>
-			{% endif %}
-			{% if has_delete_permission %}<a href="{{ event.id }}/delete/" title="{% trans "Delete" %}" class="deletelink"><span>{% trans "delete" %}</span></a>{% endif %}
-		</div>	
 	</div>
 </div>
