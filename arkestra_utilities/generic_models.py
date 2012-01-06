@@ -82,9 +82,9 @@ class ArkestraGenericModel(models.Model):
     @property
     def links(self):
         model = ContentType.objects.get_for_model(self)
-        print model, self.id
+        # print model, self.id
         links = ObjectLink.objects.filter(content_type__pk=model.id, object_id = self.id).order_by('destination_content_type')
-        print "links", links
+        # print "links", links
         return links
 
     @property
@@ -178,16 +178,16 @@ class ArkestraGenericPlugin(object):
         instance.heading_level = getattr(instance, "heading_level", PLUGIN_HEADING_LEVEL_DEFAULT)
         instance.type = getattr(instance, "type", "plugin")
         
-        print "---- plugin settings ----"
-        print "self.display", instance.display
-        print "self.view", instance.view
-        print "self.group_dates", instance.group_dates
-        print "self.format", instance.format
-        print "self.list_format", instance.list_format
-        print "self.order_by", instance.order_by
-        print "self.limit_to", instance.limit_to
-        print "self.layout", instance.layout
-        print "self.heading_level", instance.heading_level
+        # print "---- plugin settings ----"
+        # print "self.display", instance.display
+        # print "self.view", instance.view
+        # print "self.group_dates", instance.group_dates
+        # print "self.format", instance.format
+        # print "self.list_format", instance.list_format
+        # print "self.order_by", instance.order_by
+        # print "self.limit_to", instance.limit_to
+        # print "self.layout", instance.layout
+        # print "self.heading_level", instance.heading_level
         return
 
     def add_link_to_main_page(self, instance):

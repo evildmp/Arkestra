@@ -7,7 +7,7 @@ register = template.Library()
 @register.inclusion_tag('directory.html', takes_context=True)
 def directory(context, entity = None):
     entity = work_out_entity(context, entity)
-    print entity.get_descendants()
+    # print entity.get_descendants()
     return { "entities": entity.get_descendants()}
 
 @register.inclusion_tag('people.html', takes_context=True)

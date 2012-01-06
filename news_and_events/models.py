@@ -156,20 +156,20 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     @property
     def is_uninformative(self):
-        print 
-        print "============================"
-        print self.body
-        if self.body:
-            print 1, self.body.cmsplugin_set.all()
-            print 2, self.external_url
-            print 3, self.please_contact.all()
-            print 4, self.registration_enquiries.all()
-        print "----------------------------"
+        # print 
+        # print "============================"
+        # print self.body
+        # if self.body:
+        #     print 1, self.body.cmsplugin_set.all()
+        #     print 2, self.external_url
+        #     print 3, self.please_contact.all()
+        #     print 4, self.registration_enquiries.all()
+        # print "----------------------------"
         if self.body and self.body.cmsplugin_set.all() or self.external_url or self.please_contact.all() or self.registration_enquiries.all(): # or self.links_set.all():
-            print "uninformative"
+            # print "uninformative"
             return False
         else:
-            print "informative"
+            # print "informative"
             return True
         
     def save(self):

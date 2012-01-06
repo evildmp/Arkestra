@@ -14,7 +14,7 @@ register = template.Library()
 """
 @register.inclusion_tag('links/cms_plugins/links.html', takes_context = True)
 def links(context):
-    print "in links"
+    # print "in links"
     #Publishes all the links attached to this object - superseded by the more complex version below
     content_object = context.get('content_object', None)
     if content_object:

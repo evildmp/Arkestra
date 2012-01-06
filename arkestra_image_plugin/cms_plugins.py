@@ -18,7 +18,7 @@ from arkestra_utilities.output_libraries.plugin_widths import *
 from models import FilerImage, ImageSetItem, ImageSetPlugin
 
 def width_of_image(context, plugin, image):
-    print "** image", image
+    # print "** image", image
     aspect_ratio = float(image.width)/image.height
     plugin.has_borders = False
 
@@ -312,7 +312,7 @@ class ImageSetPublisher(CMSPluginBase):
                 # set caption
                 imageset_item.caption = set_image_caption(imageset_item)
         
-                print "final output size", width, "x", height
+                # print "final output size", width, "x", height
                 
                 context.update({
                     'imageset':imageset,
@@ -324,7 +324,7 @@ class ImageSetPublisher(CMSPluginBase):
                 
         # no items, use a null template    
         else:
-            print "using a null template" , imageset
+            # print "using a null template" , imageset
             self.render_template = "null.html"  
             context.update({
                 'placeholder':placeholder,
@@ -336,7 +336,7 @@ class ImageSetPublisher(CMSPluginBase):
         return self
 
     def icon_src(self, instance):
-        print instance.kind
+        # print instance.kind
         if instance.imageset_item.count() == 1:
             return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
         elif instance.kind == "basic":

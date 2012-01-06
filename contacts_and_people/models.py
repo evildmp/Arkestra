@@ -121,7 +121,7 @@ class Building(models.Model):
         """
         Assembles the postal (external) parts of an address
         """
-        print "getting postal address"
+        # print "getting postal address"
         address = []
         if self.name:
             address.append(self.name)
@@ -216,10 +216,11 @@ class EntityManager(models.Manager):
         try:
             # are Entities available at all?
             list(Entity.objects.all())
-            print "** Entity objects are available from the database"
+            # print "** Entity objects are available from the database"
         except:
             # no - the database isn't ready 
-            print "** Entity objects are not available from the database"      
+            # print "** Entity objects are not available from the database"
+            pass      
         else:
             # we managed to get Entity.objects.all()
             # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
@@ -227,10 +228,11 @@ class EntityManager(models.Manager):
                 entity = Entity.objects.get(id = base_entity_id)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
             except (Entity.DoesNotExist, DatabaseError), e:
-                print "** Either the Entity does not exist, or I got a DatabaseError:"
-                print "**", e
+                # print "** Either the Entity does not exist, or I got a DatabaseError:"
+                # print "**", e
+                pass
             else:
-                print "** I successfully found a default entity:", entity
+                # print "** I successfully found a default entity:", entity
                 return entity
 
 class Entity(EntityLite, CommonFields):

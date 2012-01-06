@@ -167,7 +167,7 @@ def event(request, slug):
     """
     Responsible for publishing an event
     """
-    print " -------- views.event --------"
+    # print " -------- views.event --------"
     event = get_object_or_404(Event, slug=slug)
     
     return render_to_response(

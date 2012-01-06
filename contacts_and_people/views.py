@@ -143,7 +143,7 @@ def person(request, slug, active_tab=""):
     if entity:
         template = entity.get_template() 
     else: # no memberships, no useful information
-        print "no memberships, no useful information"
+        # print "no memberships, no useful information"
         template = default_entity.get_template()
 
     tabs_dict = { # information for each kind of person tab
@@ -186,7 +186,7 @@ def person(request, slug, active_tab=""):
     if tabs:
         if not active_tab:
             # find out what to add to the url for this tab
-            print tabs[0]
+            # print tabs[0]
             active_tab=tabs[0]["address"]
             # mark the tab as active for the template
             tabs[0]["active"]=True
