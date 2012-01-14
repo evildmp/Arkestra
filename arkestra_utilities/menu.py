@@ -131,7 +131,8 @@ class ArkestraPages(Modifier):
                         url = entity.get_related_info_page_url(menu["url_attribute"]), 
                         parent = node
                         )
-                    if getattr(new_node, "ancestor", None) or True:
+                    # does this menu call for sub-menu items?
+                    if menu.get("sub_menus", None):
                         plugin.add_links_to_other_items(instance)
                         for item in plugin.lists:
                             # and go through the other_items lists for each, creating a node for each
