@@ -41,8 +41,10 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
 
     meta = {"description": "Recent news and forthcoming events",}
     title = str(entity)  + " news & events"
-    pagetitle = str(entity) + " news & events"
-    
+    if getattr(settings, "MULTIPLE_ENTITY_MODE"):
+        pagetitle = str(entity) + " news & events"
+    else:
+        pagetitle = "News & events"
     CMSNewsAndEventsPlugin().render(context, instance, None)
     
     context.update({
