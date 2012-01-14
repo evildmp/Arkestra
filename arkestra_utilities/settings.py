@@ -27,6 +27,9 @@ MULTIPLE_ENTITY_MODE = True
 # such as /news-and-events
 MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = 6
 
+# the age in days at which items can be considered to have expired and should be archived
+AGE_AT_WHICH_ITEMS_EXPIRE = 180
+
 # in All forthcoming events lists, gather top events  together
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = True
 

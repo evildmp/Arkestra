@@ -28,6 +28,7 @@ PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
+AGE_AT_WHICH_ITEMS_EXPIRE = settings.AGE_AT_WHICH_ITEMS_EXPIRE
 
 class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
@@ -62,6 +63,13 @@ class NewsArticle(NewsAndEvents):
     class Meta:
         ordering = ['-date']
                 
+    @property
+    def has_expired(self):
+       # the item is too old to appear in current lists, and should only be listed in archives
+       age = datetime.now() - self.date
+       if age.days > getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 90):
+           return True
+
     @property
     def get_when(self):
         """
