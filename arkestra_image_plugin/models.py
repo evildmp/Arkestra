@@ -1,13 +1,18 @@
+from posixpath import join, basename, splitext, exists
+
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from cms.models import CMSPlugin, Page
 from cms.models.fields import PageField
-from django.utils.translation import ugettext_lazy as _
-from posixpath import join, basename, splitext, exists
+from cms import settings as cms_settings
+
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
-from cms import settings as cms_settings
-from django.conf import settings
+
+from links.models import BaseLink
 
 class FilerImage(CMSPlugin):
     LEFT = "left"

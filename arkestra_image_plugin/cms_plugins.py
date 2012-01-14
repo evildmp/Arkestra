@@ -222,8 +222,8 @@ class ImageSetPublisher(CMSPluginBase):
                 context.update({
                     'imageset':imageset,
                     'icon_size': size,
-                    # 'image_size': u'%sx%s' % (int(width), int(height)),
-                    # 'caption_width': int(width),
+                    'image_width': int(width),
+                    'image_height': int(height),
                     'placeholder':placeholder,
                 })
 
@@ -283,7 +283,7 @@ class ImageSetPublisher(CMSPluginBase):
                     # make the icons small enough to fit neatly on a line; if too small, make them bigger
                     while icon_width < 30:
                         icon_width = icon_width * 2 
-                        icon_height = icon_height / 2 
+                        icon_width = icon_height / 2 
                 
                 icon_width = icon_width - 6                   
                 
@@ -291,6 +291,8 @@ class ImageSetPublisher(CMSPluginBase):
                     'imageset':imageset,
                     'icon_size': (int(icon_width), int(icon_height)),
                     'placeholder':placeholder,
+                    'image_width': int(icon_width),
+                    'image_height': int(icon_width),
                 })
 
             # we'll use the basic style
@@ -318,6 +320,8 @@ class ImageSetPublisher(CMSPluginBase):
                     'imageset':imageset,
                     'imageset_item': imageset_item, 
                     'image_size': u'%sx%s' % (int(width), int(height)),
+                    'image_width': int(width),
+                    'image_height': int(height),
                     'caption_width': int(width),
                     'placeholder':placeholder,
                 })
