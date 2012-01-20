@@ -2,7 +2,7 @@
 {% if not video.unready_versions %}
     <video width="{{ video.width }}" controls>
     	{% for codec in video.formats.HTML5 %}
-    	    <source src="{{ codec.url }}" type="{{ codec.type|safe }}" />
+    	    <source src='{{ codec.url }}' type='{{ codec.type|safe }}' />
     	{% endfor %}
     	{% if video.formats.FLASH %}
     	    <object width="{{video.width}}" height="{{ video.dumb_height }}" type="application/x-shockwave-flash" data="{{ STATIC_URL }}swf/player.swf">
