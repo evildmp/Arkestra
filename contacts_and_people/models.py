@@ -299,7 +299,7 @@ class Entity(EntityLite, CommonFields):
         if self.external_url:
             return self.external_url.url
         else:
-            return "/entity/%s/" % self.slug
+            return "/contact/%s/" % self.slug
 
     def get_real_ancestor(self):
         """

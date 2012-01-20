@@ -50,6 +50,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
             "meta": meta,
             "location": entity.precise_location, 
             "intro_page_placeholder": entity.contacts_page_intro,
+            "phone": contact.phone_contacts.all(),
 
             "people": people,
             "people_list_heading": people_list_heading,
@@ -121,7 +122,7 @@ def person(request, slug, active_tab=""):
 
     contact = person.get_please_contact()
     email = contact.email
-    phone = contact.phone_contacts
+    phone = contact.phone_contacts.all()
 
     if person.override_entity or person.please_contact:
         location = None
