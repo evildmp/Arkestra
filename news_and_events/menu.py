@@ -4,5 +4,5 @@ menu_dict = {
     "cms_plugin_model_name": "CMSNewsAndEventsPlugin",
     "title_attribute": "news_page_menu_title",
     "url_attribute": "news-and-events",
-    "sub_menus": () 
+    "sub_menus": False, 
     }
