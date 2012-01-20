@@ -1,7 +1,7 @@
 {% load sekizai_tags thumbnail %}
 <ul id="{{ imageset|default:"slider"}}">
 	{% for item in imageset.items %} 
-    	<li><img src="{% thumbnail item.image icon_size crop subject_location=item.image.subject_location %}" alt=""></li>			
+    	<li><img src="{% thumbnail item.image imageset.size crop subject_location=item.image.subject_location %}" alt=""></li>			
 	{% endfor %}
 </ul>
 	
@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}slider/css/theme-minimalist-square.css">
 <style>
 	#{{ imageset|default:"slider"}} {
-	width: {{ icon_size.0 }}px;
-	height: {{ icon_size.1 }}px;
+	width: {{ imageset.size.0 }}px;
+	height: {{ imageset.size.1 }}px;
 	list-style: none;
 	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
 	overflow-y: auto;

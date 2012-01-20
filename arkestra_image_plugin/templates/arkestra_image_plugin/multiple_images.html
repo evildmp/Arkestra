@@ -1,0 +1,5 @@
+{% load thumbnail %}
+
+<ul class="multiple-images" style="width: {{ imageset.container_width }}px;">
+{% for item in imageset.items %}<li {% if item.lastinrow %}class="lastinrow"{% endif %}><img alt="" src="{% thumbnail item.image item.icon_size crop subject_location=image.subject_location %}" /></li>{% endfor %}
+</ul>

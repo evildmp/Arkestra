@@ -30,4 +30,4 @@
 {% endaddtoblock %}
 
 
-<div class="fancybox">{% for item in imageset.items %}<a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="" src="{% thumbnail item.image icon_size crop subject_location=image.subject_location %}" /></a>{% endfor %}</div>
+<div class="fancybox" style="width: {{ imageset.container_width }}px;">{% for item in imageset.items %}<a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.large_url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="" src="{% thumbnail item.image imageset.size crop subject_location=image.subject_location %}" /></a>{% endfor %}</div>

@@ -27,7 +27,6 @@ def get_placeholder_width(context, plugin):
     placeholder_width = context.get("placeholder_width")
     placeholder_width = placeholder_width or context.get("width")
     placeholder_width = float(placeholder_width or 100.0)
-    # placeholder_width = float(context.get("placeholder_width", context.get("width", 100.0))) 
 
     # run all registered placeholder_width modifiers
     for cls in adjuster_pool.adjusters["placeholder_width"]:

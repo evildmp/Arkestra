@@ -1,4 +1,12 @@
-/* Navigation Links */
+/* Arkestra image plugin */
+
+ul.multiple-images  {padding: 0; margin: 0;}
+ul.multiple-images li {display: inline-block; margin-right: 6px;}
+ul.multiple-images li.lastinrow {margin-right: 0px;}
+
+/* Slider
+
+Navigation Links */
 body div.anythingSlider-minimalist-square .anythingControls {
 	float: right;
 	position: relative;

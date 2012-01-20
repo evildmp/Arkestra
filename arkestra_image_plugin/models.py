@@ -1,13 +1,20 @@
+from posixpath import join, basename, splitext, exists
+
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+
 from cms.models import CMSPlugin, Page
 from cms.models.fields import PageField
-from django.utils.translation import ugettext_lazy as _
-from posixpath import join, basename, splitext, exists
+from cms import settings as cms_settings
+
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
-from cms import settings as cms_settings
-from django.conf import settings
+
+from links.models import LinkMethodsMixin
 
 class FilerImage(CMSPlugin):
     LEFT = "left"
@@ -55,6 +62,8 @@ class FilerImage(CMSPlugin):
                      )
     float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
     
+
+
     '''
     @property
     def scaled_image_url(self):
@@ -84,6 +93,7 @@ class FilerImage(CMSPlugin):
 class ImageSetPlugin(CMSPlugin):
     IMAGESET_KINDS = (
         ("basic", "Basic"),
+        ("multiple", "Multiple images"),
         ("lightbox", "LightBox"),
         ("slider", "Slider"),
         )
@@ -105,12 +115,14 @@ class ImageSetPlugin(CMSPlugin):
             (-350.0, u'350 pixels'),
             )
         ),    
-        ('', u"Image's native width"),
+        ('0', u"Image's native width (use with caution)"),
     )
-    width = models.FloatField(null=True, blank=True, choices = IMAGE_WIDTHS, default = 1000.0)
-    height = models.PositiveIntegerField(null=True, blank=True)
+    width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
+    height = models.PositiveIntegerField(null=True, blank=True,
+        help_text = "Only applies when <strong>Aspect ratio</strong> is <em>Automatic</em>")
+
     ASPECT_RATIOS = (
-        (0, u'Native'),
+        (0, u'Automatic'),
         (3.0, u'3x1'),
         (1.778, u'16x9'),
         (1.618, u'Golden ratio (horizonal)'),
@@ -123,23 +135,36 @@ class ImageSetPlugin(CMSPlugin):
         (0.563, u'16x9'),
         (0.3, u'1x3'),
         )
-    aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
+    aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0,          
+        help_text = "<em>Automatic</em> means native aspect ratio will be used where possible and calculated otherwise")
+
     LEFT = "left"
     RIGHT = "right"
     FLOAT_CHOICES = ((LEFT, _("left")),
                      (RIGHT, _("right")),
                      )
     float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
+    items_per_row = models.PositiveSmallIntegerField(blank = True, null = True,
+        help_text = "Only applies to Multiple and Lightbox plugins")
+
+    @property
+    def items_have_links(self):
+        return all(item.destination_content_object is not None for item in self.imageset_item.all())
+
     def __unicode__(self):
         return u"image-set-%s" % self.kind
     
 
-class ImageSetItem(models.Model):
+class ImageSetItem(models.Model, LinkMethodsMixin):
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
     alt_text = models.CharField(null=True, blank=True, max_length=255)
     use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
     caption = models.TextField(_("Caption"), blank=True, null=True)
+
+    destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s", null = True, blank = True) 
+    destination_object_id = models.PositiveIntegerField(verbose_name="Item", null = True, blank = True)
+    destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
 
     def __unicode__(self):
         if self.image:

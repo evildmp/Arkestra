@@ -1,7 +1,12 @@
-{% load thumbnail filer_tags filer_image_tags %}{% spaceless %}
-<span class = "image {{imageset.float}}"><img alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}" class="plugin" src="{% thumbnail imageset_item.image.file image_size crop subject_location=imageset_item.image.subject_location %}" />
-	{% if imageset_item.caption %}<span style="width: {{caption_width}}px" class="image_caption">{{ imageset_item.caption }}</span>{% endif %}
-	{% if imageset_item.show_author %}
-	    <span class="image_author">(Author: {{ imageset_item.image.author }})</span>
-	{% endif %}
-</span>{% endspaceless %} 
+{% load thumbnail filer_tags filer_image_tags %}
+{% spaceless %}
+	<span class = "image {{imageset.float}}">
+		{% if imageset_item.url %}<a href="{{ imageset_item.url }}">{% endif %}
+		<img alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}" class="plugin" src="{% thumbnail imageset_item.image.file image_size crop subject_location=imageset_item.image.subject_location %}" />
+		{% if imageset_item.url %}</a>{% endif %}
+		{% if imageset_item.caption %}<span style="width: {{caption_width}}px" class="image_caption">{{ imageset_item.caption }}</span>{% endif %}
+		{% if imageset_item.show_author %}
+		    <span class="image_author">(Author: {{ imageset_item.image.author }})</span>
+		{% endif %}
+	</span>
+{% endspaceless %} 
