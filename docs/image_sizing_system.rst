@@ -55,8 +55,22 @@ How it works
 
 The image plugin (or video, or carousel, or whatever - referred to here as 'image', just to make life easier) is told what width to be. 
 
-If it's an absolute width or the native width of the image, then that's settled. But if it's one a width relative to the containing column, then Arkestra will need to make the calculation:
+If it's an absolute width or the native width of the image, then that's settled. But if it's one a width relative to the containing column, then Arkestra will need to make the calculation.
 
+In summary, it looks like this:
+* the rendering plugin
+	* `width_of_image` - if not None (native width) or negative (absolute width) then:
+		* `get_placeholder_width`
+			* `SimplePlaceholderWidthAdjuster` (the default `placeholder_width` adjuster)
+		* `calculate_container_width`
+			* `get_plugin_ancestry`
+			* for each ancestor:
+				* run each registered `plugin_width` adjuster (some modify immediately, some modify later); defaults are:
+				* `AutoSpaceFloat` 
+				* `ReduceForBackground`
+				* `ColumnWidths`
+				* `ImageBorders` - a `mark_and_modify` adjusters: it acts only once for the entire tree
+			
 Calculate the width of the placeholder
 ======================================
 
@@ -64,7 +78,12 @@ The `get_placeholder_width` function is called by the rendering plugin, such as 
 
 This obtains the default `placeholder_width` value from the context.
 
-(`placeholder_width` can be set in settings, or if your site uses different templates with different widths, then with {% with placeholder_width=<some_value> %} around the placeholder in the template.)
+This is how:
+
+* `placeholder_width` can be set by CMS_PLACEHOLDER_CONF["body"]["extra_content"]["width"]
+* `placeholder_width` can be set by {% with placeholder_width=<some_value> %} around the placeholder
+* failing to get `placeholder_width`, it looks for `width`, provided by [what? cms?]
+* failing that, it just chooses 100 - useful for admin templates
 
 `get_placeholder_width` then calls each registered `placeholder_width` adjuster. There is one included by default: `SimplePlaceholderWidthAdjuster`.
 
@@ -95,17 +114,19 @@ Possible `adjuster` values:
 
 Obviously it's up to you and your HTML/CSS how all these things work...
 
-Anyway, now Arkestra knows how wide the placeholder is.
+Anyway, now Arkestra knows how wide the placeholder is, and returns that.
 
 Calculate image container width
 ===============================
 
-The next thing `arkestra_image_plugin.cms_plugins.FilerImagePlugin` does is call `calculate_container_width`.
+Now we need to find out the width of the immediate container in which the image plugin finds itself. 
 
-Now we need to find out where our image plugin finds itself. It might be directly placed in the placeholder, or it might be within a text plugin within the placeholder, or in a deeper structure still.
+It might be directly placed in the placeholder, or it might be within a text plugin within the placeholder, or in a deeper structure still. 
 
-`calculate_container_width` gets the ancestry of the image plugin. 
-
+So, the rendering function calls `calculate_container_width`.
+                                
+First, this obtains all the ancestors in the plugin hierarchy tree, from `get_plugin_ancestry`.
+                                                                                  
 Then, starting at the rootmost plugin, it will run each registered `plugin_width` adjuster.
 
 There is one included by default: `KeyReducer`.
@@ -158,3 +179,5 @@ The defaults can be overridden in the template by using {% with %}:
 * image_border_class="some-class"
 * no_image_border_class="some-other-class"
 * image_border_reduction=16
+                                
+At the end of all this, `calculate_container_width` returns the calculated width of the container of the image.
