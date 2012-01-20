@@ -30,7 +30,7 @@ ul.plugin-list .title   {font-weight: bold;}
 
 ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em; padding-bottom: 0.5em;}
 ul.plugin-list.vertical li:first-child {padding-top: 0;}
-ul.plugin-list.vertical li.grouper li.important {
+div.main_page ul.plugin-list.vertical li.grouper li.important {
     padding: .5em; 
     margin: 1px 0 1em;
     background-color: #ccc; 
