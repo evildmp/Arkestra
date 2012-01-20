@@ -39,7 +39,6 @@ class SupplyRequestMixin(object):
         form_class.request = request
         return form_class
 
-
 class InputURLMixin(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False,
         help_text=u"Enter the URL of an external item that you want <strong>automatically</strong> added to the database, but first check carefully using <strong>External URL</strong> (above) to make sure it's really not there.", 
