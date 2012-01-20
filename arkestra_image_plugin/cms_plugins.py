@@ -313,6 +313,8 @@ class ImageSetPublisher(CMSPluginBase):
                 context.update({
                     'imageset':imageset,
                     'placeholder':placeholder,
+                    'image_width': int(icon_width),
+                    'image_height': int(icon_width),
                 })
 
             # =================================== multiple images =============================
@@ -373,6 +375,8 @@ class ImageSetPublisher(CMSPluginBase):
                     'imageset':imageset,
                     'imageset_item': imageset_item, 
                     'image_size': u'%sx%s' % (int(width), int(height)),
+                    'image_width': int(width),
+                    'image_height': int(height),
                     'caption_width': int(width),
                     'placeholder':placeholder,
                 })

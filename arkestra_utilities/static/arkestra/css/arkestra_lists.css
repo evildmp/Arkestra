@@ -32,7 +32,8 @@ ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em; padding-bottom
 ul.plugin-list.vertical li:first-child {padding-top: 0;}
 ul.plugin-list.vertical li.grouper li.important {
     padding: .5em; 
-    margin: 1px 0 1em; 
+    margin: 1px 0 1em;
+    background-color: #ccc; 
     }
 
 /* groupers in plugin lists */

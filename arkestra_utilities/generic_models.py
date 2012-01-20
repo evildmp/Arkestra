@@ -48,6 +48,11 @@ class ArkestraGenericModel(models.Model):
         help_text=u"Important items will be featured in lists")
 
     @property
+    def has_expired(self):
+       # the item is too old to appear in current lists, and should only be listed in archives
+       return False
+    
+    @property
     def get_importance(self):
         if self.importance: # if they are not being gathered together, mark them as important
             return "important"
@@ -219,10 +224,13 @@ class ArkestraGenericPlugin(object):
     def set_limits_and_indexes(self, instance):
         
         for this_list in self.lists:
+            # if a plugin or a main page or menu, eliminate expired items
+            if instance.view == "current" and instance.type in ["plugin", "main_page", "menu"]:
+                this_list["items"] = [item for item in this_list["items"] if not item.has_expired]
+                
             # cut the list down to size if necessary
             if this_list["items"] and len(this_list["items"]) > instance.limit_to:
                 this_list["items"] = this_list["items"][:instance.limit_to]
-
             # gather non-top items into a list to be indexed
             this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)]
             # extract a list of dates for the index

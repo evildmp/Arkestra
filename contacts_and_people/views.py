@@ -21,7 +21,6 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     request.current_page = entity.get_website
     template = entity.get_template()
     main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
-
     # meta values - title and meta
     title = "Contact information for %s" % entity
     meta = {
@@ -42,7 +41,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         "contacts_and_people/arkestra_page.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
             "entity":entity,
-            "pagetitle": entity,
+            "pagetitle": u"Contacts & people",
             "entity.website.template": template,
             "main_page_body_file": main_page_body_file,
             "email": entity.email,
