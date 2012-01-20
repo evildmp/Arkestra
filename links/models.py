@@ -13,18 +13,8 @@ from django.conf import settings
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
-class BaseLink(models.Model):
-    """
-    All links, whether placed using the Admin Inline mechanism or as plugins, require this information
-    """
-    destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s") 
-    destination_object_id = models.PositiveIntegerField(verbose_name="Item")
-    destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
-    
-    class Meta:
-        abstract = True
-        ordering = ['id',]
-    
+class LinkMethodsMixin(object):
+
     def __unicode__(self):
         return unicode(self.destination_content_object)
     
@@ -104,7 +94,20 @@ class BaseLink(models.Model):
         return self._smart_get_attribute_for_destination('thumbnail_url')
 
 
-class Link(BaseLink):
+class BaseLink(models.Model):
+    """
+    All links, whether placed using the Admin Inline mechanism or as plugins, require this information
+    """
+    destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s") 
+    destination_object_id = models.PositiveIntegerField(verbose_name="Item")
+    destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
+    
+    class Meta:
+        abstract = True
+        ordering = ['id',]
+
+
+class Link(BaseLink, LinkMethodsMixin):
     """
     Abstract base class for links that appear in lists - used by ObjectLinks and links.GenericLinkListPluginItem
     """
