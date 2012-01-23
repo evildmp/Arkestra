@@ -196,11 +196,16 @@ class ArkestraGenericPlugin(object):
         return
 
     def add_link_to_main_page(self, instance):
+        # only plugins and sub_pages need a link to the main page
         if instance.type == "plugin" or instance.type == "sub_page":
+            # do any of models referred to by this instance have items and is entity.menu_cues["auto_page_attribute"] (e.g. entity.auto_news_page) True? 
+            # menu_cues is this application's menu_dict
             if (any(d['items'] for d in self.lists)) and \
                 getattr(instance.entity, getattr(self, "menu_cues", {}).get("auto_page_attribute", ""), False): 
+                # set the url attribute of the link to the main page
                 instance.link_to_main_page = instance.entity.get_related_info_page_url(self.menu_cues["url_attribute"])
-                instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])
+                # set the title of the link
+                instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])  
 
     # def print_settings(self):
     #     print "---- plugin settings ----"
