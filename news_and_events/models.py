@@ -28,7 +28,7 @@ PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
-AGE_AT_WHICH_ITEMS_EXPIRE = settings.AGE_AT_WHICH_ITEMS_EXPIRE
+AGE_AT_WHICH_ITEMS_EXPIRE = getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 90)
 
 class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
@@ -67,7 +67,7 @@ class NewsArticle(NewsAndEvents):
     def has_expired(self):
        # the item is too old to appear in current lists, and should only be listed in archives
        age = datetime.now() - self.date
-       if age.days > getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 90):
+       if AGE_AT_WHICH_ITEMS_EXPIRE and age.days > AGE_AT_WHICH_ITEMS_EXPIRE:
            return True
 
     @property
@@ -366,11 +366,11 @@ post_save.connect(receiver_function, sender = Event)
 
 class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     DISPLAY = (
-        ("news events", u"News and events"),
+        ("news & events", u"News and events"),
         ("news", u"News only"),
         ("events", u"Events only"),
         )
-    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news events")
+    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news & events")
     show_previous_events = models.BooleanField()
     news_heading_text = models.CharField(max_length=25, default="News")
     events_heading_text = models.CharField(max_length=25, default="Events")

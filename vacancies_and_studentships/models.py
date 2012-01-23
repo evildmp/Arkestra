@@ -82,7 +82,7 @@ class VacanciesPlugin(CMSPlugin, ArkestraGenericPluginOptions):
         (u"vacancies", u"Vacancies only"),
         (u"studentships", u"Studentships only"),
     )
-    display = models.CharField(max_length=25,choices=DISPLAY, default="vacancies studentships")
+    display = models.CharField(max_length=25,choices=DISPLAY, default="vacancies & studentships")
     # entity = models.ForeignKey(Entity, null=True, blank=True, 
     #     help_text="Leave blank for autoselect", related_name="%(class)s_plugin")
     vacancies_heading_text = models.CharField(max_length=25, default="Vacancies")
