@@ -158,7 +158,7 @@ class PersonForm(InputURLMixin):
 
         # set the title
         title = self.cleaned_data["title"] or ""
-        link_title = " ".join(name_part for name_part in [str(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
+        link_title = u" ".join(name_part for name_part in [unicode(title), self.cleaned_data["given_name"], self.cleaned_data["surname"]] if name_part)
 
         # check ExternalLink-related issues
         self.cleaned_data["external_url"] = get_or_create_external_link(self.request,

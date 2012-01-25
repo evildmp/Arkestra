@@ -48,7 +48,7 @@ class NewsAndEventsForm(InputURLMixin):
             # must have body or url in order to be published
             if not self.instance and self.instance.body.cmsplugin_set.all():
             # if not self.cleaned_data["body"]:          
-                message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+                message = u"This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
                 messages.add_message(self.request, messages.WARNING, message)
 
 
@@ -133,10 +133,10 @@ class EventForm(NewsAndEventsForm):
                 if parent.single_day_event:
                     self.cleaned_data["start_date"] = self.cleaned_data["end_date"] = parent.start_date
                     self.cleaned_data["single_day_event"] = True
-                    message = "You didn't say, but I am guessing that this is a single-day event on " + str(self.cleaned_data["start_date"]) + "."
+                    message = u"You didn't say, but I am guessing that this is a single-day event on " + unicode(self.cleaned_data["start_date"]) + u"."
                     messages.add_message(self.request, messages.INFO, message)
                 else:
-                    raise forms.ValidationError("I'm terribly sorry, I can't work out when this event is supposed to start. You'll have to enter that information yourself.")
+                    raise forms.ValidationError(u"I'm terribly sorry, I can't work out when this event is supposed to start. You'll have to enter that information yourself.")
 
         # 2. go and do the checks in the parent class
         super(EventForm, self).clean()
@@ -149,20 +149,20 @@ class EventForm(NewsAndEventsForm):
                 self.cleaned_data["single_day_event"] = True
             elif not self.cleaned_data["end_date"]:
                 self.cleaned_data["single_day_event"] = True
-                message = "You didn't enter an end date, so I have assumed this is a single-day event"
+                message = u"You didn't enter an end date, so I have assumed this is a single-day event"
                 messages.add_message(self.request, messages.INFO, message)
             elif not self.cleaned_data["single_day_event"]:
                 if self.cleaned_data["end_date"] < self.cleaned_data["start_date"]:
                     raise forms.ValidationError('This event appears to end before it starts, which is very silly. Please correct the dates.')
                 if not self.cleaned_data["start_time"] and self.cleaned_data["end_time"]:
                     self.cleaned_data["end_time"] = None
-                    message = "You didn't enter a start time, so I deleted the end time. I hope that's OK."
+                    message = u"You didn't enter a start time, so I deleted the end time. I hope that's OK."
                     messages.add_message(self.request, messages.WARNING, message)
             
             if self.cleaned_data["single_day_event"]:  
                 self.cleaned_data["end_date"] = self.cleaned_data["start_date"]
                 if not self.cleaned_data["start_time"]:
-                    message = "You have a lovely smile."
+                    message = u"You have a lovely smile."
                     messages.add_message(self.request, messages.INFO, message)
                     self.cleaned_data["end_time"] = None
                 elif self.cleaned_data["end_time"] and self.cleaned_data["end_time"] < self.cleaned_data["start_time"]:
@@ -177,7 +177,7 @@ class EventForm(NewsAndEventsForm):
         # an event without a start date can be assumed to be a series of events
         else:
             self.cleaned_data["series"] = True
-            message = "You didn't enter a start date, so I will assume this is a series of events."
+            message = u"You didn't enter a start date, so I will assume this is a series of events."
             messages.add_message(self.request, messages.INFO, message)
             self.cleaned_data['start_date'] = self.cleaned_data['end_date'] = self.cleaned_data['start_time'] = self.cleaned_data['end_time'] = None
             self.cleaned_data['single_day_event'] = False

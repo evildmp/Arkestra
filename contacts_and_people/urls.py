@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     (r"^place/(?P<slug>[-\w]+)/(?P<active_tab>[-\w]*)/?$", "contacts_and_people.views.place"),    
 
     # lists of people in an entity
-    (r"^people/(?P<slug>[-\w]+)/(?P<letter>[a-z])/$", "contacts_and_people.views.people"),
+    (r"^people/(?P<slug>[-\w]+)/(?P<letter>\w)/$", "contacts_and_people.views.people"),
     (r"^people/(?P<slug>[-\w]+)/$", "contacts_and_people.views.people"), 
     
     # main contacts & people page

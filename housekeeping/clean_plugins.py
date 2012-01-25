@@ -89,7 +89,7 @@ def clean(request, slug = "dryrun"):
                 modified_soup = True
         if modified_soup:
             modified= True
-            plugin.body = str(soup)                    
+            plugin.body = unicode(soup)                    
 
         
         if execute and modified:

@@ -37,8 +37,8 @@ def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", Non
     instance.type = "main_page"
 
     meta = {"description": "Vacancies and studentships",}
-    title = str(entity)  + " vacancies & studentships"
-    pagetitle = str(entity) + " vacancies & studentships"
+    title = unicode(entity) + u" vacancies & studentships"
+    pagetitle = unicode(entity) + u" vacancies & studentships"
 
     CMSVacanciesPlugin().render(context, instance, None)
 
@@ -69,8 +69,8 @@ def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
     instance.limit_to = None
 
     meta = {"description": "Archive of vacancies",}
-    title = str(entity)  + " archived vacancies"
-    pagetitle = str(entity) + " archived vacancies"
+    title = unicode(entity) + u" archived vacancies"
+    pagetitle = unicode(entity) + u" archived vacancies"
 
     context.update({
         "entity":entity,
@@ -99,8 +99,8 @@ def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
     CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "All current vacancies",}
-    title = str(entity)  + " current vacancies"
-    pagetitle = str(entity) + " current vacancies"
+    title = unicode(entity) + u" current vacancies"
+    pagetitle = unicode(entity) + u" current vacancies"
 
     context.update({
         "entity":entity,
@@ -127,8 +127,8 @@ def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
     CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "Archive of studentships",}
-    title = str(entity)  + " archived studentships"
-    pagetitle = str(entity) + " archived studentships"
+    title = unicode(entity) + u" archived studentships"
+    pagetitle = unicode(entity) + u" archived studentships"
 
     context.update({
         "entity":entity,
@@ -155,8 +155,8 @@ def all_current_studentships(request, slug=getattr(default_entity, "slug", None)
     CMSVacanciesPlugin().render(context, instance, None)
 
     meta = {"description": "All current studentships",}
-    title = str(entity)  + " current studentships"
-    pagetitle = str(entity) + " current studentships"
+    title = unicode(entity) + u" current studentships"
+    pagetitle = unicode(entity) + u" current studentships"
 
     context.update({
         "entity":entity,
