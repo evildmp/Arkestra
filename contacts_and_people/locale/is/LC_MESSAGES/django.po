@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-24 16:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: admin.py:592
+#, python-format
+msgid "The %(name)s \"%(obj)s\" was added successfully."
+msgstr ""
+
+#: admin.py:600
+msgid "You may edit it again below."
+msgstr ""
+
+#: admin.py:605
+msgid "Add user"
+msgstr "Bæta við notanda"
+
+#: cms_plugins.py:18
+msgid "Entity auto page link"
+msgstr "Tengill á sjálfvirka síðu"
+
+#: cms_plugins.py:61
+msgid "Directory"
+msgstr "Skrá"
+
+#: cms_plugins.py:102
+msgid "Member list"
+msgstr "Listi yfir meðlimi"
+
+#: views.py:34
+msgid "All other people"
+msgstr "Allir aðrir"
+
+#: views.py:38
+msgid "People"
+msgstr "Fólk"
+
+#: templates/admin/contacts_and_people/change_form__delete.html:23
+#: templates/admin/contacts_and_people/person/change_form__delete.html:23
+msgid "History"
+msgstr "Saga"
+
+#: templates/admin/contacts_and_people/change_form__delete.html:24
+#: templates/admin/contacts_and_people/person/change_form__delete.html:24
+msgid "View on site"
+msgstr "Skoða á vef"
+
+#: templates/admin/contacts_and_people/change_form__delete.html:35
+#: templates/admin/contacts_and_people/person/change_form__delete.html:34
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "Vinsamlega leiðréttu villuna að neðan"
+msgstr[1] "Vinsamlega leiðréttu villurnar að neðan"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:8
+msgid "Home"
+msgstr "Heim"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:57
+msgid "Successfully moved"
+msgstr "Tókst að færa"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:62
+msgid "An error occured. Please reload the page"
+msgstr "Villa kom upp. Vinsamlegast endurhlaðið síðuna"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:77
+#, python-format
+msgid "Recover deleted %(name)s"
+msgstr "Endurheimta %(name)s sem hefur verið eytt"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:80
+#, python-format
+msgid "Add %(name)s"
+msgstr "Bæta við %(name)s"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:92
+msgid "Entities on:"
+msgstr "Einingar á:"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:109
+msgid "Filter:"
+msgstr "Sía"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:109
+msgid "on"
+msgstr "á"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:109
+msgid "off"
+msgstr "af"
+
+#: templates/admin/contacts_and_people/entity/change_list.html:111
+msgid "Filter"
+msgstr "Sía"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree.html:6
+msgid "title"
+msgstr "titill"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree.html:8
+msgid "actions"
+msgstr "aðgerðir"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:10
+msgid "insert above"
+msgstr "setja inn fyrir ofan þessa einingu"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:11
+msgid "insert below"
+msgstr "setja inn fyrir neðan þessa einingu"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:12
+msgid "insert inside"
+msgstr "setja inn undir þessari einingu"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:17
+msgid "Cut"
+msgstr "Klippa"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:17
+msgid "cut"
+msgstr "klippa"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:21
+msgid "Add Child"
+msgstr "Bæta við einingu undir þessari"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:21
+msgid "add"
+msgstr "bæta við"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:23
+msgid "Delete"
+msgstr "Eyða"
+
+#: templates/admin/contacts_and_people/entity/change_list_tree_item.html:23
+msgid "delete"
+msgstr "eyða"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:5
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr "Skráið fyrst notandanafn og lykilorð"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:12
+msgid "Username"
+msgstr "Notandanafn"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:19
+msgid "has password"
+msgstr "er með lykilorð"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:25
+msgid "Password"
+msgstr "Lykilorð"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:31
+msgid "Password (again)"
+msgstr "Lykilorð (aftur)"
+
+#: templates/contacts_and_people/admin/auth/user/add_form.html:32
+msgid "Enter the same password as above, for verification."
+msgstr "Sláðu inn sama lykilorð og að ofan, til staðfestingar"

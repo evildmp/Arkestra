@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from datetime import date as pythondate
 
@@ -264,7 +265,7 @@ class Event(NewsAndEvents, LocationModelMixin):
             if self.single_day_event:
                 dates = nice_date(start_date, end_date_format)
             else:
-                dates = nice_date(start_date, start_date_format) + " to " + nice_date(end_date, end_date_format)
+                dates = nice_date(start_date, start_date_format) + unicode(_(u" to ")) + nice_date(end_date, end_date_format)
             return dates
         else:
             return "Series"
@@ -372,8 +373,8 @@ class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
         )
     display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news & events")
     show_previous_events = models.BooleanField()
-    news_heading_text = models.CharField(max_length=25, default="News")
-    events_heading_text = models.CharField(max_length=25, default="Events")
+    news_heading_text = models.CharField(max_length=25, default=_(u"News"))
+    events_heading_text = models.CharField(max_length=25, default=_(u"Events"))
     
 try:
     mptt.register(Event)

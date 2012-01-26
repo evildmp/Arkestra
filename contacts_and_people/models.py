@@ -90,11 +90,11 @@ class Building(models.Model):
 
     def __unicode__(self):
         if self.name:
-            building_identifier = str(self.site) + ": " + self.name
+            building_identifier = unicode(self.site) + ": " + self.name
         elif self.street:
-            building_identifier = str(self.site) + ": " + self.number + " " + self.street
+            building_identifier = unicode(self.site) + ": " + self.number + " " + self.street
         else:
-            building_identifier = str(self.site) + ": " + self.postcode
+            building_identifier = unicode(self.site) + ": " + self.postcode
         return building_identifier
     
     def get_absolute_url(self):
@@ -114,7 +114,7 @@ class Building(models.Model):
         elif self.street:
             building_identifier = self.number + " " + self.street
         else:
-            building_identifier = str(self.site) + ": " + self.postcode
+            building_identifier = unicode(self.site) + ": " + self.postcode
         return building_identifier
     
     def get_postal_address(self):
@@ -205,7 +205,7 @@ class EntityLite(models.Model):
     name = models.CharField(max_length=100, help_text="e.g. Section of Haematology")
     
     def __unicode__(self):
-        return str(self.name)
+        return unicode(self.name)
 
 
 class EntityManager(models.Manager):
@@ -510,7 +510,7 @@ class PersonLite(models.Model):
     surname = models.CharField(max_length=50)
     
     def __unicode__(self):
-        return str(self.given_name + " " + self.middle_names + " " + self.surname)
+        return unicode(self.given_name + " " + self.middle_names + " " + self.surname)
     
     def __getInitials(self):
         if self.given_name <> '' and self.middle_names <> '':
@@ -556,7 +556,7 @@ class Person(PersonLite, CommonFields):
 
     def __unicode__(self):
         title = self.title or ""
-        return " ".join(name_part for name_part in [str(title), self.given_name, self.surname] if name_part)
+        return u" ".join(name_part for name_part in [unicode(title), self.given_name, self.surname] if name_part)
 
     def get_absolute_url(self):
         if self.external_url:
@@ -683,9 +683,9 @@ class Membership(models.Model):
     
     def __unicode__(self):
         if self.display_role:
-            return str(self.entity.short_name) + "-" + str(self.display_role)
+            return unicode(self.entity.short_name) + "-" + unicode(self.display_role)
         else:
-            return str(self.role)
+            return unicode(self.role)
     
     def save(self):
         """

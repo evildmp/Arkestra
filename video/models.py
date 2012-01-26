@@ -83,16 +83,16 @@ class VideoVersion(models.Model):
 
     def filename(self):    
         # e.g. "video.dv"
-        return os.path.basename(str(self.source.file)) 
+        return os.path.basename(unicode(self.source.file)) 
 
     def directory(self):
         # e.g. "filer_private/2010/11/23"
         print ">> self                 ", self
         print ">> self.source          ", self.source
         print ">> self.source.file     ", self.source.file
-        print ">> str(self.source.file)", str(self.source.file)
-        print ">> os.path.dirname(str(self.source.file))", os.path.dirname(str(self.source.file)) 
-        return os.path.dirname(str(self.source.file)) 
+        print ">> unicode(self.source.file)", unicode(self.source.file)
+        print ">> os.path.dirname(unicode(self.source.file))", os.path.dirname(unicode(self.source.file)) 
+        return os.path.dirname(unicode(self.source.file)) 
 
     def encode(self):
         print

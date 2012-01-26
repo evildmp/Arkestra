@@ -40,9 +40,9 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
     instance.type = "main_page"
 
     meta = {"description": "Recent news and forthcoming events",}
-    title = str(entity)  + " news & events"
+    title = unicode(entity) + u" news & events"
     if getattr(settings, "MULTIPLE_ENTITY_MODE"):
-        pagetitle = str(entity) + " news & events"
+        pagetitle = unicode(entity) + u" news & events"
     else:
         pagetitle = "News & events"
     CMSNewsAndEventsPlugin().render(context, instance, None)
@@ -72,8 +72,8 @@ def previous_events(request, slug=getattr(default_entity, "slug", None)):
     instance.limit_to = None
 
     meta = {"description": "Archive of previous events",}
-    title = str(entity)  + " previous events"
-    pagetitle = str(entity) + " previous events"
+    title = unicode(entity) + u" previous events"
+    pagetitle = unicode(entity) + u" previous events"
 
     CMSNewsAndEventsPlugin().render(context, instance, None)
 
@@ -102,8 +102,8 @@ def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
     CMSNewsAndEventsPlugin().render(context, instance, None)
 
     meta = {"description": "All forthcoming events",}
-    title = str(entity)  + " forthcoming events"
-    pagetitle = str(entity) + " forthcoming events"
+    title = unicode(entity) + u" forthcoming events"
+    pagetitle = unicode(entity) + u" forthcoming events"
 
     context.update({
         "entity":entity,
@@ -131,8 +131,8 @@ def news_archive(request, slug=getattr(default_entity,"slug", None)):
     CMSNewsAndEventsPlugin().render(context, instance, None)
 
     meta = {"description": "Archive of news items",}
-    title = str(entity)  + " - news archive"
-    pagetitle = str(entity) + " - news archive"
+    title = unicode(entity) + u" - news archive"
+    pagetitle = unicode(entity) + u" - news archive"
 
     context.update({
         "entity":entity,

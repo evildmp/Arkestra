@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-24 16:48+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: cms_plugins.py:25
+msgid "News & events"
+msgstr "Fréttir og viðburðir"
+
+#: models.py:268
+msgid " to "
+msgstr " - "
+
+#: models.py:376
+msgid "News"
+msgstr "Fréttir"
+
+#: models.py:377
+msgid "Events"
+msgstr "Viðburðir"
+
+#: templates/admin/news_and_events/event/change_list.html:43
+msgid "Successfully moved"
+msgstr "Tókst að færa"
+
+#: templates/admin/news_and_events/event/change_list.html:67
+#, python-format
+msgid "Add %(name)s"
+msgstr "Bæta við %(name)s"
+
+#: templates/admin/news_and_events/event/change_list_tree.html:6
+msgid "title"
+msgstr "titill"
+
+#: templates/admin/news_and_events/event/change_list_tree.html:8
+msgid "actions"
+msgstr "aðgerðir"

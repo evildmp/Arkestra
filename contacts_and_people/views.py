@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
@@ -30,11 +31,11 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     people, initials = entity.get_people_and_initials()
     # are there Key People to show?    
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
-        people_list_heading = "All other people"
+        people_list_heading = _(u"All other people")
         # now remove the Key People from the people list
         people = [ person for person in people if person not in set([role.person for role in entity.get_key_people()])]
     else: # otherwise, just a list of the people with roles
-        people_list_heading = "People"
+        people_list_heading = _(u"People")
     people = entity.get_roles_for_members(people) # convert the list of Persons into a list of Members
 
     return render_to_response(
@@ -71,14 +72,14 @@ def people(request, slug, letter=None):
     main_page_body_file = "includes/people_list_with_index.html"
     # meta values - title and meta
     meta = {
-        "description": "People in %s" % entity,
+        u"description": "People in %s" % entity,
         }
-    title = "%s: people" % entity
+    title = u"%s: people" % entity
     # content values
     people, initials = entity.get_people_and_initials()
     if letter:
         people = entity.get_people(letter)
-        title = "%s, people by surname: %s" % (entity, letter.upper())
+        title = u"%s, people by surname: %s" % (entity, letter.upper())
     return render_to_response(
         "contacts_and_people/arkestra_page.html",
         {
@@ -157,13 +158,13 @@ def person(request, slug, active_tab=""):
             "tab": "research",
             "title": "Research",
             "address": "research",
-            "meta_description_content": str(person) + "- research interests",
+            "meta_description_content": unicode(person) + "- research interests",
         },
         "publications": {
             "tab": "publications",
             "title": "Publications",
             "address": "publications",
-            "meta_description_content": str(person) + "- publications",
+            "meta_description_content": unicode(person) + "- publications",
         },
     }
     
@@ -352,8 +353,8 @@ def ajaxGetMembershipForPerson(request):
                 else:
                     is_selected = ""
                 #return an <option> entry for that membership
-                response.write('<option ' + is_selected + ' value="' + str(membership.id) + '">' + \
-                                     str(membership.entity) + ' - ' + str(membership.role) + \
+                response.write('<option ' + is_selected + ' value="' + unicode(membership.id) + '">' + \
+                                     unicode(membership.entity) + ' - ' + unicode(membership.role) + \
                                  '</option>')
     #Done
     return response        
