@@ -1,18 +1,22 @@
-Arkestra runs on Django.
+Arkestra is a semantic web publishing system for organisations, created in Django.
 
-Documentation
-*************
+Documentation & support
+***********************
 
 Documentation is in progress; what exists can be found at http://readthedocs.org/docs/arkestra/.
 
-Relationship with Django CMS
+email list and archives: http://groups.google.com/group/django-arkestra
+
+IRC: #arkestra on irc.freenode.net
+
+Relationship with django CMS
 ****************************
 
-Arkestra works alongside Django CMS https://github.com/divio/django-cms/.
+Arkestra works alongside django CMS https://github.com/divio/django-cms/.
 
-If you're already familiar with Django CMS you can regard Arkestra as a set of applications that greatly extend its ability to represent information about the world.
+If you're already familiar with django CMS you can regard Arkestra as a set of applications that greatly extend its ability to represent information about the world.
 
-Alternatively, Arkestra is a powerful system that uses Django CMS's frameworks to publish information about an institution, its organisation, internal structures and relations with other institutions, people, news, events, place, vacancies, studentships and more.
+Alternatively, Arkestra is a powerful system that uses django CMS's frameworks to publish information about an institution, its organisation, internal structures and relations with other institutions, people, news, events, place, vacancies, studentships and more.
 
 Arkestra is intelligent
 ***********************
