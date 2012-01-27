@@ -42,7 +42,7 @@
 
 	    var latlngbounds = new google.maps.LatLngBounds( );
 
-		{% for p in place.site.building_set.all %}
+		{% for p in place.site.maps %}
 		
 			{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
@@ -81,10 +81,11 @@
 		    {% endif %}
 	
 		{% endfor %}
-   
+        
+		{% if place.site.maps|length > 1 %}
 			map.fitBounds( latlngbounds );
-
-
+		{% endif %}        
+		
 	    return pMarker;
 	    }	
 </script>
