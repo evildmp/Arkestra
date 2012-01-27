@@ -33,9 +33,9 @@
 				<dl>
 					<dt>Published</dt>
 					<dd>{% date newsarticle.date %}</dd>
-					{% if newsarticle.enquiries.all %}
+					{% if newsarticle.please_contact.all %}
 	 				    <dt>General enquiries</dt>
-	 				    {% for person in newsarticle.enquiries.all %}
+	 				    {% for person in newsarticle.please_contact.all %}
 							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
 						{% endfor %}
 					{% endif %}

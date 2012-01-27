@@ -170,7 +170,9 @@ class ArkestraGenericPlugin(object):
 
     def set_defaults(self, instance):
         # set defaults
-        # ** important ** - these are set only when the render() function is called
+        # ** important ** - these are set only when the render() function is called  
+        # this means that when the plugin is invoked (as in contacts_and_people.Building.evets() 
+        # it is necessary to set these values manually)
         instance.display = getattr(instance, "display", "")
         instance.view = getattr(instance, "view", "current")
         instance.list_format = getattr(instance, "list_format", "vertical")

@@ -55,7 +55,7 @@ class URLModelMixin(models.Model):
     external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True,
         help_text=u"Select an item from the External Links database."
         )                              
-    slug = models.SlugField(unique=True, max_length=60, blank=True, help_text=u"Do not meddle with this unless you know exactly what you're doing!")
+    slug = models.SlugField(unique=True, max_length=60, blank=True, help_text=u"Do not meddle with this unless you know exactly what you're doing!", error_messages={"unique": "unique"})
 
     def __unicode__(self):
         return self.title

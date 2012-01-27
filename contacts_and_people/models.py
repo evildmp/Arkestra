@@ -64,7 +64,7 @@ class Building(models.Model):
     postcode = models.CharField(max_length=9, null=True, blank=True)
     site = models.ForeignKey(Site)
     slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
-        max_length=255, null=True, unique=True,)
+        max_length=255, null=True, unique=True)
     image = FilerImageField(null=True, blank=True)
     # for the place page
     summary =  models.TextField(verbose_name="Summary", max_length=256, default ="",
@@ -149,6 +149,7 @@ class Building(models.Model):
         instance.place = self
         instance.view = "current"
         instance.format = "details image"
+        instance.order_by = "date"
         
         # create an instance of the plugin to see if the menu should have items
         plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
@@ -298,8 +299,10 @@ class Entity(EntityLite, CommonFields):
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
-        else:
+        elif self.get_website:
             return "/contact/%s/" % self.slug
+        else:
+            return "/contact/"
 
     def get_real_ancestor(self):
         """
@@ -537,10 +540,10 @@ class Person(PersonLite, CommonFields):
     entities = models.ManyToManyField(Entity, related_name='people',
         through='Membership', blank=True, null=True)
     building = models.ForeignKey(Building, verbose_name='Specify building',
-        help_text=u"Specify a building for contact information - over-rides postal address", 
+        help_text=u"Only required if this Person <strong>Home entity</strong> has a different address", 
         blank=True, null=True, on_delete=models.SET_NULL)
     override_entity = models.ForeignKey(Entity, verbose_name='Specify entity',
-        help_text=u"Specify an entity for contact information - over-rides entity and postal address",
+        help_text=u"<strong>Temporarily specify</strong> an entity for contact information - over-rides entity and postal address",
         related_name='people_override', blank=True, null=True, on_delete=models.SET_NULL)
     please_contact = models.ForeignKey('self', help_text=u"Publish another person's details as contact information for this person",
         related_name='contact_for', blank=True, null=True, on_delete=models.SET_NULL)

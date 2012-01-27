@@ -115,9 +115,9 @@ class EventManager(ArkestraGenericModelManager):
         returns forthcoming_events, previous_events, series_events
         """
         if instance.type == "for_person":
-            all_events = instance.person.event_featuring.all()
+            all_events = instance.person.event_featuring.all().order_by('start_date', 'start_time')
         elif instance.type == "for_place":
-            all_events = instance.place.event_set.all()
+            all_events = instance.place.event_set.all().order_by('start_date', 'start_time')
         # most likely, we're getting events related to an entity
         elif MULTIPLE_ENTITY_MODE and instance.entity:
             all_events = self.model.objects.filter(Q(hosted_by=instance.entity) | \

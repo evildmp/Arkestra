@@ -207,7 +207,7 @@ class PersonAdmin(PersonAndEntityAdmin):
     tabs = [
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
         ('Contact information', {
-                'fieldsets': (fieldsets["email"], override_fieldset),
+                'fieldsets': (fieldsets["email"], fieldsets["location"], override_fieldset),
                 'inlines': [PhoneContactInline,]
                 }),
         ('Description', {'fieldsets': (description_fieldset,)}),
