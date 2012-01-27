@@ -52,7 +52,7 @@ class EntityWrapper(LinkWrapper):
             return self.obj.get_website.get_meta_description()
         # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
         # else:
-        #     return "<span class='errornote'>The page <em>" + str(self.obj.get_website) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
+        #     return u"<span class='errornote'>The page <em>" + unicode(self.obj.get_website) + "</em> has no description metadata. If you are responsible for this page, please address this problem <strong>immediately.</strong></span>"
 
     def heading(self):
         return "Related pages"
@@ -61,10 +61,10 @@ class EntityWrapper(LinkWrapper):
         return self.obj.get_website_url()
 
     def text(self):
-        return str(self.obj)# + ": " + self.link_attributes[0]
+        return unicode(self.obj)# + ": " + self.link_attributes[0]
 
     def short_text(self):
-        return str(self.obj.short_name)      
+        return unicode(self.obj.short_name)      
 schema.register_wrapper([models.Entity],EntityWrapper)
 
 

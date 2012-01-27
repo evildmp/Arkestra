@@ -28,7 +28,7 @@ if 'cms' in settings.INSTALLED_APPS:
             # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
 
             # if not self.obj.get_meta_description():
-            #     return "<span class='errornote'>The Page <em>" + str(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
+            #     return "<span class='errornote'>The Page <em>" + unicode(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
 
             return self.obj.get_meta_description()
         def metadata(self):
@@ -75,9 +75,9 @@ if 'filer' in settings.INSTALLED_APPS:
             # find the item's folder_path
             if file.folder:
                 folder = file.folder
-                path = [str(folder)]
+                path = [unicode(folder)]
                 while folder.parent:
-                    path.insert(0, str(folder.parent))
+                    path.insert(0, unicode(folder.parent))
                     folder = folder.parent
                 folder_path = u" &rsaquo; ".join(path)
             else:

@@ -15,7 +15,7 @@
 	var infowindow = null;
 
 	function initialize() {
-		var latlng = new google.maps.LatLng({{ place.latitude }}, {{place.longitude}});
+		var latlng = new google.maps.LatLng({{ place.latitude|stringformat:"f" }}, {{ place.longitude|stringformat:"f" }});
 
     var myOptions = {
         panControl: false,
@@ -46,7 +46,7 @@
 		
 			{% if p.latitude and p.longitude and p.zoom and p.map %}
 			
-				var siteLatLng = new google.maps.LatLng({{p.latitude}}, {{p.longitude}});
+				var siteLatLng = new google.maps.LatLng({{ p.latitude|stringformat:"f" }}, {{ p.longitude|stringformat:"f" }});
 
 		        latlngbounds.extend(siteLatLng);
 	
@@ -83,6 +83,7 @@
 		{% endfor %}
    
 			map.fitBounds( latlngbounds );
+
 
 	    return pMarker;
 	    }	
