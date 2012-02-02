@@ -23,3 +23,66 @@ body div.anythingSlider-minimalist-square .anythingControls {
 	color: #333;
         box-shadow:none;
 }
+
+/* images */
+
+/* images as used in news plugins etc are usually floated right */
+
+img.left    {float: left; margin-right: 1em; margin-bottom: .5em;}
+img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
+
+/* image plugin - an image will be inside a span.image, along with its span.image_caption */
+
+a img {border: none;}
+
+span.image {display: block; clear: both;}
+span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
+span.image_caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+
+/* styles available to the presentation editor */
+
+/* images: float left/right - left/right floats can be applied either directly to image plugins or their containers */
+
+.images-left span.image,
+span.image.left {
+    float: left; 
+    margin-right: 5px; 
+    clear: none;
+    }
+
+.images-right span.image,
+span.image.right {
+    float: right; 
+    margin-left: 5px; 
+    clear: none;
+    }
+
+/* images: have borders - appplied to the elements containing images/carousels
+
+it's a bit awkward when non-floated images can have borders, because then the border area is the width of the containing element, which can be rather wide*/
+
+.image-borders span.image,
+.image-borders div.anythingSlider,
+*[class|="has-background"]  {
+    background: #efefef; 
+    padding: 7px; 
+    border: 1px solid #888;
+    margin-bottom: 5px;
+    }
+
+.image-borders div.carousel-envelope
+  {
+    background: #efefef; 
+    padding: 4px 7px; 
+    border: 1px solid #888;
+    }
+
+/* fancybox */
+div.fancybox:hover img.fancybox-icon { opacity: .3;}
+img.fancybox-icon {padding: 3px}   
+div.fancybox:hover img.fancybox-icon:hover {opacity: 1; outline: 1px solid black;}   
+
+ /* multiple images */
+ul.multiple-images:hover a img { opacity: .3;}
+ul.multiple-images:hover a img:hover {opacity: 1; outline: 1px solid black;}   
+
