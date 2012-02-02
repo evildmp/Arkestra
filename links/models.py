@@ -309,7 +309,7 @@ class CarouselPlugin(CMSPlugin):
     #height = models.PositiveIntegerField(null=True, blank=True)
 
 
-class CarouselPluginItem(BaseLink):
+class CarouselPluginItem(BaseLink, LinkMethodsMixin):
     """
     The item in a carousel - basically a Link, with an image
     """
