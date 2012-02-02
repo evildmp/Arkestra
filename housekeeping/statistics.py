@@ -7,7 +7,7 @@ from django.db.models import get_model
 import django.shortcuts as shortcuts
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
+from django.conf import settings
 from arkestra_utilities.models import ArkestraUser
 
 @login_required
@@ -32,6 +32,7 @@ def stats(request):
             "users": users,
             "plugins": plugins,
             "groups": groups,
+            "base_template": settings.CMS_TEMPLATES[0][0],
             },
         RequestContext(request),
         )
