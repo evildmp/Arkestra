@@ -144,8 +144,116 @@ def set_image_caption(image):
         return image.caption or image.image.description
 
 
+def slider(imageset):
+    imageset.template = "arkestra_image_plugin/slider.html"
+    width = width_of_image(imageset)
+    if imageset.aspect_ratio:
+        height = imageset.container_width / imageset.aspect_ratio
+    elif imageset.height:
+        height = imageset.height    
+    else:
+        # use the aspect ratio of the widest image
+        heights = []
+        for item in imageset.items:
+            divider = 1.0/float(item.image.width)
+            height_multiplier = float(item.image.height)*divider
+            heights.append(height_multiplier)
+        heights.sort()
+        height_multiplier = heights[0]
+        height = width * height_multiplier
+    imageset.size = (int(width),int(height))
+    return imageset
 
+def lightbox(imageset, context):
+    # loop over each item to set attributes for the lightbox (i.e. large) image
+    imageset.template = "arkestra_image_plugin/lightbox.html"  
 
+    for item in imageset.items:
+        thumbnail_options = {} 
+        # set a caption for the item
+        item.caption = set_image_caption(item)                    
+
+        # get width, height and lightbox_max_dimension
+        lightbox_width, lightbox_height = item.image.width, item.image.height
+        lightbox_max_dimension = context.get("lightbox_max_dimension")
+        # user has set aspect ratio? apply it, set crop argument for thumbnailer
+        if imageset.aspect_ratio:
+            lightbox_height = lightbox_width / imageset.aspect_ratio
+            thumbnail_options.update({'crop': True}) 
+        # get scaler value from width, height
+        scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
+        # set size of lightbox using scaler
+        thumbnail_options.update({'size': (int(lightbox_width * scaler), int(lightbox_height * scaler))})
+        # get thumbnailer object for the image
+        thumbnailer = get_thumbnailer(item.image)
+        # apply options and get url
+        item.large_url = thumbnailer.get_thumbnail(thumbnail_options).url  
+    # now work out the sizes of the little thumbnails
+    icon_width = imageset.container_width / (imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items])
+    icon_height = imageset.height or icon_width                 
+    # make the icons small enough to fit neatly on a line; if too small, make them bigger
+    while icon_width < 30:
+        icon_width = icon_width * 2 
+        icon_height = icon_height / 2 
+    
+    # fancybox icons have 3px padding, so:
+    icon_width = icon_width - 6                   
+    
+    imageset.size = (int(icon_width), int(icon_height))
+    return imageset
+    
+def multiple_images(imageset, context):
+    imageset.template = "arkestra_image_plugin/multiple_images.html"            
+
+    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items] 
+
+    # no specified aspect ratio or height? get an average and use that
+    if not imageset.aspect_ratio and not imageset.height:
+        aspect_ratio = sum([calculate_aspect_ratio(item.image) for item in imageset.items])/imageset.number_of_items
+    # use aspect ratio
+    else:
+        aspect_ratio = imageset.aspect_ratio                             
+
+    # set up each item
+    for counter, item in enumerate(imageset.items, start = 1):
+        # mark end-of-row items so the CSS doesn't apply a margin-right
+        if not counter%items_per_row:
+            item.lastinrow = True
+        # get its width
+        item.width = width_of_image(imageset, item.image)    
+        # if we are using automatic/percentage widths, base them on the placeholder
+        if imageset.width > 0: 
+            item.width = item.width / items_per_row
+        # calculate height 
+        item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, item.width, aspect_ratio)
+        if imageset.width> 0:
+            item.width = item.width - (items_per_row-1)*6/items_per_row  
+        item.width,item.height = int(item.width), int(item.height)
+        item.image_size = u'%sx%s' %(item.width, item.height)
+    return imageset
+    
+def single_image(imageset, context):                 
+    imageset.template = "arkestra_image_plugin/single_image.html"
+    # choose an image at random from the set
+    imageset.item = imageset.imageset_item.order_by('?')[0]
+    # calculate its native aspect ratio
+    aspect_ratio = calculate_aspect_ratio(imageset.item.image)
+    # get width
+    width = width_of_image(imageset, imageset.item)
+    # shave if floated
+    width = shave_if_floated(imageset, width) or width
+                
+    # calculate height 
+    imageset.item.width, imageset.item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
+    imageset.item.image_size = u'%sx%s' % (int(imageset.item.width), int(imageset.item.height))
+    # set caption
+    imageset.item.caption = set_image_caption(imageset.item)
+    imageset.item.caption_width = int(imageset.item.width)
+    imageset.item.alt_text = imageset.item.alt_text or imageset.item.destination_content_object
+    return imageset
+                
+        
+    
 class ImageSetItemLinkInlineForm(forms.ModelForm):
     class Meta:
         model=ImageSetItem
@@ -167,8 +275,8 @@ class ImageSetItemLinkInlineForm(forms.ModelForm):
             self.cleaned_data["destination_object_id"]=None
 
         # no alt-text? no links for you!
-        if self.cleaned_data["destination_object_id"] and not self.cleaned_data["alt_text"]:
-            raise forms.ValidationError('You <strong>must</strong> provide alt text for users on images that serve as links')
+        # if self.cleaned_data["destination_object_id"] and not self.cleaned_data["alt_text"]:
+        #     raise forms.ValidationError('You <strong>must</strong> provide alt text for users on images that serve as links')
 
         if "click here" in self.cleaned_data["alt_text"].lower():
             raise forms.ValidationError("'Click here'?! In alt text?! You cannot be serious. Fix this at once.")
@@ -239,156 +347,36 @@ class ImageSetPublisher(CMSPluginBase):
 
         # don't do anything if there are no items in the imageset
         if imageset.imageset_item.count():
-
             # calculate the width of the block the image will be in
             imageset.container_width = width_of_image_container(context, imageset)
-
-            # nice ways to refer to the items and their number
             imageset.items = imageset.imageset_item.all()
-            number_of_items = imageset.imageset_item.count()
+            imageset.number_of_items = imageset.imageset_item.count()
             
-            # =================================== slider =============================
             # at least three items are required for a slider - just two is unaesthetic
             if imageset.kind == "slider" and number_of_items > 2:
-                self.render_template = "arkestra_image_plugin/slider.html"
-                width = width_of_image(imageset)
-                if imageset.aspect_ratio:
-                    height = imageset.container_width / imageset.aspect_ratio
-                elif imageset.height:
-                    height = imageset.height    
-                else:
-                    # use the aspect ratio of the widest image
-                    heights = []
-                    for item in imageset.items:
-                        divider = 1.0/float(item.image.width)
-                        height_multiplier = float(item.image.height)*divider
-                        heights.append(height_multiplier)
-                    heights.sort()
-                    height_multiplier = heights[0]
-                    height = width * height_multiplier
-                imageset.size = (int(width),int(height))
-                
-                context.update({
-                    'imageset':imageset,
-                    'placeholder':placeholder,
-                })
+                imageset = slider(imageset)
 
-            # =================================== lightbox =============================
             elif imageset.kind == "lightbox":
-                self.render_template = "arkestra_image_plugin/lightbox.html"  
+                imageset = lightbox(imageset, context)
 
-                # loop over each item to set attributes for the lightbox (i.e. large) image
-                for item in imageset.items:
-                    thumbnail_options = {} 
-                    # set a caption for the item
-                    item.caption = set_image_caption(item)                    
-
-                    # get width, height and lightbox_max_dimension
-                    lightbox_width, lightbox_height = item.image.width, item.image.height
-                    lightbox_max_dimension = context.get("lightbox_max_dimension")
-                    # user has set aspect ratio? apply it, set crop argument for thumbnailer
-                    if imageset.aspect_ratio:
-                        lightbox_height = lightbox_width / imageset.aspect_ratio
-                        thumbnail_options.update({'crop': True}) 
-                    # get scaler value from width, height
-                    scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
-                    # set size of lightbox using scaler
-                    thumbnail_options.update({'size': (int(lightbox_width * scaler), int(lightbox_height * scaler))})
-                    # get thumbnailer object for the image
-                    thumbnailer = get_thumbnailer(item.image)
-                    # apply options and get url
-                    item.large_url = thumbnailer.get_thumbnail(thumbnail_options).url  
-                # now work out the sizes of the little thumbnails
-                icon_width = imageset.container_width / (imageset.items_per_row or LIGHTBOX_COLUMNS[number_of_items])
-                icon_height = imageset.height or icon_width                 
-                # make the icons small enough to fit neatly on a line; if too small, make them bigger
-                while icon_width < 30:
-                    icon_width = icon_width * 2 
-                    icon_height = icon_height / 2 
-                
-                # fancybox icons have 3px padding, so:
-                icon_width = icon_width - 6                   
-                
-                imageset.size = (int(icon_width), int(icon_height))
-                context.update({
-                    'imageset':imageset,
-                    'placeholder':placeholder,
-                    'image_width': int(icon_width),
-                    'image_height': int(icon_width),
-                })
-
-            # =================================== multiple images =============================
             elif imageset.kind == "multiple":
-                self.render_template = "arkestra_image_plugin/multiple_images.html"            
+                imageset = multiple_images(imageset, context)
 
-                items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS[number_of_items] 
-
-                # no specified aspect ratio or height? get an average and use that
-                if not imageset.aspect_ratio and not imageset.height:
-                    aspect_ratio = sum([calculate_aspect_ratio(item.image) for item in imageset.items])/number_of_items
-                # use aspect ratio
-                else:
-                    aspect_ratio = imageset.aspect_ratio                             
-
-                # set up each item
-                for counter, item in enumerate(imageset.items, start = 1):
-                    # mark end-of-row items so the CSS doesn't apply a margin-right
-                    if not counter%items_per_row:
-                        item.lastinrow = True
-                    # get its width
-                    item.width = width_of_image(imageset, item.image)    
-                    # if we are using automatic/percentage widths, base them on the placeholder
-                    if imageset.width > 0: 
-                        item.width = item.width / items_per_row
-                    # calculate height 
-                    item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, item.width, aspect_ratio)
-                    if imageset.width> 0:
-                        item.width = item.width - (items_per_row-1)*6/items_per_row  
-                    item.width,item.height = int(item.width), int(item.height)
-                    item.icon_size = u'%sx%s' %(item.width, item.height)
-                context.update({
-                    'imageset':imageset,
-                    # 'icon_size': u'%sx%s' % (int(width), int(height)),
-                    # 'caption_width': int(width),
-                    'placeholder':placeholder,
-                })
-
-            # =================================== single image =============================
             else:
-                self.render_template = "arkestra_image_plugin/single_image.html"
-                # choose an image at random from the set
-                imageset_item = imageset.imageset_item.order_by('?')[0]
-                # calculate its native aspect ratio
-                aspect_ratio = calculate_aspect_ratio(imageset_item.image)
-                # get width
-                width = width_of_image(imageset, imageset_item)
-                # shave if floated
-                width = shave_if_floated(imageset, width) or width
-                            
-                # calculate height 
-                width, height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
+                imageset = single_image(imageset, context)
 
-                # set caption
-                imageset_item.caption = set_image_caption(imageset_item)
-                        
-                context.update({
-                    'imageset':imageset,
-                    'imageset_item': imageset_item, 
-                    'image_size': u'%sx%s' % (int(width), int(height)),
-                    'image_width': int(width),
-                    'image_height': int(height),
-                    'caption_width': int(width),
-                    'placeholder':placeholder,
+            self.render_template = imageset.template  
+            context.update({
+                'imageset':imageset,
                 })
 
-                
         # no items, use a null template    
         else:
             # print "using a null template" , imageset
             self.render_template = "null.html"  
-            context.update({
-                'placeholder':placeholder,
-            })
+            # context.update({
+            #     'placeholder':placeholder,
+            # })
         return context
 
             
