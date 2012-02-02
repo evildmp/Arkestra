@@ -189,7 +189,8 @@ class EventManager(ArkestraGenericModelManager):
         # and everything left in non-top items after this date
         if dates:
             remaining_items = non_top_events.filter(start_date__gt=date)
-            ordinary_events = ordinary_events | remaining_items
+            if ordinary_events:
+                ordinary_events = ordinary_events | remaining_items
             top_events = top_events
             ordinary_events = list(ordinary_events)
             for item in top_events:
