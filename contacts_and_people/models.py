@@ -617,6 +617,12 @@ class Person(PersonLite, CommonFields):
         else:
             return self
 
+    @property
+    def real_entities(self):
+        # returns non-abstract entities the person belongs to
+        return Membership.objects.filter(person=self, entity__abstract_entity = False)
+    
+    
     def gather_entities(self):
         """
         Returns all the entities that a person belongs to, including implicit membership
