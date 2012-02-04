@@ -43,6 +43,9 @@
 						</dl>
 						{% endif %}
 						{% render_placeholder person.description %}
+						{% with newsarticle.links as links %}
+						    {% include "includes/related_links_list.html" %}
+				        {% endwith %}
 					</div>
 				</div>
 				<div class="column lastcolumn">
