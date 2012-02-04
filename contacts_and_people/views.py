@@ -112,7 +112,7 @@ def person(request, slug, active_tab=""):
     Responsible for the person pages
     """
     person = get_object_or_404(Person,slug=slug)
-    links = object_links(person)
+    person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
     home_role = person.get_role()
     if home_role:
@@ -220,7 +220,7 @@ def person(request, slug, active_tab=""):
             "tab_object": person,
             "active_tab": active_tab,
             "meta": meta,
-            "links": links,
+            # "links": links,
         },
         RequestContext(request),
     )
