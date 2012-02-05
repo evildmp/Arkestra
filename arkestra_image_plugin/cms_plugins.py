@@ -229,7 +229,7 @@ def multiple_images(imageset, context):
         if imageset.width> 0:
             item.width = item.width - (items_per_row-1)*6/items_per_row  
         item.width,item.height = int(item.width), int(item.height)
-        item.image_size = u'%sx%s' %(item.width, item.height)
+        item.image_size = u'%sx%s' %(item.width, item.height) 
     return imageset
     
 def single_image(imageset, context):                 
@@ -406,7 +406,7 @@ class FilerImagePlugin(CMSPluginBase):
     admin_preview = False   
          
     def render(self, context, instance, placeholder):
-        self.render_template = "arkestra_image_plugin/single_image.html"
+        self.render_template = "cmsplugin_filer_image/image.html"
         instance.has_borders = False
         
         # calculate its width and aspect ratio
@@ -420,9 +420,7 @@ class FilerImagePlugin(CMSPluginBase):
         instance.caption = set_image_caption(instance)
                         
         context.update({
-            'object':instance,
-            #'link':instance.link, 
-            #'image_url':instance.scaled_image_url,
+            'object':instance, 
             'image_size': u'%sx%s' % (int(width), int(height)),
             'caption_width': int(width),
             'placeholder':placeholder,
