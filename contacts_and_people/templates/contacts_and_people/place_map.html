@@ -28,7 +28,7 @@
         }		
     }
 
-	    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	    var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 
 		var placeMarker = setMarkers(map);
 
@@ -106,5 +106,5 @@
 {% endblock pagetitle %}
 
 {% block place_information %}
-	<div id="map_canvas"></div>
+	<div id="map-canvas"></div>
 {% endblock place_information %}
