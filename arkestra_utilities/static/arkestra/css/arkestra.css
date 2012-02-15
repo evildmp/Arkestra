@@ -136,12 +136,7 @@ p.drop-cap:first-letter  {
 .amp {font-size: 105%; font-family: "Hoefler Text", "Didot", Georgia, serif; font-style:italic;}    
 .dquo {margin-left:-.3em; }
 
-div.contact_information {font-size: .9em; line-height: 1.3;}
-div.contact_information .entity {font-weight: bold;}
-
 dt  {color: gray;}
-
-
 
 /* styles for publications */
 

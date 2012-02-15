@@ -9,8 +9,6 @@ ul	{margin-bottom: .2em;}
 ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
 
 
-
-ul.news_and_events ul  {padding-left: 0;} /* so the individual items are not indented */
 ul.entity-tree li {margin: 0; padding: 0;}
 ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
 ul.entity-tree li {list-style: none;}
@@ -33,7 +31,7 @@ ul.plugin-list.vertical li:first-child {padding-top: 0;}
 div.main_page ul.plugin-list.vertical li.grouper li.important {
     padding: .5em; 
     margin: 1px 0 1em;
-    background-color: #ccc; 
+    background-color: #eee; 
     }
 
 /* groupers in plugin lists */

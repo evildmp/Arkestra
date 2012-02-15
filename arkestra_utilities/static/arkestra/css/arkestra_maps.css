@@ -1,16 +1,16 @@
-div#map_canvas {
+div#map-canvas {
     height: 500px;
     width: 100%;
     font-size: 80%;
 }
 
-div#map_canvas h2 {
+div#map-canvas h2 {
     margin: 0;
     padding: 0;
     font-size: 120%;
     border-bottom: none;}
 
-div#map_canvas div.labels {
+div#map-canvas div.labels {
     font-family: "gill sans", "gill sans mt", "Trebuchet MS", sans-serif;
     color: white;
     background-color: gray;
@@ -22,7 +22,7 @@ div#map_canvas div.labels {
     border-radius: 2px;
    }
 
-div#map_canvas div.labels.main-label {
+div#map-canvas div.labels.main-label {
     background-color: black;
     font-weight: bold;
 

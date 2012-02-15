@@ -31,13 +31,13 @@ body div.anythingSlider-minimalist-square .anythingControls {
 img.left    {float: left; margin-right: 1em; margin-bottom: .5em;}
 img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
 
-/* image plugin - an image will be inside a span.image, along with its span.image_caption */
+/* image plugin - an image will be inside a span.image, along with its span.image-caption */
 
 a img {border: none;}
 
 span.image {display: block; clear: both;}
 span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
-span.image_caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
+span.image-caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
 
 /* styles available to the presentation editor */
 
