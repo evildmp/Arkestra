@@ -314,6 +314,14 @@ class Event(NewsAndEvents, LocationModelMixin):
             self.enquiries = set(self.parent.enquiries.all())
             self.save()
         return
+
+    @property
+    def calculated_summary(self):
+        if self.parent and self.parent.display_series_summary:
+            return self.parent.summary
+        else:
+            return self.summary 
+
     @property        
     def get_when(self):
         if self.start_date:

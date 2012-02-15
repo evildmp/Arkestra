@@ -25,7 +25,7 @@
     {% block item_details %}
 		{% if "details" in everything.format %}
             {% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst }}</div>{% endblock item_date %}
-    		{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30 }}</div>{% endif %}
+    		{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30 }}</div>{% endif %}{% endblock item_summary %}
 		{% endif %}
 	{% endblock item_details %}
 	

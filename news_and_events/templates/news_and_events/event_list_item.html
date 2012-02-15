@@ -53,3 +53,5 @@
 
 {% block item_details %}
 {{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div>Venue: <span class = "date"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
+
+{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary|truncatewords:30 }}</div>{% endif %}{% endblock item_summary %}

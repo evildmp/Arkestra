@@ -35,7 +35,6 @@
 				{% endblock placeholder %}
             </div>
 			<div class="column lastcolumn">
-				{% include "includes/parent.html" %}
 				{% block image %}{% if not event.body.cmsplugin_set.all %}
 				    {% thumbnail event.image.file sidebar_image_size subject_location=event.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}{% endif %}
