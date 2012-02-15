@@ -1,14 +1,32 @@
-settings.py
+######################
+# Configure setup.py #
+######################
 
 Find and edit the lines marked with # <-- EDIT
+
+
+######################
+#  Setup virtualenv  #
+######################
+
+virtualenv .
+source bin/activate
+pip install -r requirements.txt
+
+######################
+#   Setup manually   #
+######################
 
 Modules you'll need available:
 
 Django 1.3
-Django CMS 2.13
+Django CMS 2.1.3
 pyquery 0.6.1
-typogrify
-easy_thumbnailss
+django-typogrify
+easy_thumbnails
+django-celery
+django_polymorphic
+
 also:
 
 https://github.com/stefanfoulis/django-filer
