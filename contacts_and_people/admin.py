@@ -99,6 +99,7 @@ class PersonLiteForm(forms.ModelForm):
         model = models.PersonLite
 
     def clean(self):
+        super(PersonLiteForm, self).clean()
         if hasattr(self.instance, "person"):
             raise forms.ValidationError(mark_safe(u"A PersonLite who is also a Person must be edited using the Person Admin Interface"))
         return self.cleaned_data    
@@ -155,6 +156,7 @@ class PersonForm(InputURLMixin):
         return data
 
     def clean(self):
+        super(PersonForm, self).clean()
 
         # set the title
         title = self.cleaned_data["title"] or ""
@@ -239,6 +241,7 @@ class EntityLiteForm(forms.ModelForm):
         model = models.EntityLite
 
     def clean(self):
+        super(EntityLiteForm, self).clean()
         if hasattr(self.instance, "entity"):
             raise forms.ValidationError(mark_safe(u"An EntityLite who is also a full Entity must be edited using the Entity Admin Interface"))
         return self.cleaned_data    
@@ -266,6 +269,7 @@ class EntityForm(InputURLMixin):
         model = models.Entity
                 
     def clean(self):
+        super(EntityForm, self).clean()
         if self.cleaned_data["website"]:
             try:
                 # does an instance exist in the database with the same website?
@@ -418,6 +422,7 @@ class BuildingAdminForm(forms.ModelForm):
         model = models.Building
 
     def clean(self):
+        super(BuildingAdminForm, self).clean()
         if self.cleaned_data["number"] and not self.cleaned_data["street"]:
             raise forms.ValidationError("Silly. You can't have a street number but no street, can you?")
         if self.cleaned_data["additional_street_address"] and not self.cleaned_data["street"]:

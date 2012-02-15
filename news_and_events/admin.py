@@ -26,6 +26,7 @@ class NewsAndEventsForm(InputURLMixin):
         }
     
     def clean(self):
+        super(NewsAndEventsForm, self).clean()
         # create the short_title automatically if necessary
         if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
             if len(self.cleaned_data["title"]) > 70:

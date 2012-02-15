@@ -145,6 +145,7 @@ class ArkestraGenericPluginOptions(models.Model):
 
 class ArkestraGenericPluginForm(object):
     def clean(self):
+        super(ArkestraGenericPluginForm, self).clean()
         if "horizontal" in self.cleaned_data["list_format"]:
             self.cleaned_data["order_by"] = "importance/date"
             self.cleaned_data["format"] = "details image"

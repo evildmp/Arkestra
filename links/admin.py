@@ -158,6 +158,7 @@ class ExternalLinkForm(forms.ModelForm):
         model = ExternalLink
 
     def clean(self):
+        super(ExternalLinkForm, self).clean() # now that this is here, do we need all the checks Arkestra does?
         url = self.cleaned_data.get('url', "")
         title = self.cleaned_data.get('title', "")
 
@@ -165,7 +166,6 @@ class ExternalLinkForm(forms.ModelForm):
         
         # check if the url is a duplicate
         # if the url exists, and this would be a new instance in the database, it's a duplicate
-        print "ExternalLinkForm self.instance.pk", self.instance
         if self.Meta.model.objects.filter(url=url) and not self.instance.pk:
             message = "Sorry, this link appears to exist already"
             raise forms.ValidationError(message)
@@ -198,7 +198,7 @@ class ExternalSiteForm(forms.ModelForm):
         model = ExternalSite
         
     def clean(self):
-        # if the site isn't named, use the domain name
+        super(ExternalSiteForm, self).clean()        # if the site isn't named, use the domain name
         site = self.cleaned_data.get("site", None)
         domain = self.cleaned_data.get("domain", None)
         if not site:

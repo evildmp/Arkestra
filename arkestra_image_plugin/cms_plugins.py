@@ -268,6 +268,7 @@ class ImageSetItemLinkInlineForm(forms.ModelForm):
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
 
     def clean(self):
+        super(ImageSetItemLinkInlineForm, self).clean()
         # the Link is optional, but unless both fields both Type and Item fields are provided, 
         # reset them to None
         if not self.cleaned_data["destination_content_type"] or not self.cleaned_data["destination_object_id"]:
@@ -286,6 +287,7 @@ class ImageSetItemLinkInlineForm(forms.ModelForm):
 
 class ImageSetItemLinkInlineFormset(forms.models.BaseInlineFormSet):
     def clean(self):
+        super(ImageSetItemLinkInlineFormset, self).clean()
 
         some_have_links = False
         some_do_not_have_links = False
