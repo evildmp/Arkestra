@@ -3,6 +3,10 @@
 import os
 import os.path
 
+# Make it work straight from the checkout!
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -151,15 +155,17 @@ TEMPLATE_DIRS = (
 )
 
 # ------------------------ Django Celery
+try:
+    import djcelery
+    djcelery.setup_loader()
 
-import djcelery
-djcelery.setup_loader()
-
-BROKER_HOST = "localhost"
-BROKER_PORT = 5672
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/"
+    BROKER_HOST = "localhost"
+    BROKER_PORT = 5672
+    BROKER_USER = "guest"
+    BROKER_PASSWORD = "guest"
+    BROKER_VHOST = "/"
+except ImportError:
+    pass
 
 
 # ------------------------ Django CMS
