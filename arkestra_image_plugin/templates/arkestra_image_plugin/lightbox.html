@@ -21,13 +21,10 @@
 	                'transitionOut'     : {{ transitionOut|default:"'fade'" }},/*'fade','elastic'*/
 	                'easingIn'          : {{ easingIn|default:"'swing'" }},/*'swing','easeOutBack'*/
 	                'easingOut'         : {{ easingIn|default:"'swing'" }},/*'swing','easeInBack'*/
-                
 	        });
-
-			});
+		});
 	</script>
         
 {% endaddtoblock %}
-
 
 <div class="fancybox" style="width: {{ imageset.container_width }}px;">{% for item in imageset.items %}<a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.large_url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="{{ item.image.name }}" src="{% thumbnail item.image.file imageset.size crop subject_location=item.image.subject_location %}" /></a>{% endfor %}</div>
