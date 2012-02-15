@@ -3,7 +3,7 @@
 		{% if item.url %}<a href="{{ item.url }}">{% endif %}
 		<img alt="{% if item.alt_text %}{{ item.alt_text }}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
 		{% if item.url %}</a>{% endif %}
-		{% if item.caption %}<span style="width: {{item.caption_width}}px" class="image_caption">{{ item.caption }}</span>{% endif %}
+		{% if item.caption %}<span style="width: {{item.caption_width}}px" class="image-caption">{{ item.caption }}</span>{% endif %}
 		{% if item.show_author %}
 		    <span class="image_author">(Author: {{ item.image.author }})</span>
 		{% endif %}
