@@ -1,19 +1,21 @@
-settings.py
+######################
+# Configure setup.py #
+######################
 
 Find and edit the lines marked with # <-- EDIT
 
 
-####################
-# Setup virtualenv #
-####################
+######################
+#  Setup virtualenv  #
+######################
 
 virtualenv .
 source bin/activate
 pip install -r requirements.txt
 
-####################
-#  Setup manually  #
-####################
+######################
+#   Setup manually   #
+######################
 
 Modules you'll need available:
 
