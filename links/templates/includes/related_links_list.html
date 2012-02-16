@@ -1,4 +1,4 @@
-{% regroup links by wrapped_destination_obj.heading as link_types %}
+{% regroup links by heading as link_types %}
 {% for kind in link_types %}
     <h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
     <ul class= "object-links">
