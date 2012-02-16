@@ -7,7 +7,7 @@ When provided with a list of people, then for each one will also display the bes
 {% endcomment %}
 <ul class="none">
 	{% for person in people %}
-    	<li><strong><a href="{{ person.get_absolute_url }}">{{ person }}</a></strong><br />
+    	<li><a href="{{ person.get_absolute_url }}">{{ person }}</a><br />
 	{{ person.membership.role}}{% if entity != person.membership.entity  %} ({% if entity.get_website != person.membership.entity.get_website and person.membership.entity.get_website %}<a href = "{{ person.membership.entity.get_website_url }}">{{ person.membership.entity.short_name }}</a>{% else %}{{ person.membership.entity.short_name }}{% endif %}){% endif %}
 		</li>
 	{% endfor %}

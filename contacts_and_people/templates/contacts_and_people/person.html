@@ -25,7 +25,7 @@
 	{% endif %}{% endblock pagetitle %}
 
 {% block main_page_body %}
-{% thumbnail person.image.file contacts_image_size subject_location=person.image.subject_location crop as image %}
+{% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
 	{% with placeholder_width=person_description_width %}
 	{% block arkestra_content %}
     {% include "arkestra/tabbed_menu.html" %}

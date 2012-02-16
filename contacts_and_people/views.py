@@ -18,6 +18,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
     request.auto_page_url = request.path
+    print "**", request.auto_page_url
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()
@@ -59,14 +60,16 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         RequestContext(request),
         )        
 
-def people(request, slug, letter=None):
+def people(request, slug=getattr(default_entity, "slug", None), letter=None):
     """
     Responsible for lists of people
     """
-    # general values - entity, request, template
+    # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
-    # request.page_path = request.path # for the menu, because next we mess up the path
-    # request.path = entity.get_website.get_absolute_url()
+    # for the menu, because next we mess up the path
+    request.auto_page_url = entity.get_related_info_page_url("contact")
+    print "**", request.auto_page_url
+    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()
     main_page_body_file = "includes/people_list_with_index.html"

@@ -367,6 +367,19 @@ class Entity(EntityLite, CommonFields):
         else:    # except
             return default_entity.get_website
 
+    def get_related_info_page_url(self, kind):
+        """
+        Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
+        
+        If the entity is the base entity, doesn't add the entity slug to the URL
+        """
+        if self.external_url:
+            return ""
+        elif self == default_entity:
+            return "/%s/" % kind
+        else:
+            return "/%s/%s/" % (kind, self.slug)
+
     def get_template(self):
         """
         Returns a template for any pages that need to render based on this entity
@@ -480,18 +493,6 @@ class Entity(EntityLite, CommonFields):
             initials = None
         return (people, initials)
 
-    def get_related_info_page_url(self, kind):
-        """
-        Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
-        
-        If the entity is the base entity, doesn't add the entity slug to the URL
-        """
-        if self.external_url:
-            return ""
-        elif self == default_entity:
-            return "/%s/" % kind
-        else:
-            return "/%s/%s/" % (kind, self.slug)
 
 
 class Title(models.Model):
