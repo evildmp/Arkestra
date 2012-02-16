@@ -203,7 +203,7 @@ class CommonFields(URLModelMixin):
     
 
 class EntityLite(models.Model):
-    name = models.CharField(max_length=100, help_text="e.g. Section of Haematology")
+    name = models.CharField(max_length=100, help_text="e.g. Department of Haematology")
     
     def __unicode__(self):
         return unicode(self.name)
@@ -240,14 +240,18 @@ class Entity(EntityLite, CommonFields):
     objects=EntityManager()
     short_name = models.CharField(blank=True, help_text="e.g. Haematology",
         max_length=100, null=True, verbose_name="Short name for menus")
-    abstract_entity = models.BooleanField("Group", default=False,
-        help_text =u"A <em>group</em> of entities, not an entity itself",)
+    abstract_entity = models.BooleanField("Abstract entity", default=False,
+        help_text=u"Select if this <em>group</em> of entities, but not an entity itself, or if it's just a grouping of people",)
     parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
-    display_parent = models.BooleanField(default=True, help_text=u"Include parent entity's name in address")
-    building = models.ForeignKey(Building, null=True, blank=True, on_delete=models.SET_NULL)
+    display_parent = models.BooleanField(u"Include parent entity's name in address", default=True, help_text=u"Deselect if this entity recapitulates its parent's name")
+    building_recapitulates_entity_name = models.BooleanField(default=False, 
+        help_text=u"Removes the first line of the address - use to avoid, for example:<br /><em>Department of Haematology<br />Haematology Building<br />...</em>")
+    building = models.ForeignKey(Building, null=True, blank=True, on_delete=models.SET_NULL,
+        help_text=u"Select the place where this Entity is based",)                      
     website = models.ForeignKey(Page, verbose_name="Home page",
         related_name='entity', unique=True, null=True, blank=True,
-        on_delete=models.SET_NULL)
+        on_delete=models.SET_NULL,
+        help_text=u"Select the Page that is the home page of this Entity (leave blank if this is an external Entity)",)
     
     auto_news_page = models.BooleanField(u"Publish a news & events page for this entity automatcally",
         default=False,
@@ -325,9 +329,12 @@ class Entity(EntityLite, CommonFields):
             address = entity.get_institutional_address()
             building = entity.get_building()
             if building:
-                address.extend(building.get_postal_address())
-            return address
-
+                if entity.building_recapitulates_entity_name: 
+                    address.extend(building.get_postal_address()[1:])
+                else:
+                    address.extend(building.get_postal_address())
+                return address
+                
     def get_institutional_address(self):
         """
         Lists the parts of an address within the institution (Section of YYY, Department of XXX and YYY, School of ZZZ)

@@ -316,7 +316,7 @@ class EntityAdmin(PersonAndEntityAdmin):
     entity_hierarchy_fieldset = ('Entity hierarchy', {
         'fields': ('parent', 'display_parent', 'abstract_entity'),
     })
-    building_fieldset = ('', {'fields': ('building',),})
+    building_fieldset = ('', {'fields': ('building', 'building_recapitulates_entity_name',),})
 
     contact_page_fieldset = (
         ('Automatic contacts & people page', {
