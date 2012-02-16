@@ -10,93 +10,6 @@ MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
 COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
 
-class NewsArticleManager(ArkestraGenericModelManager):
-    def get_news_ordered_by_importance_and_date(self, instance):
-        ordinary_news = []
-
-        # split the within-date items for this entity into two sets
-        publishable_news = self.get_publishable_news(instance)
-        sticky_news = publishable_news.order_by('-importance').filter(
-            Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
-            sticky_until__gte=datetime.today(),  
-            )
-        non_sticky_news = publishable_news.exclude(
-            Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
-            sticky_until__gte=datetime.today(), 
-            )
-        # print "Sticky news", sticky_news.count()
-        # print "Non-sticky news", non_sticky_news.count()
-        top_news = list(sticky_news)
-
-        # now we have to go through the non-top items, and find any that can be promoted
-        # get the set of dates where possible promotable items can be found             
-        dates = non_sticky_news.dates('date', 'day').reverse()
-        # print "Going through the date set"
-        for date in dates:
-            # print "    examining possibles from", date
-            # get all non-top items from this date
-            possible_top_news = non_sticky_news.filter(date__year=date.year, date__month= date.month, date__day= date.day)
-            # promotable items have importance > 0
-            # print "        found", possible_top_news.count(), "of which I will promote", possible_top_news.filter(Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),importance__gte = 1).count()
-            # add the good ones to the top news list
-            top_news.extend(possible_top_news.filter(
-                Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
-                importance__gte = 1)
-                )
-            # if this date set contains any unimportant items, then there are no more to promote
-            demotable_items = possible_top_news.exclude(
-                Q(hosted_by=instance.entity) | Q(is_sticky_everywhere = True),
-                importance__gte = 1
-                )
-            if demotable_items.count() > 0:
-                # put those unimportant items into ordinary news
-                ordinary_news.extend(demotable_items)
-                # print "        demoting",  demotable_items.count()
-                # and stop looking for any more
-                break
-        # and add everything left in non-sticky news before this date
-        if dates:
-            remaining_items = non_sticky_news.filter(date__lte=date)
-            # print "    demoting the remaining", remaining_items.count()
-            ordinary_news.extend(remaining_items)
-            for item in top_news:
-                item.sticky = True
-                if instance.format == "title":
-                    item.importance = None
-            # print "Top news", len(top_news)
-            # print "Ordinary news", len(ordinary_news)
-            ordinary_news.sort(key=operator.attrgetter('date'), reverse = True)
-        return top_news, ordinary_news
-
-    def get_publishable_news(self, instance):
-        # returns news items that can be published, latest news first
-        publishable_news = self.get_all_news(instance) \
-            .filter(date__lte = datetime.today()) \
-            .order_by('-date')
-        return publishable_news
-
-
-    def get_all_news(self, instance):
-        # returns every news item associated with this entity, 
-        # or all news items if MULTIPLE_ENTITY_MODE is False, or instance.entity is unspecified
-        if MULTIPLE_ENTITY_MODE and instance.entity:
-            all_news = self.model.objects.filter(
-                Q(hosted_by=instance.entity) | Q(publish_to=instance.entity)
-                ).distinct()
-        else:
-            all_news = self.model.objects.all()
-        # print "All news", all_news.count()
-        return all_news
-
-    def get_items(self, instance):
-        if instance.order_by == "importance/date":
-            top_news, ordinary_news = self.get_news_ordered_by_importance_and_date(instance)
-            instance.news =  top_news + ordinary_news
-        else:
-            instance.news = self.get_publishable_news(instance)
-        return instance.news
-
-
 class EventManager(ArkestraGenericModelManager):
     def get_items(self, instance):    
         self.get_events(instance) # gets previous_events, forthcoming_events, top_events, ordinary_events
@@ -125,6 +38,8 @@ class EventManager(ArkestraGenericModelManager):
         else:
             all_events = self.model.objects.all().order_by('start_date', 'start_time')
     
+        all_events = all_events.filter(published=True, in_lists=True)
+        
         actual_events = all_events.filter(
             # if it's (not a series and not a child) - series events are excluded, children too unless:
             # the child's parent is a series and its children can be advertised

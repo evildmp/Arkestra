@@ -101,7 +101,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         
     fieldset_stickiness = ('How this item should behave in lists', {'fields': ('sticky_until', 'is_sticky_everywhere',)})
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"]),}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],),}),
             ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"], fieldset_stickiness)}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
@@ -230,7 +230,7 @@ class EventAdmin(NewsAndEventsAdmin):
     fieldset_featuring = ('Featured people', {'fields': ('featuring',)})   
     fieldset_jumpiness = ('How this item should behave in lists', {'fields': ('jumps_queue_on', 'jumps_queue_everywhere')})
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"])}),
+            ('Basic', {'fieldsets': (fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],)}),
             ('Date & significance', {'fieldsets': 
                 ( 
                     fieldset_when, 

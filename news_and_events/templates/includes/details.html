@@ -3,10 +3,10 @@
 	<dl>
 		{% if event.parent %}
 			{% if event.parent.series %}
-				<dt>In the series</dt>
+				<dt>Part of the {{ event.type|lower }} series</dt>
 				<dd><strong><a href = "{{event.parent.get_absolute_url}}">{{ event.parent }}</strong></a></dd>
 			{% else %}
-				<dt>{{ event.parent.type }}</dt>
+				<dt>Part of the {{ event.parent.type|lower }}</dt>
 				<dd><strong><a href = "{{event.parent.get_absolute_url}}">{{ event.parent }}</a></strong>
 				<br />{% ifnotequal event.parent.get_dates event.get_dates %}{{ event.parent.get_dates }}{% endifnotequal %}</dd>
 			{% endif %}

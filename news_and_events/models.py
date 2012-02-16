@@ -22,8 +22,9 @@ from links.models import ExternalLink
 from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
+from arkestra_utilities.managers import ArkestraGenericModelManager
 
-from managers import NewsArticleManager, EventManager
+from managers import EventManager
 
 PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
 PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
@@ -47,7 +48,7 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
 class NewsArticle(NewsAndEvents):
     url_path = "news"
-    objects = NewsArticleManager()
+    objects = ArkestraGenericModelManager()
     
     date = models.DateTimeField(default=datetime.now,
         help_text=u"Dateline for the item (the item will not be published until then" ,  )

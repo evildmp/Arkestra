@@ -86,6 +86,7 @@ fieldsets = {
         }),
     'where_to_publish': ('', {'fields': ('publish_to',)}),
     'people': ('People to contact about this item', {'fields': ('please_contact',)}),
+    'publishing_control': ('Publishing control', {'fields': ('published', 'in_lists')}),
     'date': ('', {'fields': ('date',)}),
     'closing_date': ('', {'fields': ('closing_date',)}),
     'importance': ('', {'fields': ('importance',)}),
