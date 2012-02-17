@@ -7,7 +7,7 @@ from cms.plugin_pool import plugin_pool
 from models import EntityAutoPageLinkPluginEditor, EntityDirectoryPluginEditor, EntityMembersPluginEditor
 
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.mixins import AutocompleteMixin
+from arkestra_utilities.admin_mixins import AutocompleteMixin
 
 from templatetags.entity_tags import work_out_entity
 from models import Membership

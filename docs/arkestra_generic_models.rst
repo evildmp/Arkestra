@@ -87,7 +87,7 @@ admin.py
 
 Import some handy mixins::
 
-	from arkestra_utilities.mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
+	from arkestra_utilities.admin_mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
       
 * SupplyRequestMixin supplies the context to the admin - you might have a need for it
 * AutocompleteMixin

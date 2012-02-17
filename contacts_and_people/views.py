@@ -18,7 +18,6 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
     request.auto_page_url = request.path
-    print "**", request.auto_page_url
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()
@@ -68,7 +67,6 @@ def people(request, slug=getattr(default_entity, "slug", None), letter=None):
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
     request.auto_page_url = entity.get_related_info_page_url("contact")
-    print "**", request.auto_page_url
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()

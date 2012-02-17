@@ -24,7 +24,7 @@ from links.admin import ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
+from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 

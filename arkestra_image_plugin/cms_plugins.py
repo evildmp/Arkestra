@@ -15,7 +15,7 @@ from widgetry.tabs.admin import ModelAdminWithTabs
 from widgetry import fk_lookup
 
 from arkestra_utilities.output_libraries.plugin_widths import get_placeholder_width, calculate_container_width
-from arkestra_utilities.mixins import AutocompleteMixin
+from arkestra_utilities.admin_mixins import AutocompleteMixin
 
 from links import schema
 

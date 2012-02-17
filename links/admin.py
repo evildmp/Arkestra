@@ -9,7 +9,7 @@ from django.contrib.contenttypes import generic
 from widgetry import fk_lookup
 from widgetry.views import search 
 
-from arkestra_utilities.mixins import AutocompleteMixin, SupplyRequestMixin
+from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin
 
 from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
 from links import schema
