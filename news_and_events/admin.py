@@ -65,10 +65,22 @@ class NewsAndEventsAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTa
             }
         
     def _media(self):
-        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+        return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
 
+# this or something like it can be enabled when the 
+# autocomplete-stop-sworking-after-adding-an-inlin
+# bug has been addressed
+# it will hugely speed up loading of news, events etc with lots of people in the m2m
 
+# class NewsPersonInline(AutocompleteMixin, admin.TabularInline):
+#     model = NewsArticle.please_contact.through
+#     related_search_fields = ["person", ]
+#     extra = 1
+#     def _media(self):
+#         return super(AutocompleteMixin, self).media
+#     media = property(_media)
+    
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
         model = NewsArticle
@@ -98,7 +110,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         'please_contact',
         'publish_to', 
         )
-        
+    # inlines = [MembershipInline,]    
     fieldset_stickiness = ('How this item should behave in lists', {'fields': ('sticky_until', 'is_sticky_everywhere',)})
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],),}),
