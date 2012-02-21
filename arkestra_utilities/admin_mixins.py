@@ -8,6 +8,9 @@ from widgetry import fk_lookup
 
 from contacts_and_people.models import Entity
     
+    
+
+
 class AutocompleteMixin(object):
     class Media:
         js = [
@@ -29,6 +32,15 @@ class AutocompleteMixin(object):
             kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)          
         return super(AutocompleteMixin, self).formfield_for_dbfield(db_field, **kwargs)
 
+
+class SupplyRequestMixin(object):
+    def get_form(self, request, obj=None, **kwargs):
+        form_class = super(SupplyRequestMixin, self).get_form(request, obj, **kwargs)
+        form_class.request = request
+        return form_class
+
+
+class GenericModelAdminMixin(AutocompleteMixin, SupplyRequestMixin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs): 
         """
         Filters the list of Entities so that the user only sees those that
@@ -45,17 +57,11 @@ class AutocompleteMixin(object):
         return super(AutocompleteMixin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class SupplyRequestMixin(object):
-    def get_form(self, request, obj=None, **kwargs):
-        form_class = super(SupplyRequestMixin, self).get_form(request, obj, **kwargs)
-        form_class.request = request
-        return form_class
-
-
 class InputURLMixin(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False,
         help_text=u"Enter the URL of an external item that you want <strong>automatically</strong> added to the database, but first check carefully using <strong>External URL</strong> (above) to make sure it's really not there.", 
         )
+
 
 
 fieldsets = {

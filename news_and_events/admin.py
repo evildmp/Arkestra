@@ -10,7 +10,7 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.admin_mixins import SupplyRequestMixin, AutocompleteMixin, InputURLMixin, fieldsets
+from arkestra_utilities.admin_mixins import GenericModelAdminMixin, InputURLMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
 from links.admin import ObjectLinkInline
@@ -54,7 +54,7 @@ class NewsAndEventsForm(InputURLMixin):
 
 from contacts_and_people.models import Entity
 
-class NewsAndEventsAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
+class NewsAndEventsAdmin(GenericModelAdminMixin, ModelAdminWithTabsAndCMSPlaceholder):
     exclude = ('content', 'url')
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
