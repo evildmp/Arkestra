@@ -15,7 +15,7 @@ from widgetry.tabs.admin import ModelAdminWithTabs
 from widgetry import fk_lookup
 
 from arkestra_utilities.output_libraries.plugin_widths import get_placeholder_width, calculate_container_width
-from arkestra_utilities.admin_mixins import AutocompleteMixin
+from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin
 
 from links import schema
 
@@ -168,7 +168,13 @@ def lightbox(imageset, context):
     # loop over each item to set attributes for the lightbox (i.e. large) image
     imageset.template = "arkestra_image_plugin/lightbox.html"  
 
-    for item in imageset.items:
+    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items] 
+
+    # set up each item
+    for counter, item in enumerate(imageset.items, start = 1):
+        # mark end-of-row items so the CSS doesn't apply a margin-right
+        if not counter%items_per_row:
+            item.lastinrow = True
         thumbnail_options = {} 
         # set a caption for the item
         item.caption = set_image_caption(item)                    
@@ -249,17 +255,16 @@ def single_image(imageset, context):
     # set caption
     imageset.item.caption = set_image_caption(imageset.item)
     imageset.item.caption_width = int(imageset.item.width)
-    imageset.item.alt_text = imageset.item.alt_text or imageset.item.destination_content_object
     return imageset
                 
         
     
-class ImageSetItemLinkInlineForm(forms.ModelForm):
+class ImageSetItemPluginForm(forms.ModelForm):
     class Meta:
         model=ImageSetItem
         
     def __init__(self, *args, **kwargs):
-        super(ImageSetItemLinkInlineForm, self).__init__(*args, **kwargs)
+        super(ImageSetItemPluginForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None and self.instance.destination_content_type:
             destination_content_type = self.instance.destination_content_type.model_class()
         else:
@@ -268,7 +273,7 @@ class ImageSetItemLinkInlineForm(forms.ModelForm):
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
 
     def clean(self):
-        super(ImageSetItemLinkInlineForm, self).clean()
+        super(ImageSetItemPluginForm, self).clean()
         # the Link is optional, but unless both fields both Type and Item fields are provided, 
         # reset them to None
         if not self.cleaned_data["destination_content_type"] or not self.cleaned_data["destination_object_id"]:
@@ -276,18 +281,23 @@ class ImageSetItemLinkInlineForm(forms.ModelForm):
             self.cleaned_data["destination_object_id"]=None
 
         # no alt-text? no links for you!
-        # if self.cleaned_data["destination_object_id"] and not self.cleaned_data["alt_text"]:
+        # if self.cleaned_data["destination_object_id"] and not self.cleaned_data["alt_text"] :
         #     raise forms.ValidationError('You <strong>must</strong> provide alt text for users on images that serve as links')
 
         if "click here" in self.cleaned_data["alt_text"].lower():
             raise forms.ValidationError("'Click here'?! In alt text?! You cannot be serious. Fix this at once.")
+
+        # message = "This is a test message"
+        # messages.add_message(self.request, messages.WARNING, message)
+
+
             
         return self.cleaned_data    
 
 
-class ImageSetItemLinkInlineFormset(forms.models.BaseInlineFormSet):
+class ImageSetItemFormFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
-        super(ImageSetItemLinkInlineFormset, self).clean()
+        super(ImageSetItemFormFormSet, self).clean()
 
         some_have_links = False
         some_do_not_have_links = False
@@ -305,22 +315,27 @@ class ImageSetItemLinkInlineFormset(forms.models.BaseInlineFormSet):
             except AttributeError:
                 pass
         
-        #  if some_have_links and some_do_not_have_links then that's inconsistent      
-        if some_have_links and some_do_not_have_links:
-            raise forms.ValidationError('Either all or none of the items in this set should have links')
+        # #  if some_have_links and some_do_not_have_links then that's inconsistent      
+        # if some_have_links and some_do_not_have_links:
+        #     message = "I won't put links on any of your images until they all have links"
+        #     messages.add_message(self.request, messages.WARNING, message)
             
 
-class ImageSetItemEditor(admin.StackedInline, AutocompleteMixin):
-    form = ImageSetItemLinkInlineForm
-    formset = ImageSetItemLinkInlineFormset
+class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
+    form = ImageSetItemPluginForm
+    # formset = ImageSetItemFormFormSet
     # related_search_fields = ['destination_content_type']
-    model = ImageSetItem
+    model=ImageSetItem
     extra=1
     fieldset_basic = ('', {'fields': (('image',),)})
-    fieldset_advanced = ('Caption', {'fields': (( 'use_description_as_caption', 'caption'),), 'classes': ('collapse',)})
+    fieldset_advanced = ('Caption', {
+        'fields': (( 'use_description_as_caption', 'caption'),), 
+        'classes': ('collapse',)
+        })
     fieldsets = (fieldset_basic, fieldset_advanced,         
                 ("Link", {
                     'fields': (('destination_content_type', 'destination_object_id',), 'alt_text',),
+                    'description': "Links will only be applied if <em>all</em> images in the set have links.",
                     'classes': ('collapse',),
             }),
 )
@@ -328,7 +343,22 @@ class ImageSetItemEditor(admin.StackedInline, AutocompleteMixin):
         models.TextField: {'widget': forms.Textarea(attrs={'cols':30, 'rows':3,},),},
     }
 
-class ImageSetPublisher(CMSPluginBase):
+class ImageSetPluginForm(forms.ModelForm):
+    class Meta:
+        model=ImageSetPlugin
+        
+    # when the user adds link to some but not items, we need to issue a warning
+    # this should warn them, but allow them to force a save
+    # def clean(self):
+    #     force = self.cleaned_data.get('force_save')
+    #     if not force:
+    #         self.fields['force_save'] = forms.BooleanField(initial=True, widget=forms.HiddenInput())
+    #         raise forms.ValidationError('You gotta check something')
+    #     return self.cleaned_data
+
+
+class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
+    form = ImageSetPluginForm
     model = ImageSetPlugin
     name = "Image Set"
     text_enabled = True

@@ -1,8 +1,18 @@
 {% load thumbnail %}{% spaceless %}
 	<span class = "image {{imageset.float}}">
-		{% if item.url %}<a href="{{ item.url }}">{% endif %}
-		<img alt="{% if item.alt_text %}{{ item.alt_text }}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
-		{% if item.url %}</a>{% endif %}
+		{% if item.url and imageset.items_have_links %}
+			<a href="{{ item.url }}">
+				<img 
+					alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}" 
+					class="plugin" 
+					src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+			</a>
+		{% else %}
+			<img 
+				alt="{% if item.alt_text %}{{ item.alt_text }}{% endif %}" 
+				class="plugin" 
+				src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+		{% endif %}
 		{% if item.caption %}<span style="width: {{item.caption_width}}px" class="image-caption">{{ item.caption }}</span>{% endif %}
 		{% if item.show_author %}
 		    <span class="image_author">(Author: {{ item.image.author }})</span>

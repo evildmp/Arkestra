@@ -159,8 +159,8 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
     alt_text = models.CharField(null=True, blank=True, max_length=255)
-    use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
-    caption = models.TextField(_("Caption"), blank=True, null=True)
+    use_description_as_caption = models.BooleanField(verbose_name = "Auto caption", default=False, help_text = "Use image's description field as caption")
+    caption = models.TextField(_("Manual caption"), blank=True, null=True)
 
     destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s", null = True, blank = True) 
     destination_object_id = models.PositiveIntegerField(verbose_name="Item", null = True, blank = True)
