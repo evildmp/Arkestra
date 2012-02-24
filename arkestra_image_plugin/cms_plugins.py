@@ -65,44 +65,6 @@ def width_of_image(plugin, image=None):
         width = plugin.container_width
     return width
     
-    # if plugin.width >= 0:
-    #     placeholder_width = get_placeholder_width(context, plugin)        
-    #     
-    #     if plugin.width == 1000 or not plugin.width:
-    #         width = placeholder_width
-    #         auto = True
-    #      
-    #     elif plugin.width <= 100:
-    #         width = placeholder_width/100.0 * plugin.width
-    #         auto = False
-    # 
-    # 
-    # 
-    # 
-    # 
-    # elif plugin.width < 0: 
-    #     width = -plugin.width
-    # 
-    # else:
-    #     # we need to know the width of the placeholder
-    #     placeholder_width = get_placeholder_width(context, plugin)
-    #  
-    #     # widths relative to placeholder width
-    #     # widths a percentage of placeholder width
-    #     if plugin.width <= 100:
-    #         width = placeholder_width/100.0 * plugin.width
-    #         auto = False
-    # 
-    #     # automatic width      
-    #     elif plugin.width == 1000 or not plugin.width:
-    #         width = placeholder_width
-    #         auto = True
-    # 
-    #     # calculate the width of the block the image will be in
-    #     width = calculate_container_width(context, plugin, width, auto)
-    # 
-    # return width
-
 def calculate_aspect_ratio(image):
     return float(image.width)/image.height
 
