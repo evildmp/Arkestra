@@ -166,6 +166,7 @@ def slider(imageset):
 
     
 def multiple_images(imageset, context):
+    # for lightboxes and multiple image sets
     imageset.template = "arkestra_image_plugin/%s.html" %imageset.kind            
 
     # don't allow more items_per_row than there are items
