@@ -322,7 +322,7 @@ class FocusOnPluginEditor(CMSPlugin):
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
 
 
-class FocusOnPluginItemEditor(BaseLink):
+class FocusOnPluginItemEditor(LinkMethodsMixin, BaseLink):
     plugin = models.ForeignKey(FocusOnPluginEditor, related_name="focuson_items")
     text_override = models.CharField(max_length=256, null=True, blank=True, 
         help_text="Override the default link text")

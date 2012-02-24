@@ -148,7 +148,7 @@ def convert(action = "dryrun"):
                             setattr(item, new_field, placeholder)
         
                             if execute == "execute":
-                                add_plugin(placeholder, "SemanticTextPlugin", settings.LANGUAGES[0][0], body = old_field_content)
+                                add_plugin(placeholder, "SemanticTextPlugin", settings.CMS_LANGUAGES[0][0], body = old_field_content)
                                                                                                                             
                             # setattr(item, old_field, "")
                             if execute == "execute":
