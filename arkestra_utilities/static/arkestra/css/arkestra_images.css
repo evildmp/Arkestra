@@ -1,8 +1,12 @@
 /* Arkestra image plugin */
 
-ul.multiple-images  {padding: 0; margin: 0;}
-ul.multiple-images li {display: inline-block; margin-right: 6px;}
-ul.multiple-images li.lastinrow {margin-right: 0px;}
+ul.multiple-image-list {padding: 0; margin: 0;}
+ul.multiple-image-list li {display: inline-block;}
+ul.multiple-image-list li.lastinrow img {margin-right: 0;}
+ul.multiple-image-list li img {padding: 0; margin-right: 6px;}   
+ul.multiple-image-list li a img {padding: 3px; margin-right: 0;}   
+ul.multiple-image-list:hover a img { opacity: .3;}
+ul.multiple-image-list:hover a img:hover {opacity: 1; outline: 1px solid black;}   
 
 /* Slider
 
@@ -76,13 +80,4 @@ it's a bit awkward when non-floated images can have borders, because then the bo
     padding: 4px 7px; 
     border: 1px solid #888;
     }
-
-/* fancybox */
-div.fancybox:hover img.fancybox-icon { opacity: .3;}
-img.fancybox-icon {padding: 3px}   
-div.fancybox:hover img.fancybox-icon:hover {opacity: 1; outline: 1px solid black;}   
-
- /* multiple images */
-ul.multiple-images:hover a img { opacity: .3;}
-ul.multiple-images:hover a img:hover {opacity: 1; outline: 1px solid black;}   
 

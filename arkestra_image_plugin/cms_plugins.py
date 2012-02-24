@@ -164,54 +164,15 @@ def slider(imageset):
     imageset.size = (int(width),int(height))
     return imageset
 
-def lightbox(imageset, context):
-    # loop over each item to set attributes for the lightbox (i.e. large) image
-    imageset.template = "arkestra_image_plugin/lightbox.html"  
-
-    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items] 
-
-    # set up each item
-    for counter, item in enumerate(imageset.items, start = 1):
-        # mark end-of-row items so the CSS doesn't apply a margin-right
-        if not counter%items_per_row:
-            item.lastinrow = True
-        thumbnail_options = {} 
-        # set a caption for the item
-        item.caption = set_image_caption(item)                    
-
-        # get width, height and lightbox_max_dimension
-        lightbox_width, lightbox_height = item.image.width, item.image.height
-        lightbox_max_dimension = context.get("lightbox_max_dimension")
-        # user has set aspect ratio? apply it, set crop argument for thumbnailer
-        if imageset.aspect_ratio:
-            lightbox_height = lightbox_width / imageset.aspect_ratio
-            thumbnail_options.update({'crop': True}) 
-        # get scaler value from width, height
-        scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
-        # set size of lightbox using scaler
-        thumbnail_options.update({'size': (int(lightbox_width * scaler), int(lightbox_height * scaler))})
-        # get thumbnailer object for the image
-        thumbnailer = get_thumbnailer(item.image)
-        # apply options and get url
-        item.large_url = thumbnailer.get_thumbnail(thumbnail_options).url  
-    # now work out the sizes of the little thumbnails
-    icon_width = imageset.container_width / (imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items])
-    icon_height = imageset.height or icon_width                 
-    # make the icons small enough to fit neatly on a line; if too small, make them bigger
-    while icon_width < 30:
-        icon_width = icon_width * 2 
-        icon_height = icon_height / 2 
-    
-    # fancybox icons have 3px padding, so:
-    icon_width = icon_width - 6                   
-    
-    imageset.size = (int(icon_width), int(icon_height))
-    return imageset
     
 def multiple_images(imageset, context):
-    imageset.template = "arkestra_image_plugin/multiple_images.html"            
+    imageset.template = "arkestra_image_plugin/%s.html" %imageset.kind            
 
-    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS[imageset.number_of_items] 
+    # don't allow more items_per_row than there are items
+    if imageset.items_per_row > imageset.number_of_items:
+        imageset.items_per_row = imageset.number_of_items
+    
+    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS.get(imageset.number_of_items, 8) 
 
     # no specified aspect ratio or height? get an average and use that
     if not imageset.aspect_ratio and not imageset.height:
@@ -222,7 +183,7 @@ def multiple_images(imageset, context):
 
     # set up each item
     for counter, item in enumerate(imageset.items, start = 1):
-        # mark end-of-row items so the CSS doesn't apply a margin-right
+        # mark end-of-row items in case the CSS needs it
         if not counter%items_per_row:
             item.lastinrow = True
         # get its width
@@ -232,10 +193,40 @@ def multiple_images(imageset, context):
             item.width = item.width / items_per_row
         # calculate height 
         item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, item.width, aspect_ratio)
-        if imageset.width> 0:
-            item.width = item.width - (items_per_row-1)*6/items_per_row  
+
+        # fancybox icons and multiple images with links have 3px padding, so:
+        print "imageset.kind", imageset.kind, imageset.items_have_links
+        if imageset.kind == "lightbox" or imageset.items_have_links:
+            item.width = item.width - 6                   
+        else: 
+            # allow for 6px margin
+            if imageset.width > 0:
+                item.width = item.width - (items_per_row-1)*6/items_per_row  
+
         item.width,item.height = int(item.width), int(item.height)
         item.image_size = u'%sx%s' %(item.width, item.height) 
+
+        # lightbox options
+        if imageset.kind == "lightbox":
+            thumbnail_options = {} 
+            # set a caption for the item
+            item.caption = set_image_caption(item)                    
+            # get width, height and lightbox_max_dimension
+            lightbox_width, lightbox_height = item.image.width, item.image.height
+            lightbox_max_dimension = context.get("lightbox_max_dimension")
+            # user has set aspect ratio? apply it, set crop argument for thumbnailer
+            if imageset.aspect_ratio:
+                lightbox_height = lightbox_width / imageset.aspect_ratio
+                thumbnail_options.update({'crop': True}) 
+            # get scaler value from width, height
+            scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
+            # set size of lightbox using scaler
+            thumbnail_options.update({'size': (int(lightbox_width * scaler), int(lightbox_height * scaler))})
+            # get thumbnailer object for the image
+            thumbnailer = get_thumbnailer(item.image)
+            # apply options and get url
+            item.large_url = thumbnailer.get_thumbnail(thumbnail_options).url  
+
     return imageset
     
 def single_image(imageset, context):                 
@@ -388,10 +379,7 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             if imageset.kind == "slider" and imageset.number_of_items > 2:
                 imageset = slider(imageset)
 
-            elif imageset.kind == "lightbox":
-                imageset = lightbox(imageset, context)
-
-            elif imageset.kind == "multiple":
+            elif imageset.kind == "lightbox" or imageset.kind == "multiple":
                 imageset = multiple_images(imageset, context)
 
             else:

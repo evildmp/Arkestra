@@ -12,19 +12,20 @@
 	<script src="{{ STATIC_URL }}fancybox/js/jquery.fancybox-1.3.4.pack.js"></script> 
     <script src="{{ STATIC_URL }}fancybox/js/jquery.easing-1.3.pack.js"></script>
     <script type="text/javascript">
-		$(document).ready(function() {
-	        $("{{ selector|default:"a.fancy" }}").fancybox({
-	                'titlePosition'	: {{ titlePosition|default:"'over'" }}, /*'over', 'outside', 'inside'*/
-	                'overlayColor'	: {{ overlayColor|default:"'#000000'" }},
-	                'overlayOpacity'	: {{ overlayOpacity|default:"0.6" }},
-	                'transitionIn'      : {{ transitionIn|default:"'elastic'" }},/*'fade','elastic'*/
-	                'transitionOut'     : {{ transitionOut|default:"'fade'" }},/*'fade','elastic'*/
-	                'easingIn'          : {{ easingIn|default:"'swing'" }},/*'swing','easeOutBack'*/
-	                'easingOut'         : {{ easingIn|default:"'swing'" }},/*'swing','easeInBack'*/
+    var fancyBOX = jQuery.noConflict();
+    fancyBOX(document).ready(function() {
+        fancyBOX("{{ selector|default:"a.fancy" }}").fancybox({
+            'titlePosition'	: {{ titlePosition|default:"'over'" }}, /*'over', 'outside', 'inside'*/
+            'overlayColor'	: {{ overlayColor|default:"'#000000'" }},
+            'overlayOpacity'	: {{ overlayOpacity|default:"0.6" }},
+            'transitionIn'      : {{ transitionIn|default:"'elastic'" }},/*'fade','elastic'*/
+            'transitionOut'     : {{ transitionOut|default:"'fade'" }},/*'fade','elastic'*/
+            'easingIn'          : {{ easingIn|default:"'swing'" }},/*'swing','easeOutBack'*/
+            'easingOut'         : {{ easingIn|default:"'swing'" }},/*'swing','easeInBack'*/
 	        });
 		});
 	</script>
         
 {% endaddtoblock %}
 
-<div class="fancybox" style="width: {{ imageset.container_width }}px;">{% for item in imageset.items %}<a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.large_url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="{{ item.image.name }}" src="{% thumbnail item.image.file imageset.size crop subject_location=item.image.subject_location %}" /></a>{% endfor %}</div>
+<ul class="multiple-image-list" style="width: {{ imageset.container_width }}px;">{% for item in imageset.items %}<li {% if item.lastinrow %}class="lastinrow"{% endif %}><a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.large_url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="{{ item.image.name }}" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" /></a></li>{% endfor %}</ul>
