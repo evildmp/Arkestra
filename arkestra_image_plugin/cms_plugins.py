@@ -158,7 +158,6 @@ def multiple_images(imageset, context):
         item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, item.width, aspect_ratio)
 
         # fancybox icons and multiple images with links have 3px padding, so:
-        print "imageset.kind", imageset.kind, imageset.items_have_links
         if imageset.kind == "lightbox" or imageset.items_have_links:
             item.width = item.width - 6                   
         else: 
@@ -196,10 +195,11 @@ def single_image(imageset, context):
     imageset.template = "arkestra_image_plugin/single_image.html"
     # choose an image at random from the set
     imageset.item = imageset.imageset_item.order_by('?')[0]
+
     # calculate its native aspect ratio
     aspect_ratio = calculate_aspect_ratio(imageset.item.image)
     # get width
-    width = width_of_image(imageset, imageset.item)
+    width = width_of_image(imageset, imageset.item.image)
     # shave if floated
     width = shave_if_floated(imageset, width) or width
                 
@@ -393,32 +393,37 @@ class FilerImagePlugin(CMSPluginBase):
         instance.has_borders = False
         
         # calculate its width and aspect ratio
-        image_block_width = width_of_image_container(context, instance)
+        instance.container_width = width_of_image_container(context, instance)
+
+        # calculate its native aspect ratio
         aspect_ratio = calculate_aspect_ratio(instance.image)
+        # get width
+        width = width_of_image(instance, instance.image)
         # shave if floated
-        width = shave_if_floated(instance, image_block_width) or image_block_width                            
+        width = shave_if_floated(instance, width) or width
+        
         # calculate height 
-        width, height = calculate_height(instance.width, instance.height, instance.aspect_ratio, image_block_width, aspect_ratio)
+        instance.width, instance.height = calculate_height(instance.width, instance.height, instance.aspect_ratio, width, aspect_ratio)
         # set caption
         instance.caption = set_image_caption(instance)
-                        
+        instance.subject_location = instance.image.subject_location
+        instance.width, instance.height = int(instance.width), int(instance.height)   
         context.update({
             'object':instance, 
-            'image_size': u'%sx%s' % (int(width), int(height)),
+            'image_size': u'%sx%s' % (int(instance.width), int(instance.height)),
             'caption_width': int(width),
             'placeholder':placeholder,
-
+            'subject_location': instance.image.subject_location,
             'imageset':instance,
             'imageset_item': instance, 
-            'image_size': u'%sx%s' % (int(width), int(height)),
-            'caption_width': int(width),
+            'caption_width': int(instance.width),
             'placeholder':placeholder,
         })
         return context
 
     def get_thumbnail(self, context, instance):
         if instance.image:
-            return instance.image.image.file.get_thumbnail(self._get_thumbnail_options(context, instance))
+            return instance.image.image.thumbnails['admin_tiny_icon']
 
     def icon_src(self, instance):
         return instance.image.thumbnails['admin_tiny_icon']

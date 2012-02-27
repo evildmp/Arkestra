@@ -37,7 +37,7 @@ class FilerImage(CMSPlugin):
             (-350.0, u'350 pixels'),
             )
         ),    
-        ('', u"Image's native width"),
+        ('0', u"Image's native width"),
     )
     width = models.FloatField(null=True, blank=True, choices = IMAGE_WIDTHS, default = 1000.0)
     height = models.PositiveIntegerField(null=True, blank=True)

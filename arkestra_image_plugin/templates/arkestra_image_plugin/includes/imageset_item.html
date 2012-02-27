@@ -5,7 +5,7 @@
 				<img 
 					alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}" 
 					class="plugin" 
-					src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+					src="{% thumbnail item.image.file item.image_size crop %}" />
 			</a>
 		{% else %}
 			<img 
