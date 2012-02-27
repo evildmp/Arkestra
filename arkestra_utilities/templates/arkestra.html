@@ -2,6 +2,7 @@
 {% load cms_tags sekizai_tags menu_tags typogrify_tags insert_tags %}
 {% block html_tag %}<html lang="en" >{% endblock html_tag %}
 <head>
+{% block scripts %}{% endblock scripts %}
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 
 {% block meta %}
@@ -45,8 +46,6 @@
 
 {% endblock styles %}
 
-
-{% block scripts %}{% endblock scripts %}
 {% render_block "css" %}
 </head>
 
