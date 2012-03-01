@@ -55,7 +55,7 @@ p.fancy    {margin-left: 30px;}
 
 ul.fancy li,
 p.fancy   {
-    list-style: square url(/static/arkestra/images/default_styles/hand-right.png/);
+    list-style: square url(/static/arkestra/images/default_styles/hand-right.png);
     }
 
 p.fancy   {

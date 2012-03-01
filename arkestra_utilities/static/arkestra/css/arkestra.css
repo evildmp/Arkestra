@@ -123,7 +123,8 @@ div.space-on-right p.pull-out-new.big-quotes{margin-left: 5%;}
 p.drop-cap:first-letter  {
     float: left;
     font-family: "Hoefler Text", "Didot", Georgia, serif;
-    font: 300% bold;
+    font-size: 300%;
+    font-weight: bold;
     line-height: 1;
     margin-right: 0.04em;
     margin-bottom:-0.1em;
@@ -188,4 +189,13 @@ p.pull-out:first-line   {
     color: #990033;
 }
 
-span.home-role {text-align: center; font-weight: bold;}
+span.home-role {text-align: center; font-weight: bold;} 
+
+/* Arkestra credit */
+
+ul li.arkestra {text-align: right; display: block; padding: 0;
+}
+
+ul li.arkestra a {
+    font-family:"Hoefler Text", "Didot", Georgia, serif;
+}
