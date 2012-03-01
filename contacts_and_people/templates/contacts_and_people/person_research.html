@@ -1,5 +1,5 @@
 {% extends "contacts_and_people/person.html" %}
-{% load publications_tags %}
+{% load publications_tags placeholder_tags %}
 
 {% block meta %}
 	<meta name="description" content="Research overview for {{ person}}, {{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
@@ -15,9 +15,14 @@
 {% block person_information %}
   {% if person.researcher.research_synopsis or person.researcher.research_description %}
     <div>
-        <h{{ IN_BODY_HEADING_LEVEL }}>Research overview</h{{ IN_BODY_HEADING_LEVEL }}>
-        <div>{{person.researcher.research_synopsis|safe}}</div>
-        <div>{{person.researcher.research_description|safe}}</div>
+        {% if person.researcher.synopsis.cmsplugin_set.all %}
+            <h{{ IN_BODY_HEADING_LEVEL }}>Research overview</h{{ IN_BODY_HEADING_LEVEL }}>
+		    {% render_placeholder person.researcher.synopsis %}
+		{% endif %}
+        {% if person.researcher.description.cmsplugin_set.all %}
+            <h{{ IN_BODY_HEADING_LEVEL }}>Research description</h{{ IN_BODY_HEADING_LEVEL }}>
+		    {% render_placeholder person.researcher.description %}
+		{% endif %}
     </div>
 	{% endif %}
   <div>
