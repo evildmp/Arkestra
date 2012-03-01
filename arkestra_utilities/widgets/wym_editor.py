@@ -4,8 +4,8 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 
 WYM_TOOLS = ",\n".join([
-    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}",
     "{'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'}",
+    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}",
     "{'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'}",
     "{'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'}",
     "{'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'}",
