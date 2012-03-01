@@ -119,6 +119,7 @@ def person(request, slug, active_tab=""):
     if home_role:
         entity = home_role.entity
     entity = person.get_entity # don't rely on home_role.entity - could be None or overridden
+
     address = person.get_address()
 
     contact = person.get_please_contact()
@@ -203,6 +204,10 @@ def person(request, slug, active_tab=""):
     meta = {
         "description": meta_description_content,
         }
+     
+    # there's a problem here - pages such as Cardiff's /person/dr-kathrine-jane-craig/ don't
+    # get the menu right - why?
+    # print "****", request.auto_page_url, request.path, request.current_page, entity.get_website
 
     return render_to_response(
         "contacts_and_people/person%s.html" % active_tab,
