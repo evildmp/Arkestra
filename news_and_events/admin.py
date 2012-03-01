@@ -8,8 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
-from arkestra_utilities.widgets.wym_editor import WYMEditor
-from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin_mixins import GenericModelAdminMixin, InputURLMixin, fieldsets
 
 from links.admin import ExternalLinkForm, get_or_create_external_link
