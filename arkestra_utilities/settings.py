@@ -112,8 +112,8 @@ WYM_CONTAINERS = ",\n".join([
 ])
 
 WYM_TOOLS = ",\n".join([
-    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}", # not 'bold'
     "{'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'}", # and not italic
+    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}", # not 'bold'
     "{'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'}",
     "{'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'}",
     "{'name': 'Indent', 'title': 'Indent', 'css': 'wym_tools_indent'}", # should be 'nest'
