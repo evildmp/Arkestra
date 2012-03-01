@@ -376,6 +376,8 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             return "/static/plugin_icons/lightbox.png"
         elif instance.kind == "slider":
             return "/static/plugin_icons/image_slider.png"
+        else:
+            return "/static/plugin_icons/imageset.png"
         
 plugin_pool.register_plugin(ImageSetPublisher)
 
