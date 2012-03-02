@@ -72,7 +72,7 @@ class ArkestraPages(Modifier):
             key = "ArkestraPages.modify()" + request.path + "pre_cut"
             cached_pre_cut_nodes = cache.get(key, None)
             if cached_pre_cut_nodes: 
-                print "    ++ got cache", key, settings.CMS_CACHE_DURATIONS['menus']
+                # print "    ++ got cache", key, settings.CMS_CACHE_DURATIONS['menus']
                 return cached_pre_cut_nodes
 
             # loop over all the nodes returned by the nodes in the Menu classes
@@ -93,12 +93,12 @@ class ArkestraPages(Modifier):
                     #     parent = node, 
                     #     )                 
                                                                                
-            print "    ++ saving cache", key
+            # print "    ++ saving cache", key
             cache.set(key, self.nodes, settings.CMS_CACHE_DURATIONS['menus'])
-            print "    **", len(self.nodes), "nodes in", datetime.now() - start_time, "for ArkestraPages.modify()"
+            # print "    **", len(self.nodes), "nodes in", datetime.now() - start_time, "for ArkestraPages.modify()"
             return self.nodes
         else:
-            print "** post_cut"
+            # print "** post_cut"
             # for node in self.nodes:
             #     # we have found a node for a Page with an Entity, so check it against arkestra_menus
             #     for menu in arkestra_menus:

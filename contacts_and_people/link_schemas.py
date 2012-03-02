@@ -30,7 +30,7 @@ class PersonWrapper(LinkWrapper):
             return get_thumbnailer(source).get_thumbnail({'subject_location': u'', 'upscale': True, 'crop': True, 'size': (size, size)}
 ).url
         except Exception,e:
-            print e
+            print "Error in personwrapper", e
             url = None
         return url
 
