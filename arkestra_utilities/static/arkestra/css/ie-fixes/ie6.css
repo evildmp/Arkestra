@@ -142,4 +142,8 @@ div.carousel ul.carousel-btns li.carousel-btn.focus, div.carousel ul.carousel-bt
 	filter:alpha(opacity=90); /* IE lt 8 */
 	opacity:0.90; /* FF lt 1.5, Netscape */
 }
-/* FINISH: Carousel css for IE6 */
+/* FINISH: Carousel css for IE6 */             
+
+ul.multiple-image-list li {
+display: inline!important;
+}
