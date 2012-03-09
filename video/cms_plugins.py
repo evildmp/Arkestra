@@ -63,7 +63,7 @@ class VideoPluginPublisher(CMSPluginBase):
             width = width - 5   
         
         if instance.use_description_as_caption:
-            instance.caption = instance.caption or instance.image.description
+            instance.caption = instance.caption or instance.video.description
         
         # given the width we want to show the video at, we have to find the most suitable (i.e. closest larger) video file version we have created
         index = bisect.bisect_left(SIZES,width)
@@ -151,7 +151,7 @@ class VideoPluginPublisher(CMSPluginBase):
                         instance.all_formats.append(description)
         
         instance.width = int(width)
-        instance.dumb_height = instance.width * .75
+        instance.dumb_height = int(instance.width * .75)
         instance.size = size
         context.update({
             'video':instance,
