@@ -75,7 +75,7 @@ class VacancyStudentshipAdmin(GenericModelAdminMixin, ModelAdminWithTabsAndCMSPl
             }
 
     def _media(self):
-        return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+        return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
 
         
