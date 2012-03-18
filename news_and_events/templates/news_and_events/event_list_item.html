@@ -1,9 +1,18 @@
 {% extends "arkestra/universal_plugin_list_item.html" %}
+{% spaceless %}
 {% block item_title %}
 
+	{# this item is the child of a series that shows the parent's title #}
 	{% if "series" in item.show_parent_series %}
-		<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.short_title}}</a><br />
-	
+
+		{# the series is informative, so link to it #}
+	  	{% if not item.parent.is_uninformative %}
+			<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.short_title}}</a><br />
+	  	{% else %}
+			<span class="title">{{item.parent.short_title}}</span><br />
+	  	{% endif %}
+
+		{# it should show its own title too #}
 		{% if "children" in item.show_parent_series %}
 				
 	        {% if "details" in everything.format and item.is_uninformative %}
@@ -22,6 +31,7 @@
 	    	{% endif %}
 	    {% endif %}
 
+	{# either not a child of a series, or we don't display the parent's title #}
 	{% else %}
 	
 		{% with class="title" %}
@@ -32,16 +42,21 @@
 
 			{% else %}
 			
-				{% if item.parent.series or not "details" in everything.format or not item.is_uninformative %}
+				{% if item.parent.series and not item.parent.is_uninformative %} 
 				
-		   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
+					<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>				
+				
+				{% else %}  
+					{% if not "details" in everything.format or not item.is_uninformative %}
+				
+			   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
 
-				{% else %}
+					{% else %}
 				
-		            <span class="{{ class }}">{{ item.short_title }}</span>
+			            <span class="{{ class }}">{{ item.short_title }}</span>
 
-				{% endif %}
-				
+					{% endif %}
+		   		{% endif %}
 	   		{% endif %}
 
 		{% endwith %}
@@ -54,4 +69,5 @@
 {% block item_details %}
 {{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
 
-{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary|truncatewords:30 }}</div>{% endif %}{% endblock item_summary %}
+{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary }}</div>{% endif %}{% endblock item_summary %}
+{% endspaceless %}
