@@ -39,7 +39,15 @@ In addition, Arkestra will need the Python Imaging Library (PIL) to be installed
 Via PIP
 =======
 
-Most of these items are available via PIP:
+Most of these items are available via PIP.
+
+Until sekizai becomes Django 1.4-compatible, you'll need to stay with Django version 1.3:
+
+`pip install django==1.3.1`
+
+Also, make sure you have a compatible version of MPTT:
+
+`pip install django-mptt==0.5.1`
 
 `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
