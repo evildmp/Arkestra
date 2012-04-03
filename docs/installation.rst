@@ -36,41 +36,22 @@ These steps assume that you have the following available on your system:
 
 In addition, Arkestra will need the Python Imaging Library (PIL) to be installed on your system.
 
-Via PIP
-=======
+Note on PIL and pip
+===================
 
-Most of these items are available via PIP.
+Most of these items you need to install are available via PIP (see below).
 
-Until sekizai becomes Django 1.4-compatible, you'll need to stay with Django version 1.3:
+You can try `pip install PIL`, but it doesn't always seem to work very well. 
 
-`pip install django==1.3.1`
-
-Also, make sure you have a compatible version of MPTT:
-
-`pip install django-mptt==0.5.1`
-
-`pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
-
-You can try `pip install PIL`, but it doesn't always seem to work very well. This is often because
-pip installs PIL from source, and if you don't have the development packages (C headers) then it won't
+This is often because pip installs PIL from source, and if you don't have the development packages 
+(C headers) then it won't
 compile it with support for all required file formats. Make sure you get the `-dev` packages first. On
 a Debian system doing `apt-get install libjpg-dev libpng-dev` before getting PIL via pip fixed a big 
 problem with image uploads because thumbnails weren't being generated.
  
 
-From source
-===========
-
-Others are currently best installed from source:
-
-* `the Semantic Presentation Editor <https://bitbucket.org/spookylukey/semanticeditor/>`_: `hg clone https://bitbucket.org/spookylukey/semanticeditor`
-* `Django Widgetry <https://github.com/evildmp/django-widgetry/>`_ (a tweaked version): `git clone git://github.com/evildmp/django-widgetry.git`
-* `the development version of Django Filer <https://github.com/stefanfoulis/django-filer/>`_: `git clone git://github.com/stefanfoulis/django-filer.git`
-
-Installing Arkestra
-===================
-
-* `Arkestra <https://github.com/evildmp/Arkestra/>`_: `git clone git://github.com/evildmp/Arkestra.git`
+The Arkestra applications
+=========================
 
 Arkestra is a collection of applications, each of which needs to be put on your PYTHONPATH:
 
@@ -96,6 +77,10 @@ Set up a virtual environment
 Install PIP components
 ======================
 
+Until sekizai becomes Django 1.4-compatible, you'll need to stay with Django version 1.3 and make sure you have a compatible version of MPTT.
+
+* `pip install django==1.3.1`
+* `pip install django-mptt==0.5.1`
 * `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
 
 Download components from source
