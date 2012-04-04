@@ -12,3 +12,6 @@ div.space-on-right.images-right span.image    {
     margin-right: -30%;
     }
 
+ul.imageset li {
+display: inline!important;
+}
