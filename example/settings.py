@@ -232,7 +232,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
-    'djcelery',     # will need to be enabled for celery processing
+    # 'djcelery',     # will need to be enabled for celery processing
     
     # Arkestra applications
     

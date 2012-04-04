@@ -6,6 +6,6 @@
 	</div>
 	<div class="col2">
 	    <div class="col-actions">{{ event.hosted_by.short_name }}</div>
-	    <div class="col-actions">{{ event.get_dates }}</div>
+	    <div class="col-actions">{{ event.get_dates }}{% if event.get_times %}, {{ event.get_times|safe }}{% endif %}{% if event.building %}, {{ event.building }}{% endif %}</div> 
 	</div>
 </div>
