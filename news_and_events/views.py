@@ -175,7 +175,7 @@ def event(request, slug):
     return render_to_response(
         "news_and_events/event.html",
         {"event": event,
-        "entity": event.hosted_by,
+        "entity": event.get_hosted_by,
         "meta": {"description": event.summary,},
         },
         RequestContext(request),
