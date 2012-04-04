@@ -31,7 +31,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
     people, initials = entity.get_people_and_initials()
     # are there Key People to show?    
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
-        people_list_heading = _(u"All other people")
+        people_list_heading = _(u"Also")
         # now remove the Key People from the people list
         people = [ person for person in people if person not in set([role.person for role in entity.get_key_people()])]
     else: # otherwise, just a list of the people with roles

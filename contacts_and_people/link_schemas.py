@@ -48,7 +48,7 @@ class EntityWrapper(LinkWrapper):
             return "Abstract entity - description unavailable"
         if self.obj.external_url:
             return "External entity at " + self.obj.external_url.url
-        if self.obj.get_website.get_meta_description():
+        if self.obj.get_website and self.obj.get_website.get_meta_description():
             return self.obj.get_website.get_meta_description()
         # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
         # else:
