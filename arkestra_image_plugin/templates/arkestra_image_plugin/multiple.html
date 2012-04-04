@@ -1,7 +1,14 @@
 {% spaceless %}
-<ul class="multiple-image-list" style="width: {{ imageset.container_width }}px;">
+<ul class="imageset multiple" style="width: {{ imageset.container_width }}px;">
 	{% for item in imageset.items %}
-		<li {% if item.lastinrow %}class="lastinrow"{% endif %}>
+		<li 
+		    style="width: {{ item.width }}px"
+		    id="imageset-item-{{ item.plugin.id }}-{{ item.id }}"
+		    class="
+		        image {{imageset.float}}
+		            {% if item.url and imageset.items_have_links %}link{% endif %}
+		            {%if item.lastinrow %}lastinrow{% endif %}
+		        ">
 			{% include "arkestra_image_plugin/includes/imageset_item.html" %}
 		</li>
     {% endfor %}

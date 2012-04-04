@@ -8,9 +8,12 @@
 		width={{ imageset_item.width}} 
 		height={{ imageset_item.height }}
 	/>
-	{% if imageset_item.url %}<span class="link-title text">{{ imageset_item.link_title|default:imageset_item.text }}</span>{% endif %}
-   	{% if imageset_item.link_description %}<span class="link-description text">{{ imageset_item.link_description }}</span>{% endif %}
-	{% if imageset_item.url %}<span class="more-information text"><a href="{{ imageset_item.url }}">Read more<span class="hide"> about {{ imageset_item.link_title }}</span>...</a></span>{% endif %}
-
+	{% if imageset_item.url %}
+    	<a href="{{ imageset_item.url }}">
+    	    <span class="link-title text">{{ imageset_item.link_title|default:imageset_item.text }}</span>
+   	        {% if imageset_item.link_description %}<span class="link-description text">{{ imageset_item.link_description }}</span>{% endif %}
+	        <span class="more-information text">Read more<span class="hide"> about {{ imageset_item.link_title }}</span>...</span>
+        </a>
+    {% endif %}
 </div>
 {% endspaceless %}

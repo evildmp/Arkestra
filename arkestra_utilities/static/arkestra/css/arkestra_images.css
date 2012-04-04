@@ -1,33 +1,172 @@
 /* Arkestra image plugin */
 
-ul.multiple-image-list {padding: 0; margin: 0;}
-ul.multiple-image-list li {display: inline-block;}
-ul.multiple-image-list li.lastinrow img {margin-right: 0;}
-ul.multiple-image-list li img {padding: 0; margin-right: 6px;}   
-ul.multiple-image-list li a img {padding: 3px; margin-right: 0;}   
-ul.multiple-image-list:hover a img { opacity: .3;}
-ul.multiple-image-list:hover a img:hover {opacity: 1; outline: 1px solid black;}   
+/* ---------------- all images --------------- */
 
-
-/* Slider
-
-Navigation Links */
-body div.anythingSlider-minimalist-square .anythingControls {
-	float: right;
-	position: relative;
-	bottom: 0;
-	right: 0%;
-	z-index: 100;
-	opacity: 0.75;
-	filter: alpha(opacity=75);
+.image a  {
+    position: relative;
+    display: block;
 }
 
 
-.row div.anythingSlider.activeSlider .anythingControls ul.thumbNav li a.cur {
-	background-color: black;
-	color: #333;
-        box-shadow:none;
+.image img {
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+/* ---------------- all multiple imagesets --------------- */
+
+ul.imageset {padding: 0; margin: 0;}
+
+/* ---------------- all items in multiple image sets --------------- */
+
+ul.imageset li.image {
+    display: inline-block; 
+    vertical-align: top; 
+    padding: 0; 
+    margin-right: 6px;
 }
+
+ul.imageset li.image.lastinrow {
+    margin-right: 0;
+    }
+    
+/* ---------------- when images are links --------------- */
+
+.imageset a:link,
+.imageset a:visited
+ {
+    color: black;
+}
+
+.imageset a:link:hover {
+    text-decoration: none;
+}
+
+ul.imageset li.image.link {
+    padding: 3px; 
+    margin-right: 0;
+    }
+
+ul.imageset:hover li.image.link { 
+    opacity: .4;  
+}
+
+ul.imageset:hover li.image.link:hover {
+    opacity: 1;
+    }                                                                                                  
+
+/* ---------------- when images have text --------------- */
+
+/* all text items */
+.imageset .text {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.imageset .image-title {
+    text-transform:uppercase;
+    text-align: right;
+    font-size: 95%;
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    right: 0;
+    padding: 2px 10px;                          
+    color: black;
+    background: white; 
+    background: rgba(255,255,255,.7); 
+    }
+
+.imageset .image-caption {
+    font-style: italic; 
+    font-weight: lighter; 
+    font-size: 90%;
+    text-align: right;
+    padding-bottom: 5px;
+    padding-left: 20%;
+    }
+
+.imageset .link-title {
+    font-weight: bold;
+}
+
+.imageset .link-description {
+    font-weight: lighter; 
+    }
+
+.imageset a:link .more-information,
+.imageset a:visited  .more-information {
+    text-transform:uppercase;
+    font-size: 80%;
+    padding: 1px 3px;
+    border: 1px solid black;
+    border-radius: 2px;
+    background: black;
+    color: white;
+    text-decoration: none; 
+    }  
+
+/* ---------------- when hovering over a particular item --------------- */
+
+.imageset a:hover .more-information {
+    color: black;
+    background: white;
+    background: rgba(255,255,255,.7); 
+}
+
+.imageset a:hover .image-title {
+    background: white;
+    background: rgba(255,255,255,.9); 
+    }
+
+
+
+/* ---------------- lightboxes --------------- */
+
+div#fancybox-content { /* lightbox border and background */
+    z-index: auto;
+    border: 10px solid black;
+    background: white;}
+
+div#fancybox-content .text {
+    position: relative; /* necessary for the stacking behaviour */
+    z-index: 10000;
+    margin: 0;
+    } 
+
+div#fancybox-content img {
+    display: block; /* if inline, would expose empty line background */ 
+    }
+
+div#fancybox-content a {
+    display: block;
+    background: white;
+    color: black;
+    margin: 4px 10px;
+    }
+
+div#fancybox-content .link-title {
+    padding-top: 4px;
+}
+    
+div#fancybox-content a .more-information {
+    color: white;
+    background: black;
+    display: inline;
+    font-size: 75%;
+    }
+
+div#fancybox-content a:hover .more-information  {
+    color: black;
+    background: white;
+}
+div#fancybox-content .image-title,
+div#fancybox-content .image-caption {
+    padding: 2px 0;
+    background: black;
+    color: white;
+    }
 
 /* images */
 
@@ -42,8 +181,6 @@ a img {border: none;}
 
 span.image {display: block; clear: both;}
 span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
-span.image-caption {margin-top: 8px; font-style: italic; font-weight: lighter; display: block; font-size: 90%;}
-
 /* styles available to the presentation editor */
 
 /* images: float left/right - left/right floats can be applied either directly to image plugins or their containers */

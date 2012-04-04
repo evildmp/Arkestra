@@ -100,10 +100,6 @@ def calculate_height(given_width, given_height, given_aspect_ratio, width, aspec
         
     return width, height
 
-def set_image_caption(image):
-    # prefer the manually-entered caption on the plugin, otherwise the one from the filer
-    if image.caption or (image.use_description_as_caption and image.image.description):
-        return image.caption or image.image.description
 
 
 def slider(imageset):
@@ -120,10 +116,13 @@ def slider(imageset):
             divider = 1.0/float(item.image.width)
             height_multiplier = float(item.image.height)*divider
             heights.append(height_multiplier)
+            
         heights.sort()
         height_multiplier = heights[0]
         height = width * height_multiplier
     imageset.size = (int(width),int(height))
+    for item in imageset.items:
+        item.image_size = imageset.size
     return imageset
 
     
@@ -167,27 +166,7 @@ def multiple_images(imageset, context):
 
         item.width,item.height = int(item.width), int(item.height)
         item.image_size = u'%sx%s' %(item.width, item.height) 
-
-        # lightbox options
-        if imageset.kind == "lightbox":
-            thumbnail_options = {} 
-            # set a caption for the item
-            item.caption = set_image_caption(item)                    
-            # get width, height and lightbox_max_dimension
-            lightbox_width, lightbox_height = item.image.width, item.image.height
-            lightbox_max_dimension = context.get("lightbox_max_dimension")
-            # user has set aspect ratio? apply it, set crop argument for thumbnailer
-            if imageset.aspect_ratio:
-                lightbox_height = lightbox_width / imageset.aspect_ratio
-                thumbnail_options.update({'crop': True}) 
-            # get scaler value from width, height
-            scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
-            # set size of lightbox using scaler
-            thumbnail_options.update({'size': (int(lightbox_width * scaler), int(lightbox_height * scaler))})
-            # get thumbnailer object for the image
-            thumbnailer = get_thumbnailer(item.image)
-            # apply options and get url
-            item.large_url = thumbnailer.get_thumbnail(thumbnail_options).url  
+        item.caption_width=item.width
 
     return imageset
     
@@ -207,7 +186,7 @@ def single_image(imageset, context):
     imageset.item.width, imageset.item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
     imageset.item.image_size = u'%sx%s' % (int(imageset.item.width), int(imageset.item.height))
     # set caption
-    imageset.item.caption = set_image_caption(imageset.item)
+    # imageset.item.caption = set_image_caption(imageset.item)
     imageset.item.caption_width = int(imageset.item.width)
     return imageset
                 
@@ -234,15 +213,9 @@ class ImageSetItemPluginForm(forms.ModelForm):
             self.cleaned_data["destination_content_type"]=None
             self.cleaned_data["destination_object_id"]=None
 
-        # no alt-text? no links for you!
-        # if self.cleaned_data["destination_object_id"] and not self.cleaned_data["alt_text"] :
-        #     raise forms.ValidationError('You <strong>must</strong> provide alt text for users on images that serve as links')
 
         if "click here" in self.cleaned_data["alt_text"].lower():
             raise forms.ValidationError("'Click here'?! In alt text?! You cannot be serious. Fix this at once.")
-
-        # message = "This is a test message"
-        # messages.add_message(self.request, messages.WARNING, message)
 
 
             
@@ -283,12 +256,16 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
     extra=1
     fieldset_basic = ('', {'fields': (('image',),)})
     fieldset_advanced = ('Caption', {
-        'fields': (( 'use_description_as_caption', 'caption'),), 
+        'fields': (( 'auto_image_title', 'manual_image_title'), ( 'auto_image_caption', 'manual_image_caption'),), 
         'classes': ('collapse',)
         })
     fieldsets = (fieldset_basic, fieldset_advanced,         
                 ("Link", {
-                    'fields': (('destination_content_type', 'destination_object_id',), 'alt_text',),
+                    'fields': (
+                        ('destination_content_type', 'destination_object_id',), 
+                        'alt_text',
+                        ( 'auto_link_title', 'manual_link_title'), ( 'auto_link_description', 'manual_link_description'),
+                    ),
                     'description': "Links will only be applied if <em>all</em> images in the set have links.",
                     'classes': ('collapse',),
             }),
@@ -300,7 +277,6 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
 class ImageSetPluginForm(forms.ModelForm):
     class Meta:
         model=ImageSetPlugin
-        
     # when the user adds link to some but not items, we need to issue a warning
     # this should warn them, but allow them to force a save
     # def clean(self):
@@ -314,7 +290,7 @@ class ImageSetPluginForm(forms.ModelForm):
 class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
     form = ImageSetPluginForm
     model = ImageSetPlugin
-    name = "Image Set"
+    name = "Image/link set"
     text_enabled = True
     raw_id_fields = ('image',)
     inlines = (ImageSetItemEditor,)
@@ -334,7 +310,7 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
         # don't do anything if there are no items in the imageset
         if imageset.imageset_item.count():
             # calculate the width of the block the image will be in
-            imageset.container_width = width_of_image_container(context, imageset)
+            imageset.container_width = int(width_of_image_container(context, imageset))
             imageset.items = imageset.imageset_item.all()
             imageset.number_of_items = imageset.imageset_item.count()
             
@@ -342,7 +318,7 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             if imageset.kind == "slider" and imageset.number_of_items > 2:
                 imageset = slider(imageset)
 
-            elif imageset.kind == "lightbox" or imageset.kind == "multiple":
+            elif imageset.kind == "lightbox" or imageset.kind == "lightbox-test" or imageset.kind == "multiple":
                 imageset = multiple_images(imageset, context)
 
             else:
@@ -381,6 +357,11 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
         
 plugin_pool.register_plugin(ImageSetPublisher)
 
+
+def set_image_caption(image):
+    # prefer the manually-entered caption on the plugin, otherwise the one from the filer
+    if image.caption or (image.use_description_as_caption and image.image.description):
+        return image.caption or image.image.description
 
 class FilerImagePlugin(CMSPluginBase):
     model = FilerImage

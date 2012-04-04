@@ -1,3 +1,4 @@
+{% spaceless %}
 {% load sekizai_tags thumbnail %}
 
 {% addtoblock "css" %}      
@@ -6,26 +7,37 @@
 
 {% addtoblock "js" %}
     <!-- jQuery (required) -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="{{ STATIC_URL }}jquery/js/jquery.js"><\/script>')</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.js"></script>
 	<script src="{{ STATIC_URL }}fancybox/js/jquery.mousewheel-3.0.4.pack.js"></script>
 	<script src="{{ STATIC_URL }}fancybox/js/jquery.fancybox-1.3.4.pack.js"></script> 
     <script src="{{ STATIC_URL }}fancybox/js/jquery.easing-1.3.pack.js"></script>
     <script type="text/javascript">
     var fancyBOX = jQuery.noConflict();
     fancyBOX(document).ready(function() {
-        fancyBOX("{{ selector|default:"a.fancy" }}").fancybox({
-            'titlePosition'	: {{ titlePosition|default:"'over'" }}, /*'over', 'outside', 'inside'*/
-            'overlayColor'	: {{ overlayColor|default:"'#000000'" }},
-            'overlayOpacity'	: {{ overlayOpacity|default:"0.6" }},
-            'transitionIn'      : {{ transitionIn|default:"'elastic'" }},/*'fade','elastic'*/
-            'transitionOut'     : {{ transitionOut|default:"'fade'" }},/*'fade','elastic'*/
-            'easingIn'          : {{ easingIn|default:"'swing'" }},/*'swing','easeOutBack'*/
-            'easingOut'         : {{ easingIn|default:"'swing'" }},/*'swing','easeInBack'*/
+        
+
+        fancyBOX("a.fancy").fancybox({
+            'transitionIn'      : 'elastic',
+            'transitionOut'     : 'fade',
+            'easingIn'          : 'swing',
+            'easingOut'         : 'swing',
+            'speedIn'           : 100,
+            'speedOut'          : 100
 	        });
 		});
 	</script>
         
 {% endaddtoblock %}
+<ul class="imageset multiple lightbox" style="width: {{ imageset.container_width }}px;">
+	{% for item in imageset.items %}
+		<li class="image link {% if item.lastinrow %}lastinrow{% endif %}">      
+			<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}">
+			    {% if item.link_title %}<span  class="image-title">{{ item.link_title }}</span>{% endif %}
+				<img class="fancybox-icon" alt="{{ item.image.name }}"  src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+		   	</a>
+		</li>
+	{% endfor %}
+</ul>
 
-<ul class="multiple-image-list" style="width: {{ imageset.container_width }}px;">{% for item in imageset.items %}<li {% if item.lastinrow %}class="lastinrow"{% endif %}><a class='{{ class|default:"fancy" }}' rel='{{ rel|default:"gallery_1" }}' href="{{ item.large_url}}" title='{{ item.caption|default:"" }}'><img class="fancybox-icon" alt="{{ item.image.name }}" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" /></a></li>{% endfor %}</ul>
+
+{% endspaceless %}

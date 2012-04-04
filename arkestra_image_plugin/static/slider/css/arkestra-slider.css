@@ -1,0 +1,59 @@
+div.anythingSlider-minimalist-square {
+    margin-bottom: 12px; /* make room for the index */
+    }
+
+div.anythingSlider-minimalist-square li.panel {
+    position: relative;     /* for the absolutely-positioned items within */ 
+    float: none;            /* otherwise the vertical alignment won't work */
+    text-align: center; 
+    display: table-cell; 
+    vertical-align: middle;
+    }
+
+div.anythingSlider-minimalist-square .text {
+    position: absolute;
+    z-index: 10;
+    background: #000;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 5px;
+}                    
+
+div.anythingSlider-minimalist-square a.link-title {
+    bottom: 0;
+    left: 0;
+    right: 0; 
+    font-weight: normal;
+    text-align: right;
+}
+
+div.anythingSlider-minimalist-square a.link-title .title {
+    float: left; 
+    color: white;   
+}
+
+div.anythingSlider-minimalist-square a:link .more-information,
+div.anythingSlider-minimalist-square a:visited .more-information  {
+    display: inline-block;
+    border: 1px solid white;
+    background: white;
+    color: black;
+    margin-bottom: 3px;
+    }  
+
+div.anythingSlider-minimalist-square li .link-title:hover .more-information {
+    color: white;
+    background: black;
+}
+
+div.anythingSlider-minimalist-square .anythingControls {
+    left: 0; right: 0;
+    top: 100%;     
+    text-align: center;
+}
+
+div.anythingSlider-minimalist-square .anythingControls ul.thumbNav {
+    margin: 0 auto;     
+    float: none;
+    display: inline-block;
+}

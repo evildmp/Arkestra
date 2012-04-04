@@ -1,7 +1,7 @@
 {% load sekizai_tags thumbnail %}
-<ul id="{{ imageset|default:"slider"}}">
-	{% for item in imageset.items %} 
-    	<li><img src="{% thumbnail item.image imageset.size crop subject_location=item.image.subject_location %}" alt=""></li>			
+<ul id="{{ imageset|default:"slider"}}" class="imageset">
+	{% for item in imageset.items %}
+    	<li id="imageset-item-{{ imageset.id }}-{{ item.id }}">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</li>			
 	{% endfor %}
 </ul>
 	
@@ -10,6 +10,7 @@
 <!-- AnythingSlider -->
 <link rel="stylesheet" href="{{ STATIC_URL }}slider/css/anythingslider.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}slider/css/theme-minimalist-square.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}slider/css/arkestra-slider.css">
 <style>
 	#{{ imageset|default:"slider"}} {
 	width: {{ imageset.size.0 }}px;
@@ -18,6 +19,11 @@
 	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+	#{{ imageset|default:"slider"}} li .image img {
+
+	width: {{ imageset.size.0 }}px;
+	height: {{ imageset.size.1 }}px;
 }
 div.anythingSlider-minimalist-square {
 	padding: 0;

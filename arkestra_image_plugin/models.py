@@ -77,10 +77,12 @@ class FilerImage(CMSPlugin):
             return self.image.label
         else:
             return u"Image Publication %s" % self.caption
-        return ''
+        return ''     
+        
     @property
     def alt(self): 
         return self.alt_text
+        
     @property
     def link(self):
         if self.free_link:
@@ -158,9 +160,30 @@ class ImageSetPlugin(CMSPlugin):
 class ImageSetItem(models.Model, LinkMethodsMixin):
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
-    alt_text = models.CharField(null=True, blank=True, max_length=255)
-    use_description_as_caption = models.BooleanField(verbose_name = "Auto caption", default=False, help_text = "Use image's description field as caption")
-    caption = models.TextField(_("Manual caption"), blank=True, null=True)
+    alt_text = models.CharField(null=True, blank=True, max_length=255,
+        help_text = "The image's meaning, message or function (if any). Leave empty for items with links."
+        )
+    auto_image_title = models.BooleanField(_("Auto image title"), 
+        default=False, 
+        help_text = "If a link, use the destination's title; if not, use the image's name field as a title")
+    manual_image_title = models.TextField(_("Manual image title"), 
+        blank=True, null=True)
+    auto_image_caption = models.BooleanField(_("Auto image caption"), 
+        default=False, 
+        help_text = "If a link, use the destination's metadata; if not, use the image's description field as caption")
+    manual_image_caption = models.TextField(_("Manual image caption"), 
+        blank=True, null=True)
+
+    auto_link_title = models.BooleanField(_("Auto link title"), 
+        default=False, 
+        help_text = "If a link, use the destination's title; if not, use the image's name field as a title")
+    manual_link_title = models.TextField(_("Manual link title"), 
+        blank=True, null=True)
+    auto_link_description = models.BooleanField(_("Auto link description"), 
+        default=False, 
+        help_text = "If a link, use the destination's metadata; if not, use the image's description field as caption")
+    manual_link_description = models.TextField(_("Manual link description"), 
+        blank=True, null=True)
 
     destination_content_type = models.ForeignKey(ContentType, verbose_name="Type", related_name = "links_to_%(class)s", null = True, blank = True) 
     destination_object_id = models.PositiveIntegerField(verbose_name="Item", null = True, blank = True)
@@ -172,6 +195,34 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
         else:
             return u"Image Publication %s" % self.caption
         return ''
+
+    @property
+    def image_title(self):
+        return self.manual_image_title or (self.auto_image_title and self.image.name)
+        
+    @property
+    def image_caption(self):
+        return self.manual_image_caption or (self.auto_image_caption and self.image.description)
+
+    @property
+    def link_title(self): 
+        if self.plugin.items_have_links:
+            return self.manual_link_title or (self.auto_link_title and self.text)
+
+    @property
+    def link_description(self): 
+        if self.plugin.items_have_links:
+            return self.manual_link_description or (self.auto_link_description and self.description)
+        
+        # return self.manual_link_title or \
+        #     (self.plugin.items_have_links and self.auto_title and self.url() and self.text) or \
+        #     (self.auto_title and self.image.name)
+
+    # @property
+    # def caption(self):    
+    #     return self.manual_caption or \
+    #         (self.plugin.items_have_links and self.auto_caption and self.url() and self.description) or \
+    #         (self.auto_caption and self.image.description)
 
     @property
     def alt(self): 

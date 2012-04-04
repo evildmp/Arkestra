@@ -1,21 +1,30 @@
-{% load thumbnail %}{% spaceless %}
-	<span class = "image {{imageset.float}}">
-		{% if item.url and imageset.items_have_links %}
-			<a href="{{ item.url }}">
-				<img 
-					alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}" 
-					class="plugin" 
-					src="{% thumbnail item.image.file item.image_size crop %}" />
-			</a>
-		{% else %}
-			<img 
-				alt="{% if item.alt_text %}{{ item.alt_text }}{% endif %}" 
-				class="plugin" 
-				src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
-		{% endif %}
-		{% if item.caption %}<span style="width: {{item.caption_width}}px" class="image-caption">{{ item.caption }}</span>{% endif %}
-		{% if item.show_author %}
-		    <span class="image_author">(Author: {{ item.image.author }})</span>
-		{% endif %}
-	</span>
+{% spaceless %}   
+{% load thumbnail %}
+
+{% ifnotequal imageset.kind "slider" %}
+
+    <a {% if item.url and imageset.items_have_links %}href="{{ item.url }}"{% endif %}>
+	
+    	<img alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+	
+    	{% if item.image_title %}<span class="imageset-item-data image-title text">{{ item.image_title }}</span>{% endif %}
+    	{% if item.image_caption %}<span class="imageset-item-data image-caption text">{{ item.image_caption }}</span>{% endif %}
+
+    	{% if item.link_title %}<span class="link-title text">{{ item.link_title }}</span>{% endif %}
+    	{% if item.link_description %}<span class="link-description text">{{ item.link_description }}</span>{% endif %}
+	
+    	{% if item.show_author %}<span class="image_author text">(Author: {{ item.image.author }})</span>{% endif %}
+	    
+    	{% if item.link_title or item.link_description %}<span class="more-information">Read more<span class="hide"> about {{ imageset_item.link_title }}</span>...</span>{% endif %}
+
+    </a>
+    
+{% else %}    
+
+    <img alt="{% if item.link_title %}{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+
+    {% if item.image_title %}<span class="imageset-item-data image-title text">{{ item.image_title }}</span>{% endif %}
+	{% if item.url and imageset.items_have_links %}<a class="link-title text" href="{{ item.url }}"><span class="title">{{ item.link_title }}</span> <span class="more-information">Read more...</span></a>{% endif %}
+
+{% endifnotequal %}    
 {% endspaceless %}      
