@@ -24,6 +24,7 @@ nbproject
 *.sublime-project
 *.sublime-workspace
 .tm_properties
+._*
 
 # Folders to ignore
 .hg
