@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 
     # housekeeping
     (r'^', include('housekeeping.urls')),
+    (r'^', include('arkestra_image_plugin.urls')),
 
 
     )

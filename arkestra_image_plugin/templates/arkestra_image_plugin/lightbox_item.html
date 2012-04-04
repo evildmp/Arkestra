@@ -1,0 +1,16 @@
+{% spaceless %}
+<div style="width: {{ imageset_item.width}}px" class="imageset imageset-item">
+	{% if imageset_item.image_title %}<span class="imageset-item-data image-title text">{{ imageset_item.image_title }}</span>{% endif %}
+	{% if imageset_item.image_caption %}<span class="imageset-item-data image-caption text">{{ imageset_item.image_caption }}</span>{% endif %}
+	<img 
+		src="{{ imageset_item.large_url }}" 
+		alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}" 
+		width={{ imageset_item.width}} 
+		height={{ imageset_item.height }}
+	/>
+	{% if imageset_item.url %}<span class="link-title text">{{ imageset_item.link_title|default:imageset_item.text }}</span>{% endif %}
+   	{% if imageset_item.link_description %}<span class="link-description text">{{ imageset_item.link_description }}</span>{% endif %}
+	{% if imageset_item.url %}<span class="more-information text"><a href="{{ imageset_item.url }}">Read more<span class="hide"> about {{ imageset_item.link_title }}</span>...</a></span>{% endif %}
+
+</div>
+{% endspaceless %}
