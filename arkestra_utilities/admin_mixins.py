@@ -41,14 +41,18 @@ class SupplyRequestMixin(object):
 
 
 class GenericModelAdminMixin(AutocompleteMixin, SupplyRequestMixin):
-    def formfield_for_foreignkey(self, db_field, request, **kwargs): 
-        """
-        Filters the list of Entities so that the user only sees those that
-        have published websites
-        """
-        if db_field.name == "hosted_by":
-            kwargs["queryset"] = Entity.objects.filter(website__published = True)
-        return super(AutocompleteMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    # this doesn't work - it doesn't feed the Autocomplete with the desired items
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs): 
+    #     """
+    #     Filters the list of Entities so that the user only sees those that
+    #     have published websites
+    #     """
+    #     if db_field.name == "hosted_by":
+    #         print "checking hosted_bys", kwargs
+    #         kwargs["queryset"] = Entity.objects.filter(website__published = True)
+    #         print "***", kwargs["queryset"].count()
+    #     return super(GenericModelAdminMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "publish_to": 
