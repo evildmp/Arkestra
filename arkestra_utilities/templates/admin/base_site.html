@@ -1,12 +1,27 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
-{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/admin/css/arkestra_admin.css" />
-{% endblock %}
+{% block extrastyle %}
+<style>
+#header {
+	background: #6b96b4 url('{{ STATIC_URL }}arkestra/admin/images/arkestra_admin_banner_logo.png') 20px 0 no-repeat;
+	min-height: 70px;
+	}
+#branding h1 {position: absolute; left: -10000px;}
+.login #header {background: none ;}	
+body.login div#container {
+	background: #6b96b4  url('{{ STATIC_URL }}arkestra/admin/images/arkestra_login_logo_new.png') 50% 20px no-repeat;
+	min-height: 200px;
+	padding-top: 120px;	
+	}
+body.login div#container .form-row label {
+	color: white;
+}
+</style>{% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Arkestra administration' %}{% endblock %}
 
-{% block branding %}<img src="{{ STATIC_URL }}arkestra/admin/images/arkestra_admin_logo.png" alt = "" />
+{% block branding %}
+<h1 id="site-name">{% trans 'Arkestra administration' %}</h1>
 {% endblock %}
-
 
 {% block nav-global %}{% endblock %}

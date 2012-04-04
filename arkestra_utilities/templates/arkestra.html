@@ -47,6 +47,7 @@
 {% endblock styles %}
 
 {% render_block "css" %}
+{% render_block "js" %}
 </head>
 
 <body {% block body_attributes %}{% endblock body_attributes %}>
@@ -78,6 +79,5 @@
         		</div>		
     	{% endblock body_content %}
     {% endwith %}
-{% render_block "js" %}
 </body>
 </html>
