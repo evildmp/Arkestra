@@ -39,7 +39,7 @@ def stats(request):
         
 @login_required
 def userstats(request,slug):
-    print slug
+    print "userstats", slug
     user = User.objects.get(username=slug)
     #print user
     return shortcuts.render_to_response(
