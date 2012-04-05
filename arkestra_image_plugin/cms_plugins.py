@@ -187,7 +187,8 @@ def single_image(imageset, context):
     imageset.item.image_size = u'%sx%s' % (int(imageset.item.width), int(imageset.item.height))
     # set caption
     # imageset.item.caption = set_image_caption(imageset.item)
-    imageset.item.caption_width = int(imageset.item.width)
+    imageset.item.width,imageset.item.height = int(imageset.item.width), int(imageset.item.height)
+    imageset.item.caption_width = imageset.item.width
     return imageset
                 
         

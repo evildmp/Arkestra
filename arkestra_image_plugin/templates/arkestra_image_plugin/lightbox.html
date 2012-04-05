@@ -30,10 +30,7 @@
 <ul class="imageset multiple lightbox" style="width: {{ imageset.container_width }}px;">
 	{% for item in imageset.items %}
 		<li class="image link {% if item.lastinrow %}lastinrow{% endif %}">      
-			<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}">
-			    {% if item.link_title %}<span  class="image-title">{{ item.link_title }}</span>{% endif %}
-				<img class="fancybox-icon" alt="{{ item.image.name }}"  src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
-		   	</a>
+			{% include "arkestra_image_plugin/includes/imageset_item.html" %}
 		</li>
 	{% endfor %}
 </ul>
