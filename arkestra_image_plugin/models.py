@@ -156,7 +156,6 @@ class ImageSetPlugin(CMSPlugin):
     def __unicode__(self):
         return u"image-set-%s" % self.kind
     
-
 class ImageSetItem(models.Model, LinkMethodsMixin):
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
@@ -165,23 +164,23 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
         )
     auto_image_title = models.BooleanField(_("Auto image title"), 
         default=False, 
-        help_text = "If a link, use the destination's title; if not, use the image's name field as a title")
+        help_text = "Use the image's name field as a title")
     manual_image_title = models.TextField(_("Manual image title"), 
         blank=True, null=True)
     auto_image_caption = models.BooleanField(_("Auto image caption"), 
         default=False, 
-        help_text = "If a link, use the destination's metadata; if not, use the image's description field as caption")
+        help_text = "Use the image's description field as caption")
     manual_image_caption = models.TextField(_("Manual image caption"), 
         blank=True, null=True)
 
     auto_link_title = models.BooleanField(_("Auto link title"), 
         default=False, 
-        help_text = "If a link, use the destination's title; if not, use the image's name field as a title")
+        help_text = "Use the link destination's title")
     manual_link_title = models.TextField(_("Manual link title"), 
         blank=True, null=True)
     auto_link_description = models.BooleanField(_("Auto link description"), 
         default=False, 
-        help_text = "If a link, use the destination's metadata; if not, use the image's description field as caption")
+        help_text = "Use the link destination's description metadata")
     manual_link_description = models.TextField(_("Manual link description"), 
         blank=True, null=True)
 
@@ -213,16 +212,6 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
     def link_description(self): 
         if self.plugin.items_have_links:
             return self.manual_link_description or (self.auto_link_description and self.description)
-        
-        # return self.manual_link_title or \
-        #     (self.plugin.items_have_links and self.auto_title and self.url() and self.text) or \
-        #     (self.auto_title and self.image.name)
-
-    # @property
-    # def caption(self):    
-    #     return self.manual_caption or \
-    #         (self.plugin.items_have_links and self.auto_caption and self.url() and self.description) or \
-    #         (self.auto_caption and self.image.description)
 
     @property
     def alt(self): 
