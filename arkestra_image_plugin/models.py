@@ -157,6 +157,8 @@ class ImageSetPlugin(CMSPlugin):
         return u"image-set-%s" % self.kind
     
 class ImageSetItem(models.Model, LinkMethodsMixin):
+    class Meta:
+        ordering=('id',)
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
     alt_text = models.CharField(null=True, blank=True, max_length=255,
