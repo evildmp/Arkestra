@@ -12,3 +12,15 @@ p.pull-out {
 {
     background: #ccc;
 }
+
+.imageset span.image-title,
+.imageset a:hover .more-information,
+div.anythingSlider-minimalist-square .text {
+   background:transparent;
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#bbffffff,endColorstr=#bbffffff);
+   zoom: 1;
+} 
+
+div#fancybox-content .imageset span.image-title { /* not on lightboxes */
+    filter: none;
+}

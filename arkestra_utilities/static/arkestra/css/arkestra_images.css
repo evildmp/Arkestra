@@ -1,12 +1,15 @@
 /* Arkestra image plugin */
 
+/* remember that many images will be in an <a> that is *not* a link */
+
+/* ul.imageset li.image a img */
+
 /* ---------------- all images --------------- */
 
 .image a  {
-    position: relative;
+    position: relative; /* for any absolutely-positioned elements inside */
     display: block;
 }
-
 
 .image img {
     margin-left: auto;
@@ -32,8 +35,6 @@ ul.imageset li.image.lastinrow {
     }
     
 ul.imageset li.image a {
-    margin-left: auto;
-    margin-right: auto;
     vertical-align: middle;
     display: table-cell; 
     }
@@ -74,6 +75,7 @@ ul.imageset:hover li.image.link:hover {
     display: block;
     padding: 0;
     margin: 0;
+    zoom: 1;
 }
 
 
@@ -87,7 +89,6 @@ ul.imageset:hover li.image.link:hover {
     right: 0;
     padding: 2px 10px;                          
     color: black;
-    background: white; 
     background: rgba(255,255,255,.7); 
     }
 
@@ -124,12 +125,10 @@ ul.imageset:hover li.image.link:hover {
 
 .imageset a:hover .more-information {
     color: black;
-    background: white;
     background: rgba(255,255,255,.7); 
 }
 
 .imageset a:hover .image-title {
-    background: white;
     background: rgba(255,255,255,.9); 
     }
 
@@ -140,7 +139,8 @@ ul.imageset:hover li.image.link:hover {
 div#fancybox-content { /* lightbox border and background */
     z-index: auto;
     border: 10px solid black;
-    background: white;}
+    background: white;
+    }
 
 div#fancybox-content .text {
     position: relative; /* necessary for the stacking behaviour */
@@ -153,10 +153,10 @@ div#fancybox-content img {
     }
 
 div#fancybox-content a {
-    display: block;
     background: white;
     color: black;
     margin: 4px 10px;
+    display: block;
     }
 
 div#fancybox-content .link-title {
@@ -174,8 +174,9 @@ div#fancybox-content a:hover .more-information  {
     color: black;
     background: white;
 }
-div#fancybox-content .image-title,
-div#fancybox-content .image-caption {
+
+div#fancybox-content .imageset span.image-title,
+div#fancybox-content span.image-caption {
     padding: 2px 0;
     background: black;
     color: white;

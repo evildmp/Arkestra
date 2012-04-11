@@ -200,5 +200,5 @@ ul li.arkestra a {
     font-family:"Hoefler Text", "Didot", Georgia, serif;
 }                                                       
 
-.hide   {position: absolute; left: -100000px;} 
+.hide   {position: absolute; top: -10000px;} 
 
