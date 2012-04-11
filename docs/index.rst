@@ -36,6 +36,7 @@ Contents
    links_system
    video_system
    arkestra_generic_models
+   migration
 
 Indices and tables
 ==================

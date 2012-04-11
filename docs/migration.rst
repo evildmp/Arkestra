@@ -1,144 +1,160 @@
-##################################
-Migrating from an old installation
-##################################
+####################################
+Migrating from an older installation
+####################################
 
-***********************************************
-Steps for Cardiff University School of Medicine
-***********************************************
+*********************************************************************************************
+If you have been using a version of Arkestra prior to the publishing of version 2.0 on Github
+*********************************************************************************************
 
-* import old database from sql file 
-
-
-Templates
-=========
-
-Templates need to exist in the new site.
-
-If for example the old site had placeholders in a `cardiff/medic.html` template, it will need to find the same template in the new project.
-
-The templates also need to have templatetags in them that will work with the new project.
-
-For example:
-
-* {% load typogrify %} will need to be changed to `typogify_tags`
-* any templates using `show_menu` will need to load `menu_tags`
-
-
-Arkestra image plugin
-=====================
-
-This used to be cmsplugin_filer_image. 
-
-* delete the migrations directory
-* python manage.py schemamigration --initial arkestra_image_plugin
-
-
-contacts and people
-===================
-
-* delete migration files 31-40 and recreate them:
-
-* `python manage.py schemamigration --auto contacts_and_people`
-
-Note that this will try to delete the `Entity.auto_publications_page`, so comment that out in the migration.
-
-
-Database operations
-===================
-
-
-Non-existent templates
-----------------------
-
-Some pages might have templates that don't exist - find the pages in the database, and set their templates to something appropriate.
-
-
-Badly-named migrations
-----------------------
-
-Some migrations had spaces in their names - these should be removed.
-
-* 161	contacts_and_people	> 0001_researcherteacher
-* 167	contacts_and_people > 0002_uniqueslugs
-* 299	contacts_and_people	> 0030_auto_links
-
-* 170	news_and_events	> 0001_firsttry
-* 178	news_and_events	> 0008_inheritname
-* 183	news_and_events	> 0012_urlnull
-* 187	news_and_events	> 0013_fieldlengths
-* 190	news_and_events	> 0014_startseries
-* 234	news_and_events	> 0016_tidyingup
-* 236	news_and_events	> 0018_showprevious
-
-
-Tables to trash
----------------
-
-The please_contact tables for news_and_events shouldn't be there; trash them.
-
-Before running migrations
-=========================
-
-
-semantic editor
----------------
-
-The Semantic editor in Cardiff's site has too many classes to merge easily with the fixtures in Arkestra 2.
-
-* rename arkestra_utilities/fixtures/initial_data.json
-
-
-Running the migrations etc
-==========================
-
-
-* sudo mv /home/topdog/dist-packages/easy_thumbnails/migrations/ /home/topdog/dist-packages/easy_thumbnails/xmigrations
-* python manage.py migrate arkestra_image_plugin --fake --ignore-ghost-migrations
-* `python manage.py migrate cms --ignore-ghost-migrations` (see note below)
-* `python manage.py migrate --ignore-ghost-migrations`
-* python manage.py migrate --delete-ghost-migrations
-* python manage.py syncdb (for easy_thumbnails, arkestra_utilities.insert)
-* sudo mv /home/topdog/dist-packages/easy_thumbnails/xmigrations/ /home/topdog/dist-packages/easy_thumbnails/migrations
-* python manage.py migrate easy_thumbnails --fake --ignore-ghost-migrations
-
-
-Django CMS
-----------
-
-if migration 0033 of cms fails with a ValueError: Cannot find a UNIQUE constraint on table cms_title, columns ['publisher_is_draft', 'language', 'page_id']:
-
-* ALTER TABLE `cms_title` ADD CONSTRAINT `cms_title` UNIQUE (`publisher_is_draft`, `language`, `page_id`);
-
-or even:
-
-* delete the constrains manually, and comment out line 10 of the migration.
-
-
-Reset tweaks back to normal
+Before you do anything else
 ===========================
-
-* /arkestra_utilities/fixtures/initial_data.json
-
+Work on a copy of your repository and database. You were going to do that anyway, right?
 
 
-Transfer images from the old server
+Clear out the old migration records
 ===================================
+Find your south_migrationhistory table and clear out the old migration records. We're going to re-create these, so you need to:
 
-Get the images:
+DELETE FROM `south_migrationhistory` WHERE `app_name`='arkestra_image_plugin'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='contacts_and_people'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='links'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='news_and_events'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='vacancies_and_studentships'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='video'; 
 
-* scp -p -r cftopdog@v026.medcn.uwcm.ac.uk:/home/cftopdog/arkestra_medic/media/filer_public ./
-* rename folder from filer_public to filer
-* trash output files except thumbnails: find . -type f -path "*/output/*" \! -name "*32x32*" -exec rm {} \;
-* change references in database: update filer_file set file = replace(file, "filer_public/", "" );
-* make them all public: update filer_file set is_public = 1
+Trash your old migrations
+=========================
+Now, for each Arkestra application, trash its migrations directory (because we want to get rid of the old messy trail of migrations, and have just a single clean initial migration for each).
 
-== publications ==
+Do this in the Arkestra directory:
 
-./manage.py migrate --fake publications to 0001
+rm -r arkestra_image_plugin/migrations contacts_and_people/migrations links/migrations news_and_events/migrations vacancies_and_studentships/migrations video/migrations
 
+Create new migrations
+=====================
+Then create new, clean initial migrations for each one.
 
+Make sure you're in the project directory:
 
+python manage.py convert_to_south arkestra_image_plugin
+python manage.py convert_to_south contacts_and_people
+python manage.py convert_to_south links
+python manage.py convert_to_south news_and_events
+python manage.py convert_to_south vacancies_and_studentships
+python manage.py convert_to_south video
 
-== update filer_file table in database ==
+Now your migrations should match your models, and your database records should indicate that they match.
 
-update filer_file set file = replace(file, "filer_public/", "" );
+Move your migrations
+====================
+In a moment, you'll pull in the new version of Arkestra, but you don't want to overwrite the new migrations you just created, so put them in a safe place: 
+
+Do this in the Arkestra directory (we'll use --delete-ghost-migrations on the first one just in case):
+
+mv arkestra_image_plugin/migrations arkestra_image_plugin/my_migrations --delete-ghost-migrations
+mv contacts_and_people/migrations contacts_and_people/my_migrations
+mv links/migrations links/my_migrations
+mv news_and_events/migrations news_and_events/my_migrations
+mv vacancies_and_studentships/migrations vacancies_and_studentships/my_migrations
+mv video/migrations video/my_migrations
+
+Checkout the new version of Arkestra
+====================================
+Switch to the branch of Arkestra with cleaned up migrations.
+
+Fetch updated references from Github:
+
+git fetch origin
+
+Checkout the reference clean-migrations branch.
+
+git checkout clean-migrations
+
+Replace its migrations with the ones you created
+================================================
+rm -r arkestra_image_plugin/migrations contacts_and_people/migrations links/migrations news_and_events/migrations vacancies_and_studentships/migrations video/migrations
+
+mv arkestra_image_plugin/my_migrations arkestra_image_plugin/migrations
+mv contacts_and_people/my_migrations contacts_and_people/migrations
+mv links/my_migrations links/migrations
+mv news_and_events/my_migrations news_and_events/migrations
+mv vacancies_and_studentships/my_migrations vacancies_and_studentships/migrations
+mv video/my_migrations video/migrations
+
+Now you should have:
+
+* the new Arkestra models
+* a set of migrations matching your database tables
+
+Create migrations to get from your tables to the new models
+===========================================================
+Make sure you're in the project directory:
+
+python manage.py schemamigration --auto arkestra_image_plugin
+python manage.py schemamigration --auto contacts_and_people
+python manage.py schemamigration --auto links
+python manage.py schemamigration --auto news_and_events
+python manage.py schemamigration --auto vacancies_and_studentships
+python manage.py schemamigration --auto video
+
+For any models where your previous version differed from the new, you'll now have a second migration to get from old to new.
+
+Apply the new migrations
+========================
+It's always sensible to use --db-dry-run first to check:
+
+python manage.py migrate --db-dry-run
+
+then if that seems ok:
+
+python manage.py migrate
+
+Now your database tables and models are up-to-date!
+
+Get back to the Arkestra codebase
+=================================
+Do this in the Arkestra directory - be warned, it will delete everything it finds there that wasn't in the branch you checked out :
+
+git clean -dxf
+
+Clear out the migration records (again)
+=======================================
+Once again, find your south_migrationhistory table and clear out the relevant migration records. We're going to re-create these, so you need to:
+
+DELETE FROM `south_migrationhistory` WHERE `app_name`='arkestra_image_plugin'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='contacts_and_people'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='links'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='news_and_events'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='vacancies_and_studentships'; 
+DELETE FROM `south_migrationhistory` WHERE `app_name`='video'; 
+
+Fake the migrations
+===================
+Back to the project directory:
+
+python manage.py migrate --fake arkestra_image_plugin
+python manage.py migrate --fake contacts_and_people
+python manage.py migrate --fake links
+python manage.py migrate --fake news_and_events
+python manage.py migrate --fake video
+
+Finally, all the following should be in agreement with each other:
+
+* models
+* database tables
+* migrations
+* south's database records of applied migrations
+
+Apply any newer migrations
+==========================
+At the moment, your code and database are up-to-date with the 2.0 release. But, things might have moved on since then. There could be new migrations in master, or another branch. 
+
+So, in the Arkestra directory:
+
+git checkout master [or the branch you want]
+
+Back to the project directory:
+                     
+python manage.py migrate
+
+And hopefully, that will be that!
