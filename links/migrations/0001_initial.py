@@ -8,26 +8,152 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Changing field 'ExternalLink.title'
-        db.alter_column('links_externallink', 'title', self.gf('django.db.models.fields.CharField')(max_length=256))
+        # Adding model 'ObjectLink'
+        db.create_table('links_objectlink', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('destination_content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='links_to_objectlink', to=orm['contenttypes.ContentType'])),
+            ('destination_object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('include_description', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('text_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('description_override', self.gf('django.db.models.fields.TextField')(max_length=256, null=True, blank=True)),
+            ('heading_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('metadata_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('html_title_attribute', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+        ))
+        db.send_create_signal('links', ['ObjectLink'])
 
-        # Changing field 'ExternalLink.url'
-        db.alter_column('links_externallink', 'url', self.gf('django.db.models.fields.CharField')(max_length=256))
+        # Adding model 'ExternalLink'
+        db.create_table('links_externallink', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('external_site', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='links', null=True, to=orm['links.ExternalSite'])),
+            ('description', self.gf('django.db.models.fields.TextField')(max_length=256, null=True, blank=True)),
+            ('kind', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='links', null=True, to=orm['links.LinkType'])),
+        ))
+        db.send_create_signal('links', ['ExternalLink'])
 
-        # Adding unique constraint on 'LinkType', fields ['scheme']
-        db.create_unique('links_linktype', ['scheme'])
+        # Adding model 'LinkType'
+        db.create_table('links_linktype', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('scheme', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+        ))
+        db.send_create_signal('links', ['LinkType'])
+
+        # Adding model 'ExternalSite'
+        db.create_table('links_externalsite', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('site', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('domain', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='children', null=True, to=orm['links.ExternalSite'])),
+            ('lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+        ))
+        db.send_create_signal('links', ['ExternalSite'])
+
+        # Adding model 'GenericLinkListPlugin'
+        db.create_table('cmsplugin_genericlinklistplugin', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('insert_as', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1)),
+            ('use_link_icons', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('separator', self.gf('django.db.models.fields.CharField')(default=', ', max_length=20, null=True, blank=True)),
+            ('final_separator', self.gf('django.db.models.fields.CharField')(default=' and ', max_length=20, null=True, blank=True)),
+        ))
+        db.send_create_signal('links', ['GenericLinkListPlugin'])
+
+        # Adding model 'GenericLinkListPluginItem'
+        db.create_table('links_genericlinklistpluginitem', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('destination_content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='links_to_genericlinklistpluginitem', to=orm['contenttypes.ContentType'])),
+            ('destination_object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('include_description', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('text_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('description_override', self.gf('django.db.models.fields.TextField')(max_length=256, null=True, blank=True)),
+            ('heading_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('metadata_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('html_title_attribute', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('plugin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='links', to=orm['links.GenericLinkListPlugin'])),
+            ('key_link', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('links', ['GenericLinkListPluginItem'])
+
+        # Adding model 'CarouselPlugin'
+        db.create_table('cmsplugin_carouselplugin', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('width', self.gf('django.db.models.fields.FloatField')(default=100.0)),
+            ('aspect_ratio', self.gf('django.db.models.fields.FloatField')(default=1.5, null=True, blank=True)),
+        ))
+        db.send_create_signal('links', ['CarouselPlugin'])
+
+        # Adding model 'CarouselPluginItem'
+        db.create_table('links_carouselpluginitem', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('destination_content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='links_to_carouselpluginitem', to=orm['contenttypes.ContentType'])),
+            ('destination_object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('plugin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='carousel_item', to=orm['links.CarouselPlugin'])),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'])),
+            ('link_title', self.gf('django.db.models.fields.CharField')(max_length=35)),
+        ))
+        db.send_create_signal('links', ['CarouselPluginItem'])
+
+        # Adding model 'FocusOnPluginEditor'
+        db.create_table('cmsplugin_focusonplugineditor', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('heading_level', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=3)),
+        ))
+        db.send_create_signal('links', ['FocusOnPluginEditor'])
+
+        # Adding model 'FocusOnPluginItemEditor'
+        db.create_table('links_focusonpluginitemeditor', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('destination_content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='links_to_focusonpluginitemeditor', to=orm['contenttypes.ContentType'])),
+            ('destination_object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('plugin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='focuson_items', to=orm['links.FocusOnPluginEditor'])),
+            ('text_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('short_text_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('description_override', self.gf('django.db.models.fields.TextField')(max_length=256, null=True, blank=True)),
+            ('image_override', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
+        ))
+        db.send_create_signal('links', ['FocusOnPluginItemEditor'])
 
 
     def backwards(self, orm):
         
-        # Changing field 'ExternalLink.title'
-        db.alter_column('links_externallink', 'title', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True))
+        # Deleting model 'ObjectLink'
+        db.delete_table('links_objectlink')
 
-        # Changing field 'ExternalLink.url'
-        db.alter_column('links_externallink', 'url', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True))
+        # Deleting model 'ExternalLink'
+        db.delete_table('links_externallink')
 
-        # Removing unique constraint on 'LinkType', fields ['scheme']
-        db.delete_unique('links_linktype', ['scheme'])
+        # Deleting model 'LinkType'
+        db.delete_table('links_linktype')
+
+        # Deleting model 'ExternalSite'
+        db.delete_table('links_externalsite')
+
+        # Deleting model 'GenericLinkListPlugin'
+        db.delete_table('cmsplugin_genericlinklistplugin')
+
+        # Deleting model 'GenericLinkListPluginItem'
+        db.delete_table('links_genericlinklistpluginitem')
+
+        # Deleting model 'CarouselPlugin'
+        db.delete_table('cmsplugin_carouselplugin')
+
+        # Deleting model 'CarouselPluginItem'
+        db.delete_table('links_carouselpluginitem')
+
+        # Deleting model 'FocusOnPluginEditor'
+        db.delete_table('cmsplugin_focusonplugineditor')
+
+        # Deleting model 'FocusOnPluginItemEditor'
+        db.delete_table('links_focusonpluginitemeditor')
 
 
     models = {
@@ -38,7 +164,7 @@ class Migration(SchemaMigration):
             'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.permission': {
-            'Meta': {'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -51,9 +177,9 @@ class Migration(SchemaMigration):
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -64,16 +190,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'CMSPlugin'},
             'creation_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'max_length': '5', 'db_index': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.CMSPlugin']", 'null': 'True', 'blank': 'True'}),
             'placeholder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
             'plugin_type': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'}),
             'position': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'publisher_is_draft': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True', 'blank': 'True'}),
-            'publisher_public': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'publisher_draft'", 'unique': 'True', 'null': 'True', 'to': "orm['cms.CMSPlugin']"}),
-            'publisher_state': ('django.db.models.fields.SmallIntegerField', [], {'default': '0', 'db_index': 'True'}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
@@ -84,7 +207,7 @@ class Migration(SchemaMigration):
             'slot': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -93,22 +216,22 @@ class Migration(SchemaMigration):
         'filer.file': {
             'Meta': {'object_name': 'File'},
             '_file_size': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            '_file_type_plugin_name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'folder': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'all_files'", 'null': 'True', 'to': "orm['filer.Folder']"}),
-            'has_all_mandatory_data': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'has_all_mandatory_data': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'owned_files'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'polymorphic_filer.file_set'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'sha1': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40', 'blank': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'filer.folder': {
-            'Meta': {'unique_together': "(('parent', 'name'),)", 'object_name': 'Folder'},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('parent', 'name'),)", 'object_name': 'Folder'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
@@ -130,8 +253,8 @@ class Migration(SchemaMigration):
             'default_alt_text': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'default_caption': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'file_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['filer.File']", 'unique': 'True', 'primary_key': 'True'}),
-            'must_always_publish_author_credit': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'must_always_publish_copyright': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'must_always_publish_author_credit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'must_always_publish_copyright': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'subject_location': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '64', 'null': 'True', 'blank': 'True'})
         },
         'links.carouselplugin': {
@@ -142,7 +265,7 @@ class Migration(SchemaMigration):
             'width': ('django.db.models.fields.FloatField', [], {'default': '100.0'})
         },
         'links.carouselpluginitem': {
-            'Meta': {'object_name': 'CarouselPluginItem'},
+            'Meta': {'ordering': "['id']", 'object_name': 'CarouselPluginItem'},
             'destination_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links_to_carouselpluginitem'", 'to': "orm['contenttypes.ContentType']"}),
             'destination_object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -151,23 +274,23 @@ class Migration(SchemaMigration):
             'plugin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'carousel_item'", 'to': "orm['links.CarouselPlugin']"})
         },
         'links.externallink': {
-            'Meta': {'object_name': 'ExternalLink'},
+            'Meta': {'ordering': "['title']", 'object_name': 'ExternalLink'},
             'description': ('django.db.models.fields.TextField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'external_site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['links.ExternalSite']", 'null': 'True', 'blank': 'True'}),
+            'external_site': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'links'", 'null': 'True', 'to': "orm['links.ExternalSite']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'kind': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'links'", 'null': 'True', 'to': "orm['links.LinkType']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'links.externalsite': {
-            'Meta': {'object_name': 'ExternalSite'},
+            'Meta': {'ordering': "['site']", 'object_name': 'ExternalSite'},
             'domain': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['links.ExternalSite']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'site': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'site': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         'links.focusonplugineditor': {
@@ -176,7 +299,7 @@ class Migration(SchemaMigration):
             'heading_level': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '3'})
         },
         'links.focusonpluginitemeditor': {
-            'Meta': {'object_name': 'FocusOnPluginItemEditor'},
+            'Meta': {'ordering': "['id']", 'object_name': 'FocusOnPluginItemEditor'},
             'description_override': ('django.db.models.fields.TextField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'destination_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links_to_focusonpluginitemeditor'", 'to': "orm['contenttypes.ContentType']"}),
             'destination_object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
@@ -189,20 +312,21 @@ class Migration(SchemaMigration):
         'links.genericlinklistplugin': {
             'Meta': {'object_name': 'GenericLinkListPlugin', 'db_table': "'cmsplugin_genericlinklistplugin'", '_ormbases': ['cms.CMSPlugin']},
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
+            'final_separator': ('django.db.models.fields.CharField', [], {'default': "' and '", 'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'insert_as': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
-            'separator': ('django.db.models.fields.CharField', [], {'default': "', '", 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'use_link_icons': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'})
+            'separator': ('django.db.models.fields.CharField', [], {'default': "', '", 'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'use_link_icons': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'links.genericlinklistpluginitem': {
-            'Meta': {'object_name': 'GenericLinkListPluginItem'},
+            'Meta': {'ordering': "['id']", 'object_name': 'GenericLinkListPluginItem'},
             'description_override': ('django.db.models.fields.TextField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'destination_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links_to_genericlinklistpluginitem'", 'to': "orm['contenttypes.ContentType']"}),
             'destination_object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'heading_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'html_title_attribute': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'include_description': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'key_link': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'include_description': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'key_link': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'metadata_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'plugin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links'", 'to': "orm['links.GenericLinkListPlugin']"}),
             'text_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})
@@ -222,7 +346,7 @@ class Migration(SchemaMigration):
             'heading_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'html_title_attribute': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'include_description': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'include_description': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'metadata_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'text_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})

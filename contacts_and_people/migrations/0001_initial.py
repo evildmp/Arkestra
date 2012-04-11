@@ -8,27 +8,230 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'Event.do_not_link_to_children'
-        db.delete_column('news_and_events_event', 'do_not_link_to_children')
+        # Adding model 'Site'
+        db.create_table('contacts_and_people_site', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('site_name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('post_town', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('country', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('description', self.gf('django.db.models.fields.TextField')(max_length=500, null=True, blank=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Site'])
 
-        # Adding field 'Event.show_titles'
-        db.add_column('news_and_events_event', 'show_titles', self.gf('django.db.models.fields.CharField')(default='children', max_length=25), keep_default=False)
+        # Adding model 'Building'
+        db.create_table('contacts_and_people_building', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('number', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('additional_street_address', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('postcode', self.gf('django.db.models.fields.CharField')(max_length=9, null=True, blank=True)),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contacts_and_people.Site'])),
+            ('slug', self.gf('django.db.models.fields.SlugField')(db_index=True, max_length=255, unique=True, null=True, blank=True)),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
+            ('summary', self.gf('django.db.models.fields.TextField')(default='', max_length=256)),
+            ('description', self.gf('django.db.models.fields.related.ForeignKey')(related_name='building_description', null=True, to=orm['cms.Placeholder'])),
+            ('getting_here', self.gf('django.db.models.fields.related.ForeignKey')(related_name='getting_here', null=True, to=orm['cms.Placeholder'])),
+            ('access_and_parking', self.gf('django.db.models.fields.related.ForeignKey')(related_name='building_access_and_parking', null=True, to=orm['cms.Placeholder'])),
+            ('map', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('zoom', self.gf('django.db.models.fields.IntegerField')(default=17, null=True, blank=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Building'])
+
+        # Adding model 'PhoneContact'
+        db.create_table('contacts_and_people_phonecontact', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('label', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('country_code', self.gf('django.db.models.fields.CharField')(default='44', max_length=5)),
+            ('area_code', self.gf('django.db.models.fields.CharField')(default='029', max_length=5)),
+            ('number', self.gf('django.db.models.fields.CharField')(max_length=12)),
+            ('internal_extension', self.gf('django.db.models.fields.CharField')(max_length=6, null=True, blank=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['PhoneContact'])
+
+        # Adding model 'EntityLite'
+        db.create_table('contacts_and_people_entitylite', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('contacts_and_people', ['EntityLite'])
+
+        # Adding model 'Entity'
+        db.create_table('contacts_and_people_entity', (
+            ('entitylite_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['contacts_and_people.EntityLite'], unique=True, primary_key=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('external_url', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='entity_item', null=True, to=orm['links.ExternalLink'])),
+            ('slug', self.gf('django.db.models.fields.SlugField')(db_index=True, unique=True, max_length=60, blank=True)),
+            ('precise_location', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('access_note', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
+            ('short_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('abstract_entity', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='children', null=True, to=orm['contacts_and_people.Entity'])),
+            ('display_parent', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('building_recapitulates_entity_name', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('building', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contacts_and_people.Building'], null=True, blank=True)),
+            ('website', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='entity', unique=True, null=True, to=orm['cms.Page'])),
+            ('auto_news_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('news_page_menu_title', self.gf('django.db.models.fields.CharField')(default='News & events', max_length=50)),
+            ('news_page_intro', self.gf('django.db.models.fields.related.ForeignKey')(related_name='news_page_intro', null=True, to=orm['cms.Placeholder'])),
+            ('auto_contacts_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('contacts_page_menu_title', self.gf('django.db.models.fields.CharField')(default='Contacts & people', max_length=50)),
+            ('contacts_page_intro', self.gf('django.db.models.fields.related.ForeignKey')(related_name='contacts_page_intro', null=True, to=orm['cms.Placeholder'])),
+            ('auto_vacancies_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('vacancies_page_menu_title', self.gf('django.db.models.fields.CharField')(default='Vacancies & studentships', max_length=50)),
+            ('vacancies_page_intro', self.gf('django.db.models.fields.related.ForeignKey')(related_name='vacancies_page_intro', null=True, to=orm['cms.Placeholder'])),
+            ('auto_publications_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('publications_page_menu_title', self.gf('django.db.models.fields.CharField')(default='Publications', max_length=50)),
+            ('lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Entity'])
+
+        # Adding model 'Title'
+        db.create_table('contacts_and_people_title', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('abbreviation', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Title'])
+
+        # Adding model 'PersonLite'
+        db.create_table('contacts_and_people_personlite', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contacts_and_people.Title'], to_field='abbreviation', null=True, blank=True)),
+            ('given_name', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('middle_names', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('surname', self.gf('django.db.models.fields.CharField')(max_length=50)),
+        ))
+        db.send_create_signal('contacts_and_people', ['PersonLite'])
+
+        # Adding model 'Person'
+        db.create_table('contacts_and_people_person', (
+            ('personlite_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['contacts_and_people.PersonLite'], unique=True, primary_key=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('external_url', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='person_item', null=True, to=orm['links.ExternalLink'])),
+            ('slug', self.gf('django.db.models.fields.SlugField')(db_index=True, unique=True, max_length=60, blank=True)),
+            ('precise_location', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('access_note', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='person_user', unique=True, null=True, to=orm['auth.User'])),
+            ('institutional_username', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('description', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cms.Placeholder'], null=True)),
+            ('building', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contacts_and_people.Building'], null=True, blank=True)),
+            ('override_entity', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='people_override', null=True, to=orm['contacts_and_people.Entity'])),
+            ('please_contact', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='contact_for', null=True, to=orm['contacts_and_people.Person'])),
+            ('staff_id', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+            ('data_feed_locked', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Person'])
+
+        # Adding model 'Teacher'
+        db.create_table('contacts_and_people_teacher', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('person', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='teacher', unique=True, null=True, to=orm['contacts_and_people.Person'])),
+            ('dummy_field_one', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('dummy_field_two', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Teacher'])
+
+        # Adding model 'Membership'
+        db.create_table('contacts_and_people_membership', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('person', self.gf('django.db.models.fields.related.ForeignKey')(related_name='member_of', to=orm['contacts_and_people.Person'])),
+            ('entity', self.gf('django.db.models.fields.related.ForeignKey')(related_name='members', to=orm['contacts_and_people.Entity'])),
+            ('display_role', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='display_roles', null=True, to=orm['contacts_and_people.Membership'])),
+            ('key_contact', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('role', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('importance_to_person', self.gf('django.db.models.fields.IntegerField')(default=1, null=True, blank=True)),
+            ('importance_to_entity', self.gf('django.db.models.fields.IntegerField')(default=1, null=True, blank=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['Membership'])
+
+        # Adding model 'EntityAutoPageLinkPluginEditor'
+        db.create_table('cmsplugin_entityautopagelinkplugineditor', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('link_to', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('entity', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='auto_page_plugin', null=True, to=orm['contacts_and_people.Entity'])),
+            ('text_override', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['EntityAutoPageLinkPluginEditor'])
+
+        # Adding model 'EntityDirectoryPluginEditor'
+        db.create_table('cmsplugin_entitydirectoryplugineditor', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('entity', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='directory_plugin', null=True, to=orm['contacts_and_people.Entity'])),
+            ('levels', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
+            ('display_descriptions_to_level', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, null=True, blank=True)),
+            ('link_icons', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('use_short_names', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        ))
+        db.send_create_signal('contacts_and_people', ['EntityDirectoryPluginEditor'])
+
+        # Adding model 'EntityMembersPluginEditor'
+        db.create_table('cmsplugin_entitymembersplugineditor', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('entity', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='entity_members_plugin', null=True, to=orm['contacts_and_people.Entity'])),
+        ))
+        db.send_create_signal('contacts_and_people', ['EntityMembersPluginEditor'])
 
 
     def backwards(self, orm):
         
-        # Adding field 'Event.do_not_link_to_children'
-        db.add_column('news_and_events_event', 'do_not_link_to_children', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
+        # Deleting model 'Site'
+        db.delete_table('contacts_and_people_site')
 
-        # Deleting field 'Event.show_title'
-        db.delete_column('news_and_events_event', 'show_titles')
+        # Deleting model 'Building'
+        db.delete_table('contacts_and_people_building')
+
+        # Deleting model 'PhoneContact'
+        db.delete_table('contacts_and_people_phonecontact')
+
+        # Deleting model 'EntityLite'
+        db.delete_table('contacts_and_people_entitylite')
+
+        # Deleting model 'Entity'
+        db.delete_table('contacts_and_people_entity')
+
+        # Deleting model 'Title'
+        db.delete_table('contacts_and_people_title')
+
+        # Deleting model 'PersonLite'
+        db.delete_table('contacts_and_people_personlite')
+
+        # Deleting model 'Person'
+        db.delete_table('contacts_and_people_person')
+
+        # Deleting model 'Teacher'
+        db.delete_table('contacts_and_people_teacher')
+
+        # Deleting model 'Membership'
+        db.delete_table('contacts_and_people_membership')
+
+        # Deleting model 'EntityAutoPageLinkPluginEditor'
+        db.delete_table('cmsplugin_entityautopagelinkplugineditor')
+
+        # Deleting model 'EntityDirectoryPluginEditor'
+        db.delete_table('cmsplugin_entitydirectoryplugineditor')
+
+        # Deleting model 'EntityMembersPluginEditor'
+        db.delete_table('cmsplugin_entitymembersplugineditor')
 
 
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
             'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.permission': {
@@ -52,7 +255,7 @@ class Migration(SchemaMigration):
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'max_length': '30', 'unique': 'True'})
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         'cms.cmsplugin': {
             'Meta': {'object_name': 'CMSPlugin'},
@@ -82,7 +285,8 @@ class Migration(SchemaMigration):
             'login_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'moderator_state': ('django.db.models.fields.SmallIntegerField', [], {'default': '1', 'blank': 'True'}),
             'navigation_extenders': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '80', 'null': 'True', 'blank': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'blank': 'True', 'null': 'True', 'to': "orm['cms.Page']"}),
+            'page_flags': ('django.db.models.fields.TextField', [], {'null': True, 'blank': True}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['cms.Page']"}),
             'placeholders': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['cms.Placeholder']", 'symmetrical': 'False'}),
             'publication_date': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'publication_end_date': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
@@ -129,35 +333,62 @@ class Migration(SchemaMigration):
             'access_note': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'auto_contacts_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'auto_news_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'auto_publications_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'auto_vacancies_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'building': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contacts_and_people.Building']", 'null': 'True', 'blank': 'True'}),
+            'building_recapitulates_entity_name': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'contacts_page_intro': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'contacts_page_intro'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
             'contacts_page_menu_title': ('django.db.models.fields.CharField', [], {'default': "'Contacts & people'", 'max_length': '50'}),
             'display_parent': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'entitylite_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['contacts_and_people.EntityLite']", 'unique': 'True', 'primary_key': 'True'}),
-            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'entity_item'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalLink']"}),
+            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'entity_item'", 'null': 'True', 'to': "orm['links.ExternalLink']"}),
             'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'news_page_intro': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'news_page_intro'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
             'news_page_menu_title': ('django.db.models.fields.CharField', [], {'default': "'News & events'", 'max_length': '50'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
             'precise_location': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'publications_page_menu_title': ('django.db.models.fields.CharField', [], {'default': "'Publications'", 'max_length': '50'}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'short_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'unique': 'True', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'unique': 'True', 'max_length': '60', 'blank': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'vacancies_page_intro': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'vacancies_page_intro'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
             'vacancies_page_menu_title': ('django.db.models.fields.CharField', [], {'default': "'Vacancies & studentships'", 'max_length': '50'}),
             'website': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'entity'", 'unique': 'True', 'null': 'True', 'to': "orm['cms.Page']"})
+        },
+        'contacts_and_people.entityautopagelinkplugineditor': {
+            'Meta': {'object_name': 'EntityAutoPageLinkPluginEditor', 'db_table': "'cmsplugin_entityautopagelinkplugineditor'", '_ormbases': ['cms.CMSPlugin']},
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
+            'entity': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'auto_page_plugin'", 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
+            'link_to': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'text_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})
+        },
+        'contacts_and_people.entitydirectoryplugineditor': {
+            'Meta': {'object_name': 'EntityDirectoryPluginEditor', 'db_table': "'cmsplugin_entitydirectoryplugineditor'", '_ormbases': ['cms.CMSPlugin']},
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
+            'display_descriptions_to_level': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
+            'entity': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'directory_plugin'", 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
+            'levels': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'link_icons': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'use_short_names': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
         'contacts_and_people.entitylite': {
             'Meta': {'object_name': 'EntityLite'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'contacts_and_people.entitymembersplugineditor': {
+            'Meta': {'object_name': 'EntityMembersPluginEditor', 'db_table': "'cmsplugin_entitymembersplugineditor'", '_ormbases': ['cms.CMSPlugin']},
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
+            'entity': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'entity_members_plugin'", 'null': 'True', 'to': "orm['contacts_and_people.Entity']"})
+        },
         'contacts_and_people.membership': {
             'Meta': {'ordering': "('-importance_to_entity', 'person__surname')", 'object_name': 'Membership'},
-            'display_role': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'display_roles'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Membership']"}),
+            'display_role': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'display_roles'", 'null': 'True', 'to': "orm['contacts_and_people.Membership']"}),
             'entity': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'members'", 'to': "orm['contacts_and_people.Entity']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'importance_to_entity': ('django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
@@ -175,14 +406,14 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'entities': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'people'", 'to': "orm['contacts_and_people.Entity']", 'through': "orm['contacts_and_people.Membership']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'}),
-            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'person_item'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalLink']"}),
+            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'person_item'", 'null': 'True', 'to': "orm['links.ExternalLink']"}),
             'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             'institutional_username': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'override_entity': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'people_override'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
+            'override_entity': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'people_override'", 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
             'personlite_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['contacts_and_people.PersonLite']", 'unique': 'True', 'primary_key': 'True'}),
-            'please_contact': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'contact_for'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
+            'please_contact': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'contact_for'", 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
             'precise_location': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'unique': 'True', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'unique': 'True', 'max_length': '60', 'blank': 'True'}),
             'staff_id': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'person_user'", 'unique': 'True', 'null': 'True', 'to': "orm['auth.User']"})
@@ -212,13 +443,20 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'post_town': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'site_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True'})
+            'site_name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+        },
+        'contacts_and_people.teacher': {
+            'Meta': {'object_name': 'Teacher'},
+            'dummy_field_one': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'dummy_field_two': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'teacher'", 'unique': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"})
         },
         'contacts_and_people.title': {
             'Meta': {'ordering': "['title']", 'object_name': 'Title'},
-            'abbreviation': ('django.db.models.fields.CharField', [], {'max_length': '20', 'unique': 'True'}),
+            'abbreviation': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True'})
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -232,14 +470,14 @@ class Migration(SchemaMigration):
             '_file_size': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'folder': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'all_files'", 'blank': 'True', 'null': 'True', 'to': "orm['filer.Folder']"}),
+            'folder': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'all_files'", 'null': 'True', 'to': "orm['filer.Folder']"}),
             'has_all_mandatory_data': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'owned_files'", 'blank': 'True', 'null': 'True', 'to': "orm['auth.User']"}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'owned_files'", 'null': 'True', 'to': "orm['auth.User']"}),
             'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'polymorphic_filer.file_set'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'sha1': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40', 'blank': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
@@ -252,8 +490,8 @@ class Migration(SchemaMigration):
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'filer_owned_folders'", 'blank': 'True', 'null': 'True', 'to': "orm['auth.User']"}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'blank': 'True', 'null': 'True', 'to': "orm['filer.Folder']"}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'filer_owned_folders'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['filer.Folder']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
@@ -274,9 +512,9 @@ class Migration(SchemaMigration):
         'links.externallink': {
             'Meta': {'ordering': "['title']", 'object_name': 'ExternalLink'},
             'description': ('django.db.models.fields.TextField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'external_site': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalSite']"}),
+            'external_site': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'links'", 'null': 'True', 'to': "orm['links.ExternalSite']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'links'", 'blank': 'True', 'null': 'True', 'to': "orm['links.LinkType']"}),
+            'kind': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'links'", 'null': 'True', 'to': "orm['links.LinkType']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -286,7 +524,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalSite']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['links.ExternalSite']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'site': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
@@ -295,95 +533,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'LinkType'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'scheme': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True'})
-        },
-        'news_and_events.event': {
-            'Meta': {'ordering': "['type', 'start_date', 'start_time']", 'object_name': 'Event'},
-            'access_note': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'body': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
-            'building': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contacts_and_people.Building']", 'null': 'True', 'blank': 'True'}),
-            'child_list_heading': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'display_series_name': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'display_series_summary': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.TimeField', [], {'null': 'True', 'blank': 'True'}),
-            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'event_item'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalLink']"}),
-            'featuring': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'event_featuring'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
-            'hosted_by': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'event_hosted_events'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
-            'importance': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'null': 'True'}),
-            'jumps_queue_everywhere': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'jumps_queue_on': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'blank': 'True', 'null': 'True', 'to': "orm['news_and_events.Event']"}),
-            'please_contact': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'event_person'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
-            'precise_location': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'publish_to': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'event_publish_to'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
-            'registration_enquiries': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'event_registration'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
-            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'series': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'short_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'show_titles': ('django.db.models.fields.CharField', [], {'default': "'series children'", 'max_length': '25'}),
-            'single_day_event': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'max_length': '60', 'unique': 'True', 'blank': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'start_time': ('django.db.models.fields.TimeField', [], {'null': 'True', 'blank': 'True'}),
-            'summary': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['news_and_events.EventType']"}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
-        },
-        'news_and_events.eventtype': {
-            'Meta': {'ordering': "['event_type']", 'object_name': 'EventType'},
-            'event_type': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'news_and_events.newsandeventsplugin': {
-            'Meta': {'object_name': 'NewsAndEventsPlugin', 'db_table': "'cmsplugin_newsandeventsplugin'", '_ormbases': ['cms.CMSPlugin']},
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
-            'display': ('django.db.models.fields.CharField', [], {'default': "'news_and_events'", 'max_length': '25'}),
-            'entity': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'news_events_plugin'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
-            'events_heading_text': ('django.db.models.fields.CharField', [], {'default': "'Events'", 'max_length': '25'}),
-            'format': ('django.db.models.fields.CharField', [], {'default': "'details image'", 'max_length': '25'}),
-            'group_dates': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'heading_level': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '2'}),
-            'layout': ('django.db.models.fields.CharField', [], {'default': "'sidebyside'", 'max_length': '25'}),
-            'limit_to': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '5', 'null': 'True', 'blank': 'True'}),
-            'list_format': ('django.db.models.fields.CharField', [], {'default': "'vertical'", 'max_length': '25'}),
-            'news_heading_text': ('django.db.models.fields.CharField', [], {'default': "'News'", 'max_length': '25'}),
-            'order_by': ('django.db.models.fields.CharField', [], {'default': "'importance/date'", 'max_length': '25'}),
-            'show_previous_events': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        'news_and_events.newsarticle': {
-            'Meta': {'ordering': "['-date']", 'object_name': 'NewsArticle'},
-            'body': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
-            'content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'display_indefinitely': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'external_news_source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['news_and_events.NewsSource']", 'null': 'True', 'blank': 'True'}),
-            'external_url': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'newsarticle_item'", 'blank': 'True', 'null': 'True', 'to': "orm['links.ExternalLink']"}),
-            'hosted_by': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'newsarticle_hosted_events'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
-            'importance': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'null': 'True'}),
-            'is_sticky_everywhere': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'please_contact': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'newsarticle_person'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Person']"}),
-            'publish_to': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'newsarticle_publish_to'", 'blank': 'True', 'null': 'True', 'to': "orm['contacts_and_people.Entity']"}),
-            'short_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'max_length': '60', 'unique': 'True', 'blank': 'True'}),
-            'sticky_until': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today', 'null': 'True', 'blank': 'True'}),
-            'summary': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
-        },
-        'news_and_events.newssource': {
-            'Meta': {'object_name': 'NewsSource'},
-            'external_news_source': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'scheme': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         },
         'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
@@ -393,4 +543,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['news_and_events']
+    complete_apps = ['contacts_and_people']

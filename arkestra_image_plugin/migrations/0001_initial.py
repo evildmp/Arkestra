@@ -23,11 +23,48 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('arkestra_image_plugin', ['FilerImage'])
 
+        # Adding model 'ImageSetPlugin'
+        db.create_table('cmsplugin_imagesetplugin', (
+            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('kind', self.gf('django.db.models.fields.CharField')(default='basic', max_length=50)),
+            ('width', self.gf('django.db.models.fields.FloatField')(default=1000.0)),
+            ('height', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
+            ('aspect_ratio', self.gf('django.db.models.fields.FloatField')(default=0, null=True)),
+            ('float', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+            ('items_per_row', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('arkestra_image_plugin', ['ImageSetPlugin'])
+
+        # Adding model 'ImageSetItem'
+        db.create_table('arkestra_image_plugin_imagesetitem', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('plugin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imageset_item', to=orm['arkestra_image_plugin.ImageSetPlugin'])),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'])),
+            ('alt_text', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('auto_image_title', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('manual_image_title', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('auto_image_caption', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('manual_image_caption', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('auto_link_title', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('manual_link_title', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('auto_link_description', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('manual_link_description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('destination_content_type', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='links_to_imagesetitem', null=True, to=orm['contenttypes.ContentType'])),
+            ('destination_object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('arkestra_image_plugin', ['ImageSetItem'])
+
 
     def backwards(self, orm):
         
         # Deleting model 'FilerImage'
         db.delete_table('cmsplugin_filerimage')
+
+        # Deleting model 'ImageSetPlugin'
+        db.delete_table('cmsplugin_imagesetplugin')
+
+        # Deleting model 'ImageSetItem'
+        db.delete_table('arkestra_image_plugin_imagesetitem')
 
 
     models = {
@@ -43,6 +80,33 @@ class Migration(SchemaMigration):
             'use_autoscale': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'use_description_as_caption': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'width': ('django.db.models.fields.FloatField', [], {'default': '1000.0', 'null': 'True', 'blank': 'True'})
+        },
+        'arkestra_image_plugin.imagesetitem': {
+            'Meta': {'ordering': "('id',)", 'object_name': 'ImageSetItem'},
+            'alt_text': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'auto_image_caption': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'auto_image_title': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'auto_link_description': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'auto_link_title': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'destination_content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'links_to_imagesetitem'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
+            'destination_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']"}),
+            'manual_image_caption': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'manual_image_title': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'manual_link_description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'manual_link_title': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'plugin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imageset_item'", 'to': "orm['arkestra_image_plugin.ImageSetPlugin']"})
+        },
+        'arkestra_image_plugin.imagesetplugin': {
+            'Meta': {'object_name': 'ImageSetPlugin', 'db_table': "'cmsplugin_imagesetplugin'", '_ormbases': ['cms.CMSPlugin']},
+            'aspect_ratio': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
+            'float': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'height': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'items_per_row': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'kind': ('django.db.models.fields.CharField', [], {'default': "'basic'", 'max_length': '50'}),
+            'width': ('django.db.models.fields.FloatField', [], {'default': '1000.0'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
