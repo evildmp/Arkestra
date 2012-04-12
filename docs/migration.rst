@@ -14,7 +14,7 @@ Clear out the old migration records
 ===================================
 Find your south_migrationhistory table and clear out the old migration records. We're going to re-create these, so you need to:
 
-* DELETE FROM 'south_migrationhistory' WHERE `app_name`='arkestra_image_plugin'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='arkestra_image_plugin'; 
 * DELETE FROM `south_migrationhistory` WHERE `app_name`='contacts_and_people'; 
 * DELETE FROM `south_migrationhistory` WHERE `app_name`='links'; 
 * DELETE FROM `south_migrationhistory` WHERE `app_name`='news_and_events'; 
@@ -35,7 +35,7 @@ Then create new, clean initial migrations for each one.
 
 Make sure you're in the project directory:
 
-* `python manage.py convert_to_south arkestra_image_plugin`
+* `python manage.py convert_to_south arkestra_image_plugin --delete-ghost-migrations`
 * `python manage.py convert_to_south contacts_and_people`
 * `python manage.py convert_to_south links`
 * `python manage.py convert_to_south news_and_events`
@@ -89,20 +89,20 @@ Create migrations to get from your tables to the new models
 ===========================================================
 Make sure you're in the project directory:
 
-* `python manage.py schemamigration --auto arkestra_image_plugin`
-* `python manage.py schemamigration --auto contacts_and_people`
-* `python manage.py schemamigration --auto links`
-* `python manage.py schemamigration --auto news_and_events`
-* `python manage.py schemamigration --auto vacancies_and_studentships`
-* `python manage.py schemamigration --auto video`
+* `python manage.py schemamigration \--auto arkestra_image_plugin`
+* `python manage.py schemamigration \--auto contacts_and_people`
+* `python manage.py schemamigration \--auto links`
+* `python manage.py schemamigration \--auto news_and_events`
+* `python manage.py schemamigration \--auto vacancies_and_studentships`
+* `python manage.py schemamigration \--auto video`
 
 For any models where your previous version differed from the new, you'll now have a second migration to get from old to new.
 
 Apply the new migrations
 ========================
-It's always sensible to use --db-dry-run first to check:
+It's always sensible to use \--db-dry-run first to check:
 
-* `python manage.py migrate --db-dry-run`
+* `python manage.py migrate \--db-dry-run`
 
 then if that seems ok:
 
@@ -131,11 +131,11 @@ Fake the migrations
 ===================
 Back to the project directory:
 
-* `python manage.py migrate --fake arkestra_image_plugin`
-* `python manage.py migrate --fake contacts_and_people`
-* `python manage.py migrate --fake links`
-* `python manage.py migrate --fake news_and_events`
-* `python manage.py migrate --fake video`
+* `python manage.py migrate \--fake arkestra_image_plugin`
+* `python manage.py migrate \--fake contacts_and_people`
+* `python manage.py migrate \--fake links`
+* `python manage.py migrate \--fake news_and_events`
+* `python manage.py migrate \--fake video`
 
 Finally, all the following should be in agreement with each other:
 
