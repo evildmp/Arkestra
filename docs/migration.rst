@@ -14,12 +14,12 @@ Clear out the old migration records
 ===================================
 Find your south_migrationhistory table and clear out the old migration records. We're going to re-create these, so you need to:
 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'arkestra_image_plugin\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'contacts_and_people\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'links\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'news_and_events\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'vacancies_and_studentships\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'video\';` 
+* DELETE FROM 'south_migrationhistory' WHERE `app_name`='arkestra_image_plugin'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='contacts_and_people'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='links'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='news_and_events'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='vacancies_and_studentships'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='video'; 
 
 Trash your old migrations
 =========================
@@ -120,12 +120,12 @@ Clear out the migration records (again)
 =======================================
 Once again, find your south_migrationhistory table and clear out the relevant migration records. We're going to re-create these, so you need to:
 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'arkestra_image_plugin\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'contacts_and_people\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'links\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'news_and_events\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'vacancies_and_studentships\';` 
-* `DELETE FROM \'south_migrationhistory\' WHERE \'app_name\'=\'video\';` 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='arkestra_image_plugin'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='contacts_and_people'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='links'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='news_and_events'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='vacancies_and_studentships'; 
+* DELETE FROM `south_migrationhistory` WHERE `app_name`='video'; 
 
 Fake the migrations
 ===================
