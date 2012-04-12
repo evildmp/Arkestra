@@ -48,9 +48,9 @@ Move your migrations
 ====================
 In a moment, you'll pull in the new version of Arkestra, but you don't want to overwrite the new migrations you just created, so put them in a safe place: 
 
-Do this in the Arkestra directory (we'll use --delete-ghost-migrations on the first one just in case):
+Do this in the Arkestra directory:
 
-* mv `arkestra_image_plugin/migrations arkestra_image_plugin/my_migrations --delete-ghost-migrations`
+* mv `arkestra_image_plugin/migrations arkestra_image_plugin/my_migrations`
 * mv `contacts_and_people/migrations contacts_and_people/my_migrations`
 * mv `links/migrations links/my_migrations`
 * mv `news_and_events/migrations news_and_events/my_migrations`
