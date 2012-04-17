@@ -57,7 +57,10 @@ a img { border: none; }
    End Reset CSS  
 -------------------------------------------------------------- */
 
-
+.subtitle   {
+    font-weight: bold;
+    font-size: 120%;
+    }
 
     
 /* 

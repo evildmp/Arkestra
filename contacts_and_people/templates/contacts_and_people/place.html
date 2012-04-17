@@ -28,8 +28,9 @@
         		</div>
     		{% endif %}
     		<div class="column lastcolumn doublecolumn"> 
+                {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop as image %}
+                {% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
 				{% render_placeholder place.description %}
-				{% thumbnail place.image.file 426x426 subject_location=place.image.subject_location crop as image %}{% if image %}<p><img class="right" src="{{ image.url }}" alt="" /></p>{% endif %}
 			</div>	
     	</div>	
 	{% endblock place_information %}
