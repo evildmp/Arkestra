@@ -149,7 +149,10 @@ div#fancybox-content .text {
     } 
 
 div#fancybox-content img {
-    display: block; /* if inline, would expose empty line background */ 
+    display: block; /*  if inline, would expose empty line background - 
+                        there's also an inline style="display: block;" 
+                        on the img, because this one's too slow to act
+*/ 
     }
 
 div#fancybox-content a {
