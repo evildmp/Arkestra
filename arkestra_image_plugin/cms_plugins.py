@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin, messages
 from django import forms
 from django.db import models
+from django.conf import settings
 
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
@@ -21,11 +22,14 @@ from links import schema
 
 from models import FilerImage, ImageSetItem, ImageSetPlugin
 
+IMAGESET_ITEM_PADDING = getattr(settings, "IMAGESET_ITEM_PADDING", 10)
+
+
 # a dictionary to show how many items per row depending on the number of items
 LIGHTBOX_COLUMNS = {2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
 
 def width_of_image_container(context, plugin):
-    # Based on the plugin settings and placeholder width, calculate image width
+    # Based on the plugin settings and placeholder width, calculate image container width
     
     # work out native image aspect ratio
     plugin.has_borders = False
@@ -48,6 +52,7 @@ def width_of_image_container(context, plugin):
     # calculate the width of the block the image will be in
     width = calculate_container_width(context, plugin, width, auto)
     
+    # return the width of the container
     return width
 
 def width_of_image(plugin, image=None):
@@ -59,6 +64,7 @@ def width_of_image(plugin, image=None):
         else:
             # use container width
             width = plugin.container_width
+    # negative numbers are absolutes
     elif plugin.width < 0:
         width = -plugin.width
     else:
@@ -76,7 +82,10 @@ def shave_if_floated(plugin, width):
             return width - 5
                
 def calculate_height(given_width, given_height, given_aspect_ratio, width, aspect_ratio):
-    
+    # given_width, given_height, given_aspect_ratio are values set by the plugin
+    # width and aspect_ratio are calculated values
+    # using given values gives us a chance to use given values to override calculated ones 
+       
     # rules:
     # if the instance has an aspect ratio, use that to calculate the height
     # if the instance has no aspect ratio, but does have a height, use the height
@@ -128,13 +137,15 @@ def slider(imageset):
     
 def multiple_images(imageset, context):
     # for lightboxes and multiple image sets
-    imageset.template = "arkestra_image_plugin/%s.html" %imageset.kind            
-
-    # don't allow more items_per_row than there are items
-    if imageset.items_per_row > imageset.number_of_items:
-        imageset.items_per_row = imageset.number_of_items
+    imageset.template = "arkestra_image_plugin/%s.html" %imageset.kind
+    imageset.padding = IMAGESET_ITEM_PADDING
+    padding_adjuster = IMAGESET_ITEM_PADDING * 2
     
-    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS.get(imageset.number_of_items, 8) 
+    # each item will be the same width - the user gets no say in this
+    # also, let's not have any nonsense about using the native widths
+    # - and only percentage and automatic widths are allowed
+    # we call width_of_image() without an image argument 
+    each_item_width = width_of_image(imageset)           
 
     # no specified aspect ratio or height? get an average and use that
     if not imageset.aspect_ratio and not imageset.height:
@@ -143,33 +154,69 @@ def multiple_images(imageset, context):
     else:
         aspect_ratio = imageset.aspect_ratio                             
 
+
+    print "aspect_ratio", aspect_ratio
+
+    # don't allow more items_per_row than there are items
+    if imageset.items_per_row > imageset.number_of_items:
+        imageset.items_per_row = imageset.number_of_items
+    
+    items_per_row = imageset.items_per_row or LIGHTBOX_COLUMNS.get(imageset.number_of_items, 8) 
+
+    # if we are using automatic/percentage widths, base them on the placeholder
+    if imageset.width > 0: 
+        each_item_width = each_item_width / items_per_row
+
+    # fancybox icons and multiple images with links have padding, so:
+    if imageset.kind == "lightbox" or imageset.items_have_links:
+        each_item_width = each_item_width - padding_adjuster                   
+    else: 
+        # otherwise give them a margin
+        if imageset.width > 0:
+            each_item_width = each_item_width - (items_per_row-1) * padding_adjuster/items_per_row  
+
+    # calculate height 
+    each_item_width, each_item_height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
+    print "each_item_width, each_item_height", each_item_width, each_item_height
+
     # set up each item
     for counter, item in enumerate(imageset.items, start = 1):
-        # mark end-of-row items in case the CSS needs it
-        if not counter%items_per_row:
+        # mark end-of-row items in case the CSS needs it    
+        # only when we are using percentage widths
+        if imageset.width > 0 and not counter%items_per_row:
             item.lastinrow = True
-        # get its width
-        item.width = width_of_image(imageset, item.image)    
-        # if we are using automatic/percentage widths, base them on the placeholder
-        if imageset.width > 0: 
-            item.width = item.width / items_per_row
-        # calculate height 
-        item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, item.width, aspect_ratio)
 
-        # fancybox icons and multiple images with links have 3px padding, so:
-        if imageset.kind == "lightbox" or imageset.items_have_links:
-            item.width = item.width - 6                   
-        else: 
-            # allow for 6px margin
-            if imageset.width > 0:
-                item.width = item.width - (items_per_row-1)*6/items_per_row  
-
-        item.width,item.height = int(item.width), int(item.height)
+        item.width,item.height = int(each_item_width), int(each_item_height)
         item.image_size = u'%sx%s' %(item.width, item.height) 
         item.caption_width=item.width
 
     return imageset
     
+def lightbox_pile(imageset, context):
+    # for lightboxes and multiple image sets
+    imageset.template = "arkestra_image_plugin/%s.html" %"lightbox"            
+    
+    # choose the first image from the set
+    item = imageset.items[0]
+
+    # calculate its native aspect ratio
+    aspect_ratio = calculate_aspect_ratio(item.image)
+    # get width
+    width = width_of_image(imageset, item.image)
+    # shave if floated
+    width = shave_if_floated(imageset, width) or width
+
+    # calculate height 
+    item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
+    item.image_size = u'%sx%s' % (int(item.width), int(item.height))
+
+    # item.caption = set_image_caption(imageset.item)
+    item.width,item.height = int(item.width), int(item.height)
+    item.caption_width = item.width
+
+    return imageset
+
+
 def single_image(imageset, context):                 
     imageset.template = "arkestra_image_plugin/single_image.html"
     # choose an image at random from the set
@@ -185,7 +232,7 @@ def single_image(imageset, context):
     # calculate height 
     imageset.item.width, imageset.item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
     imageset.item.image_size = u'%sx%s' % (int(imageset.item.width), int(imageset.item.height))
-    # set caption
+
     # imageset.item.caption = set_image_caption(imageset.item)
     imageset.item.width,imageset.item.height = int(imageset.item.width), int(imageset.item.height)
     imageset.item.caption_width = imageset.item.width
@@ -312,15 +359,18 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
         if imageset.imageset_item.count():
             # calculate the width of the block the image will be in
             imageset.container_width = int(width_of_image_container(context, imageset))
-            imageset.items = imageset.imageset_item.all()
-            imageset.number_of_items = imageset.imageset_item.count()
+            # copy the queryset to a list. You know it makes sense
+            imageset.items = list(imageset.imageset_item.all())
             
             # at least three items are required for a slider - just two is unaesthetic
             if imageset.kind == "slider" and imageset.number_of_items > 2:
                 imageset = slider(imageset)
 
-            elif imageset.kind == "lightbox" or imageset.kind == "lightbox-test" or imageset.kind == "multiple":
+            elif imageset.kind == "lightbox" or imageset.kind == "multiple":
                 imageset = multiple_images(imageset, context)
+
+            elif imageset.kind == "lightbox-pile":
+                imageset = lightbox_pile(imageset, context)
 
             else:
                 imageset = single_image(imageset, context)

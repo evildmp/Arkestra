@@ -26,8 +26,8 @@ ul.imageset {padding: 0; margin: 0;}
 ul.imageset li.image {
     display: inline-block; 
     vertical-align: top; 
-    padding: 0; 
-    margin-right: 6px;
+    padding: 10px 0; 
+    margin-right: 20px;
 }
 
 ul.imageset li.image.lastinrow {
@@ -36,7 +36,7 @@ ul.imageset li.image.lastinrow {
     
 ul.imageset li.image a {
     vertical-align: middle;
-    display: table-cell; 
+    display: block; 
     }
 
 /* ---------------- when images are links --------------- */
@@ -51,7 +51,7 @@ ul.imageset li.image a {
 }
 
 ul.imageset li.image.link {
-    padding: 3px; 
+    padding: 10px; 
     margin-right: 0;
     }
 
@@ -61,6 +61,8 @@ ul.imageset:hover li.image.link {
 
 ul.imageset:hover li.image.link:hover {
     opacity: 1;
+    background: #efefef;
+    outline: 1px solid black;
     }                                                                                                  
 
 /* ---------------- when images have text --------------- */
@@ -128,7 +130,7 @@ ul.imageset:hover li.image.link:hover {
     background: rgba(255,255,255,.7); 
 }
 
-.imageset a:hover .image-title {
+.imageset a:link:hover .image-title {
     background: rgba(255,255,255,.9); 
     }
 

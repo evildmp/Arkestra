@@ -1,9 +1,19 @@
 {% spaceless %}
-{% load sekizai_tags thumbnail %}
+{% load sekizai_tags %}
 
 {% addtoblock "css" %}      
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/css/jquery.fancybox-1.3.4.css" media="screen" />  
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/css/jquery.fancybox-1.3.4.css" media="screen" />
 {% endaddtoblock %}
+
+{% if imageset.kind == "lightbox" %}
+	{% addtoblock "css" %}      
+		<style>
+			ul.imageset li.image.link {
+			    padding: {{ imageset.padding }}px; 
+		    }
+		</style>
+	{% endaddtoblock %}
+{% endif %}
 
 {% addtoblock "js" %}
     <!-- jQuery (required) -->
@@ -16,12 +26,12 @@
     fancyBOX(document).ready(function() {
 
         fancyBOX("a.fancy").fancybox({
-            'transitionIn'      : 'elastic',
+            'transitionIn'      : 'fade',
             'transitionOut'     : 'fade',
-            'easingIn'          : 'swing',
-            'easingOut'         : 'swing',
-            'speedIn'           : 100,
-            'speedOut'          : 100
+            'changeFade'        : 400,
+            'speedIn'           : 250,
+            'speedOut'          : 250,
+            'autoDimensions'    : true
 	        });
 		});
 	</script>

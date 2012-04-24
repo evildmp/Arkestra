@@ -24,16 +24,19 @@ def lightbox_item(request, id=None):
         lightbox_height = lightbox_width / item.plugin.aspect_ratio
         thumbnail_options.update({'crop': True}) 
 
+    print "aspect", lightbox_width, lightbox_height
     # get scaler value from width, height
     if max([lightbox_width, lightbox_height]) > 800:
-        scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height])
+        scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height]) 
         # set size of lightbox using scaler 
-        item.width, item.height = lightbox_width * scaler, lightbox_height * scaler
+        item.width, item.height = lightbox_width * scaler, lightbox_height * scaler        
     else:
         item.width, item.height = lightbox_width, lightbox_height
 
     item.width, item.height = int(item.width), int(item.height)
-
+                        
+                        
+    
 
     thumbnail_options.update({
         'size': (item.width, item.height), 
