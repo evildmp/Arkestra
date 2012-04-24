@@ -195,6 +195,8 @@ def multiple_images(imageset, context):
 def lightbox_pile(imageset, context):
     # for lightboxes and multiple image sets
     imageset.template = "arkestra_image_plugin/%s.html" %"lightbox"            
+    imageset.padding = IMAGESET_ITEM_PADDING
+    padding_adjuster = IMAGESET_ITEM_PADDING * 2
     
     # choose the first image from the set
     item = imageset.items[0]
@@ -206,6 +208,9 @@ def lightbox_pile(imageset, context):
     # shave if floated
     width = shave_if_floated(imageset, width) or width
 
+    # fancybox icons  have padding, so:
+    width = width - padding_adjuster
+    
     # calculate height 
     item.width, item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
     item.image_size = u'%sx%s' % (int(item.width), int(item.height))

@@ -7,7 +7,7 @@
 		alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}" 
 		width={{ imageset_item.width}} 
 		height={{ imageset_item.height }}
-		style="display: block;" {# has to be here, other it appears not to act in time - just putting it in the CSS file is not enough #}
+		style="display: block;" {# has to be here, otherwise it appears not to act in time - just putting it in the CSS file is not enough #}
 	/>
 	{% if imageset_item.url %}
     	<a href="{{ imageset_item.url }}">
