@@ -180,7 +180,9 @@ def multiple_images(imageset, context):
     print "each_item_width, each_item_height", each_item_width, each_item_height
 
     # set up each item
-    for counter, item in enumerate(imageset.items, start = 1):
+    # for counter, item in enumerate(imageset.items, start = 1): # enable this when we no longer need to support Python 2.5
+    for counter, item in enumerate(imageset.items):
+        counter=counter+1
         # mark end-of-row items in case the CSS needs it    
         # only when we are using percentage widths
         if imageset.width > 0 and not counter%items_per_row:
