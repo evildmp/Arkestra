@@ -1,13 +1,11 @@
 div.anythingSlider-minimalist-square {
     margin-bottom: 12px; /* make room for the index */
     }
-
+                    
 div.anythingSlider-minimalist-square li.panel {
     position: relative;     /* for the absolutely-positioned items within */ 
-    float: none;            /* otherwise the vertical alignment won't work */
     text-align: center; 
-    display: table-cell; 
-    vertical-align: middle;
+    display: block; 
     }
 
 div.anythingSlider-minimalist-square .text {
@@ -46,10 +44,9 @@ div.anythingSlider-minimalist-square li .link-title:hover .more-information {
 }
 
 div.anythingSlider-minimalist-square .anythingControls {
-    left: 0; right: 0;
     top: 100%;     
     text-align: center;
-}
+    }
 
 div.anythingSlider-minimalist-square .anythingControls ul.thumbNav {
     margin: 0 auto;     

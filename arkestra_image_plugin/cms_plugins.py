@@ -192,7 +192,7 @@ def multiple_images(imageset, context):
 
     return imageset
     
-def lightbox_pile(imageset, context):
+def lightbox_single(imageset, context):
     # for lightboxes and multiple image sets
     imageset.template = "arkestra_image_plugin/%s.html" %"lightbox"            
     imageset.padding = IMAGESET_ITEM_PADDING
@@ -374,8 +374,8 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             elif imageset.kind == "lightbox" or imageset.kind == "multiple":
                 imageset = multiple_images(imageset, context)
 
-            elif imageset.kind == "lightbox-pile":
-                imageset = lightbox_pile(imageset, context)
+            elif imageset.kind == "lightbox-single":
+                imageset = lightbox_single(imageset, context)
 
             else:
                 imageset = single_image(imageset, context)

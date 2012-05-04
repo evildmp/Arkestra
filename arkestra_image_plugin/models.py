@@ -93,8 +93,8 @@ class ImageSetPlugin(CMSPlugin):
     IMAGESET_KINDS = (
         ("basic", "Basic"),
         ("multiple", "Multiple images"),
-        ("lightbox", "LightBox"),
-        ("lightbox-pile", "New LightBox"),
+        ("lightbox", "Lightbox with gallery"),
+        ("lightbox-single", "Lightbox"),
         ("slider", "Slider"),
         )
     kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")

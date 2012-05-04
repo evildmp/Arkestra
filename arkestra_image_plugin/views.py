@@ -8,15 +8,14 @@ from easy_thumbnails.files import get_thumbnailer
 
 from models import ImageSetItem
 
-def lightbox_item(request, id=None):     
+def lightbox_item(request, id=None, lightbox_max_dimension=400):     
     item = get_object_or_404(ImageSetItem, id=id)
-
+    lightbox_max_dimension=int(lightbox_max_dimension)
     context = RequestContext(request)
     thumbnail_options = {} 
 
     # get width, height and lightbox_max_dimension
     lightbox_width, lightbox_height = item.image.width, item.image.height
-    lightbox_max_dimension = context.get("lightbox_max_dimension", 800) 
     
     # user has set aspect ratio? apply it, set crop argument for thumbnailer
 

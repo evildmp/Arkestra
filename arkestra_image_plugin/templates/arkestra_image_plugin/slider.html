@@ -1,5 +1,5 @@
 {% load sekizai_tags thumbnail %}
-<ul id="{{ imageset|default:"slider"}}" class="imageset">
+<ul id="slider{{ imageset.id }}" class="imageset slider">
 	{% for item in imageset.items %}
     	<li id="imageset-item-{{ imageset.id }}-{{ item.id }}">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</li>			
 	{% endfor %}
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}slider/css/theme-minimalist-square.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}slider/css/arkestra-slider.css">
 <style>
-	#{{ imageset|default:"slider"}} {
+	#slider{{ imageset.id }} {
 	width: {{ imageset.size.0 }}px;
 	height: {{ imageset.size.1 }}px;
 	list-style: none;
@@ -20,7 +20,7 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-	#{{ imageset|default:"slider"}} li .image img {
+	#slider{{ imageset.id }} li .image img {
 
 	width: {{ imageset.size.0 }}px;
 	height: {{ imageset.size.1 }}px;
@@ -57,8 +57,9 @@ div.anythingSlider-minimalist-square.activeSlider .anythingControls ul a {
 		// Set up Sliders
 		// **************
 		$(document).ready(function(){
-			$('#{{ imageset|default:"slider"}}').anythingSlider({
+			$('#slider{{ imageset.id }}').anythingSlider({
 				theme: "minimalist-square",
+				hashTags : false,
 				toggleArrows: true,
 				toggleControls: false,
 				autoPlay: true,

@@ -12,9 +12,9 @@
 {% else %}
 {% if "lightbox" in imageset.kind %}
 
-	<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}" style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
+	<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}/{{ lightbox_max_dimension }}/" style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
 
-	    {% if imageset.kind == "lightbox-pile" %}
+	    {% if imageset.kind == "lightbox-single" %}
 	        {% if forloop.first %}
     	        <span class="image-title">{{ imageset.number_of_items }} images</span>
     	        <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />

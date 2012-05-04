@@ -2,70 +2,85 @@
 
 /* remember that many images will be in an <a> that is *not* a link */
 
-/* ul.imageset li.image a img */
 
-/* ---------------- all images --------------- */
+/* ================ all images =============== */
 
 .image a  {
     position: relative; /* for any absolutely-positioned elements inside */
     display: block;
 }
 
-.image img {
+.image img { /* center images within their block anchor containers */ 
     margin-left: auto;
     margin-right: auto;
     display: block;
     }
 
-/* ---------------- all multiple imagesets --------------- */
+/* ================ all multiple imagesets =============== */
 
-ul.imageset {padding: 0; margin: 0;}
+/*  ul.imageset 
+        li.image[.link] 
+            a
+                img.plugin
+                span.image-title.text
+                span.image-description.text
+                span.link-title.text
+                span.link-description.text
+                span.more-information
+                    span.hide
+*/
 
-/* ---------------- all items in multiple image sets --------------- */
+ul.imageset {padding: 0; margin: 0; position}
+
+/* ================ all items in multiple image sets =============== */
 
 ul.imageset li.image {
     display: inline-block; 
     vertical-align: top; 
-    padding: 10px 0; 
+    /* these are default padding/margin values - Arkestra can overwrite them in
+    multiple.html and lightbox.html */
+    padding: 10px 0;        
     margin-right: 20px;
 }
 
 ul.imageset li.image.lastinrow {
+    /* no margin needed; it has nothing on its right */ 
     margin-right: 0;
     }
     
 ul.imageset li.image a {
     vertical-align: middle;
-    display: block; 
     }
 
-/* ---------------- when images are links --------------- */
+/* ================ when images are links =============== */
 
 .imageset a:link,
-.imageset a:visited {
+.imageset a:visited,
+.imageset a:link:hover,
+.imageset a:visited:hover  {
     color: black;
-}
-
-.imageset a:link:hover {
     text-decoration: none;
 }
-
+                          
 ul.imageset li.image.link {
+    /* these is a default padding value - Arkestra can overwrite it in
+    multiple.html and lightbox.html */
     padding: 10px; 
     margin-right: 0;
     }
 
+/* hovering over the set dims it, but not the one we're hovering over */
 ul.imageset:hover li.image.link { 
-    opacity: .4;  
-}
+    opacity: 1;  
+    }
 
 ul.imageset:hover li.image.link:hover {
     opacity: 1;
-    background: #efefef;
-    outline: 1px solid black;
+    background: white;
+    outline: 1px solid gray;
     }                                                                                                  
 
-/* ---------------- when images have text --------------- */
+/* ================ when images have text =============== */
 
 /* all text items */
 
@@ -73,6 +88,7 @@ ul.imageset:hover li.image.link:hover {
     text-align: left;
 } 
 
+/* all text on imageset items is in a block element */
 .imageset .text {
     display: block;
     padding: 0;
@@ -80,7 +96,7 @@ ul.imageset:hover li.image.link:hover {
     zoom: 1;
 }
 
-
+/* the image-title is generally superimposed on it */
 .imageset .image-title {
     text-transform:uppercase;
     text-align: right;
@@ -111,83 +127,97 @@ ul.imageset:hover li.image.link:hover {
     font-weight: lighter; 
     }
 
+.imageset a:link:hover .image-title {
+    background: rgba(255,255,255,.9); 
+    }   
+
+
+/* ================ READ MORE buttons =============== */ 
+
 .imageset a:link .more-information,
-.imageset a:visited  .more-information {
+.imageset a:visited .more-information,
+.imageset a:hover .more-information  {
     text-transform:uppercase;
     font-size: 80%;
     padding: 1px 3px;
-    border: 1px solid black;
-    border-radius: 2px;
-    background: black;
-    color: white;
+    border-radius: 3px;
     text-decoration: none; 
-    }  
-
-/* ---------------- when hovering over a particular item --------------- */
-
+    /* default colours white on black; sliders for example are reversed */
+    border: 1px solid black;
+    color: white;
+    background: black;
+    }
+    
 .imageset a:hover .more-information {
     color: black;
     background: rgba(255,255,255,.7); 
 }
+       
+/* ================ lightboxes =============== */
 
-.imageset a:link:hover .image-title {
-    background: rgba(255,255,255,.9); 
-    }
-
-
-
-/* ---------------- lightboxes --------------- */
+/*  div#fancybox-content
+        div - created by fancybox style="width:auto;height:auto;overflow: auto;position: static;" - needs to be amended in fancybox
+            div.imageset.imageset-item
+                span.imageset-item-data.image-title.text
+                span.imageset-item-data.image-caption.text
+                img
+                div
+                    span.link-title.text
+                    span.link-description.text
+                    a
+                        span.more-information.text */
 
 div#fancybox-content { /* lightbox border and background */
-    z-index: auto;
-    border: 10px solid black;
-    background: white;
+    border: 10px solid black;  /* we ought to get rid of the ones on the element */
+    z-index: auto;             /* z-index: auto and position: static required to get IE7 to work properly */
+    position: static; 
     }
 
-div#fancybox-content .text {
-    position: relative; /* necessary for the stacking behaviour */
-    z-index: 10000;
-    margin: 0;
-    } 
+div.imageset.imageset-item  {
+}
+
+div#fancybox-content span.image-title,
+div#fancybox-content span.image-caption {
+    position: relative;   /* override the usual absolute positioning; static's no good because of IE7  */     
+    z-index: 1103;       /* higher than the 1102 of the left/right anchors */
+    padding: 2px 0;
+    color: white;
+    background: black;
+}                      
 
 div#fancybox-content img {
-    display: block; /*  if inline, would expose empty line background - 
-                        there's also an inline style="display: block;" 
-                        on the img, because this one's too slow to act
-*/ 
+    display: block;     /* if inline, would expose empty line background  */ 
     }
 
-div#fancybox-content a {
-    background: white;
+div#fancybox-content div.link-information {
+    position: relative;       /* z-index: auto and position: relative required to get IE7 to work properly */
+    z-index: 1103;            /* higher than the 1102 of the left/right anchors */
     color: black;
-    margin: 4px 10px;
+    background: white;
+    padding: 4px 10px;
     display: block;
     }
 
-div#fancybox-content .link-title {
-    padding-top: 4px;
+div#fancybox-content div.link-information span.link-title, 
+div#fancybox-content div.link-information span.link-description {
+    margin-bottom: 6px;
 }
     
-div#fancybox-content a .more-information {
-    color: white;
-    background: black;
-    display: inline;
+div#fancybox-content a.more-information {
     font-size: 75%;
     }
 
-div#fancybox-content a:hover .more-information  {
-    color: black;
-    background: white;
+/* stop the left/right links from covering the border */
+
+a#fancybox-left {
+    margin-left: 10px;
 }
 
-div#fancybox-content .imageset span.image-title,
-div#fancybox-content span.image-caption {
-    padding: 2px 0;
-    background: black;
-    color: white;
-    }
+a#fancybox-right {
+    margin-right: 10px;
+}
 
-/* images */
+/* ================ images more generally =============== */
 
 /* images as used in news plugins etc are usually floated right */
 

@@ -1,5 +1,5 @@
 {% spaceless %}
-<div style="width: {{ imageset_item.width}}px" class="imageset imageset-item">
+<div style="width: {{ imageset_item.width}}px;" class="imageset imageset-item">
 	{% if imageset_item.image_title %}<span class="imageset-item-data image-title text">{{ imageset_item.image_title }}</span>{% endif %}
 	{% if imageset_item.image_caption %}<span class="imageset-item-data image-caption text">{{ imageset_item.image_caption }}</span>{% endif %}
 	<img 
@@ -10,11 +10,13 @@
 		style="display: block;" {# has to be here, otherwise it appears not to act in time - just putting it in the CSS file is not enough #}
 	/>
 	{% if imageset_item.url %}
-    	<a href="{{ imageset_item.url }}">
+    	<div class="link-information">
     	    <span class="link-title text">{{ imageset_item.link_title|default:imageset_item.text }}</span>
    	        {% if imageset_item.link_description %}<span class="link-description text">{{ imageset_item.link_description }}</span>{% endif %}
-	        <span class="more-information text">Read more<span class="hide"> about {{ imageset_item.link_title|default:imageset_item.text }}</span>...</span>
-        </a>
+			<a href="{{ imageset_item.url }}">
+				<span class="more-information">Read more<span class="hide"> about {{ imageset_item.link_title|default:imageset_item.text }}</span>...</span>
+	        </a>
+		</div>
     {% endif %}
 </div>
 {% endspaceless %}

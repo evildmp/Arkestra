@@ -67,10 +67,6 @@ div.anythingSlider-minimalist-square .back a:hover, div.anythingSlider-minimalis
 
 /* Navigation Links */
 div.anythingSlider-minimalist-square .anythingControls {
-	float: right;
-	position: absolute;
-	bottom: 0;
-	right: 15%;
 	z-index: 100;
 	opacity: 0.75;
 	filter: alpha(opacity=75);
