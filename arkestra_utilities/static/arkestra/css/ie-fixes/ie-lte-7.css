@@ -12,6 +12,18 @@ div.space-on-right.images-right span.image    {
     margin-right: -30%;
     }
 
+/* images */
+
 ul.imageset li {
-display: inline!important;
+display: inline!important;   /* overrides inline-block which IE7 and lower don't understand properly */
+}
+
+.imageset a .more-information {
+   zoom: 1; /* gives the read more box haslayout, otherwise it looks wrong */
+   }
+
+/* the carousel */
+
+.faded, .faded * {
+	filter:alpha(opacity=90); /* IE lt 8 */
 }

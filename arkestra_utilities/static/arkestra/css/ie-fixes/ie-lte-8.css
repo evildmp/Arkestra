@@ -1,0 +1,30 @@
+/* lightboxes and multiple images */
+   
+/* when image-title is superimposed on an image */
+
+.imageset .image-title,
+.imageset a:hover .more-information {
+   background:transparent;
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#bbffffff,endColorstr=#bbffffff);
+} 
+
+.imageset a:link:hover .image-title {
+   background:transparent;
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#f0ffffff,endColorstr=#f0ffffff);
+    }   
+
+div#fancybox-content .imageset span.image-title { /* not on lightboxes */
+    filter: none;
+}
+
+/* sliders */
+
+div.anythingSlider-minimalist-square ul.slider .text {
+   background:transparent;
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#bb000000,endColorstr=#bb000000);
+   zoom: 1;
+} 
+
+div.anythingSlider-minimalist-square ul.slider .link-title:hover .more-information {
+   filter: none; 
+}

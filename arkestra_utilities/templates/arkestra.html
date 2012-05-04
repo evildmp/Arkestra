@@ -33,10 +33,9 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
  
-  <!--[if lt IE 9]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
-  <!--[if IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if lt IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie6.css" rel="stylesheet" type="text/css" /><![endif]--> 
-  <!--[if IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-8.css" rel="stylesheet" type="text/css" /><![endif]--> 
+<!--[if lte IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-7.css" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 6]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-6.css" rel="stylesheet" type="text/css" /><![endif]--> 
 
     {% block extrastyles %}
     {% endblock extrastyles %}
@@ -52,7 +51,7 @@
 
 <body {% block body_attributes %}{% endblock body_attributes %}>
     {% cms_toolbar %}
-    {% with placeholder_width=960 generic_main_width=523 sidebar_image_size="294x196" entity_image_size="445x384" sidebar_map_size="296x100" person_image_size="384x384" lightbox_max_dimension=800 plugin_thumbnail_size="75x75" %}
+    {% with placeholder_width=960 generic_main_width=523 sidebar_image_size="294x196" entity_image_size="445x384" sidebar_map_size="296x100" person_image_size="384x384" lightbox_max_dimension=600 plugin_thumbnail_size="75x75" %}
     	{% block body_content %}
         		<div id="outer-wrapper">
 					{% block outer_wrapper_top %}{% endblock %}
