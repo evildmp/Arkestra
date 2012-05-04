@@ -14,7 +14,7 @@ from contacts_and_people.models import Entity
 class AutocompleteMixin(object):
     class Media:
         js = [
-            # '/static/jquery/jquery.js',
+            # '/static/jquery/jquery.min.js',
             settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
             cms_static_url('js/libs/jquery.ui.core.js'),
         ]
