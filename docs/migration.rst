@@ -135,6 +135,7 @@ Back to the project directory:
 * `python manage.py migrate \--fake contacts_and_people`
 * `python manage.py migrate \--fake links`
 * `python manage.py migrate \--fake news_and_events`
+* `python manage.py migrate \--fake vacancies_and_studentships`
 * `python manage.py migrate \--fake video`
 
 Finally, all the following should be in agreement with each other:

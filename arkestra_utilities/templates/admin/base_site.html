@@ -17,12 +17,32 @@ body.login div#container {
 body.login div#container .form-row label {
 	color: white;
 }
-</style>{% endblock %}
+</style>
+<!--[if IE]>
+<style>
+div#content  {display: none;}
+#branding h2.ie {color: black; font-weight: bold;}
+body.login div#container {
+	background: red;
+	padding: 0;
+	}
+div#branding  {margin: 20px; padding: 20px; background: white; color: black;}
+</style>
+<![endif]--> 
+{% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Arkestra administration' %}{% endblock %}
 
 {% block branding %}
 <h1 id="site-name">{% trans 'Arkestra administration' %}</h1>
+<!--[if IE]>
+<h2 class="ie">Microsoft Internet Explorer</h2>
+<p>You appear to be using <em>Internet Explorer</em>.</p>
+<p>Internet Explorer is unsuitable for Arkestra administration.</p> 
+<p>It fails to comply with important standards, and lacks support for a number of key web technologies.</p>
+<p>Please use a standards-compliant browser such as Safari or Firefox for Arkestra administration.</p>
+<![endif]--> 
 {% endblock %}
+
 
 {% block nav-global %}{% endblock %}
