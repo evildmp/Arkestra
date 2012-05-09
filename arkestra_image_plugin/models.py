@@ -5,11 +5,8 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
-from cms.models import CMSPlugin, Page
-from cms.models.fields import PageField
-from cms import settings as cms_settings
+from cms.models import CMSPlugin
 
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
@@ -96,7 +93,8 @@ class ImageSetPlugin(CMSPlugin):
     IMAGESET_KINDS = (
         ("basic", "Basic"),
         ("multiple", "Multiple images"),
-        ("lightbox", "LightBox"),
+        ("lightbox", "Lightbox with gallery"),
+        ("lightbox-single", "Lightbox"),
         ("slider", "Slider"),
         )
     kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")
@@ -152,6 +150,10 @@ class ImageSetPlugin(CMSPlugin):
     @property
     def items_have_links(self):
         return all(item.destination_content_object is not None for item in self.imageset_item.all())
+
+    @property
+    def number_of_items(self):
+        return self.imageset_item.count()
 
     def __unicode__(self):
         return u"image-set-%s" % self.kind
@@ -217,4 +219,7 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
 
     @property
     def alt(self): 
-        return self.alt_text
+        if self.plugin.items_have_links:
+            return self.alt_text or self.destination_content_object
+        else: 
+            return ""

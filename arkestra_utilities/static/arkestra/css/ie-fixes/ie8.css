@@ -1,6 +1,0 @@
-/* IE 8 */
-
-/* the first line of text is too far away from the open quotes */
-p.pull-out {
-    list-style-image:url(../fixes/quotes-left-narrow.png);
-}

@@ -98,8 +98,8 @@ ul#tab-menu .active span {
 }
 ul#tab-menu a, 
 ul#tab-menu li a:link, 
-ul#tab-menu li a:hover, 
 ul#tab-menu li a:visited, 
+ul#tab-menu li a:hover, 
 ul#tab-menu li a:active{
 	color:#fff;
 	text-decoration:none;

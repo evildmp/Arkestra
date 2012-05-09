@@ -1,5 +1,3 @@
-#content    {margin-right: .7em;}
-
 /* IE 6 */
 
 div.column.lastcolumn,
@@ -34,6 +32,13 @@ div.space-on-right.images-right span.image    {
 
 div.space-on-left p.pull-out-new.big-quotes,
 div.space-on-right p.pull-out-new.big-quotes {width: auto;}
+
+
+/* IE6 doesn't understand position: fixed, so we absolute here instead */
+
+.hide   {
+    position:absolute;
+    }
 
 
 /* these are some horrible hacks for the span.image boxes. Oh well. */
@@ -71,14 +76,17 @@ div.carousel ul.carousel-segments li.carousel-segment
     padding:0;            
 }
 
-div.carousel ul.carousel-segments li.carousel-segment p, div.carousel ul.carousel-segments li.carousel-segment p a, div.carousel ul.carousel-segments li.carousel-segment a
+div.carousel ul.carousel-segments li.carousel-segment p, 
+div.carousel ul.carousel-segments li.carousel-segment p a, 
+div.carousel ul.carousel-segments li.carousel-segment a
 {
     color:#ffffff; 
     font-size:1em;
     position:absolute;
 }
 
-div.carousel ul.carousel-segments li.carousel-segment p a, div.carousel ul.carousel-segments li.carousel-segment a
+div.carousel ul.carousel-segments li.carousel-segment p a, 
+div.carousel ul.carousel-segments li.carousel-segment a
 {
     text-decoration:underline;
 }
@@ -137,11 +145,11 @@ div.carousel ul.carousel-btns li.carousel-btn.focus, div.carousel ul.carousel-bt
     text-decoration:none;
 }
 
-
-.faded, .faded * {
-	filter:alpha(opacity=90); /* IE lt 8 */
-	opacity:0.90; /* FF lt 1.5, Netscape */
+.faded, .faded li, .faded li a
+{
+    background: #ccc;
 }
+
 /* FINISH: Carousel css for IE6 */             
 
 ul.imageset li {
