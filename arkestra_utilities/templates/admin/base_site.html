@@ -20,13 +20,10 @@ body.login div#container .form-row label {
 </style>
 <!--[if IE]>
 <style>
-div#content  {display: none;}
-#branding h2.ie {color: black; font-weight: bold;}
-body.login div#container {
-	background: red;
-	padding: 0;
-	}
-div#branding  {margin: 20px; padding: 20px; background: white; color: black;}
+#branding h2.ie {color: black; font-weight: bold; padding-left: 0;}
+body.login div#container {background: red; padding: 0;}
+body.login div#container div#branding  {margin: 20px; padding: 20px; background: white; color: black;}
+div#branding  {margin: 80px 20px 20px; padding: 20px 20px 10px; background: white; color: black;}
 </style>
 <![endif]--> 
 {% endblock %}
@@ -38,9 +35,8 @@ div#branding  {margin: 20px; padding: 20px; background: white; color: black;}
 <!--[if IE]>
 <h2 class="ie">Microsoft Internet Explorer</h2>
 <p>You appear to be using <em>Internet Explorer</em>.</p>
-<p>Internet Explorer is unsuitable for Arkestra administration.</p> 
-<p>It fails to comply with important standards, and lacks support for a number of key web technologies.</p>
-<p>Please use a standards-compliant browser such as Safari or Firefox for Arkestra administration.</p>
+<p>Internet Explorer fails to comply with important standards, and lacks support for a number of key web technologies.</p>
+<p>Please use a modern standards-compliant browser such as Safari, Firefox or Chrome.</p>
 <![endif]--> 
 {% endblock %}
 
