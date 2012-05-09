@@ -10,12 +10,6 @@
     display: block;
 }
 
-.image img { /* center images within their block anchor containers */ 
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    }
-
 /* ================ all multiple imagesets =============== */
 
 /*  ul.imageset 
@@ -50,6 +44,14 @@ ul.imageset li.image.lastinrow {
     
 ul.imageset li.image a {
     vertical-align: middle;
+    }
+
+/* applies to items inside lightboxes too, so no ul selector */
+.imageset .image img { /* center images within their block anchor containers */ 
+    margin-left: auto;
+    margin-right: auto;
+    display: block;  /* the image inside is a block, so we don't get text lines */
+
     }
 
 /* ================ when images are links =============== */
@@ -229,7 +231,7 @@ img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
 a img {border: none;}
 
 span.image {display: block; clear: both;}
-span.image img {display: block;} /* the image inside is a block, so we don't get text lines */
+
 /* styles available to the presentation editor */
 
 /* images: float left/right - left/right floats can be applied either directly to image plugins or their containers */
