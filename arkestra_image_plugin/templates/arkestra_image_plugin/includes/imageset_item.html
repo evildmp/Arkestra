@@ -20,7 +20,7 @@
 
     <a {% if item.url and imageset.items_have_links %}href="{{ item.url }}"{% endif %} style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
 	
-    	<img alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.destination_content_object }}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
+    	<img alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{% if item.destination_content_object %}{{ item.destination_content_object }}{% endif %}{% endif %}" class="plugin" src="{% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location %}" />
 	
     	{% if item.image_title %}<span class="imageset-item-data image-title text">{{ item.image_title }}</span>{% endif %}
     	{% if item.image_caption %}<span class="imageset-item-data image-caption text">{{ item.image_caption }}</span>{% endif %}

@@ -1,6 +1,6 @@
 {% spaceless %}           
 {% load thumbnail %}
 {% with imageset.item as item %}
-<span class="imageset image">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</span>
+<span class="imageset image {{ imageset.float|default:'' }}">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</span>
 {% endwith %}
 {% endspaceless %} 
