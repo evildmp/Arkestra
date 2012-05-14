@@ -22,6 +22,7 @@
                 span.link-description.text
                 span.more-information
                     span.hide
+                span.link-arrow (if no span.more-information)
 */
 
 ul.imageset {padding: 0; margin: 0; position}
@@ -154,6 +155,22 @@ ul.imageset:hover li.image.link:hover {
     color: black;
     background: rgba(255,255,255,.7); 
 }
+
+.imageset a:link .link-arrow {
+    background: url(/static/arkestra/images/default_styles/image-link-arrow.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+}
+
+/* SemanticEditor class required: no-image-link-arrows */
+
+.no-image-link-arrows .imageset a:link .link-arrow {
+    background-image: none;
+    }
        
 /* ================ lightboxes =============== */
 
