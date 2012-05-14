@@ -165,6 +165,12 @@ ul.imageset:hover li.image.link:hover {
     right: -4px;
     bottom: -4px;
 }
+
+/* SemanticEditor class required: no-image-link-arrows */
+
+.no-image-link-arrows .imageset a:link .link-arrow {
+    background-image: none;
+    }
        
 /* ================ lightboxes =============== */
 
