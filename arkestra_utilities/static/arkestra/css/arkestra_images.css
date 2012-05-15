@@ -156,7 +156,9 @@ ul.imageset:hover li.image.link:hover {
     background: rgba(255,255,255,.7); 
 }
 
-.imageset a:link .link-arrow {
+/* ================ link arrow icons =============== */ 
+.imageset a:link .link-arrow,
+.imageset a:visited .link-arrow {
     background: url(/static/arkestra/images/default_styles/image-link-arrow.png) no-repeat;
     width: 20px;
     height: 20px;
@@ -165,6 +167,12 @@ ul.imageset:hover li.image.link:hover {
     right: -4px;
     bottom: -4px;
 }
+
+.imageset a:link:hover .link-arrow,
+.imageset a:visited:hover .link-arrow {
+    background: url(/static/arkestra/images/default_styles/image-link-arrow-reversed.png) no-repeat;
+}
+
 
 /* SemanticEditor class required: no-image-link-arrows */
 
