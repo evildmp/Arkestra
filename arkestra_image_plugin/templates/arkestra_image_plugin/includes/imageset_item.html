@@ -18,6 +18,7 @@
 	        {% if forloop.first %}
     	        <span class="image-title">{{ imageset.number_of_items }} images</span>
     	        <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
+                <span class="link-arrow"></span>
     	    {% else %}
     	        <span class="hide">{{ item.image.name }}</span>
     	    {% endif %}
@@ -26,8 +27,8 @@
 	    {% if imageset.kind == "lightbox" %}
     	    {% if item.link_title %}<span  class="image-title">{{ item.link_title }}</span>{% endif %}
 		    <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
+            <span class="link-arrow"></span>
 		{% endif %}
-        <span class="link-arrow"></span>
    	</a>
 
 {% else %}
