@@ -12,7 +12,9 @@ from django.conf import settings
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
 
-import mptt
+from mptt.models import MPTTModel, TreeForeignKey
+from mptt.managers import TreeManager
+# import mptt
 
 from filer.fields.image import FilerImageField
 
@@ -209,7 +211,7 @@ class EntityLite(models.Model):
         return unicode(self.name)
 
 
-class EntityManager(models.Manager):
+class EntityManager(TreeManager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
@@ -236,13 +238,13 @@ class EntityManager(models.Manager):
                 # print "** I successfully found a default entity:", entity
                 return entity
 
-class Entity(EntityLite, CommonFields):
+class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
     short_name = models.CharField(blank=True, help_text="e.g. Haematology",
         max_length=100, null=True, verbose_name="Short name for menus")
     abstract_entity = models.BooleanField("Abstract entity", default=False,
         help_text=u"Select if this <em>group</em> of entities, but not an entity itself, or if it's just a grouping of people",)
-    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     display_parent = models.BooleanField(u"Include parent entity's name in address", default=True, help_text=u"Deselect if this entity recapitulates its parent's name")
     building_recapitulates_entity_name = models.BooleanField(default=False, 
         help_text=u"Removes the first line of the address - use to avoid, for example:<br /><em>Department of Haematology<br />Haematology Building<br />...</em>")
@@ -777,10 +779,10 @@ class EntityMembersPluginEditor(CMSPlugin):
         help_text="Leave blank for autoselect", 
         related_name="entity_members_plugin", on_delete=models.SET_NULL)
 
-try:
-    mptt.register(Entity)
-except mptt.AlreadyRegistered:
-    pass
+# try:
+#     mptt.register(Entity)
+# except mptt.AlreadyRegistered:
+#     pass
 
 # default_entity_id is used to autofill the default entity where required, when MULTIPLE_ENTITY_MODE = False
 # default_entity is used throughout the system
