@@ -1,5 +1,5 @@
 from django import template
-from contacts_and_people.models import Membership
+from contacts_and_people.models import Membership, Entity
 
 register = template.Library()
 
@@ -10,15 +10,7 @@ def membership_tree_roots(context, person):
     make_membership_tree to display the entities in the tree that the person
     belongs to.
     """
-    roots = set()
-    for entity in person.entities.all():
-        # get the closest-to-root non-abstract entity
-        if entity.get_ancestors().filter(abstract_entity = False):
-            roots.add(entity.get_ancestors().filter()[0])
-        # or this entity, if it's not an abstract entity
-        elif not entity.abstract_entity:
-            roots.add(entity)
-            
+    roots = Entity.objects.root_nodes()
     return {
         'roots': list(roots),
         'person': person,
