@@ -369,11 +369,11 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             # copy the queryset to a list. You know it makes sense
             imageset.items = list(imageset.imageset_item.all())
             
-            # at least three items are required for a slider - just two is unaesthetic
-            if imageset.kind == "slider" and imageset.number_of_items > 2:
+            # at least two items are required for a slider
+            if imageset.kind == "slider" and imageset.number_of_items > 1:
                 imageset = slider(imageset)
 
-            elif imageset.kind == "lightbox" or imageset.kind == "multiple":
+            elif imageset.kind == "lightbox" or (imageset.kind == "multiple" and imageset.number_of_items > 1):
                 imageset = multiple_images(imageset, context)
 
             elif imageset.kind == "lightbox-single":
