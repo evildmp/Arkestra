@@ -155,7 +155,6 @@ def multiple_images(imageset, context):
         aspect_ratio = imageset.aspect_ratio                             
 
 
-    print "aspect_ratio", aspect_ratio
 
     # don't allow more items_per_row than there are items
     if imageset.items_per_row > imageset.number_of_items:
@@ -177,7 +176,6 @@ def multiple_images(imageset, context):
 
     # calculate height 
     each_item_width, each_item_height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
-    print "each_item_width, each_item_height", each_item_width, each_item_height
 
     # set up each item
     # for counter, item in enumerate(imageset.items, start = 1): # enable this when we no longer need to support Python 2.5
