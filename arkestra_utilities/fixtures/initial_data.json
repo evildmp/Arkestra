@@ -1,12 +1,5 @@
 [
     {
-        "pk": 1,
-        "model": "semanticeditor.cssclasscategory",
-        "fields": {
-            "name": "Width"
-        }
-    },
-    {
         "pk": 3,
         "model": "semanticeditor.cssclasscategory",
         "fields": {
@@ -21,11 +14,58 @@
         }
     },
     {
+        "pk": 5,
+        "model": "semanticeditor.cssclasscategory",
+        "fields": {
+            "name": "Links"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "semanticeditor.cssclasscategory",
+        "fields": {
+            "name": "Typography"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "semanticeditor.cssclasscategory",
+        "fields": {
+            "name": "Width"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 5,
+            "templates": "[u'']",
+            "name": "buttonise",
+            "allowed_elements": "p newrow newcol innerrow innercol",
+            "column_equiv": null,
+            "verbose_name": "buttonise",
+            "description": ""
+        }
+    },
+    {
+        "pk": 9,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 4,
+            "templates": "[u'']",
+            "name": "no-small-caps",
+            "allowed_elements": "p newrow newcol innerrow innercol",
+            "column_equiv": null,
+            "verbose_name": "disable small caps",
+            "description": ""
+        }
+    },
+    {
         "pk": 1,
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 1,
-            "templates": "[u'arkestra.html']",
+            "templates": "[u'']",
             "name": "doublecolumn",
             "allowed_elements": "newcol innercol",
             "column_equiv": 2,
@@ -34,15 +74,28 @@
         }
     },
     {
-        "pk": 2,
+        "pk": 11,
         "model": "semanticeditor.cssclass",
         "fields": {
-            "category": 1,
-            "templates": "[u'arkestra.html']",
-            "name": "triplecolumn",
-            "allowed_elements": "newcol innercol",
-            "column_equiv": 3,
-            "verbose_name": "triple",
+            "category": 2,
+            "templates": "[u'']",
+            "name": "images-left",
+            "allowed_elements": "p newrow newcol innerrow innercol",
+            "column_equiv": null,
+            "verbose_name": "float left",
+            "description": ""
+        }
+    },
+    {
+        "pk": 12,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 2,
+            "templates": "[u'']",
+            "name": "images-right",
+            "allowed_elements": "p newrow newcol innerrow innercol",
+            "column_equiv": null,
+            "verbose_name": "float right",
             "description": ""
         }
     },
@@ -51,7 +104,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u'arkestra.html']",
+            "templates": "[u'']",
             "name": "image-borders",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -60,15 +113,67 @@
         }
     },
     {
-        "pk": 4,
+        "pk": 7,
         "model": "semanticeditor.cssclass",
         "fields": {
-            "category": 3,
-            "templates": "[u'arkestra.html']",
-            "name": "background green",
-            "allowed_elements": "p blockquote ul ol li newrow newcol innerrow innercol",
+            "category": 2,
+            "templates": "[u'']",
+            "name": "shadowed",
+            "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
-            "verbose_name": "green",
+            "verbose_name": "have shadows",
+            "description": ""
+        }
+    },
+    {
+        "pk": 8,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 2,
+            "templates": "[u'']",
+            "name": "no-image-link-arrows",
+            "allowed_elements": "p newrow newcol innerrow innercol",
+            "column_equiv": null,
+            "verbose_name": "no link arrow icons",
+            "description": ""
+        }
+    },
+    {
+        "pk": 5,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 4,
+            "templates": "[u'']",
+            "name": "standout",
+            "allowed_elements": "p",
+            "column_equiv": null,
+            "verbose_name": "standout",
+            "description": ""
+        }
+    },
+    {
+        "pk": 10,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 4,
+            "templates": "[u'']",
+            "name": "standout-mild",
+            "allowed_elements": "p",
+            "column_equiv": null,
+            "verbose_name": "standout (mild)",
+            "description": ""
+        }
+    },
+    {
+        "pk": 2,
+        "model": "semanticeditor.cssclass",
+        "fields": {
+            "category": 1,
+            "templates": "[u'']",
+            "name": "triplecolumn",
+            "allowed_elements": "newcol innercol",
+            "column_equiv": 3,
+            "verbose_name": "triple",
             "description": ""
         }
     }
