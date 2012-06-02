@@ -81,7 +81,9 @@ Until sekizai becomes Django 1.4-compatible, you'll need to stay with Django ver
 
 * `pip install django==1.3.1`
 * `pip install django-mptt==0.5.1`
-* `pip install django-cms django-polymorphic BeautifulSoup django-typogrify pyquery easy-thumbnails django-appmedia`
+* `pip install pyquery==1.1.1`
+* `pip install easy-thumbnails==1.0-alpha-21`
+* `pip install django-cms django-polymorphic BeautifulSoup ElementTree django-typogrify django-appmedia`
 
 Download components from source
 ===============================
@@ -94,9 +96,9 @@ Download components from source
 Put them on your PYTHONPATH
 ===========================
 
-There are other, probably better, ways of doing this, but it works.
+There are other, certainly better, ways of doing this, but it works.
 
-* `cd lib/python2.6/site-packages` 
+* `cd lib/python2.6/site-packages` # or wherever your site-packages is
 * `ln -s ../../../Arkestra/arkestra_image_plugin`
 * `ln -s ../../../Arkestra/arkestra_utilities`
 * `ln -s ../../../Arkestra/contacts_and_people`
@@ -130,4 +132,13 @@ Fire up the server
 
 * `python manage.py runserver 0.0.0.0:8000`
 
-Username and password are both `arkestra`.
+Username and password are both `arkestra`.     
+
+Note!
+=====
+
+When you start up the server, you won't see any of the news/events/vacancies/studentships items you'd expect. 
+
+That's because they're all out of date by now - this database was created some time ago.
+
+Go into the news/events/vacancies/studentships and give them more appropriate dates.
