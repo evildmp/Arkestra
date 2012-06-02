@@ -17,15 +17,8 @@ def lightbox_item(request, id=None, lightbox_max_dimension=400):
     # get width, height and lightbox_max_dimension
     lightbox_width, lightbox_height = item.image.width, item.image.height
     
-    # user has set aspect ratio? apply it, set crop argument for thumbnailer
-
-    if item.plugin.aspect_ratio:
-        lightbox_height = lightbox_width / item.plugin.aspect_ratio
-        thumbnail_options.update({'crop': True}) 
-
-    print "aspect", lightbox_width, lightbox_height
     # get scaler value from width, height
-    if max([lightbox_width, lightbox_height]) > 800:
+    if max([lightbox_width, lightbox_height]) > lightbox_max_dimension:
         scaler = min(lightbox_max_dimension / dimension for dimension in [lightbox_width, lightbox_height]) 
         # set size of lightbox using scaler 
         item.width, item.height = lightbox_width * scaler, lightbox_height * scaler        
@@ -34,9 +27,6 @@ def lightbox_item(request, id=None, lightbox_max_dimension=400):
 
     item.width, item.height = int(item.width), int(item.height)
                         
-                        
-    
-
     thumbnail_options.update({
         'size': (item.width, item.height), 
         'subject_location': item.image.subject_location,
