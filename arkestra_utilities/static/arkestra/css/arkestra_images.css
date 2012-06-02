@@ -119,7 +119,6 @@ ul.imageset:hover li.image.link:hover {
     font-size: 90%;
     text-align: right;
     padding-bottom: 5px;
-    padding-left: 20%;
     }
 
 .imageset .link-title {
@@ -230,7 +229,7 @@ div#fancybox-content div.link-information span.link-description {
     margin-bottom: 6px;
 }
     
-div#fancybox-content a.more-information {
+div#fancybox-content a .more-information {
     font-size: 75%;
     }
 
