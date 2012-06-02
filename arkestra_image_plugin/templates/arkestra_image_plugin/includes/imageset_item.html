@@ -2,37 +2,35 @@
 {% load thumbnail %}
 
 {% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location as image_src %}
-{% ifequal imageset.kind "slider" %}
 
+{% if imageset.kind == "slider" %}
     <div><img alt="{% if item.link_title %}{{ item.alt }}{% endif %}" class="plugin" src="{{ image_src.url }}" />
-
     {% if item.image_title %}<span class="imageset-item-data image-title text">{{ item.image_title }}</span>{% endif %}
 	{% if item.url and imageset.items_have_links %}<a class="link-title text" href="{{ item.url }}"><span class="title">{{ item.link_title|default:item.text }}</span> <span class="more-information">Read more...</span></a>{% endif %}
     </div>
-{% else %}
-{% if "lightbox" in imageset.kind %}
+{% endif %}   
 
+{% if imageset.kind == "lightbox-single" %}
 	<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}/{{ lightbox_max_dimension }}/" style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
-
-	    {% if imageset.kind == "lightbox-single" %}
-	        {% if forloop.first %}
-    	        <span class="image-title">{{ imageset.number_of_items }} images</span>
-    	        <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
-                <span class="link-arrow"></span>
-    	    {% else %}
-    	        <span class="hide">{{ item.image.name }}</span>
-    	    {% endif %}
-    	{% endif %}    
-
-	    {% if imageset.kind == "lightbox" %}
-    	    {% if item.link_title %}<span  class="image-title">{{ item.link_title }}</span>{% endif %}
-		    <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
+        {% if forloop.first %}
+   	        <span class="image-title">{{ imageset.number_of_items }} images</span>
+   	        <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
             <span class="link-arrow"></span>
-		{% endif %}
+  	    {% else %}
+   	        <span class="hide">{{ item.image.name }}</span>
+   	    {% endif %}
    	</a>
+{% endif %}
 
-{% else %}
+{% if imageset.kind == "lightbox" %}
+	<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}/{{ lightbox_max_dimension }}/" style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
+   	    {% if item.link_title %}<span  class="image-title">{{ item.link_title }}</span>{% endif %}
+	    <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
+        <span class="link-arrow"></span>
+   	</a>
+{% endif %}
 
+{% if imageset.kind == "basic" or imageset.kind == "multiple" %}
     <a {% if imageset.items_have_links %}href="{{ item.url }}"{% endif %} style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
 	
     	<img alt="{{ item.alt }}" class="plugin" src="{{ image_src.url }}" />
@@ -53,6 +51,6 @@
     	    {% endif %}
     	{% endif %}
     </a>
-    
-{% endif %}{% endifequal %}
+{% endif %}
+
 {% endspaceless %}      

@@ -115,7 +115,7 @@ class ImageSetPlugin(CMSPlugin):
             (-350.0, u'350 pixels'),
             )
         ),    
-        ('0', u"Image's native width (use with caution)"),
+        (0.0, u"Image's native width (use with caution)"),
     )
     width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
     height = models.PositiveIntegerField(null=True, blank=True,
@@ -134,6 +134,7 @@ class ImageSetPlugin(CMSPlugin):
         (0.618, u'Golden ratio (vertical)'),
         (0.563, u'16x9'),
         (0.3, u'1x3'),
+        (-1.0, u'Force native'),
         )
     aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0,          
         help_text = "<em>Automatic</em> means native aspect ratio will be used where possible and calculated otherwise")
@@ -193,7 +194,9 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
     destination_content_object = generic.GenericForeignKey('destination_content_type', 'destination_object_id')
 
     def __unicode__(self):
-        if self.image:
+        if self.destination_object_id:
+            return u"%s (links to: %s %s)" % (self.image.label, self.destination_content_type, self.destination_content_object)
+        elif self.image:
             return self.image.label
         else:
             return u"Image Publication %s" % self.caption

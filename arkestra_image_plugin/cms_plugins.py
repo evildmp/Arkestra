@@ -26,7 +26,7 @@ IMAGESET_ITEM_PADDING = getattr(settings, "IMAGESET_ITEM_PADDING", 10)
 
 
 # a dictionary to show how many items per row depending on the number of items
-LIGHTBOX_COLUMNS = {2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
+LIGHTBOX_COLUMNS = {1:1, 2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
 
 def width_of_image_container(context, plugin):
     # Based on the plugin settings and placeholder width, calculate image container width
@@ -53,12 +53,15 @@ def width_of_image_container(context, plugin):
     width = calculate_container_width(context, plugin, width, auto)
     
     # return the width of the container
+    print "width_of_image_container", width
     return width
 
 def width_of_image(plugin, image=None):
-    # no plugin width?
+    # no plugin width? 
+    print "plugin width", plugin.width
     if not plugin.width:
         if image:
+            print "image", image
             # use native image width
             width = image.width
         else:
@@ -68,7 +71,8 @@ def width_of_image(plugin, image=None):
     elif plugin.width < 0:
         width = -plugin.width
     else:
-        width = plugin.container_width
+        width = plugin.container_width 
+    print "width_of_image", width
     return width
     
 def calculate_aspect_ratio(image):
@@ -92,7 +96,11 @@ def calculate_height(given_width, given_height, given_aspect_ratio, width, aspec
     # if the instance has no aspect ratio, we use the native aspect ratio
 
     # has aspect ratio
-    if given_aspect_ratio: 
+    print  given_aspect_ratio
+    
+    if given_aspect_ratio == -1:
+        height=width/aspect_ratio 
+    elif given_aspect_ratio: 
         height = width / given_aspect_ratio
         # if the instance has no width, but does have a height, use the aspect ratio to calculate it
         if given_height and not given_width: 
@@ -147,15 +155,12 @@ def multiple_images(imageset, context):
     # we call width_of_image() without an image argument 
     each_item_width = width_of_image(imageset)           
 
-    # no specified aspect ratio or height? get an average and use that
-    if not imageset.aspect_ratio and not imageset.height:
+    # if imageset.aspect_ratio is 0 (auto) get an average and use that
+    if imageset.aspect_ratio == 0 and not imageset.height:
         aspect_ratio = sum([calculate_aspect_ratio(item.image) for item in imageset.items])/imageset.number_of_items
-    # use aspect ratio
+    # otherwise use supplied aspect ratio
     else:
         aspect_ratio = imageset.aspect_ratio                             
-
-
-    print "aspect_ratio", aspect_ratio
 
     # don't allow more items_per_row than there are items
     if imageset.items_per_row > imageset.number_of_items:
@@ -175,9 +180,9 @@ def multiple_images(imageset, context):
         if imageset.width > 0:
             each_item_width = each_item_width - (items_per_row-1) * padding_adjuster/items_per_row  
 
-    # calculate height 
-    each_item_width, each_item_height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
-    print "each_item_width, each_item_height", each_item_width, each_item_height
+    # if imageset.aspect_ratio  is not -1 (forced native) calculate height/width for all
+    if not imageset.aspect_ratio == -1:
+        each_item_width, each_item_height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
 
     # set up each item
     # for counter, item in enumerate(imageset.items, start = 1): # enable this when we no longer need to support Python 2.5
@@ -188,9 +193,32 @@ def multiple_images(imageset, context):
         if imageset.width > 0 and not counter%items_per_row:
             item.lastinrow = True
 
-        item.width,item.height = int(each_item_width), int(each_item_height)
+        if imageset.aspect_ratio == -1:
+            aspect_ratio = calculate_aspect_ratio(item.image) 
+            item.width,item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
+            item.width,item.height = int(item.width), int(item.height)
+            print item.width,item.height
+        else:            
+            item.width,item.height = int(each_item_width), int(each_item_height)
+            print item.width,item.height
         item.image_size = u'%sx%s' %(item.width, item.height) 
         item.caption_width=item.width
+
+    # # if forced_native, set each individually
+    # else:
+    #     for counter, item in enumerate(imageset.items):
+    #         counter=counter+1
+    #         # mark end-of-row items in case the CSS needs it    
+    #         # only when we are using percentage widths
+    #         if imageset.width > 0 and not counter%items_per_row:
+    #             item.lastinrow = True
+    # 
+    #         aspect_ratio = calculate_aspect_ratio(item.image)
+    #         item.width,item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
+    #         item.width,item.height = int(item.width), int(item.height)
+    #         item.image_size = u'%sx%s' %(item.width, item.height) 
+    #         item.caption_width=item.width   
+
 
     return imageset
     
@@ -206,7 +234,9 @@ def lightbox_single(imageset, context):
     # calculate its native aspect ratio
     aspect_ratio = calculate_aspect_ratio(item.image)
     # get width
-    width = width_of_image(imageset, item.image)
+    print "item.image",  item.image
+    width = width_of_image(imageset, item.image)        
+    print "width = width_of_image(imageset, item.image",     width
     # shave if floated
     width = shave_if_floated(imageset, width) or width
 
@@ -406,6 +436,8 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
             return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
         elif instance.kind == "basic":
             return "/static/plugin_icons/imageset_basic.png"
+        elif instance.kind == "lightbox-single":
+            return "/static/plugin_icons/lightbox.png"
         elif instance.kind == "lightbox":
             return "/static/plugin_icons/lightbox.png"
         elif instance.kind == "slider":
