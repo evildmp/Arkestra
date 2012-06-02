@@ -202,7 +202,7 @@ class ExternalSite(models.Model):
     parent = models.ForeignKey('self', blank=True, null = True, related_name='children') # for tree version of ExternalLinks
     
     class Meta:
-        ordering = ['site',]
+        ordering = ['domain',]
             
     def __unicode__(self):
         # if this site is unnamed, let's see if it has a named ancestor
