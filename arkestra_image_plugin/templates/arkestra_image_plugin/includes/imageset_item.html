@@ -44,11 +44,10 @@
     	{% if item.show_author %}<span class="image_author text">(Author: {{ item.image.author }})</span>{% endif %}
 	    
     	{% if imageset.items_have_links %}
-    	    {% if item.link_title or item.link_description or item.image_caption %}
-    	        <span class="more-information">Read more<span class="hide"> about {{ item.link_title|default:item.text }}</span>...</span>
-    	    {% else %}
-    	        <span class="link-arrow"></span>
+    	    {% if item.link_title or item.link_description %}
+    	        <span class="hide">{{ item.link_title|default:item.text }}</span>
     	    {% endif %}
+   	        <span class="link-arrow"></span>
     	{% endif %}
     </a>
 {% endif %}

@@ -5,9 +5,9 @@ Documentation & support
 
 Documentation is in progress; what exists can be found at http://readthedocs.org/docs/arkestra/.
 
-email list and archives: http://groups.google.com/group/django-arkestra
-
-IRC: #arkestra on irc.freenode.net
+* website: http://arkestra-project.org
+* email list and archives: http://groups.google.com/group/django-arkestra
+* IRC: #arkestra on irc.freenode.net
 
 Relationship with django CMS
 ****************************
@@ -45,9 +45,9 @@ Arkestra currently publishes the website of Cardiff University School of Medicin
 160 entities (i.e. parts of the organisation), as well as
 330 news articles and 570 events.
 
-It also publishes over 1000 pages.
+It also publishes over 10000 pages, around 90% of which are published automatically by the system.
 
-All this information is managed by a team of over 60 web editors.
+All this information is managed by a team of over 40 web editors.
 
 In other words it is suited to the needs of large organisations; it's robust and performs well.
 
@@ -56,8 +56,8 @@ Smaller projects
 
 It also works well for much smaller projects, its core concepts scale up and down effectively. Two much smaller sites using Arkestra include:
 
-http://aikidocardiff.com/
-http://thelaugharneweekend.com/
+* http://aikidocardiff.com/
+* http://thelaugharneweekend.com/
 
 Work to be done
 ***************

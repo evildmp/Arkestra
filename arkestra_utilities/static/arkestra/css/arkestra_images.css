@@ -10,6 +10,24 @@
     display: block;
 }
 
+/* ================ all single imagesets =============== */
+
+/*  span.imageset.image 
+        a
+            img.plugin
+            span.image-title.text
+            span.image-description.text
+            span.link-title.text
+            span.link-description.text
+            span.more-information
+                span.hide
+            span.link-arrow (if no span.more-information)
+*/
+
+span.imageset.image {
+    display: inline-block; /* because otherwise a block, that could get too wide */
+}
+
 /* ================ all multiple imagesets =============== */
 
 /*  ul.imageset 
@@ -255,6 +273,7 @@ img.right   {float: right; margin-left: 1em; margin-bottom: .5em;}
 a img {border: none;}
 
 span.image {display: block; clear: both;}
+span.image span.image-caption {display: block;}
 
 /* styles available to the presentation editor */
 
