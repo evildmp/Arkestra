@@ -241,7 +241,7 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
-    'video',
+    # 'video',
     'housekeeping',
     
     # other applications
