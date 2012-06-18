@@ -15,7 +15,7 @@ setup(
     #     'news_and_events',
     #     'vacancies_and_studentships',
     #     # 'video',
-    ),
+    # ),
     license='LICENSE.txt',
     description='A semantic web publishing system for organisations',
     long_description=open(join(dirname(__file__), 'README.txt')).read(),
