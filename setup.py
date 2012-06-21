@@ -6,7 +6,8 @@ setup(
     version='2.0.0',
     author='Daniele Procida',
     author_email='daniele@vurt.org',
-    packages=find_packages(),
+    packages=find_packages(exclude=["example"]),
+    include_package_data=True,
     # packages=(
     #     'arkestra_utilities',
     #     'arkestra_image_plugin',
@@ -20,12 +21,12 @@ setup(
     license='LICENSE.txt',
     description='A semantic web publishing system for organisations',
     long_description=open(join(dirname(__file__), 'README.txt')).read(),
-    # requires=[
-    #     "Django==1.3.1",            # Django, obviously
-    #     "django-cms==2.2",          # and django CMS
-    #     "South==0.7.5",             # for migrations
-    #     "django-mptt==0.5.1",       # necessary to force the right version
-    #     "django-typogrify==1.3",    # for HTML typography
+    install_requires=[
+        "Django==1.3.1",            # Django, obviously
+        "django-cms==2.2",          # and django CMS
+        "South==0.7.5",             # for migrations
+        "django-mptt==0.5.1",       # necessary to force the right version
+        "django-typogrify==1.3",    # for HTML typography
     #     "django-polymorphic",       # not sure what needs this
     #     "django-appmedia",
     #     
@@ -38,8 +39,8 @@ setup(
     #     
     #     # for images
     #     "PIL==1.1.7",               # never works properly 
-    #     "easy-thumbnails==1.0-alpha-21", # hooray for SmileyChris
-    # ],
+        "easy-thumbnails==1.0-alpha-21", # hooray for SmileyChris
+    ],
 )
  
 """
