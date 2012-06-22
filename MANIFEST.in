@@ -1,2 +1,11 @@
 # include *.txt
 # recursive-include docs *.txt           
+graft arkestra_image_plugin
+graft arkestra_utilities
+graft arkestra_utilities
+graft contacts_and_people
+graft housekeeping
+graft links
+graft news_and_events
+graft vacancies_and_studentships
+graft video
