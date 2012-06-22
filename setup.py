@@ -13,7 +13,8 @@ setup(
     description='A semantic web publishing system for organisations',
     long_description=open(join(dirname(__file__), 'README.txt')).read(),
     install_requires=[
-    'django-typogrify',
+    'django-typogrify', 
+    'BeautifulSoup'
     'django-cms',
     ]
 )
