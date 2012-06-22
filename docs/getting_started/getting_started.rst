@@ -1,6 +1,6 @@
-###############
-Getting Started
-###############
+#########################
+Starting your own project
+#########################
 
 *********************************
 Using the bundled example project
@@ -40,6 +40,6 @@ where the value corresponds to the id of your base entity.
 In production
 *************
 
-Run `collectstatic` - https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/- and the equivalent `symlinkmedia` -https://github.com/divio/django-appmedia - for media files to get them into the right place.
+Run `collectstatic` - https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles for media files to get them into the right place.
 
 For deployment, point your web hosting platform not at `settings.py`, but `deployment_settings.py`, which turns off various debug modes. 
