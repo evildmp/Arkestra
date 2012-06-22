@@ -16,7 +16,7 @@ setup(
     'django-typogrify', 
     'BeautifulSoup',
     'django-cms',  
-    'pil',
+    'pillow',
     ]
 )
  
