@@ -167,6 +167,14 @@ except ImportError:
     pass
 
 
+# ------------------------ Django Filer
+
+FILER_FILE_MODELS = (
+        'video.models.Video',
+        'filer.models.imagemodels.Image',
+        'filer.models.filemodels.File',
+    )
+
 # ------------------------ Django CMS
 
 gettext = lambda s: s
@@ -217,6 +225,7 @@ CMS_PLACEHOLDER_CONF = {
 
 LANGUAGES = (
 ('en', gettext('English')),
+('de', gettext('German')),
 ('cy', gettext('Cymraeg')),
 )
 
@@ -241,7 +250,7 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
-    # 'video',
+    'video',
     'housekeeping',
     
     # other applications
