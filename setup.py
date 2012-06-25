@@ -13,9 +13,13 @@ setup(
     description='A semantic web publishing system for organisations',
     long_description=open(join(dirname(__file__), 'README.txt')).read(),
     install_requires=[
+    'django==1.3.1',
     'django-typogrify', 
     'BeautifulSoup',
-    'django-cms',  
+    'django-cms',
+    'django-filer'
+    'semanticeditor',
+    'django-widgetry',  
     'pillow',
     ]
 )
