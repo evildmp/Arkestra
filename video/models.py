@@ -2,24 +2,45 @@ import os, subprocess
 
 from posixpath import join, basename, splitext, exists
 
+from django.core import urlresolvers
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from cms.models import CMSPlugin, Page
 from cms import settings as cms_settings
 
+from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
-from filer.fields.video import FilerVideoField
-from filer.models.videomodels import Video
+# from filer.fields.video import FilerVideoField
+from filer.models.filemodels import File
+from filer import settings as filer_settings
 
 
-class ArkestraVideo(Video):
-    class Meta:
-        proxy = True
-        verbose_name = "Video"
-        
+class Video(File):
+
+    @classmethod
+    def matches_file_type(cls, iname, ifile, request):
+        # the extensions we'll recognise for this file type
+        filename_extensions = ['.dv', '.mov', '.mp4', '.avi', '.wmv',]
+        ext = os.path.splitext(iname)[1].lower()
+        return ext in filename_extensions
+
+    # we get to use Filer's video icon free
+    _icon = "video"
+
+    # def get_admin_url_path(self):
+    #     return urlresolvers.reverse('admin:filer_video_change', args=(self.id,))
+
+
+# class ArkestraVideo(Video):
+#     class Meta:
+#         proxy = True
+#         verbose_name = "Video"
+
+
+class FilerVideoField(FilerFileField):
+    default_model_class = Video
 
 class VideoPluginEditor(CMSPlugin):
     LEFT = "left"
@@ -28,7 +49,6 @@ class VideoPluginEditor(CMSPlugin):
                      (RIGHT, _("right")),
                      )
     video = FilerVideoField()
-    #   added for cardiff template calculations
     VIDEO_WIDTHS = (
         (1000.0, u"Automatic"),
         (u'Widths relative to the containing column', (
@@ -44,7 +64,6 @@ class VideoPluginEditor(CMSPlugin):
     )
     width = models.FloatField(null=True, blank=True, choices = VIDEO_WIDTHS, default = 1000.0)
 
-#   end of cardiff amendments
     use_description_as_caption = models.BooleanField(verbose_name = "Use description", default=False, help_text = "Use image's description field as caption")
     caption = models.TextField(_("Caption"), blank=True, null=True)
     float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
@@ -287,4 +306,4 @@ We provide these so we know we which encoded videos are available or missing for
 PLAYERS = {
     "HTML5": ("H.264", "Theora"),
     "FLASH": ("H.264",),
-    }
+    }                                    
