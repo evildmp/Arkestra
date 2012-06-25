@@ -227,7 +227,7 @@ INSTALLED_APPS = (
     'arkestra_utilities',
     'cms',
     'menus',
-    'appmedia',
+    # 'appmedia',
     'cms.plugins.text',
     'cms.plugins.snippet',
     'sekizai',
@@ -241,12 +241,12 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
-    'video',
+    # 'video',
     'housekeeping',
     
     # other applications
     
-    'polymorphic',
+    # 'polymorphic',
     'semanticeditor',
     'mptt',
     'easy_thumbnails',

@@ -1,32 +1,13 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
+from datetime import datetime
 
-Replace these with more appropriate tests for your application.
-"""
 from django.test import TestCase
-from django.utils import unittest
 
-class PersonTestCase(unittest.TestCase):
+from contacts_and_people.models import Person
+
+class TestTest(TestCase):
+
     def setUp(self):
-        self.lion = Animal.objects.create(name="lion", sound="roar")
-        self.cat = Animal.objects.create(name="cat", sound="meow")
+        self.person = Person(surname="Smith")
 
-    def testSpeaking(self):
-        self.assertEqual(self.lion.speak(), 'The lion says "roar"')
-        self.assertEqual(self.cat.speak(), 'The cat says "meow"')
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
+    def test_models(self):
+        self.assertEqual(self.person.surname, "Smith")
