@@ -17,11 +17,11 @@
     <div>
         {% if person.researcher.synopsis.cmsplugin_set.all %}
             <h{{ IN_BODY_HEADING_LEVEL }}>Research overview</h{{ IN_BODY_HEADING_LEVEL }}>
-		    {% render_placeholder person.researcher.synopsis %}
+		    {% render_placeholder person.researcher.research_synopsis %}
 		{% endif %}
         {% if person.researcher.description.cmsplugin_set.all %}
             <h{{ IN_BODY_HEADING_LEVEL }}>Research description</h{{ IN_BODY_HEADING_LEVEL }}>
-		    {% render_placeholder person.researcher.description %}
+		    {% render_placeholder person.researcher.research_description %}
 		{% endif %}
     </div>
 	{% endif %}
