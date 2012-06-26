@@ -33,10 +33,10 @@ class Video(File):
     #     return urlresolvers.reverse('admin:filer_video_change', args=(self.id,))
 
 
-# class ArkestraVideo(Video):
-#     class Meta:
-#         proxy = True
-#         verbose_name = "Video"
+class ArkestraVideo(Video):
+    class Meta:
+        proxy = True
+        verbose_name = "Video"
 
 
 class FilerVideoField(FilerFileField):
