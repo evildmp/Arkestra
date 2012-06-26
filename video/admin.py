@@ -5,7 +5,7 @@ from django.utils.translation import ugettext  as _
 # 
 from filer.admin.fileadmin import FileAdmin
 # 
-from models import Video, VideoVersion
+from models import Video, VideoVersion, ArkestraVideo
 #                                                           
 
 # class VideoVersionForm(forms.ModelForm):
@@ -39,11 +39,11 @@ class VideoVersionAdmin(admin.ModelAdmin):
 # class MyVideoAdmin(VideoAdmin):
 #     inlines = (VideoVersionInline,)
 # 
-# class ArkestraVideoAdmin(admin.ModelAdmin):
-#     inlines = (VideoVersionInline,)
+class ArkestraVideoAdmin(admin.ModelAdmin):
+    inlines = (VideoVersionInline,)
 # 
 # 
 # admin.site.unregister(Video)
 # admin.site.register(Video, MyVideoAdmin)
-# admin.site.register(ArkestraVideo, ArkestraVideoAdmin)
+admin.site.register(ArkestraVideo, ArkestraVideoAdmin)
 admin.site.register(VideoVersion, VideoVersionAdmin)
