@@ -255,7 +255,7 @@ INSTALLED_APPS = (
     
     # other applications
     
-    # 'polymorphic',
+    'polymorphic',
     'semanticeditor',
     'mptt',
     'easy_thumbnails',
