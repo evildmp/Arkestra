@@ -19,7 +19,6 @@ setup(
     'django-cms',
     'django-filer',
     'semanticeditor',
-    'django-widgetry',  
     'pillow',
     ]
 )
