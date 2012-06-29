@@ -1,4 +1,3 @@
--e git+git@github.com:divio/django-cms.git@develop#egg=django-cms
 -e hg+https://bitbucket.org/evildmp/semanticeditor#egg=semanticeditor
 -e git+git@github.com:evildmp/django-widgetry.git#egg=django-widgetry
 -e git+https://github.com/stefanfoulis/django-filer.git#egg=django-filer
