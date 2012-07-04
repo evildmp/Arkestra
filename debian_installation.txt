@@ -1,0 +1,234 @@
+##############################################
+Setting up an Arkestra web server from scratch
+##############################################
+
+************************
+Basic Debian Linux setup
+************************
+
+
+Obtain Debian Linux
+===================
+
+Get a Debian network installer from http://www.debian.org (I used debian-6.0.5-amd64-netinst.iso).
+
+Copy it onto a USB flash drive:
+
+diskutil unmountDisk /dev/disk1                                 # unmount the volume
+cat Desktop/debian-6.0.5-amd64-netinst.iso | dd of=/dev/disk1   # copy the disk image
+
+Boot up the machine from the flash drive, and let Debian use its suggested defaults.
+
+When it comes to ask what software to install, tell it to install only the basic system utilities.
+
+
+Configure the system
+====================
+
+You'll need to login as root.
+
+apt-get install openssh-server 
+
+Now you can login as from another machine instead of from the console. So do that now.
+
+As root:
+
+apt-get install sudo    # now you can use sudo
+adduser daniele sudo    # add your user account to the sudoers file
+
+Login as daniele:
+
+sudo locale-gen en_GB.UTF-8                     # set up locales
+sudo /usr/sbin/update-locale LANG=en_GB.UTF-8
+
+
+sudo apt-get update                  # shouldn't really be necessary, as this is a new install
+sudo aptitude safe-upgrade
+
+# installing handy things for compiling and building
+sudo aptitude install build-essential linux-headers-`uname -r`
+
+Make your life easier: having /sbin on the path provides access to commands otherwise reserved for root, and makes it possible to run stop-start-daemon in the fcgi script below.
+
+pico ~/.profile # edit the user's profile
+
+# add:
+PATH=$PATH:/new/path/one:/new/path/two
+export PATH 
+
+
+***************************
+Install the server software
+***************************
+
+
+OpenSSH
+=======
+
+ssh-keygen # generate server keys
+
+Paste your own public key(s) into .ssh/authorized_keys.
+
+chmod 600 .ssh/authorized_keys
+
+sudo pico /etc/ssh/sshd_config # edit the sshd_config
+
+The following 3 lines
+
+* Port 22
+* PermitRootLogin yes
+* PasswordAuthentication yes
+
+Become
+
+* Port 8888
+* PermitRootLogin no
+* PasswordAuthentication no
+
+
+The firewall
+============
+
+sudo apt-get install ufw
+
+sudo ufw allow 8000/tcp # web dev
+sudo ufw allow 8001/tcp # web dev
+sudo ufw allow 8002/tcp # web dev
+sudo ufw allow 8003/tcp # web dev
+sudo ufw allow 8004/tcp # web dev
+sudo ufw allow 8005/tcp # web dev
+sudo ufw allow 8082/tcp # munin
+sudo ufw allow 8888/tcp # for ssh
+sudo ufw allow 80/tcp # standard http 
+sudo ufw allow 22/tcp # ssh
+sudo ufw enable
+
+# restart sshd
+# make sure you do this as root, using sudo
+sudo /etc/init.d/ssh restart
+
+
+MySQL server
+============
+
+# install mysql server and python interface
+sudo apt-get install mysql-server python-mysqldb
+
+sudo pico /etc/mysql/my.cnf     # edit system-wide MySQL conf
+
+add/change in the [mysqld] section:
+
+skip-character-set-client-handshake
+collation_server = utf8_unicode_ci
+character_set_server = utf8
+
+# restart the server
+sudo /etc/init.d/mysql restart
+
+# test the server
+mysql -u root -p
+create database bongo;          # create a database
+show create database bongo;     # see what's been created
+
+You need to see that it's using the correct character set:  
+
+    CREATE DATABASE `bongo` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci *
+
+# drop the database
+drop database bongo;
+
+
+Nginx
+=====
+
+The version of Nginx from Debian stable is rather old. We'll install from backports.
+
+sudo pico /etc/apt/sources.list     # edit the sources list
+
+Add:
+
+# backports
+deb http://backports.debian.org/debian-backports squeeze-backports main
+
+sudo apt-get -t squeeze-backports install nginx
+
+sudo /etc/init.d/nginx start    # start nginx
+
+And now check that the server is serving by visiting it in a web browser.
+
+**************
+Other software
+**************
+
+Version control
+===============
+
+sudo apt-get install git mercurial
+
+Give the machine's public keys to GitHub and Bitbucket: 
+
+less ~/.ssh/id_rsa.pub  # get the key
+
+If you don't have access to GitHub/Bitbucket accounts, then you'll have to make do with anonymous access later on.
+
+
+Python
+======
+
+sudo apt-get install python-virtualenv python-dev # install virtualenv & development version of Python
+
+sudo apt-get install python-ldap 
+
+
+Video
+=====
+
+We install Handbrake and ffmpeg2theora:
+
+sudo pico /etc/apt/sources.list # edit the sources list (because handbrake isn't otherwise available)
+
+Add:
+
+#Handbrake
+deb http://www.debian-multimedia.org squeeze main # use this multmedia repository
+
+sudo apt-get update
+
+sudo apt-get install handbrake-cli ffmpeg2theora
+
+
+
+Miscellaneous libraries
+=======================
+
+sudo apt-get install libxml2-dev libxslt-dev libjpeg8-dev   # install some libraries
+
+
+Django & Arkestra
+=================
+
+cd
+virtualenv arkestra_test
+cd arkestra_test
+source bin/activate
+
+pip install -e git+git@github.com:evildmp/Arkestra.git@pip#egg=Arkestra # install Arkestra & dependencies
+
+Install the right versions of Semantic Editor, Django Widgetry and Django Filer:
+
+pip install -r src/arkestra/REQUIREMENTS.txt # install the things that pip can't do automatically
+
+
+Test the example site
+=====================
+
+cd src/arkestra/example
+
+python manage.py syncdb # answer "no"
+
+python manage.py reset contenttypes # answer "yes"
+
+python manage.py loaddata example_database.json
+python manage.py runserver 0.0.0.0:8000   
+
+The admin username and password are both "arkestra"
