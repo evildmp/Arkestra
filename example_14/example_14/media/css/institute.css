@@ -1,0 +1,144 @@
+/* just to get you started */
+
+/* ----------------- brand new styles ----------------- */
+
+
+body    {
+    background: #def58c ;
+    
+    font-family: "Hoefler Text", Garamond, Palatino, "Palatino Linotype", "Times New Roman", serif;
+    line-height: 1.2;
+    color: #222}
+
+p{margin-bottom: 1em;}
+
+/* it there is no horiz nav, you don't need all that top padding */
+.no_nav_horiz div#outer-wrapper   {
+    padding: 0px 30px 5px;
+    }
+    
+div#outer-wrapper   {
+    padding: 30px 30px 5px;
+    margin: 30px auto;
+    background: white;
+    width: 960px;
+    border: 1px solid black;
+    }
+    
+div#inner-wrapper   {
+    padding: 0 0 10px;
+    margin: 0;
+    background: white;
+}
+
+div.footer  {
+    border-top: 1px solid black;
+}
+h1,h2,h3,h4,h5,h6 {margin: 0.6em 0 0.8em 0;}
+
+h1  {font-size: 220%; color: #412fd9; font-variant: small-caps; font-weight: normal; text-align: center; }
+h2  {font-size: 170%; font-style: italic; font-weight: normal; color: #7e991e; border-bottom: 1px solid gray;}
+h3  {font-size: 150%; margin-bottom: 0;}
+h4  {font-size: 112%}
+h5  {font-size: 86%}
+h6  {font-size: 75%}
+
+/* ----------------- arkestra.css ----------------- */
+
+/* background of important items */
+ul.plugin-list.vertical li.grouper li.important {
+    background: #fffd92;
+    }
+
+/* groupers in plugin lists */
+ul.plugin-list li.grouper {color: #ff7f37;}
+ul.plugin-list li.grouper ul {
+    color: #444;
+    }
+    
+/* summary for news, events, etc */
+.summary   {color: gray; size: 200%;}
+.date   {color: #666; font-weight: lighter; font-style: italic;}
+
+ul.plugin-list li span.site-name    {
+    font-family: "gill sans", "gill sans mt", "Trebuchet MS", sans-serif;
+    font-variant: small-caps;
+    color: #666;
+}
+
+*[class|="has-background"] {
+    padding: 8px;
+    border: none;
+}
+
+*.has-background-green  {
+    background: #edfac1; 
+    color: black;
+    }
+
+*.has-background-yellow  {
+    background: #fffec5; 
+    color: black;
+    }
+
+*[class|="has-background"] .plugin h2 {
+    border-bottom: none;
+    margin-top: 0;
+    color: black;
+}
+
+/* ----------------- arkestra_navigation.css ----------------- */
+
+ul.menu	{ /* the whole thing */
+    background: #def58c;
+    padding: 8px;
+    padding-right: 8px;
+    border-bottom: 1px solid gray;
+	} 
+	
+ul.menu li	{ /* all items */
+    background: #def58c;
+	padding-bottom: 8px;
+	}
+
+ul.menu li li li li {
+    background: #ecf9ba;
+    padding: 6px;
+    font-size: 90%;
+    }
+
+ul.menu li li li li li {
+    background: #f3fbd2;
+    }
+
+ul.menu ul { /* 2nd level list */
+}
+	
+ul.menu ul li { /* 2nd level items */
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+ul.menu ul ul { /* 3rd level list */
+	padding: 7px 0 0;
+}
+
+ul.menu ul li:hover ul {
+}
+
+ul.menu ul ul li {
+	padding-top: 8px;
+	border-top: 1px solid gray;
+}
+
+li.menu_item a	{
+    color: black;
+}
+	
+li.menu_item a.selected	{
+    color: #412fd9;
+	}
+
+li.menu_item a:hover	{
+	color: #ff7f37;
+	}

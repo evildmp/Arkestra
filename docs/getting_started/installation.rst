@@ -25,19 +25,21 @@ Set up a virtual environment
 Install PIP components
 ======================
 
-* `pip install -e git+git@github.com:divio/django-cms.git@develop#egg=django-cms`
-* `pip install -e git+git@github.com:evildmp/Arkestra.git@pip#egg=Arkestra`
-* `pip install -e hg+https://bitbucket.org/spookylukey/semanticeditor#egg=semanticeditor`
-* `pip install -e git+git@github.com:evildmp/django-widgetry.git#egg=django-widgetry`
-* `pip install -e git+https://github.com/stefanfoulis/django-filer.git#egg=django-filer`
+* `pip install -e git+git@github.com:evildmp/Arkestra.git@pip#egg=Arkestra` # install Arkestra & dependencies
+* `pip install -r src/arkestra/REQUIREMENTS.txt` # install the things that pip can't do automatically
 
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included.
 
-Set up the supplied example database
-====================================
+Set up the supplied example project
+===================================
 
-* `cd src/arkestra/example` # or wherever your Arkestra source gets put
+Arkestra includes example projects for both Django 1.4 and earlier versions.
+
+Assuming that your code was installed into src/arkestra in your virtualenv:
+                                   
+* `cd src/arkestra/example_14/example_14` # for Django 1.4
+* `cd src/arkestra/example_14/example_14` # for Django 1.4
 
 * `python manage.py syncdb` # set up a new database
 
