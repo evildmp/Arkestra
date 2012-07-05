@@ -158,17 +158,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    # core Django applications
-
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.admin',
-    'django.contrib.admindocs',
-    'django.contrib.humanize',
 
      # Django CMS applications
     
@@ -203,6 +192,19 @@ INSTALLED_APPS = (
     'widgetry',  
     # 'south',         
     # 'adminsortable',
+
+    # core Django applications
+    # these should be last, so we can override their templates
+    
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
+    'django.contrib.humanize',
 )
 
 # A sample logging configuration. The only tangible logging
