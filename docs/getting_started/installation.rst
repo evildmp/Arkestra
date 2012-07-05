@@ -38,8 +38,8 @@ Arkestra includes example projects for both Django 1.4 and earlier versions.
 
 Assuming that your code was installed into src/arkestra in your virtualenv:
                                    
-* `cd src/arkestra/example_14/example_14` # for Django 1.4
-* `cd src/arkestra/example_14/example_14` # for Django 1.4
+* `cd src/arkestra/example_14` # for Django 1.4
+* `cd src/arkestra/example` # for earlier versions
 
 * `python manage.py syncdb` # set up a new database
 
