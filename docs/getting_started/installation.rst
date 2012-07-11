@@ -56,7 +56,10 @@ Fire up the server
 
 * `python manage.py runserver 0.0.0.0:8000` # go!
 
-Username and password are both `arkestra`.     
+You should see the famous Institute of Mediaeval Medicine website, complete with images and all kinds of interesting content.
+
+Username and password are both `arkestra`. 
+    
 
 Note!
 =====
