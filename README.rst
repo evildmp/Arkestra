@@ -1,5 +1,9 @@
 Arkestra is a semantic web publishing system for organisations, created in Django.
 
+**Go straight to the develop branch**: https://github.com/evildmp/Arkestra/tree/develop 
+if you're a new user and don't need to worry about an existing installation. Also, use the
+documentation of the develop branch: https://github.com/evildmp/Arkestra/blob/develop/docs/index.rst
+
 Documentation & support
 ***********************
 
