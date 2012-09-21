@@ -16,7 +16,7 @@ setup(
     'django',
     'django-typogrify', 
     'BeautifulSoup',
-    'django-cms',
+    'django-cms=2.3.1',
     'django-filer',
     'semanticeditor',
     'pillow',
