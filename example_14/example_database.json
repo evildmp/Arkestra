@@ -2059,6 +2059,230 @@
         }
     }, 
     {
+        "pk": 256, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 257, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 258, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 259, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 260, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 261, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 262, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 263, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 264, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 265, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 266, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 267, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 268, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 269, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 270, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 271, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 272, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 273, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 274, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 275, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 276, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 277, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 278, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 279, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 280, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 281, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 282, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 283, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "cms.cmsplugin", 
         "fields": {
@@ -3408,6 +3632,15 @@
         }
     }, 
     {
+        "pk": 2, 
+        "model": "menus.cachekey", 
+        "fields": {
+            "key": "cms-menu_nodes_en_1", 
+            "site": 1, 
+            "language": "en"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "text.text", 
         "fields": {
@@ -4157,7 +4390,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 5, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "buttonise", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4170,7 +4403,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "no-small-caps", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4183,7 +4416,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "doublecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 2, 
@@ -4196,7 +4429,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "images-left", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4209,7 +4442,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "images-right", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4222,7 +4455,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 3, 
-            "templates": "[u'[u\\'[u\\\\\\'[u\\\\\\\\\\\\\\'[u\"[u\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'arkestra.html\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\']\"]\\\\\\\\\\\\\\']\\\\\\']\\']']", 
+            "templates": "", 
             "name": "background green", 
             "allowed_elements": "p blockquote ul ol li newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4235,7 +4468,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "image-borders", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4248,7 +4481,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "shadowed", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4261,7 +4494,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "no-image-link-arrows", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -4274,7 +4507,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "standout", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -4287,7 +4520,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "standout-mild", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -4300,7 +4533,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "", 
             "name": "triplecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 3, 
@@ -4314,7 +4547,7 @@
         "fields": {
             "name": "2011/06/30/0020n040.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-07-04T13:23:36"
+            "modified": "2012-10-07T11:20:24.413"
         }
     }, 
     {
@@ -4440,7 +4673,7 @@
         "fields": {
             "name": "2011/07/28/arrow-down_1.png", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-09-14T23:20:44"
+            "modified": "2012-10-07T11:20:24.417"
         }
     }, 
     {
@@ -4458,7 +4691,7 @@
         "fields": {
             "name": "2011/07/28/arrow-right_1.png", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-09-14T23:20:44"
+            "modified": "2012-10-07T11:20:24.417"
         }
     }, 
     {
@@ -4536,7 +4769,7 @@
             "source": 1, 
             "name": "2011/06/30/0020n040.jpg__16x16_q85_crop_subject_location-178,292_upscale.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-07-10T13:48:29"
+            "modified": "2012-10-07T11:42:32.737"
         }
     }, 
     {
@@ -4546,7 +4779,7 @@
             "source": 1, 
             "name": "2011/06/30/0020n040.jpg__32x32_q85_crop_subject_location-178,292_upscale.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-07-10T13:48:29"
+            "modified": "2012-10-07T11:42:32.841"
         }
     }, 
     {
@@ -4556,7 +4789,7 @@
             "source": 1, 
             "name": "2011/06/30/0020n040.jpg__48x48_q85_crop_subject_location-178,292_upscale.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-07-10T13:48:29"
+            "modified": "2012-10-07T11:42:32.925"
         }
     }, 
     {
@@ -4566,7 +4799,7 @@
             "source": 1, 
             "name": "2011/06/30/0020n040.jpg__64x64_q85_crop_subject_location-178,292_upscale.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-07-10T13:48:29"
+            "modified": "2012-10-07T11:42:33.013"
         }
     }, 
     {
@@ -6856,7 +7089,7 @@
             "source": 1, 
             "name": "2011/06/30/0020n040.jpg__294x385_q85_crop_subject_location-178,292.jpg", 
             "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
-            "modified": "2011-08-30T17:30:40"
+            "modified": "2012-10-07T11:27:46.949"
         }
     }, 
     {
@@ -6890,6 +7123,26 @@
         }
     }, 
     {
+        "pk": 242, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 17, 
+            "name": "2011/07/28/arrow-right_1.png__50x110_q85_crop.png", 
+            "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
+            "modified": "2012-10-07T11:27:47.237"
+        }
+    }, 
+    {
+        "pk": 243, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 15, 
+            "name": "2011/07/28/arrow-down_1.png__50x22_q85_crop.png", 
+            "storage_hash": "52617e6399d6f38ea9cbf527bf430616", 
+            "modified": "2012-10-07T11:27:47.481"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "auth.user", 
         "fields": {
@@ -6899,10 +7152,10 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2011-10-04T11:45:19", 
+            "last_login": "2012-10-08T15:36:22.700", 
             "groups": [], 
             "user_permissions": [], 
-            "password": "sha1$49fb7$89abc6b9becfb50befcf23d34dae67d8186b0afe", 
+            "password": "pbkdf2_sha256$10000$qXiZFHkAMorY$TY93IarzG+j3RjgU4SCBY7e1Ej+0ISCY+FfhQUblAi8=", 
             "email": "daniele@vurt.org", 
             "date_joined": "2011-10-04T11:45:19"
         }
@@ -6953,6 +7206,30 @@
         "fields": {
             "expire_date": "2011-10-18T00:23:18", 
             "session_data": "MWQ3MzM0OGQwNjUzYTdiMzljMjg5N2VjZmMyMTU2Y2NlOGY0NjVmYjqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n"
+        }
+    }, 
+    {
+        "pk": "6f90ca729993e8b13a960f64f891b258", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2012-10-21T11:28:23.899", 
+            "session_data": "NWY2YzIzNGQ1ZmU0OTc5MjAwNzM1OGNmN2M4MzdkMGQzOTkzOGZhZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlcQJLAVUNX2F1dGhfdXNlcl9pZEsBVRJfYXV0aF91c2VyX2JhY2tlbmRVKWRqYW5nby5j\nb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kdS4=\n"
+        }
+    }, 
+    {
+        "pk": "8bf261c133da49d7a1914b7426a997b3", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2012-10-21T11:42:17.641", 
+            "session_data": "MThlNmE2YzU0NzE4N2NhMzhmMjUzNjg1YWEyMDRjYTg5YWVkMDZlOTqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n"
+        }
+    }, 
+    {
+        "pk": "705e0e2f568faa9637d2a6b1f3e31ac7", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2012-10-22T15:36:30.536", 
+            "session_data": "NWY2YzIzNGQ1ZmU0OTc5MjAwNzM1OGNmN2M4MzdkMGQzOTkzOGZhZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlcQJLAVUNX2F1dGhfdXNlcl9pZEsBVRJfYXV0aF91c2VyX2JhY2tlbmRVKWRqYW5nby5j\nb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kdS4=\n"
         }
     }, 
     {
