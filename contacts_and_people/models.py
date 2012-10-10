@@ -64,7 +64,7 @@ class Building(models.Model):
     additional_street_address = models.CharField(help_text=u"If required",
         max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=9, null=True, blank=True)
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, related_name="place")
     slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
         max_length=255, null=True, unique=True)
     image = FilerImageField(null=True, blank=True)
@@ -119,6 +119,7 @@ class Building(models.Model):
             building_identifier = unicode(self.site) + ": " + self.postcode
         return building_identifier
     
+    @property
     def get_postal_address(self):
         """
         Assembles the postal (external) parts of an address
@@ -134,7 +135,7 @@ class Building(models.Model):
         if self.additional_street_address:
             address.append(self.additional_street_address)
         if self.site.post_town:
-            address.append(self.site.post_town + " " + self.postcode)
+            address.append(self.site.post_town + " " + (self.postcode or ""))
         elif self.postcode:
             address.append(self.postcode)
         return address
@@ -310,7 +311,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         else:
             return "/contact/"
 
-    def get_real_ancestor(self):
+    @property
+    def _get_real_ancestor(self):
         """
         Find the nearest non-abstract Entity amongst this Entity's ancestors
         """
@@ -318,36 +320,54 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             if not ancestor.abstract_entity:
                 return ancestor
                 
-        return None
+    @property
+    def get_building(self):
+        """
+        Return the Building for this Entity (or its nearest parent) 
+        """   
+        if self.abstract_entity:
+            return
+        elif self.building:
+            return self.building
+        else:
+            try: 
+                return self._get_real_ancestor.get_building
+            except AttributeError: 
+                return None
 
-    def get_address(self):
-        """
-        Returns the full address of the entity
-        """
-        entity = self
-        if entity.abstract_entity:
-            entity = self.get_real_ancestor()
-        if entity:
-            address = entity.get_institutional_address()
-            building = entity.get_building()
-            if building:
-                if entity.building_recapitulates_entity_name: 
-                    address.extend(building.get_postal_address()[1:])
-                else:
-                    address.extend(building.get_postal_address())
-                return address
-                
-    def get_institutional_address(self):
+    @property
+    def _get_institutional_address(self):
         """
         Lists the parts of an address within the institution (Section of YYY, Department of XXX and YYY, School of ZZZ)
         """ 
-        ancestors = []
-        showparent = self.display_parent
-        for entity in self.get_ancestors(ascending = True).exclude(abstract_entity = True):
-            if showparent:
-                ancestors.append(entity)
-            showparent = entity.display_parent
-        return ancestors
+        if self.abstract_entity:
+            return
+        else:
+            ancestors = []
+            showparent = self.display_parent
+            for entity in self.get_ancestors(ascending = True).exclude(abstract_entity = True):
+                if showparent:
+                    ancestors.append(entity)
+                showparent = entity.display_parent
+            return ancestors
+
+    @property
+    def get_full_address(self):
+        """
+        Returns the full address of the entity
+        """
+        if self.abstract_entity:
+            return []
+        else:
+            address = self._get_institutional_address
+            building = self.get_building
+            if building:
+                if self.building_recapitulates_entity_name: 
+                    address.extend(building.get_postal_address[1:])
+                else:
+                    address.extend(building.get_postal_address)
+                return address
+                
 
     @property
     def get_website(self):
@@ -398,17 +418,6 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         else:
             return default_entity.get_website.get_template()
 
-    def get_building(self):
-        """
-        Return the Building for this Entity (or its nearest parent) 
-        """
-        if self.building:
-            return self.building
-        else:
-            try:
-                return self.parent.get_building()
-            except AttributeError:
-                return None
 
     def get_contacts(self):
         """
@@ -578,6 +587,7 @@ class Person(PersonLite, CommonFields):
         else:
             return "/person/%s/" % self.slug
 
+    @property
     def get_role(self):
         """
         Returns a Membership object.
@@ -588,7 +598,11 @@ class Person(PersonLite, CommonFields):
         
         If it can't find any role, it returns None.
         """
-        memberships = Membership.objects.filter(person = self, entity__abstract_entity = False, importance_to_person__gte = 2).order_by('-importance_to_person')
+        memberships = Membership.objects.filter(
+            person = self, 
+            entity__abstract_entity = False, 
+            importance_to_person__gte = 2).order_by('-importance_to_person'
+            )
         if memberships:
             return memberships[0]
         else: # the poor person had no memberships
@@ -603,21 +617,35 @@ class Person(PersonLite, CommonFields):
         """
         if self.override_entity and not self.override_entity.abstract_entity:
             return self.override_entity
-        elif self.get_role():
-            return self.get_role().entity
+        elif self.get_role:
+            return self.get_role.entity
         return None
                 
-    def get_address(self):
+    @property
+    def get_building(self):
+        """
+        Returns a Person's Building, if possible
+        """
+        if self.building:
+            return self.building
+        elif self.get_entity:
+            return self.get_entity.get_building
+                    
+    @property
+    def get_full_address(self):
         """
         Works out a person's address, based on their home/best entity or information that overrides this
         """
         if self.get_entity: # needs an entity to work
             if self.building:
-                address = self.get_entity.get_institutional_address()
-                address.extend(self.building.get_postal_address())
+                address = self.get_entity._get_institutional_address
+                address.extend(self.building.get_postal_address)
                 return address
             else:
-                return self.get_entity.get_address()
+                return self.get_entity.get_full_address
+        else:
+            return []
+
 
     def get_please_contact(self):
         """
@@ -719,8 +747,10 @@ class Membership(models.Model):
         # if there's just one membership, make it home; if this one is home, make home on all the others false
         memberships = Membership.objects.filter(person = self.person)
         if self.importance_to_person == 5:
-            for membership in memberships:
-                if membership.importance_to_person == 5:
+            for membership in memberships: 
+        
+                if membership.importance_to_person == 5: 
+                    
                     membership.importance_to_person = 4
                 super(Membership, membership).save()
             self.importance_to_person = 5

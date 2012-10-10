@@ -29,6 +29,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         }
         
     people, initials = entity.get_people_and_initials()
+
     # are there Key People to show?    
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
         people_list_heading = _(u"Also")
@@ -51,7 +52,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
             "location": entity.precise_location, 
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
-
+            "full_address" : entity.get_full_address,
+            "building" : entity.get_building,
             "people": people,
             "people_list_heading": people_list_heading,
             "initials_list": initials,
@@ -115,12 +117,12 @@ def person(request, slug, active_tab=""):
     person = get_object_or_404(Person,slug=slug)
     person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
-    home_role = person.get_role()
+    home_role = person.get_role
     if home_role:
         entity = home_role.entity
     entity = person.get_entity # don't rely on home_role.entity - could be None or overridden
 
-    address = person.get_address()
+    building = person.get_building
 
     contact = person.get_please_contact()
     email = contact.email
@@ -216,11 +218,12 @@ def person(request, slug, active_tab=""):
             "home_role": home_role, # entity and position
             "entity": entity,
             "template": template, # from entity
-            "address": address, # from entity
+            "building": building,
             "email": email, # from person or please_contact
             "location": location, # from person, or None 
             "contact": contact, # from person or please_contact
             "phone": phone,
+            "full_address" : person.get_full_address,
             "access_note": access_note, # from person
             "tabs": tabs,
             "tab_object": person,

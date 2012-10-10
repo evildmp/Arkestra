@@ -17,9 +17,7 @@ Called up by arkestra_page.html
 			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 			    <dl>
 			        {% include "includes/key_contacts.html" %}
-					{% with address=entity.get_address %}
-						{% include "includes/address.html" %}
-					{% endwith %}
+					{% include "includes/address.html" %}
 	                {% include "includes/precise_location.html" %}
 	   		        {% include "includes/access_notes.html" %}
 	                {% include "includes/email.html" %}

@@ -1,9 +1,11 @@
-{% if address %}
+{% if full_address %}
 <dt>Address</dt>
 <dd>
 	<strong>{{ entity }}</strong>
 	<br />
-	{{ address|join:"<br />" }}
-	{% if entity.building.map %}<p><a href="{{entity.building.get_absolute_url}}">map &amp; directions</a></p>{% endif %}
+	{{ full_address|join:"<br />" }}
+	{% if building.map %}<p><a href="{{ building.get_absolute_url }}">map &amp; directions<br /> 
+	    <img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ building.latitude }},{{ building.longitude }}&zoom={{ building.zoom }}&size={{ entity_image_size }}&markers=color:red|{{ building.latitude }},{{ building.longitude }}&sensor=false" />
+	    </a></p>{% endif %}
 </dd>
 {% endif %}

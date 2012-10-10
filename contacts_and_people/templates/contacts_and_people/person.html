@@ -33,7 +33,7 @@
     		<div class="row columns2">
     			<div class="column firstcolumn">
     				<div>
-						{% if address or location or access_note or email or phone.all %}<h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
+						{% if building or address or location or access_note or email or phone.all %}<h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 						<dl>
 							{% include "includes/address.html" %}
 							{% if address %}{% include "includes/precise_location.html" %}{% endif %}

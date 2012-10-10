@@ -19,7 +19,7 @@ class PersonWrapper(LinkWrapper):
 
     def description(self):
         data = []
-        data.append(smart_unicode(self.obj.get_role()))
+        data.append(smart_unicode(self.obj.get_role))
         data.append(smart_unicode(self.obj.get_entity))
         return ', '.join(data)
 
@@ -72,7 +72,7 @@ class BuildingWrapper(LinkWrapper):
     search_fields = admin.BuildingAdmin.search_fields
 
     def description(self):
-        return self.obj.get_postal_address()
+        return self.obj.get_postal_address
 
     def heading(self):
         return "Places"
