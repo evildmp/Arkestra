@@ -12,13 +12,12 @@
 
 {% block coltype %}flex{% endblock %}
 {% block extrahead %}
-
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}cms/css/pages.css"/>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}cms/jstree/tree_component.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}cms/css/jquery.dialog.css" />
 
-
-<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+{{ block.super }}
+<script type="text/javascript" src="{% admin_static_url %}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}cms/js/csrf.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}cms/js/libs/jquery.livequery.js"></script>
 
@@ -32,6 +31,9 @@
 <script type="text/javascript" src="{{ STATIC_URL }}cms/jstree/tree_component.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}cms/js/libs/jquery.ui.dialog.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}cms/js/libs/jquery.functional.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}cms/js/libs/classy.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}cms/js/plugins/cms.setup.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}cms/js/plugins/cms.base.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}cms/js/change_list.js"></script>
 
 
@@ -43,7 +45,7 @@
 {% block content %}
 <script type="text/javascript">
 //<![CDATA[	
-(function($) {
+(function namespacing($) {
 	$(document).ready(function() {
 		{% if not cl.is_filtered %}
 			initTree();
@@ -54,12 +56,17 @@
 		$("#changelist-filter").toggle();
 	}
 	moveSuccess = function(node){
-		var msg = $('<span class="success">{% trans "Successfully moved" %}</span>');
+		var msg = $({% javascript_string %}<span class="success">{% trans "Successfully moved" %}</span>{% end_javascript_string %});
 		node.append(msg);
 	    msg.fadeOut(3000);
 	}
-	moveError = function(node){
-		var msg = $('<span class="success">{% trans "An error occured. Please reload the page" %}</span>');
+	moveError = function(node,message){
+        if(message && message!="error") {
+            var msg = $({% javascript_string %}<span class="success">{% end_javascript_string %}+message+{% javascript_string %}</span>{% end_javascript_string %});
+        }
+        else {
+            var msg = $({% javascript_string %}<span class="success">{% trans "An error occured. Please reload the page" %}</span>{% end_javascript_string %});
+        }
 		node.append(msg);
 	}
 
