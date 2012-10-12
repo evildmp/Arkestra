@@ -5,7 +5,7 @@
 	<br />
 	{{ full_address|join:"<br />" }}
 	{% if building.map %}<p><a href="{{ building.get_absolute_url }}">map &amp; directions<br /> 
-	    <img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ building.latitude }},{{ building.longitude }}&zoom={{ building.zoom }}&size={{ entity_image_size }}&markers=color:red|{{ building.latitude }},{{ building.longitude }}&sensor=false" />
+	    <img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ building.latitude }},{{ building.longitude }}&zoom={{ building.zoom }}&size={{ person_entity_map_size }}&markers=color:red|{{ building.latitude }},{{ building.longitude }}&sensor=false" />
 	    </a></p>{% endif %}
 </dd>
 {% endif %}

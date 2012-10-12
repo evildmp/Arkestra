@@ -128,11 +128,11 @@ def person(request, slug, active_tab=""):
     email = contact.email
     phone = contact.phone_contacts.all()
 
-    if person.override_entity or person.please_contact:
-        location = None
+    if person.please_contact:
+        precise_location = None
     else:
-        location = person.precise_location
-    access_note = person.access_note
+        precise_location = person.precise_location
+    access_note = person.access_note     
         
     if home_role:
         description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
@@ -220,7 +220,7 @@ def person(request, slug, active_tab=""):
             "template": template, # from entity
             "building": building,
             "email": email, # from person or please_contact
-            "location": location, # from person, or None 
+            "precise_location": precise_location, # from person, or None 
             "contact": contact, # from person or please_contact
             "phone": phone,
             "full_address" : person.get_full_address,

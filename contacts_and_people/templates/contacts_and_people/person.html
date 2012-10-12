@@ -36,7 +36,7 @@
 						{% if building or address or location or access_note or email or phone.all %}<h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 						<dl>
 							{% include "includes/address.html" %}
-							{% if address %}{% include "includes/precise_location.html" %}{% endif %}
+							{% if full_address %}{% include "includes/precise_location.html" %}{% endif %}
 							{% include "includes/access_notes.html" %}
 							{% include "includes/email.html" %}
 							{% include "includes/phone_contacts.html" %}
