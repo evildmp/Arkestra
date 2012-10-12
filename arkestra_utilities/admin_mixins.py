@@ -84,6 +84,6 @@ fieldsets = {
     'importance': ('', {'fields': ('importance',)}),
     'url': ('If this is an external item', {'fields': ('external_url', 'input_url',)}),         
     'slug': ('If this is an internal item', {'fields': ('slug',)}),
-    'location': ('', {'fields': ('precise_location', 'access_note',)}),
+    'location': ('', {'fields': ('get_full_address', 'precise_location', 'access_note',)}),
     'email': ('', {'fields': ('email',)}),
     }

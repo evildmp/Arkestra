@@ -88,6 +88,7 @@ class PhoneContactAdmin(admin.ModelAdmin):
     pass
 
 class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):    
+    
     def _media(self):
         return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
@@ -181,19 +182,32 @@ def create_action(entity):
     return (name, (action, name,"Add selected Person to %s as 'Member'" % (entity,)))
 
 
-class PersonAdmin(PersonAndEntityAdmin):
+class PersonAdmin(PersonAndEntityAdmin):    
     search_fields = ['given_name','surname','institutional_username',]
-    
-    
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
     # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
+    readonly_fields = ['get_full_address', 'role']    
+    
+    def get_full_address(self, instance):
+        if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
+            return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
+        else:
+            return "%s" % (", ".join(instance.get_full_address)) or "Warning: this person has no address."
 
-    name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
+    get_full_address.short_description = "Address"
+
+    def role(self, instance):
+        return models.Membership.objects.get(
+            person = instance, 
+            entity__abstract_entity = False, 
+            importance_to_person = 5)
+    
+    name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname', 'role'),})
     override_fieldset = ('Over-ride default output', {
-        'fields': ('please_contact', 'override_entity', 'building',),
+        'fields': ('please_contact', 'building',),
         'classes': ('collapse',)
         })
     advanced_fieldset =  (
@@ -205,7 +219,6 @@ class PersonAdmin(PersonAndEntityAdmin):
         'fields': ('description',),
         'classes': ('plugin-holder', 'plugin-holder-nopage',)
         })
-    
     tabs = [
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
         ('Contact information', {
@@ -310,6 +323,15 @@ class EntityAdmin(PersonAndEntityAdmin):
     prepopulated_fields = {
             'slug': ('name',)
             }
+    readonly_fields = ['get_full_address']    
+
+    def get_full_address(self, instance):
+        if not instance.abstract_entity:
+            return "%s" % (", ".join(instance.get_full_address)) or "Warning: this Entity has no address."
+        else:
+            return "This is an abstract entity and therefore has no address"
+
+    get_full_address.short_description = "Address"
 
     name_fieldset = ('Name', {'fields': ('name', 'short_name')})
     website_fieldset = ('', {'fields': ('website',)})
