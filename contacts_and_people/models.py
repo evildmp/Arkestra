@@ -560,7 +560,7 @@ class Person(PersonLite, CommonFields):
     entities = models.ManyToManyField(Entity, related_name='people',
         through='Membership', blank=True, null=True)
     building = models.ForeignKey(Building, verbose_name='Specify building',
-        help_text=u"Only required if this Person <strong>Home entity</strong> has a different address", 
+        help_text=u"<strong>Only</strong> required if this Person's <strong>Home entity</strong> has a different address", 
         blank=True, null=True, on_delete=models.SET_NULL)
     override_entity = models.ForeignKey(Entity, verbose_name='Specify entity',
         help_text=u"<strong>Temporarily specify</strong> an entity for contact information - over-rides entity and postal address",
@@ -630,7 +630,7 @@ class Person(PersonLite, CommonFields):
             return self.building
         elif self.get_entity:
             return self.get_entity.get_building
-                    
+
     @property
     def get_full_address(self):
         """
