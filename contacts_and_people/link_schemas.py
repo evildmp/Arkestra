@@ -72,7 +72,7 @@ class BuildingWrapper(LinkWrapper):
     search_fields = admin.BuildingAdmin.search_fields
 
     def description(self):
-        return self.obj.get_postal_address
+        return ", ".join(self.obj.get_postal_address[1:])
 
     def heading(self):
         return "Places"
