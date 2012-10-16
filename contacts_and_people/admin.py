@@ -189,23 +189,18 @@ class PersonAdmin(PersonAndEntityAdmin):
     # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
-    readonly_fields = ['get_full_address', 'role']    
+    readonly_fields = ['get_full_address',]    
     
     def get_full_address(self, instance):
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
             return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
         else:
-            return "%s" % (", ".join(instance.get_full_address)) or "Warning: this person has no address."
+            return "%s" % (", ".join(instance.get_full_address)) or "<span class='errors'>Warning: this person has no address.</span>"
 
     get_full_address.short_description = "Address"
-
-    def role(self, instance):
-        return models.Membership.objects.get(
-            person = instance, 
-            entity__abstract_entity = False, 
-            importance_to_person = 5)
+    get_full_address.allow_tags = True
     
-    name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname', 'role'),})
+    name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
     override_fieldset = ('Over-ride default output', {
         'fields': ('please_contact', 'building',),
         'classes': ('collapse',)
