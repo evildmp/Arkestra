@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.test import TestCase
 
 from contacts_and_people.models import Site, Person, Building, Entity, Membership
@@ -9,7 +7,7 @@ class EntityTestObjectsMixin(object):
     Create a set of inter-related objects that we'll use in a series of tests
     """
 
-    def setUp(self):
+    def setUp(self): 
         # a geographical Site
         self.cardiff = Site(
             site_name="Main site",
@@ -55,6 +53,7 @@ class EntityTestObjectsMixin(object):
             parent=self.school,
             slug="departments",
             abstract_entity=True,
+            building=self.heart_testing_centre, # this should be ignored by everything!
             )
         self.departments.save()
 
@@ -115,7 +114,7 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.departments.get_building, None)
         # the section has no Building assigned so should inherit from its parent
         self.assertEquals(self.section.get_building, self.main_building)
-        # the department has no Building assigned so should inherit from its parent
+        # the department has no Building assigned so should inherit from its real ancestor
         self.assertEquals(self.department.get_building, self.main_building)
         
     def test_entity_get_institutional_address(self):
@@ -136,16 +135,16 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         """
         
         # an entity with a building
-        self.assertEquals(self.school.get_full_address, [u'Main Building', u"St Mary's Street", u'Cardiff '])
+        self.assertEquals(self.school.get_full_address, [u'Main Building', u"St Mary's Street", u'Cardiff'])
         # an abstract entity has no address
         self.assertEquals(self.departments.get_full_address, []) 
         # abstract entity is skipped in address
-        self.assertEquals(self.department.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff '])
+        self.assertEquals(self.department.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])
         # an entity that doesn't display its parent in the address
-        self.assertEquals(self.student_centre.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff ']) 
+        self.assertEquals(self.student_centre.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']) 
         # an entity with building_recapitulates_entity_name flag shares 
         # its name with the building & drops the 1st line of postal address 
-        self.assertEquals(self.testing_centre.get_full_address, [self.department, self.school, u"Queen Street", u'Cardiff ']) 
+        self.assertEquals(self.testing_centre.get_full_address, [self.department, self.school, u"Queen Street", u'Cardiff']) 
 
     def test_person_methods(self):
         """
@@ -187,9 +186,9 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_role, smith_department_membership)
         self.assertEquals(self.smith.get_entity, self.department)
         self.assertEquals(self.smith.get_building, self.main_building)
-        self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff '])                
+        self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])                
                     
-        # now smith have a better entity: school 
+        # now smith has a better entity: school 
         smith_school_membership = Membership(
             person=self.smith,
             entity=self.school,
@@ -202,7 +201,7 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_role, smith_school_membership)
         self.assertEquals(self.smith.get_entity, self.school)
         self.assertEquals(self.smith.get_building, self.main_building)
-        self.assertEquals(self.smith.get_full_address, [u'Main Building', u"St Mary's Street", u'Cardiff '])        
+        self.assertEquals(self.smith.get_full_address, [u'Main Building', u"St Mary's Street", u'Cardiff'])        
         
         # now smith's best entity will be department
         smith_department_membership.importance_to_person = 5
@@ -211,6 +210,6 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_role, smith_department_membership)
         self.assertEquals(self.smith.get_entity, self.department)
         self.assertEquals(self.smith.get_building, self.main_building)
-        self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff '])                
+        self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])                
         # check that his membership of school has been downgraded by the save()
         self.assertEquals(Membership.objects.get(pk=smith_school_membership.pk).importance_to_person, 4) 

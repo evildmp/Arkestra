@@ -135,7 +135,7 @@ class Building(models.Model):
         if self.additional_street_address:
             address.append(self.additional_street_address)
         if self.site.post_town:
-            address.append(self.site.post_town + " " + (self.postcode or ""))
+            address.append(" ".join((item for item in (self.site.post_town, self.postcode) if item)))
         elif self.postcode:
             address.append(self.postcode)
         return address
