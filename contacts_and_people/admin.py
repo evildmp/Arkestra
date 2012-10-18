@@ -189,16 +189,16 @@ class PersonAdmin(PersonAndEntityAdmin):
     # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
-    readonly_fields = ['get_full_address',]    
+    readonly_fields = ['address_report',]    
     
-    def get_full_address(self, instance):
+    def address_report(self, instance):
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
             return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
         else:
             return "%s" % (", ".join(instance.get_full_address)) or "<span class='errors'>Warning: this person has no address.</span>"
 
-    get_full_address.short_description = "Address"
-    get_full_address.allow_tags = True
+    address_report.short_description = "Address"
+    address_report.allow_tags = True
     
     name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
     override_fieldset = ('Over-ride default output', {
@@ -217,7 +217,7 @@ class PersonAdmin(PersonAndEntityAdmin):
     tabs = [
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
         ('Contact information', {
-                'fieldsets': (fieldsets["email"], fieldsets["location"], override_fieldset),
+                'fieldsets': (fieldsets["email"], fieldsets["address_report"], fieldsets["location"], override_fieldset),
                 'inlines': [PhoneContactInline,]
                 }),
         ('Description', {'fieldsets': (description_fieldset,)}),
@@ -318,15 +318,15 @@ class EntityAdmin(PersonAndEntityAdmin):
     prepopulated_fields = {
             'slug': ('name',)
             }
-    readonly_fields = ['get_full_address']    
+    readonly_fields = ['address_report']    
 
-    def get_full_address(self, instance):
+    def address_report(self, instance):
         if not instance.abstract_entity:
             return "%s" % (", ".join(instance.get_full_address)) or "Warning: this Entity has no address."
         else:
             return "This is an abstract entity and therefore has no address"
 
-    get_full_address.short_description = "Address"
+    address_report.short_description = "Address"
 
     name_fieldset = ('Name', {'fields': ('name', 'short_name')})
     website_fieldset = ('', {'fields': ('website',)})
@@ -365,7 +365,7 @@ class EntityAdmin(PersonAndEntityAdmin):
 
     tabs = [
         ('Basic information', {'fieldsets': (name_fieldset, fieldsets["image"], website_fieldset, entity_hierarchy_fieldset)}),
-        ('Location', {'fieldsets': (building_fieldset, fieldsets["location"],)}),
+        ('Location', {'fieldsets': (fieldsets["address_report"], building_fieldset, fieldsets["location"],)}),
         ('Contact', {
             'fieldsets': (fieldsets["email"],),
             'inlines': (PhoneContactInline,)

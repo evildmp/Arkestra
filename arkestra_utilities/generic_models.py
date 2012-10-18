@@ -38,8 +38,12 @@ class ArkestraGenericModel(models.Model):
     hosted_by = models.ForeignKey(Entity, default=default_entity_id,
         related_name='%(class)s_hosted_events', null=True, blank=True,
         help_text=u"The entity responsible for publishing this item")
-    publish_to = models.ManyToManyField(Entity, null=True, blank=True, related_name="%(class)s_publish_to",
-        help_text=u"Use these sensibly - don't send minor items to the home page, for example")
+    publish_to = models.ManyToManyField(
+        Entity, verbose_name="Also publish to",
+        null=True, blank=True, 
+        related_name="%(class)s_publish_to",
+        help_text=u"Use these sensibly - don't send minor items to the home page, for example.",
+        )
     please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
         help_text=u"The person to whom enquiries about this should be directed", 
         null=True, blank=True)

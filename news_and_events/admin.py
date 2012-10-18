@@ -226,6 +226,7 @@ class EventAdmin(NewsAndEventsAdmin):
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']
 
+
     # the tabs
     fieldset_type = ('Type', {'fields': ('type',)},)
     fieldset_building = ('Building', {'fields': ('building',)},)

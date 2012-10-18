@@ -61,6 +61,7 @@ class GenericModelAdminMixin(AutocompleteMixin, SupplyRequestMixin):
         return super(AutocompleteMixin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
+
 class InputURLMixin(forms.ModelForm):
     input_url = forms.CharField(max_length=255, required = False,
         help_text=u"Enter the URL of an external item that you want <strong>automatically</strong> added to the database, but first check carefully using <strong>External URL</strong> (above) to make sure it's really not there.", 
@@ -84,6 +85,7 @@ fieldsets = {
     'importance': ('', {'fields': ('importance',)}),
     'url': ('If this is an external item', {'fields': ('external_url', 'input_url',)}),         
     'slug': ('If this is an internal item', {'fields': ('slug',)}),
-    'location': ('', {'fields': ('get_full_address', 'precise_location', 'access_note',)}),
+    'location': ('', {'fields': ('precise_location', 'access_note',)}),
+    'address_report': ('', {'fields': ('address_report',)}),
     'email': ('', {'fields': ('email',)}),
     }
