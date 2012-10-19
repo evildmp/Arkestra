@@ -21,7 +21,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 
-# from django.conf import settings
 
 def tidy_links(action = "dryrun"):
     if action == "execute":

@@ -22,13 +22,12 @@ from filer.fields.image import FilerImageField
 # from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from arkestra_utilities.mixins import URLModelMixin
-
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE
 from links.models import ExternalLink
 
 import news_and_events
 
-MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
-base_entity_id = settings.ARKESTRA_BASE_ENTITY
+base_entity_id = ARKESTRA_BASE_ENTITY
 
 # Page = models.get_model('cms', 'Page')
 # CMSPlugin = models.get_model('cms', 'CMSPlugin')
@@ -261,7 +260,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     news_page_menu_title = models.CharField(u"Title",
         max_length= 50,
-        default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
+        default = DEFAULT_NEWS_PAGE_TITLE
+        )
     news_page_intro = PlaceholderField('body', 
         related_name="news_page_intro",
         )
@@ -270,7 +270,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     contacts_page_menu_title = models.CharField(u"Title",
         max_length=50,
-        default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
+        default = DEFAULT_CONTACTS_PAGE_TITLE,
+        )
     contacts_page_intro = PlaceholderField('body',
         related_name="contacts_page_intro",
         help_text = "Text for the Contacts & people page"
@@ -281,7 +282,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     vacancies_page_menu_title = models.CharField(u"Title",
         max_length=50,
-        default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
+        default = DEFAULT_VACANCIES_PAGE_TITLE,
+        )
     vacancies_page_intro = PlaceholderField('body',
         related_name="vacancies_page_intro",
         )
@@ -291,7 +293,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             default=False)
         publications_page_menu_title = models.CharField(u"Title",
             max_length=50,
-            default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"))
+            default = DEFAULT_PUBLICATIONS_PAGE_TITLE,
+            )
     
     class Meta:
         verbose_name_plural = "Entities"

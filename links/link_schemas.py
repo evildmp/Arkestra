@@ -1,11 +1,12 @@
 # register all interesting models for search
 #print "LOADING link_schemas.py for %s" % __name__
 
-from links import models, admin
-from links import schema, LinkWrapper
 from django.conf import settings
 
-permitted_filetypes = getattr(settings, "PERMITTED_FILETYPES", ["pdf",])
+from links import models, admin
+from links import schema, LinkWrapper
+
+from arkestra_utilities.settings import PERMITTED_FILETYPES
 
 schema.register(models.ExternalLink, search_fields=admin.ExternalLinkAdmin.search_fields, 
                 #url='url', description=lambda obj: u"%s<br />%s" % (obj.url, obj.description), metadata='description', heading='"External links"'
@@ -98,7 +99,7 @@ if 'filer' in settings.INSTALLED_APPS:
                 error_message = ""
                         
             # if not in allowed types, raises an exception and prevents item from being returned
-            filetype = permitted_filetypes[file.extension]
+            filetype = PERMITTED_FILETYPES[file.extension]
             
             
             # build the description

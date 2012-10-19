@@ -14,7 +14,6 @@ from django.db.models import get_model
 import django.shortcuts as shortcuts
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
 @login_required
 def clean(request, slug = "dryrun"):

@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.syndication.feeds import Feed
 from django.contrib.syndication.feeds import FeedDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
@@ -6,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from news_and_events.models import NewsArticle
 from contacts_and_people.models import Entity, Person
 
-STANDARD_FEED_ENTRY_COUNT = getattr(settings,'STANDARD_FEED_ENTRY_COUNT', 5)
+from arkestra_utilities.settings import STANDARD_FEED_ENTRY_COUNT
 
 class LatestNewsArticles(Feed):
     title = "cardiff news"

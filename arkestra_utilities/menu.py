@@ -11,11 +11,10 @@ from menus.base import Modifier, Menu
 
 from datetime import datetime
 
-main_news_events_page_list_length = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-arkestra_menus = settings.ARKESTRA_MENUS
+from arkestra_utilities.settings import MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, ARKESTRA_MENUS
 
     
-for menu in arkestra_menus:
+for menu in ARKESTRA_MENUS:
     if menu["cms_plugin_model_name"]:
         plugin = __import__(menu["plugins_module"], globals(), locals(), [menu["cms_plugin_model_name"],], -1)
         menu["cms_plugin_model"] = getattr(plugin, menu["cms_plugin_model_name"])
@@ -68,7 +67,7 @@ class ArkestraPages(Modifier):
         self.request = request
         
 
-        if arkestra_menus and not post_cut:
+        if ARKESTRA_MENUS and not post_cut:
             key = "ArkestraPages.modify()" + request.path + "pre_cut"
             cached_pre_cut_nodes = cache.get(key, None)
             if cached_pre_cut_nodes: 
@@ -84,7 +83,7 @@ class ArkestraPages(Modifier):
                     node.entity = False
                 else:            
                     node.entity = page.entity.all()[0]  
-                    for menu in arkestra_menus:
+                    for menu in ARKESTRA_MENUS:
                         self.do_menu(node, menu, node.entity)
 
                     # self.create_new_node(
@@ -116,7 +115,7 @@ class ArkestraPages(Modifier):
                 # create an instance of the plugin class editor with appropriate attributes
                 instance = cms_plugin_model.model(
                     entity = entity, 
-                    limit_to = main_news_events_page_list_length
+                    limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
                     )
                 instance.type = "menu"
                 instance.view = "current"

@@ -2,7 +2,6 @@
 # They are not just Arkestra settings, but settings for other applications
 # that Arkestra requires to be just so.
  
-from arkestra_utilities.settings import *
 
 # These are the only settings you really need.
 # If you need to modify other aspects of Arkestra's behaviour, see the

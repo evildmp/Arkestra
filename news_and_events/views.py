@@ -1,5 +1,4 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.conf import settings
 from django.template import RequestContext
 
 from contacts_and_people.models import Entity, default_entity
@@ -8,10 +7,7 @@ from links.link_functions import object_links
 from models import NewsAndEventsPlugin, Event, NewsArticle
 from cms_plugins import CMSNewsAndEventsPlugin
 
-layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
-
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
+from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL
 
 
 def common_settings(request, slug):
@@ -28,7 +24,7 @@ def common_settings(request, slug):
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "news-and-events"
     instance.format = "details image"
-    instance.layout = layout
+    instance.layout = NEWS_AND_EVENTS_LAYOUT
     instance.view = "current"
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity

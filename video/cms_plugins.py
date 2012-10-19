@@ -9,10 +9,11 @@ from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 
 from arkestra_utilities.output_libraries.plugin_widths import *
+from arkestra_utilities.settings import USE_CELERY_FOR_VIDEO_ENCODING
 
 from models import VideoPluginEditor, VideoVersion, CODECS, VERSIONS, SIZES, PLAYERS
 
-if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+if USE_CELERY_FOR_VIDEO_ENCODING:
     from tasks import encodevideo
 
 class VideoPluginPublisher(CMSPluginBase):
@@ -106,7 +107,7 @@ class VideoPluginPublisher(CMSPluginBase):
                  # unless status check says it's encoding, it must be "missing" or "failed"- so let's try to encode it
                  if version.status != "encoding":
 
-                     if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+                     if USE_CELERY_FOR_VIDEO_ENCODING:
                          print "** launching encodevideo()"
                          version_status = encodevideo.delay(source = instance.video, size = size, codec = codec)
                          print "** got back from encodevideo()", version_status
@@ -120,7 +121,7 @@ class VideoPluginPublisher(CMSPluginBase):
              version.status = "missing"
              instance.unready_versions.append(codec)
 
-             if getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", None):
+             if USE_CELERY_FOR_VIDEO_ENCODING:
                  encodevideo.delay(source = instance.video, size = size, codec = codec)
                  print "** launching encodevideo() for", codec_and_size
              else:

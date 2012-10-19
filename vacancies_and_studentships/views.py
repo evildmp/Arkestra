@@ -7,10 +7,8 @@ from contacts_and_people.models import Entity, default_entity
 from models import VacanciesPlugin, Vacancy, Studentship 
 from cms_plugins import CMSVacanciesPlugin
 
-layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
+from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL
 
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
 
 def common_settings(request, slug):
     # general values - entity, request, template
@@ -26,7 +24,7 @@ def common_settings(request, slug):
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "vacancies-and-studentships"
     instance.format = "details image"
-    instance.layout = layout
+    instance.layout = NEWS_AND_EVENTS_LAYOUT
     instance.view = "current"
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity

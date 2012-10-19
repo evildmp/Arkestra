@@ -4,9 +4,7 @@ from datetime import datetime
 
 from django.db import models
 from django.db.models import Q
-from django.conf import settings
-
-MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
 class ArkestraGenericModelManager(models.Manager):
     def get_by_natural_key(self, slug):

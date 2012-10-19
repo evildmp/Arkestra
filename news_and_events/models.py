@@ -2,7 +2,6 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from datetime import date as pythondate
 
-from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
@@ -23,14 +22,9 @@ from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
 from arkestra_utilities.managers import ArkestraGenericModelManager
+from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT, COLLECT_TOP_ALL_FORTHCOMING_EVENTS, DATE_FORMAT, AGE_AT_WHICH_ITEMS_EXPIRE
 
 from managers import EventManager
-
-PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
-PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
-COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
-DATE_FORMAT = settings.ARKESTRA_DATE_FORMAT
-AGE_AT_WHICH_ITEMS_EXPIRE = getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 90)
 
 class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 

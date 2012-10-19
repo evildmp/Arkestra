@@ -35,8 +35,6 @@ class Insert(models.Model):
 # from contacts_and_people.models import Entity #, Person, default_entity_id
 # from contacts_and_people.templatetags.entity_tags import work_out_entity
 
-# PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
-# PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 # 
 # class ArkestraGenericModel(models.Model):
 #     class Meta:

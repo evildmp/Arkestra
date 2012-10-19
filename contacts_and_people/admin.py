@@ -25,6 +25,7 @@ from links.admin import ObjectLinkInline
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
+from arkestra_utilities.settings import ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
@@ -512,7 +513,7 @@ admin.site.register(models.Title,TitleAdmin)
 # admin.site.register(models.PhoneContact,PhoneContactAdmin)
 
 # ------------------------- admin hacks -------------------------
-if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
+if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
     admin.site.unregister(User)
     from django import template
     from django.conf import settings

@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin, messages
 from django import forms
 from django.db import models
-from django.conf import settings
 
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
@@ -15,14 +14,13 @@ from easy_thumbnails.files import get_thumbnailer
 from widgetry.tabs.admin import ModelAdminWithTabs
 from widgetry import fk_lookup
 
+from arkestra_utilities.settings import IMAGESET_ITEM_PADDING
 from arkestra_utilities.output_libraries.plugin_widths import get_placeholder_width, calculate_container_width
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin
 
 from links import schema
 
 from models import FilerImage, ImageSetItem, ImageSetPlugin
-
-IMAGESET_ITEM_PADDING = getattr(settings, "IMAGESET_ITEM_PADDING", 10)
 
 
 # a dictionary to show how many items per row depending on the number of items

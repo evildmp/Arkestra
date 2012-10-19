@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.conf import settings
+from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
 from cms.models.fields import PlaceholderField
@@ -11,9 +11,6 @@ from links.models import ObjectLink
 
 from contacts_and_people.models import Entity, Person, default_entity_id, default_entity
 from contacts_and_people.templatetags.entity_tags import work_out_entity
-
-PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
-PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
 class ArkestraGenericModel(models.Model):
     class Meta:
