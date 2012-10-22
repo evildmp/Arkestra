@@ -192,6 +192,11 @@ class PersonAdmin(PersonAndEntityAdmin):
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
     readonly_fields = ['address_report',]    
     
+    # def __init__(self, model, admin_site):
+    #     print self.readonly_fields
+    #     super(PersonAdmin, self).__init__(model, admin_site)
+    #     return
+
     def address_report(self, instance):
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
             return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
@@ -501,8 +506,8 @@ class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     )
 
 try:
-    admin.site.register(models.Person,PersonAdmin)
-except AlreadyRegistered:
+    admin.site.register(models.Person, PersonAdmin)
+except admin.sites.AlreadyRegistered:
     pass
 
 admin.site.register(models.Building,BuildingAdmin)
