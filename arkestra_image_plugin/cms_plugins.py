@@ -337,6 +337,8 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
     # related_search_fields = ['destination_content_type']
     model=ImageSetItem
     extra=1
+    
+    
     fieldset_basic = ('', {'fields': (('image',),)})
     fieldset_advanced = ('Caption', {
         'fields': (( 'auto_image_title', 'manual_image_title'), ( 'auto_image_caption', 'manual_image_caption'),), 
@@ -378,16 +380,26 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
     raw_id_fields = ('image',)
     inlines = (ImageSetItemEditor,)
     admin_preview = False         
-    fieldset_basic = ('Size & proportions', {'fields': (('kind', 'width', 'aspect_ratio',),)})
+    fieldset_basic = ('Size & proportions', {'fields': ('notes', ('kind', 'width', 'aspect_ratio',),)})
     fieldset_advanced = ('Advanced', {'fields': (( 'float', 'height'),), 'classes': ('collapse',)})
     fieldset_items_per_row = ('For Multiple and Lightbox plugins only', {'fields': ('items_per_row',), 'classes': ('collapse',)})
     fieldsets = (fieldset_basic, fieldset_items_per_row, fieldset_advanced)
+    readonly_fields = ["notes", ]
     
     def __init__(self, model = None, admin_site = None):
         self.admin_preview = False
         self.text_enabled = True
         super(ImageSetPublisher, self).__init__(model, admin_site)
 
+    def notes(self,instance):
+        if not instance.imageset_item.count():
+            message = u"There are currently no items in this set."
+        elif instance.imageset_item.count() == 1:
+            message = u"There is currently only one item in this set."
+        else:
+            message = u"There are currently %s items in this set." % instance.imageset_item.count()
+        return message
+        
     def render(self, context, imageset, placeholder):
 
         # don't do anything if there are no items in the imageset
