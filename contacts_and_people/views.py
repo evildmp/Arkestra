@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from models import Person, Building, Membership, Entity, default_entity
+from models import Person, Building, Membership, Entity
 from links.link_functions import object_links
 
 from django.conf import settings
@@ -13,7 +13,7 @@ if 'publications' in applications:
     from publications.models import BibliographicRecord
     from publications.models import Researcher # required for publications
 
-def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
+def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
@@ -61,7 +61,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         RequestContext(request),
         )        
 
-def people(request, slug=getattr(default_entity, "slug", None), letter=None):
+def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), letter=None):
     """
     Responsible for lists of people
     """
@@ -138,8 +138,8 @@ def person(request, slug, active_tab=""):
         description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
         request.current_page = entity.get_website 
     else:
-        description = default_entity.__unicode__()
-        request.current_page = default_entity.get_website
+        description = Entity.objects.base_entity().__unicode__()
+        request.current_page = Entity.objects.base_entity().get_website
 
     meta = {
         "description": ": ".join((person.__unicode__(), description))
@@ -149,7 +149,7 @@ def person(request, slug, active_tab=""):
         template = entity.get_template() 
     else: # no memberships, no useful information
         # print "no memberships, no useful information"
-        template = default_entity.get_template()
+        template = Entity.objects.base_entity().get_template()
 
     tabs_dict = { # information for each kind of person tab
         "default": {
@@ -302,7 +302,7 @@ def place(request, slug, active_tab=""):
     meta = {
         "description": meta_description_content,
         }
-    page = default_entity.get_website
+    page = Entity.objects.base_entity().get_website
     request.current_page = page
     template = page.get_template()
 

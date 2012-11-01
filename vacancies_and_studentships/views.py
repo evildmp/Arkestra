@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from django.template import RequestContext
 
-from contacts_and_people.models import Entity, default_entity
+from contacts_and_people.models import Entity
 
 from models import VacanciesPlugin, Vacancy, Studentship 
 from cms_plugins import CMSVacanciesPlugin
@@ -12,7 +12,7 @@ from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS
 
 def common_settings(request, slug):
     # general values - entity, request, template
-    entity = Entity.objects.get(slug=slug) or default_entity
+    entity = Entity.objects.get(slug=slug) or Entity.objects.base_entity()
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
@@ -29,7 +29,7 @@ def common_settings(request, slug):
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity
 
-def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", None)):
+def vacancies_and_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
@@ -58,7 +58,7 @@ def vacancies_and_studentships(request, slug=getattr(default_entity, "slug", Non
 
 
 
-def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
+def archived_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -86,7 +86,7 @@ def archived_vacancies(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
         
-def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
+def all_current_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -114,7 +114,7 @@ def all_current_vacancies(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
 
-def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
+def archived_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -142,7 +142,7 @@ def archived_studentships(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
         
-def all_current_studentships(request, slug=getattr(default_entity, "slug", None)):
+def all_current_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -171,7 +171,7 @@ def all_current_studentships(request, slug=getattr(default_entity, "slug", None)
         )
 
 def vacancy_and_studentship(item):
-    entity = item.hosted_by or default_entity
+    entity = item.hosted_by or Entity.objects.base_entity()
     item.link_to_vacancies_and_studentships_page = entity.get_related_info_page_url("vacancies-and-studentships")
     item.template = entity.get_template()
     return item

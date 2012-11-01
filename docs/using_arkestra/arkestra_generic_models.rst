@@ -75,7 +75,6 @@ and @properties:
 * ``links``
 * ``external_url``
 * ``get_hosted_by``
-* ``get_entity``
 * ``get_website``
     
 And you can add whatever fields of your own that are required and ignore the ones that are not.

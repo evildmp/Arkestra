@@ -215,14 +215,14 @@ class EntityManager(TreeManager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
-    def base_entity(self):
+    def base_entity(self): 
         try:
             # are Entities available at all?
             list(Entity.objects.all())
-            # print "** Entity objects are available from the database"
+            print "** Entity objects are available from the database"
         except:
             # no - the database isn't ready 
-            # print "** Entity objects are not available from the database"
+            print "** Entity objects are not available from the database"
             pass      
         else:
             # we managed to get Entity.objects.all()
@@ -231,12 +231,19 @@ class EntityManager(TreeManager):
                 entity = Entity.objects.get(id = base_entity_id)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
             except (Entity.DoesNotExist, DatabaseError), e:
-                # print "** Either the Entity does not exist, or I got a DatabaseError:"
-                # print "**", e
+                print "** Either the Entity does not exist, or I got a DatabaseError:"
+                print "**", e
                 pass
             else:
-                # print "** I successfully found a default entity:", entity
+                print "** I successfully found a default entity:", entity
                 return entity
+
+    def default_entity_id(self):
+        if self.base_entity and not MULTIPLE_ENTITY_MODE:
+            return base_entity_id
+
+    def some_thing(self):
+        print "*********"
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
@@ -397,7 +404,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             # try
             return self.parent.get_website_url()
         else:    # except
-            return default_entity.get_website
+            return Entity.objects.base_entity().get_website
 
     def get_related_info_page_url(self, kind):
         """
@@ -407,7 +414,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         """
         if self.external_url:
             return ""
-        elif self == default_entity:
+        elif self == Entity.objects.base_entity():
             return "/%s/" % kind
         else:
             return "/%s/%s/" % (kind, self.slug)
@@ -419,7 +426,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.get_website:
             return self.get_website.get_template()
         else:
-            return default_entity.get_website.get_template()
+            return Entity.objects.base_entity().get_website.get_template()
 
 
     def get_contacts(self):
@@ -820,11 +827,11 @@ class EntityMembersPluginEditor(CMSPlugin):
 # default_entity_id is used to autofill the default entity where required, when MULTIPLE_ENTITY_MODE = False
 # default_entity is used throughout the system
 # make default_entity and default_entity_id available
-default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
-if default_entity and not MULTIPLE_ENTITY_MODE:
-    default_entity_id = base_entity_id
-else:
-    default_entity_id = None
+# default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
+# if default_entity and not MULTIPLE_ENTITY_MODE:
+#     default_entity_id = base_entity_id
+# else:
+#     default_entity_id = None      
 
 
 # crazymaniac's wild monkeypatch# 

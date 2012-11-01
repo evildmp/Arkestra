@@ -14,7 +14,7 @@ from cms.models.fields import PlaceholderField
 
 from filer.fields.image import FilerImageField
 
-from contacts_and_people.models import Entity, Person, Building, default_entity_id
+from contacts_and_people.models import Entity, Person, Building
 
 from links.models import ExternalLink
 
@@ -38,7 +38,8 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
         super(NewsAndEvents, self).save(*args, **kwargs)
 
     def link_to_more(self):
-        return self.get_hosted_by.get_related_info_page_url("news-and-events")        
+        if self.get_hosted_by:
+            return self.get_hosted_by.get_related_info_page_url("news-and-events")        
 
 class NewsArticle(NewsAndEvents):
     url_path = "news"

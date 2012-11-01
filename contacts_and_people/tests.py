@@ -2,6 +2,30 @@ from django.test import TestCase
 
 from contacts_and_people.models import Site, Person, Building, Entity, Membership
 
+class EntityManagerTests(TestCase):
+    def setUp(self): 
+        pass
+
+    def test_base_entity_with_empty_database(self):
+        """
+        test EntityManager.base_entity
+        """
+        # no Entities, should be None 
+        self.assertEquals(Entity.objects.base_entity(), None)
+
+    def test_base_entity_with_one_entity(self):
+        """
+        test EntityManager.base_entity
+        """
+        # one Entities, should be that 
+        self.school = Entity(
+            name="School of Medicine", 
+            slug="medicine",
+            )
+        self.school.save()
+        self.assertEquals(Entity.objects.base_entity(), self.school)
+
+
 class EntityTestObjectsMixin(object):
     """
     Create a set of inter-related objects that we'll use in a series of tests
