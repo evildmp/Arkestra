@@ -7,7 +7,7 @@ from links.link_functions import object_links
 from models import NewsAndEventsPlugin, Event, NewsArticle
 from cms_plugins import CMSNewsAndEventsPlugin
 
-from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL
+from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL, MULTIPLE_ENTITY_MODE
 
 
 def common_settings(request, slug):
@@ -37,7 +37,7 @@ def news_and_events(request, slug=getattr(Entity.objects.base_entity(), "slug", 
 
     meta = {"description": "Recent news and forthcoming events",}
     title = unicode(entity) + u" news & events"
-    if getattr(settings, "MULTIPLE_ENTITY_MODE"):
+    if MULTIPLE_ENTITY_MODE:
         pagetitle = unicode(entity) + u" news & events"
     else:
         pagetitle = "News & events"
@@ -152,7 +152,7 @@ def newsarticle(request, slug):
     if request.user.is_staff:
         newsarticle = get_object_or_404(NewsArticle, slug=slug)
     else:
-        newsarticle = get_object_or_404(NewsArticle, slug=slug, published = True)
+        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True)
     return render_to_response(
         "news_and_events/newsarticle.html",
         {
