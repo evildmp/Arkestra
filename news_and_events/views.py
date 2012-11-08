@@ -1,5 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.http import Http404
+from django.utils import timezone
 
 from contacts_and_people.models import Entity
 from links.link_functions import object_links
@@ -11,7 +13,13 @@ from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS
 
 
 def common_settings(request, slug):
-    entity = Entity.objects.get(slug=slug) or Entity.objects.base_entity()
+    if slug:
+        try:
+            entity = Entity.objects.get(slug=slug)
+        except Entity.DoesNotExist:
+            raise Http404   
+    else:
+        entity = Entity.objects.base_entity()
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
@@ -30,7 +38,7 @@ def common_settings(request, slug):
     return instance, context, entity
 
 
-def news_and_events(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def news_and_events(request, slug):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
@@ -59,7 +67,7 @@ def news_and_events(request, slug=getattr(Entity.objects.base_entity(), "slug", 
         context,
         )
 
-def previous_events(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def previous_events(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -87,7 +95,7 @@ def previous_events(request, slug=getattr(Entity.objects.base_entity(), "slug", 
         context,
         )
         
-def all_forthcoming_events(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def all_forthcoming_events(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -115,7 +123,7 @@ def all_forthcoming_events(request, slug=getattr(Entity.objects.base_entity(), "
         context,
         )
 
-def news_archive(request, slug=getattr(Entity.objects.base_entity(),"slug", None)):
+def news_archive(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -152,7 +160,7 @@ def newsarticle(request, slug):
     if request.user.is_staff:
         newsarticle = get_object_or_404(NewsArticle, slug=slug)
     else:
-        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True)
+        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True, date__lte=timezone.now())
     return render_to_response(
         "news_and_events/newsarticle.html",
         {
