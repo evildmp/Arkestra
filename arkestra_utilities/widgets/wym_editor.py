@@ -4,8 +4,7 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
-from arkestra_utilities.settings import WYM_TOOLS, WYM_CONTAINERS, WYM_CLASSES, WYM_STYLES
-
+from cms.plugins.text.settings import WYM_TOOLS, WYM_CONTAINERS, WYM_CLASSES, WYM_STYLES
 
 class WYMEditor(forms.Textarea):
     class Media:

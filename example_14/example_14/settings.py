@@ -319,4 +319,33 @@ LANGUAGES = (
 ('cy', gettext('Cymraeg')),
 )
 
+# ------------------------ WYMeditor/SemanticEditor
+
+# these override the settings in cms.plugins.text.settings
+
+WYM_TOOLS = ",\n".join([
+    "{'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'}",
+    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}",
+    "{'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'}",
+    "{'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'}",
+    "{'name': 'Indent', 'title': 'Indent', 'css': 'wym_tools_indent'}",
+    "{'name': 'Outdent', 'title': 'Outdent', 'css': 'wym_tools_outdent'}",
+    "{'name': 'Undo', 'title': 'Undo', 'css': 'wym_tools_undo'}",
+    "{'name': 'Redo', 'title': 'Redo', 'css': 'wym_tools_redo'}",
+    "{'name': 'ToggleHtml', 'title': 'HTML', 'css': 'wym_tools_html'}",
+])
+
+WYM_CONTAINERS = ",\n".join([
+    "{'name': 'P', 'title': 'Paragraph', 'css': 'wym_containers_p'}",
+   # "{'name': 'H1', 'title': 'Heading_1', 'css': 'wym_containers_h1'}", # I assume you reserve <h1> for your page templates
+    "{'name': 'H2', 'title': 'Heading_2', 'css': 'wym_containers_h2'}",
+    "{'name': 'H3', 'title': 'Heading_3', 'css': 'wym_containers_h3'}",
+    "{'name': 'H4', 'title': 'Heading_4', 'css': 'wym_containers_h4'}",
+    "{'name': 'H5', 'title': 'Heading_5', 'css': 'wym_containers_h5'}",
+    "{'name': 'H6', 'title': 'Heading_6', 'css': 'wym_containers_h6'}",
+#    "{'name': 'PRE', 'title': 'Preformatted', 'css': 'wym_containers_pre'}",
+   "{'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'}",
+   # "{'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}", # not ready for this yet
+])
+
 from arkestra_settings import *# import pdb; pdb.set_trace()
