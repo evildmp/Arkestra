@@ -38,17 +38,9 @@ Arkestra includes example projects for both Django 1.4 and earlier versions.
 
 Assuming that your code was installed into src/arkestra in your virtualenv:
                                    
-* `cd src/arkestra/example_14` # for Django 1.4
-* `cd src/arkestra/example` # for earlier versions
+* `cd src/arkestra/example_14` # (or `cd src/arkestra/example` for Django < 1.4)
 
-* `python manage.py syncdb` # set up a new database
-
-Answer `no` to the question about setting up a superuser.
-
-* `python manage.py reset contenttypes` # reset all the contenttype relations; we'll supply them in the fixture below
-
-Answer `yes`.
-
+* `python manage.py syncdb --noinput` # set up a new database; don't prompt for superuser
 * `python manage.py loaddata example_database.json` # load the example database from the fixture
 
 Fire up the server
