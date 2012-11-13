@@ -2,7 +2,6 @@
 # They are not just Arkestra settings, but settings for other applications
 # that Arkestra requires to be just so.
  
-from arkestra_utilities.settings import *
 
 # These are the only settings you really need.
 # If you need to modify other aspects of Arkestra's behaviour, see the
@@ -36,22 +35,6 @@ import os
 from settings import STATIC_URL
 SEMANTICEDITOR_MEDIA_URL = os.path.join(STATIC_URL, "semanticeditor/")
 
-PAGE_TITLE_HEADING_LEVEL = 2
-
-# ensure that the highest_page_body_heading_level is made available below
-
-WYM_CONTAINERS = ",\n".join([
-    "{'name': 'P', 'title': 'Paragraph', 'css': 'wym_containers_p'}",
-#    "{'name': 'H1', 'title': 'Heading_1', 'css': 'wym_containers_h1'}", # I assume you reserve <h1> for your page templates
-    "{'name': 'H2', 'title': 'Heading_2', 'css': 'wym_containers_h2'}",
-    "{'name': 'H3', 'title': 'Heading_3', 'css': 'wym_containers_h3'}",
-    "{'name': 'H4', 'title': 'Heading_4', 'css': 'wym_containers_h4'}",
-    "{'name': 'H5', 'title': 'Heading_5', 'css': 'wym_containers_h5'}",
-    "{'name': 'H6', 'title': 'Heading_6', 'css': 'wym_containers_h6'}",
-#    "{'name': 'PRE', 'title': 'Preformatted', 'css': 'wym_containers_pre'}",
-   "{'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'}",
-   # "{'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}", # not ready for this yet
-])
 
 # ------------------------ Link system
                                            

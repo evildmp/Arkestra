@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 # we're testing the behaviour of a method that uses date-related functions
 import datetime
-from django.utils import timezone
 
 from models import NewsArticle
 from contacts_and_people.models import Entity
@@ -27,7 +26,7 @@ class NewsTests(TestCase):
         self.tootharticle = NewsArticle(
             title = "All about teeth",
             slug = "all-about-teeth",
-            date = timezone.now() + datetime.timedelta(days=30),
+            date = datetime.datetime.now() + datetime.timedelta(days=30),
             )
         print self.tootharticle.date
     def test_generic_attributes(self):

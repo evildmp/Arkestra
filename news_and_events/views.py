@@ -1,7 +1,8 @@
+import datetime
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
-from django.utils import timezone
 
 from contacts_and_people.models import Entity
 from links.link_functions import object_links
@@ -160,7 +161,7 @@ def newsarticle(request, slug):
     if request.user.is_staff:
         newsarticle = get_object_or_404(NewsArticle, slug=slug)
     else:
-        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True, date__lte=timezone.now())
+        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True, date__lte=datetime.datetime.now())
     return render_to_response(
         "news_and_events/newsarticle.html",
         {
