@@ -22,7 +22,7 @@ from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
 from arkestra_utilities.managers import ArkestraGenericModelManager
-from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT, COLLECT_TOP_ALL_FORTHCOMING_EVENTS, DATE_FORMAT, AGE_AT_WHICH_ITEMS_EXPIRE
+from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT, COLLECT_TOP_ALL_FORTHCOMING_EVENTS, DATE_FORMAT, ARKESTRA_DATE_FORMATS, AGE_AT_WHICH_ITEMS_EXPIRE
 
 from managers import EventManager
 
@@ -75,7 +75,7 @@ class NewsArticle(NewsAndEvents):
         """
         if getattr(self, "sticky", None):
             return "Top news"        
-        get_when = nice_date(self.date, DATE_FORMAT["date_groups"])
+        get_when = nice_date(self.date, ARKESTRA_DATE_FORMATS["date_groups"])
         return get_when
 
 
@@ -250,14 +250,14 @@ class Event(NewsAndEvents, LocationModelMixin):
             end_date = self.end_date
             if not end_date or self.single_day_event:
                 end_date = start_date
-            start_date_format = end_date_format = DATE_FORMAT["not_this_year"]
+            start_date_format = end_date_format = ARKESTRA_DATE_FORMATS["not_this_year"]
             now = datetime.now()
             if start_date.year == end_date.year:            # start and end in the same year, so:
-                start_date_format = DATE_FORMAT["not_this_month"]                  # start format example: "3rd May"
+                start_date_format = ARKESTRA_DATE_FORMATS["not_this_month"]                  # start format example: "3rd May"
                 if start_date.month == end_date.month:      # start and end in the same month, so:
-                    start_date_format = DATE_FORMAT["this_month"]                # start format example: "21st" 
+                    start_date_format = ARKESTRA_DATE_FORMATS["this_month"]                # start format example: "21st" 
                 if end_date.year == now.year:               # they're both this year, so:
-                    end_date_format = DATE_FORMAT["not_this_month"]                # end format example: "23rd May"
+                    end_date_format = ARKESTRA_DATE_FORMATS["not_this_month"]                # end format example: "23rd May"
             if self.single_day_event:
                 dates = nice_date(start_date, end_date_format)
             else:

@@ -28,7 +28,7 @@ class NewsTests(TestCase):
             slug = "all-about-teeth",
             date = datetime.datetime.now() + datetime.timedelta(days=30),
             )
-        print self.tootharticle.date
+
     def test_generic_attributes(self):
         self.tootharticle.save()
         # the item has no informative content
@@ -39,7 +39,11 @@ class NewsTests(TestCase):
 
         # since there are no Entities in the database, default to settings's template
         self.assertEqual(self.tootharticle.get_template, settings.CMS_TEMPLATES[0][0])
-    
+
+    def test_date_related_attributes(self):
+        self.tootharticle.date = datetime.datetime(year=2012, month=12, day=12)
+        self.assertEqual(self.tootharticle.get_when, "December 2012")
+            
 class NewsEventsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.

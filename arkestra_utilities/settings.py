@@ -49,7 +49,9 @@ NEWS_AND_EVENTS_LAYOUT = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside
 
 # -------- Date formats ----------------------
 
-DATE_FORMAT = getattr(settings, "DATE_FORMAT", 
+DATE_FORMAT = getattr(settings, "ARKESTRA_DATE_FORMATS", "jS F Y")
+
+ARKESTRA_DATE_FORMATS = getattr(settings, "ARKESTRA_DATE_FORMATS", 
     {
     "date_groups": "F Y",
     "not_this_year": "jS F Y",
