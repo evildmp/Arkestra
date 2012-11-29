@@ -18,7 +18,8 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-    urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)           
+    urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+               
 urlpatterns += patterns('',
     url('^autocomplete/$', 'widgetry.views.search', name='widgetry-search'),
     url(r'^', include('cms.urls')),
