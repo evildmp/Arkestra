@@ -1,7 +1,6 @@
 from __future__ import division
 
 from django.shortcuts import render_to_response, get_object_or_404
-from django.conf import settings
 from django.template import RequestContext
 
 from easy_thumbnails.files import get_thumbnailer

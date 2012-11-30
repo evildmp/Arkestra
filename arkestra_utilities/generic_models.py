@@ -1,19 +1,21 @@
+from datetime import datetime      
+
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from datetime import datetime
+
+from django.conf import settings
+
 from cms.models.fields import PlaceholderField
 
 from filer.fields.image import FilerImageField
 
+from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
+
 from links.models import ObjectLink
 
-from contacts_and_people.models import Entity, Person, default_entity_id, default_entity
+from contacts_and_people.models import Entity, Person
 from contacts_and_people.templatetags.entity_tags import work_out_entity
-
-PLUGIN_HEADING_LEVELS = settings.PLUGIN_HEADING_LEVELS
-PLUGIN_HEADING_LEVEL_DEFAULT = settings.PLUGIN_HEADING_LEVEL_DEFAULT
 
 class ArkestraGenericModel(models.Model):
     class Meta:
@@ -35,11 +37,15 @@ class ArkestraGenericModel(models.Model):
     image = FilerImageField(null=True, blank=True)
 
     # universal plugin fields 
-    hosted_by = models.ForeignKey(Entity, default=default_entity_id,
+    hosted_by = models.ForeignKey(Entity, default=Entity.objects.default_entity_id(),
         related_name='%(class)s_hosted_events', null=True, blank=True,
         help_text=u"The entity responsible for publishing this item")
-    publish_to = models.ManyToManyField(Entity, null=True, blank=True, related_name="%(class)s_publish_to",
-        help_text=u"Use these sensibly - don't send minor items to the home page, for example")
+    publish_to = models.ManyToManyField(
+        Entity, verbose_name="Also publish to",
+        null=True, blank=True, 
+        related_name="%(class)s_publish_to",
+        help_text=u"Use these sensibly - don't send minor items to the home page, for example.",
+        )
     please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
         help_text=u"The person to whom enquiries about this should be directed", 
         null=True, blank=True)
@@ -66,28 +72,31 @@ class ArkestraGenericModel(models.Model):
 
     @property
     def get_hosted_by(self):
-        return self.hosted_by or default_entity
+        return self.hosted_by or Entity.objects.base_entity()
         
     @property
     def get_template(self):
-        return self.get_hosted_by.get_template()    
+        if self.get_hosted_by:
+            return self.get_hosted_by.get_template()
+        else:
+            return settings.CMS_TEMPLATES[0][0]    
         
     @property
     def get_entity(self):
         """
         Real-world information, can be None
         """
-        return self.hosted_by or Entity.objects.get(id=default_entity_id)
+        return self.hosted_by or Entity.objects.get(id=Entity.objects.base_entity())
     
-    @property
-    def get_website(self):
-        """
-        for internal Arkestra purposes only
-        """
-        if self.get_entity:
-            return self.get_entity.get_website
-        else:
-            return None
+    # @property
+    # def get_website(self):
+    #     """
+    #     for internal Arkestra purposes only
+    #     """
+    #     if self.get_entity:
+    #         return self.get_entity.get_website
+    #     else:
+    #         return None
             
     @property
     def links(self):

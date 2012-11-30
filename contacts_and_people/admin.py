@@ -25,6 +25,7 @@ from links.admin import ObjectLinkInline
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
+from arkestra_utilities.settings import ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION
 
 HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
@@ -88,6 +89,7 @@ class PhoneContactAdmin(admin.ModelAdmin):
     pass
 
 class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):    
+    
     def _media(self):
         return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
@@ -181,19 +183,32 @@ def create_action(entity):
     return (name, (action, name,"Add selected Person to %s as 'Member'" % (entity,)))
 
 
-class PersonAdmin(PersonAndEntityAdmin):
+class PersonAdmin(PersonAndEntityAdmin):    
     search_fields = ['given_name','surname','institutional_username',]
-    
-    
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
     # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
+    readonly_fields = ['address_report',]    
+    
+    # def __init__(self, model, admin_site):
+    #     print self.readonly_fields
+    #     super(PersonAdmin, self).__init__(model, admin_site)
+    #     return
 
+    def address_report(self, instance):
+        if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
+            return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
+        else:
+            return "%s" % (", ".join(instance.get_full_address)) or "<span class='errors'>Warning: this person has no address.</span>"
+
+    address_report.short_description = "Address"
+    address_report.allow_tags = True
+    
     name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
     override_fieldset = ('Over-ride default output', {
-        'fields': ('please_contact', 'override_entity', 'building',),
+        'fields': ('please_contact', 'building',),
         'classes': ('collapse',)
         })
     advanced_fieldset =  (
@@ -205,11 +220,10 @@ class PersonAdmin(PersonAndEntityAdmin):
         'fields': ('description',),
         'classes': ('plugin-holder', 'plugin-holder-nopage',)
         })
-    
     tabs = [
         ('Personal details', {'fieldsets': (name_fieldset, fieldsets["image"])}),
         ('Contact information', {
-                'fieldsets': (fieldsets["email"], fieldsets["location"], override_fieldset),
+                'fieldsets': (fieldsets["email"], fieldsets["address_report"], fieldsets["location"], override_fieldset),
                 'inlines': [PhoneContactInline,]
                 }),
         ('Description', {'fieldsets': (description_fieldset,)}),
@@ -310,6 +324,15 @@ class EntityAdmin(PersonAndEntityAdmin):
     prepopulated_fields = {
             'slug': ('name',)
             }
+    readonly_fields = ['address_report']    
+
+    def address_report(self, instance):
+        if not instance.abstract_entity:
+            return "%s" % (", ".join(instance.get_full_address)) or "Warning: this Entity has no address."
+        else:
+            return "This is an abstract entity and therefore has no address"
+
+    address_report.short_description = "Address"
 
     name_fieldset = ('Name', {'fields': ('name', 'short_name')})
     website_fieldset = ('', {'fields': ('website',)})
@@ -348,7 +371,7 @@ class EntityAdmin(PersonAndEntityAdmin):
 
     tabs = [
         ('Basic information', {'fieldsets': (name_fieldset, fieldsets["image"], website_fieldset, entity_hierarchy_fieldset)}),
-        ('Location', {'fieldsets': (building_fieldset, fieldsets["location"],)}),
+        ('Location', {'fieldsets': (fieldsets["address_report"], building_fieldset, fieldsets["location"],)}),
         ('Contact', {
             'fieldsets': (fieldsets["email"],),
             'inlines': (PhoneContactInline,)
@@ -483,8 +506,8 @@ class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     )
 
 try:
-    admin.site.register(models.Person,PersonAdmin)
-except AlreadyRegistered:
+    admin.site.register(models.Person, PersonAdmin)
+except admin.sites.AlreadyRegistered:
     pass
 
 admin.site.register(models.Building,BuildingAdmin)
@@ -495,7 +518,7 @@ admin.site.register(models.Title,TitleAdmin)
 # admin.site.register(models.PhoneContact,PhoneContactAdmin)
 
 # ------------------------- admin hacks -------------------------
-if getattr(settings,"ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION", False):
+if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
     admin.site.unregister(User)
     from django import template
     from django.conf import settings

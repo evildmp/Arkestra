@@ -1,21 +1,26 @@
-from django.shortcuts import render_to_response, get_object_or_404
-from django.conf import settings
-from django.template import RequestContext
+import datetime
 
-from contacts_and_people.models import Entity, default_entity
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
+from django.http import Http404
+
+from contacts_and_people.models import Entity
 from links.link_functions import object_links
 
 from models import NewsAndEventsPlugin, Event, NewsArticle
 from cms_plugins import CMSNewsAndEventsPlugin
 
-layout = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside")
-
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = settings.MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-IN_BODY_HEADING_LEVEL = settings.IN_BODY_HEADING_LEVEL
+from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL, MULTIPLE_ENTITY_MODE
 
 
 def common_settings(request, slug):
-    entity = Entity.objects.get(slug=slug) or default_entity
+    if slug:
+        try:
+            entity = Entity.objects.get(slug=slug)
+        except Entity.DoesNotExist:
+            raise Http404   
+    else:
+        entity = Entity.objects.base_entity()
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
@@ -28,20 +33,20 @@ def common_settings(request, slug):
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "news-and-events"
     instance.format = "details image"
-    instance.layout = layout
+    instance.layout = NEWS_AND_EVENTS_LAYOUT
     instance.view = "current"
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity
 
 
-def news_and_events(request, slug=getattr(default_entity, "slug", None)):
+def news_and_events(request, slug):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
 
     meta = {"description": "Recent news and forthcoming events",}
     title = unicode(entity) + u" news & events"
-    if getattr(settings, "MULTIPLE_ENTITY_MODE"):
+    if MULTIPLE_ENTITY_MODE:
         pagetitle = unicode(entity) + u" news & events"
     else:
         pagetitle = "News & events"
@@ -63,7 +68,7 @@ def news_and_events(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
 
-def previous_events(request, slug=getattr(default_entity, "slug", None)):
+def previous_events(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -91,7 +96,7 @@ def previous_events(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
         
-def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
+def all_forthcoming_events(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -119,7 +124,7 @@ def all_forthcoming_events(request, slug=getattr(default_entity, "slug", None)):
         context,
         )
 
-def news_archive(request, slug=getattr(default_entity,"slug", None)):
+def news_archive(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -153,8 +158,10 @@ def newsarticle(request, slug):
     """
     Responsible for publishing news article
     """
-    newsarticle = get_object_or_404(NewsArticle, slug=slug)
-    
+    if request.user.is_staff:
+        newsarticle = get_object_or_404(NewsArticle, slug=slug)
+    else:
+        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True, date__lte=datetime.datetime.now())
     return render_to_response(
         "news_and_events/newsarticle.html",
         {

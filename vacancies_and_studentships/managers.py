@@ -5,8 +5,7 @@ from datetime import datetime
 import operator
 
 from arkestra_utilities.managers import ArkestraGenericModelManager
-
-MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
     
 class ItemManager(ArkestraGenericModelManager):
     def get_items(self, instance):

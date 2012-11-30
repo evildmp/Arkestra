@@ -21,22 +21,31 @@ Arkestra was developed at `Cardiff University School of Medicine <http://medicin
 
 Arkestra can be obtained from our `GitHub repository <https://github.com/evildmp/Arkestra>`_.
 
-********
-Contents
-********
+***************
+Getting started
+***************
 
 .. toctree::
    :maxdepth: 2
 
-   installation
-   getting_started
+   getting_started/installation
+   getting_started/installation_notes
+   getting_started/getting_started
 
-   using_news_and_events
-   image_sizing_system
-   links_system
-   video_system
-   arkestra_generic_models
-   migration
+**************
+Using Arkestra
+**************
+
+.. toctree::
+   :maxdepth: 2
+   
+   using_arkestra/templates
+   using_arkestra/using_news_and_events
+   using_arkestra/image_sizing_system
+   using_arkestra/links_system
+   using_arkestra/video_system
+   using_arkestra/arkestra_generic_models
+   using_arkestra/migration
 
 Indices and tables
 ==================

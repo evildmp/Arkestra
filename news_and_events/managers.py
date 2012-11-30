@@ -5,9 +5,7 @@ from datetime import datetime
 import operator
 
 from arkestra_utilities.managers import ArkestraGenericModelManager
-
-MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
-COLLECT_TOP_ALL_FORTHCOMING_EVENTS = settings.COLLECT_TOP_ALL_FORTHCOMING_EVENTS
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
 
 class EventManager(ArkestraGenericModelManager):

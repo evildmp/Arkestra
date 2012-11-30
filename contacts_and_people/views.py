@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from models import Person, Building, Membership, Entity, default_entity
+from models import Person, Building, Membership, Entity
 from links.link_functions import object_links
 
 from django.conf import settings
@@ -13,7 +13,7 @@ if 'publications' in applications:
     from publications.models import BibliographicRecord
     from publications.models import Researcher # required for publications
 
-def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
+def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
@@ -29,6 +29,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         }
         
     people, initials = entity.get_people_and_initials()
+
     # are there Key People to show?    
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
         people_list_heading = _(u"Also")
@@ -51,7 +52,8 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
             "location": entity.precise_location, 
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
-
+            "full_address" : entity.get_full_address,
+            "building" : entity.get_building,
             "people": people,
             "people_list_heading": people_list_heading,
             "initials_list": initials,
@@ -59,7 +61,7 @@ def contacts_and_people(request, slug=getattr(default_entity, "slug", None)):
         RequestContext(request),
         )        
 
-def people(request, slug=getattr(default_entity, "slug", None), letter=None):
+def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), letter=None):
     """
     Responsible for lists of people
     """
@@ -115,29 +117,29 @@ def person(request, slug, active_tab=""):
     person = get_object_or_404(Person,slug=slug)
     person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
-    home_role = person.get_role()
+    home_role = person.get_role
     if home_role:
         entity = home_role.entity
     entity = person.get_entity # don't rely on home_role.entity - could be None or overridden
 
-    address = person.get_address()
+    building = person.get_building
 
     contact = person.get_please_contact()
     email = contact.email
     phone = contact.phone_contacts.all()
 
-    if person.override_entity or person.please_contact:
-        location = None
+    if person.please_contact:
+        precise_location = None
     else:
-        location = person.precise_location
-    access_note = person.access_note
+        precise_location = person.precise_location
+    access_note = person.access_note     
         
     if home_role:
         description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
         request.current_page = entity.get_website 
     else:
-        description = default_entity.__unicode__()
-        request.current_page = default_entity.get_website
+        description = Entity.objects.base_entity().__unicode__()
+        request.current_page = Entity.objects.base_entity().get_website
 
     meta = {
         "description": ": ".join((person.__unicode__(), description))
@@ -147,7 +149,7 @@ def person(request, slug, active_tab=""):
         template = entity.get_template() 
     else: # no memberships, no useful information
         # print "no memberships, no useful information"
-        template = default_entity.get_template()
+        template = Entity.objects.base_entity().get_template()
 
     tabs_dict = { # information for each kind of person tab
         "default": {
@@ -216,11 +218,12 @@ def person(request, slug, active_tab=""):
             "home_role": home_role, # entity and position
             "entity": entity,
             "template": template, # from entity
-            "address": address, # from entity
+            "building": building,
             "email": email, # from person or please_contact
-            "location": location, # from person, or None 
+            "precise_location": precise_location, # from person, or None 
             "contact": contact, # from person or please_contact
             "phone": phone,
+            "full_address" : person.get_full_address,
             "access_note": access_note, # from person
             "tabs": tabs,
             "tab_object": person,
@@ -299,7 +302,7 @@ def place(request, slug, active_tab=""):
     meta = {
         "description": meta_description_content,
         }
-    page = default_entity.get_website
+    page = Entity.objects.base_entity().get_website
     request.current_page = page
     template = page.get_template()
 

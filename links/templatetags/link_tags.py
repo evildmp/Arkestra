@@ -5,10 +5,6 @@ import re
 
 from links.models import ObjectLink
 
-from django.conf import settings
-LINK_SCHEMA = getattr(settings, 'LINK_SCHEMA', {})
-
-
 register = template.Library()
 
 """

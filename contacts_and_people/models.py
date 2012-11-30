@@ -22,13 +22,12 @@ from filer.fields.image import FilerImageField
 # from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from arkestra_utilities.mixins import URLModelMixin
-
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE
 from links.models import ExternalLink
 
 import news_and_events
 
-MULTIPLE_ENTITY_MODE = settings.MULTIPLE_ENTITY_MODE
-base_entity_id = settings.ARKESTRA_BASE_ENTITY
+base_entity_id = ARKESTRA_BASE_ENTITY
 
 # Page = models.get_model('cms', 'Page')
 # CMSPlugin = models.get_model('cms', 'CMSPlugin')
@@ -64,7 +63,7 @@ class Building(models.Model):
     additional_street_address = models.CharField(help_text=u"If required",
         max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=9, null=True, blank=True)
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, related_name="place")
     slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
         max_length=255, null=True, unique=True)
     image = FilerImageField(null=True, blank=True)
@@ -119,6 +118,7 @@ class Building(models.Model):
             building_identifier = unicode(self.site) + ": " + self.postcode
         return building_identifier
     
+    @property
     def get_postal_address(self):
         """
         Assembles the postal (external) parts of an address
@@ -134,7 +134,7 @@ class Building(models.Model):
         if self.additional_street_address:
             address.append(self.additional_street_address)
         if self.site.post_town:
-            address.append(self.site.post_town + " " + self.postcode)
+            address.append(" ".join((item for item in (self.site.post_town, self.postcode) if item)))
         elif self.postcode:
             address.append(self.postcode)
         return address
@@ -215,7 +215,7 @@ class EntityManager(TreeManager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
-    def base_entity(self):
+    def base_entity(self): 
         try:
             # are Entities available at all?
             list(Entity.objects.all())
@@ -228,6 +228,7 @@ class EntityManager(TreeManager):
             # we managed to get Entity.objects.all()
             # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
             try:
+                # print "trying"
                 entity = Entity.objects.get(id = base_entity_id)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet 
             except (Entity.DoesNotExist, DatabaseError), e:
@@ -237,6 +238,13 @@ class EntityManager(TreeManager):
             else:
                 # print "** I successfully found a default entity:", entity
                 return entity
+
+    def default_entity_id(self):
+        if self.base_entity and not MULTIPLE_ENTITY_MODE:
+            return base_entity_id
+
+    def some_thing(self):
+        print "*********"
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
@@ -260,7 +268,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     news_page_menu_title = models.CharField(u"Title",
         max_length= 50,
-        default=getattr(settings, "DEFAULT_NEWS_PAGE_TITLE", "News & events"))
+        default = DEFAULT_NEWS_PAGE_TITLE
+        )
     news_page_intro = PlaceholderField('body', 
         related_name="news_page_intro",
         )
@@ -269,7 +278,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     contacts_page_menu_title = models.CharField(u"Title",
         max_length=50,
-        default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Contacts & people"))
+        default = DEFAULT_CONTACTS_PAGE_TITLE,
+        )
     contacts_page_intro = PlaceholderField('body',
         related_name="contacts_page_intro",
         help_text = "Text for the Contacts & people page"
@@ -280,7 +290,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
     vacancies_page_menu_title = models.CharField(u"Title",
         max_length=50,
-        default=getattr(settings, "DEFAULT_VACANCIES_PAGE_TITLE", "Vacancies & studentships"))
+        default = DEFAULT_VACANCIES_PAGE_TITLE,
+        )
     vacancies_page_intro = PlaceholderField('body',
         related_name="vacancies_page_intro",
         )
@@ -290,7 +301,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             default=False)
         publications_page_menu_title = models.CharField(u"Title",
             max_length=50,
-            default=getattr(settings, "DEFAULT_CONTACTS_PAGE_TITLE", "Publications"))
+            default = DEFAULT_PUBLICATIONS_PAGE_TITLE,
+            )
     
     class Meta:
         verbose_name_plural = "Entities"
@@ -310,7 +322,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         else:
             return "/contact/"
 
-    def get_real_ancestor(self):
+    @property
+    def _get_real_ancestor(self):
         """
         Find the nearest non-abstract Entity amongst this Entity's ancestors
         """
@@ -318,36 +331,54 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             if not ancestor.abstract_entity:
                 return ancestor
                 
-        return None
+    @property
+    def get_building(self):
+        """
+        Return the Building for this Entity (or its nearest parent) 
+        """   
+        if self.abstract_entity:
+            return
+        elif self.building:
+            return self.building
+        else:
+            try: 
+                return self._get_real_ancestor.get_building
+            except AttributeError: 
+                return None
 
-    def get_address(self):
-        """
-        Returns the full address of the entity
-        """
-        entity = self
-        if entity.abstract_entity:
-            entity = self.get_real_ancestor()
-        if entity:
-            address = entity.get_institutional_address()
-            building = entity.get_building()
-            if building:
-                if entity.building_recapitulates_entity_name: 
-                    address.extend(building.get_postal_address()[1:])
-                else:
-                    address.extend(building.get_postal_address())
-                return address
-                
-    def get_institutional_address(self):
+    @property
+    def _get_institutional_address(self):
         """
         Lists the parts of an address within the institution (Section of YYY, Department of XXX and YYY, School of ZZZ)
         """ 
-        ancestors = []
-        showparent = self.display_parent
-        for entity in self.get_ancestors(ascending = True).exclude(abstract_entity = True):
-            if showparent:
-                ancestors.append(entity)
-            showparent = entity.display_parent
-        return ancestors
+        if self.abstract_entity:
+            return
+        else:
+            ancestors = []
+            showparent = self.display_parent
+            for entity in self.get_ancestors(ascending = True).exclude(abstract_entity = True):
+                if showparent:
+                    ancestors.append(entity)
+                showparent = entity.display_parent
+            return ancestors
+
+    @property
+    def get_full_address(self):
+        """
+        Returns the full address of the entity
+        """
+        if self.abstract_entity:
+            return []
+        else:
+            address = self._get_institutional_address
+            building = self.get_building
+            if building:
+                if self.building_recapitulates_entity_name: 
+                    address.extend(building.get_postal_address[1:])
+                else:
+                    address.extend(building.get_postal_address)
+                return address
+                
 
     @property
     def get_website(self):
@@ -374,7 +405,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             # try
             return self.parent.get_website_url()
         else:    # except
-            return default_entity.get_website
+            return Entity.objects.base_entity().get_website
 
     def get_related_info_page_url(self, kind):
         """
@@ -384,7 +415,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         """
         if self.external_url:
             return ""
-        elif self == default_entity:
+        elif self == Entity.objects.base_entity():
             return "/%s/" % kind
         else:
             return "/%s/%s/" % (kind, self.slug)
@@ -396,19 +427,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.get_website:
             return self.get_website.get_template()
         else:
-            return default_entity.get_website.get_template()
+            return settings.CMS_TEMPLATES[0][0]
 
-    def get_building(self):
-        """
-        Return the Building for this Entity (or its nearest parent) 
-        """
-        if self.building:
-            return self.building
-        else:
-            try:
-                return self.parent.get_building()
-            except AttributeError:
-                return None
 
     def get_contacts(self):
         """
@@ -551,7 +571,7 @@ class Person(PersonLite, CommonFields):
     entities = models.ManyToManyField(Entity, related_name='people',
         through='Membership', blank=True, null=True)
     building = models.ForeignKey(Building, verbose_name='Specify building',
-        help_text=u"Only required if this Person <strong>Home entity</strong> has a different address", 
+        help_text=u"<strong>Only</strong> required if this Person's <strong>Home entity</strong> has a different address", 
         blank=True, null=True, on_delete=models.SET_NULL)
     override_entity = models.ForeignKey(Entity, verbose_name='Specify entity',
         help_text=u"<strong>Temporarily specify</strong> an entity for contact information - over-rides entity and postal address",
@@ -578,6 +598,7 @@ class Person(PersonLite, CommonFields):
         else:
             return "/person/%s/" % self.slug
 
+    @property
     def get_role(self):
         """
         Returns a Membership object.
@@ -588,7 +609,11 @@ class Person(PersonLite, CommonFields):
         
         If it can't find any role, it returns None.
         """
-        memberships = Membership.objects.filter(person = self, entity__abstract_entity = False, importance_to_person__gte = 2).order_by('-importance_to_person')
+        memberships = Membership.objects.filter(
+            person = self, 
+            entity__abstract_entity = False, 
+            importance_to_person__gte = 2).order_by('-importance_to_person'
+            )
         if memberships:
             return memberships[0]
         else: # the poor person had no memberships
@@ -603,21 +628,35 @@ class Person(PersonLite, CommonFields):
         """
         if self.override_entity and not self.override_entity.abstract_entity:
             return self.override_entity
-        elif self.get_role():
-            return self.get_role().entity
+        elif self.get_role:
+            return self.get_role.entity
         return None
                 
-    def get_address(self):
+    @property
+    def get_building(self):
+        """
+        Returns a Person's Building, if possible
+        """
+        if self.building:
+            return self.building
+        elif self.get_entity:
+            return self.get_entity.get_building
+
+    @property
+    def get_full_address(self):
         """
         Works out a person's address, based on their home/best entity or information that overrides this
         """
         if self.get_entity: # needs an entity to work
             if self.building:
-                address = self.get_entity.get_institutional_address()
-                address.extend(self.building.get_postal_address())
+                address = self.get_entity._get_institutional_address
+                address.extend(self.building.get_postal_address)
                 return address
             else:
-                return self.get_entity.get_address()
+                return self.get_entity.get_full_address
+        else:
+            return []
+
 
     def get_please_contact(self):
         """
@@ -719,8 +758,10 @@ class Membership(models.Model):
         # if there's just one membership, make it home; if this one is home, make home on all the others false
         memberships = Membership.objects.filter(person = self.person)
         if self.importance_to_person == 5:
-            for membership in memberships:
-                if membership.importance_to_person == 5:
+            for membership in memberships: 
+        
+                if membership.importance_to_person == 5: 
+                    
                     membership.importance_to_person = 4
                 super(Membership, membership).save()
             self.importance_to_person = 5
@@ -787,11 +828,11 @@ class EntityMembersPluginEditor(CMSPlugin):
 # default_entity_id is used to autofill the default entity where required, when MULTIPLE_ENTITY_MODE = False
 # default_entity is used throughout the system
 # make default_entity and default_entity_id available
-default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
-if default_entity and not MULTIPLE_ENTITY_MODE:
-    default_entity_id = base_entity_id
-else:
-    default_entity_id = None
+# default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
+# if default_entity and not MULTIPLE_ENTITY_MODE:
+#     default_entity_id = base_entity_id
+# else:
+#     default_entity_id = None      
 
 
 # crazymaniac's wild monkeypatch# 

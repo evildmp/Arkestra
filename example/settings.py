@@ -1,4 +1,4 @@
-# Django settings for arkestra_medic project.
+# Django settings for example project.
 
 import os
 import os.path
@@ -7,12 +7,17 @@ import os.path
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
+# set the BASE_PATH for convenience's sake
+BASE_PATH = os.path.normpath(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# ------------------------  admin settings
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
 
-# ------------------------  databases
+MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
@@ -53,11 +58,11 @@ SITE_ID = 1
 USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
+# calendars according to the current locale.
 USE_L10N = True
 
-BASE_PATH = os.path.normpath(os.path.dirname(__file__))
-
+# If you set this to False, Django will not use timezone-aware datetimes.
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -135,16 +140,9 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',    
-    )
+)
 
-THUMBNAIL_PROCESSORS = (
-    'easy_thumbnails.processors.colorspace',
-    'easy_thumbnails.processors.autocrop',
-    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
-    'easy_thumbnails.processors.filters',
-    )
-
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'example.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -152,6 +150,63 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     BASE_PATH+'/templates/',
 )
+
+INSTALLED_APPS = (
+
+     # Django CMS applications
+    
+    'arkestra_utilities',
+    'cms',
+    'menus',
+    # 'appmedia',
+    'cms.plugins.text',
+    'cms.plugins.snippet',
+    'sekizai',
+    # 'djcelery',     # will need to be enabled for celery processing
+    
+    # Arkestra applications
+    
+    'contacts_and_people',
+    'vacancies_and_studentships',
+    'news_and_events',
+    'links',
+    'arkestra_utilities.widgets.combobox',
+    'arkestra_image_plugin',
+    'video',
+    'housekeeping',
+
+    # other applications
+    
+    'polymorphic',
+    'semanticeditor',
+    'mptt',
+    'easy_thumbnails',
+    'typogrify',
+    'filer',    
+    'widgetry',  
+    # 'south',         
+    # 'adminsortable',
+
+    # core Django applications
+    # these should be last, so we can override their templates
+    
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
+    'django.contrib.humanize',
+)
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+    )
 
 # ------------------------ Django Celery
 try:
@@ -166,6 +221,14 @@ try:
 except ImportError:
     pass
 
+
+# ------------------------ Django Filer
+
+FILER_FILE_MODELS = (
+        'video.models.Video',
+        'filer.models.imagemodels.Image',
+        'filer.models.filemodels.File',
+    )
 
 # ------------------------ Django CMS
 
@@ -217,80 +280,37 @@ CMS_PLACEHOLDER_CONF = {
 
 LANGUAGES = (
 ('en', gettext('English')),
+('de', gettext('German')),
 ('cy', gettext('Cymraeg')),
 )
 
-INSTALLED_APPS = (
+# ------------------------ WYMeditor/SemanticEditor
 
-     # Django CMS applications
-    
-    'arkestra_utilities',
-    'cms',
-    'menus',
-    'appmedia',
-    'cms.plugins.text',
-    'cms.plugins.snippet',
-    'sekizai',
-    # 'djcelery',     # will need to be enabled for celery processing
-    
-    # Arkestra applications
-    
-    'contacts_and_people',
-    'vacancies_and_studentships',
-    'news_and_events',
-    'links',
-    'arkestra_utilities.widgets.combobox',
-    'arkestra_image_plugin',
-    'video',
-    'housekeeping',
-    
-    # other applications
-    
-    'polymorphic',
-    'semanticeditor',
-    'mptt',
-    'easy_thumbnails',
-    'typogrify',
-    'filer',    
-    'widgetry',  
-    # 'south',         
-    # 'adminsortable',
-    
-    # core Django applications
+# these override the settings in cms.plugins.text.settings
 
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.admin',
-    'django.contrib.admindocs',
-    'django.contrib.humanize',
-    'django.contrib.staticfiles',
-)
+WYM_TOOLS = ",\n".join([
+    "{'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'}",
+    "{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}",
+    "{'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'}",
+    "{'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'}",
+    "{'name': 'Indent', 'title': 'Indent', 'css': 'wym_tools_indent'}",
+    "{'name': 'Outdent', 'title': 'Outdent', 'css': 'wym_tools_outdent'}",
+    "{'name': 'Undo', 'title': 'Undo', 'css': 'wym_tools_undo'}",
+    "{'name': 'Redo', 'title': 'Redo', 'css': 'wym_tools_redo'}",
+    "{'name': 'ToggleHtml', 'title': 'HTML', 'css': 'wym_tools_html'}",
+])
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
+WYM_CONTAINERS = ",\n".join([
+    "{'name': 'P', 'title': 'Paragraph', 'css': 'wym_containers_p'}",
+   # "{'name': 'H1', 'title': 'Heading_1', 'css': 'wym_containers_h1'}", # I assume you reserve <h1> for your page templates
+    "{'name': 'H2', 'title': 'Heading_2', 'css': 'wym_containers_h2'}",
+    "{'name': 'H3', 'title': 'Heading_3', 'css': 'wym_containers_h3'}",
+    "{'name': 'H4', 'title': 'Heading_4', 'css': 'wym_containers_h4'}",
+    "{'name': 'H5', 'title': 'Heading_5', 'css': 'wym_containers_h5'}",
+    "{'name': 'H6', 'title': 'Heading_6', 'css': 'wym_containers_h6'}",
+#    "{'name': 'PRE', 'title': 'Preformatted', 'css': 'wym_containers_pre'}",
+   "{'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'}",
+   # "{'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}", # not ready for this yet
+])
 
 from arkestra_settings import *# import pdb; pdb.set_trace()
