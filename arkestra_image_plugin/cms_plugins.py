@@ -51,15 +51,15 @@ def width_of_image_container(context, plugin):
     width = calculate_container_width(context, plugin, width, auto)
     
     # return the width of the container
-    print "width_of_image_container", width
+    # print "width_of_image_container", width
     return width
 
 def width_of_image(plugin, image=None):
     # no plugin width? 
-    print "plugin width", plugin.width
+    # print "plugin width", plugin.width
     if not plugin.width:
         if image:
-            print "image", image
+            # print "image", image
             # use native image width
             width = image.width
         else:
@@ -70,7 +70,7 @@ def width_of_image(plugin, image=None):
         width = -plugin.width
     else:
         width = plugin.container_width 
-    print "width_of_image", width
+    # print "width_of_image", width
     return width
     
 def calculate_aspect_ratio(image):
@@ -94,7 +94,7 @@ def calculate_height(given_width, given_height, given_aspect_ratio, width, aspec
     # if the instance has no aspect ratio, we use the native aspect ratio
 
     # has aspect ratio
-    print  given_aspect_ratio
+    # print  given_aspect_ratio
     
     if given_aspect_ratio == -1:
         height=width/aspect_ratio 
@@ -195,10 +195,10 @@ def multiple_images(imageset, context):
             aspect_ratio = calculate_aspect_ratio(item.image) 
             item.width,item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, each_item_width, aspect_ratio)
             item.width,item.height = int(item.width), int(item.height)
-            print item.width,item.height
+            # print item.width,item.height
         else:            
             item.width,item.height = int(each_item_width), int(each_item_height)
-            print item.width,item.height
+            # print item.width,item.height
         item.image_size = u'%sx%s' %(item.width, item.height) 
         item.caption_width=item.width
 
@@ -232,9 +232,9 @@ def lightbox_single(imageset, context):
     # calculate its native aspect ratio
     aspect_ratio = calculate_aspect_ratio(item.image)
     # get width
-    print "item.image",  item.image
+    # print "item.image",  item.image
     width = width_of_image(imageset, item.image)        
-    print "width = width_of_image(imageset, item.image",     width
+    # print "width = width_of_image(imageset, item.image",     width
     # shave if floated
     width = shave_if_floated(imageset, width) or width
 
