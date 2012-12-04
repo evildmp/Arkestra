@@ -27,6 +27,9 @@ They are set using `{% with %}`/`{% endwith %}` around the `{% block body_conten
     lightbox_max_dimension=600  # what's the biggest a lightbox can be?
     plugin_thumbnail_size="75x75"  
                                                                      
+**************************
+{% block main_page_body %}
+**************************
 
 Some views, such as for an entity's Contacts & People page or News & Events page, expect your templates to be lined up in the right way. For example:
 
