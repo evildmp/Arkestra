@@ -7,8 +7,6 @@
 Arkestra - documentation
 ########################
 
-These documents are best read at `RTFD <http://readthedocs.org/docs/arkestra/>`_.
-
 Arkestra is an intelligent, semantic web content management system for organisations and institutions.
 
 Arkestra builds on `Django CMS <https://www.django-cms.org/>`_ with modules that handle contacts & people, news & events, 
@@ -30,7 +28,7 @@ Getting started
 
    getting_started/installation
    getting_started/installation_notes
-   getting_started/getting_started
+   getting_started/starting_your_own_project
 
 **************
 Using Arkestra
