@@ -257,9 +257,15 @@ class GenericLinkListPlugin(CMSPlugin):
     separator = models.CharField(help_text = "Applies to Inline links only; default is ', '", max_length=20, null = True, blank = True, default = ", ")
     final_separator = models.CharField(help_text = "Applies to Inline links only; default is ' and '", max_length=20, null = True, blank = True, default = " and ")
 
+    def copy_relations(self, oldinstance):
+        for plugin_item in oldinstance.links_item.all():
+            plugin_item.pk = None
+            plugin_item.plugin = self
+            plugin_item.save()
+
 
 class GenericLinkListPluginItem(Link):
-    plugin = models.ForeignKey(GenericLinkListPlugin, related_name="links")
+    plugin = models.ForeignKey(GenericLinkListPlugin, related_name="links_item")
     key_link = models.BooleanField(help_text="Make this item stand out (for links in lists only)")
     
     class Meta:
@@ -306,7 +312,11 @@ class CarouselPlugin(CMSPlugin):
     aspect_ratio = models.FloatField(null=True, blank=True,
          choices=ASPECT_RATIOS, default=1.5)
     #height = models.PositiveIntegerField(null=True, blank=True)
-
+    def copy_relations(self, oldinstance):
+        for plugin_item in oldinstance.carousel_item.all():
+            plugin_item.pk = None
+            plugin_item.plugin = self
+            plugin_item.save()
 
 class CarouselPluginItem(BaseLink, LinkMethodsMixin):
     """
@@ -320,9 +330,15 @@ class CarouselPluginItem(BaseLink, LinkMethodsMixin):
 class FocusOnPluginEditor(CMSPlugin):
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
 
+    def copy_relations(self, oldinstance):
+        for plugin_item in oldinstance.focuson_item.all():
+            plugin_item.pk = None
+            plugin_item.plugin = self
+            plugin_item.save()
+
 
 class FocusOnPluginItemEditor(LinkMethodsMixin, BaseLink):
-    plugin = models.ForeignKey(FocusOnPluginEditor, related_name="focuson_items")
+    plugin = models.ForeignKey(FocusOnPluginEditor, related_name="focuson_item")
     text_override = models.CharField(max_length=256, null=True, blank=True, 
         help_text="Override the default link text")
     short_text_override = models.CharField(max_length=256, null=True, blank=True, 

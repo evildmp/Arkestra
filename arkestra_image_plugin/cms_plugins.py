@@ -509,8 +509,11 @@ class FilerImagePlugin(CMSPluginBase):
             return instance.image.image.thumbnails['admin_tiny_icon']
 
     def icon_src(self, instance):
-        return instance.image.thumbnails['admin_tiny_icon']
-
+        if instance.image:
+            try:
+                return instance.image.image.thumbnails['admin_tiny_icon']
+            except KeyError:
+                pass
 
 plugin_pool.register_plugin(FilerImagePlugin)   
 

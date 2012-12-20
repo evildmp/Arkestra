@@ -42,7 +42,7 @@ class FocusOnPluginPublisher(CMSPluginBase):
         return "/static/plugin_icons/focus_on.png"
     
     def render(self, context, instance, placeholder):
-        focuson = instance.focuson_items.order_by('?')[0]
+        focuson = instance.focuson_item.order_by('?')[0]
         focuson.heading_level = instance.heading_level
         context.update({
             'focuson':focuson,
@@ -97,7 +97,7 @@ class LinksPlugin(CMSPluginBase):
         return "/static/plugin_icons/links.png"
     
     def render(self, context, instance, placeholder):
-        all_links = instance.links.all()
+        all_links = instance.links_item.all()
         links = [link for link in all_links if link.destination_content_object]
         # are there at least two items? if so, the second-last has a final_separator
         if len(links) > 1:
@@ -154,7 +154,7 @@ class CarouselPluginPublisher(CMSPluginBase):
     def render(self, context, instance, placeholder):
         segments = list(instance.carousel_item.all())
         if len(segments) < 2:
-            return # because it would be silly to have a carousel with only one segment
+            return context # because it would be silly to have a carousel with only one segment
 
         # widths a fraction of nominal container width (deprecated)
         placeholder_width = get_placeholder_width(context, instance)
