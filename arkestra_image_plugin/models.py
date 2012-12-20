@@ -159,6 +159,12 @@ class ImageSetPlugin(CMSPlugin):
     def __unicode__(self):
         return u"image-set-%s" % self.kind
     
+    def copy_relations(self, oldinstance):
+        for plugin_item in oldinstance.imageset_item.all():
+            plugin_item.pk = None
+            plugin_item.plugin = self
+            plugin_item.save()
+
 class ImageSetItem(models.Model, LinkMethodsMixin):
     class Meta:
         ordering=('id',)
