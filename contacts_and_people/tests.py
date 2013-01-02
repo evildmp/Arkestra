@@ -2,6 +2,40 @@ from django.test import TestCase
 
 from contacts_and_people.models import Site, Person, Building, Entity, Membership
 
+class SiteTests(TestCase):
+    def setUp(self): 
+        # a geographical Site
+        self.cardiff = Site(
+            site_name="Main site",
+            post_town="Cardiff",
+            country="UK",
+            )
+        self.cardiff.save()
+
+    def test_maps(self):
+        """
+        test Site.maps property
+        """
+        # no Buildings on this site, should be an empty list 
+        self.assertEquals(self.cardiff.maps, [])
+        
+        # add a Building
+        self.main_building = Building(
+            name="Main Building",
+            street="St Mary's Street",
+            site=self.cardiff,
+            )
+        self.main_building.save()
+        self.assertEquals(self.cardiff.maps, [])  
+        
+        # give the building a map
+        self.main_building.map = True
+        self.main_building.latitude = 10
+        self.main_building.longitude = 10
+        self.main_building.zoom = 10
+        self.main_building.save()
+        self.assertEquals(self.cardiff.maps, [self.main_building])  
+       
 class EntityManagerTests(TestCase):
     def setUp(self): 
         pass

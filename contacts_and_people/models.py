@@ -47,8 +47,7 @@ class Site(models.Model):
 
     @property
     def maps(self):
-        # return self.building_set.filter(has_map = True)
-        return [building for building in self.building_set.all() if building.has_map]
+        return [building for building in self.place.all() if building.has_map]
          
 class BuildingManager(models.Manager):
     def get_by_natural_key(self, slug):
