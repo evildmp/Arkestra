@@ -443,7 +443,10 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
     def icon_src(self, instance):
         # print instance.kind
         if instance.imageset_item.count() == 1:
-            return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
+            try:
+                return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
+            except KeyError:
+                pass
         elif instance.kind == "basic":
             return "/static/plugin_icons/imageset_basic.png"
         elif instance.kind == "lightbox-single":
