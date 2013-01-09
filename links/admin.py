@@ -24,6 +24,9 @@ class ObjectLinkInlineForm(forms.ModelForm):
     class Meta:
         model=ObjectLink
         
+    input_url = forms.CharField(max_length=255, required = False,
+        )
+
     def __init__(self, *args, **kwargs):
         super(ObjectLinkInlineForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:

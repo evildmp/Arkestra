@@ -58,6 +58,7 @@ class PluginLinkInlineForm(ObjectLinkInlineForm):
         model=GenericLinkListPluginItem
 
 
+
 class PluginInlineLink(admin.StackedInline):
     extra=10
     model = GenericLinkListPluginItem
@@ -66,6 +67,7 @@ class PluginInlineLink(admin.StackedInline):
         (None, {
             'fields': (
                 'destination_content_type', 'destination_object_id',
+                'input_url',
                 ('include_description', 'key_link',),
             ),
         }),
@@ -82,6 +84,7 @@ class LinksPlugin(CMSPluginBase):
     name = "Link(s)"
     render_template = "links/cms_plugins/links.html"
     text_enabled = True
+    change_form_template = "admin/links/links_plugin_change_form.html"
     
     raw_id_fields = ('image',)
     fieldsets = (
