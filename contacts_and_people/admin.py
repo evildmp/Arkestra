@@ -461,21 +461,8 @@ class BuildingInline(admin.StackedInline):
     extra = 1
 
 
-class SiteAdmin(AutocompleteMixin, admin.ModelAdmin):
+class SiteAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'post_town', 'country',)
-    # inlines = (BuildingInline,) # not working for some reason - can't render the inlines
-    tabs = (
-            ('General', {
-                    'fieldsets': (
-                        ('hello', {
-                            'fields': ('site_name', ('post_town','country',),'description', 'image'),
-                        }),
-                    ),
-            }),
-            ('Buildings', {
-                    'inlines': ('BuildingInline',),
-            }),
-    )
 
 
 class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
