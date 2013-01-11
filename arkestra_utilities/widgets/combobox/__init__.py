@@ -6,11 +6,13 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 
 from cms.utils import cms_static_url
+from cms.templatetags.cms_admin import admin_static_url
 
 class Combobox(forms.Select):
     class Media:
         js = [
-            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            # settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
+            # "%sjs/jquery.min.js" % admin_static_url(),
             cms_static_url('js/libs/jquery.ui.core.js'),
             settings.CMS_MEDIA_URL + 'js/placeholder_editor_registry.js',
             'combobox/ui.combobox.js',
@@ -42,7 +44,7 @@ class Combobox(forms.Select):
             'STATIC_URL': settings.STATIC_URL,
         }
         return rendered + mark_safe(u'''<script type="text/javascript">
-            $(document).ready(function(){
+            jQuery(document).ready(function($){
                 $('#id_%(name)s').combobox({autoShow: false,arrowURL:'%(STATIC_URL)scombobox/drop_down.png',});
             });
             </script>''' % context)
