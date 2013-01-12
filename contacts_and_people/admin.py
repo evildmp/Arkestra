@@ -19,8 +19,7 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from contacts_and_people import models
 
-from links.admin import get_or_create_external_link
-from links.admin import ObjectLinkInline
+from links.admin import get_or_create_external_link, ObjectLinkInline
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
@@ -31,14 +30,9 @@ HAS_PUBLICATIONS = 'publications' in settings.INSTALLED_APPS
 
 
 # ------------------------- Membership admin -------------------------
-class MembershipForm(forms.ModelForm):
-    # cleans up membership & role information
-    class Meta:
-        model = models.Membership
 
 class MembershipInline(AutocompleteMixin, admin.TabularInline):
     # for all membership inline admin
-    form = MembershipForm    
     model = models.Membership
     extra = 1
     related_search_fields = {
@@ -60,7 +54,6 @@ class MembershipForPersonInline(MembershipInline): # for Person admin
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ('person', 'entity', 'importance_to_person', 'importance_to_entity',)
     ordering = ['person',]
-    form = MembershipForm
     related_search_fields = [
         'person',
         'entity',
@@ -84,9 +77,6 @@ class PhoneContactInline(generic.GenericTabularInline):
     model = models.PhoneContact
     form = PhoneContactInlineForm
 
-
-class PhoneContactAdmin(admin.ModelAdmin):
-    pass
 
 class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):    
     
@@ -120,15 +110,7 @@ class PersonLiteAdmin(admin.ModelAdmin):
         if not hasattr(obj, "person"):         
             obj.save()
           
-# admin.site.register(models.PersonLite, PersonLiteAdmin)     
-
 # ------------------------- Person admin -------------------------
-
-"""
-Not for v1.0
-class TeacherInline(admin.StackedInline):
-    model = models.Teacher
-"""
 
 class PersonForm(InputURLMixin):
     class Meta:
@@ -187,16 +169,10 @@ class PersonAdmin(PersonAndEntityAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     form = PersonForm
     list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
-    # list_editable = ('user',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
     readonly_fields = ['address_report',]    
     
-    # def __init__(self, model, admin_site):
-    #     print self.readonly_fields
-    #     super(PersonAdmin, self).__init__(model, admin_site)
-    #     return
-
     def address_report(self, instance):
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
             return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
@@ -238,10 +214,6 @@ class PersonAdmin(PersonAndEntityAdmin):
         return dict(create_action(e) for e in models.Entity.objects.all())
 
 
-class TitleAdmin(admin.ModelAdmin):
-    pass
-
-
 class DisplayUsernameWidget(forms.TextInput):
     def render(self, name, value, attrs=None):
         user = User.objects.get(pk=value)
@@ -272,9 +244,6 @@ class EntityLiteAdmin(admin.ModelAdmin):
         """
         if not hasattr(obj, "entity"):         
             obj.save()
-
-
-# admin.site.register(models.EntityLite, EntityLiteAdmin)          
         
 # ------------------------- Entity admin -------------------------
 
@@ -500,9 +469,7 @@ except admin.sites.AlreadyRegistered:
 admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)
 admin.site.register(models.Site,SiteAdmin)
-admin.site.register(models.Title,TitleAdmin)
-# admin.site.register(models.Membership,MembershipAdmin)
-# admin.site.register(models.PhoneContact,PhoneContactAdmin)
+admin.site.register(models.Title)
 
 # ------------------------- admin hacks -------------------------
 if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
