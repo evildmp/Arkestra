@@ -1,6 +1,5 @@
 # Django settings for example_14 project.
 
-import os
 import os.path
 
 # Make it work straight from the checkout!
