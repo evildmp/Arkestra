@@ -306,6 +306,17 @@ it's a bit awkward when non-floated images can have borders, because then the bo
     margin-bottom: 5px;
     }
 
+.image-borders div.anythingSlider-minimalist-square {
+    background: #efefef; 
+    padding: 7px; 
+    border: 1px solid #888;
+    margin-bottom: 37px;
+    }
+
+.image-borders div.anythingSlider-minimalist-square .anythingControls ul.thumbNav {
+    margin-top: 12px;     
+}
+
 .image-borders div.carousel-envelope
   {
     background: #efefef; 
