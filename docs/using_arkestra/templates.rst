@@ -22,8 +22,8 @@ They are set using `{% with %}`/`{% endwith %}` around the `{% block body_conten
     sidebar_map_size="296x100" # map thumbnail image in events etc sidebars
     person_entity_map_size="445x100" # map thumbnail image for persons and entites
     entity_image_size="445x384" # main entity image
-    person_image_size="384x384" # person's main image'
-    place_image_size="490x380"  # a place's main image'
+    person_image_size="384x384" # person's main image
+    place_image_size="627x418"  # a place's main image
     lightbox_max_dimension=600  # what's the biggest a lightbox can be?
     plugin_thumbnail_size="75x75"  
                                                                      
