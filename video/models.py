@@ -7,8 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.conf import settings
 
-from cms.models import CMSPlugin, Page
-from cms import settings as cms_settings
+from cms.models import CMSPlugin
 
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
