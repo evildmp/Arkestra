@@ -9,53 +9,17 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.admin_mixins import GenericModelAdminMixin, InputURLMixin, fieldsets
+from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, fieldsets
 
-from links.admin import ExternalLinkForm, get_or_create_external_link
-from links.admin import ObjectLinkInline
+from links.admin import ExternalLinkForm, ObjectLinkInline
 
 from models import Vacancy, Studentship
 
-class VacancyStudentshipForm(InputURLMixin):
+class VacancyStudentshipForm(GenericModelForm):
     # a shared form for vacancies & studentships
-    class Meta:
-        widgets = {'summary': forms.Textarea(
-              attrs={'cols':80, 'rows':2,},
-            ),  
-        }
-
-    input_url = forms.CharField(max_length=255, required = False)
+    pass
     
-    def clean(self):
-        super(VacancyStudentshipForm, self).clean()
-        # create the short_title automatically if necessary
-        if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
-            if len(self.cleaned_data["title"]) > 70:
-                raise forms.ValidationError("Please provide a short (less than 70 characters) version of the Title for the Short title field.")     
-            else:
-                self.cleaned_data["short_title"] = self.cleaned_data["title"]
-                
-        # check ExternalLink-related issues
-        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
-            self.cleaned_data.get("input_url", None), # a manually entered url
-            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            self.cleaned_data.get("title"), # link title
-            self.cleaned_data.get("summary"), # link description
-            )          
-
-        # misc checks
-        if not self.cleaned_data["external_url"]:
-            if not self.cleaned_data["hosted_by"]:
-                message = "This vacancy is not Hosted by and Entity and has no External URL. Are you sure you want to do that?"
-                messages.add_message(self.request, messages.WARNING, message)
-            # must have content or url in order to be published
-            # not currently working, because self.cleaned_data["body"] = None
-            # if not self.cleaned_data["body"]:          
-            #     message = "This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
-            #     messages.add_message(self.request, messages.WARNING, message)
-        return self.cleaned_data
-
-class VacancyStudentshipAdmin(GenericModelAdminMixin, ModelAdminWithTabsAndCMSPlaceholder):
+class VacancyStudentshipAdmin(GenericModelAdmin, ModelAdminWithTabsAndCMSPlaceholder):
     # inlines = (ObjectLinkInline,)
     exclude = ('description', 'url',)
     search_fields = ['short_title','title','summary', 'slug','url']

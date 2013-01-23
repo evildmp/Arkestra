@@ -108,19 +108,21 @@ class BaseLink(models.Model):
 
 class Link(BaseLink, LinkMethodsMixin):
     """
-    Abstract base class for links that appear in lists - used by ObjectLinks and links.GenericLinkListPluginItem
+    Abstract base class for link items as they appear in lists - used by ObjectLinks and links.GenericLinkListPluginItem
     """
     include_description = models.BooleanField(help_text=u"Also display metadata")
-    text_override = models.CharField(max_length=256, null=True, blank=True, 
-        help_text="Override the default link text")
+    text_override = models.CharField(verbose_name = "Link text, if required", 
+        max_length=256, null=True, blank=True, 
+        help_text="Will override the automatic default link text")
     description_override = models.TextField(max_length=256, null=True,
-        blank=True, help_text="Override the link default description text")
+        blank=True, help_text="Will override the automatic default description text")
     heading_override = models.CharField(max_length=256, null=True, blank=True, 
-        help_text="Override the link destination's default group heading")
+        help_text="Will override the link destination's automatic default group heading")
     metadata_override = models.CharField(max_length=256, null=True, blank=True, 
         help_text="Override the link destination's default metadata")
     html_title_attribute = models.CharField(max_length=256, null=True, blank=True, 
         help_text="Add an HTML <em>title</em> attribute")
+    key_link = models.BooleanField(help_text="Make this item stand out in the list")
     
     class Meta:
         abstract = True
@@ -137,6 +139,15 @@ class ObjectLink(Link):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id') # the content object the link is attached to    
+
+class GenericLinkListPluginItem(Link):
+    """
+    Similar to ObjectLink above, but this one isn't attached to an object such as a NewsArticle, but to a plugin.
+    """
+    plugin = models.ForeignKey("GenericLinkListPlugin", related_name="links_item")
+    
+    class Meta:
+        ordering = ['id',]
 
 
 """
@@ -264,12 +275,6 @@ class GenericLinkListPlugin(CMSPlugin):
             plugin_item.save()
 
 
-class GenericLinkListPluginItem(Link):
-    plugin = models.ForeignKey(GenericLinkListPlugin, related_name="links_item")
-    key_link = models.BooleanField(help_text="Make this item stand out (for links in lists only)")
-    
-    class Meta:
-        ordering = ['id',]
 
 
 class CarouselPlugin(CMSPlugin):

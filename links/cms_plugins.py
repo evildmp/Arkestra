@@ -1,24 +1,85 @@
 from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from arkestra_utilities.output_libraries.plugin_widths import (
     get_placeholder_width, get_plugin_ancestry, calculate_container_width)
+from arkestra_utilities.admin_mixins import SupplyRequestMixin
 
-from links.admin import ObjectLinkInlineForm
+from links.admin import LinkItemForm
 from links.models import (GenericLinkListPlugin, GenericLinkListPluginItem, 
     CarouselPlugin, CarouselPluginItem, FocusOnPluginEditor, 
-    FocusOnPluginItemEditor)
+    FocusOnPluginItemEditor, ExternalLink)
 
   
-class FocusOnInlineForm(ObjectLinkInlineForm):
-    class Meta:
-        model=FocusOnPluginItemEditor
+# -----------------------------------------
+class PluginInlineLink(SupplyRequestMixin, admin.StackedInline):
+    model = GenericLinkListPluginItem
+    form = LinkItemForm
+    extra=3
+    fieldsets = (
+        (None, {
+            'fields': (
+                'destination_content_type', 'destination_object_id',
+                'text_override',
+                ('include_description', 'key_link',),
+            ),
+        }),
+        ('Overrides', {
+            'fields': ('metadata_override', 'heading_override', 'description_override', 'html_title_attribute',
+            ),
+            'classes': ('collapse',),
+        })
+    )
+
+
+class LinksPlugin(CMSPluginBase):
+    model = GenericLinkListPlugin
+    name = "Link(s)"
+    render_template = "links/cms_plugins/links.html"
+    text_enabled = True
+    
+    raw_id_fields = ('image',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                ('insert_as', 'use_link_icons',), ('separator', 'final_separator',)
+            ),
+        }),
+    )
+    inlines = (PluginInlineLink,)
+    
+    def icon_src(self, instance):
+        return "/static/plugin_icons/links.png"
+    
+    def render(self, context, instance, placeholder):
+        all_links = instance.links_item.all()
+        links = [link for link in all_links if link.destination_content_object]
+        # are there at least two items? if so, the second-last has a final_separator
+        if len(links) > 1:
+            links[-2].separator = instance.final_separator
+        # are there at least three items? if so, all up to third-last have a separator
+        if len(links) > 2:
+            for link in links[0:-2]:
+                link.separator = instance.separator        
+        context.update({
+            'object':instance,
+            'use_link_icons': instance.use_link_icons,
+            'links':links, 
+            'placeholder':placeholder,
+            'separator': instance.separator
+        })
+        return context
+        
+
+plugin_pool.register_plugin(LinksPlugin)
+
 
 class FocusOnInlineItemAdmin(admin.StackedInline):
     model = FocusOnPluginItemEditor
-    form = FocusOnInlineForm
+    form = LinkItemForm
     fieldsets = (
         (None, {
             'fields': (
@@ -52,84 +113,10 @@ class FocusOnPluginPublisher(CMSPluginBase):
 
 plugin_pool.register_plugin(FocusOnPluginPublisher)
 
-# -----------------------------------------
-class PluginLinkInlineForm(ObjectLinkInlineForm):
-    class Meta:
-        model=GenericLinkListPluginItem
-
-
-
-class PluginInlineLink(admin.StackedInline):
-    extra=10
-    model = GenericLinkListPluginItem
-    form = PluginLinkInlineForm
-    fieldsets = (
-        (None, {
-            'fields': (
-                'destination_content_type', 'destination_object_id',
-                'input_url',
-                ('include_description', 'key_link',),
-            ),
-        }),
-        ('Overrides', {
-            'fields': ('metadata_override', 'heading_override', 'text_override','description_override', 'html_title_attribute',
-            ),
-            'classes': ('collapse',),
-        })
-    )
-
-
-class LinksPlugin(CMSPluginBase):
-    model = GenericLinkListPlugin
-    name = "Link(s)"
-    render_template = "links/cms_plugins/links.html"
-    text_enabled = True
-    change_form_template = "admin/links/links_plugin_change_form.html"
-    
-    raw_id_fields = ('image',)
-    fieldsets = (
-        (None, {
-            'fields': (
-                ('insert_as', 'use_link_icons',), ('separator', 'final_separator',)
-            ),
-        }),
-    )
-    inlines = (PluginInlineLink,)
-    
-    def icon_src(self, instance):
-        return "/static/plugin_icons/links.png"
-    
-    def render(self, context, instance, placeholder):
-        all_links = instance.links_item.all()
-        links = [link for link in all_links if link.destination_content_object]
-        # are there at least two items? if so, the second-last has a final_separator
-        if len(links) > 1:
-            links[-2].separator = instance.final_separator
-        # are there at least three items? if so, all up to third-last have a separator
-        if len(links) > 2:
-            for link in links[0:-2]:
-                link.separator = instance.separator        
-        context.update({
-            'object':instance,
-            'use_link_icons': instance.use_link_icons,
-            'links':links, 
-            'placeholder':placeholder,
-            'separator': instance.separator
-        })
-        return context
-plugin_pool.register_plugin(LinksPlugin)
-
-
-class PluginCarouselItemForm(ObjectLinkInlineForm):
-    """
-    """
-    class Meta:
-        model=CarouselPluginItem
-
 
 class PluginInlineCarousel(admin.StackedInline):
     model = CarouselPluginItem
-    form = PluginCarouselItemForm
+    form = LinkItemForm
     extra=3
     max_num=5
     fieldsets = (

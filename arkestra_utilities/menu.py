@@ -8,11 +8,17 @@ from cms.models import Page
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 from menus.base import Modifier, Menu
-
 from datetime import datetime
 
 from arkestra_utilities.settings import MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, ARKESTRA_MENUS
-
+                      
+try:
+    # pre-2.4
+    CACHE_DURATIONS = settings.CMS_CACHE_DURATIONS['menus']
+except AttributeError:
+    # 2.4
+    from cms.utils import get_cms_setting
+    CACHE_DURATIONS = get_cms_setting('CACHE_DURATIONS')['menus']
     
 for menu in ARKESTRA_MENUS:
     if menu["cms_plugin_model_name"]:
@@ -71,7 +77,6 @@ class ArkestraPages(Modifier):
             key = "ArkestraPages.modify()" + request.path + "pre_cut"
             cached_pre_cut_nodes = cache.get(key, None)
             if cached_pre_cut_nodes: 
-                # print "    ++ got cache", key, settings.CMS_CACHE_DURATIONS['menus']
                 return cached_pre_cut_nodes
 
             # loop over all the nodes returned by the nodes in the Menu classes
@@ -93,7 +98,7 @@ class ArkestraPages(Modifier):
                     #     )                 
                                                                                
             # print "    ++ saving cache", key
-            cache.set(key, self.nodes, settings.CMS_CACHE_DURATIONS['menus'])
+            cache.set(key, self.nodes, CACHE_DURATIONS)
             # print "    **", len(self.nodes), "nodes in", datetime.now() - start_time, "for ArkestraPages.modify()"
             return self.nodes
         else:

@@ -1,1 +1,34 @@
-[{"pk": 1, "model": "links.linktype", "fields": {"scheme": "https", "name": "Secure hypertext"}}, {"pk": 2, "model": "links.linktype", "fields": {"scheme": "http", "name": "Hypertext"}}, {"pk": 3, "model": "links.linktype", "fields": {"scheme": "mailto", "name": "Email address"}}, {"pk": 4, "model": "links.linktype", "fields": {"scheme": "ftp", "name": "File Transfer Protocol"}}]
+[
+    {
+        "pk": 1, 
+        "model": "links.linktype", 
+        "fields": {
+            "scheme": "https", 
+            "name": "Secure hypertext"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "links.linktype", 
+        "fields": {
+            "scheme": "http", 
+            "name": "Hypertext"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "links.linktype",
+        "fields": {
+            "scheme": "mailto", 
+            "name": "Email address"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "links.linktype", 
+        "fields": {
+            "scheme": "ftp", 
+            "name": "File Transfer Protocol"
+        }
+    }
+]

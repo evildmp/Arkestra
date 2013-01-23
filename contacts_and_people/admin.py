@@ -19,7 +19,8 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from contacts_and_people import models
 
-from links.admin import get_or_create_external_link, ObjectLinkInline
+from links.admin import ObjectLinkInline
+from links.utils import get_or_create_external_link
 
 from cms.admin.placeholderadmin import PlaceholderAdmin
 

@@ -7,51 +7,19 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
-from arkestra_utilities.admin_mixins import GenericModelAdminMixin, InputURLMixin, fieldsets
+from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, fieldsets
 
-from links.admin import ExternalLinkForm, get_or_create_external_link
-from links.admin import ObjectLinkInline
+from links.admin import ExternalLinkForm, ObjectLinkInline
 
 from models import NewsArticle, NewsSource, Event, EventType
 
-class NewsAndEventsForm(InputURLMixin):
+class NewsAndEventsForm(GenericModelForm):
     # a shared form for news and events
-    class Meta:
-        widgets = {'summary': forms.Textarea(
-              attrs={'cols':80, 'rows':2,},
-            ),  
-        }
+    pass
     
-    def clean(self):
-        super(NewsAndEventsForm, self).clean()
-        # create the short_title automatically if necessary
-        if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
-            if len(self.cleaned_data["title"]) > 70:
-                raise forms.ValidationError("Please provide a short (less than 70 characters) version of the Title for the Short title field.")     
-            else:
-                self.cleaned_data["short_title"] = self.cleaned_data["title"]
-                
-        # check ExternalLink-related issues
-        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
-            self.cleaned_data.get("input_url", None), # a manually entered url
-            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            self.cleaned_data.get("title"), # link title
-            self.cleaned_data.get("summary"), # link description
-            )          
-
-        # misc checks
-        if not self.cleaned_data["external_url"]:
-            if not self.cleaned_data["hosted_by"]:
-                raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
-            # must have body or url in order to be published
-            if not self.instance and self.instance.body.cmsplugin_set.all():
-            # if not self.cleaned_data["body"]:          
-                message = u"This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
-                messages.add_message(self.request, messages.WARNING, message)
-
 from contacts_and_people.models import Entity
 
-class NewsAndEventsAdmin(GenericModelAdminMixin, ModelAdminWithTabsAndCMSPlaceholder):
+class NewsAndEventsAdmin(GenericModelAdmin):
     exclude = ('content', 'url')
     search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)

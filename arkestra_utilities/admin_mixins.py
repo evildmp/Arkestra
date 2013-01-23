@@ -5,17 +5,15 @@ from django import forms
 from cms.utils import cms_static_url
 
 from widgetry import fk_lookup
+from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from contacts_and_people.models import Entity
+from links.models import ExternalLink
+from links.utils import get_or_create_external_link
     
-    
-
-
 class AutocompleteMixin(object):
     class Media:
         js = [
-            # '/static/jquery/jquery.min.js',
-            settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
             cms_static_url('js/libs/jquery.ui.core.js'),
         ]
         css = {
@@ -40,33 +38,57 @@ class SupplyRequestMixin(object):
         return form_class
 
 
-class GenericModelAdminMixin(AutocompleteMixin, SupplyRequestMixin):
-    # this doesn't work - it doesn't feed the Autocomplete with the desired items
-
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs): 
-    #     """
-    #     Filters the list of Entities so that the user only sees those that
-    #     have published websites
-    #     """
-    #     if db_field.name == "hosted_by":
-    #         print "checking hosted_bys", kwargs
-    #         kwargs["queryset"] = Entity.objects.filter(website__published = True)
-    #         print "***", kwargs["queryset"].count()
-    #     return super(GenericModelAdminMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+class GenericModelAdmin(AutocompleteMixin, SupplyRequestMixin, ModelAdminWithTabsAndCMSPlaceholder):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "publish_to": 
-            # print "&&&&", Entity.objects.filter().count()
             kwargs["queryset"] = Entity.objects.filter(website__published = True)
         return super(AutocompleteMixin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
-
-class InputURLMixin(forms.ModelForm):
+class InputURLMixin(forms.ModelForm): 
+    # really this is simply acting as a base admin form for various models
+    # but not just GenericModels (e.g. Person, Entity too)
     input_url = forms.CharField(max_length=255, required = False,
         help_text=u"<strong>External URL</strong> not found above? Enter a new one.", 
         )
 
+class GenericModelForm(InputURLMixin):
+    class Meta:
+        widgets = {'summary': forms.Textarea(
+              attrs={'cols':80, 'rows':2,},
+            ),  
+        }
+
+    def clean(self):
+        super(GenericModelForm, self).clean()
+
+        # create the short_title automatically if necessary
+        if not self.cleaned_data["short_title"] and self.cleaned_data.get("title"):
+            if len(self.cleaned_data["title"]) > 70:
+                raise forms.ValidationError("Please provide a short (less than 70 characters) version of the Title for the Short title field.")     
+            else:
+                self.cleaned_data["short_title"] = self.cleaned_data["title"]
+                
+        # check ExternalLink-related issues
+        self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
+            self.cleaned_data.get("input_url", None), # a manually entered url
+            self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
+            self.cleaned_data.get("title"), # link title
+            self.cleaned_data.get("summary"), # link description
+            )          
+
+        # misc checks
+        if not self.cleaned_data["external_url"]:
+            if not self.cleaned_data["hosted_by"]:
+                raise forms.ValidationError("A Host is required except for items on external websites - please provide either a Host or an External URL")      
+            # must have body or url in order to be published
+            if not self.instance and self.instance.body.cmsplugin_set.all():
+            # if not self.cleaned_data["body"]:          
+                message = u"This will not be published until either an external URL or Plugin has been added. Perhaps you ought to do that now."
+                messages.add_message(self.request, messages.WARNING, message)
+
+        return self.cleaned_data
 
 
 fieldsets = {

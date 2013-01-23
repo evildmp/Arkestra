@@ -16,7 +16,7 @@ ExternalLinkForm.clean() checks that the link is in order.
 If the URL (which must be unique) already exists in the database, an error is raised; if the title already exists, a warning is raised (a duplicate title could be confusing but is not fatal).
 
 
-`links.admin.get_or_create_external_link()`
+`links.utils.get_or_create_external_link()`
 -------------------------------------------
 
 When an object that can have an External URL is saved, the ModelAdmin.clean() of that object must call `links.admin.get_or_create_external_link()`, passing it various items of information:
@@ -28,6 +28,6 @@ When an object that can have an External URL is saved, the ModelAdmin.clean() of
 
 `links.admin.get_or_create_external_link()` checks that information against the database:
 
-* is the URL scheme of input_url or external_url permitted by `links.admin.check_urls()`?
+* is the URL scheme of input_url or external_url permitted by `links.utils.check_urls()`?
 * has input_url been provided?
 	* get_or_create an `ExternalLink` based on it

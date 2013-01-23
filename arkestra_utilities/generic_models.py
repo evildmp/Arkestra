@@ -87,17 +87,7 @@ class ArkestraGenericModel(models.Model):
         Real-world information, can be None
         """
         return self.hosted_by or Entity.objects.get(id=Entity.objects.base_entity())
-    
-    # @property
-    # def get_website(self):
-    #     """
-    #     for internal Arkestra purposes only
-    #     """
-    #     if self.get_entity:
-    #         return self.get_entity.get_website
-    #     else:
-    #         return None
-            
+                
     @property
     def links(self):
         model = ContentType.objects.get_for_model(self)
