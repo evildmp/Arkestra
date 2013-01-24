@@ -30,7 +30,12 @@ class LinkItemForm(InputURLMixin):
                 destination_content_type = self.instance.destination_content_type.model_class()
         else:
             destination_content_type = None
-        self.fields['destination_object_id'].widget = fk_lookup.GenericFkLookup('id_%s-destination_content_type' % self.prefix, destination_content_type)
+        # look up the correct widget from the content type
+        widget = fk_lookup.GenericFkLookup(
+            'id_%s-destination_content_type' % self.prefix,
+             destination_content_type,
+             )
+        self.fields['destination_object_id'].widget = widget
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
 
 
