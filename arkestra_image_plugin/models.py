@@ -232,3 +232,72 @@ class ImageSetItem(models.Model, LinkMethodsMixin):
             return self.alt_text or self.destination_content_object
         else: 
             return ""
+            
+class EmbeddedVideoSetPlugin(CMSPlugin):
+    # IMAGESET_KINDS = (
+    #     ("basic", "Basic"),
+    #     ("multiple", "Multiple images"),
+    #     ("lightbox", "Lightbox with gallery"),
+    #     ("lightbox-single", "Lightbox"),
+    #     ("slider", "Slider"),
+    #     )
+    # kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")
+    IMAGE_WIDTHS = (
+        (1000.0, u"Automatic"),
+        (u'Relative to column', (
+            (100.0, u"100%"),
+            (75.0, u"75%"),
+            (66.7, u"66%"),
+            (50.0, u"50%"),
+            (33.3, u"33%"),
+            (25.0, u"25%"),
+            )
+        ),
+    )
+    width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
+
+    @property
+    def number_of_items(self):
+        return self.imageset_item.count()
+
+    def __unicode__(self):
+        return u"embedded-video-set-%s" % self.id
+    
+    def copy_relations(self, oldinstance):
+        for plugin_item in oldinstance.embeddedvideoset_item.all():
+            plugin_item.pk = None
+            plugin_item.plugin = self
+            plugin_item.save()
+
+class EmbeddedVideoSetItem(models.Model, LinkMethodsMixin):
+    class Meta:
+        ordering=('id',)
+    plugin = models.ForeignKey(
+        EmbeddedVideoSetPlugin, 
+        related_name="embeddedvideoset_item"
+        )
+    SERVICES = (
+        ("vimeo", "Vimeo"),
+        ("youtube", "YouTube"),
+        )
+    service = models.CharField(choices = SERVICES, max_length = 50)
+    video_code = models.CharField(max_length=255,
+        help_text = "Not the full URL."
+        )
+    video_title = models.CharField(_("Title"), max_length=250)
+    # video_caption = models.TextField(
+    #     _("Video caption"), 
+    #     blank=True, null=True
+    #     )
+    video_autoplay = models.BooleanField(_("Autoplay"), default=False)
+
+    ASPECT_RATIOS = (
+        (1.778, u'16x9'),
+        (1.333, u'4x3'),
+        )
+    aspect_ratio = models.FloatField(choices = ASPECT_RATIOS, default = 1.333,          
+        help_text = "Adjust to match video file"
+        )
+
+    def __unicode__(self):
+        return self.video_title

@@ -8,6 +8,7 @@ from django.db import models
 
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
+from cms.models.pluginmodel import CMSPlugin
 
 from easy_thumbnails.files import get_thumbnailer
 
@@ -20,8 +21,7 @@ from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixi
 
 from links import schema
 
-from models import FilerImage, ImageSetItem, ImageSetPlugin
-
+from models import FilerImage, ImageSetItem, ImageSetPlugin, EmbeddedVideoSetItem, EmbeddedVideoSetPlugin
 
 # a dictionary to show how many items per row depending on the number of items
 LIGHTBOX_COLUMNS = {1:1, 2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
@@ -118,6 +118,8 @@ def calculate_height(given_width, given_height, given_aspect_ratio, width, aspec
 
 
 def slider(imageset):
+    # loops over the items in the set, and calculates their sizes
+    # for use in a slider
     imageset.template = "arkestra_image_plugin/slider.html"
     width = width_of_image(imageset)
     if imageset.aspect_ratio:
@@ -519,6 +521,85 @@ class FilerImagePlugin(CMSPluginBase):
                 pass
 
 plugin_pool.register_plugin(FilerImagePlugin)   
+
+class EmbeddedVideoSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
+    # form = ImageSetItemPluginForm
+    # formset = ImageSetItemFormFormSet
+    # related_search_fields = ['destination_content_type']
+    model=EmbeddedVideoSetItem
+    extra=1
+    fieldsets = (
+        (None, {
+            'fields': (
+                ('service', 'video_code', 'aspect_ratio'),  
+                ('video_title', 'video_autoplay'),
+            ),
+        }),
+        # ('Other options', {
+        #     'fields': (
+        #     'video_caption',
+        #     ),
+        #     'classes': ('collapse',),
+        # })
+    ) 
+   
+    
+class EmbeddedVideoPlugin(CMSPluginBase):
+    model = EmbeddedVideoSetPlugin
+    render_template = "arkestra_image_plugin/embedded_video_plugin.html"
+    admin_preview = False   
+
+    name = "Embedded video set"
+    text_enabled = True
+    inlines = (EmbeddedVideoSetItemEditor,)
+    
+    
+    def notes(self,instance):
+        if not instance.embeddedvideoset_item.count():
+            message = u"There are currently no items in this set."
+        elif instance.imageset_item.count() == 1:
+            message = u"There is currently only one item in this set."
+        else:
+            message = u"There are currently %s items in this set." % instance.imageset_item.count()
+        return message
+        
+    def render(self, context, embeddedvideoset, placeholder):
+
+        # don't do anything if there are no items in the embeddedvideoset
+        if embeddedvideoset.embeddedvideoset_item.count():
+            video = embeddedvideoset.embeddedvideoset_item.order_by('?')[0]
+
+            # calculate the width of the block the image will be in
+            width = int(width_of_image_container(context, embeddedvideoset))
+            height = width/video.aspect_ratio
+            # self.render_template = imageset.template  
+            print embeddedvideoset, embeddedvideoset.id
+            context.update({
+                'embeddedvideoset': embeddedvideoset,
+                'video': video,
+                'width': width,
+                'height': height,
+                })
+
+        # no items, use a null template    
+        else:
+            # print "using a null template" , imageset
+            self.render_template = "null.html"  
+            # context.update({
+            #     'placeholder':placeholder,
+            # })
+        return context
+
+            
+    def __unicode__(self):
+        return self
+
+    def icon_src(self, instance):
+        return "/static/plugin_icons/embedded_videos.png"
+        
+
+plugin_pool.register_plugin(EmbeddedVideoPlugin)
+
 
                     # gcbirzan's suggestion on how to calculate LIGHTBOX_COLUMNS
                     # d={}
