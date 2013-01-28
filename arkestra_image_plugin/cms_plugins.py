@@ -566,14 +566,13 @@ class EmbeddedVideoPlugin(CMSPluginBase):
     def render(self, context, embeddedvideoset, placeholder):
 
         # don't do anything if there are no items in the embeddedvideoset
-        if embeddedvideoset.embeddedvideoset_item.count():
+        if embeddedvideoset.number_of_items:
             video = embeddedvideoset.embeddedvideoset_item.order_by('?')[0]
 
             # calculate the width of the block the image will be in
             width = int(width_of_image_container(context, embeddedvideoset))
-            height = width/video.aspect_ratio
-            # self.render_template = imageset.template  
-            print embeddedvideoset, embeddedvideoset.id
+            height = int(width/video.aspect_ratio)
+
             context.update({
                 'embeddedvideoset': embeddedvideoset,
                 'video': video,

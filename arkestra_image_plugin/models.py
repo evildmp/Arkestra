@@ -258,7 +258,7 @@ class EmbeddedVideoSetPlugin(CMSPlugin):
 
     @property
     def number_of_items(self):
-        return self.imageset_item.count()
+        return self.embeddedvideoset_item.count()
 
     def __unicode__(self):
         return u"embedded-video-set-%s" % self.id
