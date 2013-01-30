@@ -1,8 +1,6 @@
 from django.db import models
 
-from links.models import ExternalLink
-from links.link_functions import object_links
-     
+from links.models import ExternalLink     
         
 
 class URLModelMixin(models.Model):
@@ -35,3 +33,5 @@ class LocationModelMixin(models.Model):
         max_length=255, null=True, blank=True)
     access_note = models.CharField(help_text = u"Notes on access/visiting hours/etc",
         max_length=255, null=True, blank=True)
+        
+

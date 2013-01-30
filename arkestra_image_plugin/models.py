@@ -11,6 +11,7 @@ from cms.models import CMSPlugin
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
 
+from arkestra_utilities.import_free_model_mixins import ArkestraGenericPluginItemOrdering
 from links.models import LinkMethodsMixin
 
 class FilerImage(CMSPlugin):
@@ -156,6 +157,10 @@ class ImageSetPlugin(CMSPlugin):
     def number_of_items(self):
         return self.imageset_item.count()
 
+    @property
+    def active_items(self):
+        return self.imageset_item.filter(active=True)
+
     def __unicode__(self):
         return u"image-set-%s" % self.kind
     
@@ -165,9 +170,9 @@ class ImageSetPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
-class ImageSetItem(models.Model, LinkMethodsMixin):
+class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.Model):
     class Meta:
-        ordering=('id',)
+        ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField()
     alt_text = models.CharField(null=True, blank=True, max_length=255,
@@ -257,8 +262,8 @@ class EmbeddedVideoSetPlugin(CMSPlugin):
     width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
 
     @property
-    def number_of_items(self):
-        return self.embeddedvideoset_item.count()
+    def active_items(self):
+        return self.embeddedvideoset_item.filter(active=True)
 
     def __unicode__(self):
         return u"embedded-video-set-%s" % self.id
@@ -269,9 +274,9 @@ class EmbeddedVideoSetPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
-class EmbeddedVideoSetItem(models.Model, LinkMethodsMixin):
+class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
     class Meta:
-        ordering=('id',)
+        ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(
         EmbeddedVideoSetPlugin, 
         related_name="embeddedvideoset_item"

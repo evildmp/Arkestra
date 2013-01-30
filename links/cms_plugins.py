@@ -25,6 +25,7 @@ class PluginInlineLink(SupplyRequestMixin, admin.StackedInline):
                 'destination_content_type', 'destination_object_id',
                 'text_override',
                 ('include_description', 'key_link',),
+                ('inline_item_ordering', 'active', ),
             ),
         }),
         ('Overrides', {
@@ -124,6 +125,7 @@ class PluginInlineCarousel(admin.StackedInline):
             'fields': (
                 ('destination_content_type', 'destination_object_id',),
                 ('link_title', 'image', ),
+                ('inline_item_ordering', 'active', ),
             ),
         }),
     )

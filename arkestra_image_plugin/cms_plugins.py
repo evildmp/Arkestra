@@ -341,17 +341,26 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
     extra=1
     
     
-    fieldset_basic = ('', {'fields': (('image',),)})
+    fieldset_basic = ('', {'fields': ((
+        'image',                        
+        'inline_item_ordering', 
+        'active',
+        ),)})
     fieldset_advanced = ('Caption', {
-        'fields': (( 'auto_image_title', 'manual_image_title'), ( 'auto_image_caption', 'manual_image_caption'),), 
+        'fields': (
+            ( 'auto_image_title', 'manual_image_title'), 
+            ( 'auto_image_caption', 'manual_image_caption'),
+        ), 
         'classes': ('collapse',)
         })
-    fieldsets = (fieldset_basic, fieldset_advanced,         
+    fieldsets = (
+                fieldset_basic, 
+                fieldset_advanced,         
                 ("Link", {
                     'fields': (
                         ('destination_content_type', 'destination_object_id',), 
                         'alt_text',
-                        ( 'auto_link_title', 'manual_link_title'), ( 'auto_link_description', 'manual_link_description'),
+                        ('auto_link_title', 'manual_link_title'), ( 'auto_link_description', 'manual_link_description'),
                     ),
                     'description': "Links will only be applied if <em>all</em> images in the set have links.",
                     'classes': ('collapse',),
@@ -533,6 +542,7 @@ class EmbeddedVideoSetItemEditor(SupplyRequestMixin, admin.StackedInline, Autoco
             'fields': (
                 ('service', 'video_code', 'aspect_ratio'),  
                 ('video_title', 'video_autoplay'),
+                ('active', ),
             ),
         }),
         # ('Other options', {
@@ -566,8 +576,8 @@ class EmbeddedVideoPlugin(CMSPluginBase):
     def render(self, context, embeddedvideoset, placeholder):
 
         # don't do anything if there are no items in the embeddedvideoset
-        if embeddedvideoset.number_of_items:
-            video = embeddedvideoset.embeddedvideoset_item.order_by('?')[0]
+        if embeddedvideoset.active_items:
+            video = embeddedvideoset.active_items.order_by('?')[0]
 
             # calculate the width of the block the image will be in
             width = int(width_of_image_container(context, embeddedvideoset))
@@ -582,7 +592,6 @@ class EmbeddedVideoPlugin(CMSPluginBase):
 
         # no items, use a null template    
         else:
-            # print "using a null template" , imageset
             self.render_template = "null.html"  
             # context.update({
             #     'placeholder':placeholder,

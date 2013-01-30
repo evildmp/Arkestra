@@ -1,15 +1,19 @@
+from urlparse import urlparse
+
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
-from cms.models import CMSPlugin, Page
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+
+from cms.models import CMSPlugin, Page
+
 from filer.fields.image import FilerImageField
-from links import schema
+
 import mptt 
 
-from urlparse import urlparse  # for tree version of ExternalLinks
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned # for tree version of ExternalLinks
-
+from arkestra_utilities.import_free_model_mixins import ArkestraGenericPluginItemOrdering
 from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
+from links import schema
 
 
 class LinkMethodsMixin(object):
@@ -140,14 +144,14 @@ class ObjectLink(Link):
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id') # the content object the link is attached to    
 
-class GenericLinkListPluginItem(Link):
+class GenericLinkListPluginItem(ArkestraGenericPluginItemOrdering, Link):
     """
     Similar to ObjectLink above, but this one isn't attached to an object such as a NewsArticle, but to a plugin.
     """
     plugin = models.ForeignKey("GenericLinkListPlugin", related_name="links_item")
     
     class Meta:
-        ordering = ['id',]
+        ordering = ['inline_item_ordering', 'id',]
 
 
 """
@@ -274,6 +278,9 @@ class GenericLinkListPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
+    @property
+    def active_items(self):
+        return self.links_item.filter(active=True)
 
 
 
@@ -310,20 +317,25 @@ class CarouselPlugin(CMSPlugin):
         (.75, u'3x4'),
         (.667, u'2x3'),
     )
-    #class Meta:
-        #permissions = (("is_a_boss", "Is a boss"),)
+
     name = models.CharField(max_length=50)
     width = models.FloatField(choices=CAROUSEL_WIDTHS, default=100.0)
     aspect_ratio = models.FloatField(null=True, blank=True,
          choices=ASPECT_RATIOS, default=1.5)
     #height = models.PositiveIntegerField(null=True, blank=True)
+
     def copy_relations(self, oldinstance):
         for plugin_item in oldinstance.carousel_item.all():
             plugin_item.pk = None
             plugin_item.plugin = self
             plugin_item.save()
 
-class CarouselPluginItem(BaseLink, LinkMethodsMixin):
+    @property
+    def active_items(self):
+        return self.carousel_item.filter(active=True)
+
+
+class CarouselPluginItem(BaseLink, LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
     """
     The item in a carousel - basically a Link, with an image
     """
@@ -331,6 +343,8 @@ class CarouselPluginItem(BaseLink, LinkMethodsMixin):
     image = FilerImageField()
     link_title = models.CharField(max_length=35)    
 
+    class Meta:
+        ordering = ['inline_item_ordering', 'id',]
 
 class FocusOnPluginEditor(CMSPlugin):
     heading_level = models.PositiveSmallIntegerField(choices = PLUGIN_HEADING_LEVELS, default = PLUGIN_HEADING_LEVEL_DEFAULT)
