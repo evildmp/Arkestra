@@ -1,0 +1,39 @@
+{% if email %}
+   <dt style = "clear: both;">Email address</dt>
+   <dd><a href="mailto:{{ email }}">{{ email }}</a></dd>
+{% endif %}
+  
+{% if full_address and precise_location %}
+   <dt>Location</dt>
+   <dd>{{ precise_location }}</dd>
+{% endif %}
+
+{% if access_note %}
+   <dt>Please note</dt>
+   <dd>{{ access_note }}</dd>
+{% endif %}
+
+{% if phone %}
+    <dt>Telephone</dt>
+    {% for phone_number in phone %}
+        <dd>+{{ phone_number.country_code }} {{ phone_number.area_code }} {{ phone_number.number }}{% if phone_number.internal_extension %}, ext. {{ phone_number.internal_extension }} {% endif %} {% if phone_number.label %} ({{ phone_number.label }}) {% endif %}</dd>
+    {% endfor %}
+{% endif %}
+
+{% if full_address %}
+	<dt>Address</dt>
+	<dd>
+		<strong>{{ entity }}</strong>
+		<br />
+		{{ full_address|join:"<br />" }}
+		{% if building.map %}
+			<span class="image imageset">
+				<a href="{{ building.get_absolute_url }}">
+					<img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ building.latitude }},{{ building.longitude }}&zoom={{ building.zoom|add:"-4" }}&size={{ map_size }}&markers=color:red|{{ building.latitude }},{{ building.longitude }}&sensor=false" />
+					<span class="imageset-item-data image-title text">map &amp; directions</span>
+					<span class="link-arrow"></span>
+				</a>
+		    </span>
+		{% endif %}
+	</dd>
+{% endif %}      

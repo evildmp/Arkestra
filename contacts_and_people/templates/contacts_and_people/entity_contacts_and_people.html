@@ -9,6 +9,9 @@ Called up by arkestra_page.html
 {% load entity_tags %}
 {% load thumbnail %}
 {% load typogrify_tags %}
+
+{% thumbnail entity.image.file entity_image_size subject_location=entity.image.subject_location as image %}
+
 {% block arkestra_content %}
 	<div class="row columns2">
 	    {% render_placeholder intro_page_placeholder %}
@@ -17,13 +20,11 @@ Called up by arkestra_page.html
 			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
 			    <dl>
 			        {% include "includes/key_contacts.html" %}
-					{% include "includes/address.html" %}
-	                {% include "includes/precise_location.html" %}
-	   		        {% include "includes/access_notes.html" %}
-	                {% include "includes/email.html" %}
-	   		        {% include "includes/phone_contacts.html" %}
+					{% with entity_map_size as map_size %}
+						{% include "includes/contact_information.html" %}
+					{% endwith %}	
 			    </dl>
-			    {% thumbnail entity.image.file entity_image_size subject_location=entity.image.subject_location as image %}{% if image %}<img src="{{ image.url }}" alt = "" class="right"/>{% endif %}
+			    {% if image %}<img src="{{ image.url }}" alt = "" class="right"/>{% endif %}
 			</div>
 		</div>
 		{% if entity.get_people_with_roles or initials_list or people %}
