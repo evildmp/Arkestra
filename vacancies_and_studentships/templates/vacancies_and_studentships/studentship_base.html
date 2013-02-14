@@ -28,7 +28,7 @@
 				    {% thumbnail studentship.image.file 227x0 subject_location=studentship.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
-				<dl>
+				<dl class="not-indented">
 					<dt>Closing date</dt>
 					<dd>{% date studentship.closing_date %}</dd>
 					{% if studentship.supervisors.all %}

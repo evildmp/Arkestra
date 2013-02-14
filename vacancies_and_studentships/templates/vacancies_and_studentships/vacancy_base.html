@@ -28,7 +28,7 @@
 				    {% thumbnail vacancy.image.file 227x0 subject_location=vacancy.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}				
-				<dl> {% if vacancy.hosted_by %}
+				<dl class="not-indented"> {% if vacancy.hosted_by %}
     				    <dt>Where</dt>
     				    <dd><a href="{{ vacancy.hosted_by.get_absolute_url }}">{{ vacancy.hosted_by.short_name }}</a></dd>
 				    {% endif %}

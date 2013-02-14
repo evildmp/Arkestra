@@ -1,5 +1,5 @@
 {% regroup entity.get_key_people by role as roles %}
-<dl>
+<dl class="not-indented">
 	{% for role in roles %}
 		<dt>{{ role.grouper }}</dt>
 		{% for person in role.list %}<dd><a href ="{{ person.person.get_absolute_url }}">{{person.person}}</a></dd>{% endfor %}

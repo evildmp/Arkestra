@@ -25,7 +25,7 @@
 	{% endif %}{% endblock pagetitle %}
 
 {% block main_page_body %}
-{% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
+    {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
 	{% with placeholder_width=person_description_width %}
 	{% block arkestra_content %}
     {% include "arkestra/tabbed_menu.html" %}
@@ -34,10 +34,10 @@
     			<div class="column firstcolumn">
     				<div>
 						{% if building or address or location or access_note or email or phone.all %}<h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
-						<dl>
-						{% with person_map_size as map_size %}
-							{% include "includes/contact_information.html" %}
-						{% endwith %}	
+						<dl class="not-indented">
+    						{% with person_map_size as map_size %}
+    							{% include "includes/contact_information.html" %}
+    						{% endwith %}	
 						</dl>
 						{% endif %}
 						{% render_placeholder person.description %}

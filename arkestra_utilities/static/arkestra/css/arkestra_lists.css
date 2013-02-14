@@ -148,6 +148,10 @@ ul.horizontal.grid li {
 
 li.horizontal   {float: left; list-style-type: none;}
 
+ul.index {
+    padding: 0;
+    }
+
 ul.index li  {
     font-weight: bold;
     display: inline;
@@ -205,7 +209,9 @@ ul.boxed li li {border: none;}
 ul.boxed li dl {margin:0;}
 
 dl dd {padding: 0; margin: 0 0 5px 10px;}
-dl dd.not-indented {padding: 0; margin-left: 0;}
+dl dd.not-indented,
+dl.not-indented dd
+ {padding: 0; margin-left: 0;}
 
 /* for the sub column - the right hand column in some pages - that contains lists of links etc */
 
