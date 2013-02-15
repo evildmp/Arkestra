@@ -20,13 +20,23 @@
     {% include "arkestra/tabbed_menu.html" %}
 	{% block place_information %}
         <div class="row columns3">
-        		<div class="column firstcolumn">
-					<p class="subtitle">{{ place.summary|typogrify }}</p>
-		 		    {% if place.postcode or place.street %}
-		       			<h2>Address</h2>
-	        		   {{ place.get_postal_address|join:"<br />" }}
-		    		{% endif %}
-        		</div>
+    		<div class="column firstcolumn">
+				<p class="subtitle">{{ place.summary|typogrify }}</p>
+	 		    {% if place.postcode or place.street %}
+	       			<h2>Address</h2>
+        		    {{ place.get_postal_address|join:"<br />" }}
+                    {% if place.map %}
+                    	<br />
+                    	<span class="image imageset map">
+                    		<a href="{{ place.get_absolute_url }}map/">
+                    			<img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ place.latitude }},{{ place.longitude }}&zoom={{ place.zoom|add:"-4" }}&size={{ place_map_size }}&markers=color:red|{{ place.latitude }},{{ place.longitude }}&sensor=false" />
+                    			<span class="imageset-item-data image-title text">map &amp; directions</span>
+                    			<span class="link-arrow"></span>
+                    		</a>
+                        </span>
+                    {% endif %}
+	    		{% endif %}
+    		</div>
     		<div class="column lastcolumn doublecolumn"> 
                 {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop as image %}
                 {% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
