@@ -57,13 +57,13 @@ class Migration(SchemaMigration):
         db.alter_column('contacts_and_people_personlite', 'title_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contacts_and_people.Title'], to_field='abbreviation', null=True))
         # # Adding field 'Entity.auto_publications_page'
         # db.add_column('contacts_and_people_entity', 'auto_publications_page',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
+                      # self.gf('django.db.models.fields.BooleanField')(default=False),
+                      # keep_default=False)
 
         # # Adding field 'Entity.publications_page_menu_title'
         # db.add_column('contacts_and_people_entity', 'publications_page_menu_title',
-                      self.gf('django.db.models.fields.CharField')(default='Publications', max_length=50),
-                      keep_default=False)
+                      # self.gf('django.db.models.fields.CharField')(default='Publications', max_length=50),
+                      # keep_default=False)
 
 
         # Changing field 'Entity.parent'
