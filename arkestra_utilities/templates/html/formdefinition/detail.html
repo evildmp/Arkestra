@@ -1,0 +1,21 @@
+{% extends "html/formdefinition/base.html" %}
+{% block content %}
+{% if form_definition.title %}<h2>{{ form_definition.title }}</h2>{% endif %}
+{% if form_definition.body %}<p>{{ form_definition.body|linebreaksbr }}</p>{% endif %}
+{% if messages %}
+<ul class="messages">
+{% for message in messages %}
+<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% include form_template %}
+
+
+<script type="text/javascript">
+    var inputs = document.getElementsByTagName('input');
+    if (inputs.length) {
+        inputs[0].focus();
+    }
+</script>
+{% endblock %}

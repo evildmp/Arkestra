@@ -1,0 +1,37 @@
+{% load friendly %}
+<form class="arkestra-form" name="{{ form_definition.name }}" action="{{ form_definition.action }}" method="{{ form_definition.method }}" enctype="multipart/form-data">
+	{% if messages %}
+		<h{{ IN_BODY_HEADING_LEVEL }}>Response</h{{ IN_BODY_HEADING_LEVEL }}>     
+		{{ messages.success }}
+		{% for message in messages %}
+			<p><strong>{{message}}</strong></p>
+		{%endfor %}
+	{% endif %}
+    {% for entry in logs %}
+		<h{{ IN_BODY_HEADING_LEVEL }}>Your submission</h{{ IN_BODY_HEADING_LEVEL }}>     
+        {% for field in entry.data %}
+        <p>
+            <label for="">{{ field.label }}</label>
+            {{ field.value|friendly }}
+        </p>
+        {% endfor %}
+    {% endfor %}
+
+    {% for field in form %}
+        {% if not field.is_hidden %}
+            {{ field.errors }}
+            <p class="field {% if field.errors %}errors{% endif %}{% if field.field.required %}{% if field.errors %} {% endif %}required{% endif %}">
+                <label for="{{ field.auto_id }}">{{ field.label }} {{field.field.required|yesno:"(required),"}}</label>
+                {{ field }}
+            </p>
+        {% endif %}
+    {% endfor %}
+    
+    <p class="buttons"> 
+    {% include "html/formdefinition/forms/includes/submit.html" %}
+    </p>
+    {% for field in form.hidden_fields %}
+        {{ field }}
+    {% endfor %}
+    {% csrf_token %}
+</form>

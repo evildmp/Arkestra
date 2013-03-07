@@ -211,3 +211,10 @@ ul li.arkestra a {
     height:1px;
     overflow:hidden;
     }
+
+/* forms */
+
+form.arkestra-form input, 
+form.arkestra-form textarea   {width: 100%;}
+form.arkestra-form .errors    {color: red;}
+form.arkestra-form label    {font-weight: bold;}
