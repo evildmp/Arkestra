@@ -21,6 +21,8 @@ class URLModelMixin(models.Model):
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url.url
+        elif self.url_path in ["news","event","vacancy","studentship"]:
+            return reverse(self.url_path,kwargs={"slug":self.slug})
         else:
             return "/%s/%s/" % (self.url_path, self.slug)
 
