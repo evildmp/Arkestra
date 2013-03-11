@@ -536,7 +536,7 @@ class Title(models.Model):
 
 class PersonLite(models.Model):
     title = models.ForeignKey('contacts_and_people.Title', 
-        to_field="abbreviation", blank=True, null=True, on_delete=models.SET_NULL)
+        blank=True, null=True, on_delete=models.SET_NULL)
     given_name = models.CharField(max_length=50, blank=True, null=True)
     middle_names = models.CharField(max_length=100, blank=True, null=True)
     surname = models.CharField(max_length=50)
