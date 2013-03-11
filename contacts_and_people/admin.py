@@ -473,26 +473,32 @@ admin.site.register(models.Site,SiteAdmin)
 admin.site.register(models.Title)
 
 # ------------------------- admin hacks -------------------------
+# Allows us to create Users who don't have passwords - because their 
+# passwords will be dealt with by LDAP
+#
+# So we:
+#   1   unregister UserAdmin
+#   2   import the extra things we need
+#   3   create two forms:
+#       *   MyNoPasswordCapableUserCreationForm for adding users   
+#       *   MyNoPasswordCapableUserChangeForm for editing users
+#       each of these gets a new has_password field and __init__()/save()/clean() methods 
+#   4   redefine the UserAdmin.fieldsets and UserAdmin.add_fieldsets
+#   5   define a custom UserAdmin to use all the above
+#   6   register the custom UserAdmin   
+
 if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
     admin.site.unregister(User)
-    from django import template
-    from django.conf import settings
-    from django.contrib import admin
     from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AdminPasswordChangeForm
-    from django.contrib.auth.models import User, Group
-    from django.core.exceptions import PermissionDenied
-    from django.http import HttpResponseRedirect, Http404
-    from django.shortcuts import render_to_response, get_object_or_404
-    from django.template import RequestContext
-    from django.utils.html import escape
-    from django.utils.translation import ugettext, ugettext_lazy as _
-    
     from django.contrib.auth.admin import UserAdmin
-    from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AdminPasswordChangeForm
-    from django import forms
         
     class MyNoPasswordCapableUserCreationForm(UserCreationForm):
-        has_password = forms.BooleanField(required=False, initial=True)
+        has_password = forms.BooleanField(
+            label="has password", 
+            help_text="LDAP users don't need a password", 
+            required=False, 
+            initial=True
+            )
 
         def clean(self):
             data = self.cleaned_data
@@ -518,7 +524,12 @@ if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
                 return instance
         
     class MyNoPasswordCapableUserChangeForm(UserChangeForm):
-        has_password = forms.BooleanField(label="has password", help_text="LDAP users don't need a password", required=False, initial=True)
+        has_password = forms.BooleanField(
+            label="has password", 
+            help_text="LDAP users don't need a password", 
+            required=False, 
+            initial=True
+            )
 
         def __init__(self, *args, **kwargs):
             r = super(MyNoPasswordCapableUserChangeForm,self).__init__(*args, **kwargs)
@@ -544,62 +555,16 @@ if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
     
     user_admin_fieldsets = list(UserAdmin.fieldsets)
     user_admin_fieldsets[0] = (None, {'fields': ('username', ('password', 'has_password',),)})
+
+    user_admin_add_fieldsets = list(UserAdmin.add_fieldsets)
+    user_admin_add_fieldsets[0] = (None, {'fields': ('username', ('password', 'has_password',),)})
     
     
     class MyUserAdmin(UserAdmin):
         fieldsets = user_admin_fieldsets
+        add_fieldsets = user_admin_add_fieldsets
         form = MyNoPasswordCapableUserChangeForm
         add_form = MyNoPasswordCapableUserCreationForm
-        list_display = ('username', 'email', 'is_staff')
+        filter_horizontal = ('user_permissions', 'groups') # not needed in Django 1.5
         
-        def add_view(self, request):
-            # IT REALLY SUCKS THAT I NEED TO COPY THIS ENTIRE METHOD... it's the same as 
-            # django.contrib.auth.admin.UserAdmin.add_view, just with a other template
-            
-            # It's an error for a user to have add permission but NOT change
-            # permission for users. If we allowed such users to add users, they
-            # could create superusers, which would mean they would essentially have
-            # the permission to change users. To avoid the problem entirely, we
-            # disallow users from adding users if they don't have change
-            # permission.
-            if not self.has_change_permission(request):
-                if self.has_add_permission(request) and settings.DEBUG:
-                    # Raise Http404 in debug mode so that the user gets a helpful
-                    # error message.
-                    raise Http404('Your user does not have the "Change user" permission. In order to add users, Django requires that your user account have both the "Add user" and "Change user" permissions set.')
-                raise PermissionDenied
-            if request.method == 'POST':
-                form = self.add_form(request.POST)
-                if form.is_valid():
-                    new_user = form.save()
-                    msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': 'user', 'obj': new_user}
-                    self.log_addition(request, new_user)
-                    if "_addanother" in request.POST:
-                        request.user.message_set.create(message=msg)
-                        return HttpResponseRedirect(request.path)
-                    elif '_popup' in request.REQUEST:
-                        return self.response_add(request, new_user)
-                    else:
-                        request.user.message_set.create(message=msg + ' ' + ugettext("You may edit it again below."))
-                        return HttpResponseRedirect('../%s/' % new_user.id)
-            else:
-                form = self.add_form()
-            return render_to_response('contacts_and_people/admin/auth/user/add_form.html', {
-                'title': _('Add user'),
-                'form': form,
-                'is_popup': '_popup' in request.REQUEST,
-                'add': True,
-                'change': False,
-                'has_add_permission': True,
-                'has_delete_permission': False,
-                'has_change_permission': True,
-                'has_file_field': False,
-                'has_absolute_url': False,
-                'auto_populated_fields': (),
-                'opts': self.model._meta,
-                'save_as': False,
-                'username_help_text': self.model._meta.get_field('username').help_text,
-                'root_path': self.admin_site.root_path,
-                'app_label': self.model._meta.app_label,            
-            }, context_instance=template.RequestContext(request))
     admin.site.register(User, MyUserAdmin)
