@@ -8,6 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        db._constraint_cache = {} # force _fill_constraint_cache()
         db.rename_column('contacts_and_people_personlite', 'title_id', 'title_backup_id')
         db.add_column('contacts_and_people_personlite', 'title', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
 
