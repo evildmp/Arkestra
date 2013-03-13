@@ -99,6 +99,12 @@ LINK_SCHEMA = getattr(settings, 'LINK_SCHEMA', {})
 
 USE_CELERY_FOR_VIDEO_ENCODING = getattr(settings, "USE_CELERY_FOR_VIDEO_ENCODING", False)
 
+VIDEO_HOSTING_SERVICES = getattr(settings, "VIDEO_HOSTING_SERVICES", {
+    "vimeo": {"name": "Vimeo", "template": "embedded_video/vimeo.html"},
+    "youtube": {"name": "YouTube", "template": "embedded_video/youtube.html"},
+    }
+    )
+
 # -------- Django CMS ----------------------
 
 CMS_SEO_FIELDS = getattr(settings, "CMS_SEO_FIELDS", True)

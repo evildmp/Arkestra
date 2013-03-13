@@ -12,6 +12,8 @@ from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
 
 from arkestra_utilities.import_free_model_mixins import ArkestraGenericPluginItemOrdering
+from arkestra_utilities.settings import VIDEO_HOSTING_SERVICES
+
 from links.models import LinkMethodsMixin
 
 class FilerImage(CMSPlugin):
@@ -281,10 +283,7 @@ class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
         EmbeddedVideoSetPlugin, 
         related_name="embeddedvideoset_item"
         )
-    SERVICES = (
-        ("vimeo", "Vimeo"),
-        ("youtube", "YouTube"),
-        )
+    SERVICES = [(service, values["name"]) for service,values in VIDEO_HOSTING_SERVICES.items()]
     service = models.CharField(choices = SERVICES, max_length = 50)
     video_code = models.CharField(max_length=255,
         help_text = "Not the full URL."

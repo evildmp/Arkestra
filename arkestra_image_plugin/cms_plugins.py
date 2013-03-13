@@ -15,7 +15,8 @@ from easy_thumbnails.files import get_thumbnailer
 from widgetry.tabs.admin import ModelAdminWithTabs
 from widgetry import fk_lookup
 
-from arkestra_utilities.settings import IMAGESET_ITEM_PADDING
+from arkestra_utilities.settings import IMAGESET_ITEM_PADDING, VIDEO_HOSTING_SERVICES
+
 from arkestra_utilities.output_libraries.plugin_widths import get_placeholder_width, calculate_container_width
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin
 
@@ -531,10 +532,8 @@ class FilerImagePlugin(CMSPluginBase):
 
 plugin_pool.register_plugin(FilerImagePlugin)   
 
+
 class EmbeddedVideoSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
-    # form = ImageSetItemPluginForm
-    # formset = ImageSetItemFormFormSet
-    # related_search_fields = ['destination_content_type']
     model=EmbeddedVideoSetItem
     extra=1
     fieldsets = (
@@ -542,21 +541,14 @@ class EmbeddedVideoSetItemEditor(SupplyRequestMixin, admin.StackedInline, Autoco
             'fields': (
                 ('service', 'video_code', 'aspect_ratio'),  
                 ('video_title', 'video_autoplay'),
-                ('active', ),
+                ('active', 'inline_item_ordering'),
             ),
         }),
-        # ('Other options', {
-        #     'fields': (
-        #     'video_caption',
-        #     ),
-        #     'classes': ('collapse',),
-        # })
     ) 
    
     
 class EmbeddedVideoPlugin(CMSPluginBase):
     model = EmbeddedVideoSetPlugin
-    render_template = "arkestra_image_plugin/embedded_video_plugin.html"
     admin_preview = False   
 
     name = "Embedded video set"
@@ -583,6 +575,7 @@ class EmbeddedVideoPlugin(CMSPluginBase):
             width = int(width_of_image_container(context, embeddedvideoset))
             height = int(width/video.aspect_ratio)
 
+            self.render_template = VIDEO_HOSTING_SERVICES[video.service]["template"]
             context.update({
                 'embeddedvideoset': embeddedvideoset,
                 'video': video,
@@ -593,9 +586,6 @@ class EmbeddedVideoPlugin(CMSPluginBase):
         # no items, use a null template    
         else:
             self.render_template = "null.html"  
-            # context.update({
-            #     'placeholder':placeholder,
-            # })
         return context
 
             
