@@ -169,7 +169,8 @@ def create_action(entity):
 class PersonAdmin(PersonAndEntityAdmin):    
     search_fields = ['given_name','surname','institutional_username',]
     form = PersonForm
-    list_display = ( 'surname', 'given_name', 'image', 'get_entity', 'slug')
+    list_display = ('surname', 'given_name', 'title', 'get_entity', 'slug', 'active')
+    list_editable = ('title',)
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
     readonly_fields = ['address_report',]    
