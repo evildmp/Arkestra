@@ -28,7 +28,17 @@ They are set using `{% with %}`/`{% endwith %}` around the `{% block body_conten
     place_image_size="627x418"  # a place's main image
     place_map_size="294x182 # the small map on a place page
     lightbox_max_dimension=600  # what's the biggest a lightbox can be?
-    plugin_thumbnail_size="75x75"  
+    plugin_thumbnail_size="75x75"
+
+**********    
+Other cues
+**********
+
+Arkestra also provides template hooks for other variables, which can be set in the same `{% with %}`/`{% endwith %}` block.
+
+::
+
+    slider_delay="4000" # time for each slide in the ImageSet slider
                                                                      
 **************************
 {% block main_page_body %}

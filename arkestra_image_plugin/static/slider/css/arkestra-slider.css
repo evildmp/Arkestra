@@ -31,6 +31,8 @@ div.anythingSlider-minimalist-square a.link-title .title {
 
 div.anythingSlider-minimalist-square a:link .more-information,
 div.anythingSlider-minimalist-square a:visited .more-information  {
+    font-weight: lighter;
+    font-size: x-small;
     display: inline-block;
     border: 1px solid white;
     background: white;
