@@ -113,12 +113,12 @@ class ImageSetPlugin(CMSPlugin):
             )
         ),
         (u'Absolute widths', (
-            (-50.0, u'50 pixels square'),
+            (-50.0, u'50 x 50'),
             (-175.0, u'175 pixels'),
             (-350.0, u'350 pixels'),
             )
         ),    
-        (0.0, u"Image's native width (use with caution)"),
+        (0.0, u"Native"),
     )
     width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
     height = models.PositiveIntegerField(null=True, blank=True,
@@ -140,7 +140,7 @@ class ImageSetPlugin(CMSPlugin):
         (-1.0, u'Force native'),
         )
     aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0,          
-        help_text = "<em>Automatic</em> means native aspect ratio will be used where possible and calculated otherwise")
+        help_text = "<em>Automatic</em>: native aspect ratio if possible, calculated otherwise")
 
     LEFT = "left"
     RIGHT = "right"

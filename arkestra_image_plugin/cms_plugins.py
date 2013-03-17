@@ -392,7 +392,10 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
     raw_id_fields = ('image',)
     inlines = (ImageSetItemEditor,)
     admin_preview = False         
-    fieldset_basic = ('Size & proportions', {'fields': ('notes', ('kind', 'width', 'aspect_ratio',),)})
+    fieldset_basic = ('Size & proportions', {'fields': (
+        ('kind', 'notes',),
+        ('width', 'aspect_ratio',)
+        ,)})
     fieldset_advanced = ('Advanced', {'fields': (( 'float', 'height'),), 'classes': ('collapse',)})
     fieldset_items_per_row = ('For Multiple and Lightbox plugins only', {'fields': ('items_per_row',), 'classes': ('collapse',)})
     fieldsets = (fieldset_basic, fieldset_items_per_row, fieldset_advanced)
@@ -414,12 +417,15 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
         
     def render(self, context, imageset, placeholder):
 
+        # get only active ones
+        imageset.items = imageset.imageset_item.filter(active=True)
+        
         # don't do anything if there are no items in the imageset
-        if imageset.imageset_item.count():
+        if imageset.items.count():
             # calculate the width of the block the image will be in
             imageset.container_width = int(width_of_image_container(context, imageset))
             # copy the queryset to a list. You know it makes sense
-            imageset.items = list(imageset.imageset_item.all())
+            imageset.items = list(imageset.items)
             
             # at least two items are required for a slider
             if imageset.kind == "slider" and imageset.number_of_items > 1:
