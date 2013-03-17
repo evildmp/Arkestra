@@ -2,6 +2,8 @@
 
 ul.menu	{ /* the whole thing */
 	text-align: left;
+    z-index: 200;
+    position: relative;  
 	} 
 	
 li.menu_item a	{
@@ -71,14 +73,15 @@ ul#tab-menu {
 	width: 100%; /* width of entire menu */
 	margin: 0 0 .5em 0; /*margin underneath menu*/
 	padding: 0;
-	list-style: none;
 }
 ul#tab-menu li {
 	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_rt.gif) no-repeat right top;
 	float:left;
 	margin: 0 2px 0 0; /*gap between menu tabs*/
 	padding:0;
+	list-style: none;
 }
+
 ul#tab-menu a {
 	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_lt.gif) no-repeat left top;
 	display:block;
