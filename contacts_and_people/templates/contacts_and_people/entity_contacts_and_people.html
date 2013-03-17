@@ -10,7 +10,7 @@ Called up by arkestra_page.html
 {% load thumbnail %}
 {% load typogrify_tags %}
 
-{% thumbnail entity.image.file entity_image_size subject_location=entity.image.subject_location as image %}
+{% thumbnail entity.image.file entity_image_size crop subject_location=entity.image.subject_location as image %}
 
 {% block arkestra_content %}
 	<div class="row columns2">
