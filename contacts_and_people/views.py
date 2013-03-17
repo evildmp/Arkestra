@@ -29,6 +29,12 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
         }
         
     people, initials = entity.get_people_and_initials()
+    
+    # only show pagetitle if there are people
+    if people:
+        pagetitle = u"Contacts & people"
+    else:
+        pagetitle = u""
 
     # are there Key People to show?    
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
@@ -43,7 +49,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
         "contacts_and_people/arkestra_page.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
             "entity":entity,
-            "pagetitle": u"Contacts & people",
+            "pagetitle": pagetitle,
             "entity.website.template": template,
             "main_page_body_file": main_page_body_file,
             "email": entity.email,

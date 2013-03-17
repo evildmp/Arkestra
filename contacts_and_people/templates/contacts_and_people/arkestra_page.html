@@ -19,9 +19,11 @@ Extends the base page template, and includes the main_page_body_file specified i
 {% block skip_and_language %}
 {% endblock %}
 
-{% block pagetitle %}
-    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-{% endblock pagetitle %}
+{% if pagetitle %}
+	{% block pagetitle %}
+	    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	{% endblock pagetitle %}
+{% endif %}
 
 {% block main_page_body %}
 	{% with placeholder_width=200 %}
