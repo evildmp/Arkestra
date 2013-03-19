@@ -5,14 +5,18 @@ from django.db.models import Q
 from django.conf import settings
 
 from django.contrib import admin, messages
+from django.contrib.admin import SimpleListFilter
 from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 
 from django import forms
 
-from django.utils.safestring import mark_safe 
 
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.safestring import mark_safe 
+from django.utils.translation import ugettext_lazy as _
+
+from treeadmin.admin import TreeAdmin
 
 from arkestra_utilities.widgets.combobox import ComboboxField
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
@@ -46,10 +50,12 @@ class MembershipInline(AutocompleteMixin, admin.TabularInline):
 class MembershipForEntityInline(MembershipInline): # for Entity admin
     exclude = ('display_role',)
     extra = 3
+    ordering = ['-importance_to_entity',]
 
 
 class MembershipForPersonInline(MembershipInline): # for Person admin
     exclude = ('display_role',)
+    ordering = ['-importance_to_person',]
 
 
 class MembershipAdmin(admin.ModelAdmin):
@@ -166,11 +172,44 @@ def create_action(entity):
     return (name, (action, name,"Add selected Person to %s as 'Member'" % (entity,)))
 
 
+class HasHomeRole(SimpleListFilter):
+    title = _('Has home role')
+    parameter_name = 'homerole'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('ok', _('OK')),
+            ('missing', _('Missing')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'ok':            
+            return queryset.filter(member_of__importance_to_person=5)
+        if self.value() == 'missing':
+            return queryset.exclude(member_of__importance_to_person=5)
+
+class PersonIsExternal(SimpleListFilter):
+    title = _('Profile is hosted')
+    parameter_name = 'hosted'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('external', _('Externally')),
+            ('internal', _('In Arkestra')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'external':            
+            return queryset.exclude(external_url=None)
+        if self.value() == 'internal':
+            return queryset.filter(external_url=None)
+        
+
 class PersonAdmin(PersonAndEntityAdmin):    
     search_fields = ['given_name','surname','institutional_username',]
     form = PersonForm
-    list_display = ('surname', 'given_name', 'title', 'get_entity', 'slug', 'active')
-    list_editable = ('title',)
+    list_filter = (HasHomeRole, PersonIsExternal, 'active')
+    list_display = ('surname', 'given_name','get_entity_short_name', 'active')
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
     readonly_fields = ['address_report',]    
@@ -284,13 +323,32 @@ class EntityForm(InputURLMixin):
         return self.cleaned_data 
 
 
-class EntityAdmin(PersonAndEntityAdmin): 
-    search_fields = ['name']
-    # inlines = (MembershipForEntityInline,PhoneContactInline)
+class EntityIsExternal(SimpleListFilter):
+    title = _('website hosted')
+    parameter_name = 'hosted'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('external', _('Externally')),
+            ('internal', _('In Arkestra')),
+            ('nowebsite', _('No website')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'external':            
+            return queryset.exclude(external_url=None)
+        if self.value() == 'internal':
+            return queryset.exclude(website=None)
+        if self.value() == 'nowebsite':
+            return queryset.filter(website=None, external_url=None)
+        
+
+class EntityAdmin(PersonAndEntityAdmin, TreeAdmin): 
+    filter_include_ancestors = False
+    search_fields = ['name',]
     form = EntityForm
-    list_display = ('name', 'parent', 'building', 'abstract_entity','website', )
-    list_editable = ('website', )
-    change_list_template = "admin/contacts_and_people/entity/change_list.html"
+    list_display = ('name',)
+    list_filter = (EntityIsExternal, 'abstract_entity')
     related_search_fields = ['parent', 'building', 'website', 'external_url',]    
     prepopulated_fields = {
             'slug': ('name',)
@@ -363,57 +421,14 @@ class EntityAdmin(PersonAndEntityAdmin):
             ('Publications', {'fieldsets': publications_fieldset})
         )
 
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context.update({
-                'root_entities':models.Entity.objects.filter(level=0),
-                'has_add_permission': request.user.has_perm('contacts_and_people.add_entity'),
-                'has_change_permission': request.user.has_perm('contacts_and_people.change_entity'),
-                'has_delete_permission': request.user.has_perm('contacts_and_people.delete_entity'),
-        })
-        return super(EntityAdmin, self).changelist_view(request, extra_context)
-
-    def get_urls(self):
-        urls = super(EntityAdmin, self).get_urls()
-        
-        # helper for url pattern generation
-        info = "%sadmin_%s_%s" % (self.admin_site.name, self.model._meta.app_label, self.model._meta.module_name)
-        #pat = lambda regex, fn: url(regex, self.admin_site.admin_view(fn), name='%s_%s' % (info, fn.__name__))
-        
-        url_patterns = patterns('',
-            url(r'^([0-9]+)/move-page/$', self.admin_site.admin_view(self.move_entity), name='%s_%s' % (info, 'move_page') ),
-            #pat(r'^([0-9]+)/move-page/$', self.move_entity),
-        )
-        url_patterns.extend(urls)
-        return url_patterns
-
-    def move_entity(self, request, entity_id, extra_context=None):
-        target = request.POST.get('target', None)
-        position = request.POST.get('position', None)
-        if target is None or position is None:
-            return HttpResponseRedirect('../../')            
-        try:
-            entity = self.model.objects.get(pk=entity_id)
-            target = self.model.objects.get(pk=target)
-        except self.model.DoesNotExist:
-            return HttpResponse("error")
-            
-        # does he haves permissions to do this...?
-        if not request.user.has_perm('contacts_and_people.change_entity'):
-            return HttpResponse("Denied")
-        # move page
-        entity.move_to(target, position)
-        entity.save()
-        return HttpResponse("ok")
 
 # ------------------------- Building and site admin -------------------------
 
 class BuildingAdminForm(forms.ModelForm):
-    # getting_here = forms.CharField(widget=WYMEditor, required = False)
-    # access_and_parking = forms.CharField(widget=WYMEditor, required = False)
-    
+
     class Meta:
         model = models.Building
+
 
     def clean(self):
         super(BuildingAdminForm, self).clean()
@@ -433,10 +448,12 @@ class BuildingInline(admin.StackedInline):
 
 
 class SiteAdmin(admin.ModelAdmin):
-    list_display = ('site_name', 'post_town', 'country',)
+    list_display = ('site_name', 'post_town', 'country', 'buildings')
 
 
 class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
+    list_filter = ('site',)
+    list_display = ('building_identifier', 'site', 'has_map')
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
     address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site'),}),)
@@ -467,6 +484,7 @@ try:
     admin.site.register(models.Person, PersonAdmin)
 except admin.sites.AlreadyRegistered:
     pass
+                      
 
 admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)

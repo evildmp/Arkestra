@@ -9,6 +9,8 @@ from django.contrib.contenttypes import generic
 from widgetry import fk_lookup
 from widgetry.views import search 
 
+from treeadmin.admin import TreeAdmin
+
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin
 
 from links.models import ObjectLink, ExternalLink, ExternalSite, LinkType
@@ -114,20 +116,11 @@ class ExternalSiteForm(forms.ModelForm):
         return self.cleaned_data    
 
 
-class ExternalSiteAdmin(admin.ModelAdmin):
+class ExternalSiteAdmin(TreeAdmin):
     readonly_fields = ('parent',)
     form = ExternalSiteForm
+    list_display = ('domain', 'site',)
     
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context.update({
-                'root_domains': ExternalSite.objects.filter(level = 0),
-                # 'has_add_permission': request.user.has_perm('links.add_link'),
-                # 'has_change_permission': request.user.has_perm('links.change_link'),
-                # 'has_delete_permission': request.user.has_perm('links.delete_link'),
-        })
-        return super(ExternalSiteAdmin, self).changelist_view(request, extra_context)
-
     
 admin.site.register(ExternalLink, ExternalLinkAdmin)
 admin.site.register(ExternalSite, ExternalSiteAdmin)

@@ -189,8 +189,8 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',    
     'widgetry',  
-    # 'south',         
-    # 'adminsortable',
+    # 'south',   # don't leave this disabled      
+    'treeadmin',    
 
     # core Django applications
     # these should be last, so we can override their templates
@@ -204,6 +204,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
+    'django.contrib.markup'
 )
 
 # A sample logging configuration. The only tangible logging

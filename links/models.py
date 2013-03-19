@@ -211,13 +211,17 @@ class LinkType(models.Model):
 
 
 class ExternalSite(models.Model):
-    site = models.CharField(max_length=50,help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", null = True)
+    site = models.CharField(
+        max_length=50,
+        help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", 
+        null = True
+        )
     domain = models.CharField(max_length=256, null = True, blank = True,)
-    parent = models.ForeignKey('self', blank=True, null = True, related_name='children') # for tree version of ExternalLinks
+    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
     
     class Meta:
         ordering = ['domain',]
-            
+    
     def __unicode__(self):
         # if this site is unnamed, let's see if it has a named ancestor
         if self.site == self.domain:

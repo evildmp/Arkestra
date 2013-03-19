@@ -10,22 +10,6 @@ def directory(context, entity = None):
     # print entity.get_descendants()
     return { "entities": entity.get_descendants()}
 
-@register.inclusion_tag('people.html', takes_context=True)
-def key_people(context, entity = None):
-    """
-    Publishes an ordered list of memberships, grouped by people
-    """
-    entity = work_out_entity(context, entity)
-    memberships = Membership.objects.filter(entity = entity, importance_to_entity_gte = 3).order_by('importance_to_entity',) 
-    duplicates = set()
-    membership_list = []
-    for membership in memberships:
-        if membership not in duplicates:
-            duplicates.add(membership)
-            membership_list.append(membership)
-    # returns a list of memberships, in the right order - we use a regroup tag to group them by person in the template 
-    # this doesn't list people's non-key-roles - should it?
-    return {'membership_list': membership_list}
 
 @register.inclusion_tag('includes/people_with_roles.html', takes_context=True)
 def people_with_roles(context, letter = None):
