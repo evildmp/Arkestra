@@ -348,7 +348,9 @@ class EntityAdmin(PersonAndEntityAdmin, TreeAdmin):
     search_fields = ['name',]
     form = EntityForm
     list_display = ('name',)
-    list_filter = (EntityIsExternal, 'abstract_entity')
+    list_filter = (EntityIsExternal, 'abstract_entity')     
+    list_max_show_all = 400
+    list_per_page = 400
     related_search_fields = ['parent', 'building', 'website', 'external_url',]    
     prepopulated_fields = {
             'slug': ('name',)
