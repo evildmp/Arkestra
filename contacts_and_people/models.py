@@ -14,12 +14,8 @@ from cms.models.fields import PlaceholderField
 
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
-# import mptt
 
 from filer.fields.image import FilerImageField
-
-# from news_and_events.models import NewsAndEventsPlugin
-# from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from arkestra_utilities.mixins import URLModelMixin
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE
@@ -255,8 +251,6 @@ class EntityManager(TreeManager):
         if self.base_entity and not MULTIPLE_ENTITY_MODE:
             return base_entity_id
 
-    def some_thing(self):
-        print "*********"
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
