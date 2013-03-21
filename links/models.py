@@ -175,6 +175,10 @@ class ExternalLink(models.Model):
     def __unicode__(self):
         return self.title or self.url
 
+        
+    def get_absolute_url(self):
+        return self.url
+
     def save(self, *args, **kwargs):
         # here we either find the ExternalSite to attach to, or create it if it doesn't exist
         # split url into component parts
