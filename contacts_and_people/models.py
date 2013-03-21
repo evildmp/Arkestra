@@ -14,12 +14,8 @@ from cms.models.fields import PlaceholderField
 
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
-# import mptt
 
 from filer.fields.image import FilerImageField
-
-# from news_and_events.models import NewsAndEventsPlugin
-# from news_and_events.cms_plugins import CMSNewsAndEventsPlugin
 
 from arkestra_utilities.mixins import URLModelMixin
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE
@@ -45,9 +41,12 @@ class Site(models.Model):
     def __unicode__(self):
         return self.site_name
 
+    def buildings(self):
+        return self.place.all().count() 
+        
     @property
     def maps(self):
-        return [building for building in self.place.all() if building.has_map]
+        return [building for building in self.place.all() if building.has_map()]
          
 class BuildingManager(models.Manager):
     def get_by_natural_key(self, slug):
@@ -88,6 +87,14 @@ class Building(models.Model):
     # def natural_key(self):
     #     return (self.slug)
 
+    def building_identifier(self):
+        if self.name:
+            return self.name
+        elif self.street:
+           return self.number + " " + self.street
+        else:
+            return self.postcode
+            
     def __unicode__(self):
         if self.name:
             building_identifier = unicode(self.site) + ": " + self.name
@@ -95,7 +102,9 @@ class Building(models.Model):
             building_identifier = unicode(self.site) + ": " + self.number + " " + self.street
         else:
             building_identifier = unicode(self.site) + ": " + self.postcode
-        return building_identifier
+        
+        return u"%s (%s)" %(self.building_identifier(), unicode(self.site))
+        
     
     def get_absolute_url(self):
         return "/place/%s/" % self.slug
@@ -138,9 +147,9 @@ class Building(models.Model):
             address.append(self.postcode)
         return address
 
-    @property
     def has_map(self):
-        return self.map and self.latitude and self.longitude and self.zoom
+        return (self.latitude and self.longitude and self.zoom and self.map)==True          
+    has_map.boolean = True          
     
     def events(self):
         # invoke the plugin to find out more
@@ -242,14 +251,12 @@ class EntityManager(TreeManager):
         if self.base_entity and not MULTIPLE_ENTITY_MODE:
             return base_entity_id
 
-    def some_thing(self):
-        print "*********"
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
     short_name = models.CharField(blank=True, help_text="e.g. Haematology",
         max_length=100, null=True, verbose_name="Short name for menus")
-    abstract_entity = models.BooleanField("Abstract entity", default=False,
+    abstract_entity = models.BooleanField("abstract", default=False,
         help_text=u"Select if this <em>group</em> of entities, but not an entity itself, or if it's just a grouping of people",)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     display_parent = models.BooleanField(u"Include parent entity's name in address", default=True, help_text=u"Deselect if this entity recapitulates its parent's name")
@@ -631,6 +638,13 @@ class Person(PersonLite, CommonFields):
             return self.get_role.entity
         return None
                 
+    def get_entity_short_name(self):
+        if self.get_entity:
+            return self.get_entity.short_name
+        else:
+            return u""
+    get_entity_short_name.short_description = "Entity"
+
     @property
     def get_building(self):
         """

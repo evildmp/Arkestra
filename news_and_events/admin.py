@@ -2,10 +2,14 @@ from datetime import datetime
 
 from django import forms
 from django.contrib import admin, messages
+from django.contrib.admin import SimpleListFilter
 from django.db.models import ForeignKey
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.translation import ugettext_lazy as _
 
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
+
+from treeadmin.admin import TreeAdmin
 
 from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, fieldsets
 
@@ -174,7 +178,23 @@ class EventForm(NewsAndEventsForm):
         return data
     '''
 
-class EventAdmin(NewsAndEventsAdmin):
+class EventIsSeries(SimpleListFilter):
+    title = _('actual/series')
+    parameter_name = 'series'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('actual', _('Actual')),
+            ('series', _('Series')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'actual':
+            return queryset.filter(series=False)
+        if self.value() == 'series':
+            return queryset.filter(series=True)
+
+class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
     # some general settings
     form = EventForm
     filter_horizontal = (
@@ -184,11 +204,10 @@ class EventAdmin(NewsAndEventsAdmin):
         'featuring', 
         )
     ordering = ['type',]
-    change_list_template = "admin/news_and_events/event/change_list.html"
-    list_display = ('short_title','parent',   'start_date', 'series', 'slug',)
-    list_editable = ('parent',  'start_date',  'series', 'slug',)
-    search_fields = ['title',]
-    list_filter = ('start_date',)
+    list_display = ('short_title', 'hosted_by', 'start_date')
+    list_editable = ()
+    search_fields = ['title']
+    list_filter = (EventIsSeries,)
     save_as = True
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']
@@ -224,44 +243,6 @@ class EventAdmin(NewsAndEventsAdmin):
             ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
         )
 
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context.update({
-                'root_events': Event.objects.filter(level=0),
-                'has_add_permission': request.user.has_perm('news_and_events.add_event'),
-                'has_change_permission': request.user.has_perm('news_and_events.change_event'),
-                'has_delete_permission': request.user.has_perm('news_and_events.delete_event'),
-        })
-        return super(EventAdmin, self).changelist_view(request, extra_context)
-    def get_urls(self):
-        from django.conf.urls.defaults import patterns, url
-        urls = super(EventAdmin, self).get_urls()
-        # helper for url pattern generation
-        info = "%sadmin_%s_%s" % (self.admin_site.name, self.model._meta.app_label, self.model._meta.module_name)
-        #pat = lambda regex, fn: url(regex, self.admin_site.admin_view(fn), name='%s_%s' % (info, fn.__name__))
-        url_patterns = patterns('',
-            url(r'^([0-9]+)/move-page/$', self.admin_site.admin_view(self.move_event), name='%s_%s' % (info, 'move_page') ),
-            #pat(r'^([0-9]+)/move-page/$', self.move_entity),
-        )
-        url_patterns.extend(urls)
-        return url_patterns
-    def move_event(self, request, event_id, extra_context=None):
-        target = request.POST.get('target', None)
-        position = request.POST.get('position', None)
-        if target is None or position is None:
-            return HttpResponseRedirect('../../')            
-        try:
-            event = self.model.objects.get(pk=event_id)
-            target = self.model.objects.get(pk=target)
-        except self.model.DoesNotExist:
-            return HttpResponse("error")
-        # does he haves permissions to do this...?
-        if not request.user.has_perm('news_and_events.change_event'):
-            return HttpResponse("Denied")
-        # move page
-        event.move_to(target, position)
-        event.save()
-        return HttpResponse("ok")
 
 class EventTypeAdmin(admin.ModelAdmin):
     pass

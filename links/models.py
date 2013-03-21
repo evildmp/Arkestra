@@ -175,6 +175,10 @@ class ExternalLink(models.Model):
     def __unicode__(self):
         return self.title or self.url
 
+        
+    def get_absolute_url(self):
+        return self.url
+
     def save(self, *args, **kwargs):
         # here we either find the ExternalSite to attach to, or create it if it doesn't exist
         # split url into component parts
@@ -211,13 +215,17 @@ class LinkType(models.Model):
 
 
 class ExternalSite(models.Model):
-    site = models.CharField(max_length=50,help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", null = True)
+    site = models.CharField(
+        max_length=50,
+        help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", 
+        null = True
+        )
     domain = models.CharField(max_length=256, null = True, blank = True,)
-    parent = models.ForeignKey('self', blank=True, null = True, related_name='children') # for tree version of ExternalLinks
+    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
     
     class Meta:
         ordering = ['domain',]
-            
+    
     def __unicode__(self):
         # if this site is unnamed, let's see if it has a named ancestor
         if self.site == self.domain:
