@@ -10,8 +10,6 @@ from django.conf import settings
 from cms.models import CMSPlugin
 
 from filer.fields.file import FilerFileField
-from filer.fields.image import FilerImageField
-# from filer.fields.video import FilerVideoField
 from filer.models.filemodels import File
 from filer import settings as filer_settings
 

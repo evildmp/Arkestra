@@ -34,10 +34,12 @@ class ArkestraGenericModel(models.Model):
     in_lists = models.BooleanField(_(u"Display in lists"), default=True, db_index=True,
         help_text=_(u"If deselected, this item will not appear in lists"))
     body = PlaceholderField('body', help_text="Not used or required for external items")    
-    image = FilerImageField(null=True, blank=True)
+    image = FilerImageField(on_delete=models.SET_NULL, null=True, blank=True)
 
     # universal plugin fields 
-    hosted_by = models.ForeignKey(Entity, default=Entity.objects.default_entity_id(),
+    hosted_by = models.ForeignKey(Entity, 
+        on_delete=models.SET_DEFAULT,
+        default=Entity.objects.default_entity_id(),
         related_name='%(class)s_hosted_events', null=True, blank=True,
         help_text=u"The entity responsible for publishing this item")
     publish_to = models.ManyToManyField(
@@ -112,7 +114,9 @@ class ArkestraGenericModel(models.Model):
 class ArkestraGenericPluginOptions(models.Model):
     class Meta:
         abstract = True
-    entity = models.ForeignKey(Entity, null=True, blank=True, 
+    entity = models.ForeignKey(Entity, 
+        on_delete=models.SET_NULL,
+        null=True, blank=True, 
         help_text="Leave blank for autoselect", 
         related_name="%(class)s_plugin")
     LAYOUTS = (
