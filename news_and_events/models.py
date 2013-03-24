@@ -12,8 +12,6 @@ import mptt
 from cms.models import CMSPlugin
 from cms.models.fields import PlaceholderField
 
-from filer.fields.image import FilerImageField
-
 from contacts_and_people.models import Entity, Person, Building
 
 from links.models import ExternalLink
@@ -83,11 +81,15 @@ class Event(NewsAndEvents, LocationModelMixin):
     url_path = "event"
     objects = EventManager()
 
-    type = models.ForeignKey('EventType')
+    type = models.ForeignKey('EventType',
+        on_delete=models.PROTECT)
     featuring = models.ManyToManyField(Person, related_name='%(class)s_featuring',
         null=True, blank=True,
         help_text="The speakers, lecturers, instructors or other people featured in this event")
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
+    parent = models.ForeignKey('self', 
+        blank=True, null=True, 
+        on_delete=models.PROTECT,
+        related_name='children')
     SERIES = (
         (False, u"an actual event"),
         (True, u"a series of events"),
@@ -119,8 +121,9 @@ class Event(NewsAndEvents, LocationModelMixin):
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     single_day_event = models.BooleanField(default=False)
-    building = models.ForeignKey(Building, null=True, blank=True)
-    # this won't appear in the admin
+    building = models.ForeignKey(Building, 
+        null=True, blank=True,
+        on_delete=models.SET_NULL)
     jumps_queue_on = models.DateField(null=True, blank=True,
         help_text=u"Will become a featured item on this date") 
     jumps_queue_everywhere = models.BooleanField(default=False)

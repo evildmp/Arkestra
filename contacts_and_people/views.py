@@ -120,7 +120,7 @@ def person(request, slug, active_tab=""):
     """
     Responsible for the person pages
     """
-    person = get_object_or_404(Person,slug=slug)
+    person = get_object_or_404(Person, slug=slug, active=True)
     person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
     home_role = person.get_role

@@ -165,9 +165,12 @@ class ExternalLink(models.Model):
     # this would have unique = True, but it makes it too hard to migrate from databases with duplicates
     url = models.CharField(max_length=255)
     external_site = models.ForeignKey('ExternalSite', related_name="links",
-        null=True, blank=True)
+        null=True, blank=True,
+        on_delete=models.PROTECT)
     description = models.TextField(max_length=256, null=True, blank=True)
-    kind = models.ForeignKey('LinkType', blank=True, null = True, related_name='links')
+    kind = models.ForeignKey('LinkType', 
+        blank=True, null = True, on_delete=models.SET_NULL,
+        related_name='links')
     
     class Meta:
         ordering = ['title',]
