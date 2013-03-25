@@ -336,16 +336,12 @@ class ImageSetItemFormFormSet(forms.models.BaseInlineFormSet):
 
 class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
     form = ImageSetItemPluginForm
-    # formset = ImageSetItemFormFormSet
-    # related_search_fields = ['destination_content_type']
     model=ImageSetItem
     extra=1
     
-    
     fieldset_basic = ('', {'fields': ((
         'image',                        
-        'inline_item_ordering', 
-        'active',
+        'alt_text',
         ),)})
     fieldset_advanced = ('Caption', {
         'fields': (
@@ -354,19 +350,25 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
         ), 
         'classes': ('collapse',)
         })
+    fieldset_control = ('Control', {
+        'fields': (
+            ( 'inline_item_ordering', 'active'), 
+        ), 
+        'classes': ('collapse',)
+        })
     fieldsets = (
-                fieldset_basic, 
-                fieldset_advanced,         
-                ("Link", {
-                    'fields': (
-                        ('destination_content_type', 'destination_object_id',), 
-                        'alt_text',
-                        ('auto_link_title', 'manual_link_title'), ( 'auto_link_description', 'manual_link_description'),
-                    ),
-                    'description': "Links will only be applied if <em>all</em> images in the set have links.",
-                    'classes': ('collapse',),
-            }),
-)
+        fieldset_basic, 
+        fieldset_advanced,         
+        ("Link", {
+            'fields': (
+                ('destination_content_type', 'destination_object_id',), 
+                ('auto_link_title', 'manual_link_title'), ( 'auto_link_description', 'manual_link_description'),
+            ),
+            'description': "Links will only be applied if <em>all</em> images in the set have links.",
+            'classes': ('collapse',),
+        }), 
+        fieldset_control,
+        )
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'cols':30, 'rows':3,},),},
     }
