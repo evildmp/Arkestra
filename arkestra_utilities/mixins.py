@@ -10,7 +10,10 @@ class URLModelMixin(models.Model):
     # url fields
     url = models.URLField(null=True, blank=True, verify_exists=True, 
         help_text=u"To be used <strong>only</strong> for external items. Use with caution!")
-    external_url = models.ForeignKey(ExternalLink, related_name="%(class)s_item", blank=True, null=True,
+    external_url = models.ForeignKey(ExternalLink, 
+        related_name="%(class)s_item", 
+        on_delete=models.PROTECT,
+        blank=True, null=True,
         help_text=u"Select an item from the External Links database."
         )                              
     slug = models.SlugField(unique=True, max_length=60, blank=True, help_text=u"Do not meddle with this unless you know exactly what you're doing!", error_messages={"unique": "unique"})

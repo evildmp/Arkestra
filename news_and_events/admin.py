@@ -207,7 +207,7 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
     list_display = ('short_title', 'hosted_by', 'start_date')
     list_editable = ()
     search_fields = ['title']
-    list_filter = (EventIsSeries,)
+    list_filter = (EventIsSeries, 'start_date')
     save_as = True
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']

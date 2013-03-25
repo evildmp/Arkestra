@@ -1,19 +1,14 @@
 from django.db import models
 
-# from cms.models.fields import PlaceholderField
 from cms.models import CMSPlugin
 
-# from filer.fields.image import FilerImageField
 
 from arkestra_utilities.output_libraries.dates import nice_date
-# from arkestra_utilities.models import ArkestraGenericModel
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
 from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
 
 from contacts_and_people.models import Entity, Person #, default_entity_id
-
-# from links.models import ExternalLink
 
 from managers import VacancyManager, StudentshipManager
 
