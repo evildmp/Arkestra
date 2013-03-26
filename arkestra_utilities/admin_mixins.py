@@ -1,6 +1,8 @@
 from django.db.models import ForeignKey
 from django.conf import settings
 from django import forms
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import ugettext_lazy as _
 
 from cms.utils import cms_static_url
 
@@ -38,6 +40,24 @@ class SupplyRequestMixin(object):
         return form_class
 
 
+class HostedByFilter(SimpleListFilter):
+    title = _('hosting Entity')
+    parameter_name = 'entity'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('my', _('My entities')),
+            ('nobody', _('None')),
+        )
+
+    def queryset(self, request, queryset):
+        entities = Entity.objects.all()
+        myentities = entities.filter(people__in=request.user.person_user.all())
+        if self.value() == 'my':
+            return queryset.filter(hosted_by__in=myentities)
+        if self.value() == 'nobody':
+            return queryset.exclude(hosted_by__in=entities)
+
 class GenericModelAdmin(AutocompleteMixin, SupplyRequestMixin, ModelAdminWithTabsAndCMSPlaceholder):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
@@ -48,7 +68,23 @@ class GenericModelAdmin(AutocompleteMixin, SupplyRequestMixin, ModelAdminWithTab
 
 class InputURLMixin(forms.ModelForm): 
     # really this is simply acting as a base admin form for various models
-    # but not just GenericModels (e.g. Person, Entity too)
+    # but not just GenericModels:
+    #
+    #   PersonForm(InputURLMixin):
+    #   EntityForm(InputURLMixin)
+    #   LinkItemForm(InputURLMixin)
+    #   GenericModelForm(InputURLMixin)
+    #       NewsAndEventsForm(GenericModelForm)
+    #           NewsArticleForm(NewsAndEventsForm)
+    #           Event(NewsAndEventsForm)
+    #       VacancyStudentshipForm(GenericModelForm)
+    #           VacancyForm(VacancyStudentshipForm)
+    #           StudentshipForm(VacancyStudentshipForm)
+    #
+    # when https://code.djangoproject.com/ticket/19617 is fixed 
+    # probably by https://github.com/linovia/django/compare/master...forms_metaclasses_rationalization
+    # we can do something nicer
+    
     input_url = forms.CharField(max_length=255, required = False,
         help_text=u"<strong>External URL</strong> not found above? Enter a new one.", 
         )

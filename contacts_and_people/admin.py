@@ -205,10 +205,29 @@ class PersonIsExternal(SimpleListFilter):
             return queryset.filter(external_url=None)
         
 
+class PersonEntity(SimpleListFilter):
+    title = _('Entity membership')
+    parameter_name = 'entity'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('my', _('My entities')),
+            ('nobody', _('None')),
+        )
+
+    def queryset(self, request, queryset):
+        entities = models.Entity.objects.all()
+        myentities = entities.filter(people__in=request.user.person_user.all())
+        if self.value() == 'my':
+            return queryset.filter(entities__in=myentities)
+        if self.value() == 'nobody':
+            return queryset.exclude(entities__in=entities)
+
+
 class PersonAdmin(PersonAndEntityAdmin):    
     search_fields = ['given_name','surname','institutional_username',]
     form = PersonForm
-    list_filter = (HasHomeRole, PersonIsExternal, 'active')
+    list_filter = (HasHomeRole, PersonIsExternal, PersonEntity, 'active')
     list_display = ('surname', 'given_name','get_entity_short_name', 'active')
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
@@ -341,6 +360,19 @@ class EntityIsExternal(SimpleListFilter):
             return queryset.exclude(website=None)
         if self.value() == 'nowebsite':
             return queryset.filter(website=None, external_url=None)
+
+class MyEntity(SimpleListFilter):
+    title = _('Entity membership')
+    parameter_name = 'entity'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('my', _('My entities')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'my':
+            return queryset.filter(people__in=request.user.person_user.all())
         
 
 class EntityAdmin(PersonAndEntityAdmin, TreeAdmin): 
@@ -348,7 +380,7 @@ class EntityAdmin(PersonAndEntityAdmin, TreeAdmin):
     search_fields = ['name',]
     form = EntityForm
     list_display = ('name',)
-    list_filter = (EntityIsExternal, 'abstract_entity')     
+    list_filter = (EntityIsExternal, MyEntity, 'abstract_entity')     
     list_max_show_all = 400
     list_per_page = 400
     related_search_fields = ['parent', 'building', 'website', 'external_url',]    

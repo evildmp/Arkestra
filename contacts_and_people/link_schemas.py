@@ -3,7 +3,8 @@
 from contacts_and_people import models, admin
 from links import schema, LinkWrapper
 from django.utils.encoding import smart_unicode
-
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from easy_thumbnails.files import get_thumbnailer
 from widgetry.views import search
 
@@ -37,6 +38,27 @@ class PersonWrapper(LinkWrapper):
     def heading(self):
         return "Related people"
 schema.register_wrapper(models.Person,PersonWrapper)
+
+class UserWrapper(LinkWrapper):
+    search_fields = UserAdmin.search_fields
+
+    def title(self):
+        return "%s: %s" %(self.obj.get_full_name(), self.obj.__unicode__())
+        
+    def short_text(self):
+        return u"%s %s" % (self.obj.first_name, self.obj.last_name)
+
+    def description(self):
+        data = [group.__unicode__() for group in self.obj.groups.all()]
+        if self.obj.is_staff:
+            data.append(u"Admin user")
+        if self.obj.is_superuser:
+            data.append(u"Super user")
+        data.append(u"Last login: %s" % unicode(self.obj.last_login))
+        return '<br /> '.join(data)
+
+
+schema.register_wrapper(models.User, UserWrapper)
 
 
 class EntityWrapper(LinkWrapper):

@@ -11,7 +11,7 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from treeadmin.admin import TreeAdmin
 
-from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, fieldsets
+from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, HostedByFilter, fieldsets
 
 from links.admin import ExternalLinkForm, ObjectLinkInline
 
@@ -75,7 +75,7 @@ class NewsArticleForm(NewsAndEventsForm):
 class NewsArticleAdmin(NewsAndEventsAdmin):
     # some general settings
     form = NewsArticleForm
-    list_filter = ('date',)
+    list_filter = ('date', HostedByFilter)
     read_only_fields = ('sticky_until')
     filter_horizontal = (
         'please_contact',
@@ -196,7 +196,9 @@ class EventIsSeries(SimpleListFilter):
         if self.value() == 'series':
             return queryset.filter(series=True)
 
+
 class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
+    
     # some general settings
     form = EventForm
     filter_horizontal = (
@@ -209,7 +211,7 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
     list_display = ('short_title', 'hosted_by', 'start_date')
     list_editable = ()
     search_fields = ['title']
-    list_filter = (EventIsSeries, 'start_date')
+    list_filter = (EventIsSeries, 'start_date', HostedByFilter)
     save_as = True
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']

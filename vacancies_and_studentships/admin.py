@@ -9,7 +9,7 @@ from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from arkestra_utilities.widgets.wym_editor import WYMEditor
 from arkestra_utilities import admin_tabs_extension
-from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, fieldsets
+from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, HostedByFilter, fieldsets
 
 from links.admin import ExternalLinkForm, ObjectLinkInline
 
@@ -25,6 +25,7 @@ class VacancyStudentshipAdmin(GenericModelAdmin, ModelAdminWithTabsAndCMSPlaceho
     search_fields = ['short_title','title','summary', 'slug','url']
     list_display = ('short_title', 'hosted_by', 'closing_date',)
     list_display = ('short_title', 'closing_date', 'hosted_by',)
+    list_filter = ('closing_date', HostedByFilter)
     related_search_fields = [
         'hosted_by',
         'please_contact',
