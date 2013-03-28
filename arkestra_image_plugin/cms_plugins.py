@@ -202,7 +202,7 @@ def multiple_images(imageset, context):
         else:            
             item.width,item.height = int(each_item_width), int(each_item_height)
             # print item.width,item.height
-        item.image_size = u'%sx%s' %(item.width, item.height) 
+        # item.image_size = u'%sx%s' %(item.width, item.height) 
         item.caption_width=item.width
 
     # # if forced_native, set each individually
@@ -269,10 +269,10 @@ def single_image(imageset, context):
                 
     # calculate height 
     imageset.item.width, imageset.item.height = calculate_height(imageset.width, imageset.height, imageset.aspect_ratio, width, aspect_ratio)
-    imageset.item.image_size = u'%sx%s' % (int(imageset.item.width), int(imageset.item.height))
 
-    # imageset.item.caption = set_image_caption(imageset.item)
     imageset.item.width,imageset.item.height = int(imageset.item.width), int(imageset.item.height)
+    
+
     imageset.item.caption_width = imageset.item.width
     return imageset
                 
@@ -420,20 +420,18 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
     def render(self, context, imageset, placeholder):
 
         # get only active ones
-        imageset.items = imageset.imageset_item.filter(active=True)
+        imageset.items = list(imageset.imageset_item.active_items())
         
         # don't do anything if there are no items in the imageset
-        if imageset.items.count():
+        if imageset.items:
             # calculate the width of the block the image will be in
             imageset.container_width = int(width_of_image_container(context, imageset))
-            # copy the queryset to a list. You know it makes sense
-            imageset.items = list(imageset.items)
             
             # at least two items are required for a slider
-            if imageset.kind == "slider" and imageset.number_of_items > 1:
+            if imageset.kind == "slider" and len(imageset.items) > 1:
                 imageset = slider(imageset)
 
-            elif imageset.kind == "lightbox" or (imageset.kind == "multiple" and imageset.number_of_items > 1):
+            elif imageset.kind == "lightbox" or (imageset.kind == "multiple" and len(imageset.items) > 1):
                 imageset = multiple_images(imageset, context)
 
             elif imageset.kind == "lightbox-single":
@@ -447,13 +445,8 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
                 'imageset':imageset,
                 })
 
-        # no items, use a null template    
         else:
-            # print "using a null template" , imageset
             self.render_template = "null.html"  
-            # context.update({
-            #     'placeholder':placeholder,
-            # })
         return context
 
             
@@ -591,7 +584,6 @@ class EmbeddedVideoPlugin(CMSPluginBase):
                 'height': height,
                 })
 
-        # no items, use a null template    
         else:
             self.render_template = "null.html"  
         return context

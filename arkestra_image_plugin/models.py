@@ -128,7 +128,7 @@ class ImageSetPlugin(CMSPlugin):
         (0, u'Automatic'),
         (3.0, u'3x1'),
         (1.778, u'16x9'),
-        (1.618, u'Golden ratio (horizonal)'),
+        (1.618, u'Golden ratio (horizontal)'),
         (1.5, u'3x2'),
         (1.333, u'4x3'),
         (1.0, u'Square'),
@@ -159,9 +159,6 @@ class ImageSetPlugin(CMSPlugin):
     def number_of_items(self):
         return self.imageset_item.count()
 
-    @property
-    def active_items(self):
-        return self.imageset_item.filter(active=True)
 
     def __unicode__(self):
         return u"image-set-%s" % self.kind
@@ -176,7 +173,7 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
     class Meta:
         ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
-    image = FilerImageField()
+    image = FilerImageField(on_delete=models.PROTECT)
     alt_text = models.CharField(null=True, blank=True, max_length=255,
         help_text = "The image's meaning, message or function (if any). Leave empty for items with links."
         )
@@ -239,7 +236,11 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
             return self.alt_text or self.destination_content_object
         else: 
             return ""
-            
+
+    @property
+    def image_size(self):
+        return u'%sx%s' % (self.width, self.height)
+                    
 class EmbeddedVideoSetPlugin(CMSPlugin):
     # IMAGESET_KINDS = (
     #     ("basic", "Basic"),
@@ -296,8 +297,17 @@ class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
     video_autoplay = models.BooleanField(_("Autoplay"), default=False)
 
     ASPECT_RATIOS = (
+        (3.0, u'3x1'),
         (1.778, u'16x9'),
+        (1.618, u'Golden ratio (horizontal)'),
+        (1.5, u'3x2'),
         (1.333, u'4x3'),
+        (1.0, u'Square'),
+        (.75, u'3x4'),
+        (.667, u'2x3'),
+        (0.618, u'Golden ratio (vertical)'),
+        (0.563, u'9x16'),
+        (0.3, u'1x3'),
         )
     aspect_ratio = models.FloatField(choices = ASPECT_RATIOS, default = 1.333,          
         help_text = "Adjust to match video file"
