@@ -166,10 +166,12 @@ class ExternalLink(models.Model):
     url = models.CharField(max_length=255)
     external_site = models.ForeignKey('ExternalSite', related_name="links",
         null=True, blank=True,
-        on_delete=models.PROTECT)
+        on_delete=models.PROTECT
+        )
     description = models.TextField(max_length=256, null=True, blank=True)
     kind = models.ForeignKey('LinkType', 
-        blank=True, null = True, on_delete=models.SET_NULL,
+        blank=True, null = True, 
+        on_delete=models.SET_NULL,
         related_name='links')
     
     class Meta:
@@ -289,10 +291,6 @@ class GenericLinkListPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
-    @property
-    def active_items(self):
-        return self.links_item.filter(active=True)
-
 
 
 class CarouselPlugin(CMSPlugin):
@@ -341,9 +339,6 @@ class CarouselPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
-    @property
-    def active_items(self):
-        return self.carousel_item.filter(active=True)
 
 
 class CarouselPluginItem(BaseLink, LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
