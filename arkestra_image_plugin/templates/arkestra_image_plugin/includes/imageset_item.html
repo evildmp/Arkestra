@@ -13,7 +13,7 @@
 {% if imageset.kind == "lightbox-single" %}
 	<a class="fancy" href="/arkestra-lightbox-item/{{ item.id }}/{{ lightbox_max_dimension }}/" style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
         {% if forloop.first %}
-   	        <span class="image-title">{{ imageset.number_of_items }} images</span>
+   	        <span class="image-title">{{ imageset.items.count }} images</span>
    	        <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
             <span class="link-arrow"></span>
   	    {% else %}

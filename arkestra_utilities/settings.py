@@ -88,6 +88,13 @@ PLUGIN_HEADING_LEVELS = getattr(settings, "PLUGIN_HEADING_LEVELS", (
 
 IMAGESET_ITEM_PADDING = getattr(settings, "IMAGESET_ITEM_PADDING", 10) # should be relative to templates!
 
+# a dictionary to show how many items per row depending on the number of items
+LIGHTBOX_COLUMNS = getattr(
+    settings, 
+    "LIGHTBOX_COLUMNS",
+    {1:1, 2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
+    )
+
 PERMITTED_FILETYPES = getattr(settings, "PERMITTED_FILETYPES", ["pdf",])
 
 
