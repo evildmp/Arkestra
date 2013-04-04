@@ -162,40 +162,19 @@ class ImageSetPublisher(SupplyRequestMixin, CMSPluginBase):
         
     def render(self, context, imageset, placeholder):
 
-        # don't do anything if there are no items in the imageset
-        if imageset.active_items:  
-            # calculate the width of the block the image will be in
-            imageset.container_width = int(imageset.width_of_image_container(context))
-            
-            # at least two items are required for a slider
-            if imageset.kind == "slider" and imageset.active_items.count() > 1:
-                imageset.slider()
-
-            # multiple_images() prepares a gallery of images
-            elif imageset.kind == "lightbox" or (imageset.kind == "multiple" and imageset.active_items.count() > 1):
-                imageset.multiple_images()
-
-            elif imageset.kind == "lightbox-single":
-                imageset = lightbox_single(imageset, context)
-
-            else:
-                imageset.single_image()
-
-            self.render_template = imageset.template  
+        kind = imageset.select_imageset_kind()
+        if kind:
+            getattr(imageset, kind)(context)
             context.update({
                 'imageset':imageset,
-                })
-
-        else:
-            self.render_template = "null.html"  
+                }) 
+        self.render_template = imageset.template
         return context
-
-            
+        
     def __unicode__(self):
         return self
 
     def icon_src(self, instance):
-        # print instance.kind
         if instance.imageset_item.count() == 1:
             try:
                 return instance.imageset_item.all()[0].image.thumbnails['admin_tiny_icon']
@@ -233,17 +212,17 @@ class FilerImagePlugin(CMSPluginBase):
         instance.has_borders = False
         
         # calculate its width and aspect ratio
-        instance.container_width = instance.width_of_image_container(context)
+        instance.get_container_width(context)
 
         # calculate its native aspect ratio
-        aspect_ratio = calculate_aspect_ratio(instance.image)
+        aspect_ratio = instance.calculate_aspect_ratio([instance.image])
         # get width
-        width = instance.width_of_image(instance.image)
+        width = instance.get_plugin_width(instance.image)
         # shave if floated
-        width = imageset.shave_if_floated(width) or width
+        width = instance.shave_if_floated(width) or width
         
         # calculate height 
-        instance.width, instance.height = instance.calculate_height(width, aspect_ratio)
+        instance.width, instance.height = instance.calculate_plugin_dimensions(width, aspect_ratio)
         # set caption
         instance.caption = set_image_caption(instance)
         instance.subject_location = instance.image.subject_location
@@ -314,8 +293,9 @@ class EmbeddedVideoPlugin(CMSPluginBase):
             video = embeddedvideoset.active_items.order_by('?')[0]
 
             # calculate the width of the block the image will be in
-            width = int(embeddedvideoset.width_of_image_container(context))
-            height = int(width/video.aspect_ratio)
+            embeddedvideoset.get_container_width(context)
+            width = embeddedvideoset.container_width
+            height = int(embeddedvideoset.container_width/video.aspect_ratio)
 
             self.render_template = VIDEO_HOSTING_SERVICES[video.service]["template"]
             context.update({
