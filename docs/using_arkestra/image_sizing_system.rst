@@ -59,7 +59,7 @@ If it's an absolute width or the native width of the image, then that's settled.
 
 In summary, it looks like this:
 * the rendering plugin
-	* `width_of_image` - if not None (native width) or negative (absolute width) then:
+	* `get_plugin_width` - if not None (native width) or negative (absolute width) then:
 		* `get_placeholder_width`
 			* `SimplePlaceholderWidthAdjuster` (the default `placeholder_width` adjuster)
 		* `calculate_container_width`

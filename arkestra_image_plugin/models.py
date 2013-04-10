@@ -1,3 +1,4 @@
+from __future__ import division
 from posixpath import join, basename, splitext, exists
 
 from django.utils.translation import ugettext_lazy as _
@@ -13,91 +14,101 @@ from filer.fields.file import FilerFileField
 
 from arkestra_utilities.import_free_model_mixins import ArkestraGenericPluginItemOrdering
 from arkestra_utilities.settings import VIDEO_HOSTING_SERVICES
+from arkestra_utilities.output_libraries.plugin_widths import get_placeholder_width, calculate_container_width
 
 from links.models import LinkMethodsMixin
 
-class FilerImage(CMSPlugin):
-    LEFT = "left"
-    RIGHT = "right"
-    image = FilerImageField()
-    IMAGE_WIDTHS = (
-        (1000.0, u"Automatic"),
-        (u'Widths relative to the containing column', (
-            (100.0, u"100%"),
-            (75.0, u"75%"),
-            (66.7, u"66%"),
-            (50.0, u"50%"),
-            (33.3, u"33%"),
-            (25.0, u"25%"),
-            )
-        ),
-        (u'Absolute widths', (
-            (-50.0, u'50 pixels square, cropped'),
-            (-175.0, u'175 pixels'),
-            (-350.0, u'350 pixels'),
-            )
-        ),    
-        ('0', u"Image's native width"),
-    )
-    width = models.FloatField(null=True, blank=True, choices = IMAGE_WIDTHS, default = 1000.0)
-    height = models.PositiveIntegerField(null=True, blank=True)
-    ASPECT_RATIOS = (
-        (0, u'Native'),
-        (1.5, u'3x2'),
-        (1.333, u'4x3'),
-        (1.0, u'Square'),
-        (.75, u'3x4'),
-        (.667, u'2x3'),
-        (.3, u'1x3'),
-        (3.0, u'3x1'),
-        )
-    aspect_ratio = models.FloatField(null=True, choices = ASPECT_RATIOS, default = 0)
-    alt_text = models.CharField(null=True, blank=True, max_length=255)
-    use_description_as_caption = models.BooleanField(verbose_name = "Show caption", default=False, help_text = "Use image's description field as caption; override using <em>Caption</em> field below")
-    caption = models.TextField(_("Caption"), blank=True, null=True)
-    use_autoscale = models.BooleanField(_("use automatic scaling"), default=False, 
-                                        help_text=_('tries to auto scale the image based on the placeholder context'))
-    FLOAT_CHOICES = ((LEFT, _("left")),
-                     (RIGHT, _("right")),
-                     )
-    float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
+from arkestra_utilities.settings import IMAGESET_ITEM_PADDING, LIGHTBOX_COLUMNS
+
+
+class ImageSetTypePluginMixin(object):
+
+    def get_container_width(self, context):
+        # Based on the plugin settings and placeholder width, calculate image container width
     
+        # work out native image aspect ratio
+        self.has_borders = False
+    
+        # width values
+        # None:     use native width
+        # <0:       an absolute value
+        # <=100:    a percentage of placeholder's width
+        # 1000:     automatic, based on placeholder's width
+    
+        placeholder_width = get_placeholder_width(context, self)
 
-
-    '''
-    @property
-    def scaled_image_url(self):
-        h = self.height or self.image.width
-        w = self.width or self.image.height
-        tn = unicode(DjangoThumbnail(self.image.file, (w,h), opts=['crop','upscale'] ))
-        return tn
-    '''
-    def __unicode__(self):
-        if self.image:
-            return self.image.label
+        if self.width > 0 and self.width <= 100:
+            width = placeholder_width/100.0 * self.width
+            auto = False
         else:
-            return u"Image Publication %s" % self.caption
-        return ''     
+            width = placeholder_width
+            auto = True 
         
-    @property
-    def alt(self): 
-        return self.alt_text
-        
-    @property
-    def link(self):
-        if self.free_link:
-            return self.free_link
-        elif self.page_link and self.page_link:
-            return self.page_link.get_absolute_url()
-        else:
-            return ''
+        # calculate the width of the block the image will be in 
+        self.container_width = int(calculate_container_width(context, self, width, auto)) 
+        return self.container_width # return it for further processing
 
-class ImageSetPlugin(CMSPlugin):
+    def get_plugin_width(self, image=None):
+        # given plugin.width and plugin.container_width and optionally an image,
+        # return the width we'll use for the plugin. Mostly it will be the same as
+        # plugin.container_width, but for native and absolute sizes we ignore that
+        
+        # no plugin width? use native image width or container width 
+        if not self.width:
+            if image:
+                # use native image width
+                width = image.width
+            else:
+                # use container width
+                width = 0
+        # negative plugin widths are absolutes
+        elif self.width < 0:
+            width = -self.width   
+        else:
+            width = 0 
+        return width
+
+    def shave_if_floated(plugin, width):
+        # shave off 5 point if the image is floated, to make room for a margin
+        # see arkestra.css, span.image.left and span.image.right
+        if plugin.float and plugin.width > 0:
+            # print "-5 for float"
+                return width - 5
+
+    def calculate_aspect_ratio(self, item_list):
+        return sum(
+            [float(
+                item.image.width)/item.image.height for item in item_list]
+            )/len(item_list)
+
+    def calculate_plugin_dimensions(self, calculated_width, calculated_aspect_ratio):
+
+        # calculated_width and self.aspect_ratio determine height 
+        if self.aspect_ratio > 0:
+            return int(calculated_width), int(calculated_width / self.aspect_ratio)            
+
+        # no self.aspect_ratio, so self.height applies  
+        elif self.aspect_ratio == 0 and self.height:
+            # self.width exists, so use calculated_width and self.height
+            if self.width:
+                return int(calculated_width), int(self.height)
+            # no width has been set; calculate it from self.height
+            else:
+                return int(self.height * calculated_aspect_ratio), int(self.height)
+
+        # native width, aspect ratio and height
+        elif self.aspect_ratio == -1 or self.aspect_ratio == 0:  
+            return int(calculated_width), int(calculated_width/calculated_aspect_ratio)
+        else:
+            return int(calculated_width), int(calculated_width/calculated_aspect_ratio)
+
+            
+class ImageSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
     IMAGESET_KINDS = (
         ("basic", "Basic"),
-        ("multiple", "Multiple images"),
+        ("multiple", "Multiple image gallery"),
         ("lightbox", "Lightbox with gallery"),
-        ("lightbox-single", "Lightbox"),
+        ("lightbox-single", "Lightbox without gallery"),
         ("slider", "Slider"),
         )
     kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")
@@ -120,7 +131,7 @@ class ImageSetPlugin(CMSPlugin):
         ),    
         (0.0, u"Native"),
     )
-    width = models.FloatField(choices = IMAGE_WIDTHS, default = 1000.0)
+    width = models.FloatField(u"Width of set", choices = IMAGE_WIDTHS, default = 1000.0)
     height = models.PositiveIntegerField(null=True, blank=True,
         help_text = "Only applies when <strong>Aspect ratio</strong> is <em>Automatic</em>")
 
@@ -128,7 +139,7 @@ class ImageSetPlugin(CMSPlugin):
         (0, u'Automatic'),
         (3.0, u'3x1'),
         (1.778, u'16x9'),
-        (1.618, u'Golden ratio (horizonal)'),
+        (1.618, u'Golden ratio (horizontal)'),
         (1.5, u'3x2'),
         (1.333, u'4x3'),
         (1.0, u'Square'),
@@ -149,19 +160,129 @@ class ImageSetPlugin(CMSPlugin):
                      )
     float = models.CharField(_("float"), max_length=10, blank=True, null=True, choices=FLOAT_CHOICES)
     items_per_row = models.PositiveSmallIntegerField(blank = True, null = True,
-        help_text = "Only applies to Multiple and Lightbox plugins")
+        help_text = "Only applies to gallery-type plugins")
 
     @property
     def items_have_links(self):
         return all(item.destination_content_object is not None for item in self.imageset_item.all())
 
     @property
-    def number_of_items(self):
-        return self.imageset_item.count()
-
-    @property
     def active_items(self):
-        return self.imageset_item.filter(active=True)
+        return self.imageset_item.active_items()      
+        
+    def select_imageset_kind(self):   
+        if not self.active_items:  
+            self.template = "null.html"
+            return None
+        self.items = self.active_items
+        # at least two items are required for a slider
+        if self.kind == "slider" and self.active_items.count() > 1:
+            self.template = "arkestra_image_plugin/slider.html"
+            return "slider"
+        # multiple_images() prepares a gallery of images
+        elif self.kind == "lightbox" or \
+            (self.kind == "multiple" and self.active_items.count() > 1):
+            self.template = "arkestra_image_plugin/%s.html" %self.kind
+            return "multiple_images"
+        # lightbox_single can work with one iamge    
+        elif self.kind == "lightbox-single":
+            self.template = "arkestra_image_plugin/lightbox.html"            
+            return "lightbox_single"
+        else: 
+            self.template = "arkestra_image_plugin/single_image.html"
+            return "single_image"
+
+    def single_image(self, context={"placeholder_width": 500}):                 
+        # choose an image at random from the set
+        self.item = self.items.order_by('?')[0]
+        # get width 
+        width = self.get_plugin_width(self.item.image) or self.get_container_width(context) 
+        # shave if floated
+        width = self.shave_if_floated(width) or width
+        # calculate height 
+        self.item.width, self.item.height = self.calculate_plugin_dimensions(
+            width, 
+            self.calculate_aspect_ratio([self.item.image])
+            )
+
+        self.item.caption_width = self.item.width
+        self.items = [self.item]
+        
+    def multiple_images(self, context={"placeholder_width": 500}):
+        # for lightboxes and multiple image sets
+ 
+        self.padding = IMAGESET_ITEM_PADDING
+        padding_adjuster = IMAGESET_ITEM_PADDING * 2
+    
+        # don't allow more items_per_row than there are items
+        if self.items_per_row > self.items.count():
+            self.items_per_row = self.items.count()
+    
+        items_per_row = self.items_per_row or LIGHTBOX_COLUMNS.get(self.items.count(), 8) 
+
+        # each item will be the same width - the user gets no say in this
+        
+        each_item_width = self.get_container_width(context) / items_per_row
+        aspect_ratio = self.calculate_aspect_ratio(self.items) 
+        each_item_width, each_item_height = self.calculate_plugin_dimensions(
+            each_item_width, 
+            aspect_ratio
+            )        
+            
+        # fancybox icons and multiple images with links have padding, so:
+        if self.kind == "lightbox" or self.items_have_links:
+            each_item_width = each_item_width - padding_adjuster                   
+        else: 
+            # otherwise give them a margin
+            each_item_width = int(each_item_width - (items_per_row-1) * padding_adjuster/items_per_row)  
+
+        # set up each item
+        # for counter, item in enumerate(self.items, start = 1): 
+        # enable this when we no longer need to support Python 2.5
+        for counter, item in enumerate(self.items):
+            counter=counter+1
+            # mark end-of-row items in case the CSS needs it    
+            if not counter%items_per_row:
+                item.lastinrow = True
+
+            item.width = item.caption_width = each_item_width  
+            item.height = each_item_height 
+
+    def lightbox_single(self, context={"placeholder_width": 500}):
+        self.padding = IMAGESET_ITEM_PADDING
+        padding_adjuster = IMAGESET_ITEM_PADDING * 2
+        # convert to a list        
+        self.items = list(self.items)    
+        # choose the first image from the set
+        self.item = self.items[0]
+
+        # get width
+        width = self.get_plugin_width(self.item.image) or self.get_container_width(context)       
+        # shave if floated
+        width = self.shave_if_floated(width) or width
+
+        # fancybox icons  have padding, so:
+        width = width - padding_adjuster
+    
+        # calculate height 
+        self.item.width, self.item.height = self.calculate_plugin_dimensions(
+            width, self.calculate_aspect_ratio([self.item])
+            )
+        # item.caption = set_image_caption(self.item)
+        # item.width,item.height = int(item.width), int(item.height)
+        self.item.caption_width = self.item.width 
+
+    def slider(self, context={"placeholder_width": 500}):
+        # loops over the items in the set, and calculates their sizes
+        # for use in a slider
+        width = self.get_plugin_width() or self.get_container_width(context)
+
+        self.size = (self.calculate_plugin_dimensions(
+            width, self.calculate_aspect_ratio(self.items)
+            ))
+        
+        for item in self.items:
+            (item.width, item.height) = self.size
 
     def __unicode__(self):
         return u"image-set-%s" % self.kind
@@ -172,11 +293,12 @@ class ImageSetPlugin(CMSPlugin):
             plugin_item.plugin = self
             plugin_item.save()
 
+
 class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.Model):
     class Meta:
         ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
-    image = FilerImageField()
+    image = FilerImageField(on_delete=models.PROTECT)
     alt_text = models.CharField(null=True, blank=True, max_length=255,
         help_text = "The image's meaning, message or function (if any). Leave empty for items with links."
         )
@@ -239,16 +361,13 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
             return self.alt_text or self.destination_content_object
         else: 
             return ""
-            
-class EmbeddedVideoSetPlugin(CMSPlugin):
-    # IMAGESET_KINDS = (
-    #     ("basic", "Basic"),
-    #     ("multiple", "Multiple images"),
-    #     ("lightbox", "Lightbox with gallery"),
-    #     ("lightbox-single", "Lightbox"),
-    #     ("slider", "Slider"),
-    #     )
-    # kind = models.CharField(choices = IMAGESET_KINDS, max_length = 50, default = "basic")
+
+    @property
+    def image_size(self):
+        return u'%sx%s' % (int(self.width), int(self.height))
+
+                    
+class EmbeddedVideoSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
     IMAGE_WIDTHS = (
         (1000.0, u"Automatic"),
         (u'Relative to column', (
@@ -296,8 +415,17 @@ class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
     video_autoplay = models.BooleanField(_("Autoplay"), default=False)
 
     ASPECT_RATIOS = (
+        (3.0, u'3x1'),
         (1.778, u'16x9'),
+        (1.618, u'Golden ratio (horizontal)'),
+        (1.5, u'3x2'),
         (1.333, u'4x3'),
+        (1.0, u'Square'),
+        (.75, u'3x4'),
+        (.667, u'2x3'),
+        (0.618, u'Golden ratio (vertical)'),
+        (0.563, u'9x16'),
+        (0.3, u'1x3'),
         )
     aspect_ratio = models.FloatField(choices = ASPECT_RATIOS, default = 1.333,          
         help_text = "Adjust to match video file"

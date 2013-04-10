@@ -41,11 +41,11 @@ From this point you can wrestle Arkestra into submission on your own, or get sta
 Set up the supplied example project
 ===================================
 
-Arkestra includes example projects for both Django 1.4 and earlier versions.
+Arkestra includes an example project for Django 1.4.
 
 Assuming that your code was installed into src/arkestra in your virtualenv::
                                    
-    cd src/arkestra/example_14 # (or cd src/arkestra/example for Django < 1.4)
+    cd src/arkestra/example
     python manage.py syncdb --noinput # set up a new database; don't prompt for superuser
     python manage.py loaddata example_database.json # load the example database from the fixture
 

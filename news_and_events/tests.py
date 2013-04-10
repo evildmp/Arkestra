@@ -44,6 +44,9 @@ class NewsTests(TestCase):
         self.tootharticle.date = datetime.datetime(year=2012, month=12, day=12)
         self.assertEqual(self.tootharticle.get_when, "December 2012")
             
+@override_settings(
+    CMS_TEMPLATES = (('null.html', "Null"),)
+)
 class NewsEventsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
@@ -64,7 +67,7 @@ class NewsEventsViewsTests(TestCase):
         self.adminuser.is_staff=True
         self.adminuser.save()
 
-    def test_newsarticle_views(self):
+    def test_unpublished_newsarticle_404(self):
         self.tootharticle.save()
         
         # Issue a GET request.
@@ -73,13 +76,15 @@ class NewsEventsViewsTests(TestCase):
         # Check that the response is 404 because it's not published
         self.assertEqual(response.status_code, 404)
 
+    def test_unpublished_newsarticle_200_for_admin(self):
+        self.tootharticle.save()
+
         # log in a staff user
         self.client.login(username='arkestra', password='arkestra')        
         response = self.client.get('/news/all-about-teeth/')  
         self.assertEqual(response.status_code, 200)
         
-        # log out the staff user
-        self.client.logout()
+    def test_published_newsarticle_200_for_everyone(self):
         self.tootharticle.published = True
         self.tootharticle.save()
                 
@@ -87,44 +92,69 @@ class NewsEventsViewsTests(TestCase):
         response = self.client.get('/news/all-about-teeth/')  
         self.assertEqual(response.status_code, 200)
 
+    def test_published_newsarticle_context(self):
+        self.tootharticle.published = True
+        self.tootharticle.save()
+        response = self.client.get('/news/all-about-teeth/')  
         self.assertEqual(response.context['newsarticle'], self.tootharticle)
     
-    def test_news_and_events_views_in_multiple_entity_mode(self):
+    def test_news_and_events_main_url(self):
         self.school.save()
-
         response = self.client.get('/news-and-events/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_entity_url(self):
+        self.school.save()
         response = self.client.get('/news-and-events/medicine/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_bogus_entity_url(self):
+        self.school.save()
         response = self.client.get('/news-and-events/xxxx/')
         self.assertEqual(response.status_code, 404)
 
+    def test_news_and_events_main_archive_url(self):
+        self.school.save()
         response = self.client.get('/news-archive/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_entity__news_archive_url(self):
+        self.school.save()
         response = self.client.get('/news-archive/medicine/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_bogus_entity_news_archive_url(self):
+        self.school.save()
         response = self.client.get('/news-archive/xxxx/')
         self.assertEqual(response.status_code, 404)
 
+    def test_news_and_events_main_previous_events_url(self):
+        self.school.save()
         response = self.client.get('/previous-events/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_entity_previous_events_url(self):
+        self.school.save()
         response = self.client.get('/previous-events/medicine/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_bogus_entity_events_archive_url(self):
+        self.school.save()
         response = self.client.get('/previous-events/xxxx/')
         self.assertEqual(response.status_code, 404)
         
+    def test_news_and_events_main_forthcoming_events_url(self):
+        self.school.save()
         response = self.client.get('/forthcoming-events/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_entity_forthcoming_events_url(self):
+        self.school.save()
         response = self.client.get('/forthcoming-events/medicine/')
         self.assertEqual(response.status_code, 200)
 
+    def test_news_and_events_bogus_entity_forthcoming_events_url(self):
+        self.school.save()
         response = self.client.get('/forthcoming-events/xxx/')
         self.assertEqual(response.status_code, 404)
 

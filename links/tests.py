@@ -117,7 +117,6 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
         # get the corresponding plugin instance
         instance = plugin.get_plugin_instance()[1]
 
-        self.assertEquals(plugin.active_items.count(), 0) 
        
         # add an item to the plugin
         item1 = GenericLinkListPluginItem(
@@ -127,12 +126,18 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
             active=False,
             )
         item1.save() 
-        self.assertEquals(list(plugin.active_items), []) 
-
+        self.assertEquals(
+            instance.render({}, plugin, placeholder),
+            {}
+        )  
+        
         # now the item is active
         item1.active=True
         item1.save() 
-        self.assertListEqual(list(plugin.active_items), [item1]) 
+        self.assertEqual(
+            instance.render({}, plugin, placeholder)["links"],
+            [item1]
+        )  
 
         # add a second image to the plugin
         item2 = GenericLinkListPluginItem(
@@ -140,63 +145,91 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
             destination_content_type = ContentType.objects.get_for_model(self.school),
             destination_object_id = self.school.id,
             )
-        item2.save()    
-        self.assertListEqual(list(plugin.active_items), [item1, item2]) 
+        item2.save()
+        self.assertListEqual(
+            instance.render({}, plugin, placeholder)["links"],
+            [item1, item2]
+        )  
 
         # now the ordering should be reversed
         item1.inline_item_ordering=1
         item1.save() 
-        self.assertListEqual(list(plugin.active_items), [item2, item1]) 
+        self.assertListEqual(
+            instance.render({}, plugin, placeholder)["links"],
+            [item2, item1]
+        )  
 
 
 class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
-    def test_carousel_plugin_item(self):
+    def test_carousel_plugin(self):
         """
         test the output of the link set plugin 
         """
-        img = Image()
+        img = Image(_width=100, _height=100)
         img.save()
 
         placeholder = Placeholder(slot=u"some_slot")
         placeholder.save() # a good idea, if not strictly necessary
 
         # add the plugin
-        plugin = add_plugin(placeholder, u"CarouselPluginPublisher", u"en",
-            )
+        plugin = add_plugin(
+            placeholder, 
+            u"CarouselPluginPublisher", 
+            u"en",
+            width = 1000.0
+        )
         plugin.save()
 
         # get the corresponding plugin instance
         instance = plugin.get_plugin_instance()[1]
-
-        self.assertEquals(plugin.active_items.count(), 0) 
+        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
        
         # add an item to the plugin
         item1 = CarouselPluginItem(
             plugin=plugin,
             destination_content_type = ContentType.objects.get_for_model(self.school),
             destination_object_id = self.school.id,
+            link_title=u"item1 link title",
             active=False,
             image_id=img.id,
             )
         item1.save() 
-        self.assertEquals(list(plugin.active_items), []) 
+        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
 
         # now the item is active
         item1.active=True
         item1.save() 
-        self.assertListEqual(list(plugin.active_items), [item1]) 
+        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
 
         # add a second image to the plugin
         item2 = CarouselPluginItem(
             plugin=plugin,
             destination_content_type = ContentType.objects.get_for_model(self.school),
             destination_object_id = self.school.id,
+            link_title=u"item1 link title",
             image_id=img.id,
             )
         item2.save()    
-        self.assertListEqual(list(plugin.active_items), [item1, item2]) 
-
+        self.assertListEqual(
+            instance.render({}, plugin, placeholder)["segments"], 
+            [item1, item2] 
+        )
+        
         # now the ordering should be reversed
         item1.inline_item_ordering=1
         item1.save() 
-        self.assertListEqual(list(plugin.active_items), [item2, item1]) 
+        rendered_plugin = instance.render({}, plugin, placeholder)
+        self.assertListEqual(
+            rendered_plugin["segments"], 
+            [item2, item1] 
+        )
+        
+        # check size calculations
+        self.assertEqual(
+            rendered_plugin["size"], 
+            (98,65) 
+        )
+        # if we delete the image the items should be deleted too
+        img.delete()
+        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
+        
