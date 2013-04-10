@@ -198,55 +198,7 @@ def set_image_caption(image):
     # prefer the manually-entered caption on the plugin, otherwise the one from the filer
     if image.caption or (image.use_description_as_caption and image.image.description):
         return image.caption or image.image.description
-
-# class FilerImagePlugin(CMSPluginBase):
-#     model = FilerImage
-#     name = _("Image")
-#     render_template = "cmsplugin_filer_image/image.html"
-#     text_enabled = True
-#     raw_id_fields = ('image',)
-#     admin_preview = False   
-#          
-#     def render(self, context, instance, placeholder):
-#         self.render_template = "cmsplugin_filer_image/image.html"
-# 
-#         # get width 
-#         width = instance.get_plugin_width(instance.image) or instance.get_container_width(context) 
-#         # shave if floated
-#         width = instance.shave_if_floated(width) or width
-#         # calculate height 
-#         instance.width, instance.height = instance.calculate_plugin_dimensions(
-#             width, 
-#             instance.calculate_aspect_ratio([instance.image])
-#             )
-#         instance.caption_width = instance.width
-# 
-#         context.update({
-#             'object':instance, 
-#             'image_size': u'%sx%s' % (int(instance.width), int(instance.height)),
-#             'caption_width': int(width),
-#             'placeholder':placeholder,
-#             'subject_location': instance.image.subject_location,
-#             'imageset':instance,
-#             'imageset_item': instance, 
-#             'caption_width': int(instance.width),
-#             'placeholder':placeholder,
-#         })
-#         return context
-# 
-#     def get_thumbnail(self, context, instance):
-#         if instance.image:
-#             return instance.image.image.thumbnails['admin_tiny_icon']
-# 
-#     def icon_src(self, instance):
-#         if instance.image:
-#             try:
-#                 return instance.image.image.thumbnails['admin_tiny_icon']
-#             except KeyError:
-#                 pass
-# 
-# plugin_pool.register_plugin(FilerImagePlugin)   
-
+        
 
 class EmbeddedVideoSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
     model=EmbeddedVideoSetItem
