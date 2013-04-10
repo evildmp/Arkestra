@@ -209,24 +209,18 @@ class FilerImagePlugin(CMSPluginBase):
          
     def render(self, context, instance, placeholder):
         self.render_template = "cmsplugin_filer_image/image.html"
-        instance.has_borders = False
-        
-        # calculate its width and aspect ratio
-        instance.get_container_width(context)
 
-        # calculate its native aspect ratio
-        aspect_ratio = instance.calculate_aspect_ratio([instance.image])
-        # get width
-        width = instance.get_plugin_width(instance.image)
+        # get width 
+        width = instance.get_plugin_width(instance.image) or instance.get_container_width(context) 
         # shave if floated
         width = instance.shave_if_floated(width) or width
-        
         # calculate height 
-        instance.width, instance.height = instance.calculate_plugin_dimensions(width, aspect_ratio)
-        # set caption
-        instance.caption = set_image_caption(instance)
-        instance.subject_location = instance.image.subject_location
-        instance.width, instance.height = int(instance.width), int(instance.height)   
+        instance.width, instance.height = instance.calculate_plugin_dimensions(
+            width, 
+            instance.calculate_aspect_ratio([instance.image])
+            )
+        instance.caption_width = instance.width
+
         context.update({
             'object':instance, 
             'image_size': u'%sx%s' % (int(instance.width), int(instance.height)),

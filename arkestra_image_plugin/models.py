@@ -99,7 +99,10 @@ class ImageSetTypePluginMixin(object):
         # native width, aspect ratio and height
         elif self.aspect_ratio == -1 or self.aspect_ratio == 0:  
             return int(calculated_width), int(calculated_width/calculated_aspect_ratio)
+        else:
+            return int(calculated_width), int(calculated_width/calculated_aspect_ratio)
 
+            
 class ImageSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
     IMAGESET_KINDS = (
         ("basic", "Basic"),
