@@ -3,7 +3,7 @@ import sys
 from django.core import management
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "example_14.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "example.settings")
 
     management.call_command(
         'test',

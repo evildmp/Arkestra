@@ -1,4 +1,4 @@
-# Django settings for example_14 project.
+# Django settings for example project.
 
 import os.path
 
@@ -144,10 +144,10 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.toolbar.ToolbarMiddleware',    
 )
 
-ROOT_URLCONF = 'example_14.urls'
+ROOT_URLCONF = 'example.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'example_14.wsgi.application'
+WSGI_APPLICATION = 'example.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -189,7 +189,7 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',    
     'widgetry',  
-    # 'south',   # don't leave this disabled      
+    # 'south', # don't leave this disabled      
     'treeadmin',    
 
     # core Django applications

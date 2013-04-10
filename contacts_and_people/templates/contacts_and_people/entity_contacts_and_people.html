@@ -13,50 +13,51 @@ Called up by arkestra_page.html
 {% thumbnail entity.image.file entity_image_size crop subject_location=entity.image.subject_location as image %}
 
 {% block arkestra_content %}
-	<div class="row columns2">
-	    {% render_placeholder intro_page_placeholder %}
-	   	<div class="column firstcolumn">
-			<div class = "">
-			    <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
-			    <dl class="not-indented">
-			        {% include "includes/key_contacts.html" %}
-					{% with entity_map_size as map_size %}
-						{% include "includes/contact_information.html" %}
-					{% endwith %}	
-			    </dl>
-			    {% if image %}<img src="{{ image.url }}" alt = "" class="right"/>{% endif %}
-			</div>
-		</div>
-		{% if entity.get_people_with_roles or initials_list or people %}
-    		<div class="column lastcolumn"> 
-    			{% if entity.get_key_people %}
-            		<div class="">
-    				    <h{{ IN_BODY_HEADING_LEVEL }}>Key people</h{{ IN_BODY_HEADING_LEVEL }}>
+    <div class="row columns2">
+        {% render_placeholder intro_page_placeholder %}
+        <div class="column firstcolumn">
+            <div class = "">
+                <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
+                <dl class="not-indented">
+                    {% include "includes/key_contacts.html" %}
+                    {% with entity_map_size as map_size %}
+                        {% include "includes/contact_information.html" %}
+                    {% endwith %}   
+                </dl>
+                {% if image %}<img src="{{ image.url }}" alt = "" class="right"/>{% endif %}
+            </div>
+        </div>
+        {% if entity.get_people_with_roles or initials_list or people %}
+            <div class="column lastcolumn"> 
+                {% if entity.get_key_people %}
+                    <div class="">
+                        <h{{ IN_BODY_HEADING_LEVEL }}>Key people</h{{ IN_BODY_HEADING_LEVEL }}>
                         {% regroup entity.get_key_people by role as roles %}
                         <dl class="not-indented personlist">
-                        	{% for role in roles %}
-                        		<dt>{{ role.grouper }}</dt>
-                        		{% for person in role.list %}
-                        		    {% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop as personimage %}
-                            		<dd class="row"><a href ="{{ person.person.get_absolute_url }}">{{person.person}}<img class="right" alt="" src="{{ personimage.url }}" /></a></dd>{% endfor %}
-                        	{% endfor %}
+                            {% for role in roles %}
+                                <dt>{{ role.grouper }}</dt>
+                                {% for person in role.list %}
+                                    {% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop as personimage %}
+                                    <dd class="row"><a href ="{{ person.person.get_absolute_url }}">{{person.person}}{% if personimage %} <img class="right" alt="" src="{{ personimage.url }}" />{% endif %}</a></dd>
+                                {% endfor %}
+                            {% endfor %}
                         </dl>
-    				</div>
-    		    {% endif %}	
-    		    {% if initials_list %}
-    				<h{{ IN_BODY_HEADING_LEVEL }}>All people A-Z by surname</h{{ IN_BODY_HEADING_LEVEL }}>
-    				<ul class= "index">
-    					{% for initial in initials_list %}
-    						<li><a href="/people/{{ entity.slug }}/{{initial|lower|urlencode}}/">{{ initial }}</a></li>
-    					{% endfor %}
-    				</ul>	
-        		{% endif %}
-        		{% if people %}
-					<h{{ IN_BODY_HEADING_LEVEL }}>{{ people_list_heading }}</h{{ IN_BODY_HEADING_LEVEL }}>
-					{% include "includes/people_with_roles.html" %}
-        		{% endif %}
-    		</div>
-		{% endif %}
-	</div>
-	
+                    </div>
+                {% endif %} 
+                {% if initials_list %}
+                    <h{{ IN_BODY_HEADING_LEVEL }}>All people A-Z by surname</h{{ IN_BODY_HEADING_LEVEL }}>
+                    <ul class= "index">
+                        {% for initial in initials_list %}
+                            <li><a href="/people/{{ entity.slug }}/{{initial|lower|urlencode}}/">{{ initial }}</a></li>
+                        {% endfor %}
+                    </ul>   
+                {% endif %}
+                {% if people %}
+                    <h{{ IN_BODY_HEADING_LEVEL }}>{{ people_list_heading }}</h{{ IN_BODY_HEADING_LEVEL }}>
+                    {% include "includes/people_with_roles.html" %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    
 {% endblock arkestra_content %}
