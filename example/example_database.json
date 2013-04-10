@@ -2731,6 +2731,118 @@
         }
     },
     {
+        "pk": 340,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 341,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 342,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 343,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 344,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 345,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 346,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 347,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 348,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 349,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 350,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 351,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 352,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
+        "pk": 353,
+        "model": "cms.placeholder",
+        "fields": {
+            "slot": "body",
+            "default_width": null
+        }
+    },
+    {
         "pk": 1,
         "model": "cms.cmsplugin",
         "fields": {
@@ -3349,7 +3461,7 @@
             "rght": 28,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-21T16:04:48",
             "lft": 1,
             "in_navigation": true,
             "reverse_id": null,
@@ -3368,7 +3480,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-21T16:05:44",
-            "creation_date": "2011-06-21T16:04:48",
             "publisher_public": null,
             "level": 0,
             "changed_by": "arkestra",
@@ -3383,7 +3494,7 @@
             "rght": 7,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-05T23:17:27",
             "lft": 2,
             "in_navigation": true,
             "reverse_id": null,
@@ -3402,7 +3513,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-05T23:17:38",
-            "creation_date": "2011-07-05T23:17:27",
             "publisher_public": null,
             "level": 1,
             "changed_by": "arkestra",
@@ -3417,7 +3527,7 @@
             "rght": 4,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-05T23:18:00",
             "lft": 3,
             "in_navigation": true,
             "reverse_id": null,
@@ -3436,7 +3546,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-05T23:18:23",
-            "creation_date": "2011-07-05T23:18:00",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3451,7 +3560,7 @@
             "rght": 6,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-22T08:03:22",
             "lft": 5,
             "in_navigation": true,
             "reverse_id": null,
@@ -3470,7 +3579,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-22T08:03:36",
-            "creation_date": "2011-06-22T08:03:22",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3485,7 +3593,7 @@
             "rght": 17,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-30T00:56:18",
             "lft": 8,
             "in_navigation": true,
             "reverse_id": null,
@@ -3504,7 +3612,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-30T00:56:23",
-            "creation_date": "2011-06-30T00:56:18",
             "publisher_public": null,
             "level": 1,
             "changed_by": "sagdp6",
@@ -3519,7 +3626,7 @@
             "rght": 10,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-21T16:33:32",
             "lft": 9,
             "in_navigation": true,
             "reverse_id": null,
@@ -3538,7 +3645,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-21T16:35:51",
-            "creation_date": "2011-06-21T16:33:32",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3553,7 +3659,7 @@
             "rght": 12,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-22T08:02:56",
             "lft": 11,
             "in_navigation": true,
             "reverse_id": null,
@@ -3572,7 +3678,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-22T08:03:34",
-            "creation_date": "2011-06-22T08:02:56",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3587,7 +3692,7 @@
             "rght": 14,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-22T08:03:12",
             "lft": 13,
             "in_navigation": true,
             "reverse_id": null,
@@ -3606,7 +3711,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-22T08:03:34",
-            "creation_date": "2011-06-22T08:03:12",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3621,7 +3725,7 @@
             "rght": 16,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-28T16:19:00",
             "lft": 15,
             "in_navigation": true,
             "reverse_id": null,
@@ -3640,7 +3744,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-28T16:19:36",
-            "creation_date": "2011-07-28T16:19:00",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3655,7 +3758,7 @@
             "rght": 27,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-06-22T08:03:52",
             "lft": 18,
             "in_navigation": true,
             "reverse_id": null,
@@ -3674,7 +3777,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-06-22T08:03:56",
-            "creation_date": "2011-06-22T08:03:52",
             "publisher_public": null,
             "level": 1,
             "changed_by": "arkestra",
@@ -3689,7 +3791,7 @@
             "rght": 20,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-06T00:08:44",
             "lft": 19,
             "in_navigation": true,
             "reverse_id": null,
@@ -3708,7 +3810,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-06T00:26:59",
-            "creation_date": "2011-07-06T00:08:44",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3723,7 +3824,7 @@
             "rght": 22,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-06T21:06:14",
             "lft": 21,
             "in_navigation": true,
             "reverse_id": null,
@@ -3742,7 +3843,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-06T21:06:29",
-            "creation_date": "2011-07-06T21:06:14",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3757,7 +3857,7 @@
             "rght": 24,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-28T15:07:51",
             "lft": 23,
             "in_navigation": true,
             "reverse_id": null,
@@ -3776,7 +3876,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-28T22:59:57",
-            "creation_date": "2011-07-28T15:07:51",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -3791,7 +3890,7 @@
             "rght": 26,
             "navigation_extenders": "",
             "site": 1,
-            "page_flags": "[u'[]']",
+            "creation_date": "2011-07-31T10:06:12",
             "lft": 25,
             "in_navigation": true,
             "reverse_id": null,
@@ -3810,7 +3909,6 @@
             "publisher_state": 1,
             "soft_root": false,
             "publication_date": "2011-07-31T11:54:19",
-            "creation_date": "2011-07-31T10:06:12",
             "publisher_public": null,
             "level": 2,
             "changed_by": "arkestra",
@@ -4107,6 +4205,24 @@
         "model": "menus.cachekey",
         "fields": {
             "key": "cms-menu_nodes_en_1_/_1_user",
+            "site": 1,
+            "language": "en"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "menus.cachekey",
+        "fields": {
+            "key": "cms-menu_nodes_en_1_/technical-demonstrations/_1_user",
+            "site": 1,
+            "language": "en"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "menus.cachekey",
+        "fields": {
+            "key": "cms-menu_nodes_en_1_/technical-demonstrations/images/_1_user",
             "site": 1,
             "language": "en"
         }
@@ -6947,7 +7063,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 5,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "buttonise",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -6960,7 +7076,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 4,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "no-small-caps",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -6973,7 +7089,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 1,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "doublecolumn",
             "allowed_elements": "newcol innercol",
             "column_equiv": 2,
@@ -6986,7 +7102,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "images-left",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -6999,7 +7115,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "images-right",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -7012,7 +7128,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 3,
-            "templates": "[u'[]']",
+            "templates": "[u\"[u'[]']\"]",
             "name": "background green",
             "allowed_elements": "p blockquote ul ol li newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -7025,7 +7141,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "image-borders",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -7038,7 +7154,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "shadowed",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -7051,7 +7167,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 2,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "no-image-link-arrows",
             "allowed_elements": "p newrow newcol innerrow innercol",
             "column_equiv": null,
@@ -7064,7 +7180,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 4,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "standout",
             "allowed_elements": "p",
             "column_equiv": null,
@@ -7077,7 +7193,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 4,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "standout-mild",
             "allowed_elements": "p",
             "column_equiv": null,
@@ -7090,7 +7206,7 @@
         "model": "semanticeditor.cssclass",
         "fields": {
             "category": 1,
-            "templates": "[u\"[u'']\"]",
+            "templates": "[u'[u\"[u\\'\\']\"]']",
             "name": "triplecolumn",
             "allowed_elements": "newcol innercol",
             "column_equiv": 3,
@@ -9709,7 +9825,7 @@
             "is_active": true,
             "is_superuser": true,
             "is_staff": true,
-            "last_login": "2013-04-10T17:51:56.625",
+            "last_login": "2013-04-10T19:12:29.069",
             "groups": [],
             "user_permissions": [],
             "password": "pbkdf2_sha256$10000$qXiZFHkAMorY$TY93IarzG+j3RjgU4SCBY7e1Ej+0ISCY+FfhQUblAi8=",
@@ -9810,6 +9926,14 @@
         "model": "sessions.session",
         "fields": {
             "expire_date": "2013-04-24T17:51:57.095",
+            "session_data": "NWY2YzIzNGQ1ZmU0OTc5MjAwNzM1OGNmN2M4MzdkMGQzOTkzOGZhZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlcQJLAVUNX2F1dGhfdXNlcl9pZEsBVRJfYXV0aF91c2VyX2JhY2tlbmRVKWRqYW5nby5j\nb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kdS4=\n"
+        }
+    },
+    {
+        "pk": "72d09b05c04302536c111d226edf51d3",
+        "model": "sessions.session",
+        "fields": {
+            "expire_date": "2013-04-24T19:12:49.782",
             "session_data": "NWY2YzIzNGQ1ZmU0OTc5MjAwNzM1OGNmN2M4MzdkMGQzOTkzOGZhZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlcQJLAVUNX2F1dGhfdXNlcl9pZEsBVRJfYXV0aF91c2VyX2JhY2tlbmRVKWRqYW5nby5j\nb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kdS4=\n"
         }
     },
