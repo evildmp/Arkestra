@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.conf import settings
 from django.template import RequestContext
+from django.http import Http404
 
 from contacts_and_people.models import Entity
 
@@ -11,8 +11,13 @@ from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS
 
 
 def common_settings(request, slug):
-    # general values - entity, request, template
-    entity = Entity.objects.get(slug=slug) or Entity.objects.base_entity()
+    if slug:
+        entity = get_object_or_404(Entity, slug=slug)
+    else:
+        entity = Entity.objects.base_entity()
+    if not (entity.website and entity.website.published and entity.auto_vacancies_page):
+        raise Http404 
+
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
@@ -29,7 +34,7 @@ def common_settings(request, slug):
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity
 
-def vacancies_and_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def vacancies_and_studentships(request, slug):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"
@@ -56,9 +61,7 @@ def vacancies_and_studentships(request, slug=getattr(Entity.objects.base_entity(
         context,
         )
 
-
-
-def archived_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def archived_vacancies(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -70,6 +73,8 @@ def archived_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug
     title = unicode(entity) + u" archived vacancies"
     pagetitle = unicode(entity) + u" archived vacancies"
 
+    CMSVacanciesPlugin().render(context, instance, None)
+
     context.update({
         "entity":entity,
         "title": title,
@@ -79,14 +84,12 @@ def archived_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug
         'everything': instance,}
         )
     
-    CMSVacanciesPlugin().render(context, instance, None)
-
     return render_to_response(
         "contacts_and_people/arkestra_page.html",
         context,
         )
         
-def all_current_vacancies(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def all_current_vacancies(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -114,7 +117,7 @@ def all_current_vacancies(request, slug=getattr(Entity.objects.base_entity(), "s
         context,
         )
 
-def archived_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def archived_studentships(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -142,7 +145,7 @@ def archived_studentships(request, slug=getattr(Entity.objects.base_entity(), "s
         context,
         )
         
-def all_current_studentships(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
+def all_current_studentships(request, slug):
     instance, context, entity = common_settings(request, slug)
 
     instance.type = "sub_page"
@@ -180,9 +183,11 @@ def vacancy(request, slug):
     """
     Responsible for publishing vacancy
     """
-    vacancy = get_object_or_404(Vacancy, slug=slug)
-    vacancy = vacancy_and_studentship(vacancy)
-    
+    if request.user.is_staff:
+        vacancy = get_object_or_404(Vacancy, slug=slug)
+    else:
+        vacancy = get_object_or_404(Vacancy, slug=slug, published=True)
+
     return render_to_response(
         "vacancies_and_studentships/vacancy.html",
         {"vacancy":vacancy,
@@ -196,11 +201,11 @@ def studentship(request, slug):
     """
     Responsible for publishing a studentship
     """
-    studentship = get_object_or_404(Studentship, slug=slug)
-    studentship = vacancy_and_studentship(studentship)
+    if request.user.is_staff:
+        studentship = get_object_or_404(Studentship, slug=slug)
+    else:
+        studentship = get_object_or_404(Studentship, slug=slug, published=True)
     
-    # featuring = event.get_featuring()
-
     return render_to_response(
         "vacancies_and_studentships/studentship.html",
         {"studentship": studentship,

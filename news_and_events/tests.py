@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 # we're testing the behaviour of a method that uses date-related functions
 import datetime
 
+from cms.api import create_page
+
 from models import NewsArticle
 from contacts_and_people.models import Entity
 
@@ -47,16 +49,11 @@ class NewsTests(TestCase):
 @override_settings(
     CMS_TEMPLATES = (('null.html', "Null"),)
 )
-class NewsEventsViewsTests(TestCase):
+class NewsEventsItemsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
         
-        self.school = Entity(
-            name="School of Medicine", 
-            slug="medicine",
-            )
-
         # create a news item
         self.tootharticle = NewsArticle(
             title = "All about teeth",
@@ -67,6 +64,7 @@ class NewsEventsViewsTests(TestCase):
         self.adminuser.is_staff=True
         self.adminuser.save()
 
+    # news article tests
     def test_unpublished_newsarticle_404(self):
         self.tootharticle.save()
         
@@ -98,6 +96,30 @@ class NewsEventsViewsTests(TestCase):
         response = self.client.get('/news/all-about-teeth/')  
         self.assertEqual(response.context['newsarticle'], self.tootharticle)
     
+@override_settings(
+    CMS_TEMPLATES = (('null.html', "Null"),)
+)
+class NewsEventsEntityPagesViewsTests(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        self.client = Client()
+        
+        home_page = create_page(
+            "School home page", 
+            "null.html", 
+            "en",
+            published=True
+            )
+
+        self.school = Entity(
+            name="School of Medicine", 
+            slug="medicine",
+            auto_news_page=True,
+            website=home_page
+            )
+
+
+    # entity news and events URLs - has news and events pages
     def test_news_and_events_main_url(self):
         self.school.save()
         response = self.client.get('/news-and-events/')
@@ -154,6 +176,152 @@ class NewsEventsViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_news_and_events_bogus_entity_forthcoming_events_url(self):
+        self.school.save()
+        response = self.client.get('/forthcoming-events/xxx/')
+        self.assertEqual(response.status_code, 404)
+
+    # entity news and events URLs - no news and events pages
+    def test_news_and_events_no_auto_page_main_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-and-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_entity_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-and-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_bogus_entity_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-and-events/xxxx/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_main_archive_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-archive/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_entity__news_archive_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-archive/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_bogus_entity_news_archive_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/news-archive/xxxx/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_main_previous_events_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/previous-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_entity_previous_events_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/previous-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_bogus_entity_events_archive_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/previous-events/xxxx/')
+        self.assertEqual(response.status_code, 404)
+        
+    def test_news_and_events_no_auto_page_main_forthcoming_events_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/forthcoming-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_entity_forthcoming_events_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/forthcoming-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_auto_page_bogus_entity_forthcoming_events_url(self):
+        self.school.auto_news_page= False
+        self.school.save()
+        response = self.client.get('/forthcoming-events/xxx/')
+        self.assertEqual(response.status_code, 404)
+
+    # entity news and events URLs - no entity home page
+    def test_news_and_events_no_entity_home_page_main_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-and-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_entity_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-and-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_bogus_entity_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-and-events/xxxx/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_main_archive_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-archive/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_entity__news_archive_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-archive/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_bogus_entity_news_archive_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/news-archive/xxxx/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_main_previous_events_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/previous-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_entity_previous_events_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/previous-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_bogus_entity_events_archive_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/previous-events/xxxx/')
+        self.assertEqual(response.status_code, 404)
+        
+    def test_news_and_events_no_entity_home_page_main_forthcoming_events_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/forthcoming-events/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_entity_forthcoming_events_url(self):
+        self.school.website = None
+        self.school.save()
+        response = self.client.get('/forthcoming-events/medicine/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_news_and_events_no_entity_home_page_bogus_entity_forthcoming_events_url(self):
+        self.school.website = None
         self.school.save()
         response = self.client.get('/forthcoming-events/xxx/')
         self.assertEqual(response.status_code, 404)

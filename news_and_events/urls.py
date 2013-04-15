@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r"^news/(?P<slug>[-\w]+)/$", views.newsarticle, name="newsarticle"),
     url(r"^event/(?P<slug>[-\w]+)/$", views.event, name="event"),
     
-    # named entities' news and events
+    # entities' news and events
     url(r'^news-archive/(?:(?P<slug>[-\w]+)/)?$', views.news_archive, name="news_archive"),
     url(r'^previous-events/(?:(?P<slug>[-\w]+)/)?$', views.previous_events, name="previous_events"),
     url(r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)?$', views.all_forthcoming_events, name="forthcoming_event"),
