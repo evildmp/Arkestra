@@ -5,7 +5,7 @@ urlpatterns = patterns('',
     (r"^housekeeping/statistics/", "housekeeping.statistics.stats"),
 
     # /housekeeping/repair_mptt/contacts_and_people.Entity/
-    (r"^housekeeping/repair_mptt/(?P<slug>[-\w\.]+)/$", "housekeeping.repair_mptt.fix"),
+    (r"^housekeeping/repair_mptt/(?P<slug>[-\w\\.]+)/$", "housekeeping.repair_mptt.fix"),
 
     # then, try to match /housekeeping/<task>/<execute>
     (r"^housekeeping/(?P<task>[^/]+)/(?P<action>[^/]+)/$", "housekeeping.tasks.tasks"),
