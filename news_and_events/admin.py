@@ -32,8 +32,8 @@ class NewsAndEventsAdmin(GenericModelAdmin):
     prepopulated_fields = {
         'slug': ('title',)
             }
-    list_max_show_all = 400
-    list_per_page = 400
+    list_max_show_all = 1000
+    list_per_page = 1000
         
     def _media(self):
         return super(ModelAdminWithTabsAndCMSPlaceholder, self).media

@@ -5,7 +5,6 @@ from django.template import RequestContext
 from django.http import Http404
 
 from contacts_and_people.models import Entity
-from links.link_functions import object_links
 
 from models import NewsAndEventsPlugin, Event, NewsArticle
 from cms_plugins import CMSNewsAndEventsPlugin
@@ -15,12 +14,12 @@ from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS
 
 def common_settings(request, slug):
     if slug:
-        try:
-            entity = Entity.objects.get(slug=slug)
-        except Entity.DoesNotExist:
-            raise Http404   
+        entity = get_object_or_404(Entity, slug=slug)
     else:
         entity = Entity.objects.base_entity()
+    if not (entity.website and entity.website.published and entity.auto_news_page):
+        raise Http404 
+
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
@@ -51,7 +50,7 @@ def news_and_events(request, slug):
     else:
         pagetitle = "News & events"
     CMSNewsAndEventsPlugin().render(context, instance, None)
-    
+
     context.update({
         "entity":entity,
         "title": title,
@@ -62,7 +61,7 @@ def news_and_events(request, slug):
         'everything': instance,
         }
         )
-    
+
     return render_to_response(
         "contacts_and_people/arkestra_page.html",
         context,
@@ -170,7 +169,7 @@ def newsarticle(request, slug):
         "meta": {"description": newsarticle.summary,}
         },
         RequestContext(request),
-        )
+    )
 
 def event(request, slug):
     """
