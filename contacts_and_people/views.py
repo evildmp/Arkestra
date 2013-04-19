@@ -279,9 +279,7 @@ def place(request, slug, active_tab=""):
         tabs_dict[active_tab]["active"] = True
 
     # add tabs to the list of tabs
-    tabs = []
-    if place.postcode or place.street or place.description.cmsplugin_set.all():
-        tabs.append(tabs_dict["about"])          
+    tabs = [tabs_dict["about"]]
     if place.has_map():
         tabs.append(tabs_dict["map"])
     if (place.getting_here and place.getting_here.cmsplugin_set.all()) \
@@ -290,16 +288,14 @@ def place(request, slug, active_tab=""):
     if place.events().forthcoming_events:
         tabs.append(tabs_dict["events"])  
     
-    # were there any tabs created?
-    if tabs:
-        if not active_tab:
-            # find out what to add to the url for this tab
-            active_tab=tabs[0]["address"]
-            # mark the tab as active for the template
-            tabs[0]["active"]=True
-        # fewer than 2? not worth having tabs!
-        if len(tabs)==1:
-            tabs=[]
+    if not active_tab:
+        # find out what to add to the url for this tab
+        active_tab=tabs[0]["address"]
+        # mark the tab as active for the template
+        tabs[0]["active"]=True
+    # fewer than 2? not worth having tabs!
+    if len(tabs)==1:
+        tabs=[]
 
     meta_description_content = tabs_dict[active_tab or "about"]["meta_description_content"] 
     if active_tab:

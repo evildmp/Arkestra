@@ -69,7 +69,7 @@ class Building(models.Model):
     image = FilerImageField(on_delete=models.SET_NULL, 
         null=True, blank=True)
     # for the place page
-    summary =  models.TextField(verbose_name="Summary", max_length=256, default ="",
+    summary = models.TextField(verbose_name="Summary", max_length=256, default ="",
         help_text="A very short description of this building (maximum two lines)",)
     description = PlaceholderField('body', related_name="building_description",
         help_text="A fuller description",)
@@ -254,6 +254,7 @@ class EntityManager(TreeManager):
         if self.base_entity and not MULTIPLE_ENTITY_MODE:
             return base_entity_id
 
+from django.test import TestCase
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
@@ -445,8 +446,10 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         """
         Return designated contacts for the entity
         """
-        contacts = Membership.objects.filter(entity=self, person__active=True, key_contact=True).order_by('importance_to_entity')
-        return contacts
+        return self.members.filter(
+            person__active=True, 
+            key_contact=True
+            ).order_by('importance_to_entity')
 
     def get_people_with_roles(self, key_members_only = False):   
         """
@@ -456,10 +459,15 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         
         Optionally, will return *all* members with roles
         """     
-        memberships = Membership.objects.\
-            filter(entity=self,person__active=True).\
+        memberships = self.members.\
+            filter(person__active=True).\
             exclude(role ="").\
-            order_by('-importance_to_entity','person__surname',) 
+            order_by(
+                '-importance_to_entity',
+                'person__surname', 
+                'person__given_name'
+                ) 
+            
         if key_members_only:
             memberships = memberships.filter(importance_to_entity__gte = 3)
         # create a set with which to check for duplicates
@@ -484,7 +492,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         The roles returned are in alphabetical order by Person.
         """
         for member in members:
-            ms = Membership.objects.filter(person = member)
+            ms = member.member_of()
             # get the best named membership in the entity
             named_memberships = list(ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person'))
             if named_memberships:
@@ -639,8 +647,7 @@ class Person(PersonLite, CommonFields):
         
         If it can't find any role, it returns None.
         """
-        memberships = Membership.objects.filter(
-            person=self, 
+        memberships = self.member_of.filter(
             entity__abstract_entity = False, 
             importance_to_person__gte = 2).order_by('-importance_to_person'
             )
@@ -655,7 +662,7 @@ class Person(PersonLite, CommonFields):
         Works out a person's best entity, based on get_role
         
         A person needs at least a named role to have an entity.
-        """
+        """      
         if self.override_entity and not self.override_entity.abstract_entity:
             return self.override_entity
         elif self.get_role:
@@ -707,7 +714,7 @@ class Person(PersonLite, CommonFields):
     @property
     def real_entities(self):
         # returns non-abstract entities the person belongs to
-        return Membership.objects.filter(person=self, entity__abstract_entity = False)
+        return self.member_of.objects.filter(entity__abstract_entity = False)
     
     
     def gather_entities(self):
@@ -795,7 +802,7 @@ class Membership(models.Model):
         home:           5           key member:     3-5
         """
         # if there's just one membership, make it home; if this one is home, make home on all the others false
-        memberships = Membership.objects.filter(person = self.person)
+        memberships = self.person.member_of.all()
         if self.importance_to_person == 5:
             for membership in memberships: 
         

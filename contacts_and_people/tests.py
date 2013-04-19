@@ -12,13 +12,14 @@ class SiteTests(TestCase):
             )
         self.cardiff.save()
 
-    def test_maps(self):
+    def test_no_building_no_maps(self):
         """
         test Site.maps property
         """
         # no Buildings on this site, should be an empty list 
         self.assertEquals(self.cardiff.maps, [])
         
+    def test_building_but_no_map_settings_no_maps(self):
         # add a Building
         self.main_building = Building(
             name="Main Building",
@@ -28,11 +29,17 @@ class SiteTests(TestCase):
         self.main_building.save()
         self.assertEquals(self.cardiff.maps, [])  
         
+    def test_building_and_map_settings(self):
         # give the building a map
-        self.main_building.map = True
-        self.main_building.latitude = 10
-        self.main_building.longitude = 10
-        self.main_building.zoom = 10
+        self.main_building = Building(
+            name="Main Building",
+            street="St Mary's Street",
+            site=self.cardiff,
+            map=True,
+            latitude=10,
+            longitude=10,
+            zoom = 10,
+            )
         self.main_building.save()
         self.assertEquals(self.cardiff.maps, [self.main_building])  
        
@@ -159,32 +166,32 @@ class EntityTestObjectsMixin(object):
         self.smith.save()            
 
 
-class ModelTests(EntityTestObjectsMixin, TestCase):
-    def test_entity_get_building(self):
-        """
-        test Entity.get_building
-        check that Entities report the correct Building
-        """
-        
-        # get_building works when building is assigned 
+class EntityAddressTests(EntityTestObjectsMixin, TestCase):
+    def test_get_building_works_when_building_is_assigned(self):
         self.assertEquals(self.school.get_building, self.main_building)
-        # an abstract entity has no building *even if one is assigned*
+    
+    def test_abstract_entity_never_has_a_building(self):    
         self.assertEquals(self.departments.get_building, None)
-        # the section has no Building assigned so should inherit from its parent
+
+    def test_child_inherits_building_from_parent(self):
         self.assertEquals(self.section.get_building, self.main_building)
-        # the department has no Building assigned so should inherit from its real ancestor
+
+    def test_descendant_inherits_building_from_real_ancestor(self):
         self.assertEquals(self.department.get_building, self.main_building)
         
-    def test_entity_get_institutional_address(self):
-        """
-        test Entity.get_institutional_address
-        check that Entities report the correct internal addresses
-        """
-        
-        # for section, should be a list of its ancestors excluding abstract entities
-        self.assertEquals(self.section._get_institutional_address, [self.department, self.school])
+    def test_section_entity_get_institutional_address(self):
+        #  a list of its section's ancestors excluding abstract entities
+        self.assertEquals(
+            self.section._get_institutional_address, 
+            [self.department, self.school]
+            )
+
+    def test_student_centre_entity_get_institutional_address(self):
         # for student_centre, should exclude department
-        self.assertEquals(self.student_centre._get_institutional_address, [self.school,])
+        self.assertEquals(
+            self.student_centre._get_institutional_address, 
+            [self.school,]
+            )
 
     def test_entity_get_full_address(self):
         """
@@ -192,30 +199,53 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         check that Entities report the correct full addresses
         """
         
+    def test_school_entity_get_full_address(self):
         # an entity with a building
-        self.assertEquals(self.school.get_full_address, [u'Main Building', u"St Mary's Street", u'Cardiff'])
+        self.assertEquals(
+            self.school.get_full_address, 
+            [u'Main Building', u"St Mary's Street", u'Cardiff']
+            )
+    def test_abstract_entity_get_full_address(self):
         # an abstract entity has no address
         self.assertEquals(self.departments.get_full_address, []) 
+
+    def test_abstract_entity_skipped_in_address(self):
         # abstract entity is skipped in address
-        self.assertEquals(self.department.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])
+        self.assertEquals(
+            self.department.get_full_address, 
+            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            )
+            
+    def test_dont_display_parent_in_address(self):
         # an entity that doesn't display its parent in the address
-        self.assertEquals(self.student_centre.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']) 
+        self.assertEquals(
+            self.student_centre.get_full_address, 
+            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            ) 
+
+    def test_building_recapitulates_entity_name_in_address(self):
         # an entity with building_recapitulates_entity_name flag shares 
         # its name with the building & drops the 1st line of postal address 
-        self.assertEquals(self.testing_centre.get_full_address, [self.department, self.school, u"Queen Street", u'Cardiff']) 
+        self.assertEquals(
+            self.testing_centre.get_full_address, [
+            self.department, self.school, u"Queen Street", u'Cardiff']
+            ) 
 
-    def test_person_methods(self):
-        """
-        test Person methods: get_role, get_entity, get_building, get_full_address
-        check that Person reports the correct information in different circumstances
-        """
-        
+class PersonTests(EntityTestObjectsMixin, TestCase):
+    """
+    test Person methods: get_role, get_entity, get_building, get_full_address
+    check that Person reports the correct information in different 
+    circumstances
+    """
+
+    def test_person_with_no_memberships(self):
         # smith has no Memberships
         self.assertEquals(self.smith.get_role, None)
         self.assertEquals(self.smith.get_entity, None)
         self.assertEquals(self.smith.get_building, None)
         self.assertEquals(self.smith.get_full_address, [])
        
+    def test_person_with_abstract_entity_memberships(self):
         # smith is a web editor and only has a membership of an abstract entity
         smith_web_editor_membership = Membership(
             person=self.smith,
@@ -231,7 +261,17 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_building, None)
         self.assertEquals(self.smith.get_full_address, [])
 
+    def test_person_with_abstract_entity_and_real_entity_memberships(self):
         # smith's best entity so far is technician in the department
+        smith_web_editor_membership = Membership(
+            person=self.smith,
+            entity=self.web_editors,
+            importance_to_person=5,
+            importance_to_entity=4,
+            role="Lead web editor",
+            )
+        smith_web_editor_membership.save()
+
         smith_department_membership = Membership(
             person=self.smith,
             entity=self.department,
@@ -246,7 +286,26 @@ class ModelTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_building, self.main_building)
         self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])                
                     
+    def test_person_with_better_entity_membership(self):
         # now smith has a better entity: school 
+        smith_web_editor_membership = Membership(
+            person=self.smith,
+            entity=self.web_editors,
+            importance_to_person=5,
+            importance_to_entity=4,
+            role="Lead web editor",
+            )
+        smith_web_editor_membership.save()
+
+        smith_department_membership = Membership(
+            person=self.smith,
+            entity=self.department,
+            importance_to_person=2, # note that it's not as important his other one
+            importance_to_entity=4,
+            role="Technician",
+            )
+        smith_department_membership.save()
+
         smith_school_membership = Membership(
             person=self.smith,
             entity=self.school,
