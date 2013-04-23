@@ -166,6 +166,20 @@ class EntityTestObjectsMixin(object):
         self.smith.save()            
 
 
+class EntityGetRolesForMembersTests(EntityTestObjectsMixin, TestCase):
+    def test_get_roles(self):
+        smith_school_membership = Membership(
+            person=self.smith,
+            entity=self.school,
+            importance_to_person=5,
+            importance_to_entity=5,
+            role="Dean",
+            )
+        smith_school_membership.save()        
+        people = [self.smith]
+        self.assertEquals(self.school.get_roles_for_members(people), [self.smith])
+
+
 class EntityAddressTests(EntityTestObjectsMixin, TestCase):
     def test_get_building_works_when_building_is_assigned(self):
         self.assertEquals(self.school.get_building, self.main_building)
