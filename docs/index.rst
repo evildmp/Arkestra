@@ -31,19 +31,30 @@ Getting started
    getting_started/starting_your_own_project
 
 **************
-Using Arkestra
+Arkestra for users
 **************
 
 .. toctree::
    :maxdepth: 2
    
-   using_arkestra/templates
-   using_arkestra/using_news_and_events
-   using_arkestra/image_sizing_system
-   using_arkestra/links_system
-   using_arkestra/video_system
-   using_arkestra/arkestra_generic_models
-   using_arkestra/migration
+   arkestra_for_users/introduction
+   arkestra_for_users/entities
+
+
+**************
+How it works
+**************
+
+.. toctree::
+   :maxdepth: 2
+   
+   how_it_works/templates
+   how_it_works/using_news_and_events
+   how_it_works/image_sizing_system
+   how_it_works/links_system
+   how_it_works/video_system
+   how_it_works/arkestra_generic_models
+   how_it_works/migration
 
 Indices and tables
 ==================
