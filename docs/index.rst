@@ -39,7 +39,7 @@ Arkestra for users
    
    arkestra_for_users/introduction
    arkestra_for_users/entities
-
+   arkestra_for_users/things_never_to_do
 
 **************
 How it works
