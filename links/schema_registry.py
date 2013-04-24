@@ -28,15 +28,17 @@ class LinkWrapper(SearchItemWrapper):
 
 
 ATTRIBUTES = [
-    'identifier',
+    # at least one of these is absolutely required
     'title',
+    'text',
+    # useful
+    'identifier',
     'description',
     'thumbnail_url',
-    'text',
     'short_text',
     'url',
     'metadata',
-    'heading',
+    'heading',  # the heading under which such items will be grouped
 ]
 
 

@@ -10,7 +10,8 @@ from arkestra_utilities.settings import PERMITTED_FILETYPES
 
 schema.register(models.ExternalLink, search_fields=admin.ExternalLinkAdmin.search_fields, 
                 #url='url', description=lambda obj: u"%s<br />%s" % (obj.url, obj.description), metadata='description', heading='"External links"'
-                url='url', description = 'description', 
+                url='url', 
+                description = 'description', 
                 #short_text = 'title', 
                 heading='"External links"'
                 )
@@ -113,3 +114,12 @@ if 'filer' in settings.INSTALLED_APPS:
             return u"Files"    
             
     schema.register_wrapper(File, FileLinkWrapper)
+    
+if 'form_designer' in settings.INSTALLED_APPS:
+    from form_designer.models import FormDefinition    
+
+    schema.register(
+        FormDefinition, 
+        search_fields = ['title',],
+        description = 'body',
+        )
