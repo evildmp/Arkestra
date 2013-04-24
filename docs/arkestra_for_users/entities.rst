@@ -132,7 +132,9 @@ Phone contacts
 Contacts & people, News & Events, Vacancies & Studentships
 ==========================================================
 
-Arkestra will publish pages of various types automatically if required. The controls are very similar for them all, and also for other modules that might be added by other applications, and will look much like:
+Arkestra will publish pages of various types automatically if required. The
+controls are very similar for them all, and also for other modules that might
+be added by other applications, and will look much like:
 
 Publish a contacts and people page for this entity automatically 
    if this entity should have its own contacts and people page
