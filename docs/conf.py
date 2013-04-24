@@ -214,3 +214,6 @@ man_pages = [
     ('index', 'arkestra', u'Arkestra Documentation',
      [u'Daniele Procida'], 1)
 ]
+
+def setup(app):
+    app.add_stylesheet('../../../arkestra.css')
