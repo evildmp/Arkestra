@@ -177,8 +177,11 @@ class EntityGetRolesForMembersTests(EntityTestObjectsMixin, TestCase):
             )
         smith_school_membership.save()        
         people = [self.smith]
-        self.assertEquals(self.school.get_roles_for_members(people), [self.smith])
-
+        self.assertEquals(
+            self.school.get_roles_for_members(people), 
+            [self.smith]
+            )
+                
 
 class EntityAddressTests(EntityTestObjectsMixin, TestCase):
     def test_get_building_works_when_building_is_assigned(self):
@@ -254,6 +257,7 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
 
     def test_person_with_no_memberships(self):
         # smith has no Memberships
+        self.assertEquals(list(self.smith.real_entity_memberships), [])
         self.assertEquals(self.smith.get_role, None)
         self.assertEquals(self.smith.get_entity, None)
         self.assertEquals(self.smith.get_building, None)
@@ -270,6 +274,7 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
             )
         smith_web_editor_membership.save()
 
+        self.assertEquals(list(self.smith.real_entity_memberships), [])
         self.assertEquals(self.smith.get_role, None)
         self.assertEquals(self.smith.get_entity, None)
         self.assertEquals(self.smith.get_building, None)
@@ -295,6 +300,10 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
             )
         smith_department_membership.save()
 
+        self.assertEquals(
+            list(self.smith.real_entity_memberships),
+            [smith_department_membership]
+            )
         self.assertEquals(self.smith.get_role, smith_department_membership)
         self.assertEquals(self.smith.get_entity, self.department)
         self.assertEquals(self.smith.get_building, self.main_building)
@@ -329,6 +338,10 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
             )
         smith_school_membership.save()        
 
+        self.assertEquals(
+            list(self.smith.real_entity_memberships),
+            [smith_school_membership, smith_department_membership]
+            )
         self.assertEquals(self.smith.get_role, smith_school_membership)
         self.assertEquals(self.smith.get_entity, self.school)
         self.assertEquals(self.smith.get_building, self.main_building)
@@ -338,6 +351,10 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
         smith_department_membership.importance_to_person = 5
         smith_department_membership.save()
 
+        self.assertEquals(
+            list(self.smith.real_entity_memberships),
+            [smith_school_membership, smith_department_membership]
+            )
         self.assertEquals(self.smith.get_role, smith_department_membership)
         self.assertEquals(self.smith.get_entity, self.department)
         self.assertEquals(self.smith.get_building, self.main_building)
