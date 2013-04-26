@@ -492,7 +492,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         The roles returned are in alphabetical order by Person.
         """
         for member in members:
-            ms = member.member_of.all()
+            ms = member.member_of()
             # get the best named membership in the entity
             named_memberships = list(ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person'))
             if named_memberships:
@@ -714,7 +714,7 @@ class Person(PersonLite, CommonFields):
     @property
     def real_entities(self):
         # returns non-abstract entities the person belongs to
-        return self.member_of.objects.filter(entity__abstract_entity = False)
+        return self.member_of.filter(entity__abstract_entity = False)
     
     
     def gather_entities(self):
