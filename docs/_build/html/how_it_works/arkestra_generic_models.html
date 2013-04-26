@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Arkestra generic models &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" />
+    <link rel="next" title="Migrating from an older installation" href="migration.html" />
+    <link rel="prev" title="The video system" href="video_system.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="migration.html" title="Migrating from an older installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="video_system.html" title="The video system"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="arkestra-generic-models">
+<h1>Arkestra generic models<a class="headerlink" href="#arkestra-generic-models" title="Permalink to this headline">¶</a></h1>
+<p>Arkestra provides a flexible way to query your database for information and have it published - automatically, in the right time, in the right place.</p>
+<p>This is a full description of how the news_and_events application does this.</p>
+<div class="section" id="models-py">
+<h2>models.py<a class="headerlink" href="#models-py" title="Permalink to this headline">¶</a></h2>
+<p>Import the classes you&#8217;ll need:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">arkestra_utilities.generic_models</span> <span class="kn">import</span> <span class="n">ArkestraGenericPluginOptions</span><span class="p">,</span> <span class="n">ArkestraGenericModel</span>
+<span class="kn">from</span> <span class="nn">arkestra_utilities.mixins</span> <span class="kn">import</span> <span class="n">URLModelMixin</span>
+</pre></div>
+</div>
+<p>Inherit the ones you need into your new model class:</p>
+<div class="highlight-python"><pre>class NewsArticle(ArkestraGenericModel, URLModelMixin):</pre>
+</div>
+<p>You don&#8217;t need to inherit URLModelMixin, but it can be useful. URLModelMixin provides fields:</p>
+<ul class="simple">
+<li>slug</li>
+<li>external_url</li>
+</ul>
+<p>and methods:</p>
+<ul class="simple">
+<li>__unicode__()</li>
+<li>get_absolute_url()</li>
+</ul>
+<p>URLModelMixin is handy if your instances of your model will each have their own page on the site.</p>
+<p>ArkestraGenericModel provides:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">title</span></tt></dt>
+<dd>the full title of the item</dd>
+<dt><tt class="docutils literal"><span class="pre">short_title</span></tt></dt>
+<dd>a short version, for lists</dd>
+<dt><tt class="docutils literal"><span class="pre">summary</span></tt></dt>
+<dd>a brief summary, used in lists and on the item&#8217;s main page</dd>
+<dt><tt class="docutils literal"><span class="pre">body</span></tt></dt>
+<dd>a PlaceholderField</dd>
+<dt><tt class="docutils literal"><span class="pre">image</span></tt></dt>
+<dd>for the item&#8217;s page, and to offer a little thumbnail image for lists</dd>
+<dt><tt class="docutils literal"><span class="pre">hosted_by</span></tt></dt>
+<dd>the Entity that hosts or publishes the item</dd>
+<dt><tt class="docutils literal"><span class="pre">publish_to</span></tt></dt>
+<dd>the other Entities to whose pages it should be published</dd>
+<dt><tt class="docutils literal"><span class="pre">please_contact</span></tt></dt>
+<dd>a Person</dd>
+<dt><tt class="docutils literal"><span class="pre">importance</span></tt></dt>
+<dd>so Arkestra can highlight it when appropriate</dd>
+</dl>
+<p>and &#64;properties:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">get_importance</span></tt></dt>
+<dd>marks items as important, to help gather them together or highlight them in lists as required</dd>
+<dt><tt class="docutils literal"><span class="pre">is_uninformative</span></tt></dt>
+<dd>the item bears little information of its own</dd>
+<dt><tt class="docutils literal"><span class="pre">get_template</span></tt></dt>
+<dd>the template of the webpage of the entity of this item</dd>
+</dl>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">links</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">external_url</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">get_hosted_by</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">get_website</span></tt></li>
+</ul>
+<p>And you can add whatever fields of your own that are required and ignore the ones that are not.</p>
+</div>
+<div class="section" id="admin-py">
+<h2>admin.py<a class="headerlink" href="#admin-py" title="Permalink to this headline">¶</a></h2>
+<p>Import some handy mixins:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">arkestra_utilities.admin_mixins</span> <span class="kn">import</span> <span class="n">SupplyRequestMixin</span><span class="p">,</span> <span class="n">AutocompleteMixin</span><span class="p">,</span> <span class="n">InputURLMixin</span><span class="p">,</span> <span class="n">fieldsets</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>SupplyRequestMixin supplies the context to the admin - you might have a need for it</li>
+<li>AutocompleteMixin</li>
+<li>InputURLMixin</li>
+<li>fieldsets: some handy predefined fieldsets</li>
+</ul>
+<p>Define the admin form and class, and do the usual things with them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">NewsArticleForm</span><span class="p">(</span><span class="n">InputURLMixin</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">NewsArticle</span>
+
+
+<span class="k">class</span> <span class="nc">NewsArticledmin</span><span class="p">(</span><span class="n">SupplyRequestMixin</span><span class="p">,</span> <span class="n">AutocompleteMixin</span><span class="p">,</span> <span class="n">ModelAdminWithTabsAndCMSPlaceholder</span><span class="p">):</span>
+    <span class="n">related_search_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;hosted_by&#39;</span><span class="p">,</span> <span class="s">&#39;external_url&#39;</span><span class="p">,]</span> <span class="c"># autocomplete on these fields</span>
+
+    <span class="k">def</span> <span class="nf">_media</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AutocompleteMixin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">media</span> <span class="o">+</span> <span class="nb">super</span><span class="p">(</span><span class="n">ModelAdminWithTabsAndCMSPlaceholder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">media</span>
+    <span class="n">media</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_media</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="urls-py">
+<h2>urls.py<a class="headerlink" href="#urls-py" title="Permalink to this headline">¶</a></h2>
+<p>To <tt class="docutils literal"><span class="pre">urls.py</span></tt> add a url pattern:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="s">r&quot;^news/(?P&lt;slug&gt;[-\w]+)/$&quot;</span><span class="p">,</span> <span class="s">&quot;news_and_events.views.newsarticle&quot;</span><span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="views-py">
+<h2>views.py<a class="headerlink" href="#views-py" title="Permalink to this headline">¶</a></h2>
+<p>We need to provide the view the urlpattern points to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">newsarticle</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Responsible for publishing news article</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">newsarticle</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">NewsArticle</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+        <span class="s">&quot;news_and_events/newsarticle.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+        <span class="s">&quot;newsarticle&quot;</span><span class="p">:</span><span class="n">newsarticle</span><span class="p">,</span>
+        <span class="s">&quot;entity&quot;</span><span class="p">:</span> <span class="n">newsarticle</span><span class="o">.</span><span class="n">hosted_by</span><span class="p">,</span>
+        <span class="s">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="n">newsarticle</span><span class="o">.</span><span class="n">summary</span><span class="p">,}</span>
+        <span class="p">},</span>
+        <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="news-and-events-newsarticle-html">
+<h2>news_and_events/newsarticle.html<a class="headerlink" href="#news-and-events-newsarticle-html" title="Permalink to this headline">¶</a></h2>
+<p>The best thing to do is to have a look at the actual <tt class="docutils literal"><span class="pre">news_and_events/newsarticle.html</span></tt>.</p>
+<p>Same salient points:</p>
+<ul class="simple">
+<li>{% extends newsarticle.get_template %} - see ArkestraGenericModel.get_template, above</li>
+<li>page furniture, such as the metadata, will be handled by the template it extends</li>
+</ul>
+</div>
+<div class="section" id="managers-py">
+<h2>managers.py<a class="headerlink" href="#managers-py" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s useful to give your model a manager. You don&#8217;t <em>need</em> to, but it helps keep things tidy, and we&#8217;ll use one in this example. In particular, if you want to make use of the ArkestraGenericPlugin, that makes use of a <tt class="docutils literal"><span class="pre">get_items()</span></tt> method on your manager.</p>
+<p>Inherit the generic model manager:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">arkestra_utilities.managers</span> <span class="kn">import</span> <span class="n">ArkestraGenericModelManager</span>
+</pre></div>
+</div>
+<p>At present this only contains:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">get_by_natural_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>but in the future it might acquire more.</p>
+<p>Define your manager and give it a <tt class="docutils literal"><span class="pre">get_items()</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">NewsArticleManager</span><span class="p">(</span><span class="n">ArkestraGenericModelManager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+                <span class="c"># just for now, we will return all the objects of this model</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">get_items()</span></tt> can be very complex - see the news_and_events.EventManager for a particularly complex example.</p>
+<p>The <tt class="docutils literal"><span class="pre">instance</span></tt> argument for the manager is actually an instance of the plugin model class, which functions as a reasonably convenient API.</p>
+<p>Go back to your model and add an attribute so it knows about the manager:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">NewsArticleManager</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cms-plugins-py">
+<h2>cms_plugins.py<a class="headerlink" href="#cms-plugins-py" title="Permalink to this headline">¶</a></h2>
+<p>The simplest kind of plugin isn&#8217;t even configurable. You just insert it into your content, and let it do its work. We&#8217;ll start with one of those:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">arkestra_utilities.generic_models</span> <span class="kn">import</span> <span class="n">ArkestraGenericPlugin</span>
+</pre></div>
+</div>
+<p>ArkestraGenericPlugin refers throughout to <tt class="docutils literal"><span class="pre">instance</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">instance</span></tt> is the class that defines the behaviour of the plugin in this particular instance. If the plugin is configurable, the instance is the model instance as set up in the Admin; if not, it&#8217;s just an instance of the same model class created for the purpose, but not stored in the database. If we haven&#8217;t even created sucha model class ourselves, it will be an instance of <tt class="docutils literal"><span class="pre">cms.models.pluginmodel.CMSPlugin</span></tt>.</p>
+<p>ArkestraGenericPlugin provides a number of methods, mostly called by <tt class="docutils literal"><span class="pre">render()</span></tt>:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">render(self,</span> <span class="pre">context,</span> <span class="pre">instance,</span> <span class="pre">placeholder)</span></tt></dt>
+<dd><ul class="first simple">
+<li>works out the entity</li>
+<li>assumes the <tt class="docutils literal"><span class="pre">type</span></tt> of the instance is <tt class="docutils literal"><span class="pre">plugin</span></tt> if not stated otherwise (e.g. a menu generator, a main page generator)</li>
+<li>changes the render_template from <tt class="docutils literal"><span class="pre">arkestra/universal_plugin_lister.html</span></tt> if required</li>
+<li>calls <tt class="docutils literal"><span class="pre">set_defaults()</span></tt> to set some sensible defaults which may or may not be overridden</li>
+<li>calls <tt class="docutils literal"><span class="pre">get_items()</span></tt> to get items in a list of lists, called <tt class="docutils literal"><span class="pre">lists</span></tt>.</li>
+<li>calls <tt class="docutils literal"><span class="pre">add_link_to_main_page()</span></tt> to see if we need a link to a main page (e.g. the main news and events page)</li>
+<li>calls <tt class="docutils literal"><span class="pre">add_links_to_other_items()</span></tt> to see if we should provide links to archives etc</li>
+<li>calls <tt class="docutils literal"><span class="pre">set_limits_and_indexes()</span></tt> to work out whether we need indexes, or how to truncate lists of items</li>
+<li>calls <tt class="docutils literal"><span class="pre">determine_layout_settings()</span></tt> to set rows/columns and classes for items in the lists</li>
+<li>calls <tt class="docutils literal"><span class="pre">set_layout_classes()</span></tt> to work out the overall structure (rows/columns) of the plugin output</li>
+</ul>
+<p class="last">Everything it needs to set for the overall information about what&#8217;s going on in the plugin is set as an attribute of <tt class="docutils literal"><span class="pre">instance</span></tt>, which is then passed to the template as <tt class="docutils literal"><span class="pre">everything</span></tt>. <tt class="docutils literal"><span class="pre">lists</span></tt> is made an attribute of <tt class="docutils literal"><span class="pre">instance</span></tt>.</p>
+</dd>
+</dl>
+<p><tt class="docutils literal"><span class="pre">get_items()</span></tt> isn&#8217;t provided by ArkestraGenericPlugin, except as a dummy that sets an empty <tt class="docutils literal"><span class="pre">lists</span></tt> - it needs to be provided by whatever subclasses it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">lists</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>This is because ArkestraGenericPlugin won&#8217;t have any idea how to get items - it doesn&#8217;t know about content.</p>
+<div class="highlight-python"><pre>class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, CMSPluginBase):
+    # set text_enabled, admin_preview, render_template if the ArkestraGenericPlugin default are not suitable
+
+    # provide an icon for the admin interface
+            def icon_src(self, instance):
+        return "/static/plugin_icons/news_and_events.png"
+
+plugin_pool.register_plugin(CMSNewsAndEventsPlugin)</pre>
+</div>
+<p>You should now be able to insert the plugin into a placeholder, and examine its output - but there won&#8217;t be anything in there yet, because <tt class="docutils literal"><span class="pre">get_items()</span></tt> returns <tt class="docutils literal"><span class="pre">[]</span></tt>.</p>
+<p>So let&#8217;s add a method to our plugin:</p>
+<div class="highlight-python"><pre>def get_items(self, instance):
+    # call the base get_items() to set up our self.lists
+            super(CMSPublicationsPlugin, self).get_items(instance)
+
+    # create a dict to store information about the news articles
+            news_articles = {}
+
+    # put the actual items in it
+            news_articles["items"] = NewsArticle.objects.all()
+
+    # will the plugin publish links to other items (more news, news archive)?
+            news_articles["links_to_other_items"] = self.news_style_other_links
+
+    # will the plugin publish links to other items (more news, news archive)?
+            news_articles["heading_text"] = instance.news_heading_text
+
+            # what template will each item in this list use?
+            news_articles["item_template"] = "arkestra/universal_plugin_list_item.html"
+
+
+    self.lists.append(news_articles)</pre>
+</div>
+<p>And if we haven&#8217;t changed <tt class="docutils literal"><span class="pre">render_template</span></tt>, it will use <tt class="docutils literal"><span class="pre">arkestra/universal_plugin_lister.html</span></tt>.  Use <tt class="docutils literal"><span class="pre">arkestra/universal_plugin_lister.html</span></tt> as a guide to writing your template.</p>
+<div class="section" id="add-link-to-main-page">
+<h3>add_link_to_main_page()<a class="headerlink" href="#add-link-to-main-page" title="Permalink to this headline">¶</a></h3>
+<p>To be completed</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>urls.py<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>We can use the architecture we have been working with to create an automatic page, for each entity, for this - or these - generic models.</p>
+<p>We need a URL pattern for this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># named entities&#39; news</span>
+<span class="p">(</span><span class="s">r&quot;^news/(?P&lt;slug&gt;[-\w]+)/$&quot;</span><span class="p">,</span> <span class="s">&quot;news.views.news&quot;</span><span class="p">),</span>
+
+<span class="c"># base entity&#39;s news</span>
+<span class="p">(</span><span class="s">r&#39;^news/$&#39;</span><span class="p">,</span> <span class="s">&quot;news.views.news&quot;</span><span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>views.py<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="models-py-again">
+<h2>models.py (again)<a class="headerlink" href="#models-py-again" title="Permalink to this headline">¶</a></h2>
+<p>Now let&#8217;s create a plugin that we can use to list a number of the items in the model we have created.</p>
+<p>We have already imported arkestra_utilities.ArkestraGenericPluginOptions. This provides:</p>
+<div class="highlight-python"><pre>* entity: the entity whose items we'll publish (can usually be left blank; Arkestra will work out what to do)
+* layout: if there are multiple lists (e.g. news and events), will they be stacked or side-by-side?
+* format: title only? details? image?
+* heading_level: above the list there'll be a heading
+* order_by: date alone, or rank by importance too?
+* list format: horizontal or vertical
+* group dates: group lists into sublists (of months, usually)
+* limit_to: how many items - leave blank for no limit</pre>
+</div>
+<div class="highlight-python"><pre>class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):</pre>
+</div>
+<p>Note that this plugin can handle both news and events.</p>
+<p>And let&#8217;s add:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">display</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s">&quot;Show&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span><span class="n">choices</span> <span class="o">=</span> <span class="n">DISPLAY</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="s">&quot;news events&quot;</span><span class="p">)</span>
+<span class="n">show_previous_events</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+<span class="n">news_heading_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;News&quot;</span><span class="p">)</span>
+<span class="n">events_heading_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;Events&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):</p>
+<p>This is in effect the model for the plugin, and will inherit:</p>
+<div class="section" id="form-and-admin">
+<h3>form and admin<a class="headerlink" href="#form-and-admin" title="Permalink to this headline">¶</a></h3>
+<p>from arkestra_utilities.generic_models import ArkestraGenericPlugin, ArkestraGenericPluginForm
+from arkestra_utilities.mixins import AutocompleteMixin</p>
+<dl class="docutils">
+<dt>class PublicationsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):</dt>
+<dd>pass</dd>
+<dt>class CMSPublicationsPlugin(UniversalPlugin, AutocompleteMixin, CMSPluginBase):</dt>
+<dd><p class="first">model = PublicationsPlugin
+name = _(&#8220;Publications&#8221;)
+form = PublicationsPluginForm
+auto_page_attribute = &#8220;auto_publications_page&#8221;
+auto_page_slug = &#8220;publications&#8221;
+auto_page_menu_title = &#8220;publications_page_menu_title&#8221;
+# fieldsets = (
+#     (None, {
+#     &#8216;fields&#8217;: ((&#8216;display&#8217;, &#8216;layout&#8217;, &#8216;list_format&#8217;,),  ( &#8216;format&#8217;, &#8216;order_by&#8217;, &#8216;group_dates&#8217;,), &#8216;limit_to&#8217;)
+# }),
+#     (&#8216;Advanced options&#8217;, {
+#     &#8216;classes&#8217;: (&#8216;collapse&#8217;,),
+#     &#8216;fields&#8217;: (&#8216;entity&#8217;, &#8216;heading_level&#8217;, (&#8216;news_heading_text&#8217;, &#8216;events_heading_text&#8217;), (&#8216;show_previous_events&#8217;, ),)
+# }),
+# )</p>
+<p># autocomplete fields
+related_search_fields = [&#8216;entity&#8217;,]</p>
+<dl class="last docutils">
+<dt>def get_items(self, instance):</dt>
+<dd><p class="first">self.lists = []</p>
+<p>this_list = {&#8220;model&#8221;: Publication,}
+this_list[&#8220;items&#8221;] = Pub.objects.get_items(instance)
+this_list[&#8220;links_to_other_items&#8221;] = self.news_style_other_links
+this_list[&#8220;heading_text&#8221;] = instance.news_heading_text
+this_list[&#8220;item_template&#8221;] = &#8220;arkestra/universal_plugin_list_item.html&#8221;
+# the following should <em>also</em> check this_list[&#8220;links_to_other_items&#8221;] -
+# but then get_items() will need to call self.add_links_to_other_items() itself
+# this will then mean that news and events pages show two columns if one has links to other items
+if this_list[&#8220;items&#8221;]:</p>
+<blockquote class="last">
+<div>self.lists.append(this_list)</div></blockquote>
+</dd>
+<dt>def icon_src(self, instance):</dt>
+<dd>return &#8220;/static/plugin_icons/publications_plugin.png&#8221;</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="menu">
+<h2>Menu<a class="headerlink" href="#menu" title="Permalink to this headline">¶</a></h2>
+<p>Every Entity in the system that has Recordings should have a menu item where they&#8217;re listed.</p>
+<p>For now we will just hardcode a little routine into our menu, contacts_and_people.menu, at the comment &#8220;# insert nodes for this Entity&#8221;:</p>
+<dl class="docutils">
+<dt>self.create_new_node(</dt>
+<dd>title = &#8220;Recordings&#8221;,
+url = node.entity.get_related_info_page_url(&#8220;recordings&#8221;), # i.e. /url_of_entity/recordings
+parent = node,
+)</dd>
+</dl>
+<p>We&#8217;ll make this more sophisticated later.</p>
+</div>
+<div class="section" id="url">
+<h2>URL<a class="headerlink" href="#url" title="Permalink to this headline">¶</a></h2>
+<p>We need a URL pattern to match that, so you&#8217;ll need:</p>
+<blockquote>
+<div><p># named entities&#8217; recordings
+(r&#8221;^recordings/(?P&lt;slug&gt;[-w]+)/$&#8221;, &#8220;recordings.views.recordings&#8221;),</p>
+<p># base entity&#8217;s vacancies and studentships
+(r&#8217;^recordings/$&#8217;, &#8220;recordings.views.recordings&#8221;),</p>
+</div></blockquote>
+</div>
+<div class="section" id="views">
+<h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<p>Your URL is looking for a view:</p>
+<p>class MyPluginPublisher(ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):</p>
+<p>This is in effect the admin for the plugin. Its render() method is what publishes the output. It will inherit:</p>
+<blockquote>
+<div><p>How to use and abuse this plugin:</p>
+<p>first create an instance of the plugin model:</p>
+<blockquote>
+<div>instance = NewsAndEventsPlugin()</div></blockquote>
+<p>set the attributes as required:</p>
+<blockquote>
+<div>instance.display = &#8220;events&#8221;
+instance.type = &#8220;for_place&#8221;
+instance.place = self
+instance.view = &#8220;current&#8221;
+instance.format = &#8220;details image&#8221;</div></blockquote>
+<p>render it to get back the items you want in instance.lists, if you have the context:</p>
+<blockquote>
+<div>CMSNewsAndEventsPlugin().render(context, instance, None)</div></blockquote>
+<p>alternatively (this is used in the menus, for example):</p>
+<blockquote>
+<div>plugin = CMSNewsAndEventsPlugin()
+plugin.get_items(instance)
+plugin.add_links_to_other_items(instance)
+... and any operations tests as required</div></blockquote>
+<p>and the NewsAndEventsPlugin() needs to have the lists attribute of CMSNewsAndEventsPlugin()</p>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Arkestra generic models</a><ul>
+<li><a class="reference internal" href="#models-py">models.py</a></li>
+<li><a class="reference internal" href="#admin-py">admin.py</a></li>
+<li><a class="reference internal" href="#urls-py">urls.py</a></li>
+<li><a class="reference internal" href="#views-py">views.py</a></li>
+<li><a class="reference internal" href="#news-and-events-newsarticle-html">news_and_events/newsarticle.html</a></li>
+<li><a class="reference internal" href="#managers-py">managers.py</a></li>
+<li><a class="reference internal" href="#cms-plugins-py">cms_plugins.py</a><ul>
+<li><a class="reference internal" href="#add-link-to-main-page">add_link_to_main_page()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">urls.py</a></li>
+<li><a class="reference internal" href="#id2">views.py</a></li>
+<li><a class="reference internal" href="#models-py-again">models.py (again)</a><ul>
+<li><a class="reference internal" href="#form-and-admin">form and admin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#menu">Menu</a></li>
+<li><a class="reference internal" href="#url">URL</a></li>
+<li><a class="reference internal" href="#views">Views</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="video_system.html"
+                        title="previous chapter">The video system</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="migration.html"
+                        title="next chapter">Migrating from an older installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/how_it_works/arkestra_generic_models.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="migration.html" title="Migrating from an older installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="video_system.html" title="The video system"
+             >previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
