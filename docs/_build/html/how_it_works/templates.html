@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Arkestra templating &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" />
+    <link rel="next" title="Using news &amp; events" href="using_news_and_events.html" />
+    <link rel="prev" title="Introduction" href="../arkestra_for_users/introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="using_news_and_events.html" title="Using news &amp; events"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../arkestra_for_users/introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="arkestra-templating">
+<h1>Arkestra templating<a class="headerlink" href="#arkestra-templating" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="placeholder-image-sizing-cues">
+<h2>Placeholder &amp; image sizing cues<a class="headerlink" href="#placeholder-image-sizing-cues" title="Permalink to this headline">¶</a></h2>
+<p>Your main site template(s) should include some cues for the image sizing system.</p>
+<p>Obviously, these should reflect the site&#8217;s CSS.</p>
+<p>The built-in <cite>arkestra_utilities/templates/arkestra.html</cite> sets some defaults, so if your own template extends that (certainly recommended while you are getting started) you will find that the values below are already set.</p>
+<p>They are set using <cite>{% with %}</cite>/<cite>{% endwith %}</cite> around the <cite>{% block body_content %}</cite>. If you want to override any of them in your own template, use <cite>{% with %}</cite>/<cite>{% endwith %}</cite> just <em>inside</em> in your template&#8217;s <cite>{% block body_content %}</cite>, the way <cite>institute.html</cite> does in the example project.</p>
+<div class="highlight-python"><pre>placeholder_width=960 # the main body, default for all placeholders
+generic_main_width=523 # width of the main part of a news item, event, etc
+sidebar_image_size="294x196" # images in news, events, etc sidebars
+sidebar_map_size="296x100" # map thumbnail image in events etc sidebars
+entity_map_size="445x100" # map thumbnail image for entites
+person_map_size="445x100" # map thumbnail image for persons
+entity_image_size="445x384" # main entity image
+person_image_size="384x384" # person's main image
+person_thumbnail_size="40x40" # person's thumbnail image in lists
+place_image_size="627x418"  # a place's main image
+place_map_size="294x182 # the small map on a place page
+lightbox_max_dimension=600  # what's the biggest a lightbox can be?
+plugin_thumbnail_size="75x75"</pre>
+</div>
+</div>
+<div class="section" id="other-cues">
+<h2>Other cues<a class="headerlink" href="#other-cues" title="Permalink to this headline">¶</a></h2>
+<p>Arkestra also provides template hooks for other variables, which can be set in the same <cite>{% with %}</cite>/<cite>{% endwith %}</cite> block.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slider_delay</span><span class="o">=</span><span class="s">&quot;4000&quot;</span> <span class="c"># time for each slide in the ImageSet slider</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="block-main-page-body">
+<h2>{% block main_page_body %}<a class="headerlink" href="#block-main-page-body" title="Permalink to this headline">¶</a></h2>
+<p>Some views, such as for an entity&#8217;s Contacts &amp; People page or News &amp; Events page, expect your templates to be lined up in the right way. For example:</p>
+<ul class="simple">
+<li>the view for a Contacts &amp; People page will load <cite>contacts_and_people/templates/contacts_and_people/arkestra_page.html</cite></li>
+<li>this extend the template that it gets from the entity&#8217;s cms.Page: <cite>{% extends entity.get_template %}</cite></li>
+<li>the site template in its <cite>{% block main_page_body %}</cite> will thus include the file that view has specified, containing the special stuff for that view: <cite>{% include main_page_body_file %}</cite></li>
+</ul>
+<p>So, anything in your template that should <em>not</em> end up in pages like Contacts &amp; People should be <em>inside</em> <cite>{% block main_page_body %}</cite>, so that it is replaced.</p>
+<p>Anything outside that block will appear on those pages too.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Arkestra templating</a><ul>
+<li><a class="reference internal" href="#placeholder-image-sizing-cues">Placeholder &amp; image sizing cues</a></li>
+<li><a class="reference internal" href="#other-cues">Other cues</a></li>
+<li><a class="reference internal" href="#block-main-page-body">{% block main_page_body %}</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../arkestra_for_users/introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="using_news_and_events.html"
+                        title="next chapter">Using news &amp; events</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/how_it_works/templates.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="using_news_and_events.html" title="Using news &amp; events"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../arkestra_for_users/introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

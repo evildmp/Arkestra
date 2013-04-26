@@ -1,0 +1,129 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Starting your own project &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="starting-your-own-project">
+<h1>Starting your own project<a class="headerlink" href="#starting-your-own-project" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-the-bundled-example-project">
+<h2>Using the bundled example project<a class="headerlink" href="#using-the-bundled-example-project" title="Permalink to this headline">¶</a></h2>
+<p>Arkestra comes with a bundled example project - in the <cite>example</cite> folder - which is ready to go, complete with database and media files.</p>
+<p>Once you have the example project running, have a look at the site.</p>
+<p>The admin interface is at <cite>/admin</cite>; username and password are both <cite>arkestra</cite>.</p>
+<p>Once logged in to the admin, set your <cite>Site</cite> appropriately - <cite>/admin/sites/site/</cite>.</p>
+</div>
+<div class="section" id="running-your-own-project">
+<h2>Running your own project<a class="headerlink" href="#running-your-own-project" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>example</cite> project in Arkestra contains a ready-made <cite>settings.py</cite> file, not to mention the <cite>urls.py</cite> and so on that you&#8217;ll need.</p>
+<p>Either copy these, or if you know what you&#8217;re doing, copy the relevant parts to the files in your own project.</p>
+<p>Start with the Python runserver, and get that going.</p>
+<p>In order to make anything work, you&#8217;ll need to do log in to Admin (username and password are both <cite>arkestra</cite>) and do three things.</p>
+<ul class="simple">
+<li>create a Page</li>
+<li>create an Entity</li>
+<li>link the Entity to the Page, by selecting the Page as the Entity&#8217;s /Home page/</li>
+</ul>
+<p>And since Arkestra needs to know what the <em>base entity</em> of your site is, in your <tt class="docutils literal"><span class="pre">arkestra_settings</span></tt> file add something like:</p>
+<p>ARKESTRA_BASE_ENTITY = 1</p>
+<p>where the value corresponds to the id of your base entity.</p>
+</div>
+<div class="section" id="in-production">
+<h2>In production<a class="headerlink" href="#in-production" title="Permalink to this headline">¶</a></h2>
+<p>Run <cite>collectstatic</cite> - <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles">https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles</a> for media files to get them into the right place.</p>
+<p>For deployment, point your web hosting platform not at <cite>settings.py</cite>, but <cite>deployment_settings.py</cite>, which turns off various debug modes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Starting your own project</a><ul>
+<li><a class="reference internal" href="#using-the-bundled-example-project">Using the bundled example project</a></li>
+<li><a class="reference internal" href="#running-your-own-project">Running your own project</a></li>
+<li><a class="reference internal" href="#in-production">In production</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/getting_started/getting_started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

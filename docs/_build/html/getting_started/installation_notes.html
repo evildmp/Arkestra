@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>More notes about installation &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" />
+    <link rel="next" title="Starting your own project" href="starting_your_own_project.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="starting_your_own_project.html" title="Starting your own project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="more-notes-about-installation">
+<h1>More notes about installation<a class="headerlink" href="#more-notes-about-installation" title="Permalink to this headline">¶</a></h1>
+<p>With luck you won&#8217;t even need to refer to this, but just in case, here it is.</p>
+<div class="section" id="the-arkestra-applications">
+<h2>The Arkestra applications<a class="headerlink" href="#the-arkestra-applications" title="Permalink to this headline">¶</a></h2>
+<p>Arkestra is a collection of applications, each of which needs to be put on your PYTHONPATH (Arkestra&#8217;s setup.py should do this for you):</p>
+<ul class="simple">
+<li>arkestra_image_plugin</li>
+<li>arkestra_utilities</li>
+<li>contacts_and_people</li>
+<li>housekeeping</li>
+<li>links</li>
+<li>news_and_events</li>
+<li>vacancies_and_studentships</li>
+<li>video</li>
+</ul>
+</div>
+<div class="section" id="other-components">
+<h2>Other components<a class="headerlink" href="#other-components" title="Permalink to this headline">¶</a></h2>
+<p>Akestra requires installation of various components (Arkestra&#8217;s setup.py should do this for you). They include:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://django-cms.org/">Django CMS</a></li>
+<li>Django Filer</li>
+<li>Django Widgetry</li>
+<li>Semantic Presentation Editor</li>
+<li>django-polymorphic</li>
+<li>BeautifulSoup</li>
+<li>django-typogrify</li>
+<li>pyquery</li>
+<li>easy-thumbnails</li>
+<li>django-appmedia</li>
+<li>PIL</li>
+</ul>
+</div>
+<div class="section" id="pip-freeze">
+<h2>pip freeze<a class="headerlink" href="#pip-freeze" title="Permalink to this headline">¶</a></h2>
+<p>This is what <cite>pip freeze</cite> reports, just for your information:</p>
+<ul class="simple">
+<li>-e <a class="reference external" href="mailto:git+git&#37;&#52;&#48;github&#46;com">git+git<span>&#64;</span>github<span>&#46;</span>com</a>:<a class="reference external" href="mailto:evildmp/Arkestra&#46;git&#37;&#52;&#48;a4cba94661af4b22025a301e70c1c5438bbecd65#egg=Arkestra-dev">evildmp/Arkestra<span>&#46;</span>git<span>&#64;</span>a4cba94661af4b22025a301e70c1c5438bbecd65#egg=Arkestra-dev</a></li>
+<li>BeautifulSoup==3.2.1</li>
+<li>Django==1.4</li>
+<li>Pillow==1.7.7</li>
+<li>South==0.7.5</li>
+<li>cssselect==0.7.1</li>
+<li>django-classy-tags==0.3.4.1</li>
+<li>-e <a class="reference external" href="mailto:git+git&#37;&#52;&#48;github&#46;com">git+git<span>&#64;</span>github<span>&#46;</span>com</a>:<a class="reference external" href="mailto:divio/django-cms&#46;git&#37;&#52;&#48;56afb01890396fe0562c3ce6700afbff81487f80#egg=django_cms-dev">divio/django-cms<span>&#46;</span>git<span>&#64;</span>56afb01890396fe0562c3ce6700afbff81487f80#egg=django_cms-dev</a></li>
+<li>-e git+https://github.com/stefanfoulis/django-filer.git&#64;52aa62b11b7c890e45ed0eb45ef37d0300d5d3ee#egg=django_filer-dev</li>
+<li>django-mptt==0.5.2</li>
+<li>django-polymorphic==0.2</li>
+<li>django-sekizai==0.6.1</li>
+<li>django-typogrify==1.3</li>
+<li>-e <a class="reference external" href="mailto:git+git&#37;&#52;&#48;github&#46;com">git+git<span>&#64;</span>github<span>&#46;</span>com</a>:<a class="reference external" href="mailto:evildmp/django-widgetry&#46;git&#37;&#52;&#48;87885698bb3b1c0913a642a0b242a21557b3da09#egg=django_widgetry-dev">evildmp/django-widgetry<span>&#46;</span>git<span>&#64;</span>87885698bb3b1c0913a642a0b242a21557b3da09#egg=django_widgetry-dev</a></li>
+<li>easy-thumbnails==1.0.3</li>
+<li>html5lib==0.95</li>
+<li>lxml==2.3.4</li>
+<li>pyquery==1.2.1</li>
+<li>-e hg+https://bitbucket.org/spookylukey/semanticeditor&#64;6a344716ddd2791c98af773fdfc6bb50107c3b8f#egg=semanticeditor-dev</li>
+<li>smartypants==1.6.0.3</li>
+<li>wsgiref==0.1.2</li>
+</ul>
+</div>
+<div class="section" id="pillow-and-pil">
+<h2>Pillow and PIL<a class="headerlink" href="#pillow-and-pil" title="Permalink to this headline">¶</a></h2>
+<p>Arkestra will install Pillow. It&#8217;ll work with PIL too, but Pillow is much easier to use with setuptools.</p>
+<div class="section" id="if-you-must-use-pil">
+<h3>If you must use PIL<a class="headerlink" href="#if-you-must-use-pil" title="Permalink to this headline">¶</a></h3>
+<p>You can try <cite>pip install PIL</cite>, but it doesn&#8217;t always seem to work very well.</p>
+<p>This is often because pip installs PIL from source, and if you don&#8217;t have the development packages
+(C headers) then it won&#8217;t
+compile it with support for all required file formats. Make sure you get the <cite>-dev</cite> packages first. On
+a Debian system doing <cite>apt-get install libjpg-dev libpng-dev</cite> before getting PIL via pip fixed a big
+problem with image uploads because thumbnails weren&#8217;t being generated.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">More notes about installation</a><ul>
+<li><a class="reference internal" href="#the-arkestra-applications">The Arkestra applications</a></li>
+<li><a class="reference internal" href="#other-components">Other components</a></li>
+<li><a class="reference internal" href="#pip-freeze">pip freeze</a></li>
+<li><a class="reference internal" href="#pillow-and-pil">Pillow and PIL</a><ul>
+<li><a class="reference internal" href="#if-you-must-use-pil">If you must use PIL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="starting_your_own_project.html"
+                        title="next chapter">Starting your own project</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/getting_started/installation_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="starting_your_own_project.html" title="Starting your own project"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Entities &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/../../../arkestra.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" />
+    <link rel="next" title="Things you should never do" href="things_never_to_do.html" />
+    <link rel="prev" title="The concept of Arkestra" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="things_never_to_do.html" title="Things you should never do"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="The concept of Arkestra"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="entities">
+<h1>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-exactly-is-an-entity">
+<h2>What exactly is an entity?<a class="headerlink" href="#what-exactly-is-an-entity" title="Permalink to this headline">¶</a></h2>
+<p>An <em>entity</em> could be:</p>
+<dl class="docutils">
+<dt>an organisation:</dt>
+<dd><em>Cardiff University School of Medicine</em></dd>
+<dt>a part of a larger organisation:</dt>
+<dd><em>Institute of Infection &amp; Immunity</em>
+<em>Research Office</em></dd>
+<dt>a group of other entities:</dt>
+<dd><p class="first"><em>Research institutes</em></p>
+<p class="last"><em>Administrative &amp; support offices</em></p>
+</dd>
+<dt>a collection of people:</dt>
+<dd><em>Web editors</em>
+<em>School IT liaison officers</em></dd>
+</dl>
+<p>Entities exist in a <em>hierarchy</em>, which might look like:</p>
+<ul class="simple">
+<li>Cardiff University<ul>
+<li>Cardiff University School of Medicine<ul>
+<li>Institutes<ul>
+<li>Institute of Infection &amp; Immunity</li>
+<li>Institute of Cancer Genetics</li>
+<li>Institute of Medical Education<ul>
+<li>Admissions</li>
+<li>Assessments</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Administrative offices<ul>
+<li>Finance</li>
+<li>Personnel</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="managing-entities">
+<h2>Managing entities<a class="headerlink" href="#managing-entities" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s start by getting to work on an entity.</p>
+<div class="section" id="the-entities-change-list">
+<h3>The Entities change list<a class="headerlink" href="#the-entities-change-list" title="Permalink to this headline">¶</a></h3>
+<p>In the Arkestra admin site, find <cite>Contacts &amp; people</cite> &gt; <cite>Entities</cite>. They are arranged in a tree reflecting the hierarchy of entities.</p>
+<div class="figure">
+<img alt="map to buried treasure" src="../_images/entity-change-list.png" style="width: 100%;" />
+<p class="caption">The <strong>Entities</strong> change list</p>
+</div>
+<p>You can:</p>
+<ul class="simple">
+<li><strong>search</strong> the list of Entities</li>
+<li><strong>filter</strong> the list according to various criteria</li>
+<li><strong>expand and collapse</strong> sections of the hiearchy using the controls in the window</li>
+<li><strong>move</strong> entites by dragging them around within the tree</li>
+</ul>
+<p>Either select an existing entity to edit, or create a new one if none exist.</p>
+</div>
+<div class="section" id="editing-an-entity">
+<h3>Editing an entity<a class="headerlink" href="#editing-an-entity" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<img alt="map to buried treasure" src="../_images/entity-change-view.png" style="width: 100%;" />
+<p class="caption">The <strong>Entity</strong> change view - you&#8217;ll find many of the same controls and
+features throughout Arkestra&#8217;s adminstration interface.</p>
+</div>
+<p>This is where we tell Arkestra what it needs to know about our entity.</p>
+<div class="section" id="basic-information">
+<h4>Basic information<a class="headerlink" href="#basic-information" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>Name</dt>
+<dd>its official title, in full</dd>
+<dt>Short name for menus</dt>
+<dd>a shorter version, if required</dd>
+<dt>Image</dt>
+<dd>an image (for example a logo)</dd>
+<dt>Home page</dt>
+<dd>The entity will likely have a number of pages associated with it in the
+<strong>Pages</strong> system that; select the root page of that section. Arkestra will
+know that <em>all</em> the pages in that section belong to this entity.</dd>
+<dt>Parent</dt>
+<dd>The entity&#8217;s parent in the hierarchy. You can also change this by dragging the entity around in the change list, but if the hierarchy contains hundreds of items, this is a more efficient way to do it.</dd>
+<dt>Include parent entity&#8217;s name in address</dt>
+<dd>Arkestra builds an entity&#8217;s address automatically, and will include its parent&#8217;s name in that automatically. Usually that makes sense (<em>IT Office, School of Medicine</em>, but sometimes it might look silly (<em>Cardiff University School of Medicine, Cardiff University</em>), so this allows us to turn it off.</dd>
+<dt>Abstract</dt>
+<dd>Some entities are actual organisational entities, like the University or the Research Office. Others are just useful groupings, or <em>abstract entities</em>.</dd>
+</dl>
+</div>
+<div class="section" id="location">
+<h4>Location<a class="headerlink" href="#location" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>Address</dt>
+<dd>This is there to show you how Arkestra will render the entity&#8217;s address</dd>
+<dt>Building</dt>
+<dd>where the entity is based</dd>
+<dt>Building recapitulates entity name</dt>
+<dd>Sometimes, the building name and the entity name are so similar it would be silly to have them both in the address. If so, this field allows Arkestra to know that it shouldn&#8217;t include them both in addresses</dd>
+<dt>Precise location</dt>
+<dd>the place <em>inside</em> the building - floor, room number, etc</dd>
+<dt>Precise location</dt>
+<dd>any note for potential visitors</dd>
+</dl>
+</div>
+<div class="section" id="contact">
+<h4>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>Email address</dt>
+<dd>if the entity has its own email address</dd>
+<dt>Phone contacts</dt>
+<dd>choose or add a suitable label; don&#8217;t try to format numbers</dd>
+</dl>
+</div>
+<div class="section" id="contacts-people-news-events-vacancies-studentships">
+<h4>Contacts &amp; people, News &amp; Events, Vacancies &amp; Studentships<a class="headerlink" href="#contacts-people-news-events-vacancies-studentships" title="Permalink to this headline">¶</a></h4>
+<p>Arkestra will publish pages of various types automatically if required. The
+controls are very similar for them all, and also for other modules that might
+be added by other applications, and will look much like:</p>
+<dl class="docutils">
+<dt>Publish a contacts and people page for this entity automatically</dt>
+<dd>if this entity should have its own contacts and people page</dd>
+<dt>Title</dt>
+<dd>what the page should be called</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Entities</a><ul>
+<li><a class="reference internal" href="#what-exactly-is-an-entity">What exactly is an entity?</a></li>
+<li><a class="reference internal" href="#managing-entities">Managing entities</a><ul>
+<li><a class="reference internal" href="#the-entities-change-list">The Entities change list</a></li>
+<li><a class="reference internal" href="#editing-an-entity">Editing an entity</a><ul>
+<li><a class="reference internal" href="#basic-information">Basic information</a></li>
+<li><a class="reference internal" href="#location">Location</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
+<li><a class="reference internal" href="#contacts-people-news-events-vacancies-studentships">Contacts &amp; people, News &amp; Events, Vacancies &amp; Studentships</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">The concept of Arkestra</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="things_never_to_do.html"
+                        title="next chapter">Things you should never do</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/arkestra_for_users/entities.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="things_never_to_do.html" title="Things you should never do"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="The concept of Arkestra"
+             >previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

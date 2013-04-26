@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The image sizing system &mdash; Arkestra dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Arkestra dev documentation" href="../index.html" />
+    <link rel="next" title="The links system" href="links_system.html" />
+    <link rel="prev" title="Using news &amp; events" href="using_news_and_events.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="links_system.html" title="The links system"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="using_news_and_events.html" title="Using news &amp; events"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-image-sizing-system">
+<h1>The image sizing system<a class="headerlink" href="#the-image-sizing-system" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-problem">
+<h2>The problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we have a page with two columns, and an image, 500px wide, in the second column, which happens to be 500px wide itself.</p>
+<p>At the moment, a 500px width is correct for that image, but any one of a number of things could change that, for example:</p>
+<ul class="simple">
+<li>if the editor decides the layout should no longer be two columns but three</li>
+<li>... or that the text column should be twice the width of the image columns</li>
+<li>if the editor applies a border to the image</li>
+<li>the designer decides that the site template should be 200px wider</li>
+<li>the designer applies CSS to the site placing borders on all images</li>
+</ul>
+<p>Any of these will mean that the 500px wide image will no longer fit neatly into its column.</p>
+<p>One solution is for the editor to work out the new correct size for the image and set it accordingly. Of course, if this is in the process of working out a new page layout it could be a rather tedious; it could be more tedious still if it&#8217;s the result of a site-wide change, when there could be hundreds or thousands of images to correct.</p>
+<p>The other solution is for Arkestra to do it all automatically, which it does.</p>
+</div>
+<div class="section" id="the-solution">
+<h2>The solution<a class="headerlink" href="#the-solution" title="Permalink to this headline">¶</a></h2>
+<p>Arkestra can know about site templates, and use this information to work out the correct size of any image.</p>
+<p>For example, suppose the body content area of in our example above is 960 pixels wide. Arkestra will know what the exact width of the image should be to fill it.</p>
+<p>Using the default CSS and values:</p>
+<ul class="simple">
+<li>to occupy that second column, it will be be 48% of 960</li>
+<li>for a three-column layout, or if the text column should be twice the width: 30.6667%</li>
+<li>if it has a border class applied: reduce the width by 16 pixels.</li>
+</ul>
+<p>These are just the simplest examples. If your image has been told to</p>
+<ul class="simple">
+<li>float right</li>
+<li>have a border</li>
+<li>and occupy 50% of a column</li>
+<li>which itself has a background tint</li>
+<li>and is two-fifths of the second column in a two-column layout</li>
+<li>and the page has a menu down the side that makes the content area narrower</li>
+</ul>
+<p>Arkestra will take account of all that to work out the size of the image to the nearest pixel. Every time any of those things changes, when the page is rendered, the image will appear at exactly the right size.</p>
+<p>Arkestra comes with sensible defaults for columns and borders, but they are easy to override if you want your own templates to have different values.</p>
+</div>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>The image plugin (or video, or carousel, or whatever - referred to here as &#8216;image&#8217;, just to make life easier) is told what width to be.</p>
+<p>If it&#8217;s an absolute width or the native width of the image, then that&#8217;s settled. But if it&#8217;s one a width relative to the containing column, then Arkestra will need to make the calculation.</p>
+<p>In summary, it looks like this:
+* the rendering plugin</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt><cite>get_plugin_width</cite> - if not None (native width) or negative (absolute width) then:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>get_placeholder_width</cite></dt>
+<dd><ul class="first last simple">
+<li><cite>SimplePlaceholderWidthAdjuster</cite> (the default <cite>placeholder_width</cite> adjuster)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>calculate_container_width</cite></dt>
+<dd><ul class="first last">
+<li><p class="first"><cite>get_plugin_ancestry</cite></p>
+</li>
+<li><dl class="first docutils">
+<dt>for each ancestor:</dt>
+<dd><ul class="first last simple">
+<li>run each registered <cite>plugin_width</cite> adjuster (some modify immediately, some modify later); defaults are:</li>
+<li><cite>AutoSpaceFloat</cite></li>
+<li><cite>ReduceForBackground</cite></li>
+<li><cite>ColumnWidths</cite></li>
+<li><cite>ImageBorders</cite> - a <cite>mark_and_modify</cite> adjusters: it acts only once for the entire tree</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="calculate-the-width-of-the-placeholder">
+<h3>Calculate the width of the placeholder<a class="headerlink" href="#calculate-the-width-of-the-placeholder" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>get_placeholder_width</cite> function is called by the rendering plugin, such as <cite>arkestra_image_plugin.cms_plugins.FilerImagePlugin</cite>.</p>
+<p>This obtains the default <cite>placeholder_width</cite> value from the context.</p>
+<p>This is how:</p>
+<ul class="simple">
+<li><cite>placeholder_width</cite> can be set by CMS_PLACEHOLDER_CONF[&#8220;body&#8221;][&#8220;extra_content&#8221;][&#8220;width&#8221;]</li>
+<li><cite>placeholder_width</cite> can be set by {% with placeholder_width=&lt;some_value&gt; %} around the placeholder</li>
+<li>failing to get <cite>placeholder_width</cite>, it looks for <cite>width</cite>, provided by [what? cms?]</li>
+<li>failing that, it just chooses 100 - useful for admin templates</li>
+</ul>
+<p><cite>get_placeholder_width</cite> then calls each registered <cite>placeholder_width</cite> adjuster. There is one included by default: <cite>SimplePlaceholderWidthAdjuster</cite>.</p>
+<div class="section" id="simpleplaceholderwidthadjuster">
+<h4><cite>SimplePlaceholderWidthAdjuster</cite><a class="headerlink" href="#simpleplaceholderwidthadjuster" title="Permalink to this headline">¶</a></h4>
+<p>This examines the context for your clues on how placeholder widths should be adjusted.</p>
+<p>Suppose that if the page has a menu down the side, then the placeholder width should be different - 749px, say. So it might look like:</p>
+<p><cite>{% with adjust_width=current_page.flags.local_menu width_adjuster=&#8221;absolute&#8221; width_adjustment=749 %}</cite></p>
+<p>This means:</p>
+<ul class="simple">
+<li>adjust the width if current_page.flags.local_menu is found</li>
+<li>we want to use an absolute width</li>
+<li>which will be 749px</li>
+</ul>
+<p><cite>SimplePlaceholderWidthAdjuster</cite> inspects the context for an <cite>adjust_width</cite> variable. If found, it will also look for <cite>adjuster</cite> and <cite>adjustment</cite>.</p>
+<p>Possible <cite>adjuster</cite> values:</p>
+<ul class="simple">
+<li>divider (divide the <cite>placeholder_width</cite> by <cite>adjustment</cite>)</li>
+<li>multiplier (multiply it)</li>
+<li>percent (the calculated value will be <cite>adjustment</cite> percent of <cite>placeholder_width</cite>)</li>
+<li>relative (add <cite>adjustment</cite> percent to <cite>placeholder_width</cite>)</li>
+<li>absolute (set the new value to <cite>adjustment</cite>)</li>
+</ul>
+<p>Obviously it&#8217;s up to you and your HTML/CSS how all these things work...</p>
+<p>Anyway, now Arkestra knows how wide the placeholder is, and returns that.</p>
+</div>
+</div>
+<div class="section" id="calculate-image-container-width">
+<h3>Calculate image container width<a class="headerlink" href="#calculate-image-container-width" title="Permalink to this headline">¶</a></h3>
+<p>Now we need to find out the width of the immediate container in which the image plugin finds itself.</p>
+<p>It might be directly placed in the placeholder, or it might be within a text plugin within the placeholder, or in a deeper structure still.</p>
+<p>So, the rendering function calls <cite>calculate_container_width</cite>.</p>
+<p>First, this obtains all the ancestors in the plugin hierarchy tree, from <cite>get_plugin_ancestry</cite>.</p>
+<p>Then, starting at the rootmost plugin, it will run each registered <cite>plugin_width</cite> adjuster.</p>
+<p>There is one included by default: <cite>KeyReducer</cite>.</p>
+<div class="section" id="autospacefloat">
+<h4><cite>AutoSpaceFloat</cite><a class="headerlink" href="#autospacefloat" title="Permalink to this headline">¶</a></h4>
+<p>AutoSpaceFloat uses a truth table to determine how to adjust the width of the container, depending upon whether not the width is set to automatic, whether the space-on-left or space-on-right classes have been used, and whether the image is floated.</p>
+<p>Next it will examine the HTML of the plugin (using <cite>BeautifulSoup</cite>), and find where the next plugin is in the HTML structure. It will then examine the HTML structure of nested elements, from the root upwards.</p>
+<p>For each element, it will run the <cite>image_width</cite> adjusters.</p>
+</div>
+<div class="section" id="reduceforbackground">
+<h4><cite>ReduceForBackground</cite><a class="headerlink" href="#reduceforbackground" title="Permalink to this headline">¶</a></h4>
+<p>The second allows for backgrounds - if elements with background tints also have padding, which they usually do, we need to allow for that.</p>
+<p>The effect of this padding is cumulative - if three nested elements all have padding, then the reduction for the padding will need to be applied for each one.</p>
+<p><cite>ReduceForBackground</cite> by default tests for <cite>tint</cite> or <cite>outline</cite> in the element class, and applies a 16px width reduction.</p>
+<p>This can be overridden in the template by using {% with %}:</p>
+<ul class="simple">
+<li>background_classes=&#8221;some-class some-other-class&#8221; (space-separated values)</li>
+<li>background_reduction=16</li>
+</ul>
+</div>
+<div class="section" id="columnwidths">
+<h4><cite>ColumnWidths</cite><a class="headerlink" href="#columnwidths" title="Permalink to this headline">¶</a></h4>
+<p>The second of these calculates the column width.</p>
+</div>
+<div class="section" id="imageborders">
+<h4><cite>ImageBorders</cite><a class="headerlink" href="#imageborders" title="Permalink to this headline">¶</a></h4>
+<p>The final kind of adjuster is the <cite>mark_and_modify</cite> adjusters, which run two functions, one to mark the elements that need acting on, and one to act on them afterwards.</p>
+<p>These inspect every element, but don&#8217;t modify the width for every one - they only act once per plugin.</p>
+<p>For example, even if several elements in the image plugin&#8217;s ancestry have a border class on them, the image can only have one border.</p>
+<p><cite>ImageBorders</cite> by default tests for <cite>image-borders</cite> and <cite>no-image-borders</cite> in the element classes.</p>
+<p>These tests add a key - <cite>markers[&#8220;has_borders&#8221;]</cite> to the dictionary that looks after this.</p>
+<p>Finally, after all the rest is done, <cite>calculate_container_width</cite> will run the <cite>modify</cite> functions of these adjusters.</p>
+<p>The defaults can be overridden in the template by using {% with %}:</p>
+<ul class="simple">
+<li>image_border_class=&#8221;some-class&#8221;</li>
+<li>no_image_border_class=&#8221;some-other-class&#8221;</li>
+<li>image_border_reduction=16</li>
+</ul>
+<p>At the end of all this, <cite>calculate_container_width</cite> returns the calculated width of the container of the image.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The image sizing system</a><ul>
+<li><a class="reference internal" href="#the-problem">The problem</a></li>
+<li><a class="reference internal" href="#the-solution">The solution</a></li>
+<li><a class="reference internal" href="#how-it-works">How it works</a><ul>
+<li><a class="reference internal" href="#calculate-the-width-of-the-placeholder">Calculate the width of the placeholder</a><ul>
+<li><a class="reference internal" href="#simpleplaceholderwidthadjuster"><cite>SimplePlaceholderWidthAdjuster</cite></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculate-image-container-width">Calculate image container width</a><ul>
+<li><a class="reference internal" href="#autospacefloat"><cite>AutoSpaceFloat</cite></a></li>
+<li><a class="reference internal" href="#reduceforbackground"><cite>ReduceForBackground</cite></a></li>
+<li><a class="reference internal" href="#columnwidths"><cite>ColumnWidths</cite></a></li>
+<li><a class="reference internal" href="#imageborders"><cite>ImageBorders</cite></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="using_news_and_events.html"
+                        title="previous chapter">Using news &amp; events</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="links_system.html"
+                        title="next chapter">The links system</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/how_it_works/image_sizing_system.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="links_system.html" title="The links system"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="using_news_and_events.html" title="Using news &amp; events"
+             >previous</a> |</li>
+        <li><a href="../index.html">Arkestra dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Daniele Procida.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
