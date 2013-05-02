@@ -213,6 +213,9 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
     search_fields = ['title']
     list_filter = (EventIsSeries, 'start_date', HostedByFilter)
     save_as = True
+
+    filter_include_ancestors = True
+
     # autocomplete fields
     related_search_fields = ['hosted_by','parent','building', 'external_url']
 
