@@ -388,7 +388,8 @@ class EntityAdmin(PersonAndEntityAdmin, TreeAdmin):
             'slug': ('name',)
             }
     readonly_fields = ['address_report']    
-
+    filter_include_ancestors = True
+    
     def address_report(self, instance):
         if not instance.abstract_entity:
             return "%s" % (", ".join(instance.get_full_address)) or "Warning: this Entity has no address."

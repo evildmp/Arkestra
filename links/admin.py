@@ -120,6 +120,7 @@ class ExternalSiteAdmin(TreeAdmin):
     readonly_fields = ('parent',)
     form = ExternalSiteForm
     list_display = ('domain', 'site',)
+    filter_include_ancestors = True
     
     
 admin.site.register(ExternalLink, ExternalLinkAdmin)
