@@ -10,6 +10,7 @@ class ArkestraGenericModelManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
+    # this method is not yet used, but will be used as part of the wholesale rewriting of this code
     def published_items(self, entity=None):
         return self.model.objects.filter(
             published=True,
