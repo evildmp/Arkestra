@@ -6,12 +6,17 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 # we're testing the behaviour of a method that uses date-related functions
-import datetime
+from datetime import datetime, timedelta
 
 from cms.api import create_page
 
-from models import NewsArticle
+from news_and_events.models import NewsArticle
 from contacts_and_people.models import Entity
+
+@override_settings(
+    USE_TZ = False
+)
+
 
 class NewsTests(TestCase):
     def setUp(self):
@@ -28,7 +33,7 @@ class NewsTests(TestCase):
         self.tootharticle = NewsArticle(
             title = "All about teeth",
             slug = "all-about-teeth",
-            date = datetime.datetime.now() + datetime.timedelta(days=30),
+            date = datetime.now(),
             )
 
     def test_generic_attributes(self):
@@ -43,7 +48,7 @@ class NewsTests(TestCase):
         self.assertEqual(self.tootharticle.get_template, settings.CMS_TEMPLATES[0][0])
 
     def test_date_related_attributes(self):
-        self.tootharticle.date = datetime.datetime(year=2012, month=12, day=12)
+        self.tootharticle.date = datetime(year=2012, month=12, day=12)
         self.assertEqual(self.tootharticle.get_when, "December 2012")
             
 @override_settings(
