@@ -5,7 +5,6 @@ python:
   - "2.6"
 # install Arkestra & dependencies
 install:
-  - pip install -e git+https://github.com/evildmp/Arkestra.git@develop#egg=Arkestra
   - pip install -r REQUIREMENTS.txt
 # command to run tests, e.g. python setup.py test
 script:  python example/testrunner.py
