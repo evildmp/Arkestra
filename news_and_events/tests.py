@@ -41,11 +41,14 @@ class NewsTests(TestCase):
         # the item has no informative content
         self.assertEqual(self.tootharticle.is_uninformative, True)
         
-        # there are no Entities in the database, so this can't be hosted_by anything
+        # no Entities in the database, so this can't be hosted_by anything
         self.assertEqual(self.tootharticle.hosted_by, None)
 
-        # since there are no Entities in the database, default to settings's template
-        self.assertEqual(self.tootharticle.get_template, settings.CMS_TEMPLATES[0][0])
+        #  no Entities in the database, so default to settings's template
+        self.assertEqual(
+            self.tootharticle.get_template, 
+            settings.CMS_TEMPLATES[0][0]
+            )
 
     def test_date_related_attributes(self):
         self.tootharticle.date = datetime(year=2012, month=12, day=12)
