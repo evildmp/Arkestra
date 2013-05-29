@@ -211,24 +211,43 @@ class ExternalLink(models.Model):
         
 
 class LinkType(models.Model):
-    scheme = models.CharField(max_length=50, help_text=u"e.g. 'http', 'mailto', etc",
-        unique=True)
-    name = models.CharField(max_length=50, help_text=u"e.g. 'Hypertext', 'email', etc")
+    scheme = models.CharField(
+        max_length=50, 
+        help_text=u"e.g. 'http', 'mailto', etc",
+        unique=True
+        )
+    name = models.CharField(
+        max_length=50, 
+        help_text=u"e.g. 'Hypertext', 'email', etc"
+        )
     
     def __unicode__(self):
         return self.scheme
 
 
 class ExternalSite(models.Model):
+    
     site = models.CharField(
+        "site name",
         max_length=50,
         help_text = u"e.g. 'BBC News', 'Welsh Assembly Goverment', etc", 
         null = True
         )
-    domain = models.CharField(max_length=256, null = True, blank = True,)
-    parent = models.ForeignKey('self', blank=True, null = True, related_name='children')
+    domain = models.CharField(
+        "domain name",
+        max_length=256, 
+        null = True, 
+        blank = True,
+        help_text = u"Do not amend unless you know what you are doing", 
+        )
+    parent = models.ForeignKey('self', 
+        blank=True, 
+        null = True, 
+        related_name='children'
+        )
     
     class Meta:
+        verbose_name = "domain"
         ordering = ['domain',]
     
     def __unicode__(self):
