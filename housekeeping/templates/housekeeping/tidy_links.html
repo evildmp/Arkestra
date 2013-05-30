@@ -42,13 +42,14 @@
             <dd>{{ duplicate }}: used on {{ duplicate.objects|length }} objects and in {{ duplicate.plugins|length }} plugins</dd>
         {% endfor %}
     {% endfor %}
-<dl>
+</dl>
 
-<h3>Unused sites</h3><ul>
+<h3>Unused sites</h3>
+<ul>
     {% for site in report.sites_to_delete %}
         <li>{{site}}</li>
 		{% endfor %}
-<ul>
+</ul>
 <h3>Convert old-style URLFields to ForeignKeys</h3>
 	    <ul>
 	        {% for module, module_values in report.models_dictionary.modules.items %}
