@@ -8,7 +8,6 @@ class NewsList(ArkestraGenericList):
     model = NewsArticle       
         
     def other_items(self):
-        print "evaluating other_items"
         if self.items and self.view == "current":
             all_items_count = len(self.all_items)
             if self.limit_to and all_items_count > self.limit_to:
