@@ -10,6 +10,13 @@ class ArkestraGenericModelManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
+    # this method is not yet used, but will be used as part of the wholesale rewriting of this code
+    def published_items(self, entity=None):
+        return self.model.objects.filter(
+            published=True,
+            date__lte = datetime.now()            
+            )
+
     def get_items(self, instance):
         publishable_items = self.get_publishable_items(instance)        
         if instance.order_by == "importance/date":

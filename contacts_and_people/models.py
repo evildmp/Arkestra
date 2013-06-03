@@ -712,8 +712,8 @@ class Person(PersonLite, CommonFields):
             return self
 
     @property
-    def real_entities(self):
-        # returns non-abstract entities the person belongs to
+    def real_entity_memberships(self):
+        # returns Memberships of non-abstract entities the person belongs to
         return self.member_of.filter(entity__abstract_entity = False)
     
     
