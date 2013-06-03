@@ -63,3 +63,5 @@ class NewsAndEventsPluginMixin(object):
             this_list["item_template"] = "news_and_events/event_list_item.html"
             if this_list["items"]:
                 self.lists.append(this_list)
+
+        return self.lists

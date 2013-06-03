@@ -24,7 +24,6 @@ def common_settings(request, slug):
     context = RequestContext(request)
     instance = VacanciesPlugin()
     instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-    instance.default_limit = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
     instance.entity = entity
     instance.heading_level = IN_BODY_HEADING_LEVEL
     instance.display = "vacancies-and-studentships"
@@ -57,7 +56,7 @@ def vacancies_and_studentships(request, slug):
         )
 
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 
@@ -85,7 +84,7 @@ def archived_vacancies(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
         
@@ -113,7 +112,7 @@ def all_current_vacancies(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 
@@ -141,7 +140,7 @@ def archived_studentships(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
         
@@ -169,7 +168,7 @@ def all_current_studentships(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 

@@ -9,6 +9,23 @@ from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, COLLECT_TOP_ALL_FO
 
 
 class EventManager(ArkestraGenericModelManager):
+
+    # this method is not yet used, but will be used as part of the wholesale 
+    # rewriting of this code
+    def published_items(self):
+        return self.model.objects.filter(
+            published=True,
+            end_date__gte = datetime.now(),            
+            )
+
+    def listable_published_items(self):
+        return self.published_items().filter(
+            in_lists=True,
+            )
+    
+    # --------------------------
+
+
     def get_items(self, instance):    
         self.get_events(instance) # gets previous_events, forthcoming_events, top_events, ordinary_events
         if instance.view == "archive":

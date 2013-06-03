@@ -26,7 +26,6 @@ def common_settings(request, slug):
     context = RequestContext(request)
     instance = NewsAndEventsPlugin()
     instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-    instance.default_limit = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
     instance.order_by = "importance/date"
     instance.entity = entity
     instance.heading_level = IN_BODY_HEADING_LEVEL
@@ -37,6 +36,58 @@ def common_settings(request, slug):
     instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
     return instance, context, entity
 
+from .lister import NewsAndEventsLister
+
+def new_news_and_events(request, slug):
+    if slug:
+        entity = get_object_or_404(Entity, slug=slug)
+    else:
+        entity = Entity.objects.base_entity()
+    if not (entity.website and entity.website.published and entity.auto_news_page):
+        raise Http404 
+
+    lister = NewsAndEventsLister(
+        entity=entity,
+        view="current", 
+        display="news and events",
+        type="main_page",
+        order_by="importance/date",
+        limit_to=MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH,
+        format="details image",
+        )
+    lister.main_page_body_file = "arkestra/universal_plugin_lister_new.html"
+    
+    lister.get_items() 
+    lister.add_link_to_main_page()
+    # lister.add_links_to_other_items()
+    # lister.set_limits_and_indexes()
+
+    meta = {"description": "Recent news and forthcoming events",}
+    title = unicode(entity) + u" news & events"
+    if MULTIPLE_ENTITY_MODE:
+        pagetitle = unicode(entity) + u" news & events"
+    else:
+        pagetitle = "News & events"
+
+    request.auto_page_url = request.path
+    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
+    request.current_page = entity.get_website
+    context = RequestContext(request)
+
+    context.update({
+        "entity":entity,
+        "title": title,
+        "meta": meta,
+        "pagetitle": pagetitle,
+        "main_page_body_file": lister.main_page_body_file,
+        "intro_page_placeholder": entity.news_page_intro,
+        'everything': lister,
+        }
+        )
+    return render_to_response(
+        "arkestra_utilities/entity_auto_page.html",
+        context,
+        )
 
 def news_and_events(request, slug):
     instance, context, entity = common_settings(request, slug)    
@@ -63,7 +114,7 @@ def news_and_events(request, slug):
         )
 
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 
@@ -91,7 +142,7 @@ def previous_events(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
         
@@ -119,7 +170,7 @@ def all_forthcoming_events(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 
@@ -148,7 +199,7 @@ def news_archive(request, slug):
         )
     
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         context,
         )
 

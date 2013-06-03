@@ -46,7 +46,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
     people = entity.get_roles_for_members(people) # convert the list of Persons into a list of Members
 
     return render_to_response(
-        "contacts_and_people/arkestra_page.html", # this is a catch-all template, that then uses includes to bring in extra information
+        "arkestra_utilities/entity_auto_page.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
             "entity":entity,
             "pagetitle": pagetitle,
@@ -90,7 +90,7 @@ def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), le
         people = entity.get_people(letter)
         title = u"%s, people by surname: %s" % (entity, letter.upper())
     return render_to_response(
-        "contacts_and_people/arkestra_page.html",
+        "arkestra_utilities/entity_auto_page.html",
         {
             "entity":entity,
             "pagetitle": entity,

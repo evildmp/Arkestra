@@ -167,11 +167,13 @@ class ArkestraGenericPluginForm(object):
             self.cleaned_data["limit_to"] = None
         return self.cleaned_data
 
-
+        
+        
 class ArkestraGenericPlugin(object):
     text_enabled = True
     admin_preview = False
-    # default render_template - change it in your ArkestraGenericPlugin if required
+    # default render_template - change it in your ArkestraGenericPlugin if 
+    # required
     render_template = "arkestra/universal_plugin_lister.html"
 
     # def __init__(self, model = None, admin_site = None):
@@ -179,8 +181,10 @@ class ArkestraGenericPlugin(object):
 
     def set_defaults(self, instance):
         # set defaults
-        # ** important ** - these are set only when the render() function is called  
-        # this means that when the plugin is invoked (as in contacts_and_people.Building.evets() 
+        # ** important ** - these are set only when the render() function is   
+        # called  
+        # this means that when the plugin is invoked (as in 
+        # contacts_and_people.Building.evets() 
         # it is necessary to set these values manually)
         instance.display = getattr(instance, "display", "")
         instance.view = getattr(instance, "view", "current")
@@ -189,10 +193,10 @@ class ArkestraGenericPlugin(object):
         instance.limit_to = getattr(instance, "limit_to", None)
         instance.group_dates = getattr(instance, "group_dates", True)
         instance.format = getattr(instance, "format", "details image")
-        instance.type = getattr(instance, "type", "plugin") # assume it's a plugin unless otherwise stated
+        instance.type = getattr(instance, "type", "plugin") # assume it's a 
+        # plugin unless otherwise stated
         instance.order_by = getattr(instance, "order_by", "")
         instance.heading_level = getattr(instance, "heading_level", PLUGIN_HEADING_LEVEL_DEFAULT)
-        instance.type = getattr(instance, "type", "plugin")
         
         # print "---- plugin settings ----"
         # print "self.display", instance.display
@@ -209,7 +213,9 @@ class ArkestraGenericPlugin(object):
     def add_link_to_main_page(self, instance):
         # only plugins and sub_pages need a link to the main page
         if instance.type == "plugin" or instance.type == "sub_page":
-            # do any of models referred to by this instance have items and is entity.menu_cues["auto_page_attribute"] (e.g. entity.auto_news_page) True? 
+            # do any of models referred to by this instance have items and is 
+            # entity.menu_cues["auto_page_attribute"] (e.g. 
+            # entity.auto_news_page) True? 
             # menu_cues is this application's menu_dict
             if (any(d['items'] for d in self.lists)) and \
                 getattr(instance.entity, getattr(self, "menu_cues", {}).get("auto_page_attribute", ""), False): 
@@ -232,7 +238,8 @@ class ArkestraGenericPlugin(object):
     def add_links_to_other_items(self, instance):
         if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":     
             for this_list in self.lists:
-                # does this list have a function specified that will add the links we need to other items?
+                # does this list have a function specified that will add the 
+                # links we need to other items?
                 if this_list.get("links_to_other_items"):
                     # call that function
                     this_list["links_to_other_items"](instance, this_list)
@@ -306,7 +313,24 @@ class ArkestraGenericPlugin(object):
         self.lists = []
 
     def render(self, context, instance, placeholder):
-        instance.entity = getattr(instance, "entity", None) or work_out_entity(context, None)
+        instance.entity = getattr(instance, "entity", None) or \
+            work_out_entity(context, None)
+        
+        # print instance.display
+        #     
+        # lister = ArkestraGenericLister(
+        #     display=instance.display,
+        #     list_format=instance.list_format,
+        #     layout=instance.layout,
+        #     limit_to=instance.limit_to,
+        #     group_dates=instance.group_dates,
+        #     format=instance.format,
+        #     order_by=instance.order_by,
+        #     heading_level=instance.heading_level,
+        #     )
+        # 
+        # lister.lists = self.new_get_items(instance)
+        
         self.set_defaults(instance)
         self.get_items(instance)
         self.add_link_to_main_page(instance)

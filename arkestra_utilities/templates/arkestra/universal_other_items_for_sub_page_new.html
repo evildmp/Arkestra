@@ -1,0 +1,12 @@
+{% ifequal everything.type "sub_page" %}
+	<ul class="close icons other-items">
+		{% for list in everything.lists %}
+			{% for item in other_links %}
+				<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
+			{% endfor %}
+		{% endfor %}
+        {% if everything.link_to_main_page %}
+            <li><strong><a href = "{{ everything.link_to_main_page}}">{{ everything.entity.short_name }} {{ everything.main_page_name|lower }} page</a></strong></li>
+    	{% endif %}
+	</ul>
+{% endifequal %}      

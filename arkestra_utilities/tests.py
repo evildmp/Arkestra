@@ -47,3 +47,21 @@ class NewsManagerTests(TestCase):
             list(NewsArticle.objects.published_items()),
             [self.tootharticle]
             )
+  
+    def test_published_items_one_saved_published_item_not_in_list(self):
+        self.tootharticle.published = True
+        self.tootharticle.date = datetime.now() - timedelta(minutes=30)
+        self.tootharticle.save()
+        self.assertEqual(
+            list(NewsArticle.objects.listable_published_items()),
+            []
+            )
+
+    def test_published_items_one_saved_published_item_in_list(self):
+        self.tootharticle.published = True
+        self.tootharticle.date = datetime.now() - timedelta(minutes=30)
+        self.tootharticle.save()
+        self.assertEqual(
+            list(NewsArticle.objects.listable_published_items()),
+            [self.tootharticle]
+            )
