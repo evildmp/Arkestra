@@ -14,6 +14,10 @@ urlpatterns = patterns('',
     url(r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)?$', views.all_forthcoming_events, name="forthcoming_event"),
     url(r"^news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.news_and_events, name="news_and_events"),
     url(r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.new_news_and_events, name="new_news_and_events"),
+
+
+    url(r"^classy-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.NewsAndEventsView.as_view(), name="class_news_and_events"),
+    url(r"^classy-news-archive/(?:(?P<slug>[-\w]+)/)?$", views.NewsArchiveView.as_view(), name="class_news_archive"),
     )
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development
 
