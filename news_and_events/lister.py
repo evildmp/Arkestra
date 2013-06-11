@@ -11,7 +11,7 @@ from .models import NewsArticle, Event
 from .menu import menu_dict
 
         
-class NewsList(ArkestraGenericList):
+class NewsList(object):
     model = NewsArticle       
     item_template = "arkestra/universal_plugin_list_item.html"
     
@@ -156,15 +156,17 @@ class NewsList(ArkestraGenericList):
 
     # methods that can be called only when required, e.g. in a template
 
-    def other_items(self):
-        if self.items and self.view == "current":
+    def other_items(self):    
+        print "* other itmes"
+        if self.items and self.view == "current":   
+            
             all_items_count = len(self.all_items)
-            if self.limit_to and all_items_count > self.limit_to:
+            if self.limit_to and all_items_count > self.limit_to: 
                 self.other_items = [{
                     "link": self.entity.get_related_info_page_url("news-archive"), 
                     "title": "News archive",
                     "count": all_items_count,}]
-    
+                print  self.other_items
 
 class EventsList(ArkestraGenericList):
     model = Event
@@ -197,7 +199,7 @@ class EventsList(ArkestraGenericList):
                     "count": self.forthcoming_events.count(),}]                
         
         
-class NewsAndEventsLister(ArkestraGenericLister):
+class NewsAndEventsLister(object):
      
     menu_cues = menu_dict
     listkinds = [
@@ -205,7 +207,78 @@ class NewsAndEventsLister(ArkestraGenericLister):
                 # ("events", EventsList),
             ]
     
+    def __init__(
+        self,
+        display="",
+        view="current",
+        list_format="vertical",
+        layout="",
+        limit_to=None,
+        group_dates=True,
+        format="details image",
+        type="plugin",
+        order_by="",
+        heading_level=PLUGIN_HEADING_LEVEL_DEFAULT,
+        lists=None,
+        entity=None,  
+        ):
+        
+        self.display = display
+        self.view = view
+        self.list_format = list_format
+        self.layout = layout
+        self.limit_to = limit_to
+        self.group_dates = group_dates
+        self.format = format
+        self.type = type
+        self.order_by = order_by
+        self.heading_level = heading_level
+        self.lists = lists or []
+        self.entity = entity
+        
+    def get_items(self):   
+        
+        self.lists = []
 
-                   
+        for kind, listclass in self.listkinds:
+        
+            if kind in self.display:
+                this_list = listclass(
+                    view=self.view,
+                    limit_to=self.limit_to,
+                    entity=self.entity,
+                    order_by=self.order_by,
+                    type=self.type,
+                    format=self.format,
+                    group_dates=self.group_dates,
+                    list_format=self.list_format,
+                    )
+            
+                if this_list.items: 
+                    self.lists.append(this_list)
 
+    # def add_link_to_main_page(self):  
+    #     
+    #     # only plugins and sub_pages need a link to the main page
+    #     auto_page_attribute = self.menu_cues.get("auto_page_attribute", "")
+    # 
+    #     if auto_page_attribute and \
+    #         (self.type == "plugin" or self.type == "sub_page") and \
+    #         (any(lister.items for lister in self.lists)) and \
+    #         getattr(self.entity, auto_page_attribute, False):  
+    #         
+    #         url_attribute = self.menu_cues["url_attribute"]
+    #         title_attribute = self.menu_cues["title_attribute"]
+    #         
+    #         self.link_to_main_page = self.entity.get_related_info_page_url(url_attribute)
+    #         self.main_page_name = getattr(self.entity, title_attribute)  
+    # 
+    # def add_links_to_other_items(self):
+    #     if self.type == "main_page" or self.type == "sub_page" or \
+    #         self.type == "menu":     
+    #         for this_list in self.lists:    
+    #             this_list.other_links()
+    #                      
+    #                
+    # 
 

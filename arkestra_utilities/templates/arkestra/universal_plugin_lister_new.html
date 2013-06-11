@@ -1,19 +1,21 @@
-{% if everything.lists %}
+{% if lister.lists %}
     {% load placeholder_tags %}
-    <div class="{{ everything.row_class }} {{ everything.type }}">
+    <div class="{{ lister.row_class }} {{ lister.type }}">
     	{% render_placeholder intro_page_placeholder %}
 
-    	{% for list in everything.lists %}
-    	
-        	{% with list.other_items as other_items %} 
+    	{% for list in lister.lists %}
+    	    1{{ list.other_items }}
+    	    2{{ list.other_items }}
+    	    3{{ list.other_items }}
+        	{% with list.other_items as other_items %}
         		{% if other_items or list.items %}
         			{% include "arkestra/universal_date_index.html" %}
         			<div class = "{{ list.div_class }}">
-        				{% if everything.heading_level %}
-        					<h{{ everything.heading_level }}>{{ list.heading_text }}</h{{ everything.heading_level }}>
+        				{% if lister.heading_level %}
+        					<h{{ lister.heading_level }}>{{ list.heading_text }}</h{{ lister.heading_level }}>
         				{% endif %}
 
-        				<ul class="{{ everything.list_format}} plugin-list">
+        				<ul class="{{ lister.list_format}} plugin-list">
         			        {% if list.show_when %}
         							{% regroup list.items by get_when as itemlist %}
         							{% for get_when in itemlist %}
@@ -40,6 +42,6 @@
     	{% endfor %}
     </div>
 
-    {% include "arkestra/universal_other_items_for_sub_page_new.html" %}*
+    {% include "arkestra/universal_other_items_for_sub_page_new.html" %}
     {% include "arkestra/universal_other_items_for_plugin.html" %}
 {% endif %}

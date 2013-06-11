@@ -141,7 +141,7 @@ class ArkestraGenericList(object):
         # we only show date groups when warranted    
         self.show_when = self.group_dates and not ("horizontal" in self.list_format or self.no_of_get_whens < 2)
           
-    def other_items(self):
+    def other_items(self):    
         return []
 
 class ArkestraGenericLister(object):

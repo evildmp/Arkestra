@@ -228,7 +228,7 @@ class ArkestraGenericView(View):
             "pagetitle": self.pagetitle,
             "main_page_body_file": self.lister.main_page_body_file,
             "intro_page_placeholder": self.entity.news_page_intro,
-            'everything': self.lister,
+            'lister': self.lister,
             }
             )
         
