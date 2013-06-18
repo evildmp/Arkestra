@@ -1,0 +1,97 @@
+{% load pagination_tags sekizai_tags %}
+{% addtoblock "css" %}
+<style>
+form.filter-form label {font-weight: bold}
+form.filter-form input {width: 100%}
+/* Filters */
+.filterline {
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    text-indent: 0;
+    line-height: 1.8em;
+}
+
+.filterline .filterlabel {
+    font-weight: bold;
+}
+.removefilter a:link,
+.removefilter a:visited,
+.addfilter a:link,
+.addfilter a:visited {
+    text-decoration: none;
+}
+
+.removefilter a:link,
+.removefilter a:visited {
+    border-radius: 4px;
+    padding: 0px 1px 2px 3px;
+    border: 1px solid #113399;
+    background-color: #113399;
+    color: white;
+}
+
+.addfilter a:link,
+.addfilter a:visited {
+    border-radius: 4px;
+    padding: 0px 1px 2px 3px;
+    border: 1px solid #f0f0f0;
+    background-color: #f0f0f0;
+    color: black;
+}
+
+/* :hover come after to override */
+.addfilter a:hover,
+.removefilter a:hover {
+    border-radius: 4px;
+    padding: 0px 1px 2px 3px;
+    border: 1px solid #3355bb;
+    background-color: #3355bb;
+    color: white;
+}
+
+.displayfilter {
+    border-radius: 4px;
+    padding: 0px 1px 2px 3px;
+    border: 1px solid #303030;
+    background-color: white;
+    color: #505050;
+}
+</style>   
+{% endaddtoblock %}
+{% for list in lister.lists %}
+
+    <div class="row columns3">
+    	<div class = "column lastcolumn">
+			<h{{ lister.heading_level }} id = "filter">Filter</h{{ lister.heading_level }}>
+            <form action="" method="GET" class="filter-form">
+                {% for field in list.search_fields %}
+                    <div>
+                        <label for="{{ field.field_name }}">
+                        	<span class="label-text">{{ field.field_label }}:</span>
+                        </label>                  
+                
+                        <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}"> 
+                    </div>
+                {% endfor %}    
+                <input type="submit" value="Apply">
+                {% for field in list.hidden_search_fields %}
+                    <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}"> 
+                {% endfor %}    
+            </form>
+            {% with list.itemfilter.qs as items %}
+                {% autopaginate items 8 %}
+                {{ list.itemfilter }}
+                {% paginate %}  
+       
+        
+        </div>
+    	<div class = "column firstcolumn doublecolumn">
+                    <ul class="{{ lister.list_format}} plugin-list">
+                        {% for item in items %}
+                            {% include list.item_template %}
+                        {% endfor %}
+                    </ul>
+            {% endwith %}
+        </div>
+    </div>    
+{% endfor %}

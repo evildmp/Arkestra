@@ -208,9 +208,14 @@ class ArkestraGenericView(View):
             type=self.type,
             order_by=self.order_by,
             limit_to=self.limit_to,
-            format="details image",
+            format="details image", 
+            request=self.request
             )
-        self.lister.main_page_body_file = "arkestra/universal_plugin_lister_new.html"
+        if self.view == "archive":
+            self.lister.main_page_body_file = "news_and_events/filter.html"
+
+        else:
+            self.lister.main_page_body_file = "arkestra/universal_plugin_lister_new.html"
     
         self.lister.get_items() 
          
@@ -266,11 +271,14 @@ class NewsArchiveView(ArkestraGenericView):
     def get(self, request, *args, **kwargs):
         self.get_entity()
         
+        self.request = request
         self.view = "archive"
         self.display = "news"
         self.type = "sub_page"
         self.order_by = "date"
         self.limit_to = None
+        self.template = "news_and_events/universal_archive_lister_new.html"   
+        
         self.create_lister()
         
         # lister.add_link_to_main_page()
@@ -282,56 +290,4 @@ class NewsArchiveView(ArkestraGenericView):
         self.pagetitle = unicode(self.entity) + u" - news archive"
         
         return self.response(request)
-
-
-def new_news_and_events(request, slug):
-    if slug:
-        entity = get_object_or_404(Entity, slug=slug)
-    else:
-        entity = Entity.objects.base_entity()
-    if not (entity.website and entity.website.published and entity.auto_news_page):
-        raise Http404 
-
-    lister = NewsAndEventsLister(
-        entity=entity,
-        view="current", 
-        display="news and events",
-        type="main_page",
-        order_by="importance/date",
-        limit_to=MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH,
-        format="details image",
-        )
-    lister.main_page_body_file = "arkestra/universal_plugin_lister_new.html"
-    
-    lister.get_items() 
-    # lister.add_link_to_main_page()
-    # lister.add_links_to_other_items()
-    # lister.set_limits_and_indexes()
-
-    meta = {"description": "Recent news and forthcoming events",}
-    title = unicode(entity) + u" news & events"
-    if MULTIPLE_ENTITY_MODE:
-        pagetitle = unicode(entity) + u" news & events"
-    else:
-        pagetitle = "News & events"
-
-    request.auto_page_url = request.path
-    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
-    request.current_page = entity.get_website
-    context = RequestContext(request)
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": lister.main_page_body_file,
-        "intro_page_placeholder": entity.news_page_intro,
-        'everything': lister,
-        }
-        )
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-
+        
