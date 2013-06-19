@@ -494,23 +494,24 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         for member in members:
             ms = member.member_of
             # get the best named membership in the entity
-            named_memberships = list(ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person'))
+            named_memberships = ms.filter(entity=self).exclude(role ="").order_by('-importance_to_person')
             if named_memberships:
                 member.membership = named_memberships[0]
             else:            
                 # see if there's a display_role membership - actually this one should go first
-                display_role_memberships = list(ms.filter(entity=self).exclude(display_role = None).order_by('-importance_to_person',)) 
+                display_role_memberships = ms.filter(entity=self).exclude(display_role = None).order_by('-importance_to_person',) 
                 if display_role_memberships:
                     member.membership = display_role_memberships[0].display_role
                 else:                 
                     # find the best named membership anywhere we can
-                    best_named_membership = list(ms.exclude(role = "").order_by('-importance_to_person',)) 
+                    best_named_membership = ms.exclude(role = "").order_by('-importance_to_person',) 
                     if best_named_membership:
                         member.membership = best_named_membership[0]
                     else:                        
                         # add the unnamed membership for this entity - it's all we have
-                        unnamed_memberships = list(ms.order_by('-importance_to_person',)) 
+                        unnamed_memberships = ms.order_by('-importance_to_person',) 
                         member.membership = unnamed_memberships[0]
+        print type(members)
         return members
 
     def get_people(self, letter=None):
@@ -534,13 +535,13 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         """
         people = self.get_people(letter)
         # letter or long list? show initials
-        if letter or len(people) > 20:
+        if letter or people.count() > 20:
             initials = set(person.surname[0].upper() for person in people)
             initials = list(initials)
             initials.sort()
             # no letter but list is long? initials only
             if not letter:
-                people = []
+                people = people[:0]
         # no letter, short list? don't show initials
         else:
             initials = None

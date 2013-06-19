@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from models import Person, Building, Membership, Entity
 from links.link_functions import object_links
+from django.db.models import Q
 
 from django.conf import settings
 
@@ -44,7 +45,42 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
     else: # otherwise, just a list of the people with roles
         people_list_heading = _(u"People")
     people = entity.get_roles_for_members(people) # convert the list of Persons into a list of Members
-
+    search_fields = [
+        {
+            "field_name": "name",
+            "field_label": "Name",
+            "placeholder": "Surname or first name",
+            "search_keys": [
+                "given_name__icontains", 
+                "surname__icontains",
+                ],    
+            },
+        # {
+        #     "field_name": "publisher",
+        #     "field_label": "Published by",
+        #     "search_keys": [
+        #         "hosted_by__name__icontains",
+        #         "hosted_by__short_name__icontains",
+        #         ]
+        #     }    
+        ]
+    people_qs = entity.get_people()
+    search = False
+    for search_field in search_fields:
+        field_name = search_field["field_name"]
+        if field_name in request.GET:
+            query = request.GET[field_name]
+            search_field["value"] = query
+            if query:
+                search = True
+            
+            q_object = Q()
+            for search_key in search_field["search_keys"]:
+                lookup = {search_key: query}
+                q_object |= Q(**lookup)
+            people_qs = people_qs.distinct().filter(q_object)
+    if search:
+        people_qs = entity.get_roles_for_members(people_qs)
     return render_to_response(
         "arkestra_utilities/entity_auto_page.html", # this is a catch-all template, that then uses includes to bring in extra information
         {
@@ -63,6 +99,9 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "people": people,
             "people_list_heading": people_list_heading,
             "initials_list": initials,
+            "search_fields": search_fields,
+            "people_qs": people_qs,
+            "search": search,
         },
         RequestContext(request),
         )        
@@ -154,7 +193,6 @@ def person(request, slug, active_tab=""):
     if entity:
         template = entity.get_template() 
     else: # no memberships, no useful information
-        # print "no memberships, no useful information"
         template = Entity.objects.base_entity().get_template()
 
     tabs_dict = { # information for each kind of person tab
@@ -197,7 +235,6 @@ def person(request, slug, active_tab=""):
     if tabs:
         if not active_tab:
             # find out what to add to the url for this tab
-            # print tabs[0]
             active_tab=tabs[0]["address"]
             # mark the tab as active for the template
             tabs[0]["active"]=True
