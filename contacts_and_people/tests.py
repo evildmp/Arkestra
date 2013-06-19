@@ -2,6 +2,8 @@ from django.test import TestCase
 
 from contacts_and_people.models import Site, Person, Building, Entity, Membership
 
+from links.models import ExternalLink
+
 class SiteTests(TestCase):
     def setUp(self): 
         # a geographical Site
@@ -181,7 +183,29 @@ class EntityGetRolesForMembersTests(EntityTestObjectsMixin, TestCase):
             self.school.get_roles_for_members(people), 
             [self.smith]
             )
-                
+
+class EntityGetRelatedInfoPageTests(EntityTestObjectsMixin, TestCase):
+
+    def test_external_entity(self):
+        # an external entity can't have any related info pages
+        external_url = ExternalLink(title="Example", url="http://example.com")
+        self.school.external_url = external_url
+        self.assertEquals(
+            self.school.get_related_info_page_url("contact"),
+            ""
+            )                
+
+    def test_base_entity_contact(self):        
+        self.assertEquals(
+            self.school.get_related_info_page_url("contact"),
+            "/contact/"
+            )                
+    
+    def test_base_entity_bogus(self):        
+        self.assertEquals(
+            self.school.get_related_info_page_url("bogus"),
+            "/bogus/"
+            )                
 
 class EntityAddressTests(EntityTestObjectsMixin, TestCase):
     def test_get_building_works_when_building_is_assigned(self):

@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
-
+from django.core.urlresolvers import reverse
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
 
@@ -110,7 +110,7 @@ class Building(models.Model):
         
     
     def get_absolute_url(self):
-        return "/place/%s/" % self.slug
+        return reverse("contact_place", kwargs={"slug":self.slug}) 
     
     def save(self):
         if not self.slug or self.slug == '':
@@ -330,9 +330,9 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.external_url:
             return self.external_url.url
         elif self.get_website:
-            return "/contact/%s/" % self.slug
+            return reverse("contact", kwargs={"slug":self.slug}) 
         else:
-            return "/contact/"
+            return reverse("contact_base") 
 
     @property
     def _get_real_ancestor(self):
@@ -421,16 +421,38 @@ class Entity(MPTTModel, EntityLite, CommonFields):
 
     def get_related_info_page_url(self, kind):
         """
-        Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
+        Returns a URL not for the entity, but for its /contact page, 
+        /news-and-events, or whatever.
         
-        If the entity is the base entity, doesn't add the entity slug to the URL
+        If the entity is the base entity, doesn't add the entity slug to 
+        the URL
         """
+        kinds = [
+            "contact",
+            "news-and-events",
+            "vacancies-and-studentships",
+            "forthcoming-events",
+            "news-archive",
+            "previous-events"
+            ]
+        # external entities don't have info pages
         if self.external_url:
             return ""
+        # info pages for base entity
         elif self == Entity.objects.base_entity():
-            return "/%s/" % kind
+            print 'reverse(kind+"_base")'
+            return reverse(kind+"_base")
+            try:
+                return reverse(kind+"_base")
+            except NoReverseMatch:
+                return "/%s/" % kind
+        # info pages for other entities
         else:
-            return "/%s/%s/" % (kind, self.slug)
+            return reverse(kind,kwargs={"slug":self.slug})
+            try:
+                return reverse(kind,kwargs={"slug":self.slug})
+            except NoReverseMatch:
+                return "/%s/%s/" % (kind, self.slug)
 
     def get_template(self):
         """
@@ -634,7 +656,7 @@ class Person(PersonLite, CommonFields):
             if self.external_url:
                 return self.external_url.url
             else:
-                return "/person/%s/" % self.slug
+                return reverse("contact_person", kwargs={"slug":self.slug}) 
 
     @property
     def get_role(self):
