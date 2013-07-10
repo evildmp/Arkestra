@@ -55,14 +55,14 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
                 "surname__icontains",
                 ],    
             },
-        # {
-        #     "field_name": "publisher",
-        #     "field_label": "Published by",
-        #     "search_keys": [
-        #         "hosted_by__name__icontains",
-        #         "hosted_by__short_name__icontains",
-        #         ]
-        #     }    
+        {
+            "field_name": "role",
+            "field_label": "Roles",
+            "placeholder": "All roles",
+            "search_keys": [
+                "member_of__role__icontains",
+                ]
+            }    
         ]
     people_qs = entity.get_people()
     search = False

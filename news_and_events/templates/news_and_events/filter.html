@@ -59,10 +59,8 @@ form.filter-form input {width: 100%}
 </style>   
 {% endaddtoblock %}
 {% for list in lister.lists %}
-
     <div class="row columns3">
     	<div class = "column lastcolumn">
-			<h{{ lister.heading_level }} id = "filter">Filter</h{{ lister.heading_level }}>
             <form action="" method="GET" class="filter-form">
                 {% for field in list.search_fields %}
                     <div>
@@ -80,8 +78,11 @@ form.filter-form input {width: 100%}
             </form>
             {% with list.itemfilter.qs as items %}
                 {% autopaginate items 8 %}
-                {{ list.itemfilter }}
+                {{ list.itemfilter }} 
+				{{ list.itemfilter.qs.count }} items found
                 {% paginate %}  
+			    {% include "arkestra/universal_other_items_for_sub_page_new.html" %}
+			    {% include "arkestra/universal_other_items_for_plugin.html" %}
        
         
         </div>

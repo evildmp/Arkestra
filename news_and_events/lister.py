@@ -22,33 +22,33 @@ class NewsList(object):
         {
             "field_name": "text",
             "field_label": "Title/summary",
-            "placeholder": "Search within title & summary",
+            "placeholder": "Search",
             "search_keys": [
                 "title__icontains", 
                 "summary__icontains",
                 ],    
             },
-        {
-            "field_name": "publisher",
-            "field_label": "Published by",
-            "search_keys": [
-                "hosted_by__name__icontains",
-                "hosted_by__short_name__icontains",
-                ]
-            }    
+        # {
+        #     "field_name": "publisher",
+        #     "field_label": "Published by",
+        #     "search_keys": [
+        #         "hosted_by__name__icontains",
+        #         "hosted_by__short_name__icontains",
+        #         ]
+        #     }    
         ]
     
     def __init__(
         self,
-        view,
-        limit_to,
-        entity,
-        order_by, 
-        type,
-        format,
-        group_dates,
-        list_format,
-        request
+        view="current",
+        limit_to=None,
+        entity=None,
+        order_by="", 
+        format="details image",
+        type="plugin",
+        group_dates=True,
+        list_format="vertical",
+        request=None,
         ):   
 
         self.view = view
@@ -65,7 +65,7 @@ class NewsList(object):
         self.items = self.items_for_entity
         
         if self.view == "archive":
-            self.apply_filters()
+            # self.apply_filters()
             self.itemfilter = ItemFilterSet(self.items, self.request.GET) 
 
         else:       
@@ -90,25 +90,26 @@ class NewsList(object):
         if MULTIPLE_ENTITY_MODE and self.entity:
             self.items_for_entity = self.all_listable_items.filter(
                 Q(hosted_by=self.entity) | Q(publish_to=self.entity)
-                ).distinct() 
+                ).distinct()
+            # print self.items_for_entity.count()
+            # print self.items_for_entity.query
         else:
             self.items_for_entity = self.all_listable_items
                         
     # further processing
 
-    def apply_filters(self):            
+    def apply_filters(self):
         for search_field in self.search_fields:
             field_name = search_field["field_name"]
             if field_name in self.request.GET:
-                print "field_name", field_name
                 query = self.request.GET[field_name]
                 search_field["value"] = query
-                
+            
                 q_object = Q()
                 for search_key in search_field["search_keys"]:
                     lookup = {search_key: query}
-                    q_object |= Q(**lookup)
-                    self.items = self.items.distinct().filter(q_object) 
+                q_object |= Q(**lookup)
+                self.items = self.items.distinct().filter(q_object) 
 
         self.hidden_search_fields = []
         for key in ItemFilterSet.fields:
@@ -201,6 +202,7 @@ class NewsList(object):
         if self.items and len(self.items) > self.limit_to:
             self.items = self.items[:self.limit_to]  
 
+    # methods that inspect the list and return something useful
     def set_show_when(self):
         # we only show date groups when warranted    
         self.show_when = self.group_dates and not ("horizontal" in self.list_format or self.no_of_get_whens < 2)
@@ -208,7 +210,6 @@ class NewsList(object):
     def other_items(self):    
         if self.items and self.view == "current":   
             all_items_count = self.items_for_entity.count()
-            print  self.limit_to, all_items_count, self.limit_to 
             if self.limit_to and all_items_count > self.limit_to:
                 return [{
                     "link": self.entity.get_related_info_page_url("news-archive"), 
@@ -315,28 +316,28 @@ class NewsAndEventsLister(object):
             
                 self.lists.append(this_list)
 
-    # def add_link_to_main_page(self):  
-    #     
-    #     # only plugins and sub_pages need a link to the main page
-    #     auto_page_attribute = self.menu_cues.get("auto_page_attribute", "")
-    # 
-    #     if auto_page_attribute and \
-    #         (self.type == "plugin" or self.type == "sub_page") and \
-    #         (any(lister.items for lister in self.lists)) and \
-    #         getattr(self.entity, auto_page_attribute, False):  
-    #         
-    #         url_attribute = self.menu_cues["url_attribute"]
-    #         title_attribute = self.menu_cues["title_attribute"]
-    #         
-    #         self.link_to_main_page = self.entity.get_related_info_page_url(url_attribute)
-    #         self.main_page_name = getattr(self.entity, title_attribute)  
-    # 
-    # def add_links_to_other_items(self):
-    #     if self.type == "main_page" or self.type == "sub_page" or \
-    #         self.type == "menu":     
-    #         for this_list in self.lists:    
-    #             this_list.other_links()
-    #                      
-    #                
-    # 
+    def add_link_to_main_page(self):  
+        
+        # only plugins and sub_pages need a link to the main page
+        auto_page_attribute = self.menu_cues.get("auto_page_attribute", "")
+    
+        if auto_page_attribute and \
+            (self.type == "plugin" or self.type == "sub_page") and \
+            (any(lister.items for lister in self.lists)) and \
+            getattr(self.entity, auto_page_attribute, False):  
+            
+            url_attribute = self.menu_cues["url_attribute"]
+            title_attribute = self.menu_cues["title_attribute"]
+            
+            self.link_to_main_page = self.entity.get_related_info_page_url(url_attribute)
+            self.main_page_name = getattr(self.entity, title_attribute)  
+    
+    def add_links_to_other_items(self):
+        if self.type == "main_page" or self.type == "sub_page" or \
+            self.type == "menu":     
+            for this_list in self.lists:    
+                this_list.other_links()
+                         
+                   
+    
 

@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r"^event/(?P<slug>[-\w]+)/$", views.event, name="event"),
     
     # entities' news and events
-    url(r'^news-archive/(?:(?P<slug>[-\w]+)/)?$', views.news_archive, name="news_archive"),
+    url(r'^old-news-archive/(?:(?P<slug>[-\w]+)/)?$', views.news_archive, name="news_archive"),
     url(r'^previous-events/(?:(?P<slug>[-\w]+)/)?$', views.previous_events, name="previous_events"),
     url(r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)?$', views.all_forthcoming_events, name="forthcoming_event"),
     url(r"^news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.news_and_events, name="news_and_events"),
@@ -17,8 +17,8 @@ urlpatterns = patterns('',
     # url(r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.new_news_and_events, name="new_news_and_events"),
 
 
-    url(r"^classy-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.NewsAndEventsView.as_view(), name="class_news_and_events"),
-    url(r"^classy-news-archive/(?:(?P<slug>[-\w]+)/)?$", views.NewsArchiveView.as_view(), name="class_news_archive"),
+    url(r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.NewsAndEventsView.as_view(), name="class_news_and_events"),
+    url(r"^news-archive/(?:(?P<slug>[-\w]+)/)?$", views.NewsArchiveView.as_view(), name="class_news_archive"),
     )
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development
 

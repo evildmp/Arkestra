@@ -50,6 +50,8 @@ class ArkestraGenericList(object):
             self.items = self.all_items.filter(
                 Q(hosted_by=self.entity) | Q(publish_to=self.entity)
                 ).distinct() 
+        else:
+            self.items_for_entity = self.all_listable_items
                 
     def remove_expired(self):
         # remove expired

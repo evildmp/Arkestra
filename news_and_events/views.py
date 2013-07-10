@@ -277,17 +277,17 @@ class NewsArchiveView(ArkestraGenericView):
         self.type = "sub_page"
         self.order_by = "date"
         self.limit_to = None
-        self.template = "news_and_events/universal_archive_lister_new.html"   
+        # self.template = "news_and_events/universal_archive_listesr_new.html"   
         
         self.create_lister()
         
-        # lister.add_link_to_main_page()
+        self.lister.add_link_to_main_page()
         # lister.add_links_to_other_items()
         # lister.set_limits_and_indexes()
 
-        self.meta = {"description": "Archive of news items",}
-        self.title = unicode(self.entity) + u" - news archive"
-        self.pagetitle = unicode(self.entity) + u" - news archive"
+        self.meta = {"description": "Searchable archive of news items",}
+        self.title = u"News archive for %s" % unicode(self.entity)
+        self.pagetitle = u"News archive for %s" % unicode(self.entity)
         
         return self.response(request)
         
