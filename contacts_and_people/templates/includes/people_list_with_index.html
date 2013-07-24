@@ -5,7 +5,7 @@ Used by: views.people
 Lists members of an entity - either all people by surname, or surnames beginning {{ letter }}.
 
 {% endcomment %}
-{% load entity_tags %}
+{% load i18n entity_tags %}
 <div class="row columns2">
    	<div class="column firstcolumn">
 		<h{{ IN_BODY_HEADING_LEVEL }} style="clear:both">{% if letter %}{% trans "People: surnames beginning" %} {{letter|upper}}{% else %}{% trans "All people by surname" %}{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
