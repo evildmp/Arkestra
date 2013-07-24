@@ -8,7 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
+
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
 
@@ -53,18 +54,22 @@ class BuildingManager(models.Manager):
         return self.get(slug=slug)
 
 class Building(models.Model):
-    """Each Building is on a Site."""
+    # the Building model should really be named Place
     objects=BuildingManager()
     name = models.CharField(max_length=100, null=True, blank=True)
     number = models.CharField(max_length=10, null=True, blank=True)
-    street = models.CharField("Street name", max_length=100, null = True, blank=True)
+    street = models.CharField(
+        "Street name", max_length=100, 
+        null = True, blank=True
+        )
     additional_street_address = models.CharField(help_text=u"If required",
         max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=9, null=True, blank=True)
     site = models.ForeignKey(Site, 
         on_delete=models.PROTECT, 
         related_name="place")
-    slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
+    slug = models.SlugField(blank=True, 
+        help_text=u"Please leave blank/amend only if required", 
         max_length=255, null=True, unique=True)
     image = FilerImageField(on_delete=models.SET_NULL, 
         null=True, blank=True)
@@ -330,9 +335,9 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.external_url:
             return self.external_url.url
         elif self.get_website:
-            return reverse("contact", kwargs={"slug":self.slug}) 
+            return reverse("contact-entity", kwargs={"slug":self.slug}) 
         else:
-            return reverse("contact_base") 
+            return reverse("contact-entity-base") 
 
     @property
     def _get_real_ancestor(self):
@@ -427,28 +432,17 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         If the entity is the base entity, doesn't add the entity slug to 
         the URL
         """
-        kinds = [
-            "contact",
-            "news-and-events",
-            "vacancies-and-studentships",
-            "forthcoming-events",
-            "news-archive",
-            "previous-events"
-            ]
         # external entities don't have info pages
         if self.external_url:
             return ""
         # info pages for base entity
         elif self == Entity.objects.base_entity():
-            print 'reverse(kind+"_base")'
-            return reverse(kind+"_base")
             try:
                 return reverse(kind+"_base")
             except NoReverseMatch:
                 return "/%s/" % kind
         # info pages for other entities
         else:
-            return reverse(kind,kwargs={"slug":self.slug})
             try:
                 return reverse(kind,kwargs={"slug":self.slug})
             except NoReverseMatch:
@@ -652,11 +646,10 @@ class Person(PersonLite, CommonFields):
         return u" ".join(name_part for name_part in [unicode(title), self.given_name, self.surname] if name_part)
 
     def get_absolute_url(self):
-        if self.active:
-            if self.external_url:
-                return self.external_url.url
-            else:
-                return reverse("contact_person", kwargs={"slug":self.slug}) 
+        if self.external_url:
+            return self.external_url.url
+        else:
+            return reverse("contact-person", kwargs={"slug":self.slug}) 
 
     @property
     def get_role(self):

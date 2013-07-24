@@ -38,7 +38,7 @@ def common_settings(request, slug):
     return instance, context, entity
 
 
-def news_and_events(request, slug=None):
+def news_and_events(request, slug):
     instance, context, entity = common_settings(request, slug)    
 
     instance.type = "main_page"

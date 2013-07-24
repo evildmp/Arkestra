@@ -1,4 +1,5 @@
-# this file exists to help avoid circular imports
+# this file exists to help avoid circular imports - it imports nothing from
+# Arkestra
 
 from django.db import models
 

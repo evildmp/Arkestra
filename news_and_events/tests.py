@@ -4,6 +4,7 @@ from django.test.utils import override_settings
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 # we're testing the behaviour of a method that uses date-related functions
 from datetime import datetime, timedelta
@@ -103,7 +104,71 @@ class NewsEventsItemsViewsTests(TestCase):
         self.tootharticle.save()
         response = self.client.get('/news/all-about-teeth/')  
         self.assertEqual(response.context['newsarticle'], self.tootharticle)
+
+
+class ReverseURLsTests(TestCase):
+    def test_newsarticle_reverse_url(self):
+        self.assertEqual(
+            reverse("news", kwargs={"slug": "all-about-teeth"}),
+            "/news/all-about-teeth/"
+            )
+
+    def test_event_reverse_url(self):
+        self.assertEqual(
+            reverse("event", kwargs={"slug": "all-about-teeth"}),
+            "/event/all-about-teeth/"
+            )
+
+    def test_news_archive_base_reverse_url(self):
+        self.assertEqual(
+            reverse("news-archive-base"),
+            "/news-archive/"
+            )
+
+    def test_news_archive_slug_reverse_url(self):
+        self.assertEqual(
+            reverse("news-archive", kwargs={"slug": "some-slug"}),
+            "/news-archive/some-slug/"
+            )
+
+    def test_previous_events_base_reverse_url(self):
+        self.assertEqual(
+            reverse("previous-events-base"),
+            "/previous-events/"
+            )
+
+    def test_previous_events_reverse_url(self):
+        self.assertEqual(
+            reverse("previous-events", kwargs={"slug": "some-slug"}),
+            "/previous-events/some-slug/"
+            )
+
     
+    def test_forthcoming_events_base_reverse_url(self):
+        self.assertEqual(
+            reverse("forthcoming-events-base"),
+            "/forthcoming-events/"
+            )
+
+    def test_forthcoming_events_reverse_url(self):
+        self.assertEqual(
+            reverse("forthcoming-events", kwargs={"slug": "some-slug"}),
+            "/forthcoming-events/some-slug/"
+            )
+
+    def test_news_and_events_base_reverse_url(self):
+        self.assertEqual(
+            reverse("news-and-events-base"),
+            "/news-and-events/"
+            )
+
+    def test_news_and_events_reverse_url(self):
+        self.assertEqual(
+            reverse("news-and-events", kwargs={"slug": "some-slug"}),
+            "/news-and-events/some-slug/"
+            )
+
+
 @override_settings(
     CMS_TEMPLATES = (('null.html', "Null"),)
 )

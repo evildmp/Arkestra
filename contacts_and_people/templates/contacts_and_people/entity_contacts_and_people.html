@@ -48,7 +48,7 @@ Called up by arkestra_page.html
     				<h{{ IN_BODY_HEADING_LEVEL }}>All people A-Z by surname</h{{ IN_BODY_HEADING_LEVEL }}>
     				<ul class= "index">
     					{% for initial in initials_list %}
-    						<li><a href="{% url contact_people_letter entity.slug,initial|lower %}">{{ initial }}</a></li>
+    						<li><a href="{% url contact-people-letter entity.slug,initial|lower %}">{{ initial }}</a></li>
     					{% endfor %}
     				</ul>	
         		{% endif %}

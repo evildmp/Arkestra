@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
 from contacts_and_people.models import Site, Person, Building, Entity, Membership
 
@@ -164,7 +165,7 @@ class EntityTestObjectsMixin(object):
         self.web_editors.save()
 
         # set up a Person - we will add memberships later in the tests
-        self.smith = Person()
+        self.smith = Person(slug="smith")
         self.smith.save()            
 
 
@@ -279,6 +280,12 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
     circumstances
     """
 
+    def test_person_get_absolute_url(self):
+        self.assertEquals(
+            self.smith.get_absolute_url(),
+            "/person/smith/"
+            )
+        
     def test_person_with_no_memberships(self):
         # smith has no Memberships
         self.assertEquals(list(self.smith.real_entity_memberships), [])
@@ -384,4 +391,66 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_building, self.main_building)
         self.assertEquals(self.smith.get_full_address, [self.school, u'Main Building', u"St Mary's Street", u'Cardiff'])                
         # check that his membership of school has been downgraded by the save()
-        self.assertEquals(Membership.objects.get(pk=smith_school_membership.pk).importance_to_person, 4) 
+        self.assertEquals(
+            Membership.objects.get(
+                pk=smith_school_membership.pk
+                ).importance_to_person, 
+            4
+        ) 
+
+
+class ReverseURLsTests(TestCase):
+    def test_person_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-person", kwargs={"slug": "some-slug"}),
+            "/person/some-slug/"
+            )
+
+    def test_person_tab_reverse_url(self):
+        self.assertEqual(
+            reverse(
+                "contact-person-tab", 
+                kwargs={"slug": "some-slug", "active_tab": "yibbers"}),
+            "/person/some-slug/yibbers/"
+            )
+
+    def test_place_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-place", kwargs={"slug": "some-slug"}),
+            "/place/some-slug/"
+            )
+
+    def test_place_tab_reverse_url(self):
+        self.assertEqual(
+            reverse(
+                "contact-place-tab", 
+                kwargs={"slug": "some-slug", "active_tab": "yibbers"}),
+            "/place/some-slug/yibbers/"
+            )
+
+    def test_contact_people_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-people", kwargs={"slug": "some-slug"}),
+            "/people/some-slug/"
+            )
+
+    def test_contact_people_letter_reverse_url(self):
+        self.assertEqual(
+            reverse(
+                "contact-people-letter", 
+                kwargs={"slug": "some-slug", "letter": "w"}),
+            "/people/some-slug/w/"
+            )
+
+    def test_contact_entity_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-entity", kwargs={"slug": "some-slug"}),
+            "/contact/some-slug/"
+            )
+
+    def test_contact_base_entity_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-entity-base"),
+            "/contact/"
+            )
+     

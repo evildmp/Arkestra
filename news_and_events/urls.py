@@ -1,62 +1,68 @@
-from django.conf.urls.defaults import *
-# from  news_and_events.views import NewsAndEventsViews
+from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('news_and_events.views',
     
     # news and events items
-    url(r"^news/(?P<slug>[-\w]+)/$", "newsarticle", {}, "news" ),
-    url(r"^event/(?P<slug>[-\w]+)/$", "event", {}, "event"),
-    
-    # entities' news and events
     url(
-        r'^news-archive/?$', 
+        r"^news/(?P<slug>[-\w]+)/$", 
+        "newsarticle", 
+        name="news"
+        ),
+    url(
+        r"^event/(?P<slug>[-\w]+)/$", 
+        "event",
+        name="event"
+        ),
+    
+    # news archives 
+    url(
+        r'^news-archive/$', 
         "news_archive", 
         {"slug": None},
-        "news-archive_base"
+        name="news-archive-base"
         ),
     url(
-        r'^news-archive/(?:(?P<slug>[-\w]+)/)?$', 
+        r'^news-archive/(?:(?P<slug>[-\w]+)/)$', 
         "news_archive", 
-        {}, 
-        "news-archive"
+        name="news-archive"
         ),
 
+    # previous events 
     url(
-        r'^previous-events/?$', 
+        r'^previous-events/$', 
         "previous_events", 
         {"slug": None}, 
-        "previous-events_base"
+        name="previous-events-base"
         ),
     url(
-        r'^previous-events/(?:(?P<slug>[-\w]+)/)?$', 
+        r'^previous-events/(?:(?P<slug>[-\w]+)/)$', 
         "previous_events", 
-        {}, 
-        "previous-events"
+        name="previous-events"
         ),
 
+    # forthcoming events 
     url(
-        r'^forthcoming-events/?$', 
+        r'^forthcoming-events/$', 
         "all_forthcoming_events", 
         {"slug": None}, 
-        "forthcoming-events_base"
+        name="forthcoming-events-base"
         ),
     url(
-        r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)?$', 
+        r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)$', 
         "all_forthcoming_events", 
-        {}, 
-        "forthcoming-events"
+        name="forthcoming-events"
         ),
 
+    # main news and events 
     url(
-        r"^news-and-events/?$", 
+        r"^news-and-events/$", 
         "news_and_events", 
         {"slug": None}, 
-        "news-and-events_base"
+        name="news-and-events-base"
         ),
     url(
-        r"^news-and-events/(?:(?P<slug>[-\w]+)/)?$", 
+        r"^news-and-events/(?:(?P<slug>[-\w]+)/)$", 
         "news_and_events", 
-        {}, 
-        "news-and-events"
+        name="news-and-events"
         ),
     )
