@@ -13,5 +13,5 @@ if __name__ == "__main__":
         'news_and_events', 
         'vacancies_and_studentships', 
         'links',
-        verbosity=2,
+        # verbosity=2,
         )
