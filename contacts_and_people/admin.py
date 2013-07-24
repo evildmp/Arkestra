@@ -230,7 +230,7 @@ class PersonAdmin(PersonAndEntityAdmin):
     list_filter = (HasHomeRole, PersonIsExternal, PersonEntity, 'active')
     list_display = ('surname', 'given_name','get_entity_short_name', 'active')
     filter_horizontal = ('entities',)
-    prepopulated_fields = {'slug': ('title', 'given_name', 'middle_names', 'surname',)}
+    prepopulated_fields = {'slug': ('given_name', 'middle_names', 'surname',)}
     readonly_fields = ['address_report',]    
     
     def address_report(self, instance):
