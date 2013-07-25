@@ -5,18 +5,18 @@ Used by: views.people
 Lists members of an entity - either all people by surname, or surnames beginning {{ letter }}.
 
 {% endcomment %}
-{% load entity_tags %}
+{% load i18n entity_tags %}
 <div class="row columns2">
    	<div class="column firstcolumn">
-		<h{{ IN_BODY_HEADING_LEVEL }} style="clear:both">{% if letter %}People: surnames beginning {{letter|upper}}{% else %}All people by surname{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
+		<h{{ IN_BODY_HEADING_LEVEL }} style="clear:both">{% if letter %}{% trans "People: surnames beginning" %} {{letter|upper}}{% else %}{% trans "All people by surname" %}{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
 		{% people_with_roles letter %}
 	</div>
 	<div class="column lastcolumn"> 
 	{% if initials_list %}
-		<h{{ IN_BODY_HEADING_LEVEL }}>Index of people by surname</h{{ IN_BODY_HEADING_LEVEL }}>
+		<h{{ IN_BODY_HEADING_LEVEL }}>{% trans "Index of people by surname" %}</h{{ IN_BODY_HEADING_LEVEL }}>
 		<ul class="index">
 			{% for initial in initials_list %}
-				<li><a href="/people/{{ entity.slug }}/{{initial|lower}}/">{{ initial }}</a></li>
+				<li><a href="{% url contact-people-letter entity.slug initial|lower %}">{{ initial }}</a></li>
 			{% endfor %}
 		</ul>
 	{% endif %}

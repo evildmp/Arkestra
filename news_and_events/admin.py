@@ -20,7 +20,7 @@ from models import NewsArticle, NewsSource, Event, EventType
 class NewsAndEventsForm(GenericModelForm):
     # a shared form for news and events
     pass
-    
+
 from contacts_and_people.models import Entity
 
 class NewsAndEventsAdmin(GenericModelAdmin):
@@ -34,12 +34,12 @@ class NewsAndEventsAdmin(GenericModelAdmin):
             }
     list_max_show_all = 1000
     list_per_page = 1000
-        
+
     def _media(self):
         return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
 
-# this or something like it can be enabled when the 
+# this or something like it can be enabled when the
 # autocomplete-stop-sworking-after-adding-an-inlin
 # bug has been addressed
 # it will hugely speed up loading of news, events etc with lots of people in the m2m
@@ -51,22 +51,22 @@ class NewsAndEventsAdmin(GenericModelAdmin):
 #     def _media(self):
 #         return super(AutocompleteMixin, self).media
 #     media = property(_media)
-    
+
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
         model = NewsArticle
-        
+
     def clean(self):
         super(NewsArticleForm, self).clean()
-        
+
         # sticky_until value must be greater than (later) than date
         date = datetime.date(self.cleaned_data['date'])
-        self.cleaned_data['sticky_until'] = self.cleaned_data.get('sticky_until', date) 
+        self.cleaned_data['sticky_until'] = self.cleaned_data.get('sticky_until', date)
         # if importance = 0, it's not sticky
 
         self.cleaned_data['sticky_until'] = self.cleaned_data['sticky_until'] or datetime.date(self.cleaned_data['date'])
         if self.cleaned_data['importance'] == 0:
-            self.cleaned_data['sticky_until'] = None 
+            self.cleaned_data['sticky_until'] = None
         elif self.cleaned_data['sticky_until'] < datetime.date(self.cleaned_data['date']):
             self.cleaned_data['sticky_until'] = datetime.date(self.cleaned_data['date'])
         return self.cleaned_data
@@ -79,9 +79,9 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
     read_only_fields = ('sticky_until')
     filter_horizontal = (
         'please_contact',
-        'publish_to', 
+        'publish_to',
         )
-    # inlines = [MembershipInline,]    
+    # inlines = [MembershipInline,]
     fieldset_stickiness = ('How this item should behave in lists', {'fields': ('sticky_until', 'is_sticky_everywhere',)})
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],),}),
@@ -90,7 +90,7 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
             ('Related people', {'fieldsets': (fieldsets["people"],)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
 class EventForm(NewsAndEventsForm):
@@ -108,7 +108,7 @@ class EventForm(NewsAndEventsForm):
                 print "checking parent field_content"
                 self.cleaned_data[field_name] = self.cleaned_data[field_name] or list(getattr(parent,field_name).all())
             # other fields
-            attribute_list = ['building', 'precise_location', 'hosted_by', 'access_note'] 
+            attribute_list = ['building', 'precise_location', 'hosted_by', 'access_note']
             for field_name in attribute_list:
                 print "checking which attributes to inherit:", field_name
                 self.cleaned_data[field_name] = self.cleaned_data[field_name] or getattr(parent,field_name)
@@ -124,11 +124,11 @@ class EventForm(NewsAndEventsForm):
 
         # 2. go and do the checks in the parent class
         super(EventForm, self).clean()
-        
+
         # 3. check dates
         if self.cleaned_data["start_date"]:
             if self.cleaned_data["series"]:
-                raise forms.ValidationError("An event with a start date can't also be a series of events. Please correct this.")      
+                raise forms.ValidationError("An event with a start date can't also be a series of events. Please correct this.")
             elif self.cleaned_data["end_date"] == self.cleaned_data["start_date"]:
                 self.cleaned_data["single_day_event"] = True
             elif not self.cleaned_data["end_date"]:
@@ -142,8 +142,8 @@ class EventForm(NewsAndEventsForm):
                     self.cleaned_data["end_time"] = None
                     message = u"You didn't enter a start time, so I deleted the end time. I hope that's OK."
                     messages.add_message(self.request, messages.WARNING, message)
-            
-            if self.cleaned_data["single_day_event"]:  
+
+            if self.cleaned_data["single_day_event"]:
                 self.cleaned_data["end_date"] = self.cleaned_data["start_date"]
                 if not self.cleaned_data["start_time"]:
                     message = u"You have a lovely smile."
@@ -151,10 +151,10 @@ class EventForm(NewsAndEventsForm):
                     self.cleaned_data["end_time"] = None
                 elif self.cleaned_data["end_time"] and self.cleaned_data["end_time"] < self.cleaned_data["start_time"]:
                     raise forms.ValidationError('This event appears to end before it starts, which is very silly. Please correct the times.')
-                                  
+
             self.cleaned_data['jumps_queue_on'] = self.cleaned_data['jumps_queue_on'] or self.cleaned_data['start_date']
             if self.cleaned_data['importance'] == 0:
-                self.cleaned_data['jumps_queue_on'] = None 
+                self.cleaned_data['jumps_queue_on'] = None
             elif self.cleaned_data['jumps_queue_on'] > self.cleaned_data['start_date']:
                 self.cleaned_data['jumps_queue_on'] = self.cleaned_data['start_date']
 
@@ -165,7 +165,7 @@ class EventForm(NewsAndEventsForm):
             messages.add_message(self.request, messages.INFO, message)
             self.cleaned_data['start_date'] = self.cleaned_data['end_date'] = self.cleaned_data['start_time'] = self.cleaned_data['end_time'] = None
             self.cleaned_data['single_day_event'] = False
-            self.cleaned_data['jumps_queue_on'] = None 
+            self.cleaned_data['jumps_queue_on'] = None
             self.cleaned_data['importance'] = 0
         return self.cleaned_data
 
@@ -198,14 +198,14 @@ class EventIsSeries(SimpleListFilter):
 
 
 class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
-    
+
     # some general settings
     form = EventForm
     filter_horizontal = (
         'please_contact',
-        'publish_to', 
+        'publish_to',
         'registration_enquiries',
-        'featuring', 
+        'featuring',
         )
     ordering = ['type',]
     list_display = ('short_title', 'hosted_by', 'start_date')
@@ -230,15 +230,15 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
         ('When displaying the children of this item in lists', {
             'fields': ('show_titles', 'display_series_summary',),},),
         )
-    fieldset_registration = ('Registration enquiries', {'fields': ('registration_enquiries',)})   
-    fieldset_featuring = ('Featured people', {'fields': ('featuring',)})   
+    fieldset_registration = ('Registration enquiries', {'fields': ('registration_enquiries',)})
+    fieldset_featuring = ('Featured people', {'fields': ('featuring',)})
     fieldset_jumpiness = ('How this item should behave in lists', {'fields': ('jumps_queue_on', 'jumps_queue_everywhere')})
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldset_type, fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],)}),
-            ('Date & significance', {'fieldsets': 
-                ( 
-                    fieldset_when, 
-                    fieldsets["importance"], 
+            ('Date & significance', {'fieldsets':
+                (
+                    fieldset_when,
+                    fieldsets["importance"],
                     fieldset_jumpiness,)}
                     ),
             ('Location', {'fieldsets': (fieldset_building, fieldsets["location"],)}),
@@ -247,7 +247,7 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
             ('People', {'fieldsets': (fieldset_featuring, fieldsets["people"], fieldset_registration)}),
             ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),        
+            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
 

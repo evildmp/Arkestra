@@ -8,4 +8,4 @@
 
 -e git+https://github.com/stefanfoulis/django-filer.git@81c7304b8240279a5fe13bf769d7839fed72fba9#egg=django_filer-0.9a1-py2.6-feature/issue-213
 
--e git+git@github.com:evildmp/django-treeadmin.git#egg=django_treeadmin-dev
+-e git+https://github.com/evildmp/django-treeadmin.git#egg=django_treeadmin-dev

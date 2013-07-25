@@ -218,8 +218,11 @@ def person(request, slug, active_tab=""):
     
     # mark the active tab, if there is one
     if active_tab:
-        tabs_dict[active_tab]["active"] = True
-
+        try:
+            tabs_dict[active_tab]["active"] = True
+        except KeyError:
+            raise http.Http404
+            
     # add tabs to the list of tabs
     tabs = []
     tabs.append(tabs_dict["default"])          

@@ -1,19 +1,82 @@
 from django.conf.urls.defaults import patterns, url
-import views
 
-urlpatterns = patterns('',
+urlpatterns = patterns('vacancies_and_studentships.views',
     
-    # vacancies and studentships items
-    url(r"^vacancy/(?P<slug>[-\w]+)/$", views.vacancy, name="vacancy"),
-    url(r"^studentship/(?P<slug>[-\w]+)/$", views.studentship, name="studentship"),
+    # vacancies and studentship items
+    url(
+        r"^vacancy/(?P<slug>[-\w]+)/$", 
+        "vacancy", 
+        name="vacancy"
+        ),
+    url(
+        r"^studentship/(?P<slug>[-\w]+)/$", 
+        "studentship", 
+        name="studentship"
+        ),
     
-    # entities' vacancies and studentships
-    url(r'^archived-vacancies/(?:(?P<slug>[-\w]+)/)?$', views.archived_vacancies, name="archived_vacancies"),
-    url(r'^all-open-vacancies/(?:(?P<slug>[-\w]+)/)?$', views.all_current_vacancies, name="all_current_vacancies"),
+    # archived vacancies 
+    url(
+        r'^archived-vacancies/$', 
+        "archived_vacancies", 
+        {"slug": None}, 
+        "archived-vacancies-base"
+        ),
+    url(
+        r'^archived-vacancies/(?:(?P<slug>[-\w]+)/)$', 
+        "archived_vacancies", 
+        name="archived-vacancies"
+        ),
 
-url(r'^archived-studentships/(?:(?P<slug>[-\w]+)/)?$', views.archived_studentships, name="archived_studentships"),
-    url(r"^all-open-studentships/(?:(?P<slug>[-\w]+)/)?$", views.all_current_studentships, name="all_current_studentships"),
+    # all current vacancies 
+    url(
+        r'^current-vacancies/$', 
+        "all_current_vacancies", 
+        {"slug": None}, 
+        name="current-vacancies-base"
+        ),
+    url(
+        r'^current-vacancies/(?:(?P<slug>[-\w]+)/)$', 
+        "all_current_vacancies", 
+        name="current-vacancies"
+        ),
 
-url(r"^vacancies-and-studentships/(?:(?P<slug>[-\w]+)/)?$", views.vacancies_and_studentships, name="vacancies_and_studentships"),
-    )
-    
+    # archived studentships 
+    url(
+        r'^archived-studentships/$', 
+        "archived_studentships", 
+        {"slug": None}, 
+        "archived-studentships-base"
+        ),
+    url(
+        r'^archived-studentships/(?:(?P<slug>[-\w]+)/)$', 
+        "archived_studentships", 
+        name="archived-studentships"
+        ),
+
+    # all current studentships 
+    url(
+        r'^current-studentships/$', 
+        "all_current_studentships", 
+        {"slug": None}, 
+        "current-studentships-base"
+        ),
+    url(
+        r'^current-studentships/(?:(?P<slug>[-\w]+)/)$', 
+        "all_current_studentships", 
+        name="current-studentships"
+        ),
+
+    # main vacancies and studentships 
+    url(
+        r"^vacancies-and-studentships/$", 
+        "vacancies_and_studentships", 
+        {"slug": None}, 
+        "vacancies-and-studentships-base"
+        ),
+    url(
+        r"^vacancies-and-studentships/(?:(?P<slug>[-\w]+)/)$", 
+        "vacancies_and_studentships", 
+        name="vacancies-and-studentships"
+        ),
+
+)

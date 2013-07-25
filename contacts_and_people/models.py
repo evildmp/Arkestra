@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
+from django.core.urlresolvers import reverse, NoReverseMatch
 
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
@@ -53,18 +54,22 @@ class BuildingManager(models.Manager):
         return self.get(slug=slug)
 
 class Building(models.Model):
-    """Each Building is on a Site."""
+    # the Building model should really be named Place
     objects=BuildingManager()
     name = models.CharField(max_length=100, null=True, blank=True)
     number = models.CharField(max_length=10, null=True, blank=True)
-    street = models.CharField("Street name", max_length=100, null = True, blank=True)
+    street = models.CharField(
+        "Street name", max_length=100, 
+        null = True, blank=True
+        )
     additional_street_address = models.CharField(help_text=u"If required",
         max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=9, null=True, blank=True)
     site = models.ForeignKey(Site, 
         on_delete=models.PROTECT, 
         related_name="place")
-    slug = models.SlugField(blank=True, help_text=u"Please leave blank/amend only if required", 
+    slug = models.SlugField(blank=True, 
+        help_text=u"Please leave blank/amend only if required", 
         max_length=255, null=True, unique=True)
     image = FilerImageField(on_delete=models.SET_NULL, 
         null=True, blank=True)
@@ -110,7 +115,7 @@ class Building(models.Model):
         
     
     def get_absolute_url(self):
-        return "/place/%s/" % self.slug
+        return reverse("contact_place", kwargs={"slug":self.slug}) 
     
     def save(self):
         if not self.slug or self.slug == '':
@@ -330,9 +335,9 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.external_url:
             return self.external_url.url
         elif self.get_website:
-            return "/contact/%s/" % self.slug
+            return reverse("contact-entity", kwargs={"slug":self.slug}) 
         else:
-            return "/contact/"
+            return reverse("contact-entity-base") 
 
     @property
     def _get_real_ancestor(self):
@@ -421,16 +426,27 @@ class Entity(MPTTModel, EntityLite, CommonFields):
 
     def get_related_info_page_url(self, kind):
         """
-        Returns a URL not for the entity, but for its /contact page, /news-and-events, or whatever.
+        Returns a URL not for the entity, but for its /contact page, 
+        /news-and-events, or whatever.
         
-        If the entity is the base entity, doesn't add the entity slug to the URL
+        If the entity is the base entity, doesn't add the entity slug to 
+        the URL
         """
+        # external entities don't have info pages
         if self.external_url:
             return ""
+        # info pages for base entity
         elif self == Entity.objects.base_entity():
-            return "/%s/" % kind
+            try:
+                return reverse(kind+"_base")
+            except NoReverseMatch:
+                return "/%s/" % kind
+        # info pages for other entities
         else:
-            return "/%s/%s/" % (kind, self.slug)
+            try:
+                return reverse(kind,kwargs={"slug":self.slug})
+            except NoReverseMatch:
+                return "/%s/%s/" % (kind, self.slug)
 
     def get_template(self):
         """
@@ -631,11 +647,10 @@ class Person(PersonLite, CommonFields):
         return u" ".join(name_part for name_part in [unicode(title), self.given_name, self.surname] if name_part)
 
     def get_absolute_url(self):
-        if self.active:
-            if self.external_url:
-                return self.external_url.url
-            else:
-                return "/person/%s/" % self.slug
+        if self.external_url:
+            return self.external_url.url
+        else:
+            return reverse("contact-person", kwargs={"slug":self.slug}) 
 
     @property
     def get_role(self):

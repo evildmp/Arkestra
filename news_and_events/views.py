@@ -1,5 +1,5 @@
 import datetime
-
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
@@ -42,11 +42,11 @@ def news_and_events(request, slug):
     instance.type = "main_page"
 
     meta = {"description": "Recent news and forthcoming events",}
-    title = unicode(entity) + u" news & events"
+    title = unicode(entity) + _(u" news & events")
     if MULTIPLE_ENTITY_MODE:
-        pagetitle = unicode(entity) + u" news & events"
+        pagetitle = unicode(entity) + _(u" news & events")
     else:
-        pagetitle = "News & events"
+        pagetitle = _("News & events")
     CMSNewsAndEventsPlugin().render(context, instance, None)
 
     context.update({
