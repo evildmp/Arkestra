@@ -438,7 +438,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         # info pages for base entity
         elif self == Entity.objects.base_entity():
             try:
-                return reverse(kind+"_base")
+                return reverse(kind+"-base")
             except NoReverseMatch:
                 return "/%s/" % kind
         # info pages for other entities

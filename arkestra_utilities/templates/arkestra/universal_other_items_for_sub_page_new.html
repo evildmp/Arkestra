@@ -1,7 +1,7 @@
 {% ifequal lister.type "sub_page" %}
 	<ul class="close icons other-items">
 		{% for list in lister.lists %}
-			{% for item in list.other_items %}*
+			{% for item in list.other_items %}
 				<li><a href = "{{item.link}}">{{item.title|capfirst }}</a> ({{ item.count }} item{{ item.count|pluralize }})</li>
 			{% endfor %}
 		{% endfor %}

@@ -277,7 +277,7 @@ class NewsArchiveView(ArkestraGenericView):
         self.type = "sub_page"
         self.order_by = "date"
         self.limit_to = None
-        # self.template = "news_and_events/universal_archive_listesr_new.html"   
+        # self.template = "news_and_events/universal_archive_lister_new.html"   
         
         self.create_lister()
         

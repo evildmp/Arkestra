@@ -1,7 +1,7 @@
 import operator
 from datetime import datetime, timedelta
 
-from arkestra_utilities.generic_lister import ArkestraGenericList, ArkestraGenericLister
+from arkestra_utilities.generic_lister import ArkestraGenericLister
 
 from django.db.models import Q
 
@@ -15,8 +15,8 @@ from django_easyfilters import FilterSet
 class ItemFilterSet(FilterSet):
     fields = ['date']
         
-class NewsList(object):
-    model = NewsArticle       
+class ArkestraGenericList(object):
+    model = None       
     item_template = "arkestra/universal_plugin_list_item_new.html"
     search_fields = [
         {
@@ -28,14 +28,6 @@ class NewsList(object):
                 "summary__icontains",
                 ],    
             },
-        # {
-        #     "field_name": "publisher",
-        #     "field_label": "Published by",
-        #     "search_keys": [
-        #         "hosted_by__name__icontains",
-        #         "hosted_by__short_name__icontains",
-        #         ]
-        #     }    
         ]
     
     def __init__(
@@ -65,7 +57,7 @@ class NewsList(object):
         self.items = self.items_for_entity
         
         if self.view == "archive":
-            # self.apply_filters()
+            self.apply_filters()
             self.itemfilter = ItemFilterSet(self.items, self.request.GET) 
 
         else:       
@@ -212,7 +204,7 @@ class NewsList(object):
             all_items_count = self.items_for_entity.count()
             if self.limit_to and all_items_count > self.limit_to:
                 return [{
-                    "link": self.entity.get_related_info_page_url("news-archive"), 
+                    "link": self.entity.get_related_info_page_url("class-news-archive"), 
                     "title": "%s news archive" % self.entity,
                     "count": all_items_count,}]
 
@@ -224,6 +216,9 @@ class NewsList(object):
         # more than one date in the list: show an index
         if self.type == "sub_page" and self.no_of_get_whens > 1:
             self.index = True
+
+class NewsList(ArkestraGenericList):
+    model = NewsArticle
 
 class EventsList(ArkestraGenericList):
     model = Event
@@ -261,7 +256,7 @@ class NewsAndEventsLister(object):
     menu_cues = menu_dict
     listkinds = [
                 ("news", NewsList),
-                # ("events", EventsList),
+                ("events", EventsList),
             ]
     
     def __init__(

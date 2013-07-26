@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+from news_and_events import views
 
 urlpatterns = patterns('news_and_events.views',
     
@@ -13,21 +14,32 @@ urlpatterns = patterns('news_and_events.views',
         "event",
         name="event"
         ),    
-
-    url(r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)?$", views.NewsAndEventsView.as_view(), name="class_news_and_events"),
-    url(r"^news-archive/(?:(?P<slug>[-\w]+)/)?$", views.NewsArchiveView.as_view(), name="class_news_archive"),
-    )
+        
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development
 
     # news archives 
+    url(
+        r"^news-archive/(?:(?P<slug>[-\w]+)/)$",
+        views.NewsArchiveView.as_view(), 
+        name="class-news-archive"
+        ),
+
+    url(
+        r'^news-archive/$', 
+        views.NewsArchiveView.as_view(), 
+        {"slug": None},
+        name="class-news-archive-base"
+        ),
+
     url(
         r'^old-news-archive/$', 
         "news_archive", 
         {"slug": None},
         name="news-archive-base"
         ),
+        
     url(
-        r'^news-archive/(?:(?P<slug>[-\w]+)/)$', 
+        r'^old-news-archive/(?:(?P<slug>[-\w]+)/)$', 
         "news_archive", 
         name="news-archive"
         ),
@@ -59,6 +71,19 @@ urlpatterns = patterns('news_and_events.views',
         ),
 
     # main news and events 
+    url(
+        r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)$",
+        views.NewsAndEventsView.as_view(), 
+        name="class-news-and-events"
+        ),
+        
+    url(
+        r"^new-news-and-events/$",
+        views.NewsAndEventsView.as_view(), 
+        {"slug": None},
+        name="class-news-and-events-base"
+        ),
+        
     url(
         r"^news-and-events/$", 
         "news_and_events", 
