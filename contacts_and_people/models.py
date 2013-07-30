@@ -115,7 +115,7 @@ class Building(models.Model):
         
     
     def get_absolute_url(self):
-        return reverse("contact_place", kwargs={"slug":self.slug}) 
+        return reverse("contact-place", kwargs={"slug":self.slug}) 
     
     def save(self):
         if not self.slug or self.slug == '':
