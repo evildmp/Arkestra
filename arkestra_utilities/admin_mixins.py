@@ -139,7 +139,7 @@ fieldsets = {
     'people': ('People to contact about this item', {'fields': ('please_contact',)}),
     'publishing_control': ('Publishing control', {'fields': ('published', 'in_lists')}),
     'date': ('', {'fields': ('date',)}),
-    'closing_date': ('', {'fields': ('closing_date',)}),
+    'date': ('', {'fields': ('date',)}),
     'importance': ('', {'fields': ('importance',)}),
     'url': ('If this is an external item', {'fields': ('external_url', 'input_url',)}),         
     'slug': ('If this is an internal item', {'fields': ('slug',)}),

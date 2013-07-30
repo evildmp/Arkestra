@@ -115,7 +115,8 @@ class Event(NewsAndEvents, LocationModelMixin):
         )
     child_list_heading = models.CharField(max_length=50, null=True, blank=True,
         help_text= u"e.g. Conference sessions; Lectures in this series")
-    start_date = models.DateField(null=True, blank=True,
+    date = models.DateField(
+        null=True, blank=True,
         help_text=u"Not required for a series of events")
     start_time = models.TimeField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -134,7 +135,7 @@ class Event(NewsAndEvents, LocationModelMixin):
         )
 
     class Meta:
-        ordering = ['type', 'start_date', 'start_time']
+        ordering = ['type', 'date', 'start_time']
 
     @property
     def informative_url(self):
@@ -188,17 +189,17 @@ class Event(NewsAndEvents, LocationModelMixin):
         if self.slug == "" or slug_is_bad(self):
             self.slug=slugify(self.short_title)
         if slug_is_bad(self):
-            suffix = slugify(date(self.start_date, "Y"))
+            suffix = slugify(date(self.date, "Y"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
                 # print "adding suffix:", suffix, self.slug
         if slug_is_bad(self):
-            suffix = slugify(date(self.start_date, "F"))
+            suffix = slugify(date(self.date, "F"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
                 # print "adding suffix:", suffix, self.slug
         if slug_is_bad(self):
-            suffix = slugify(date(self.start_date, "d"))
+            suffix = slugify(date(self.date, "d"))
             if not suffix in self.slug:
                 self.slug = self.slug + "-" + suffix
                 # print "adding suffix:", suffix, self.slug
@@ -209,13 +210,13 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     def get_children_forthcoming(self):
         if self.series:
-            return self.children.filter(Q(start_date__gte = datetime.now()) | Q(end_date__gte = datetime.now()) | Q(series = True)).order_by('start_date')
+            return self.children.filter(Q(date__gte = datetime.now()) | Q(end_date__gte = datetime.now()) | Q(series = True)).order_by('date')
         else:
             return self.children.all()
 
     def get_children_previous(self):
         if self.series:
-            return self.children.filter(Q(start_date__lt = datetime.now()) | Q(end_date__lt = datetime.now()) | Q(series = True)).order_by('-start_date')
+            return self.children.filter(Q(date__lt = datetime.now()) | Q(end_date__lt = datetime.now()) | Q(series = True)).order_by('-date')
 
     def get_featuring(self, featuring = None):
         featuring = set(self.featuring.all()) or set()
@@ -223,10 +224,6 @@ class Event(NewsAndEvents, LocationModelMixin):
             for child_event in self.children.all():
                 featuring.update(child_event.get_featuring(featuring))
         return featuring
-
-    @property
-    def date(self):
-        return self.start_date
 
     def get_date_if_needed_and_time_heading(self):
         date_time_heading = []
@@ -249,22 +246,22 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     def get_dates(self):
         if not self.series:
-            start_date = self.start_date
+            date = self.date
             end_date = self.end_date
             if not end_date or self.single_day_event:
-                end_date = start_date
-            start_date_format = end_date_format = ARKESTRA_DATE_FORMATS["not_this_year"]
+                end_date = date
+            date_format = end_date_format = ARKESTRA_DATE_FORMATS["not_this_year"]
             now = datetime.now()
-            if start_date.year == end_date.year:            # start and end in the same year, so:
-                start_date_format = ARKESTRA_DATE_FORMATS["not_this_month"]                  # start format example: "3rd May"
-                if start_date.month == end_date.month:      # start and end in the same month, so:
-                    start_date_format = ARKESTRA_DATE_FORMATS["this_month"]                # start format example: "21st"
+            if date.year == end_date.year:            # start and end in the same year, so:
+                date_format = ARKESTRA_DATE_FORMATS["not_this_month"]                  # start format example: "3rd May"
+                if date.month == end_date.month:      # start and end in the same month, so:
+                    date_format = ARKESTRA_DATE_FORMATS["this_month"]                # start format example: "21st"
                 if end_date.year == now.year:               # they're both this year, so:
                     end_date_format = ARKESTRA_DATE_FORMATS["not_this_month"]                # end format example: "23rd May"
             if self.single_day_event:
-                dates = nice_date(start_date, end_date_format)
+                dates = nice_date(date, end_date_format)
             else:
-                dates = nice_date(start_date, start_date_format) + unicode(_(u" to ")) + nice_date(end_date, end_date_format)
+                dates = nice_date(date, date_format) + unicode(_(u" to ")) + nice_date(end_date, end_date_format)
             return dates
         else:
             return "Series"
@@ -289,16 +286,16 @@ class Event(NewsAndEvents, LocationModelMixin):
             for child in self.children.all():
                 need_to_save = False
                 child.check_date()
-                if child.start_date and not self.series:
+                if child.date and not self.series:
                     child.check_date() # we start at the leaves and work backwards, so we can assume all descendants are OK
-                    if (not self.start_date) or (self.start_date > child.start_date):
-                        self.start_date = child.start_date
+                    if (not self.date) or (self.date > child.date):
+                        self.date = child.date
                         need_to_save = True
                     if not self.end_date:
-                        self.end_date = self.start_date
+                        self.end_date = self.date
                     child_end_date = child.end_date
                     if not child_end_date:
-                        child_end_date = child.start_date
+                        child_end_date = child.date
                     if  self.end_date < child_end_date:
                         self.end_date = child_end_date
                         need_to_save = True
@@ -323,19 +320,19 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     @property
     def get_when(self):
-        if self.start_date:
+        if self.date:
             if getattr(self, "sticky", None):
                 return "Top events"
 
-            #return self.start_date
+            #return self.date
             #now = datetime.now()
             date_format = "F Y" # Aikido Cardiff version
             # date_format = "F Y" # standard version
-            #if self.start_date.year == now.year:               # they're both this year, so:
+            #if self.date.year == now.year:               # they're both this year, so:
             #    date_format = "F"                # end format example: "23rd May"
-            return date(self.start_date, date_format)
+            return date(self.date, date_format)
             #This is the old method of grouping items
-            #diff = self.start_date - datetime.now().date()
+            #diff = self.date - datetime.now().date()
             #tddict = {999999999: 'Next month & beyond', 31:'This month', 7: 'This week', }
             #tdlist = sorted(tddict.keys())
             #when_heading =  tddict[tdlist[bisect.bisect(tdlist, diff.days)]]

@@ -13,11 +13,11 @@ def smart_description(obj):
     r = []
     date_format = "jS F Y"
     now = datetime.now()
-    if obj.closing_date.year == now.year: # this year
+    if obj.date.year == now.year: # this year
         date_format = "jS F"
-    closing_date = date(obj.closing_date, date_format) 
+    date = date(obj.date, date_format) 
     
-    s = u"Closing date: %s" % closing_date
+    s = u"Closing date: %s" % date
     if obj.please_contact:
         s += u" contact: %s" % smart_unicode(obj.please_contact)
     r.append(s) 

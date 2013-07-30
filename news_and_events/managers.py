@@ -43,15 +43,15 @@ class EventManager(ArkestraGenericModelManager):
         returns forthcoming_events, previous_events, series_events
         """
         if instance.type == "for_person":
-            all_events = instance.person.event_featuring.all().order_by('start_date', 'start_time')
+            all_events = instance.person.event_featuring.all().order_by('date', 'start_time')
         elif instance.type == "for_place":
-            all_events = instance.place.event_set.all().order_by('start_date', 'start_time')
+            all_events = instance.place.event_set.all().order_by('date', 'start_time')
         # most likely, we're getting events related to an entity
         elif MULTIPLE_ENTITY_MODE and instance.entity:
             all_events = self.model.objects.filter(Q(hosted_by=instance.entity) | \
-            Q(publish_to=instance.entity)).distinct().order_by('start_date', 'start_time')
+            Q(publish_to=instance.entity)).distinct().order_by('date', 'start_time')
         else:
-            all_events = self.model.objects.all().order_by('start_date', 'start_time')
+            all_events = self.model.objects.all().order_by('date', 'start_time')
     
         all_events = all_events.filter(published=True, in_lists=True)
         
@@ -65,15 +65,15 @@ class EventManager(ArkestraGenericModelManager):
         
         instance.forthcoming_events = actual_events.filter(  
             # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
-            Q(single_day_event = True, start_date__gte = datetime.now()) | \
+            Q(single_day_event = True, date__gte = datetime.now()) | \
             Q(single_day_event = False, end_date__gte = datetime.now())
             )
 
         instance.previous_events = actual_events.exclude(  
             # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
-            Q(single_day_event = True, start_date__gte = datetime.now()) | \
+            Q(single_day_event = True, date__gte = datetime.now()) | \
             Q(single_day_event = False, end_date__gte = datetime.now())
-            ).order_by('-start_date', '-start_time')
+            ).order_by('-date', '-start_time')
         
         instance.series_events = all_events.filter(series = True)
         
@@ -97,11 +97,11 @@ class EventManager(ArkestraGenericModelManager):
 
         # now we have to go through the non-top items, and find any that can be promoted to top_events
         # get the set of dates where possible promotable items can be found             
-        dates = non_top_events.dates('start_date', 'day')
+        dates = non_top_events.dates('date', 'day')
         for date in dates:
             # get all non-top items from this date
             possible_top_events = non_top_events.filter(
-                start_date = date)
+                date = date)
             # promotable items have importance > 0
             # promote the promotable items
             list(top_events).extend(possible_top_events.filter(Q(hosted_by=instance.entity) | \
@@ -118,7 +118,7 @@ class EventManager(ArkestraGenericModelManager):
                 break
         # and everything left in non-top items after this date
         if dates:
-            remaining_items = non_top_events.filter(start_date__gt=date)
+            remaining_items = non_top_events.filter(date__gt=date)
             if ordinary_events:
                 ordinary_events = ordinary_events | remaining_items
             top_events = top_events

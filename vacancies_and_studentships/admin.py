@@ -23,9 +23,9 @@ class VacancyStudentshipAdmin(GenericModelAdmin, ModelAdminWithTabsAndCMSPlaceho
     # inlines = (ObjectLinkInline,)
     exclude = ('description', 'url',)
     search_fields = ['short_title','title','summary', 'slug','url']
-    list_display = ('short_title', 'hosted_by', 'closing_date',)
-    list_display = ('short_title', 'closing_date', 'hosted_by',)
-    list_filter = ('closing_date', HostedByFilter)
+    list_display = ('short_title', 'hosted_by', 'date',)
+    list_display = ('short_title', 'date', 'hosted_by',)
+    list_filter = ('date', HostedByFilter)
     related_search_fields = [
         'hosted_by',
         'please_contact',
@@ -58,7 +58,7 @@ class VacancyAdmin(VacancyStudentshipAdmin):
         
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy, fieldsets["image"], fieldsets["publishing_control"],)}),
-            ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
+            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
             ('Please contact', {'fieldsets': (fieldsets["people"],)}),
@@ -84,7 +84,7 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
     fieldset_supervision = ('', {'fields': ('supervisors',)})
     tabs = (
             ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],)}),
-            ('Date & significance', {'fieldsets': (fieldsets["closing_date"], fieldsets["importance"])}),
+            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
             ('Body', {'fieldsets': (fieldsets["body"],)}),
             ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
             ('Supervisors', {'fieldsets': (fieldset_supervision,)}),

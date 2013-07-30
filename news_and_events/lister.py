@@ -59,7 +59,7 @@ class ArkestraGenericList(object):
         if self.view == "archive":
             self.apply_filters()
             self.itemfilter = ItemFilterSet(self.items, self.request.GET) 
-
+        
         else:       
             self.remove_expired()
             self.re_order_by_importance() # expensive; shame it has to be here
@@ -78,6 +78,7 @@ class ArkestraGenericList(object):
             )
 
     def filter_by_entity(self):
+
         # filter by entity
         if MULTIPLE_ENTITY_MODE and self.entity:
             self.items_for_entity = self.all_listable_items.filter(
@@ -116,6 +117,43 @@ class ArkestraGenericList(object):
         
     # methods that merely manipulate the contents of the list - all work on 
     # self.items
+
+    def remove_expired(self):
+        pass
+
+    def re_order_by_importance(self):
+        pass
+
+    def truncate_items(self):        
+        # cut the list down to size if necessary
+        if self.items and len(self.items) > self.limit_to:
+            self.items = self.items[:self.limit_to]  
+
+    # methods that inspect the list and return something useful
+    def set_show_when(self):
+        # we only show date groups when warranted    
+        self.show_when = self.group_dates and not ("horizontal" in self.list_format or self.no_of_get_whens < 2)
+
+    def other_items(self):    
+        if self.items and self.view == "current":   
+            all_items_count = self.items_for_entity.count()
+            if self.limit_to and all_items_count > self.limit_to:
+                return [{
+                    "link": self.entity.get_related_info_page_url("class-news-archive"), 
+                    "title": "%s news archive" % self.entity,
+                    "count": all_items_count,}]
+
+    def index_items(self):
+        # gather non-top items into a list to be indexed
+        self.index_items = [item for item in self.items if not getattr(item, 'sticky', False)]
+        # extract a list of dates for the index
+        self.no_of_get_whens = len(set(getattr(item, "get_when", None) for item in self.items))
+        # more than one date in the list: show an index
+        if self.type == "sub_page" and self.no_of_get_whens > 1:
+            self.index = True
+
+class NewsList(ArkestraGenericList):
+    model = NewsArticle
 
     def remove_expired(self):
         # remove expired
@@ -189,67 +227,76 @@ class ArkestraGenericList(object):
                     )
             self.items = top_items + ordinary_items
 
-    def truncate_items(self):        
-        # cut the list down to size if necessary
-        if self.items and len(self.items) > self.limit_to:
-            self.items = self.items[:self.limit_to]  
-
-    # methods that inspect the list and return something useful
-    def set_show_when(self):
-        # we only show date groups when warranted    
-        self.show_when = self.group_dates and not ("horizontal" in self.list_format or self.no_of_get_whens < 2)
-
-    def other_items(self):    
-        if self.items and self.view == "current":   
-            all_items_count = self.items_for_entity.count()
-            if self.limit_to and all_items_count > self.limit_to:
-                return [{
-                    "link": self.entity.get_related_info_page_url("class-news-archive"), 
-                    "title": "%s news archive" % self.entity,
-                    "count": all_items_count,}]
-
-    def index_items(self):
-        # gather non-top items into a list to be indexed
-        self.index_items = [item for item in self.items if not getattr(item, 'sticky', False)]
-        # extract a list of dates for the index
-        self.no_of_get_whens = len(set(getattr(item, "get_when", None) for item in self.items))
-        # more than one date in the list: show an index
-        if self.type == "sub_page" and self.no_of_get_whens > 1:
-            self.index = True
-
-class NewsList(ArkestraGenericList):
-    model = NewsArticle
 
 class EventsList(ArkestraGenericList):
     model = Event
 
-    def other_links(self):
-        if self.view == "current":
-                
-            if getattr(self, "previous_events", None) or \
-                getattr(self, "forthcoming_events", None):
-                if self.limit_to and len(self.events) > self.limit_to:
-                    if self.forthcoming_events.count() > self.limit_to:
-                        self.other_items.append({
-                            "link": self.entity.get_related_info_page_url("forthcoming-events"), 
-                            "title": "All forthcoming events", 
-                            "count": self.forthcoming_events.count(),}
-                            )
-            if getattr(self, "previous_events", None):
-                self.other_items.append({
-                    "link": self.entity.get_related_info_page_url("previous-events"), 
-                    "title": "Previous events",
-                    "count": self.previous_events.count(),}
-                    )    
-                
-        elif self.view == "archive":
-                
-            if getattr(self, "forthcoming_events", None):
-                self.other_items = [{
-                    "link": self.entity.get_related_info_page_url("forthcoming-events"), 
-                    "title": "All forthcoming events", 
-                    "count": self.forthcoming_events.count(),}]                
+    def set_all_listable_items(self):
+        # all listable items
+        self.all_listable_items = self.model.objects.filter(
+            published=True,
+            in_lists=True,
+            )
+
+    def other_items(self):
         
+        actual_events = self.items_for_entity.filter(
+            # if it's (not a series and not a child) - series events are excluded, children too unless:
+            # the child's parent is a series and its children can be advertised
+            # tough luck if it's the child of a series and can't be advertised
+            Q(parent = None) | \
+            Q(parent__series = True), 
+            series = False,
+            )
+        actual_events_count = actual_events.count()
+        
+        now = datetime.now()
+        
+        # (a single-day event starting after today) or (not a single-day event
+        # and ends after today)
+        q_object = Q(single_day_event = True, date__gte = now) | \
+            Q(single_day_event = False, end_date__gte = now)
+
+        forthcoming_events = actual_events.filter(q_object)
+        forthcoming_events_count = forthcoming_events.count()
+        
+        previous_events = actual_events.exclude(
+            q_object
+            ).order_by('-date', '-start_time')
+        previous_events_count = previous_events.count()
+        
+        print actual_events_count, previous_events_count, forthcoming_events_count
+        
+        # for x in actual_events:
+        #     if not x in previous_events | forthcoming_events:
+        #         print x, x.id
+        
+        series_events = self.items_for_entity.filter(series = True)
+        series_events_count = series_events.count()
+
+
+        other_items=[]
+                
+        if self.limit_to and forthcoming_events_count > self.limit_to:
+            other_items.append({
+                "link": self.entity.get_related_info_page_url("forthcoming-events"), 
+                "title": "%s all forthcoming events" % self.entity,
+                "count": forthcoming_events_count,})
+
+        if previous_events:
+            other_items.append({
+                "link": self.entity.get_related_info_page_url("previous-events"), 
+                "title": "%s archived events" % self.entity,
+                "count": previous_events_count,})
+
+        if actual_events_count:
+            other_items.append({
+                "link": self.entity.get_related_info_page_url("all-events"), 
+                "title": "%s all events" % self.entity,
+                "count": actual_events_count,})
+
+
+        return other_items
         
 class NewsAndEventsLister(object):
      

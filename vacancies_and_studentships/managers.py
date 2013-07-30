@@ -17,12 +17,12 @@ class ItemManager(ArkestraGenericModelManager):
         if MULTIPLE_ENTITY_MODE and instance.entity:
             all_items = self.model.objects.filter(
             Q(hosted_by__in=instance.entity.get_descendants(include_self = True)) | \
-            Q(publish_to=instance.entity)).distinct().order_by('-closing_date')
+            Q(publish_to=instance.entity)).distinct().order_by('-date')
         else:
-            all_items = self.model.objects.all().order_by('-closing_date')
+            all_items = self.model.objects.all().order_by('-date')
     
-        instance.forthcoming_items = all_items.filter(closing_date__gte = datetime.now())  
-        instance.previous_items = all_items.exclude(closing_date__gte = datetime.now())  
+        instance.forthcoming_items = all_items.filter(date__gte = datetime.now())  
+        instance.previous_items = all_items.exclude(date__gte = datetime.now())  
         
         if instance.view == "archive":
             instance.items = list(instance.previous_items)

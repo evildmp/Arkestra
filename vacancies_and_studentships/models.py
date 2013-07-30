@@ -15,9 +15,9 @@ from managers import VacancyManager, StudentshipManager
 class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin):
     class Meta:
         abstract = True
-        ordering = ['-closing_date']  
+        ordering = ['-date']  
 
-    closing_date = models.DateField()
+    date = models.DateField()
     
     description = models.TextField(null=True, blank=True,
         help_text="No longer used")
@@ -39,12 +39,8 @@ class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin
             pass
         
         date_format = "F Y"
-        get_when = nice_date(self.closing_date, date_format)
+        get_when = nice_date(self.date, date_format)
         return get_when
-
-    @property
-    def date(self):
-        return self.closing_date
 
 
 class Vacancy(CommonVacancyAndStudentshipInformation):

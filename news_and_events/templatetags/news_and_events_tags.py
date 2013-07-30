@@ -77,5 +77,5 @@ def event_index(context):
     index_items = context["news_and_events"].events_index_items
     return {
         "index_items": index_items,
-        "indexer": "start_date.year",
+        "indexer": "date.year",
         }

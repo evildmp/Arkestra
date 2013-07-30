@@ -22,7 +22,7 @@ class VacanciesTests(TestCase):
         self.toothjob = Vacancy(
             title = "Pulling teeth",
             slug = "pulling-teeth",
-            closing_date = datetime.datetime.now() + datetime.timedelta(days=30),
+            date = datetime.datetime.now() + datetime.timedelta(days=30),
             )
 
     def test_generic_attributes(self):
@@ -37,7 +37,7 @@ class VacanciesTests(TestCase):
         self.assertEqual(self.toothjob.get_template, settings.CMS_TEMPLATES[0][0])
 
     def test_date_related_attributes(self):
-        self.toothjob.closing_date = datetime.datetime(year=2012, month=12, day=12)
+        self.toothjob.date = datetime.datetime(year=2012, month=12, day=12)
         self.assertEqual(self.toothjob.get_when, "December 2012")
             
 @override_settings(
@@ -52,7 +52,7 @@ class VacanciesStudentshipsItemsViewsTests(TestCase):
         self.toothjob = Vacancy(
             title = "Pulling teeth",
             slug = "pulling-teeth",
-            closing_date = datetime.datetime.now() + datetime.timedelta(days=30),
+            date = datetime.datetime.now() + datetime.timedelta(days=30),
             )
         
         self.adminuser = User.objects.create_user('arkestra', 'arkestra@example.com', 'arkestra')

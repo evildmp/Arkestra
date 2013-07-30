@@ -45,7 +45,20 @@ class SiteTests(TestCase):
             )
         self.main_building.save()
         self.assertEquals(self.cardiff.maps, [self.main_building])  
-       
+
+    def test_get_absolute_url(self):
+        # give the building a map
+        self.main_building = Building(
+            name="Main Building",
+            street="St Mary's Street",
+            site=self.cardiff,
+            )
+        self.main_building.save()
+        self.assertEquals(
+            self.main_building.get_absolute_url(), 
+            "/place/main-building-main-site/"
+            )  
+
 class EntityManagerTests(TestCase):
     def setUp(self): 
         pass

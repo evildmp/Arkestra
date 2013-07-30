@@ -33,7 +33,7 @@
     				    <dd><a href="{{ vacancy.hosted_by.get_absolute_url }}">{{ vacancy.hosted_by.short_name }}</a></dd>
 				    {% endif %}
 					<dt>Closing date</dt>
-					<dd>{% date vacancy.closing_date %}</dd>
+					<dd>{% date vacancy.date %}</dd>
 				    {% if vacancy.salary %}
 						<dt>Salary</dt>
 						<dd>{{ vacancy.salary }}</dd>

@@ -115,7 +115,7 @@ class Building(models.Model):
         
     
     def get_absolute_url(self):
-        return reverse("contact_place", kwargs={"slug":self.slug}) 
+        return reverse("contact-place", kwargs={"slug":self.slug}) 
     
     def save(self):
         if not self.slug or self.slug == '':
@@ -527,7 +527,6 @@ class Entity(MPTTModel, EntityLite, CommonFields):
                         # add the unnamed membership for this entity - it's all we have
                         unnamed_memberships = ms.order_by('-importance_to_person',) 
                         member.membership = unnamed_memberships[0]
-        print type(members)
         return members
 
     def get_people(self, letter=None):
