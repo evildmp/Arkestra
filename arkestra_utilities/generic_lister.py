@@ -1,222 +1,223 @@
-import operator
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.db.models import Q
 
-from arkestra_utilities.settings import PLUGIN_HEADING_LEVEL_DEFAULT, MULTIPLE_ENTITY_MODE, AGE_AT_WHICH_ITEMS_EXPIRE
-
-class ArkestraGenericList(object):
-    item_template = "arkestra/universal_plugin_list_item.html"
-    
-    def __init__(
-        self,
-        view,
-        limit_to,
-        entity,
-        order_by, 
-        type,
-        format,
-        group_dates,
-        list_format,
-        ):   
-
-        self.view = view
-        self.limit_to = limit_to  
-        self.entity = entity
-        self.type=type
-        self.order_by=order_by
-        self.group_dates = group_dates
-        self.list_format = list_format
-
-        self.all_listable_items()
-        self.filter_by_entity()        
-        self.remove_expired()
-        self.re_order_by_importance()
-        self.truncate_items()   
-        self.index_items()
-        self.set_show_when()    
-
-    def all_listable_items(self):
-        # all listable items
-        self.all_items = self.model.objects.filter(
-            published=True,
-            date__lte = datetime.now(),            
-            in_lists=True,
-            )
-
-    def filter_by_entity(self):
-        # filter by entity
-        if MULTIPLE_ENTITY_MODE and self.entity:
-            self.items = self.all_items.filter(
-                Q(hosted_by=self.entity) | Q(publish_to=self.entity)
-                ).distinct() 
-        else:
-            self.items_for_entity = self.all_listable_items
-                
-    def remove_expired(self):
-        # remove expired
-        if AGE_AT_WHICH_ITEMS_EXPIRE and self.view == "current" and \
-            self.type in ["plugin", "main_page", "menu"]: 
-            expiry_date = datetime.now() - \
-               timedelta(days=AGE_AT_WHICH_ITEMS_EXPIRE)
-            self.items = self.items.filter(date__gte=expiry_date)
-
-    def re_order_by_importance(self):
-        # re-order by importance as well as date
-        if self.order_by == "importance/date":
-            ordinary_items = []
-
-            # split the within-date items for this entity into two sets
-            sticky_items = self.items.order_by('-importance').filter(
-                Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                sticky_until__gte=datetime.today(),  
-                )
-            non_sticky_items = self.items.exclude(
-                Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                sticky_until__gte=datetime.today(), 
-                )
-
-            top_items = list(sticky_items)
-
-            # now go through the non-top items, and find any that can be 
-            # promoted
-            # get the set of dates where possible promotable items can be found             
-            dates = non_sticky_items.dates('date', 'day').reverse()
-
-            for date in dates:
-
-                # get all non-top items from this date
-                possible_top_items = non_sticky_items.filter(
-                    date__year=date.year, 
-                    date__month=date.month, 
-                    date__day=date.day
-                    )
-
-                # promotable items have importance > 0
-                # add the promotable ones to the top items list
-                top_items.extend(possible_top_items.filter(
-                    Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                    importance__gte = 1)
-                    )
-
-                # if this date set contains any unimportant items, then 
-                # there are no more to promote
-                demotable_items = possible_top_items.exclude(
-                    Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                    importance__gte = 1
-                    )
-                if demotable_items.count() > 0:
-                    # put those unimportant items into ordinary items
-                    ordinary_items.extend(demotable_items)
-                    # and stop looking for any more
-                    break
-
-            # and add everything left in non-sticky items before this date
-            if dates:
-                remaining_items = non_sticky_items.filter(date__lte=date)
-                ordinary_items.extend(remaining_items)
-                for item in top_items:
-                    item.sticky = True
-                    if format == "title":
-                        item.importance = None
-                ordinary_items.sort(
-                    key=operator.attrgetter('date'), 
-                    reverse = True
-                    )
-            self.items = top_items + ordinary_items
-
-    def truncate_items(self):        
-        # cut the list down to size if necessary
-        if self.items and len(self.items) > self.limit_to:
-            self.items = self.items[:self.limit_to]  
-
-    def index_items(self):
-        # gather non-top items into a list to be indexed
-        self.index_items = [item for item in self.items if not getattr(item, 'sticky', False)]
-        # extract a list of dates for the index
-        self.no_of_get_whens = len(set(getattr(item, "get_when", None) for item in self.items))
-        # more than one date in the list: show an index
-        if self.type == "sub_page" and self.no_of_get_whens > 1:
-            self.index = True
-
-    def set_show_when(self):
-        # we only show date groups when warranted    
-        self.show_when = self.group_dates and not ("horizontal" in self.list_format or self.no_of_get_whens < 2)
-          
-    def other_items(self):    
-        return []
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, PLUGIN_HEADING_LEVEL_DEFAULT
 
 class ArkestraGenericLister(object):
-    """A Lister is a set of ArkestraGenericLists."""
-    def __init__(
-        self,
-        display="",
-        view="current",
-        list_format="vertical",
-        layout="",
-        limit_to=None,
-        group_dates=True,
-        format="details image",
-        type="plugin",
-        order_by="",
-        heading_level=PLUGIN_HEADING_LEVEL_DEFAULT,
-        lists=None,
-        entity=None,  
-        ):
-        
-        self.display = display
-        self.view = view
-        self.list_format = list_format
-        self.layout = layout
-        self.limit_to = limit_to
-        self.group_dates = group_dates
-        self.format = format
-        self.type = type
-        self.order_by = order_by
-        self.heading_level = heading_level
-        self.lists = lists or []
-        self.entity = entity
-        
-    def get_items(self):   
-        
+
+    # menu_cues = menu.menu_dict
+
+    display = ""
+    list_format = "vertical"
+    layout = ""
+    limit_to = None
+    group_dates = True
+    item_format = "details image"
+    order_by = "date"
+    heading_level = PLUGIN_HEADING_LEVEL_DEFAULT
+    lists = None
+    entity = None
+    place = None
+    person = None
+    request = None  
+
+
+    def __init__(self, **kwargs):   
+        vars(self).update(kwargs)
+
+    def get_items(self):
+                        
         self.lists = []
 
         for kind, listclass in self.listkinds:
-        
             if kind in self.display:
-                this_list = listclass(
-                    view=self.view,
+                list_ = listclass(
                     limit_to=self.limit_to,
                     entity=self.entity,
+                    place=self.place,
+                    person=self.person,
                     order_by=self.order_by,
-                    type=self.type,
-                    format=self.format,
+                    item_format=self.item_format,
                     group_dates=self.group_dates,
                     list_format=self.list_format,
+                    request=self.request
                     )
             
-                if this_list.items: 
-                    self.lists.append(this_list)
-
-    def add_link_to_main_page(self):  
+                if list_.items:
+                    self.lists.append(list_)
         
-        # only plugins and sub_pages need a link to the main page
-        auto_page_attribute = self.menu_cues.get("auto_page_attribute", "")
+        self.determine_layout_settings()
+        self.set_layout_classes()
 
-        if auto_page_attribute and \
-            (self.type == "plugin" or self.type == "sub_page") and \
-            (any(lister.items for lister in self.lists)) and \
-            getattr(self.entity, auto_page_attribute, False):  
-            
-            url_attribute = self.menu_cues["url_attribute"]
-            title_attribute = self.menu_cues["title_attribute"]
-            
-            self.link_to_main_page = self.entity.get_related_info_page_url(url_attribute)
-            self.main_page_name = getattr(self.entity, title_attribute)  
+    def other_items(self):
+        pass
 
-    def add_links_to_other_items(self):
-        if self.type == "main_page" or self.type == "sub_page" or \
-            self.type == "menu":     
-            for this_list in self.lists:    
-                this_list.other_links()
-                         
+    def determine_layout_settings(self):
+        """
+        Sets:
+            list_format
+        """
+        # set columns for horizontal lists        
+        if "horizontal" in self.list_format:
+            self.list_format = "row columns%s %s" % (
+                self.limit_to, 
+                self.list_format
+                )
+
+            # loop over the list of items
+            for list_ in self.lists:
+                # list_.items is itself a Python list
+                # give each a "column" CSS class
+                for item in list_.items:
+                    item.column_class = "column"
+                # give the first (if it exists) a "firstcolumn" CSS class
+                if list_.items:
+                    list_.items[0].column_class += " firstcolumn" 
+                    list_.items[-1].column_class += " lastcolumn"
+                # # give the last (if it exists) a "lastcolumn" CSS class
+                #     if len(list_.items) > 1:
+                #         list_.items[-1].column_class += " lastcolumn"
+
+        elif "vertical" in self.list_format:
+            self.list_format = "vertical"
+
+    def set_layout_classes(self):
+        """
+        Lays out the plugin's divs
+        """
+        self.row_class="row"
+        # if divs will be side-by-side
+        if self.layout == "sidebyside" and len(self.lists) > 1:
+            self.row_class=self.row_class+" columns" + str(len(self.lists))
+            self.lists[0].div_class = "column firstcolumn"
+            self.lists[-1].div_class = "column lastcolumn"
+
+
+class ArkestraGenericList(object):
+
+    # defaults for list instances
+    limit_to = None
+    entity = None
+    order_by = "" 
+    item_format = "details image"
+    type = "plugin"
+    group_dates = True
+    list_format = "vertical"
+    request = None
+
+    item_collections = []
+    other_item_kinds = []
+    model = None       
+    item_template = "arkestra/generic_list_item.html"
+    
+    def __init__(self, **kwargs):   
+        vars(self).update(kwargs)
+        self.now = datetime.now()
+
+        # methods that are always called by __init__()
+        self.set_all_listable_items()   # sets all_listable_items
+        self.set_items_for_context()        # sets items_for_context
+        self.create_item_collections()  # sets multiple attributes & self.items
+        self.additional_list_processing()        
+
+    # subclasses should provide their own versions of these methods if required
+        
+    def additional_list_processing(self):
+        # call additional methods as required
+        pass
+        
+    # methods that always get called by additional_list_processing()
+        
+    def set_all_listable_items(self):
+        # all published & listable items
+        # takes:    self.model.objects
+        # sets:     self.all_listable_items
+        self.all_listable_items = self.model.objects.filter(
+            published=True,
+            in_lists=True,
+            )
+
+    def set_items_for_context(self):
+        # usually, the context for lists is the Entity we're publishing the
+        # lists for, but this could be Place or Person for Events, for example
+        # takes:    self.all_listable_items.objects
+        # sets:     self.items_for_context
+        if MULTIPLE_ENTITY_MODE and self.entity:
+            self.items_for_context = self.all_listable_items.filter(
+                Q(hosted_by=self.entity) | Q(publish_to=self.entity)
+                ).distinct()
+        else:
+            self.items_for_context = self.all_listable_items
+                        
+    def create_item_collections(self):
+        # usually, we can simply pass along the items we have, but sometimes
+        # we will need to obtain lists of particular sets of the items - for
+        # example, we need various collections to generate Events menus
+        # self.other_item_kinds lists these
+        # takes:    self.items_for_context
+        # sets:     self.items (the main set, always)
+        #           self.forthcoming_events (for example, optional)
+        # 
+        self.items = self.items_for_context
+
+    # the following methods are optional; if required, they will be called by 
+    # self.additional_list_processing()
+    
+    # methods for lists that filter and search
+
+    def filter_on_search_terms(self):
+        for search_field in self.search_fields:
+            field_name = search_field["field_name"]
+            if field_name in self.request.GET:
+                query = self.request.GET[field_name]
+                search_field["value"] = query
+            
+                q_object = Q()
+                for search_key in search_field["search_keys"]:
+                    lookup = {search_key: query}
+                q_object |= Q(**lookup)
+                self.items = self.items.distinct().filter(q_object) 
+
+        self.hidden_search_fields = []
+        for key in self.filter_set.fields:
+            if key not in [search_field["field_name"] for search_field in self.search_fields]:
+                for query_value in self.request.GET.getlist(key):
+                    # the field_name and query_value populate some <input> elements
+                    self.hidden_search_fields.append(
+                        {
+                            "field_name": key,
+                            "value": query_value,                            
+                        })
+        
+    # other operations on the list of items
+    # all take and set self.items
+
+    def remove_expired(self):
+        # in some lists, items that are too old should be removed
+        pass
+
+    def re_order_by_importance(self):
+        # in some lists, items should be re-ordered
+        # acts on self.order_by
+        pass
+
+    def truncate_items(self):        
+        # in some lists, we only ask for a certain number of items
+        # acts on self.limit_to
+        if self.items and len(self.items) > self.limit_to:
+            self.items = self.items[:self.limit_to]  
+
+    # methods that inspect self.items and set something useful
+    
+    def set_show_when(self):
+        # in some lists, we regroup by date
+        # we only show date groups when warranted    
+        no_of_get_whens = len(set(getattr(item, "get_when", None) for item in self.items))
+        self.show_when = self.group_dates and not ("horizontal" in self.list_format or no_of_get_whens < 2)
+
+    def other_items(self):
+        # build a list of links to relevant other items
+        # self.other_item_kinds lists these
+        # see NewsList.other_items() for an example
+        return []

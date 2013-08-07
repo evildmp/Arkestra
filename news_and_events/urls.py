@@ -17,82 +17,128 @@ urlpatterns = patterns('news_and_events.views',
         
     #(r"^entity/(?P<slug>[-\w]+)/news/$", "news_and_events.views.news"), # in development
 
+
+    # # old urls
+    # url(
+    #     r'^old-news-archive/$', 
+    #     "news_archive", 
+    #     {"slug": None},
+    #     name="old-news-archive-base"
+    #     ),
+    #     
+    # url(
+    #     r'^old-news-archive/(?:(?P<slug>[-\w]+)/)$', 
+    #     "news_archive", 
+    #     name="old-news-archive"
+    #     ),
+    # 
+    # url(
+    #     r'^old-previous-events/$', 
+    #     "previous_events", 
+    #     {"slug": None}, 
+    #     name="old-previous-events-base"
+    #     ),
+    # url(
+    #     r'^old-previous-events/(?:(?P<slug>[-\w]+)/)$', 
+    #     "previous_events", 
+    #     name="old-previous-events"
+    #     ),
+    # 
+    # # forthcoming events 
+    # url(
+    #     r'^old-forthcoming-events/$', 
+    #     "all_forthcoming_events", 
+    #     {"slug": None}, 
+    #     name="old-forthcoming-events-base"
+    #     ),
+    # url(
+    #     r'^old-forthcoming-events/(?:(?P<slug>[-\w]+)/)$', 
+    #     "all_forthcoming_events", 
+    #     name="old-forthcoming-events"
+    #     ),
+    # 
+    #     
+    # url(
+    #     r"^old-news-and-events/$", 
+    #     "news_and_events", 
+    #     {"slug": None}, 
+    #     name="old-news-and-events-base"
+    #     ),
+    # url(
+    #     r"^old-news-and-events/(?:(?P<slug>[-\w]+)/)$", 
+    #     "news_and_events", 
+    #     name="old-news-and-events"
+    #     ),
+     
+    # class-based views
+        
+    # main news and events 
+    url(
+        r"^news-and-events/(?:(?P<slug>[-\w]+)/)$",
+        views.NewsAndEventsView.as_view(), 
+        name="news-and-events"
+        ),
+        
+    url(
+        r"^news-and-events/$",
+        views.NewsAndEventsView.as_view(), 
+        {"slug": None},
+        name="news-and-events-base"
+        ),
+
     # news archives 
     url(
         r"^news-archive/(?:(?P<slug>[-\w]+)/)$",
         views.NewsArchiveView.as_view(), 
-        name="class-news-archive"
+        name="news-archive"
         ),
 
     url(
         r'^news-archive/$', 
         views.NewsArchiveView.as_view(), 
         {"slug": None},
-        name="class-news-archive-base"
-        ),
-
-    url(
-        r'^old-news-archive/$', 
-        "news_archive", 
-        {"slug": None},
         name="news-archive-base"
-        ),
-        
-    url(
-        r'^old-news-archive/(?:(?P<slug>[-\w]+)/)$', 
-        "news_archive", 
-        name="news-archive"
         ),
 
     # previous events 
     url(
-        r'^previous-events/$', 
-        "previous_events", 
-        {"slug": None}, 
-        name="previous-events-base"
-        ),
-    url(
-        r'^previous-events/(?:(?P<slug>[-\w]+)/)$', 
-        "previous_events", 
-        name="previous-events"
+        r"^previous-events/(?:(?P<slug>[-\w]+)/)$",
+        views.EventsArchiveView.as_view(), 
+        name="events-archive"
         ),
 
+    url(
+        r'^previous-events/$', 
+        views.EventsArchiveView.as_view(), 
+        {"slug": None},
+        name="events-archive-base"
+        ),
+        
     # forthcoming events 
     url(
-        r'^forthcoming-events/$', 
-        "all_forthcoming_events", 
-        {"slug": None}, 
-        name="forthcoming-events-base"
-        ),
-    url(
-        r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)$', 
-        "all_forthcoming_events", 
-        name="forthcoming-events"
+        r"^forthcoming-events/(?:(?P<slug>[-\w]+)/)$",
+        views.EventsForthcomingView.as_view(), 
+        name="events-forthcoming"
         ),
 
-    # main news and events 
     url(
-        r"^new-news-and-events/(?:(?P<slug>[-\w]+)/)$",
-        views.NewsAndEventsView.as_view(), 
-        name="class-news-and-events"
-        ),
-        
-    url(
-        r"^new-news-and-events/$",
-        views.NewsAndEventsView.as_view(), 
+        r'^forthcoming-events/$', 
+        views.EventsForthcomingView.as_view(), 
         {"slug": None},
-        name="class-news-and-events-base"
+        name="events-forthcoming-base"
         ),
         
-    url(
-        r"^news-and-events/$", 
-        "news_and_events", 
-        {"slug": None}, 
-        name="news-and-events-base"
-        ),
-    url(
-        r"^news-and-events/(?:(?P<slug>[-\w]+)/)$", 
-        "news_and_events", 
-        name="news-and-events"
-        ),
+    # # series events 
+    # url(
+    #     r"^series-events/(?:(?P<slug>[-\w]+)/)$",
+    #     views.EventsSeriesView.as_view(), 
+    #     name="events-series"
+    #     ),
+    # 
+    # url(
+    #     r'^series-events/$', 
+    #     views.EventsSeriesView.as_view(), 
+    #     {"slug": None},
+    #     name="events-series-base"
+    #     ),
     )

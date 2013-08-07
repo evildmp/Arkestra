@@ -202,17 +202,23 @@ def person(request, slug, active_tab=""):
             "address": "",
             "meta_description_content": person,
         },
+        "news-and-events": {
+            "tab": "news-and-events",
+            "title": "Related news & events",
+            "address": "news-and-events",
+            "meta_description_content": unicode(person) + " - related news & events",
+        },
         "research": {
             "tab": "research",
             "title": "Research",
             "address": "research",
-            "meta_description_content": unicode(person) + "- research interests",
+            "meta_description_content": unicode(person) + " - research interests",
         },
         "publications": {
             "tab": "publications",
             "title": "Publications",
             "address": "publications",
-            "meta_description_content": unicode(person) + "- publications",
+            "meta_description_content": unicode(person) + " - publications",
         },
     }
     
@@ -225,7 +231,11 @@ def person(request, slug, active_tab=""):
             
     # add tabs to the list of tabs
     tabs = []
-    tabs.append(tabs_dict["default"])          
+    tabs.append(tabs_dict["default"])
+            
+    if person.news_and_events.lists:
+        tabs.append(tabs_dict["news-and-events"])  
+              
     if 'publications' in applications:
         try:
             if person.researcher and person.researcher.publishes:
@@ -274,6 +284,7 @@ def person(request, slug, active_tab=""):
             "tabs": tabs,
             "tab_object": person,
             "active_tab": active_tab,
+            # "news_and_events": news_and_events,
             "meta": meta,
             # "links": links,
         },
@@ -325,7 +336,7 @@ def place(request, slug, active_tab=""):
     if (place.getting_here and place.getting_here.cmsplugin_set.all()) \
         or (place.access_and_parking and place.access_and_parking.cmsplugin_set.all()):
         tabs.append(tabs_dict["getting-here"])
-    if place.events().forthcoming_events:
+    if place.events:
         tabs.append(tabs_dict["events"])  
     
     if not active_tab:

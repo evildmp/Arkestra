@@ -174,7 +174,7 @@ def all_current_studentships(request, slug):
 
 def vacancy_and_studentship(item):
     entity = item.hosted_by or Entity.objects.base_entity()
-    item.link_to_vacancies_and_studentships_page = entity.get_related_info_page_url("vacancies-and-studentships")
+    item.link_to_vacancies_and_studentships_page = entity.get_auto_page_url("vacancies-and-studentships")
     item.template = entity.get_template()
     return item
 

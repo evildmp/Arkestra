@@ -1,4 +1,4 @@
-{% extends "arkestra/universal_plugin_list_item.html" %}
+{% extends "arkestra/generic_list_item.html" %}
 {% spaceless %}
 {% block item_title %}
 
@@ -47,7 +47,7 @@
 					<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>				
 				
 				{% else %}  
-					{% if not "details" in everything.format or not item.is_uninformative %}
+					{% if not "details" in lister.item_format or not item.is_uninformative %}
 				
 			   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
 
@@ -67,7 +67,7 @@
 {% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
 
 {% block item_details %}
-{{ block.super }}{% ifnotequal everything.type "for_place" %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endifnotequal %}{% endblock item_details%}
+{{ block.super }}{% if not list.place %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.get_name }}</a></span></div>{% endif %}{% endif %}{% endblock item_details%}
 
 {% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary }}</div>{% endif %}{% endblock item_summary %}
 {% endspaceless %}

@@ -1,0 +1,12 @@
+{% if list.other_items %}
+	<ul class="close other-items icons">
+		{% for item in list.other_items %}
+			<li class="{{ item.cls }}"><a href = "{{item.link}}">{{item.title|capfirst }}</a> 
+                {% with item.count as count %}
+                {% if count %}({{ item.count }} item{{ item.count|pluralize }}){% endif %}
+                {% endwith %}
+            </li>
+		{% endfor %}
+	</ul>
+{% endif %}      
+

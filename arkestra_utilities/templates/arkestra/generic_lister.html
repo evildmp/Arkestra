@@ -2,7 +2,7 @@
 {% render_placeholder intro_page_placeholder %}
 
 {% if lister.lists %}
-    <div class="{{ lister.row_class }} {{ lister.type }}">
+    <div class="{{ lister.row_class }} {{ lister.list_format }}">
 
     	{% for list in lister.lists %}
 
@@ -36,14 +36,14 @@
     					{% endif %}
 					</ul>
     				
-					{% include "arkestra/universal_other_items_for_main_page_new.html" %}
+					{% include "arkestra/generic_list_other_items.html" %}
     			</div>
     		{% endif %}
     		
     		
     	{% endfor %}
+        {% include "arkestra/generic_lister_other_items.html" %}
     </div>
 
-    {% include "arkestra/universal_other_items_for_sub_page_new.html" %}
-    {% include "arkestra/universal_other_items_for_plugin.html" %}
+
 {% endif %}

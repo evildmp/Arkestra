@@ -24,6 +24,8 @@ from links.models import ExternalLink
 
 import news_and_events
 
+from django.utils.functional import cached_property
+
 base_entity_id = ARKESTRA_BASE_ENTITY
 
 # Page = models.get_model('cms', 'Page')
@@ -159,24 +161,19 @@ class Building(models.Model):
         return (self.latitude and self.longitude and self.zoom and self.map)==True          
     has_map.boolean = True          
     
+    @cached_property
     def events(self):
-        # invoke the plugin to find out more
-        instance = news_and_events.models.NewsAndEventsPlugin()
-        instance.display = "events"
-        instance.type = "for_place"
-        instance.place = self
-        instance.view = "current"
-        instance.format = "details image"
-        instance.order_by = "date"
-        
-        # create an instance of the plugin to see if the menu should have items
-        plugin = news_and_events.cms_plugins.CMSNewsAndEventsPlugin()   
-        plugin.get_items(instance)
-        plugin.add_links_to_other_items(instance)    
-        # plugin.set_image_format(instance)
-        plugin.set_limits_and_indexes(instance)
-        instance.lists = plugin.lists
-        return instance
+        # invoke the lister to find out more
+        lister = news_and_events.lister.EventsPlaceLister(
+            place=self,
+            entity=None,
+            display="events",
+            order_by="date",
+            item_format="details image", 
+            # request=instance.request 
+            )
+        lister.get_items()
+        return lister
 
     @property
     def get_website(self):
@@ -424,7 +421,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         else:    # except
             return Entity.objects.base_entity().get_website
 
-    def get_related_info_page_url(self, kind):
+    def get_auto_page_url(self, kind):
         """
         Returns a URL not for the entity, but for its /contact page, 
         /news-and-events, or whatever.
@@ -760,6 +757,18 @@ class Person(PersonLite, CommonFields):
         if do_check_please_contact_loop and self.check_please_contact_has_loop(compare_to=self)==True:
             raise Exception # TODO: raise a more appropriate exception
         return super(Person, self).save(*args, **kwargs)
+
+    @cached_property
+    def news_and_events(self):
+        # invoke the lister to find out more
+        lister = news_and_events.lister.NewsAndEventsPersonLister(
+            person=self,
+            entity=None,
+            order_by="date",
+            item_format="details image", 
+            )
+        lister.get_items()
+        return lister
 
 
 class Teacher(models.Model):

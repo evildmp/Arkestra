@@ -37,7 +37,7 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
     def link_to_more(self):
         if self.get_hosted_by:
-            return self.get_hosted_by.get_related_info_page_url("news-and-events")
+            return self.get_hosted_by.get_auto_page_url("news-and-events")
 
 class NewsArticle(NewsAndEvents):
     url_path = "news"
@@ -115,7 +115,7 @@ class Event(NewsAndEvents, LocationModelMixin):
         )
     child_list_heading = models.CharField(max_length=50, null=True, blank=True,
         help_text= u"e.g. Conference sessions; Lectures in this series")
-    date = models.DateField(
+    date = models.DateField("Start date",
         null=True, blank=True,
         help_text=u"Not required for a series of events")
     start_time = models.TimeField(null=True, blank=True)
@@ -135,7 +135,7 @@ class Event(NewsAndEvents, LocationModelMixin):
         )
 
     class Meta:
-        ordering = ['type', 'date', 'start_time']
+        ordering = ['date', 'start_time']
 
     @property
     def informative_url(self):

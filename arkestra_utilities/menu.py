@@ -21,9 +21,13 @@ except AttributeError:
     CACHE_DURATIONS = get_cms_setting('CACHE_DURATIONS')['menus']
     
 for menu in ARKESTRA_MENUS:
-    if menu["cms_plugin_model_name"]:
-        plugin = __import__(menu["plugins_module"], globals(), locals(), [menu["cms_plugin_model_name"],], -1)
-        menu["cms_plugin_model"] = getattr(plugin, menu["cms_plugin_model_name"])
+    if menu.get("lister_name"):
+        lister = __import__(
+            menu["lister_module"], 
+            fromlist = [menu["lister_name"],]
+            )
+        menu["lister"] = getattr(lister, menu["lister_name"])
+
 
 # ArkestraPages(Modifier) checks whether there are Entities that have automatic pages 
 # (contacts & people, news & events, etc) that should be featured in the menu.
@@ -93,7 +97,7 @@ class ArkestraPages(Modifier):
 
                     # self.create_new_node(
                     #     title = "Publications",
-                    #     url = node.entity.get_related_info_page_url("publications"), 
+                    #     url = node.entity.get_auto_page_url("publications"), 
                     #     parent = node, 
                     #     )                 
                                                                                
@@ -113,35 +117,25 @@ class ArkestraPages(Modifier):
     def do_menu(self, node, menu, entity):
         # does this entity have this kind of auto-page in the menu?
         if getattr(entity, menu["auto_page_attribute"]):
-            cms_plugin_model = menu.get("cms_plugin_model")
             new_nodes = []
             
-            if cms_plugin_model:
+            if menu.get("lister"):
                 # create an instance of the plugin class editor with appropriate attributes
-                instance = cms_plugin_model.model(
-                    entity = entity, 
-                    limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-                    )
-                instance.type = "menu"
-                instance.view = "current"
-                
+                lister_ = menu.get("lister")(entity = entity)
                 # use the instance to create an instance of the plugin publisher
-                plugin = cms_plugin_model()   
                 # use its get_items method to place publishable items in plugin.lists
-                plugin.get_items(instance)
-                if plugin.lists:
+                lister_.get_items()
+                if lister_.lists:
                     new_node = self.create_new_node(
                         title = getattr(entity, menu["title_attribute"]),
-                        url = entity.get_related_info_page_url(menu["url_attribute"]), 
+                        url = entity.get_auto_page_url(menu["url_attribute"]), 
                         parent = node
                         )
                     # does this menu call for sub-menu items?
                     if menu.get("sub_menus", None):
-                        plugin.add_links_to_other_items(instance)
-                        for item in plugin.lists:
+                        for item in lister_.lists:
                             # and go through the other_items lists for each, creating a node for each
-                            for other_item in item["other_items"]:
-
+                            for other_item in item.other_items():
                                 self.create_new_node(
                                     title = other_item["title"], 
                                     url = other_item["link"], 
@@ -151,7 +145,7 @@ class ArkestraPages(Modifier):
             else:
                 new_node = self.create_new_node(
                     title = getattr(entity, menu["title_attribute"]),
-                    url = entity.get_related_info_page_url(menu["url_attribute"]), 
+                    url = entity.get_auto_page_url(menu["url_attribute"]), 
                     parent = node, 
                     )
             # if new_node:
@@ -167,7 +161,6 @@ class ArkestraPages(Modifier):
             url= url, 
             id=None,                           
             )
-
         new_node.parent = parent
         parent.children.append(new_node)
         self.nodes.append(new_node) 

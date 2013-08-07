@@ -393,7 +393,7 @@ For now we will just hardcode a little routine into our menu, contacts_and_peopl
 
 self.create_new_node(
     title = "Recordings",
-    url = node.entity.get_related_info_page_url("recordings"), # i.e. /url_of_entity/recordings
+    url = node.entity.get_auto_page_url("recordings"), # i.e. /url_of_entity/recordings
     parent = node, 
     ) 				
 

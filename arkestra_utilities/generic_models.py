@@ -48,7 +48,8 @@ class ArkestraGenericModel(models.Model):
         related_name="%(class)s_publish_to",
         help_text=u"Use these sensibly - don't send minor items to the home page, for example.",
         )
-    please_contact = models.ManyToManyField(Person, related_name='%(class)s_person', 
+    please_contact = models.ManyToManyField(Person, 
+        related_name='%(class)s_person', 
         help_text=u"The person to whom enquiries about this should be directed", 
         null=True, blank=True)
     IMPORTANCES = (
@@ -123,7 +124,11 @@ class ArkestraGenericPluginOptions(models.Model):
         ("sidebyside", u"Side-by-side"),
         ("stacked", u"Stacked"),
         )
-    layout = models.CharField("Plugin layout", max_length=25, choices = LAYOUTS, default = "sidebyside")
+    layout = models.CharField(
+        "Plugin layout", 
+        max_length=25, 
+        choices = LAYOUTS, default = "sidebyside"
+        )
     FORMATS = (
         ("title", u"Title only"),
         ("details image", u"Details"),
@@ -220,7 +225,7 @@ class ArkestraGenericPlugin(object):
             if (any(d['items'] for d in self.lists)) and \
                 getattr(instance.entity, getattr(self, "menu_cues", {}).get("auto_page_attribute", ""), False): 
                 # set the url attribute of the link to the main page
-                instance.link_to_main_page = instance.entity.get_related_info_page_url(self.menu_cues["url_attribute"])
+                instance.link_to_main_page = instance.entity.get_auto_page_url(self.menu_cues["url_attribute"])
                 # set the title of the link
                 instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])  
 

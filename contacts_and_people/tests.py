@@ -205,19 +205,19 @@ class EntityGetRelatedInfoPageTests(EntityTestObjectsMixin, TestCase):
         external_url = ExternalLink(title="Example", url="http://example.com")
         self.school.external_url = external_url
         self.assertEquals(
-            self.school.get_related_info_page_url("contact"),
+            self.school.get_auto_page_url("contact"),
             ""
             )                
 
     def test_base_entity_contact(self):        
         self.assertEquals(
-            self.school.get_related_info_page_url("contact"),
+            self.school.get_auto_page_url("contact"),
             "/contact/"
             )                
     
     def test_base_entity_bogus(self):        
         self.assertEquals(
-            self.school.get_related_info_page_url("bogus"),
+            self.school.get_auto_page_url("bogus"),
             "/bogus/"
             )                
 

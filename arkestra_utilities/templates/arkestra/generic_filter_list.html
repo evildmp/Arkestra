@@ -81,8 +81,7 @@ form.filter-form input {width: 100%}
                 {{ list.itemfilter }} 
 				{{ list.itemfilter.qs.count }} items found
                 {% paginate %}  
-			    {% include "arkestra/universal_other_items_for_sub_page_new.html" %}
-			    {% include "arkestra/universal_other_items_for_plugin.html" %}
+			    {% include "arkestra/generic_list_other_items.html" %}
        
         
         </div>

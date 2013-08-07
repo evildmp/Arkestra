@@ -4,7 +4,7 @@
 <li class = "{{ item.column_class }} {{ item.get_importance}}">
 
     {% block item_title %}
-        {% if "details" in lister.format and item.is_uninformative %}
+        {% if "details" in lister.item_format and item.is_uninformative %}
             <span class="title">{{ item.short_title|typogrify }}</span>
         {% else %}
     		{% if item.external_url %}
@@ -16,14 +16,14 @@
 	{% endblock item_title %}
 
 	{% block item_image %}
-    	{% if "image" in lister.format and item.image %}
+    	{% if "image" in lister.item_format and item.image %}
 			{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
 		{% endif %}
 	{% endblock item_image %}
 	
 
     {% block item_details %}
-		{% if "details" in lister.format %}
+		{% if "details" in lister.item_format %}
             {% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst|typogrify }}</div>{% endblock item_date %}
     		{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30|typogrify }}</div>{% endif %}{% endblock item_summary %}
 		{% endif %}

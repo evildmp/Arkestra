@@ -23,7 +23,7 @@ class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin
         help_text="No longer used")
 
     def link_to_more(self):
-        return self.get_hosted_by.get_related_info_page_url("vacancies-and-studentships")        
+        return self.get_hosted_by.get_auto_page_url("vacancies-and-studentships")        
 
     @property
     def get_when(self):

@@ -7,7 +7,7 @@ class NewsAndEventsPluginMixin(object):
             all_items_count = len(this_list["items"])
             if instance.limit_to and all_items_count > instance.limit_to:
                 this_list["other_items"] = [{
-                    "link":instance.entity.get_related_info_page_url("news-archive"), 
+                    "link":instance.entity.get_auto_page_url("news-archive"), 
                     "title":"News archive",
                     "count": all_items_count,}]
             return this_list
@@ -20,13 +20,13 @@ class NewsAndEventsPluginMixin(object):
                 if instance.limit_to and len(instance.events) > instance.limit_to:
                     if instance.forthcoming_events.count() > instance.limit_to:
                         this_list["other_items"].append({
-                            "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
+                            "link":instance.entity.get_auto_page_url("forthcoming-events"), 
                             "title":"All forthcoming events", 
                             "count": instance.forthcoming_events.count(),}
                             )
             if instance.previous_events:
                 this_list["other_items"].append({
-                    "link":instance.entity.get_related_info_page_url("previous-events"), 
+                    "link":instance.entity.get_auto_page_url("previous-events"), 
                     "title":"Previous events",
                     "count": instance.previous_events.count(),}
                     )    
@@ -35,7 +35,7 @@ class NewsAndEventsPluginMixin(object):
                 
             if instance.forthcoming_events:
                 this_list["other_items"] = [{
-                    "link":instance.entity.get_related_info_page_url("forthcoming-events"), 
+                    "link":instance.entity.get_auto_page_url("forthcoming-events"), 
                     "title":"All forthcoming events", 
                     "count": instance.forthcoming_events.count(),}]                
         return this_list
