@@ -1,215 +1,119 @@
+import datetime
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
 
+from arkestra_utilities.views import ArkestraGenericView
+
 from contacts_and_people.models import Entity
 
-from models import VacanciesPlugin, Vacancy, Studentship 
-from cms_plugins import CMSVacanciesPlugin
+from models import Studentship, Vacancy
+from lister import VacanciesAndStudentshipsCurrentLister, VacanciesArchiveLister, \
+    StudentshipsArchiveLister, StudentshipsForthcomingLister
 
-from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, IN_BODY_HEADING_LEVEL
+
+from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
+
+class VacanciesAndStudentshipsView(ArkestraGenericView):
+    def get(self, request, *args, **kwargs):
+        super(VacanciesAndStudentshipsView, self).get(request, *args, **kwargs)
+
+        self.lister = VacanciesAndStudentshipsCurrentLister(
+            entity=self.entity,
+            request=self.request
+            )
+
+        self.main_page_body_file = "arkestra/generic_lister.html"
+        self.meta = {"description": "Recent vacancies and forthcoming studentships",}
+        self.title = unicode(self.entity) + u" vacancies & studentships"
+        if MULTIPLE_ENTITY_MODE:
+            self.pagetitle = unicode(self.entity) + u" vacancies & studentships"
+        else:
+            self.pagetitle = "Vacancies & studentships"
+
+        return self.response(request)
+
+class VacanciesArchiveView(ArkestraGenericView):
+    def get(self, request, *args, **kwargs):
+        self.get_entity()
+
+        self.lister = VacanciesArchiveLister(
+            entity=self.entity,
+            request=self.request
+            )
+
+        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.meta = {"description": "Searchable archive of vacancies items",}
+        self.title = u"Vacancies archive for %s" % unicode(self.entity)
+        self.pagetitle = u"Vacancies archive for %s" % unicode(self.entity)
+
+        return self.response(request)
+
+class StudentshipsArchiveView(ArkestraGenericView):
+    def get(self, request, *args, **kwargs):
+        self.get_entity()
+
+        self.lister = StudentshipsArchiveLister(
+            entity=self.entity,
+            request=self.request
+            )
+
+        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.meta = {"description": "Searchable archive of studentships",}
+        self.title = u"Studentships archive for %s" % unicode(self.entity)
+        self.pagetitle = u"Studentships archive for %s" % unicode(self.entity)
+
+        return self.response(request)
 
 
-def common_settings(request, slug):
-    if slug:
-        entity = get_object_or_404(Entity, slug=slug)
-    else:
-        entity = Entity.objects.base_entity()
-    if not (entity.website and entity.website.published and entity.auto_vacancies_page):
-        raise Http404 
+class StudentshipsForthcomingView(ArkestraGenericView):
+    def get(self, request, *args, **kwargs):
+        self.get_entity()
 
-    request.auto_page_url = request.path
-    # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
-    request.current_page = entity.get_website
-    context = RequestContext(request)
-    instance = VacanciesPlugin()
-    instance.limit_to = MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-    instance.entity = entity
-    instance.heading_level = IN_BODY_HEADING_LEVEL
-    instance.display = "vacancies-and-studentships"
-    instance.format = "details image"
-    instance.layout = NEWS_AND_EVENTS_LAYOUT
-    instance.view = "current"
-    instance.main_page_body_file = "arkestra/universal_plugin_lister.html"
-    return instance, context, entity
+        self.lister = StudentshipsForthcomingLister(
+            entity=self.entity,
+            request=self.request
+            )
 
-def vacancies_and_studentships(request, slug):
-    instance, context, entity = common_settings(request, slug)    
+        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.meta = {"description": "Searchable list of forthcoming studentships",}
+        self.title = u"Forthcoming studentships for %s" % unicode(self.entity)
+        self.pagetitle = u"Forthcoming studentships for %s" % unicode(self.entity)
 
-    instance.type = "main_page"
+        return self.response(request)
 
-    meta = {"description": "Vacancies and studentships",}
-    title = unicode(entity) + u" vacancies & studentships"
-    pagetitle = unicode(entity) + u" vacancies & studentships"
-
-    CMSVacanciesPlugin().render(context, instance, None)
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file, 
-        "intro_page_placeholder": entity.vacancies_page_intro,
-        'everything': instance,
-        }
-        )
-
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-
-def archived_vacancies(request, slug):
-    instance, context, entity = common_settings(request, slug)
-
-    instance.type = "sub_page"
-    instance.view = "archive"
-    instance.display = "vacancies"
-    instance.limit_to = None
-
-    meta = {"description": "Archive of vacancies",}
-    title = unicode(entity) + u" archived vacancies"
-    pagetitle = unicode(entity) + u" archived vacancies"
-
-    CMSVacanciesPlugin().render(context, instance, None)
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
-        )
-    
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-        
-def all_current_vacancies(request, slug):
-    instance, context, entity = common_settings(request, slug)
-
-    instance.type = "sub_page"
-    instance.view = "current"
-    instance.display = "vacancies"
-    instance.limit_to = None
-
-    CMSVacanciesPlugin().render(context, instance, None)
-
-    meta = {"description": "All current vacancies",}
-    title = unicode(entity) + u" current vacancies"
-    pagetitle = unicode(entity) + u" current vacancies"
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
-        )
-    
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-
-def archived_studentships(request, slug):
-    instance, context, entity = common_settings(request, slug)
-
-    instance.type = "sub_page"
-    instance.view = "archive"
-    instance.display = "studentships"
-    instance.limit_to = None
-
-    CMSVacanciesPlugin().render(context, instance, None)
-
-    meta = {"description": "Archive of studentships",}
-    title = unicode(entity) + u" archived studentships"
-    pagetitle = unicode(entity) + u" archived studentships"
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
-        )
-    
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-        
-def all_current_studentships(request, slug):
-    instance, context, entity = common_settings(request, slug)
-
-    instance.type = "sub_page"
-    instance.view = "current"
-    instance.display = "studentships"
-    instance.limit_to = None
-
-    CMSVacanciesPlugin().render(context, instance, None)
-
-    meta = {"description": "All current studentships",}
-    title = unicode(entity) + u" current studentships"
-    pagetitle = unicode(entity) + u" current studentships"
-
-    context.update({
-        "entity":entity,
-        "title": title,
-        "meta": meta,
-        "pagetitle": pagetitle,
-        "main_page_body_file": instance.main_page_body_file,
-        'everything': instance,}
-        )
-    
-    return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
-        context,
-        )
-
-def vacancy_and_studentship(item):
-    entity = item.hosted_by or Entity.objects.base_entity()
-    item.link_to_vacancies_and_studentships_page = entity.get_auto_page_url("vacancies-and-studentships")
-    item.template = entity.get_template()
-    return item
 
 def vacancy(request, slug):
     """
-    Responsible for publishing vacancy
+    Responsible for publishing vacancies article
     """
     if request.user.is_staff:
         vacancy = get_object_or_404(Vacancy, slug=slug)
     else:
-        vacancy = get_object_or_404(Vacancy, slug=slug, published=True)
-
+        vacancy = get_object_or_404(Vacancy, slug=slug, published=True, date__lte=datetime.datetime.now())
     return render_to_response(
         "vacancies_and_studentships/vacancy.html",
-        {"vacancy":vacancy,
-        "entity": vacancy.hosted_by,
-        "meta": {"description": vacancy.description,}
+        {
+        "vacancy":vacancy,
+        "entity": vacancy.get_hosted_by,
+        "meta": {"description": vacancy.summary,}
         },
         RequestContext(request),
     )
 
 def studentship(request, slug):
     """
-    Responsible for publishing a studentship
+    Responsible for publishing an studentship
     """
-    if request.user.is_staff:
-        studentship = get_object_or_404(Studentship, slug=slug)
-    else:
-        studentship = get_object_or_404(Studentship, slug=slug, published=True)
-    
+    # print " -------- views.studentship --------"
+    studentship = get_object_or_404(Studentship, slug=slug)
+
     return render_to_response(
         "vacancies_and_studentships/studentship.html",
         {"studentship": studentship,
-        "entity": studentship.hosted_by,
-        "meta": {"description": studentship.description,},
+        "entity": studentship.get_hosted_by,
+        "meta": {"description": studentship.summary,},
         },
         RequestContext(request),
-    )
+        )

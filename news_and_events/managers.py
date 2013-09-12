@@ -7,26 +7,34 @@ import operator
 from arkestra_utilities.managers import ArkestraGenericModelManager
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, COLLECT_TOP_ALL_FORTHCOMING_EVENTS
 
+class NewsArticleManager(ArkestraGenericModelManager):
+
+    def listable_objects(self):
+        return self.model.objects.filter(
+            published=True,
+            in_lists=True,
+            date__lte = datetime.now(),
+            )
 
 class EventManager(ArkestraGenericModelManager):
 
-    # this method is not yet used, but will be used as part of the wholesale 
+    # this method is not yet used, but will be used as part of the wholesale
     # rewriting of this code
     def published_items(self):
         return self.model.objects.filter(
             published=True,
-            end_date__gte = datetime.now(),            
+            end_date__gte = datetime.now(),
             )
 
     def listable_published_items(self):
         return self.published_items().filter(
             in_lists=True,
             )
-    
+
     # --------------------------
 
 
-    def get_items(self, instance):    
+    def get_items(self, instance):
         self.get_events(instance) # gets previous_events, forthcoming_events, top_events, ordinary_events
         if instance.view == "archive":
             instance.events = list(instance.previous_events)
@@ -34,10 +42,10 @@ class EventManager(ArkestraGenericModelManager):
         elif instance.order_by == "importance/date" and (instance.view == "current" or COLLECT_TOP_ALL_FORTHCOMING_EVENTS):
             self.get_events_ordered_by_importance_and_date(instance)
             instance.events = instance.top_events + instance.ordinary_events
-        else: 
+        else:
             instance.events = list(instance.forthcoming_events)
         return instance.events
-        
+
     def get_events(self, instance):
         """
         returns forthcoming_events, previous_events, series_events
@@ -52,31 +60,31 @@ class EventManager(ArkestraGenericModelManager):
             Q(publish_to=instance.entity)).distinct().order_by('date', 'start_time')
         else:
             all_events = self.model.objects.all().order_by('date', 'start_time')
-    
+
         all_events = all_events.filter(published=True, in_lists=True)
-        
+
         actual_events = all_events.filter(
             # if it's (not a series and not a child) - series events are excluded, children too unless:
             # the child's parent is a series and its children can be advertised
             # tough luck if it's the child of a series and can't be advertised
             Q(series = False, parent = None) | \
-            Q(parent__series = True), 
+            Q(parent__series = True),
             )
-        
-        instance.forthcoming_events = actual_events.filter(  
-            # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
+
+        instance.forthcoming_events = actual_events.filter(
+            # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)
             Q(single_day_event = True, date__gte = datetime.now()) | \
             Q(single_day_event = False, end_date__gte = datetime.now())
             )
 
-        instance.previous_events = actual_events.exclude(  
-            # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)     
+        instance.previous_events = actual_events.exclude(
+            # ... and it's (a single-day event starting after today) or (not a single-day event and ends after today)
             Q(single_day_event = True, date__gte = datetime.now()) | \
             Q(single_day_event = False, end_date__gte = datetime.now())
             ).order_by('-date', '-start_time')
-        
+
         instance.series_events = all_events.filter(series = True)
-        
+
     def get_events_ordered_by_importance_and_date(self, instance):
         """
         When we need more than just a simple list-by-date, this keeps the top items separate
@@ -88,7 +96,7 @@ class EventManager(ArkestraGenericModelManager):
         top_events = actual_events.filter(
             Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
             jumps_queue_on__lte=datetime.today(), jumps_queue_on__isnull=False,
-            ).order_by('importance').reverse()  
+            ).order_by('importance').reverse()
         # non_top events are the rest
         non_top_events = actual_events.exclude(
             Q(hosted_by=instance.entity) | Q(jumps_queue_everywhere = True),
@@ -96,7 +104,7 @@ class EventManager(ArkestraGenericModelManager):
             )
 
         # now we have to go through the non-top items, and find any that can be promoted to top_events
-        # get the set of dates where possible promotable items can be found             
+        # get the set of dates where possible promotable items can be found
         dates = non_top_events.dates('date', 'day')
         for date in dates:
             # get all non-top items from this date
@@ -127,6 +135,6 @@ class EventManager(ArkestraGenericModelManager):
                 item.sticky = True
                 if instance.format == "title":
                     item.importance = None
-        
+
         instance.top_events, instance.ordinary_events = list(top_events), ordinary_events
-    
+

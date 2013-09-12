@@ -4,29 +4,23 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from arkestra_utilities.generic_lister import ArkestraGenericLister, ArkestraGenericList 
-from arkestra_utilities.settings import PLUGIN_HEADING_LEVEL_DEFAULT, AGE_AT_WHICH_ITEMS_EXPIRE, NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
+from django_easyfilters import FilterSet
+
+from arkestra_utilities.generic_lister import ArkestraGenericLister, ArkestraGenericList
+
+from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, AGE_AT_WHICH_ITEMS_EXPIRE
 
 from .models import NewsArticle, Event
 import menu
-
-from django_easyfilters import FilterSet
 
 
 class NewsList(ArkestraGenericList):
     model = NewsArticle
     heading_text = _(u"News")
-    
-    def set_all_listable_items(self):
-        # all listable items
-        super(NewsList, self).set_all_listable_items()
-        self.all_listable_items = self.all_listable_items.filter(
-            date__lte = datetime.now(),            
-            )
 
     def remove_expired(self):
         # remove expired
-        if AGE_AT_WHICH_ITEMS_EXPIRE: 
+        if AGE_AT_WHICH_ITEMS_EXPIRE:
             expiry_date = datetime.now() - \
                timedelta(days=AGE_AT_WHICH_ITEMS_EXPIRE)
             self.items = self.items.filter(date__gte=expiry_date)
@@ -35,7 +29,7 @@ class NewsList(ArkestraGenericList):
         other_items = []
         if "archive" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url("news-archive"), 
+                "link": self.entity.get_auto_page_url("news-archive"),
                 "title": "News archive",
                 "count": self.items_for_context.count(),})
         if "main" in self.other_item_kinds:
@@ -57,26 +51,26 @@ class NewsList(ArkestraGenericList):
             # split the within-date items for this entity into two sets
             sticky_items = self.items.order_by('-importance').filter(
                 Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                sticky_until__gte=datetime.today(),  
+                sticky_until__gte=datetime.today(),
                 )
             non_sticky_items = self.items.exclude(
                 Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
-                sticky_until__gte=datetime.today(), 
+                sticky_until__gte=datetime.today(),
                 )
 
-            top_items = list(sticky_items) 
+            top_items = list(sticky_items)
 
-            # now go through the non-top items, and find any that can be 
+            # now go through the non-top items, and find any that can be
             # promoted
-            # get the set of dates where possible promotable items can be found             
+            # get the set of dates where possible promotable items can be found
             dates = non_sticky_items.dates('date', 'day').reverse()
 
             for date in dates:
 
                 # get all non-top items from this date
                 possible_top_items = non_sticky_items.filter(
-                    date__year=date.year, 
-                    date__month=date.month, 
+                    date__year=date.year,
+                    date__month=date.month,
                     date__day=date.day
                     )
 
@@ -87,7 +81,7 @@ class NewsList(ArkestraGenericList):
                     importance__gte = 1)
                     )
 
-                # if this date set contains any unimportant items, then 
+                # if this date set contains any unimportant items, then
                 # there are no more to promote
                 demotable_items = possible_top_items.exclude(
                     Q(hosted_by=self.entity) | Q(is_sticky_everywhere = True),
@@ -108,7 +102,7 @@ class NewsList(ArkestraGenericList):
                     if self.item_format == "title":
                         item.importance = None
                 ordinary_items.sort(
-                    key=operator.attrgetter('date'), 
+                    key=operator.attrgetter('date'),
                     reverse = True
                     )
             self.items = top_items + ordinary_items
@@ -126,25 +120,25 @@ class NewsListArchive(NewsList):
             "field_label": "Title/summary",
             "placeholder": "Search",
             "search_keys": [
-                "title__icontains", 
+                "title__icontains",
                 "summary__icontains",
-                ],    
+                ],
             },
         ]
 
     def additional_list_processing(self):
         self.filter_on_search_terms()
-        self.itemfilter = self.filter_set(self.items, self.request.GET) 
-            
-            
+        self.itemfilter = self.filter_set(self.items, self.request.GET)
+
+
 class NewsListCurrent(NewsList):
     other_item_kinds = ("archive")
-    
+
     def additional_list_processing(self):
         self.remove_expired()
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()    
+        self.set_show_when()
 
 
 class NewsListPlugin(NewsList):
@@ -152,51 +146,51 @@ class NewsListPlugin(NewsList):
         self.remove_expired()
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()    
+        self.set_show_when()
 
 
 class NewsListForPerson(NewsList):
-    
+
     def set_items_for_context(self):
         self.items_for_context = self.all_listable_items.filter(please_contact=self.person)
 
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()   
+        self.set_show_when()
 
 
 class EventsList(ArkestraGenericList):
     model = Event
     heading_text = _(u"Events")
     item_collections = (
-        "actual_events", 
-        "forthcoming_events", 
+        "actual_events",
+        "forthcoming_events",
         "previous_events"
         )
     item_template = "news_and_events/event_list_item.html"
-    
+
     def create_item_collections(self):
-                
+
         if any(kind in self.item_collections for kind in ("actual_events", "forthcoming_events", "previous_events")):
 
             self.actual_events = self.items_for_context.filter(
                 # an actual event is one that:
-                # (either has no parent or whose parent is a series) and 
-                # is not a series itself   
-                Q(parent = None) | Q(parent__series = True), 
+                # (either has no parent or whose parent is a series) and
+                # is not a series itself
+                Q(parent = None) | Q(parent__series = True),
                 series = False,
                 ).order_by('date', 'start_time')
-              
+
             # (a single-day event starting after today) or (not a single-day event
             # and ends after today)
             q_object = Q(single_day_event = True, date__gte = self.now) | \
                 Q(single_day_event = False, end_date__gte = self.now)
-        
-            if "forthcoming_events" in self.item_collections:   
+
+            if "forthcoming_events" in self.item_collections:
                 self.forthcoming_events = self.actual_events.filter(q_object)
-            
-            if "previous_events" in self.item_collections:   
+
+            if "previous_events" in self.item_collections:
                 self.previous_events = self.actual_events.exclude(q_object).reverse()
 
             self.items = getattr(self, self.item_collections[0])
@@ -205,12 +199,12 @@ class EventsList(ArkestraGenericList):
         other_items = []
         if "forthcoming_events" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url("forthcoming-events"), 
+                "link": self.entity.get_auto_page_url("forthcoming-events"),
                 "title": "All forthcoming events",
                 "count": self.forthcoming_events.count(),})
         if "previous_events" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url("previous-events"), 
+                "link": self.entity.get_auto_page_url("previous-events"),
                 "title": "Archived events",
                 "count": self.previous_events.count(),})
         if "main" in self.other_item_kinds:
@@ -228,10 +222,7 @@ class EventsList(ArkestraGenericList):
 class EventsFilterSet(FilterSet):
     fields = ['date', 'type']
 
-
-class EventsListArchive(EventsList):
-    item_collections = ("previous_events", "forthcoming_events")
-    other_item_kinds = ("forthcoming_events", "main")
+class EventsFilterList(ArkestraGenericList):
     filter_set = EventsFilterSet
     search_fields = [
         {
@@ -239,24 +230,24 @@ class EventsListArchive(EventsList):
             "field_label": "Title/summary",
             "placeholder": "Search",
             "search_keys": [
-                "title__icontains", 
+                "title__icontains",
                 "summary__icontains",
-                ],    
+                ],
             },
         ]
-    
+
     def additional_list_processing(self):
         self.filter_on_search_terms()
-        self.itemfilter = self.filter_set(self.items, self.request.GET) 
+        self.itemfilter = self.filter_set(self.items, self.request.GET)
+
+class EventsListArchive(EventsFilterList, EventsList):
+    item_collections = ("previous_events", "forthcoming_events")
+    other_item_kinds = ("forthcoming_events", "main")
 
 
-class EventsListForthcoming(EventsList):
+class EventsListForthcoming(EventsFilterList, EventsList):
     item_collections = ("forthcoming_events", "previous_events")
     other_item_kinds = ("previous_events", "main")
-    
-    def additional_list_processing(self):
-        self.filter_on_search_terms()
-        self.itemfilter = self.filter_set(self.items, self.request.GET) 
 
 
 class EventsListCurrent(EventsList):
@@ -266,25 +257,25 @@ class EventsListCurrent(EventsList):
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()   
-        
-        
+        self.set_show_when()
+
+
 class EventsListPlugin(EventsList):
     item_collections = ("forthcoming_events",)
-    
+
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()   
+        self.set_show_when()
 
 
 class EventsListForPlace(EventsList):
     item_collections = ("forthcoming_events",)
-    
+
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()   
+        self.set_show_when()
 
     def set_items_for_context(self):
         self.items_for_context = self.all_listable_items.filter(building=self.place)
@@ -292,11 +283,11 @@ class EventsListForPlace(EventsList):
 
 class EventsListForPerson(EventsList):
     item_collections = ("forthcoming_events",)
-    
+
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
         self.truncate_items()
-        self.set_show_when()   
+        self.set_show_when()
 
     def set_items_for_context(self):
         self.items_for_context = self.all_listable_items.filter(featuring=self.person)
@@ -320,7 +311,7 @@ class NewsAndEventsMenuLister(ArkestraGenericLister):
             ]
     display="news and events"
     limit_to=MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH
-    
+
 
 class NewsAndEventsPluginLister(ArkestraGenericLister):
     listkinds = [
@@ -331,7 +322,7 @@ class NewsAndEventsPluginLister(ArkestraGenericLister):
 
     def other_items(self):
         return [{
-            "link": self.entity.get_auto_page_url("news-and-events"), 
+            "link": self.entity.get_auto_page_url("news-and-events"),
             "title": "More %s" % self.display,
             "cls": "main"
             }]
@@ -349,18 +340,18 @@ class NewsAndEventsPersonLister(ArkestraGenericLister):
 class NewsArchiveLister(ArkestraGenericLister):
     listkinds=[("news", NewsListArchive)]
     display="news"
-    
+
 
 class EventsArchiveLister(ArkestraGenericLister):
     listkinds=[("events", EventsListArchive)]
     display="events"
-    
-    
+
+
 class EventsForthcomingLister(ArkestraGenericLister):
     listkinds=[("events", EventsListForthcoming)]
     display="events"
- 
- 
+
+
 class EventsPlaceLister(ArkestraGenericLister):
     listkinds=[("events", EventsListForPlace)]
     display="events"

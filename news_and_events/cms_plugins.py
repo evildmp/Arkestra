@@ -25,7 +25,7 @@ class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, Au
 
     text_enabled = True
     admin_preview = False
-    # default render_template - change it in your ArkestraGenericPlugin if 
+    # default render_template - change it in your ArkestraGenericPlugin if
     # required
     render_template = "arkestra/generic_lister.html"
 
@@ -45,56 +45,31 @@ class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, Au
 
     # autocomplete fields
     related_search_fields = ['entity',]
-    
+
     def icon_src(self, instance):
         return "/static/plugin_icons/news_and_events.png"
-        
-        
+
+
     def render(self, context, instance, placeholder):
         self.entity = getattr(instance, "entity", None) or \
             work_out_entity(context, None)
-        
+
         self.lister = NewsAndEventsPluginLister(
             entity=self.entity,
             display=instance.display,
             order_by=instance.order_by,
             layout=instance.layout,
             limit_to=instance.limit_to,
-            item_format=instance.format, 
-            list_format=instance.list_format, 
-            # request=instance.request 
+            item_format=instance.format,
+            list_format=instance.list_format,
+            # request=instance.request
             )
-        
-        self.lister.get_items()
 
-        # print instance.display
-        #     
-        # lister = ArkestraGenericLister(
-        #     display=instance.display,
-        #     list_format=instance.list_format,
-        #     layout=instance.layout,
-        #     limit_to=instance.limit_to,
-        #     group_dates=instance.group_dates,
-        #     format=instance.format,
-        #     order_by=instance.order_by,
-        #     heading_level=instance.heading_level,
-        #     )
-        # 
-        # lister.lists = self.new_get_items(instance)
-        
-        # self.set_defaults(instance)
-        # self.get_items(instance)
-        # self.add_link_to_main_page(instance)
-        # self.add_links_to_other_items(instance)
-        # self.set_limits_and_indexes(instance)
-        # self.determine_layout_settings(instance)
-        # self.set_layout_classes(instance)
-        # instance.lists = self.lists
-        context.update({ 
+        context.update({
             'lister': self.lister,
             'placeholder': placeholder,
             })
         return context
-        
+
 
 plugin_pool.register_plugin(CMSNewsAndEventsPlugin)

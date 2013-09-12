@@ -6,7 +6,7 @@
 
     	{% for list in lister.lists %}
 
-    		{% if list.items %} 
+    		{% if list.items or list.other_items %} 
     			<div class = "{{ list.div_class }}">
 
     				{% if lister.heading_level %}

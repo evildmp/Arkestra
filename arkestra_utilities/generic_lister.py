@@ -20,14 +20,12 @@ class ArkestraGenericLister(object):
     entity = None
     place = None
     person = None
-    request = None  
+    request = None
 
 
-    def __init__(self, **kwargs):   
+    def __init__(self, **kwargs):
         vars(self).update(kwargs)
 
-    def get_items(self):
-                        
         self.lists = []
 
         for kind, listclass in self.listkinds:
@@ -43,10 +41,10 @@ class ArkestraGenericLister(object):
                     list_format=self.list_format,
                     request=self.request
                     )
-            
-                if list_.items:
+
+                if list_.items or list_.other_items:
                     self.lists.append(list_)
-        
+
         self.determine_layout_settings()
         self.set_layout_classes()
 
@@ -58,10 +56,10 @@ class ArkestraGenericLister(object):
         Sets:
             list_format
         """
-        # set columns for horizontal lists        
+        # set columns for horizontal lists
         if "horizontal" in self.list_format:
             self.list_format = "row columns%s %s" % (
-                self.limit_to, 
+                self.limit_to,
                 self.list_format
                 )
 
@@ -73,7 +71,7 @@ class ArkestraGenericLister(object):
                     item.column_class = "column"
                 # give the first (if it exists) a "firstcolumn" CSS class
                 if list_.items:
-                    list_.items[0].column_class += " firstcolumn" 
+                    list_.items[0].column_class += " firstcolumn"
                     list_.items[-1].column_class += " lastcolumn"
                 # # give the last (if it exists) a "lastcolumn" CSS class
                 #     if len(list_.items) > 1:
@@ -99,7 +97,7 @@ class ArkestraGenericList(object):
     # defaults for list instances
     limit_to = None
     entity = None
-    order_by = "" 
+    order_by = ""
     item_format = "details image"
     type = "plugin"
     group_dates = True
@@ -108,35 +106,25 @@ class ArkestraGenericList(object):
 
     item_collections = []
     other_item_kinds = []
-    model = None       
+    model = None
     item_template = "arkestra/generic_list_item.html"
-    
-    def __init__(self, **kwargs):   
+
+    def __init__(self, **kwargs):
         vars(self).update(kwargs)
         self.now = datetime.now()
 
         # methods that are always called by __init__()
-        self.set_all_listable_items()   # sets all_listable_items
         self.set_items_for_context()        # sets items_for_context
         self.create_item_collections()  # sets multiple attributes & self.items
-        self.additional_list_processing()        
+        self.additional_list_processing()
 
     # subclasses should provide their own versions of these methods if required
-        
+
     def additional_list_processing(self):
         # call additional methods as required
         pass
-        
+
     # methods that always get called by additional_list_processing()
-        
-    def set_all_listable_items(self):
-        # all published & listable items
-        # takes:    self.model.objects
-        # sets:     self.all_listable_items
-        self.all_listable_items = self.model.objects.filter(
-            published=True,
-            in_lists=True,
-            )
 
     def set_items_for_context(self):
         # usually, the context for lists is the Entity we're publishing the
@@ -144,12 +132,12 @@ class ArkestraGenericList(object):
         # takes:    self.all_listable_items.objects
         # sets:     self.items_for_context
         if MULTIPLE_ENTITY_MODE and self.entity:
-            self.items_for_context = self.all_listable_items.filter(
+            self.items_for_context = self.model.objects.listable_objects().filter(
                 Q(hosted_by=self.entity) | Q(publish_to=self.entity)
                 ).distinct()
         else:
             self.items_for_context = self.all_listable_items
-                        
+
     def create_item_collections(self):
         # usually, we can simply pass along the items we have, but sometimes
         # we will need to obtain lists of particular sets of the items - for
@@ -158,12 +146,12 @@ class ArkestraGenericList(object):
         # takes:    self.items_for_context
         # sets:     self.items (the main set, always)
         #           self.forthcoming_events (for example, optional)
-        # 
+        #
         self.items = self.items_for_context
 
-    # the following methods are optional; if required, they will be called by 
+    # the following methods are optional; if required, they will be called by
     # self.additional_list_processing()
-    
+
     # methods for lists that filter and search
 
     def filter_on_search_terms(self):
@@ -172,12 +160,12 @@ class ArkestraGenericList(object):
             if field_name in self.request.GET:
                 query = self.request.GET[field_name]
                 search_field["value"] = query
-            
+
                 q_object = Q()
                 for search_key in search_field["search_keys"]:
                     lookup = {search_key: query}
                 q_object |= Q(**lookup)
-                self.items = self.items.distinct().filter(q_object) 
+                self.items = self.items.distinct().filter(q_object)
 
         self.hidden_search_fields = []
         for key in self.filter_set.fields:
@@ -187,9 +175,9 @@ class ArkestraGenericList(object):
                     self.hidden_search_fields.append(
                         {
                             "field_name": key,
-                            "value": query_value,                            
+                            "value": query_value,
                         })
-        
+
     # other operations on the list of items
     # all take and set self.items
 
@@ -202,17 +190,17 @@ class ArkestraGenericList(object):
         # acts on self.order_by
         pass
 
-    def truncate_items(self):        
+    def truncate_items(self):
         # in some lists, we only ask for a certain number of items
         # acts on self.limit_to
         if self.items and len(self.items) > self.limit_to:
-            self.items = self.items[:self.limit_to]  
+            self.items = self.items[:self.limit_to]
 
     # methods that inspect self.items and set something useful
-    
+
     def set_show_when(self):
         # in some lists, we regroup by date
-        # we only show date groups when warranted    
+        # we only show date groups when warranted
         no_of_get_whens = len(set(getattr(item, "get_when", None) for item in self.items))
         self.show_when = self.group_dates and not ("horizontal" in self.list_format or no_of_get_whens < 2)
 

@@ -22,7 +22,7 @@ from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
 from arkestra_utilities.managers import ArkestraGenericModelManager
 from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT, COLLECT_TOP_ALL_FORTHCOMING_EVENTS, DATE_FORMAT, ARKESTRA_DATE_FORMATS, AGE_AT_WHICH_ITEMS_EXPIRE
 
-from managers import EventManager
+from managers import NewsArticleManager, EventManager
 
 class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
@@ -41,7 +41,7 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
 class NewsArticle(NewsAndEvents):
     url_path = "news"
-    objects = ArkestraGenericModelManager()
+    objects = NewsArticleManager()
 
     date = models.DateTimeField(default=datetime.now,
         help_text=u"Dateline for the item (the item will not be published until then" ,  )

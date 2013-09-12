@@ -1,8 +1,9 @@
-menu_dict = { 
-    "auto_page_attribute": "auto_vacancies_page", 
-    "plugins_module": "vacancies_and_studentships.cms_plugins",
-    "cms_plugin_model_name": 'CMSVacanciesPlugin',
+menu_dict = {
+    "auto_page_attribute": "auto_vacancies_page",
     "title_attribute": "vacancies_page_menu_title",
     "url_attribute": "vacancies-and-studentships",
-    "sub_menus": ()
-    }        
+    "sub_menus": (),
+
+    "lister_module": "vacancies_and_studentships.lister",
+    "lister_name": "VacanciesAndStudentshipsMenuLister",
+    }
