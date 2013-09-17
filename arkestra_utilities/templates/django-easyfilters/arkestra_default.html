@@ -1,0 +1,13 @@
+<div class="filterline"><span class="filterlabel">{{ filterlabel }}:</span>
+{% for choice in choices %}
+  {% if choice.link_type == 'add' %}
+    <span class="addfilter"><a href="{{ choice.url }}" title="Add filter">{{ choice.label }}</a></span>&nbsp;
+  {% else %}
+    {% if choice.link_type == 'remove' %}
+    <span class="removefilter"><a href="{{ choice.url }}" title="Remove filter">{{ choice.label }}&nbsp;&laquo;&nbsp;</a></span>
+    {% else %}
+      <span class="displayfilter">{{ choice.label }}</span>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</div>

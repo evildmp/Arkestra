@@ -71,6 +71,7 @@ for menu in ARKESTRA_MENUS:
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
         start_time = datetime.now()
+        
         # this currently relies on the pre-cut nodes. It *will* hammer the database
         self.nodes = nodes
         self.auto_page_url = getattr(request, "auto_page_url", None)

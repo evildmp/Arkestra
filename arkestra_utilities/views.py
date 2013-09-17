@@ -8,17 +8,28 @@ from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 from contacts_and_people.models import Entity
 
 class ArkestraGenericView(View):
+    # override the auto_page_attibute in sub-classes to check
+    auto_page_attribute = None 
+    
     def get(self, request, *args, **kwargs):
         self.get_entity()
-
+        
     def get_entity(self):
         slug = self.kwargs['slug']
         if slug:
             entity = get_object_or_404(Entity, slug=slug)
         else:
             entity = Entity.objects.base_entity()
-        if not (entity.website and entity.website.published and entity.auto_news_page):
+            
+        if not (entity.website and entity.website.published):
             raise Http404
+        
+        if self.auto_page_attribute and not getattr(
+            entity, 
+            self.auto_page_attribute
+        ):
+            raise Http404            
+
         self.entity = entity
 
     def response(self, request):
@@ -33,7 +44,10 @@ class ArkestraGenericView(View):
             "meta": self.meta,
             "pagetitle": self.pagetitle,
             "main_page_body_file": self.main_page_body_file,
+            
+            # this will need to be dealt with!
             "intro_page_placeholder": self.entity.news_page_intro,
+            
             'lister': self.lister,
             }
             )

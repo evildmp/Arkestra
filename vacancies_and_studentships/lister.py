@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from django_easyfilters import FilterSet
+from arkestra_utilities.generic_lister import ArkestraGenericFilterSet
 
 from arkestra_utilities.generic_lister import ArkestraGenericLister, ArkestraGenericList
 
@@ -19,11 +19,11 @@ class VacanciesStudentshipsList(ArkestraGenericList):
         "open",
         "archived"
         )
-    
+
     def create_item_collections(self):
 
         if any(kind in self.item_collections for kind in (
-            "open", 
+            "open",
             "archived"
             )):
 
@@ -32,7 +32,7 @@ class VacanciesStudentshipsList(ArkestraGenericList):
 
             if "archived" in self.item_collections:
                 self.archived = self.items_for_context.filter(date__lte=self.now)
-                
+
             self.items = getattr(self, self.item_collections[0])
 
 class VacanciesList(VacanciesStudentshipsList):
@@ -43,12 +43,12 @@ class VacanciesList(VacanciesStudentshipsList):
     def other_items(self):
         other_items_attributes = {
             "open": {
-                "link": self.entity.get_auto_page_url("open-vacancies"),
+                "link": self.entity.get_auto_page_url("vacancies"),
                 "title": "All open vacancies",
                 "count": self.open.count(),
                 },
             "archived": {
-                "link": self.entity.get_auto_page_url("previous-vacancies"),
+                "link": self.entity.get_auto_page_url("archived-vacancies"),
                 "title": "Archived vacancies",
                 "count": self.archived.count(),
                 },
@@ -60,21 +60,21 @@ class VacanciesList(VacanciesStudentshipsList):
                     ),
                 "cls": "main"
                 },
-            }                    
-        
+            }
+
         other_items = []
         for kind in self.other_item_kinds:
-            if getattr(self, kind):
+            if getattr(self, kind, None):
                 other_items.append(other_items_attributes[kind])
-        
+
         return other_items
 
 
-class VacanciesFilterSet(FilterSet):
+class VacanciesArkestraGenericFilterSet(ArkestraGenericFilterSet):
     fields = ['date',]
 
 class VacanciesFilterList(ArkestraGenericList):
-    filter_set = VacanciesFilterSet
+    filter_set = VacanciesArkestraGenericFilterSet
     search_fields = [
         {
             "field_name": "text",
@@ -92,15 +92,6 @@ class VacanciesFilterList(ArkestraGenericList):
         self.itemfilter = self.filter_set(self.items, self.request.GET)
 
 
-class VacanciesListCurrent(VacanciesList):
-    other_item_kinds = ("archive",)
-
-    def additional_list_processing(self):
-        # self.remove_expired()
-        self.truncate_items()
-        self.set_show_when()
-
-
 class VacanciesListArchive(VacanciesFilterList, VacanciesList):
     item_collections = ("archived", "open")
     other_item_kinds = ("open", "main")
@@ -113,7 +104,7 @@ class VacanciesListForthcoming(VacanciesFilterList, VacanciesList):
 
 class VacanciesListCurrent(VacanciesList):
     item_collections = ("open", "archived")
-    other_item_kinds = ("archived", "open")
+    other_item_kinds = ("open", "archived")
 
 
 class VacanciesListPlugin(VacanciesList):
@@ -130,12 +121,12 @@ class StudentshipsList(VacanciesStudentshipsList):
     def other_items(self):
         other_items_attributes = {
             "open": {
-                "link": self.entity.get_auto_page_url("open-studentships"),
+                "link": self.entity.get_auto_page_url("studentships"),
                 "title": "All open studentships",
                 "count": self.open.count(),
                 },
             "archived": {
-                "link": self.entity.get_auto_page_url("previous-studentships"),
+                "link": self.entity.get_auto_page_url("archived-studentships"),
                 "title": "Archived studentships",
                 "count": self.archived.count(),
                 },
@@ -147,21 +138,21 @@ class StudentshipsList(VacanciesStudentshipsList):
                     ),
                 "cls": "main"
                 },
-            }                    
-        
+            }
+
         other_items = []
         for kind in self.other_item_kinds:
             if getattr(self, kind, None):
                 other_items.append(other_items_attributes[kind])
-        
+
         return other_items
 
 
-class StudentshipsFilterSet(FilterSet):
+class StudentshipsArkestraGenericFilterSet(ArkestraGenericFilterSet):
     fields = ['date',]
 
 class StudentshipsFilterList(ArkestraGenericList):
-    filter_set = StudentshipsFilterSet
+    filter_set = StudentshipsArkestraGenericFilterSet
     search_fields = [
         {
             "field_name": "text",
@@ -190,16 +181,7 @@ class StudentshipsListForthcoming(StudentshipsFilterList, StudentshipsList):
 
 class StudentshipsListCurrent(StudentshipsList):
     item_collections = ("open", "archived")
-    other_item_kinds = ("archived", "open")
-
-
-class StudentshipsListCurrent(StudentshipsList):
-    other_item_kinds = ("archived",)
-
-    def additional_list_processing(self):
-        self.remove_expired()
-        self.truncate_items()
-        self.set_show_when()
+    other_item_kinds = ("open", "archived")
 
 
 class StudentshipsListPlugin(StudentshipsList):
@@ -218,7 +200,7 @@ class StudentshipsListForPerson(StudentshipsList):
         self.set_show_when()
 
     def set_items_for_context(self):
-        self.items_for_context = self.all_listable_items.filter(supervisors=self.person)
+        self.items_for_context = self.model.objects.listable_objects.filter(supervisors=self.person)
 
 
 class VacanciesAndStudentshipsCurrentLister(ArkestraGenericLister):

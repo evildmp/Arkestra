@@ -2,7 +2,14 @@ from datetime import datetime
 
 from django.db.models import Q
 
+from django_easyfilters import FilterSet
+
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, PLUGIN_HEADING_LEVEL_DEFAULT
+
+
+class ArkestraGenericFilterSet(FilterSet):
+    template_file = "django-easyfilters/arkestra_default.html"
+
 
 class ArkestraGenericLister(object):
 
@@ -118,7 +125,7 @@ class ArkestraGenericList(object):
         self.create_item_collections()  # sets multiple attributes & self.items
         self.additional_list_processing()
 
-    # subclasses should provide their own versions of these methods if required
+    # subclasses should provide their own versions of the following methods if required
 
     def additional_list_processing(self):
         # call additional methods as required
@@ -129,14 +136,13 @@ class ArkestraGenericList(object):
     def set_items_for_context(self):
         # usually, the context for lists is the Entity we're publishing the
         # lists for, but this could be Place or Person for Events, for example
-        # takes:    self.all_listable_items.objects
+        # takes:    self.model.objects.listable_objects()
         # sets:     self.items_for_context
+        self.items_for_context = self.model.objects.listable_objects()
         if MULTIPLE_ENTITY_MODE and self.entity:
-            self.items_for_context = self.model.objects.listable_objects().filter(
+            self.items_for_context = items_for_context().filter(
                 Q(hosted_by=self.entity) | Q(publish_to=self.entity)
                 ).distinct()
-        else:
-            self.items_for_context = self.all_listable_items
 
     def create_item_collections(self):
         # usually, we can simply pass along the items we have, but sometimes

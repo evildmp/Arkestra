@@ -4,9 +4,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from django_easyfilters import FilterSet
-
-from arkestra_utilities.generic_lister import ArkestraGenericLister, ArkestraGenericList
+from arkestra_utilities.generic_lister import ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet
 
 from arkestra_utilities.settings import NEWS_AND_EVENTS_LAYOUT, MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, AGE_AT_WHICH_ITEMS_EXPIRE
 
@@ -108,12 +106,12 @@ class NewsList(ArkestraGenericList):
             self.items = top_items + ordinary_items
 
 
-class NewsFilterSet(FilterSet):
+class NewsArkestraGenericFilterSet(ArkestraGenericFilterSet):
     fields = ['date', 'importance']
 
 class NewsListArchive(NewsList):
     other_item_kinds = ("main")
-    filter_set = NewsFilterSet
+    filter_set = NewsArkestraGenericFilterSet
     search_fields = [
         {
             "field_name": "text",
@@ -152,7 +150,7 @@ class NewsListPlugin(NewsList):
 class NewsListForPerson(NewsList):
 
     def set_items_for_context(self):
-        self.items_for_context = self.all_listable_items.filter(please_contact=self.person)
+        self.items_for_context = self.model.objects.listable_objects.filter(please_contact=self.person)
 
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
@@ -219,11 +217,11 @@ class EventsList(ArkestraGenericList):
         return other_items
 
 
-class EventsFilterSet(FilterSet):
+class EventsArkestraGenericFilterSet(ArkestraGenericFilterSet):
     fields = ['date', 'type']
 
 class EventsFilterList(ArkestraGenericList):
-    filter_set = EventsFilterSet
+    filter_set = EventsArkestraGenericFilterSet
     search_fields = [
         {
             "field_name": "text",
@@ -278,7 +276,7 @@ class EventsListForPlace(EventsList):
         self.set_show_when()
 
     def set_items_for_context(self):
-        self.items_for_context = self.all_listable_items.filter(building=self.place)
+        self.items_for_context = self.model.objects.listable_objects.filter(building=self.place)
 
 
 class EventsListForPerson(EventsList):
@@ -290,7 +288,7 @@ class EventsListForPerson(EventsList):
         self.set_show_when()
 
     def set_items_for_context(self):
-        self.items_for_context = self.all_listable_items.filter(featuring=self.person)
+        self.items_for_context = self.model.objects.listable_objects.filter(featuring=self.person)
 
 
 class NewsAndEventsCurrentLister(ArkestraGenericLister):

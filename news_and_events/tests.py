@@ -133,26 +133,26 @@ class ReverseURLsTests(TestCase):
 
     def test_previous_events_base_reverse_url(self):
         self.assertEqual(
-            reverse("previous-events-base"),
+            reverse("events-archive-base"),
             "/previous-events/"
             )
 
     def test_previous_events_reverse_url(self):
         self.assertEqual(
-            reverse("previous-events", kwargs={"slug": "some-slug"}),
+            reverse("events-archive", kwargs={"slug": "some-slug"}),
             "/previous-events/some-slug/"
             )
 
     
     def test_forthcoming_events_base_reverse_url(self):
         self.assertEqual(
-            reverse("forthcoming-events-base"),
+            reverse("events-forthcoming-base"),
             "/forthcoming-events/"
             )
 
     def test_forthcoming_events_reverse_url(self):
         self.assertEqual(
-            reverse("forthcoming-events", kwargs={"slug": "some-slug"}),
+            reverse("events-forthcoming", kwargs={"slug": "some-slug"}),
             "/forthcoming-events/some-slug/"
             )
 

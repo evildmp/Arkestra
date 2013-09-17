@@ -11,7 +11,7 @@ import datetime
 
 from cms.api import create_page
 
-from models import Vacancy
+from models import Vacancy, Studentship
 from contacts_and_people.models import Entity
 
 class VacanciesTests(TestCase):
@@ -40,10 +40,8 @@ class VacanciesTests(TestCase):
         self.toothjob.date = datetime.datetime(year=2012, month=12, day=12)
         self.assertEqual(self.toothjob.get_when, "December 2012")
             
-@override_settings(
-    CMS_TEMPLATES = (('null.html', "Null"),)
-)
-class VacanciesStudentshipsItemsViewsTests(TestCase):
+@override_settings(CMS_TEMPLATES = (('null.html', "Null"),))
+class VacanciesItemsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
@@ -88,8 +86,58 @@ class VacanciesStudentshipsItemsViewsTests(TestCase):
     def test_published_vacancy_context(self):
         self.toothjob.published = True
         self.toothjob.save()
-        response = self.client.get('/vacancy/pulling-teeth/')  
+        response = self.client.get('/vacancy/pulling-teeth/')
         self.assertEqual(response.context['vacancy'], self.toothjob)
+
+
+@override_settings(CMS_TEMPLATES = (('null.html', "Null"),))
+class StudentshipsItemsViewsTests(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        self.client = Client()
+        
+        # create a studentship item
+        self.toothjob = Studentship(
+            title = "Pulling teeth",
+            slug = "pulling-teeth",
+            date = datetime.datetime.now() + datetime.timedelta(days=30),
+            )
+        
+        self.adminuser = User.objects.create_user('arkestra', 'arkestra@example.com', 'arkestra')
+        self.adminuser.is_staff=True
+        self.adminuser.save()
+
+    # studentship tests
+    def test_unpublished_studentship_404(self):
+        self.toothjob.save()
+        
+        # Issue a GET request.
+        response = self.client.get('/studentship/pulling-teeth/')  
+
+        # Check that the response is 404 because it's not published
+        self.assertEqual(response.status_code, 404)
+
+    def test_unpublished_studentship_200_for_admin(self):
+        self.toothjob.save()
+
+        # log in a staff user
+        self.client.login(username='arkestra', password='arkestra')        
+        response = self.client.get('/studentship/pulling-teeth/')  
+        self.assertEqual(response.status_code, 200)
+        
+    def test_published_studentship_200_for_everyone(self):
+        self.toothjob.published = True
+        self.toothjob.save()
+                
+        # Check that the response is 200 OK.
+        response = self.client.get('/studentship/pulling-teeth/')  
+        self.assertEqual(response.status_code, 200)
+
+    def test_published_studentship_context(self):
+        self.toothjob.published = True
+        self.toothjob.save()
+        response = self.client.get('/studentship/pulling-teeth/')
+        self.assertEqual(response.context['studentship'], self.toothjob)
 
     
 class ReverseURLsTests(TestCase):
@@ -107,50 +155,50 @@ class ReverseURLsTests(TestCase):
 
     def test_archived_vacancies_base_reverse_url(self):
         self.assertEqual(
-            reverse("archived-vacancies-base"),
+            reverse("vacancies-archive-base"),
             "/archived-vacancies/"
             )
 
     def test_archived_vacancies_reverse_url(self):
         self.assertEqual(
-            reverse("archived-vacancies", kwargs={"slug": "some-slug"}),
+            reverse("vacancies-archive", kwargs={"slug": "some-slug"}),
             "/archived-vacancies/some-slug/"
             )
 
     def test_current_vacancies_base_reverse_url(self):
         self.assertEqual(
-            reverse("current-vacancies-base"),
-            "/current-vacancies/"
+            reverse("vacancies-current-base"),
+            "/vacancies/"
             )
 
     def test_current_vacancies_reverse_url(self):
         self.assertEqual(
-            reverse("current-vacancies", kwargs={"slug": "some-slug"}),
-            "/current-vacancies/some-slug/"
+            reverse("vacancies-current", kwargs={"slug": "some-slug"}),
+            "/vacancies/some-slug/"
             )
 
     def test_archived_studentships_base_reverse_url(self):
         self.assertEqual(
-            reverse("archived-studentships-base"),
+            reverse("studentships-archive-base"),
             "/archived-studentships/"
             )
 
     def test_archived_studentships_reverse_url(self):
         self.assertEqual(
-            reverse("archived-studentships", kwargs={"slug": "some-slug"}),
+            reverse("studentships-archive", kwargs={"slug": "some-slug"}),
             "/archived-studentships/some-slug/"
             )
 
     def test_current_studentships_base_reverse_url(self):
         self.assertEqual(
-            reverse("current-studentships-base"),
-            "/current-studentships/"
+            reverse("studentships-current-base"),
+            "/studentships/"
             )
 
     def test_current_studentships_reverse_url(self):
         self.assertEqual(
-            reverse("current-studentships", kwargs={"slug": "some-slug"}),
-            "/current-studentships/some-slug/"
+            reverse("studentships-current", kwargs={"slug": "some-slug"}),
+            "/studentships/some-slug/"
             )
 
     def test_vacancies_and_studentships_base_reverse_url(self):
@@ -237,12 +285,12 @@ class VacanciesStudentshipsEntityPagesViewsTests(TestCase):
         
     def test_vacancies_and_studentships_main_all_current_studentships_url(self):
         self.school.save()
-        response = self.client.get('/current-studentships/')
+        response = self.client.get('/studentships/')
         self.assertEqual(response.status_code, 200)
 
     def test_vacancies_and_studentships_entity_all_current_studentships_url(self):
         self.school.save()
-        response = self.client.get('/current-studentships/medicine/')
+        response = self.client.get('/studentships/medicine/')
         self.assertEqual(response.status_code, 200)
 
     def test_vacancies_and_studentships_bogus_entity_all_current_studentships_url(self):
@@ -272,37 +320,37 @@ class VacanciesStudentshipsEntityPagesViewsTests(TestCase):
     def test_vacancies_and_studentships_no_auto_page_main_archive_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/vacancies-archive/')
+        response = self.client.get('/archived-vacancies/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_auto_page_entity_vacancies_archive_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/vacancies-archive/medicine/')
+        response = self.client.get('/archived-vacancies/medicine/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_auto_page_bogus_entity_vacancies_archive_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/vacancies-archive/xxxx/')
+        response = self.client.get('/archived-vacancies/xxxx/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_auto_page_main_archived_studentships_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/archived-studentships/')
+        response = self.client.get('/studentships-archive/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_auto_page_entity_archived_studentships_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/archived-studentships/medicine/')
+        response = self.client.get('/studentships-archive/medicine/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_auto_page_bogus_entity_archived_studentships_url(self):
         self.school.auto_vacancies_page= False
         self.school.save()
-        response = self.client.get('/archived-studentships/xxxx/')
+        response = self.client.get('/studentships-archive/xxxx/')
         self.assertEqual(response.status_code, 404)
         
     def test_vacancies_and_studentships_no_auto_page_main_all_current_studentships_url(self):
@@ -345,37 +393,37 @@ class VacanciesStudentshipsEntityPagesViewsTests(TestCase):
     def test_vacancies_and_studentships_no_entity_home_page_main_archive_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/vacancies-archive/')
+        response = self.client.get('/archived-vacancies/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_entity_home_page_entity_vacancies_archive_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/vacancies-archive/medicine/')
+        response = self.client.get('/archived-vacancies/medicine/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_entity_home_page_bogus_entity_vacancies_archive_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/vacancies-archive/xxxx/')
+        response = self.client.get('/archived-vacancies/xxxx/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_entity_home_page_main_archived_studentships_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/archived-studentships/')
+        response = self.client.get('/studentships-archive/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_entity_home_page_entity_archived_studentships_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/archived-studentships/medicine/')
+        response = self.client.get('/studentships-archive/medicine/')
         self.assertEqual(response.status_code, 404)
 
     def test_vacancies_and_studentships_no_entity_home_page_bogus_entity_archived_studentships_url(self):
         self.school.website = None
         self.school.save()
-        response = self.client.get('/archived-studentships/xxxx/')
+        response = self.client.get('/studentships-archive/xxxx/')
         self.assertEqual(response.status_code, 404)
         
     def test_vacancies_and_studentships_no_entity_home_page_main_all_current_studentships_url(self):

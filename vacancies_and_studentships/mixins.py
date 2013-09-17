@@ -3,13 +3,7 @@ from models import Vacancy, Studentship
 class VacancyStudentshipPluginMixin(object):
     def other_links(self, instance, this_list):
         raise Exception
-        # if this_list["items"] and instance.view == "current":
-        #     all_items_count = len(this_list["items"])
-        #     if instance.limit_to and all_items_count > instance.limit_to:
-        #         this_list["other_items"] = [{
-        #             "link":instance.entity.get_auto_page_url("news-archive"), 
-        #             "title":"news archive",
-        #             "count": all_items_count,}]
+
         return this_list
             
     def events_style_other_links(self, instance, this_list):

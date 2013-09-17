@@ -9,16 +9,19 @@ from arkestra_utilities.views import ArkestraGenericView
 from contacts_and_people.models import Entity
 
 from models import Studentship, Vacancy
-from lister import VacanciesAndStudentshipsCurrentLister, VacanciesArchiveLister, \
+from lister import VacanciesAndStudentshipsCurrentLister, \
+    VacanciesArchiveLister, VacanciesForthcomingLister, \
     StudentshipsArchiveLister, StudentshipsForthcomingLister
 
 
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
-class VacanciesAndStudentshipsView(ArkestraGenericView):
-    def get(self, request, *args, **kwargs):
-        super(VacanciesAndStudentshipsView, self).get(request, *args, **kwargs)
+class VacanciesAndStudentshipsView(ArkestraGenericView, ):
+    auto_page_attribute = "auto_vacancies_page"
 
+    def get(self, request, *args, **kwargs):
+        self.get_entity()
+        
         self.lister = VacanciesAndStudentshipsCurrentLister(
             entity=self.entity,
             request=self.request
@@ -31,10 +34,31 @@ class VacanciesAndStudentshipsView(ArkestraGenericView):
             self.pagetitle = unicode(self.entity) + u" vacancies & studentships"
         else:
             self.pagetitle = "Vacancies & studentships"
+        
+        
+        return self.response(request)
+
+class VacanciesCurrentView(ArkestraGenericView):
+    auto_page_attribute = "auto_vacancies_page"
+
+    def get(self, request, *args, **kwargs):
+        self.get_entity()
+
+        self.lister = VacanciesForthcomingLister(
+            entity=self.entity,
+            request=self.request
+            )
+
+        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.meta = {"description": "Searchable list of forthcoming studentships",}
+        self.title = u"Forthcoming studentships for %s" % unicode(self.entity)
+        self.pagetitle = u"Forthcoming studentships for %s" % unicode(self.entity)
 
         return self.response(request)
 
 class VacanciesArchiveView(ArkestraGenericView):
+    auto_page_attribute = "auto_vacancies_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
@@ -51,6 +75,8 @@ class VacanciesArchiveView(ArkestraGenericView):
         return self.response(request)
 
 class StudentshipsArchiveView(ArkestraGenericView):
+    auto_page_attribute = "auto_vacancies_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
@@ -68,6 +94,8 @@ class StudentshipsArchiveView(ArkestraGenericView):
 
 
 class StudentshipsForthcomingView(ArkestraGenericView):
+    auto_page_attribute = "auto_vacancies_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
@@ -86,12 +114,13 @@ class StudentshipsForthcomingView(ArkestraGenericView):
 
 def vacancy(request, slug):
     """
-    Responsible for publishing vacancies article
+    Responsible for publishing vacancies
     """
     if request.user.is_staff:
         vacancy = get_object_or_404(Vacancy, slug=slug)
     else:
-        vacancy = get_object_or_404(Vacancy, slug=slug, published=True, date__lte=datetime.datetime.now())
+        vacancy = get_object_or_404(Vacancy, slug=slug, published=True, date__gte=datetime.datetime.now())
+        
     return render_to_response(
         "vacancies_and_studentships/vacancy.html",
         {
@@ -106,8 +135,11 @@ def studentship(request, slug):
     """
     Responsible for publishing an studentship
     """
-    # print " -------- views.studentship --------"
-    studentship = get_object_or_404(Studentship, slug=slug)
+    if request.user.is_staff:
+        studentship = get_object_or_404(Studentship, slug=slug)
+    else:
+        studentship = get_object_or_404(Studentship, slug=slug, published=True, date__gte=datetime.datetime.now())
+        
 
     return render_to_response(
         "vacancies_and_studentships/studentship.html",

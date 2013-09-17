@@ -94,9 +94,7 @@ class ArkestraGenericModel(models.Model):
     @property
     def links(self):
         model = ContentType.objects.get_for_model(self)
-        # print model, self.id
         links = ObjectLink.objects.filter(content_type__pk=model.id, object_id = self.id).order_by('destination_content_type')
-        # print "links", links
         return links
 
     @property

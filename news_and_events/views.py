@@ -16,8 +16,10 @@ from lister import NewsAndEventsCurrentLister, NewsArchiveLister, \
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
 class NewsAndEventsView(ArkestraGenericView):
+    auto_page_attribute = "auto_news_page"
+    
     def get(self, request, *args, **kwargs):
-        super(NewsAndEventsView, self).get(request, *args, **kwargs)
+        self.get_entity()
 
         self.lister = NewsAndEventsCurrentLister(
             entity=self.entity,
@@ -35,6 +37,8 @@ class NewsAndEventsView(ArkestraGenericView):
         return self.response(request)
 
 class NewsArchiveView(ArkestraGenericView):
+    auto_page_attribute = "auto_news_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
@@ -51,6 +55,8 @@ class NewsArchiveView(ArkestraGenericView):
         return self.response(request)
 
 class EventsArchiveView(ArkestraGenericView):
+    auto_page_attribute = "auto_news_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
@@ -68,6 +74,8 @@ class EventsArchiveView(ArkestraGenericView):
 
 
 class EventsForthcomingView(ArkestraGenericView):
+    auto_page_attribute = "auto_news_page"
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 
