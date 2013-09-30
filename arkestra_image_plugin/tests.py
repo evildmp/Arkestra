@@ -1,11 +1,9 @@
-import os
 from django.test import TestCase
 from django import forms
-from django.contrib.contenttypes.models import ContentType
 from django.core.files import File as DjangoFile
 
 from cms.models.placeholdermodel import Placeholder
-from cms.api import add_plugin         
+from cms.api import add_plugin
 
 from filer.models.imagemodels import Image
 from filer.tests.helpers import create_image
@@ -19,20 +17,20 @@ class ImageSetTypePluginMixinContainerWidthTests(TestCase):
         self.placeholder = Placeholder(slot=u"some_slot")
         self.placeholder.save()
         self.plugin = add_plugin(
-            self.placeholder, 
-            u"ImageSetPublisher", 
-            u"en", 
+            self.placeholder,
+            u"ImageSetPublisher",
+            u"en",
             kind="basic"
         )
-        self.context = {"placeholder_width": 500,} # fake context for testing widths  
+        self.context = {"placeholder_width": 500,} # fake context for testing widths
 
-        
+
     def test_imagelinkset_plugin_container_width_1000(self):
         # automatic - will *usually* be 100%
         self.plugin.width = 1000.0
         self.plugin.get_container_width({"placeholder_width": 500,})
         self.assertEqual(self.plugin.container_width, 500)
-        
+
     def test_imagelinkset_plugin_container_width_100_of_500(self):
         # 100% of 500
         self.plugin.width = 100
@@ -44,7 +42,7 @@ class ImageSetTypePluginMixinContainerWidthTests(TestCase):
         self.plugin.width = 100
         self.plugin.get_container_width({"placeholder_width": 800,})
         self.assertEqual(self.plugin.container_width, 800)
-        
+
     def test_imagelinkset_plugin_container_width_50_of_500(self):
         # 50% of 500
         self.plugin.width = 50
@@ -56,8 +54,8 @@ class ImageSetTypePluginMixinContainerWidthTests(TestCase):
         self.plugin.width = 33.3
         self.plugin.get_container_width({"placeholder_width": 500,})
         self.assertEqual(self.plugin.container_width, 166)
-  
-        
+
+
 class ImageSetTypePluginMixinContainerGetPluginWidthTests(TestCase):
     """
     For testing methods of the Imageset plugin that don't require fully-
@@ -65,7 +63,7 @@ class ImageSetTypePluginMixinContainerGetPluginWidthTests(TestCase):
     """
     def setUp(self):
         # create & save plugin
-        self.plugin = ImageSetPlugin() 
+        self.plugin = ImageSetPlugin()
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -73,7 +71,7 @@ class ImageSetTypePluginMixinContainerGetPluginWidthTests(TestCase):
 
     # output: 0 = auto, +ve if set explicitly
     # native only acts if an image is provided
-    
+
     def test_defaults(self):
         # automatic
         self.assertEqual(self.plugin.get_plugin_width(), 0)
@@ -109,7 +107,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
     """
     def setUp(self):
         # create & save plugin
-        self.plugin = ImageSetPlugin() 
+        self.plugin = ImageSetPlugin()
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -135,13 +133,13 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
     def test_calculate_aspect_ratio(self):
         # calculated aspect ratio should be mean aspect ratio of all items
         self.assertEqual(
-            self.plugin.calculate_aspect_ratio([self.item1, self.item2]), 
+            self.plugin.calculate_aspect_ratio([self.item1, self.item2]),
             1.5
-        )    
+        )
 
     def test_active_items(self):
         self.assertListEqual(
-            list(self.plugin.active_items), 
+            list(self.plugin.active_items),
             [self.item1, self.item2, self.item3]
         )
 
@@ -149,7 +147,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.item2.active = False
         self.item2.save()
         self.assertListEqual(
-            list(self.plugin.active_items), 
+            list(self.plugin.active_items),
             [self.item1, self.item3]
         )
 
@@ -157,7 +155,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.item1.inline_item_ordering = 1
         self.item1.save()
         self.assertListEqual(
-            list(self.plugin.active_items), 
+            list(self.plugin.active_items),
             [self.item2, self.item3, self.item1]
         )
 
@@ -234,12 +232,12 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.assertEquals(self.plugin.template, "arkestra_image_plugin/lightbox.html")
 
     def test_imagelinkset_calculate_plugin_dimensions_positive_self_aspect_ratio(self):
-        # calculated_width and self.aspect_ratio determine height 
+        # calculated_width and self.aspect_ratio determine height
         self.plugin.width = 1000.0 # automatic
         self.plugin.aspect_ratio = 2
         self.plugin.height = 0
         self.assertEquals(
-            self.plugin.calculate_plugin_dimensions(299, 7.353), 
+            self.plugin.calculate_plugin_dimensions(299, 7.353),
             (299,149)
         )
 
@@ -249,7 +247,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.plugin.aspect_ratio = 0
         self.plugin.height = 200.1
         self.assertEquals(
-            self.plugin.calculate_plugin_dimensions(130.7, 7.353), 
+            self.plugin.calculate_plugin_dimensions(130.7, 7.353),
             (130,200)
         )
 
@@ -259,7 +257,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.plugin.aspect_ratio = 0
         self.plugin.height = 200
         self.assertEquals(
-            self.plugin.calculate_plugin_dimensions(130, 7.353), 
+            self.plugin.calculate_plugin_dimensions(130, 7.353),
             (1470,200)
         )
 
@@ -269,7 +267,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.plugin.aspect_ratio = 0
         self.plugin.height = None
         self.assertEquals(
-            self.plugin.calculate_plugin_dimensions(500.5, 2.5), 
+            self.plugin.calculate_plugin_dimensions(500.5, 2.5),
             (500,200)
         )
 
@@ -279,7 +277,7 @@ class ImageSetTypePluginEasyMethodTests(TestCase):
         self.plugin.aspect_ratio = 1
         self.plugin.height = None
         self.assertEquals(
-            self.plugin.calculate_plugin_dimensions(505.5, 2), 
+            self.plugin.calculate_plugin_dimensions(505.5, 2),
             (505,505)
         )
 
@@ -287,7 +285,7 @@ class ImagesetsReturnCorrectItems(TestCase):
 
     def setUp(self):
         # create & save plugin
-        self.plugin = ImageSetPlugin() 
+        self.plugin = ImageSetPlugin()
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -311,50 +309,50 @@ class ImagesetsReturnCorrectItems(TestCase):
         self.item3.save()
 
     # basic
-    # multiple  
+    # multiple
     # slider
-    # lightbox single  
+    # lightbox single
 
     # are the right items being returned?
-    
+
     def test_imagelinkset_plugin_basic_returns_one_active_item(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.single_image() 
-        self.assertIn(self.plugin.item, self.plugin.active_items)                     
+        self.plugin.single_image()
+        self.assertIn(self.plugin.item, self.plugin.active_items)
 
     def test_imagelinkset_plugin_multiple_returns_all_active_item(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.multiple_images() 
+        self.plugin.multiple_images()
         self.assertListEqual(
-            list(self.plugin.items), 
+            list(self.plugin.items),
             list(self.plugin.active_items)
-        )                     
+        )
 
     def test_imagelinkset_plugin_slider_returns_all_active_item(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.slider() 
+        self.plugin.slider()
         self.assertListEqual(
-            list(self.plugin.items), 
+            list(self.plugin.items),
             list(self.plugin.active_items)
-        )                     
+        )
 
     def test_imagelinkset_plugin_lightbox_single_one_active_item(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.lightbox_single() 
+        self.plugin.lightbox_single()
         self.assertListEqual(
-            list(self.plugin.items), 
+            list(self.plugin.items),
             list(self.plugin.active_items)
-        )                     
+        )
         self.assertEqual(
-            self.plugin.item, 
+            self.plugin.item,
             list(self.plugin.active_items)[0]
-        )                     
+        )
 
 class ImagesetsReturnCorrectImageSizesAutomaticWidthAndAspectRatio(TestCase):
 
     def setUp(self):
         # create & save plugin
-        self.plugin = ImageSetPlugin() 
+        self.plugin = ImageSetPlugin()
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -382,16 +380,16 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthAndAspectRatio(TestCase):
         self.item1.save()
         self.item2.save()
         self.plugin.items = self.plugin.active_items
-        self.plugin.single_image() 
+        self.plugin.single_image()
         item = self.plugin.item
         self.assertEqual(
             (item.width, item.height),
             (500,166)
         )
-        
+
     def test_imagelinkset_plugin_multiple_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.multiple_images() 
+        self.plugin.multiple_images()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -400,7 +398,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthAndAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_slider_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.slider() 
+        self.plugin.slider()
         item = self.plugin.items[0]
         self.assertEqual(
             self.plugin.size,
@@ -413,18 +411,18 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthAndAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_lightbox_single_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.lightbox_single() 
+        self.plugin.lightbox_single()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
             (480,480)
         )
-        
+
 class ImagesetsReturnCorrectImageSizesOneThirdWidthAndAspectRatio(TestCase):
 
     def setUp(self):
         # create & save plugin
-        self.plugin = ImageSetPlugin() 
+        self.plugin = ImageSetPlugin()
         self.plugin.width = 33.3
         self.plugin.save()
         # create & save images
@@ -453,16 +451,16 @@ class ImagesetsReturnCorrectImageSizesOneThirdWidthAndAspectRatio(TestCase):
         self.item1.save()
         self.item2.save()
         self.plugin.items = self.plugin.active_items
-        self.plugin.single_image() 
+        self.plugin.single_image()
         item = self.plugin.item
         self.assertEqual(
             (item.width, item.height),
             (166, 55)
         )
-        
+
     def test_imagelinkset_plugin_multiple_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.multiple_images() 
+        self.plugin.multiple_images()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -471,7 +469,7 @@ class ImagesetsReturnCorrectImageSizesOneThirdWidthAndAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_slider_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.slider() 
+        self.plugin.slider()
         item = self.plugin.items[0]
         self.assertEqual(
             self.plugin.size,
@@ -484,7 +482,7 @@ class ImagesetsReturnCorrectImageSizesOneThirdWidthAndAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_lightbox_single_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.lightbox_single() 
+        self.plugin.lightbox_single()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -497,7 +495,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthNativeRatio(TestCase):
     def setUp(self):
         # create & save plugin
         self.plugin = ImageSetPlugin()
-        self.plugin.aspect_ratio = -1.0 
+        self.plugin.aspect_ratio = -1.0
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -525,16 +523,16 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthNativeRatio(TestCase):
         self.item1.save()
         self.item2.save()
         self.plugin.items = self.plugin.active_items
-        self.plugin.single_image() 
+        self.plugin.single_image()
         item = self.plugin.item
         self.assertEqual(
             (item.width, item.height),
             (500, 166)
         )
-        
+
     def test_imagelinkset_plugin_multiple_image_sizes(self):
-        self.plugin.items = self.plugin.active_items 
-        self.plugin.multiple_images() 
+        self.plugin.items = self.plugin.active_items
+        self.plugin.multiple_images()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -543,7 +541,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthNativeRatio(TestCase):
 
     def test_imagelinkset_plugin_slider_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.slider() 
+        self.plugin.slider()
         item = self.plugin.items[0]
         self.assertEqual(
             self.plugin.size,
@@ -556,7 +554,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticWidthNativeRatio(TestCase):
 
     def test_imagelinkset_plugin_lightbox_single_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.lightbox_single() 
+        self.plugin.lightbox_single()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -568,7 +566,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticForcedAspectRatio(TestCase):
     def setUp(self):
         # create & save plugin
         self.plugin = ImageSetPlugin()
-        self.plugin.aspect_ratio = 1.333 
+        self.plugin.aspect_ratio = 1.333
         self.plugin.save()
         # create & save images
         self.image1 = Image(_width=100, _height=100)
@@ -596,16 +594,16 @@ class ImagesetsReturnCorrectImageSizesAutomaticForcedAspectRatio(TestCase):
         self.item1.save()
         self.item2.save()
         self.plugin.items = self.plugin.active_items
-        self.plugin.single_image() 
+        self.plugin.single_image()
         item = self.plugin.item
         self.assertEqual(
             (item.width, item.height),
             (500, 375)
         )
-        
+
     def test_imagelinkset_plugin_multiple_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.multiple_images() 
+        self.plugin.multiple_images()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
@@ -614,7 +612,7 @@ class ImagesetsReturnCorrectImageSizesAutomaticForcedAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_slider_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.slider() 
+        self.plugin.slider()
         item = self.plugin.items[0]
         self.assertEqual(
             self.plugin.size,
@@ -627,574 +625,35 @@ class ImagesetsReturnCorrectImageSizesAutomaticForcedAspectRatio(TestCase):
 
     def test_imagelinkset_plugin_lightbox_single_image_sizes(self):
         self.plugin.items = self.plugin.active_items
-        self.plugin.lightbox_single() 
+        self.plugin.lightbox_single()
         item = self.plugin.items[0]
         self.assertEqual(
             (item.width, item.height),
             (480, 360)
         )
-        
 
-#     def test_imagelinkset_plugin_image_size_with_one_active_item(self):
-#         # single item width is container_width
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()
-#         self.plugin.single_image() 
-#         item = self.plugin.item
-#         self.assertEqual(
-#             (item.width, item.height),
-#             (1000, 1000)
-#         )
-# 
-#     def test_imagelinkset_plugin_image_size_with_200x100_active_item(self):
-#         # single item width is container_width; height is proportional
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item1.save()    
-#         self.plugin.single_image() 
-#         item = self.plugin.item
-#         self.assertEqual(
-#             (item.width, item.height),
-#             (1000, 500)
-#         )
-# 
-#     def test_imagelinkset_plugin_with_two_active_items_chooses_one(self):
-#         # two active; chooses one
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.single_image() 
-#         self.assertIn(self.plugin.item, [item1, item2])  
-# 
-#     def test_rendering_single_image(self):
-#         # render and test context
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         imageset = instance.render({"placeholder_width": 500,}, self.plugin, self.placeholder)["imageset"]
-#         self.assertEqual(list(imageset.items), [item1])  
-#         self.assertEqual(imageset.item, item1)  
-#         
-# 
-# class MultipleImageLinkSetTests(TestCase):
-# 
-#     def setUp(self):
-#         self.placeholder = Placeholder(slot=u"some_slot")
-#         self.placeholder.save()
-#         self.plugin = add_plugin(
-#             self.placeholder, 
-#             u"ImageSetPublisher", 
-#             u"en", 
-#             width=1000.0,
-#             kind="multiple"
-#             )
-#         self.plugin.save()
-#         self.img = Image(_width=100, _height=100)
-#         self.img.save()
-#         self.img2 = Image(_width=200, _height=100)
-#         self.img2.save()
-#         self.context = {"placeholder_width": 1000,} # fake context for testing widths
-#         self.plugin.container_width = 1000
-# 
-# 
-#     def test_imagelinkset_plugin_with_two_active_items(self):
-#         # two active items appear in multiple set
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.multiple_images()
-#         self.assertListEqual(
-#             list(self.plugin.items),
-#             [item1, item2]
-#         )  
-#  
-#         
-#     def test_imagelinkset_plugin_with_two_active_items_width(self):
-#         # two items in a row; should fit side-by-side in container
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.multiple_images()
-#         self.assertEqual(
-#             self.plugin.items[0].width,
-#             490
-#         )
-# 
-#     def test_imagelinkset_plugin_with_three_active_items_width(self):
-#         # three items in a row; should fit side-by-side in container
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         item3 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item3.save()    
-#         self.plugin.multiple_images()
-#         self.assertEqual(
-#             self.plugin.items[0].width,
-#             320
-#         )
-# 
-#     def test_imagelinkset_plugin_with_two_active_items_same_sizes(self):
-#         # both images should come out square
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item2.save()
-#         self.plugin.multiple_images()
-#         image1 = self.plugin.items[0]
-#         image2 = self.plugin.items[1]
-#         self.assertEqual(
-#             (image1.width, image1.height),
-#             (490, 490)
-#         )
-#         self.assertEqual(
-#             (image2.width, image2.height),
-#             (490, 490)
-#         )
-# 
-#     def test_imagelinkset_plugin_with_two_active_items_different_sizes(self):
-#         # aspect ratio of both images should be mean aspect ratio
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()
-#         self.plugin.multiple_images()
-#         image1 = self.plugin.items[0]
-#         image2 = self.plugin.items[1]
-#         self.assertEqual(
-#             (image1.width, image1.height),
-#             (490, 326)
-#         )
-#         self.assertEqual(
-#             (image2.width, image2.height),
-#             (490, 326)
-#         )                  
-#         
-#     def test_imagelinkset_plugin_with_different_sizes_explicit_aspect_ratio(self):
-#         # aspect ratio of both images should be mean aspect ratio
-#         instance = self.plugin.get_plugin_instance()[1]
-#         self.plugin.aspect_ratio = 1.618
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()
-#         self.plugin.multiple_images()
-#         image1 = self.plugin.items[0]
-#         image2 = self.plugin.items[1]
-#         self.assertEqual(
-#             (image1.width, image1.height),
-#             (490, 302)
-#         )
-#         self.assertEqual(
-#             (image2.width, image2.height),
-#             (490, 302)
-#         )        
-# 
-# class LightboxGalleryImageLinkSetTests(TestCase):
-# 
-#     def setUp(self):
-#         self.placeholder = Placeholder(slot=u"some_slot")
-#         self.placeholder.save()
-#         self.plugin = add_plugin(
-#             self.placeholder, 
-#             u"ImageSetPublisher", 
-#             u"en", 
-#             width=1000.0,
-#             kind="lightbox"
-#             )
-#         self.plugin.save()
-#         self.img = Image(_width=100, _height=100)
-#         self.img.save()
-#         self.img2 = Image(_width=200, _height=100)
-#         self.img2.save()
-#         self.context = {"placeholder_width": 1000,} # fake context for testing widths
-#         self.plugin.container_width = 1000
-# 
-# 
-#     # def test_imagelinkset_plugin_with_two_active_items(self):
-#     #     # two active items appear in multiple set
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item2.save()    
-#     #     self.plugin.lightbox()
-#     #     self.assertListEqual(
-#     #         list(self.plugin.items),
-#     #         [item1, item2]
-#     #     )  
-#     #  
-#     # def test_imagelinkset_plugin_with_two_active_items_reordered(self):
-#     #     # reverse their order
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id, 
-#     #         inline_item_ordering=1,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item2.save()    
-#     #     self.plugin.lightbox()
-#     #     self.assertListEqual(list(self.plugin.items), [item2, item1])
-#     #     
-#     # def test_imagelinkset_plugin_with_two_active_items_width(self):
-#     #     # two items in a row; should fit side-by-side in container
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item2.save()    
-#     #     self.plugin.lightbox()
-#     #     self.assertEqual(
-#     #         self.plugin.items[0].width,
-#     #         480
-#     #     )
-#     # 
-#     # def test_imagelinkset_plugin_with_three_active_items_width(self):
-#     #     # three items in a row; should fit side-by-side in container
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item2.save()    
-#     #     item3 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item3.save()    
-#     #     self.plugin.lightbox()
-#     #     self.assertEqual(
-#     #         self.plugin.items[0].width,
-#     #         313
-#     #     )
-#     # 
-#     # def test_imagelinkset_plugin_with_two_active_items_same_sizes(self):
-#     #     # both images should come out square
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item2.save()
-#     #     self.plugin.lightbox()
-#     #     image1 = self.plugin.items[0]
-#     #     image2 = self.plugin.items[1]
-#     #     self.assertEqual(
-#     #         (image1.width, image1.height),
-#     #         (480, 480)
-#     #     )
-#     #     self.assertEqual(
-#     #         (image2.width, image2.height),
-#     #         (480, 480)
-#     #     )
-#     # 
-#     # def test_imagelinkset_plugin_with_two_active_items_different_sizes(self):
-#     #     # aspect ratio of both images should be mean aspect ratio
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item2.save()
-#     #     self.plugin.lightbox()
-#     #     image1 = self.plugin.items[0]
-#     #     image2 = self.plugin.items[1]
-#     #     self.assertEqual(
-#     #         (image1.width, image1.height),
-#     #         (480, 320)
-#     #     )
-#     #     self.assertEqual(
-#     #         (image2.width, image2.height),
-#     #         (480, 320)
-#     #     )                  
-#     #     
-#     # def test_imagelinkset_plugin_with_different_sizes_explicit_aspect_ratio(self):
-#     #     # aspect ratio of both images should be mean aspect ratio
-#     #     instance = self.plugin.get_plugin_instance()[1]
-#     #     self.plugin.aspect_ratio = 1.618
-#     #     item1 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img.id,
-#     #         )
-#     #     item1.save()    
-#     #     item2 = ImageSetItem(
-#     #         plugin=self.plugin,
-#     #         image_id=self.img2.id,
-#     #         )
-#     #     item2.save()
-#     #     self.plugin.lightbox()
-#     #     image1 = self.plugin.items[0]
-#     #     image2 = self.plugin.items[1]
-#     #     self.assertEqual(
-#     #         (image1.width, image1.height),
-#     #         (480, 296)
-#     #     )
-#     #     self.assertEqual(
-#     #         (image2.width, image2.height),
-#     #         (480, 296)
-#     #     )        
-# 
-# class LightboxSingleImageLinkSetTests(TestCase):
-# 
-#     def setUp(self):
-#         self.placeholder = Placeholder(slot=u"some_slot")
-#         self.placeholder.save()
-#         self.plugin = add_plugin(
-#             self.placeholder, 
-#             u"ImageSetPublisher", 
-#             u"en", 
-#             width=1000.0,
-#             kind="lightbox-single"
-#             )
-#         self.plugin.save()
-#         self.img = Image(_width=100, _height=100)
-#         self.img.save()
-#         self.img2 = Image(_width=200, _height=100)
-#         self.img2.save()
-#         self.context = {"placeholder_width": 1000,} # fake context for testing widths
-#         self.plugin.container_width = 1000
-# 
-# 
-#     def test_imagelinkset_plugin_with_two_active_items(self):
-#         # two active items appear in imageset.items
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.lightbox_single()
-#         self.assertListEqual(
-#             list(self.plugin.items),
-#             [item1, item2]
-#         )  
-# 
-#     def test_imagelinkset_plugin_with_two_active_items_width(self):
-#         # imageset.item is first image
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.lightbox_single()
-#         self.assertEqual(
-#             self.plugin.items[0].width,
-#             980
-#         )
-# 
-#     def test_imagelinkset_plugin_with_two_active_items_different_sizes(self):
-#         # aspect imageset.image should be first item's aspect ratio
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()
-#         self.plugin.lightbox_single()
-#         image1 = self.plugin.items[0]
-#         image2 = self.plugin.items[1]
-#         self.assertEqual(
-#             (image1.width, image1.height),
-#             (980, 980)
-#         )
-# 
-#     def test_imagelinkset_plugin_with_different_sizes_explicit_aspect_ratio(self):
-#         # aspect ratio of both images should be mean aspect ratio
-#         instance = self.plugin.get_plugin_instance()[1]
-#         self.plugin.aspect_ratio = 2
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()
-#         self.plugin.lightbox_single()
-#         image1 = self.plugin.items[0]
-#         image2 = self.plugin.items[1]
-#         self.assertEqual(
-#             (image1.width, image1.height),
-#             (980, 490)
-#         )
-# 
-# class SliderImageLinkSetTests(TestCase):
-# 
-#     def setUp(self):
-#         self.placeholder = Placeholder(slot=u"some_slot")
-#         self.placeholder.save()
-#         self.plugin = add_plugin(
-#             self.placeholder, 
-#             u"ImageSetPublisher", 
-#             u"en", 
-#             width=1000.0,
-#             kind="slider"
-#             )
-#         self.plugin.save()
-#         self.img = Image(_width=100, _height=100)
-#         self.img.save()
-#         self.img2 = Image(_width=200, _height=100)
-#         self.img2.save()
-#         self.context = {"placeholder_width": 1000,} # fake context for testing widths
-#         self.plugin.container_width = 1000
-# 
-# 
-#     def test_imagelinkset_plugin_with_two_active_items(self):
-#         # two active items appear in multiple set
-#         instance = self.plugin.get_plugin_instance()[1]
-#         item1 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img.id,
-#             )
-#         item1.save()    
-#         item2 = ImageSetItem(
-#             plugin=self.plugin,
-#             image_id=self.img2.id,
-#             )
-#         item2.save()    
-#         self.plugin.slider()
-#         self.assertListEqual(
-#             list(self.plugin.items),
-#             [item1, item2]
-#         )  
-#  
-# 
 
-class ImageLinkSetItemTests(TestCase):  
+class ImageLinkSetItemTests(TestCase):
     def test_imagelinkset_image_size(self):
         item1 = ImageSetItem()
-        item1.width, item1.height = 160, 30 
+        item1.width, item1.height = 160, 30
         self.assertEquals(
             item1.image_size,
             u"160x30"
-        )    
+        )
 
     def test_imagelinkset_image_size_is_integers(self):
         item1 = ImageSetItem()
-        item1.width, item1.height = 160.4, 30.33 
+        item1.width, item1.height = 160.4, 30.33
         self.assertEquals(
             item1.image_size,
             u"160x30"
-        )    
+        )
 
 class EmbeddedVideoTests(TestCase):
     def test_embedded_video_plugin_item(self):
         """
-        test the output of the embedded video plugin 
+        test the output of the embedded video plugin
         """
         # create a placeholder
         placeholder = Placeholder(slot=u"some_slot")
@@ -1208,9 +667,9 @@ class EmbeddedVideoTests(TestCase):
 
         # get the corresponding plugin instance
         instance = plugin.get_plugin_instance()[1]
-        self.assertEquals(plugin.active_items.count(), 0) 
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
-       
+        self.assertEquals(plugin.active_items.count(), 0)
+        self.assertEquals(instance.render({}, plugin, placeholder), {})
+
         # add a video to the plugin - but it's not active
         item1 = EmbeddedVideoSetItem(
             plugin=plugin,
@@ -1220,36 +679,36 @@ class EmbeddedVideoTests(TestCase):
             active=False,
             inline_item_ordering=1
             )
-        item1.save()    
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
-        self.assertEquals(instance.render_template, "null.html") 
+        item1.save()
+        self.assertEquals(instance.render({}, plugin, placeholder), {})
+        self.assertEquals(instance.render_template, "null.html")
 
         # now the item is active
         item1.active=True
-        item1.save()    
+        item1.save()
         self.assertDictEqual(
-            instance.render({}, plugin, placeholder), 
+            instance.render({}, plugin, placeholder),
             {
                 'width': 100,
                 'video': item1,
                 'embeddedvideoset': plugin,
                 'height': 75,
             }
-            ) 
-        self.assertEquals(instance.render_template, "embedded_video/vimeo.html") 
-        
+            )
+        self.assertEquals(instance.render_template, "embedded_video/vimeo.html")
+
         # change aspect_ratio
         item1.aspect_ratio=1.0
-        item1.save()    
+        item1.save()
         self.assertDictEqual(
-            instance.render({}, plugin, placeholder), 
+            instance.render({}, plugin, placeholder),
             {
                 'width': 100,
                 'video': item1,
                 'embeddedvideoset': plugin,
                 'height': 100,
             }
-            ) 
+            )
 
         # add a second video to the plugin
         item2 = EmbeddedVideoSetItem(
@@ -1258,6 +717,5 @@ class EmbeddedVideoTests(TestCase):
             video_code="5678",
             video_title="two",
             )
-        item2.save()    
-        self.assertEquals(list(plugin.active_items), [item2, item1]) 
-                                                              
+        item2.save()
+        self.assertEquals(list(plugin.active_items), [item2, item1])

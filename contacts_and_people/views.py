@@ -113,7 +113,7 @@ def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), le
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
-    request.auto_page_url = entity.get_related_info_page_url("contact")
+    request.auto_page_url = entity.get_auto_page_url("contact")
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()

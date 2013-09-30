@@ -1,5 +1,3 @@
-import logging
-
 #app = contacts_and_people
 from django.db import models
 from django.db.utils import DatabaseError
@@ -7,6 +5,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.utils.functional import cached_property
 from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 
@@ -19,14 +18,12 @@ from mptt.managers import TreeManager
 from filer.fields.image import FilerImageField
 
 from arkestra_utilities.mixins import URLModelMixin
-from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE
-from links.models import ExternalLink
+from arkestra_utilities.settings import (MULTIPLE_ENTITY_MODE,
+ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE, DEFAULT_CONTACTS_PAGE_TITLE,
+DEFAULT_VACANCIES_PAGE_TITLE, DEFAULT_PUBLICATIONS_PAGE_TITLE)
 
 import news_and_events
 
-from django.utils.functional import cached_property
-
-base_entity_id = ARKESTRA_BASE_ENTITY
 
 # Page = models.get_model('cms', 'Page')
 # CMSPlugin = models.get_model('cms', 'CMSPlugin')
@@ -76,8 +73,12 @@ class Building(models.Model):
     image = FilerImageField(on_delete=models.SET_NULL,
         null=True, blank=True)
     # for the place page
-    summary = models.TextField(verbose_name="Summary", max_length=256, default ="",
-        help_text="A very short description of this building (maximum two lines)",)
+    summary = models.TextField(
+        verbose_name="Summary",
+        max_length=256,
+        default ="",
+        help_text="A very short description (maximum two lines)",
+        )
     description = PlaceholderField('body', related_name="building_description",
         help_text="A fuller description",)
     getting_here = PlaceholderField('simple',
@@ -97,23 +98,16 @@ class Building(models.Model):
     # def natural_key(self):
     #     return (self.slug)
 
-    def building_identifier(self):
+    def identifier(self):
         if self.name:
             return self.name
         elif self.street:
-           return self.number + " " + self.street
+           return " ".join((self.number, self.street))
         else:
             return self.postcode
 
     def __unicode__(self):
-        if self.name:
-            building_identifier = unicode(self.site) + ": " + self.name
-        elif self.street:
-            building_identifier = unicode(self.site) + ": " + self.number + " " + self.street
-        else:
-            building_identifier = unicode(self.site) + ": " + self.postcode
-
-        return u"%s (%s)" %(self.building_identifier(), unicode(self.site))
+        return u"%s (%s)" %(self.identifier(), unicode(self.site))
 
 
     def get_absolute_url(self):
@@ -129,12 +123,12 @@ class Building(models.Model):
         Assembles a half-decent name for a building
         """
         if self.name:
-            building_identifier = self.name
+            identifier = self.name
         elif self.street:
-            building_identifier = self.number + " " + self.street
+            identifier = self.number + " " + self.street
         else:
-            building_identifier = unicode(self.site) + ": " + self.postcode
-        return building_identifier
+            identifier = unicode(self.site) + ": " + self.postcode
+        return identifier
 
     @property
     def get_postal_address(self):
@@ -240,22 +234,23 @@ class EntityManager(TreeManager):
             # we managed to get Entity.objects.all()
             # we don't use default_entity (or default_entity_id) in MULTIPLE_ENTITY_MODE
             try:
-                # print "trying"
-                entity = Entity.objects.get(id = base_entity_id)
+                # print "trying to match", ARKESTRA_BASE_ENTITY
+                entity = self.model.objects.get(id = ARKESTRA_BASE_ENTITY)
             # it can't be found, maybe because of a misconfiguation or because we haven't added any Entities yet
             except (Entity.DoesNotExist, DatabaseError), e:
-                # print "** Either the Entity does not exist, or I got a DatabaseError:"
+                # print "** Either the Entity does not exist, or I got a
+                # DatabaseError:"
                 # print "**", e
                 pass
             else:
                 # print "** I successfully found a default entity:", entity
                 return entity
 
+    # only used in single-entity mode
     def default_entity_id(self):
         if self.base_entity and not MULTIPLE_ENTITY_MODE:
-            return base_entity_id
+            return ARKESTRA_BASE_ENTITY
 
-from django.test import TestCase
 
 class Entity(MPTTModel, EntityLite, CommonFields):
     objects=EntityManager()
@@ -336,7 +331,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             return reverse("contact-entity-base")
 
     @property
-    def _get_real_ancestor(self):
+    def get_real_ancestor(self):
         """
         Find the nearest non-abstract Entity amongst this Entity's ancestors
         """
@@ -355,14 +350,15 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             return self.building
         else:
             try:
-                return self._get_real_ancestor.get_building
+                return self.get_real_ancestor.get_building
             except AttributeError:
                 return None
 
     @property
     def _get_institutional_address(self):
         """
-        Lists the parts of an address within the institution (Section of YYY, Department of XXX and YYY, School of ZZZ)
+        Lists the parts of an address within the institution (Section of YYY,
+        Department of XXX and YYY, School of ZZZ)
         """
         if self.abstract_entity:
             return
@@ -396,7 +392,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
     @property
     def get_website(self):
         """
-        Return the Django CMS page that this Entity has attached to it (or to its nearest parent)
+        Return the Django CMS page that this Entity has attached to it (or to
+        its nearest parent)
         """
         if self.website:
             return self.website
@@ -580,7 +577,7 @@ class PersonLite(models.Model):
     surname = models.CharField(max_length=50)
 
     def __unicode__(self):
-        # TODO: make it smarter, i.e. don't include empty/None strings
+        # to-do: make it smarter, i.e. don't include empty/None strings
         return u"%s %s %s" % (self.given_name, self.middle_names, self.surname)
 
     def __getInitials(self):
@@ -900,7 +897,7 @@ class EntityMembersPluginEditor(CMSPlugin):
 # make default_entity and default_entity_id available
 # default_entity = Entity.objects.base_entity() # get it from the Entity custom manager method
 # if default_entity and not MULTIPLE_ENTITY_MODE:
-#     default_entity_id = base_entity_id
+#     default_entity_id = ARKESTRA_BASE_ENTITY
 # else:
 #     default_entity_id = None
 

@@ -23,16 +23,11 @@ class NewsAndEventsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
 
 class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
 
-    text_enabled = True
-    admin_preview = False
-    # default render_template - change it in your ArkestraGenericPlugin if
-    # required
-    render_template = "arkestra/generic_lister.html"
-
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm
     menu_cues = menu_dict
+    
     fieldsets = (
         (None, {
         'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
@@ -48,7 +43,6 @@ class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, Au
 
     def icon_src(self, instance):
         return "/static/plugin_icons/news_and_events.png"
-
 
     def render(self, context, instance, placeholder):
         self.entity = getattr(instance, "entity", None) or \

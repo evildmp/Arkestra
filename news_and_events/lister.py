@@ -24,21 +24,25 @@ class NewsList(ArkestraGenericList):
             self.items = self.items.filter(date__gte=expiry_date)
 
     def other_items(self):
+        # supply a list of links to available other items
         other_items = []
         if "archive" in self.other_item_kinds:
             other_items.append({
                 "link": self.entity.get_auto_page_url("news-archive"),
                 "title": "News archive",
                 "count": self.items_for_context.count(),})
+                
         if "main" in self.other_item_kinds:
+            auto_page = menu.menu_dict(["title_attribute"])
             other_items.append({
-                "link": self.entity.get_auto_page_url(menu.menu_dict["url_attribute"]),
+                "link": self.entity.get_auto_page_url(auto_page),
                 "title": "%s %s" % (
                     self.entity.short_name,
-                    getattr(self.entity, menu.menu_dict["title_attribute"]).lower()
+                    getattr(self.entity, auto_page).lower()
                     ),
                 "cls": "main"
             })
+
         return other_items
 
     def re_order_by_importance(self):
@@ -150,7 +154,7 @@ class NewsListPlugin(NewsList):
 class NewsListForPerson(NewsList):
 
     def set_items_for_context(self):
-        self.items_for_context = self.model.objects.listable_objects.filter(please_contact=self.person)
+        self.items_for_context = self.model.objects.listable_objects().filter(please_contact=self.lister.person)
 
     def additional_list_processing(self):
         self.re_order_by_importance() # expensive; shame it has to be here
@@ -195,22 +199,26 @@ class EventsList(ArkestraGenericList):
 
     def other_items(self):
         other_items = []
+
         if "forthcoming_events" in self.other_item_kinds:
             other_items.append({
                 "link": self.entity.get_auto_page_url("forthcoming-events"),
                 "title": "All forthcoming events",
                 "count": self.forthcoming_events.count(),})
+
         if "previous_events" in self.other_item_kinds:
             other_items.append({
                 "link": self.entity.get_auto_page_url("previous-events"),
                 "title": "Archived events",
                 "count": self.previous_events.count(),})
+
         if "main" in self.other_item_kinds:
+            auto_page = menu.menu_dict(["title_attribute"])
             other_items.append({
-                "link": self.entity.get_auto_page_url(menu.menu_dict["url_attribute"]),
+                "link": self.entity.get_auto_page_url(auto_page),
                 "title": "%s %s" % (
                     self.entity.short_name,
-                    getattr(self.entity, menu.menu_dict["title_attribute"]).lower()
+                    getattr(self.entity, auto_page).lower()
                     ),
                 "cls": "main"
             })
@@ -276,7 +284,7 @@ class EventsListForPlace(EventsList):
         self.set_show_when()
 
     def set_items_for_context(self):
-        self.items_for_context = self.model.objects.listable_objects.filter(building=self.place)
+        self.items_for_context = self.model.objects.listable_objects().filter(building=self.lister.place)
 
 
 class EventsListForPerson(EventsList):
@@ -288,7 +296,7 @@ class EventsListForPerson(EventsList):
         self.set_show_when()
 
     def set_items_for_context(self):
-        self.items_for_context = self.model.objects.listable_objects.filter(featuring=self.person)
+        self.items_for_context = self.model.objects.listable_objects().filter(featuring=self.lister.person)
 
 
 class NewsAndEventsCurrentLister(ArkestraGenericLister):
@@ -317,10 +325,10 @@ class NewsAndEventsPluginLister(ArkestraGenericLister):
         ("events", EventsListPlugin),
             ]
 
-
     def other_items(self):
+        auto_page = menu.menu_dict(["title_attribute"])
         return [{
-            "link": self.entity.get_auto_page_url("news-and-events"),
+            "link": self.entity.get_auto_page_url(auto_page),
             "title": "More %s" % self.display,
             "cls": "main"
             }]

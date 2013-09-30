@@ -6,7 +6,6 @@
 
     	{% for list in lister.lists %}
 
-    		{% if list.items or list.other_items %} 
     			<div class = "{{ list.div_class }}">
 
     				{% if lister.heading_level %}
@@ -26,21 +25,19 @@
 						        	</ul>
 						    	</li>
     						{% endfor %}
-    						
+
     			    	{% else %}
 
     						{% for item in list.items %}
     							{% include list.item_template %}
-    						{% endfor %} 
-    						
+    						{% endfor %}
+
     					{% endif %}
 					</ul>
-    				
+
 					{% include "arkestra/generic_list_other_items.html" %}
     			</div>
-    		{% endif %}
-    		
-    		
+
     	{% endfor %}
         {% include "arkestra/generic_lister_other_items.html" %}
     </div>

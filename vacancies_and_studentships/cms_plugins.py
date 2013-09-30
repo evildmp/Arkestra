@@ -13,6 +13,7 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 from models import VacanciesPlugin, Vacancy, Studentship
 from mixins import VacancyStudentshipPluginMixin
 from menu import menu_dict
+from lister import VacanciesAndStudentshipsPluginLister
 
 class VacanciesStudentshipsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
     class Meta:
@@ -40,5 +41,26 @@ class CMSVacanciesPlugin(VacancyStudentshipPluginMixin, ArkestraGenericPlugin, A
 
     def icon_src(self, instance):
         return "/static/plugin_icons/vacancies_and_studentships.png"
+
+    def render(self, context, instance, placeholder):
+        self.entity = getattr(instance, "entity", None) or \
+            work_out_entity(context, None)
+
+        self.lister = VacanciesAndStudentshipsPluginLister(
+            entity=self.entity,
+            display=instance.display,
+            order_by=instance.order_by,
+            layout=instance.layout,
+            limit_to=instance.limit_to,
+            item_format=instance.format,
+            list_format=instance.list_format,
+            # request=instance.request
+            )
+
+        context.update({
+            'lister': self.lister,
+            'placeholder': placeholder,
+            })
+        return context
 
 plugin_pool.register_plugin(CMSVacanciesPlugin)

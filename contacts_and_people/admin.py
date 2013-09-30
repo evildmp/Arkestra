@@ -13,7 +13,7 @@ from django import forms
 
 
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.safestring import mark_safe 
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from treeadmin.admin import TreeAdmin
@@ -85,8 +85,8 @@ class PhoneContactInline(generic.GenericTabularInline):
     form = PhoneContactInlineForm
 
 
-class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):    
-    
+class PersonAndEntityAdmin(SupplyRequestMixin, AutocompleteMixin, ModelAdminWithTabsAndCMSPlaceholder):
+
     def _media(self):
         return super(AutocompleteMixin, self).media + super(ModelAdminWithTabsAndCMSPlaceholder, self).media
     media = property(_media)
@@ -101,8 +101,8 @@ class PersonLiteForm(forms.ModelForm):
         super(PersonLiteForm, self).clean()
         if hasattr(self.instance, "person"):
             raise forms.ValidationError(mark_safe(u"A PersonLite who is also a Person must be edited using the Person Admin Interface"))
-        return self.cleaned_data    
-    
+        return self.cleaned_data
+
 
 class PersonLiteAdmin(admin.ModelAdmin):
     search_fields = ('surname', 'given_name',)
@@ -114,9 +114,9 @@ class PersonLiteAdmin(admin.ModelAdmin):
           If this PersonLite object is infact also a Person object, you cannot ammend it via PersonLiteAdmin
           If PersonLiteForm.clean() is doing its job, it shouldn't be possible to reach the else statement
         """
-        if not hasattr(obj, "person"):         
+        if not hasattr(obj, "person"):
             obj.save()
-          
+
 # ------------------------- Person admin -------------------------
 
 class PersonForm(InputURLMixin):
@@ -129,7 +129,7 @@ class PersonForm(InputURLMixin):
         instance = getattr(self, 'instance', None)
         if instance and instance.id and instance.user:
             self.fields['user'].widget = DisplayUsernameWidget()
-            self.fields['user'].help_text = "Once a user has been assigned, it cannot be changed"       
+            self.fields['user'].help_text = "Once a user has been assigned, it cannot be changed"
 
     def clean_please_contact(self):
         data = self.cleaned_data['please_contact']
@@ -142,7 +142,7 @@ class PersonForm(InputURLMixin):
                 r = []
                 for p in person_list:
                     r.append(u'"%s"' % p)
-                r = u' &rarr; '.join(r)    
+                r = u' &rarr; '.join(r)
                 raise forms.ValidationError(mark_safe(u"Please prevent loops: %s" % r))
         return data
 
@@ -159,14 +159,14 @@ class PersonForm(InputURLMixin):
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
             self.cleaned_data.get("link_title"), # link title
             "", # link description
-            )          
+            )
 
         return self.cleaned_data
 
 def create_action(entity):
     def action(modeladmin,request,queryset):
         for person in queryset:
-            m = models.Membership(person=person,entity=entity,role="Member") 
+            m = models.Membership(person=person,entity=entity,role="Member")
             m.save()
     name="entity_%s" % (entity,)
     return (name, (action, name,"Add selected Person to %s as 'Member'" % (entity,)))
@@ -183,7 +183,7 @@ class HasHomeRole(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if self.value() == 'ok':            
+        if self.value() == 'ok':
             return queryset.filter(member_of__importance_to_person=5)
         if self.value() == 'missing':
             return queryset.exclude(member_of__importance_to_person=5)
@@ -199,11 +199,11 @@ class PersonIsExternal(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if self.value() == 'external':            
+        if self.value() == 'external':
             return queryset.exclude(external_url=None)
         if self.value() == 'internal':
             return queryset.filter(external_url=None)
-        
+
 
 class PersonEntity(SimpleListFilter):
     title = _('Entity membership')
@@ -224,24 +224,24 @@ class PersonEntity(SimpleListFilter):
             return queryset.exclude(entities__in=entities)
 
 
-class PersonAdmin(PersonAndEntityAdmin):    
+class PersonAdmin(PersonAndEntityAdmin):
     search_fields = ['given_name','surname','institutional_username',]
     form = PersonForm
     list_filter = (HasHomeRole, PersonIsExternal, PersonEntity, 'active')
     list_display = ('surname', 'given_name','get_entity_short_name', 'active')
     filter_horizontal = ('entities',)
     prepopulated_fields = {'slug': ('given_name', 'middle_names', 'surname',)}
-    readonly_fields = ['address_report',]    
-    
+    readonly_fields = ['address_report',]
+
     def address_report(self, instance):
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
-            return "Warning: this Person has the Specify Building field set, probably unnecessarily." 
+            return "Warning: this Person has the Specify Building field set, probably unnecessarily."
         else:
             return "%s" % (", ".join(instance.get_full_address)) or "<span class='errors'>Warning: this person has no address.</span>"
 
     address_report.short_description = "Address"
     address_report.allow_tags = True
-    
+
     name_fieldset = ('Name', {'fields': ('title', 'given_name', 'middle_names', 'surname',),})
     override_fieldset = ('Over-ride default output', {
         'fields': ('please_contact', 'building',),
@@ -290,7 +290,7 @@ class EntityLiteForm(forms.ModelForm):
         super(EntityLiteForm, self).clean()
         if hasattr(self.instance, "entity"):
             raise forms.ValidationError(mark_safe(u"An EntityLite who is also a full Entity must be edited using the Entity Admin Interface"))
-        return self.cleaned_data    
+        return self.cleaned_data
 
 
 class EntityLiteAdmin(admin.ModelAdmin):
@@ -302,30 +302,30 @@ class EntityLiteAdmin(admin.ModelAdmin):
           If this EntityLite object is infact also an Entity object, you cannot ammend it via EntityLiteAdmin
           If EntityLiteForm.clean() is doing its job, it shouldn't be possible to reach the else statement
         """
-        if not hasattr(obj, "entity"):         
+        if not hasattr(obj, "entity"):
             obj.save()
-        
+
 # ------------------------- Entity admin -------------------------
 
 class EntityForm(InputURLMixin):
     class Meta:
         model = models.Entity
-                
+
     def clean(self):
         super(EntityForm, self).clean()
         if self.cleaned_data["website"]:
             try:
                 # does an instance exist in the database with the same website?
-                entity = models.Entity.objects.get(website=self.cleaned_data["website"]) 
+                entity = models.Entity.objects.get(website=self.cleaned_data["website"])
             except:
                 # nothing matched, so we can safely go ahead with this one
                 pass
             else:
                 # one existed already - if it's this one that's OK
                 if not self.instance.pk == entity.pk:
-                    raise forms.ValidationError('Another entity (%s) already has the same home page (%s).' % (entity, self.cleaned_data["website"]))    
-        
-        
+                    raise forms.ValidationError('Another entity (%s) already has the same home page (%s).' % (entity, self.cleaned_data["website"]))
+
+
         # check ExternalLink-related issues
         self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
             self.cleaned_data.get("input_url", None), # a manually entered url
@@ -339,7 +339,7 @@ class EntityForm(InputURLMixin):
             messages.add_message(self.request, messages.WARNING, message)
         if not self.cleaned_data["short_name"]:
             self.cleaned_data["short_name"] = self.cleaned_data["name"]
-        return self.cleaned_data 
+        return self.cleaned_data
 
 
 class EntityIsExternal(SimpleListFilter):
@@ -354,7 +354,7 @@ class EntityIsExternal(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if self.value() == 'external':            
+        if self.value() == 'external':
             return queryset.exclude(external_url=None)
         if self.value() == 'internal':
             return queryset.exclude(website=None)
@@ -373,23 +373,23 @@ class MyEntity(SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'my':
             return queryset.filter(people__in=request.user.person_user.all())
-        
 
-class EntityAdmin(PersonAndEntityAdmin, TreeAdmin): 
+
+class EntityAdmin(PersonAndEntityAdmin, TreeAdmin):
     filter_include_ancestors = False
     search_fields = ['name',]
     form = EntityForm
     list_display = ('name',)
-    list_filter = (EntityIsExternal, MyEntity, 'abstract_entity')     
+    list_filter = (EntityIsExternal, MyEntity, 'abstract_entity')
     list_max_show_all = 400
     list_per_page = 400
-    related_search_fields = ['parent', 'building', 'website', 'external_url',]    
+    related_search_fields = ['parent', 'building', 'website', 'external_url',]
     prepopulated_fields = {
             'slug': ('name',)
             }
-    readonly_fields = ['address_report']    
+    readonly_fields = ['address_report']
     filter_include_ancestors = True
-    
+
     def address_report(self, instance):
         if not instance.abstract_entity:
             return "%s" % (", ".join(instance.get_full_address)) or "Warning: this Entity has no address."
@@ -488,7 +488,7 @@ class SiteAdmin(admin.ModelAdmin):
 
 class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     list_filter = ('site',)
-    list_display = ('building_identifier', 'site', 'has_map')
+    list_display = ('identifier', 'site', 'has_map')
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
     address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site'),}),)
@@ -519,7 +519,7 @@ try:
     admin.site.register(models.Person, PersonAdmin)
 except admin.sites.AlreadyRegistered:
     pass
-                      
+
 
 admin.site.register(models.Building,BuildingAdmin)
 admin.site.register(models.Entity,EntityAdmin)
@@ -527,30 +527,30 @@ admin.site.register(models.Site,SiteAdmin)
 admin.site.register(models.Title)
 
 # ------------------------- admin hacks -------------------------
-# Allows us to create Users who don't have passwords - because their 
+# Allows us to create Users who don't have passwords - because their
 # passwords will be dealt with by LDAP
 #
 # So we:
 #   1   unregister UserAdmin
 #   2   import the extra things we need
 #   3   create two forms:
-#       *   MyNoPasswordCapableUserCreationForm for adding users   
+#       *   MyNoPasswordCapableUserCreationForm for adding users
 #       *   MyNoPasswordCapableUserChangeForm for editing users
-#       each of these gets a new has_password field and __init__()/save()/clean() methods 
+#       each of these gets a new has_password field and __init__()/save()/clean() methods
 #   4   redefine the UserAdmin.fieldsets and UserAdmin.add_fieldsets
 #   5   define a custom UserAdmin to use all the above
-#   6   register the custom UserAdmin   
+#   6   register the custom UserAdmin
 
 if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
     admin.site.unregister(User)
     from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AdminPasswordChangeForm
     from django.contrib.auth.admin import UserAdmin
-        
+
     class MyNoPasswordCapableUserCreationForm(UserCreationForm):
         has_password = forms.BooleanField(
-            label="has password", 
-            help_text="LDAP users don't need a password", 
-            required=False, 
+            label="has password",
+            help_text="LDAP users don't need a password",
+            required=False,
             initial=True
             )
 
@@ -576,12 +576,12 @@ if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
                 return instance
             else:
                 return instance
-        
+
     class MyNoPasswordCapableUserChangeForm(UserChangeForm):
         has_password = forms.BooleanField(
-            label="has password", 
-            help_text="LDAP users don't need a password", 
-            required=False, 
+            label="has password",
+            help_text="LDAP users don't need a password",
+            required=False,
             initial=True
             )
 
@@ -592,7 +592,7 @@ if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
                 if instance.has_usable_password():
                     self.initial['has_password'] = True
                 else:
-                    self.initial['has_password'] = False     
+                    self.initial['has_password'] = False
             return r
 
         def save(self, commit=True):
@@ -606,19 +606,19 @@ if ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION:
                 return instance
             else:
                 return instance
-    
+
     user_admin_fieldsets = list(UserAdmin.fieldsets)
     user_admin_fieldsets[0] = (None, {'fields': ('username', ('password', 'has_password',),)})
 
     user_admin_add_fieldsets = list(UserAdmin.add_fieldsets)
     user_admin_add_fieldsets[0] = (None, {'fields': ('username', ('password', 'has_password',),)})
-    
-    
+
+
     class MyUserAdmin(UserAdmin):
         fieldsets = user_admin_fieldsets
         add_fieldsets = user_admin_add_fieldsets
         form = MyNoPasswordCapableUserChangeForm
         add_form = MyNoPasswordCapableUserCreationForm
         filter_horizontal = ('user_permissions', 'groups') # not needed in Django 1.5
-        
+
     admin.site.register(User, MyUserAdmin)

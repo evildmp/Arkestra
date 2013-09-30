@@ -77,15 +77,15 @@ form.filter-form input {width: 100%}
                 {% endfor %}    
             </form>
             {% with list.itemfilter.qs as items %}
-                {% autopaginate items 8 %}
                 {{ list.itemfilter }} 
-				{{ list.itemfilter.qs.count }} items found
-                {% paginate %}  
 			    {% include "arkestra/generic_list_other_items.html" %}
        
         
         </div>
     	<div class = "column firstcolumn doublecolumn">
+            {% autopaginate items 8 %}
+			{{ list.itemfilter.qs.count }} items found
+            {% paginate %}  
                     <ul class="{{ lister.list_format}} plugin-list">
                         {% for item in items %}
                             {% include list.item_template %}

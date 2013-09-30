@@ -71,7 +71,7 @@ for menu in ARKESTRA_MENUS:
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
         start_time = datetime.now()
-        
+
         # this currently relies on the pre-cut nodes. It *will* hammer the database
         self.nodes = nodes
         self.auto_page_url = getattr(request, "auto_page_url", None)
@@ -119,9 +119,8 @@ class ArkestraPages(Modifier):
         # does this entity have this kind of auto-page in the menu?
         if getattr(entity, menu["auto_page_attribute"]):
             new_nodes = []
-
             if menu.get("lister"):
-                # create an instance of the plugin class editor with appropriate attributes
+                # create an instance of the lister with appropriate attributes
                 lister_ = menu.get("lister")(entity = entity)
                 # use the instance to create an instance of the plugin publisher
                 if lister_.lists:

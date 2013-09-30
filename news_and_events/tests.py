@@ -23,9 +23,9 @@ class NewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
-        
+
         # self.school = Entity(
-        #     name="School of Medicine", 
+        #     name="School of Medicine",
         #     slug="medicine",
         #     )
         # self.school.save()
@@ -41,20 +41,20 @@ class NewsTests(TestCase):
         self.tootharticle.save()
         # the item has no informative content
         self.assertEqual(self.tootharticle.is_uninformative, True)
-        
+
         # no Entities in the database, so this can't be hosted_by anything
         self.assertEqual(self.tootharticle.hosted_by, None)
 
         #  no Entities in the database, so default to settings's template
         self.assertEqual(
-            self.tootharticle.get_template, 
+            self.tootharticle.get_template,
             settings.CMS_TEMPLATES[0][0]
             )
 
     def test_date_related_attributes(self):
         self.tootharticle.date = datetime(year=2012, month=12, day=12)
         self.assertEqual(self.tootharticle.get_when, "December 2012")
-            
+
 @override_settings(
     CMS_TEMPLATES = (('null.html', "Null"),)
 )
@@ -62,23 +62,27 @@ class NewsEventsItemsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
-        
+
         # create a news item
         self.tootharticle = NewsArticle(
             title = "All about teeth",
             slug = "all-about-teeth"
             )
-        
-        self.adminuser = User.objects.create_user('arkestra', 'arkestra@example.com', 'arkestra')
+
+        self.adminuser = User.objects.create_user(
+            'arkestra',
+            'arkestra@example.com',
+            'arkestra'
+            )
         self.adminuser.is_staff=True
         self.adminuser.save()
 
     # news article tests
     def test_unpublished_newsarticle_404(self):
         self.tootharticle.save()
-        
+
         # Issue a GET request.
-        response = self.client.get('/news/all-about-teeth/')  
+        response = self.client.get('/news/all-about-teeth/')
 
         # Check that the response is 404 because it's not published
         self.assertEqual(response.status_code, 404)
@@ -87,22 +91,22 @@ class NewsEventsItemsViewsTests(TestCase):
         self.tootharticle.save()
 
         # log in a staff user
-        self.client.login(username='arkestra', password='arkestra')        
-        response = self.client.get('/news/all-about-teeth/')  
+        self.client.login(username='arkestra', password='arkestra')
+        response = self.client.get('/news/all-about-teeth/')
         self.assertEqual(response.status_code, 200)
-        
+
     def test_published_newsarticle_200_for_everyone(self):
         self.tootharticle.published = True
         self.tootharticle.save()
-                
+
         # Check that the response is 200 OK.
-        response = self.client.get('/news/all-about-teeth/')  
+        response = self.client.get('/news/all-about-teeth/')
         self.assertEqual(response.status_code, 200)
 
     def test_published_newsarticle_context(self):
         self.tootharticle.published = True
         self.tootharticle.save()
-        response = self.client.get('/news/all-about-teeth/')  
+        response = self.client.get('/news/all-about-teeth/')
         self.assertEqual(response.context['newsarticle'], self.tootharticle)
 
 
@@ -143,7 +147,7 @@ class ReverseURLsTests(TestCase):
             "/previous-events/some-slug/"
             )
 
-    
+
     def test_forthcoming_events_base_reverse_url(self):
         self.assertEqual(
             reverse("events-forthcoming-base"),
@@ -176,16 +180,16 @@ class NewsEventsEntityPagesViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
-        
+
         home_page = create_page(
-            "School home page", 
-            "null.html", 
+            "School home page",
+            "null.html",
             "en",
             published=True
             )
 
         self.school = Entity(
-            name="School of Medicine", 
+            name="School of Medicine",
             slug="medicine",
             auto_news_page=True,
             website=home_page
@@ -237,7 +241,7 @@ class NewsEventsEntityPagesViewsTests(TestCase):
         self.school.save()
         response = self.client.get('/previous-events/xxxx/')
         self.assertEqual(response.status_code, 404)
-        
+
     def test_news_and_events_main_forthcoming_events_url(self):
         self.school.save()
         response = self.client.get('/forthcoming-events/')
@@ -307,7 +311,7 @@ class NewsEventsEntityPagesViewsTests(TestCase):
         self.school.save()
         response = self.client.get('/previous-events/xxxx/')
         self.assertEqual(response.status_code, 404)
-        
+
     def test_news_and_events_no_auto_page_main_forthcoming_events_url(self):
         self.school.auto_news_page= False
         self.school.save()
@@ -380,7 +384,7 @@ class NewsEventsEntityPagesViewsTests(TestCase):
         self.school.save()
         response = self.client.get('/previous-events/xxxx/')
         self.assertEqual(response.status_code, 404)
-        
+
     def test_news_and_events_no_entity_home_page_main_forthcoming_events_url(self):
         self.school.website = None
         self.school.save()

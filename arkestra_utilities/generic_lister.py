@@ -1,3 +1,5 @@
+import six
+
 from datetime import datetime
 
 from django.db.models import Q
@@ -15,18 +17,23 @@ class ArkestraGenericLister(object):
 
     # menu_cues = menu.menu_dict
 
-    display = ""
-    list_format = "vertical"
-    layout = ""
-    limit_to = None
-    group_dates = True
-    item_format = "details image"
-    order_by = "date"
-    heading_level = PLUGIN_HEADING_LEVEL_DEFAULT
-    lists = None
+    # provided by generic plugin
     entity = None
-    place = None
-    person = None
+    layout = ""
+    item_format = "details image"
+    heading_level = PLUGIN_HEADING_LEVEL_DEFAULT
+    order_by = "date"
+    list_format = "vertical"
+    group_dates = True
+    limit_to = None
+
+
+    # may be required by in GenericList
+    group_dates = True # if set_show_when() is used
+
+    # also always required
+    display = ""    # what sets of items - i.e. models - to display
+    lists = None    # the lists created for each
     request = None
 
 
@@ -38,18 +45,19 @@ class ArkestraGenericLister(object):
         for kind, listclass in self.listkinds:
             if kind in self.display:
                 list_ = listclass(
+                    lister=self,
                     limit_to=self.limit_to,
                     entity=self.entity,
-                    place=self.place,
-                    person=self.person,
                     order_by=self.order_by,
                     item_format=self.item_format,
                     group_dates=self.group_dates,
                     list_format=self.list_format,
                     request=self.request
                     )
-
-                if list_.items or list_.other_items:
+                # we have to use list_.items_for_context, because list_.items
+                # could be a list rather than a queryset and exists() won't
+                # work
+                if list_.items_for_context.exists() or list_.other_items:
                     self.lists.append(list_)
 
         self.determine_layout_settings()
@@ -125,13 +133,8 @@ class ArkestraGenericList(object):
         self.create_item_collections()  # sets multiple attributes & self.items
         self.additional_list_processing()
 
-    # subclasses should provide their own versions of the following methods if required
 
-    def additional_list_processing(self):
-        # call additional methods as required
-        pass
-
-    # methods that always get called by additional_list_processing()
+    # methods that always get called by __init__()
 
     def set_items_for_context(self):
         # usually, the context for lists is the Entity we're publishing the
@@ -140,7 +143,7 @@ class ArkestraGenericList(object):
         # sets:     self.items_for_context
         self.items_for_context = self.model.objects.listable_objects()
         if MULTIPLE_ENTITY_MODE and self.entity:
-            self.items_for_context = items_for_context().filter(
+            self.items_for_context = self.items_for_context.filter(
                 Q(hosted_by=self.entity) | Q(publish_to=self.entity)
                 ).distinct()
 
@@ -155,16 +158,29 @@ class ArkestraGenericList(object):
         #
         self.items = self.items_for_context
 
+    def additional_list_processing(self):
+        # call additional methods as required
+        pass
+
     # the following methods are optional; if required, they will be called by
     # self.additional_list_processing()
 
     # methods for lists that filter and search
 
     def filter_on_search_terms(self):
+        # check each search_field in the filter
         for search_field in self.search_fields:
             field_name = search_field["field_name"]
+            
+            # if the field_name's in the URL
             if field_name in self.request.GET:
+                
+                # a query dict could contain multiple identical keys
+                # but we don't care, we'll only ever work with one
+                # and we will discard any others
                 query = self.request.GET[field_name]
+                
+                # record the URL's query string so we can put it back
                 search_field["value"] = query
 
                 q_object = Q()
@@ -173,8 +189,15 @@ class ArkestraGenericList(object):
                 q_object |= Q(**lookup)
                 self.items = self.items.distinct().filter(q_object)
 
+        # the hidden search fields are where we record query strings from
+        # django-easy-filter choices
         self.hidden_search_fields = []
-        for key in self.filter_set.fields:
+        
+        for field in self.filter_set.fields:
+            if isinstance(field, six.string_types):
+                key = field
+            else:    
+                key = field[0]
             if key not in [search_field["field_name"] for search_field in self.search_fields]:
                 for query_value in self.request.GET.getlist(key):
                     # the field_name and query_value populate some <input> elements

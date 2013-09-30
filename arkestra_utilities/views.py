@@ -23,10 +23,11 @@ class ArkestraGenericView(View):
             
         if not (entity.website and entity.website.published):
             raise Http404
-        
+
         if self.auto_page_attribute and not getattr(
             entity, 
-            self.auto_page_attribute
+            self.auto_page_attribute, 
+            None
         ):
             raise Http404            
 
@@ -50,9 +51,9 @@ class ArkestraGenericView(View):
             
             'lister': self.lister,
             }
-            )
+        )
 
         return render_to_response(
             "arkestra_utilities/entity_auto_page.html",
             context,
-            )
+        )
