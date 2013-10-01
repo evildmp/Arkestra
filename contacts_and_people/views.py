@@ -1,10 +1,15 @@
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from models import Person, Building, Membership, Entity
+
+from arkestra_utilities.navigation_pool import navigation_pool
+
 from links.link_functions import object_links
-from django.db.models import Q
+
+from models import Person, Building, Membership, Entity
+
 
 from django.conf import settings
 
@@ -28,16 +33,16 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
     meta = {
         "description": "Addresses, phone numbers, staff lists and other contact information",
         }
-        
+
     people, initials = entity.get_people_and_initials()
-    
+
     # only show pagetitle if there are people
     if people:
         pagetitle = u"Contacts & people"
     else:
         pagetitle = u""
 
-    # are there Key People to show?    
+    # are there Key People to show?
     if entity.get_key_people(): # if so we will show a list of people with key roles, then a list of other people
         people_list_heading = _(u"Also")
         # now remove the Key People from the people list
@@ -51,9 +56,9 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "field_label": "Name",
             "placeholder": "Surname or first name",
             "search_keys": [
-                "given_name__icontains", 
+                "given_name__icontains",
                 "surname__icontains",
-                ],    
+                ],
             },
         {
             "field_name": "role",
@@ -62,7 +67,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "search_keys": [
                 "member_of__role__icontains",
                 ]
-            }    
+            }
         ]
     people_qs = entity.get_people()
     search = False
@@ -73,7 +78,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             search_field["value"] = query
             if query:
                 search = True
-            
+
             q_object = Q()
             for search_key in search_field["search_keys"]:
                 lookup = {search_key: query}
@@ -91,7 +96,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "email": entity.email,
             "title": title,
             "meta": meta,
-            "location": entity.precise_location, 
+            "location": entity.precise_location,
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
             "full_address" : entity.get_full_address,
@@ -104,7 +109,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "search": search,
         },
         RequestContext(request),
-        )        
+        )
 
 def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), letter=None):
     """
@@ -153,12 +158,15 @@ def publications(request, slug):
         "contacts_and_people/publications.html",
         {"entity":entity,},
         RequestContext(request),
-    )        
+    )
+
+from arkestra_utilities.navigation_pool import navigation_pool
 
 def person(request, slug, active_tab=""):
     """
     Responsible for the person pages
     """
+    print navigation_pool.navigators
     person = get_object_or_404(Person, slug=slug, active=True)
     person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
@@ -177,11 +185,11 @@ def person(request, slug, active_tab=""):
         precise_location = None
     else:
         precise_location = person.precise_location
-    access_note = person.access_note     
-        
+    access_note = person.access_note
+
     if home_role:
         description = ", ".join((home_role.__unicode__(), entity.__unicode__()))
-        request.current_page = entity.get_website 
+        request.current_page = entity.get_website
     else:
         description = Entity.objects.base_entity().__unicode__()
         request.current_page = Entity.objects.base_entity().get_website
@@ -189,9 +197,9 @@ def person(request, slug, active_tab=""):
     meta = {
         "description": ": ".join((person.__unicode__(), description))
     }
-    
+
     if entity:
-        template = entity.get_template() 
+        template = entity.get_template()
     else: # no memberships, no useful information
         template = Entity.objects.base_entity().get_template()
 
@@ -221,21 +229,21 @@ def person(request, slug, active_tab=""):
             "meta_description_content": unicode(person) + " - publications",
         },
     }
-    
+
     # mark the active tab, if there is one
     if active_tab:
         try:
             tabs_dict[active_tab]["active"] = True
         except KeyError:
             raise http.Http404
-            
+
     # add tabs to the list of tabs
     tabs = []
     tabs.append(tabs_dict["default"])
-            
+
     if person.news_and_events.lists:
-        tabs.append(tabs_dict["news-and-events"])  
-              
+        tabs.append(tabs_dict["news-and-events"])
+
     if 'publications' in applications:
         try:
             if person.researcher and person.researcher.publishes:
@@ -255,14 +263,14 @@ def person(request, slug, active_tab=""):
         if len(tabs)==1:
             tabs=[]
 
-    meta_description_content = tabs_dict[active_tab or "default"]["meta_description_content"] 
+    meta_description_content = tabs_dict[active_tab or "default"]["meta_description_content"]
     if active_tab:
         active_tab = "_" + active_tab
-        
+
     meta = {
         "description": meta_description_content,
         }
-     
+
     # there's a problem here - pages such as Cardiff's /person/dr-kathrine-jane-craig/ don't
     # get the menu right - why?
     # print "****", request.auto_page_url, request.path, request.current_page, entity.get_website
@@ -276,7 +284,7 @@ def person(request, slug, active_tab=""):
             "template": template, # from entity
             "building": building,
             "email": email, # from person or please_contact
-            "precise_location": precise_location, # from person, or None 
+            "precise_location": precise_location, # from person, or None
             "contact": contact, # from person or please_contact
             "phone": phone,
             "full_address" : person.get_full_address,
@@ -294,7 +302,7 @@ def person(request, slug, active_tab=""):
 def place(request, slug, active_tab=""):
     """
     Receives active_tab from the slug.
-    
+
     The template receives "_" + active_tab to identify the correct template (from includes).
     """
     place = Building.objects.get(slug=slug)
@@ -324,7 +332,7 @@ def place(request, slug, active_tab=""):
             "meta_description_content": "What's on at " + place.get_name(),
         },
     }
-    
+
     # mark the active tab, if there is one
     if active_tab:
         tabs_dict[active_tab]["active"] = True
@@ -337,8 +345,8 @@ def place(request, slug, active_tab=""):
         or (place.access_and_parking and place.access_and_parking.cmsplugin_set.all()):
         tabs.append(tabs_dict["getting-here"])
     if place.events:
-        tabs.append(tabs_dict["events"])  
-    
+        tabs.append(tabs_dict["events"])
+
     if not active_tab:
         # find out what to add to the url for this tab
         active_tab=tabs[0]["address"]
@@ -348,10 +356,10 @@ def place(request, slug, active_tab=""):
     if len(tabs)==1:
         tabs=[]
 
-    meta_description_content = tabs_dict[active_tab or "about"]["meta_description_content"] 
+    meta_description_content = tabs_dict[active_tab or "about"]["meta_description_content"]
     if active_tab:
         active_tab = "_" + active_tab
-        
+
     meta = {
         "description": meta_description_content,
         }
@@ -381,8 +389,8 @@ def place(request, slug, active_tab=""):
         "meta": meta,
         },
         RequestContext(request),        )
-        
-        
+
+
 def ajaxGetMembershipForPerson(request):
     #Which person was/is selected
     try:
@@ -393,7 +401,7 @@ def ajaxGetMembershipForPerson(request):
     try:
         displayrole_id = int( request.GET.get("displayrole_id") )
     except ValueError:
-        displayrole_id = 0      
+        displayrole_id = 0
     #If editing a current membership
     try:
         membership_id = int( request.GET.get("membership_id") )
@@ -419,4 +427,4 @@ def ajaxGetMembershipForPerson(request):
                                      unicode(membership.entity) + ' - ' + unicode(membership.role) + \
                                  '</option>')
     #Done
-    return response        
+    return response
