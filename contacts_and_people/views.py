@@ -4,8 +4,6 @@ import django.http as http
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
-from arkestra_utilities.navigation_pool import navigation_pool
-
 from links.link_functions import object_links
 
 from models import Person, Building, Membership, Entity
@@ -160,13 +158,11 @@ def publications(request, slug):
         RequestContext(request),
     )
 
-from arkestra_utilities.navigation_pool import navigation_pool
 
 def person(request, slug, active_tab=""):
     """
     Responsible for the person pages
     """
-    print navigation_pool.navigators
     person = get_object_or_404(Person, slug=slug, active=True)
     person.links = object_links(person)
     # we have a home_role, but we should also provide a role, even where it's good enough to give us an address
