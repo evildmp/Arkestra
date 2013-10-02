@@ -206,12 +206,6 @@ def person(request, slug, active_tab=""):
             "address": "",
             "meta_description_content": person,
         },
-        "news-and-events": {
-            "tab": "news-and-events",
-            "title": "Related news & events",
-            "address": "news-and-events",
-            "meta_description_content": unicode(person) + " - related news & events",
-        },
         "research": {
             "tab": "research",
             "title": "Research",
@@ -236,9 +230,6 @@ def person(request, slug, active_tab=""):
     # add tabs to the list of tabs
     tabs = []
     tabs.append(tabs_dict["default"])
-
-    if person.news_and_events.lists:
-        tabs.append(tabs_dict["news-and-events"])
 
     if 'publications' in applications:
         try:

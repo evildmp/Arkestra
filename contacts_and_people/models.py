@@ -754,17 +754,6 @@ class Person(PersonLite, CommonFields):
             raise Exception # TODO: raise a more appropriate exception
         return super(Person, self).save(*args, **kwargs)
 
-    @cached_property
-    def news_and_events(self):
-        # invoke the lister to find out more
-        lister = news_and_events.lister.NewsAndEventsPersonLister(
-            person=self,
-            entity=None,
-            order_by="date",
-            item_format="details image",
-            )
-        return lister
-
 
 class Teacher(models.Model):
     person = models.ForeignKey(Person, related_name = 'teacher', unique=True, blank = True, null = True)
