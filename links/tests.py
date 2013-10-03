@@ -14,44 +14,44 @@ from contacts_and_people.models import Site, Person, Building, Entity, Membershi
 from contacts_and_people.tests import EntityTestObjectsMixin
 
 class SearchTests(EntityTestObjectsMixin, TestCase):
-    
+
     def test_entity_description(self):
-        
+
         link_to_school = Link(
             destination_content_type = ContentType.objects.get_for_model(self.school),
             destination_object_id = self.school.id,
             )
-        
+
         self.assertEquals(link_to_school.text(), self.school.name)
 
         # home_page = create_page("title", "arkestra.html", "en", menu_title=None, slug=None, apphook=None, redirect=None, meta_description="Description")
-        # 
-        # 
+        #
+        #
         # self.assertEquals(link_to_school.description(), "Description")
 
         link_to_building = Link(
             destination_content_type = ContentType.objects.get_for_model(self.main_building),
             destination_object_id = self.main_building.id,
             )
-        
-        self.assertEquals(link_to_building.text(), self.main_building.get_name())
+
+        self.assertEquals(link_to_building.text(), self.main_building.identifier())
         self.assertEquals(link_to_building.description(), u"St Mary's Street, Cardiff")
 
         """
-        Currently autocomplete searches on description, but this isn't good enough. 
-        
+        Currently autocomplete searches on description, but this isn't good enough.
+
         Sometimes when searching in the admin, we need to return useful information for the user, such as warnings about some of the objects.
-        
+
         However, searching on the front end should not necessarily return warnings in the same way.
-        
+
         So we should have an "admin_description" (or something) attribute on which to search as well.
-        """        
+        """
 class ExternalLinkTests(TestCase):
-    
+
     def test_good_url(self):
         # http://vurt.org/ should be accepted without a murmur
         self.assertEquals([], check_urls("http://vurt.org/"))
-                    
+
     def test_unknown_scheme(self):
         # an unknown urlscheme should raise a forms.ValidationError
         self.assertRaisesMessage(
@@ -60,7 +60,7 @@ class ExternalLinkTests(TestCase):
             check_urls,
             "bogusurlscheme://vurt.org/"
             )
-        
+
     def test_missing_scheme(self):
         # a missing urlscheme should raise a forms.ValidationError
         self.assertRaisesMessage(
@@ -69,7 +69,7 @@ class ExternalLinkTests(TestCase):
             check_urls,
             "vurt.org/"
             )
-        
+
     def test_host_not_found(self):
         # a hostname we can't find should raise a forms.ValidationError
         self.assertRaisesMessage(
@@ -85,12 +85,12 @@ class ExternalLinkTests(TestCase):
             check_urls("http://vurt.org/zxcvbnmmnbvcxz/")[0],
             {'message': 'Warning: the link http://vurt.org/zxcvbnmmnbvcxz/ appears not to work. Please check that it is correct.', 'level': 30}
 )
-        
+
     # def test_does_not_match(self):
     #     a link we can't open shouuld return a message
     #     not sure how this can be tested
     #     "Warning: your URL " + url + " doesn't match the site's, which is: " + url_test.geturl()
-        
+
     def test_mail_to(self):
         # a link we can't open should return a message
         self.assertDictEqual(
@@ -104,7 +104,7 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
 
     def test_links_plugin_item(self):
         """
-        test the output of the link set plugin 
+        test the output of the link set plugin
         """
         placeholder = Placeholder(slot=u"some_slot")
         placeholder.save() # a good idea, if not strictly necessary
@@ -117,7 +117,7 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
         # get the corresponding plugin instance
         instance = plugin.get_plugin_instance()[1]
 
-       
+
         # add an item to the plugin
         item1 = GenericLinkListPluginItem(
             plugin=plugin,
@@ -125,19 +125,19 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
             destination_object_id = self.school.id,
             active=False,
             )
-        item1.save() 
+        item1.save()
         self.assertEquals(
             instance.render({}, plugin, placeholder),
             {}
-        )  
-        
+        )
+
         # now the item is active
         item1.active=True
-        item1.save() 
+        item1.save()
         self.assertEqual(
             instance.render({}, plugin, placeholder)["links"],
             [item1]
-        )  
+        )
 
         # add a second image to the plugin
         item2 = GenericLinkListPluginItem(
@@ -149,21 +149,21 @@ class LinkListPluginTests(EntityTestObjectsMixin, TestCase):
         self.assertListEqual(
             instance.render({}, plugin, placeholder)["links"],
             [item1, item2]
-        )  
+        )
 
         # now the ordering should be reversed
         item1.inline_item_ordering=1
-        item1.save() 
+        item1.save()
         self.assertListEqual(
             instance.render({}, plugin, placeholder)["links"],
             [item2, item1]
-        )  
+        )
 
 
 class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
     def test_carousel_plugin(self):
         """
-        test the output of the link set plugin 
+        test the output of the link set plugin
         """
         img = Image(_width=100, _height=100)
         img.save()
@@ -173,8 +173,8 @@ class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
 
         # add the plugin
         plugin = add_plugin(
-            placeholder, 
-            u"CarouselPluginPublisher", 
+            placeholder,
+            u"CarouselPluginPublisher",
             u"en",
             width = 1000.0
         )
@@ -182,8 +182,8 @@ class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
 
         # get the corresponding plugin instance
         instance = plugin.get_plugin_instance()[1]
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
-       
+        self.assertEquals(instance.render({}, plugin, placeholder), {})
+
         # add an item to the plugin
         item1 = CarouselPluginItem(
             plugin=plugin,
@@ -193,13 +193,13 @@ class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
             active=False,
             image_id=img.id,
             )
-        item1.save() 
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
+        item1.save()
+        self.assertEquals(instance.render({}, plugin, placeholder), {})
 
         # now the item is active
         item1.active=True
-        item1.save() 
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
+        item1.save()
+        self.assertEquals(instance.render({}, plugin, placeholder), {})
 
         # add a second image to the plugin
         item2 = CarouselPluginItem(
@@ -209,27 +209,26 @@ class CarouselPluginTests(EntityTestObjectsMixin, TestCase):
             link_title=u"item1 link title",
             image_id=img.id,
             )
-        item2.save()    
+        item2.save()
         self.assertListEqual(
-            instance.render({}, plugin, placeholder)["segments"], 
-            [item1, item2] 
+            instance.render({}, plugin, placeholder)["segments"],
+            [item1, item2]
         )
-        
+
         # now the ordering should be reversed
         item1.inline_item_ordering=1
-        item1.save() 
+        item1.save()
         rendered_plugin = instance.render({}, plugin, placeholder)
         self.assertListEqual(
-            rendered_plugin["segments"], 
-            [item2, item1] 
+            rendered_plugin["segments"],
+            [item2, item1]
         )
-        
+
         # check size calculations
         self.assertEqual(
-            rendered_plugin["size"], 
-            (98,65) 
+            rendered_plugin["size"],
+            (98,65)
         )
         # if we delete the image the items should be deleted too
         img.delete()
-        self.assertEquals(instance.render({}, plugin, placeholder), {}) 
-        
+        self.assertEquals(instance.render({}, plugin, placeholder), {})

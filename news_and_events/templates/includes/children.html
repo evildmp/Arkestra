@@ -14,10 +14,10 @@
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
-					{% endif %}	
+					{% endif %}
 					{% ifnotequal event.summary child_event.summary %}<div class = "summary">{{ child_event.summary }}</div>{% endifnotequal %}
 				    <div class = "date">{{ child_event.get_dates }}{% if child_event.get_times %}, {{ child_event.get_times|safe }}{% endif %}</div>
-					{% ifnotequal child_event.building event.building %}<a href="{{child_event.building.get_absolute_url}}">{{ child_event.building.get_name }}</a>{% endifnotequal %}
+					{% ifnotequal child_event.building event.building %}<a href="{{child_event.building.get_absolute_url}}">{{ child_event.building.identifier }}</a>{% endifnotequal %}
 					{% if child_event.precise_location %}
 						{% ifnotequal child_event.precise_location event.precise_location %}{{ child_event.precise_location }}{% endifnotequal %}
 					{% endif %}
@@ -34,7 +34,7 @@
     		{% else %}
     			<h{{ IN_BODY_HEADING_LEVEL }}>Previous sessions</h{{ IN_BODY_HEADING_LEVEL }}>
     		{% endif %}
-		
+
 		<ul class = "vertical plugin-list">
 		    {% for child_event in event.get_children_previous %}
     			<li>
@@ -42,7 +42,7 @@
 	    				<strong>{{child_event.title}}</strong>
 					{% else %}
 						<a href= "{{child_event.get_absolute_url}}"><strong>{{child_event}}</strong></a>
-					{% endif %}	
+					{% endif %}
 					{% ifnotequal event.summary child_event.summary %}<div class = "summary">{{ child_event.summary }}</div>{% endifnotequal %}
 				    {% if event.series %}<div class = "date">{{ child_event.get_dates }}{% if child_event.get_times %}, {{ child_event.get_times|safe }}{% endif %}</div>{% endif %}
     			</li>

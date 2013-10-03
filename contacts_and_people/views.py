@@ -304,19 +304,19 @@ def place(request, slug, active_tab=""):
             "tab": "map",
             "title": "Map",
             "address": "map",
-            "meta_description_content": "Map for " + place.get_name(),
+            "meta_description_content": "Map for " + place.identifier(),
         },
         "getting-here": {
             "tab": "getting-here",
             "title": "Getting here",
             "address": "getting-here",
-            "meta_description_content": "How to get to " + place.get_name(),
+            "meta_description_content": "How to get to " + place.identifier(),
         },
         "events": {
             "tab": "events",
             "title": "What's on here",
             "address": "events",
-            "meta_description_content": "What's on at " + place.get_name(),
+            "meta_description_content": "What's on at " + place.identifier(),
         },
     }
 

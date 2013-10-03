@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
 from contacts_and_people.models import Site, Building
 
@@ -61,8 +62,19 @@ class BuildingGetPostalAddressTests(TestCase):
             building.get_postal_address
         )
 
+
 class BuildingTests(TestCase):
     """Other tests of smaller methods etc"""
+    def test_unicode(self):
+        building = Building(
+            name="Main Building",
+            site=Site()
+            )
+        self.assertEqual(
+            building.__unicode__(),
+            u"%s (%s)" % (building.identifier(), unicode(building.site))
+            )
+
     def test_has_map_is_always_boolean(self):
         building = Building(
             latitude=None,
@@ -82,3 +94,30 @@ class BuildingTests(TestCase):
         building.longitude = 1
         building.latitude = 1
         self.assertTrue(building.has_map())
+
+    def test_reverse_url(self):
+        self.assertEqual(
+            reverse("contact-place", kwargs={"slug": "some-slug"}),
+            "/place/some-slug/"
+            )
+
+    def test_save(self):
+        site = Site(
+            site_name="Main site",
+            post_town="Cardiff",
+            country="UK",
+            )
+        site.save()
+        building = Building(
+            name="Main Building",
+            site=site,
+            slug="main-building"
+            )
+        building.save()
+        # slug has been manually-set
+        self.assertEqual(building.slug, "main-building")
+
+        # a blank slug will be automatically regenerated
+        building.slug = ""
+        building.save()
+        self.assertEqual(building.slug, "main-building-main-site")

@@ -491,7 +491,7 @@ class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     list_display = ('identifier', 'site', 'has_map')
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
-    address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site'),}),)
+    address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site', 'slug'),}),)
     details_fieldsets = (('', {'fields': ('summary', 'image',),}),)
     description_fieldsets = (('', {
         'fields': ('description',),

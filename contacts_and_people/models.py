@@ -18,6 +18,7 @@ from mptt.managers import TreeManager
 from filer.fields.image import FilerImageField
 
 from arkestra_utilities.mixins import URLModelMixin
+from arkestra_utilities.text import concatenate
 from arkestra_utilities.settings import (
     MULTIPLE_ENTITY_MODE, ARKESTRA_BASE_ENTITY, DEFAULT_NEWS_PAGE_TITLE,
     DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE,
@@ -59,10 +60,10 @@ class Building(models.Model):
     # the Building model should really be named Place
     objects = BuildingManager()
     name = models.CharField(max_length=100, null=True, blank=True)
-    number = models.CharField(max_length=10, null=True, blank=True)
+    number = models.CharField(max_length=10, blank=True)
     street = models.CharField(
         "Street name", max_length=100,
-        null=True, blank=True
+        blank=True
         )
     additional_street_address = models.CharField(
         help_text=u"If required",
@@ -73,7 +74,7 @@ class Building(models.Model):
         )
     slug = models.SlugField(
         blank=True,
-        help_text=u"Please leave blank/amend only if required",
+        help_text=u"Leave blank to regenerate; amend only if required",
         max_length=255, null=True, unique=True)
     image = FilerImageField(
         on_delete=models.SET_NULL,
@@ -114,6 +115,9 @@ class Building(models.Model):
         ordering = ('site', 'street', 'number', 'name',)
 
     def identifier(self):
+        """
+        A text-friendly way of referring to a building
+        """
         if self.name:
             return self.name
         elif self.street:
@@ -128,21 +132,10 @@ class Building(models.Model):
         return reverse("contact-place", kwargs={"slug": self.slug})
 
     def save(self):
-        if not self.slug or self.slug == '':
+        # if the slug is blank, regenerate it
+        if not self.slug:
             self.slug = slugify(self.__unicode__())
         super(Building, self).save()
-
-    def get_name(self):
-        """
-        Assembles a half-decent name for a building
-        """
-        if self.name:
-            identifier = self.name
-        elif self.street:
-            identifier = self.number + " " + self.street
-        else:
-            identifier = unicode(self.site) + ": " + self.postcode
-        return identifier
 
     @property
     def get_postal_address(self):
@@ -153,19 +146,21 @@ class Building(models.Model):
         address = []
         if self.name:
             address.append(self.name)
-        if self.number:
-            address.append(self.number + " " + self.street)
-            # because building numbers and street names go on the same line
-        elif self.street:
-            address.append(self.street)
+        if self.number or self.street:
+            address.append(
+                concatenate(
+                    strings=[self.number, self.street],
+                    with_string=" "
+                    )
+                )
         if self.additional_street_address:
             address.append(self.additional_street_address)
         # there will always be a site.post_town; no need to check
-        fragments = (
-            item for item in (self.site.post_town, self.postcode)
-            if item
+        fragments = concatenate(
+            strings=[self.site.post_town, self.postcode],
+            with_string=" "
             )
-        address.append(" ".join(fragments))
+        address.append(fragments)
         return address
 
     def has_map(self):

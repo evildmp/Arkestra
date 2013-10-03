@@ -14,7 +14,7 @@ class PersonWrapper(LinkWrapper):
 
     def title(self):
         return self.obj.__unicode__()
-        
+
     def short_text(self):
         return u"%s %s" % (self.obj.given_name, self.obj.surname)
 
@@ -44,7 +44,7 @@ class UserWrapper(LinkWrapper):
 
     def title(self):
         return "%s: %s" %(self.obj.get_full_name(), self.obj.__unicode__())
-        
+
     def short_text(self):
         return u"%s %s" % (self.obj.first_name, self.obj.last_name)
 
@@ -86,7 +86,7 @@ class EntityWrapper(LinkWrapper):
         return unicode(self.obj)# + ": " + self.link_attributes[0]
 
     def short_text(self):
-        return unicode(self.obj.short_name)      
+        return unicode(self.obj.short_name)
 schema.register_wrapper([models.Entity],EntityWrapper)
 
 
@@ -100,7 +100,7 @@ class BuildingWrapper(LinkWrapper):
         return "Places"
 
     def text(self):
-        return self.obj.get_name()
+        return self.obj.identifier()
 
     def thumbnail_url(self):
         try:
