@@ -61,31 +61,6 @@ class SiteTests(TestCase):
             "/place/main-building-main-site/"
             )
 
-class BuildingTests(TestCase):
-    """for the Building model"""
-    def test_identifier_with_name(self):
-        building = Building(
-            name="Main Building",
-            street="St Mary's Street",
-            number="37a",
-            postcode="CF5 1QE",
-            )
-        self.assertEqual(building.identifier(), "Main Building")
-
-    def test_identifier_with_no_name(self):
-        building = Building(
-            street="St Mary's Street",
-            number="37a",
-            postcode="CF5 1QE",
-            )
-        self.assertEqual(building.identifier(), "37a St Mary's Street")
-
-    def test_identifier_with_no_name_or_street(self):
-        building = Building(
-            postcode="CF5 1QE",
-            )
-        self.assertEqual(building.identifier(), "CF5 1QE")
-
 
 class EntityManagerTests(TestCase):
     def setUp(self):
