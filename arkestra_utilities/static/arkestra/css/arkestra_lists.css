@@ -1,9 +1,9 @@
-/* lists */	
+/* lists */
 
 /* we really need to fix some of these styles. the idea of a div.plugin ul li is quite out of date now and a nuisance */
 
-ul, ol, dl  {margin-left: 0; padding-left: 0;}	
-ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}	
+ul, ol, dl  {margin-left: 0; padding-left: 0;}
+ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}
 
 ul	{margin-bottom: .2em;}
 ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
@@ -31,26 +31,26 @@ ul.plugin-list .title   {font-weight: bold;}
 ul.plugin-list.vertical li {list-style: none; padding-top: 0.5em; padding-bottom: 0.5em;}
 ul.plugin-list.vertical li:first-child {padding-top: 0;}
 div ul.plugin-list.vertical li.grouper li.important {
-    padding: .5em; 
+    padding: .5em;
     margin: 1px 0 1em;
-    background-color: #eee; 
+    background-color: #eee;
     }
 
 /* groupers in plugin lists */
 ul.plugin-list li.grouper {font-weight: bold;}
 ul.plugin-list li.grouper ul {
-    font-weight: normal; 
+    font-weight: normal;
     padding-left: 0;
     }
 
 
-/* list for links to other items, (e.g. news and events) */ 
+/* list for links to other items, (e.g. news and events) */
 ul.other-items  {
     border-top: 1px solid #999;
     padding-top: 0.5em;
+    clear: both;
     }
 
-{ margin-top: -5mm }
 /* "fancy" means links have link icons" - obviously a <p> is not really a list, but it's being displayed as a list item */
 
 ul.other-items li.main {font-weight: bold;}
@@ -79,7 +79,7 @@ ul.plugin,
         list-style:none;
     }
 
-ul.linkIcon li, 
+ul.linkIcon li,
 ul.plugin_list li,
 .fancy li   {
     list-style:none;
@@ -98,32 +98,32 @@ div.plugin ul li {
 div.plugin li.pluslistitem   {
     clear: right;
     padding: 0 0 .4em;
-}    
+}
 
 .plugin li    {
-    line-height: 1.25; 
+    line-height: 1.25;
     padding-bottom: .6em;
     clear: both;
     }
 
 ul.none {list-style-type: none;}
 
-ul.linkIcon li, 
-.fancy li,  
+ul.linkIcon li,
+.fancy li,
 li.key   {
     background: url(/media/images/hand-right.png) left .5ex no-repeat;
     padding-left: 30px;
     display: block;
     }
 
-.fancy li li,  
+.fancy li li,
 li.key li    {
     background: none;
     padding-left: 20px;
     display: block;
     }
-    
-    
+
+
 li.key  {font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;} */
 
 
@@ -209,7 +209,7 @@ ul.boxed li {
     padding: .5em;
     margin: 0 0 1em;
     }
-    
+
 ul.boxed li li {border: none;}
 ul.boxed li dl {margin:0;}
 
