@@ -320,6 +320,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         on_delete=models.SET_NULL,
         help_text=u"Select the Page that is the home page of this Entity \
         (leave blank if this is an external Entity)",)
+
     auto_news_page = models.BooleanField(
         u"Publish an automatic news & events page",
         default=False,
@@ -335,7 +336,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
 
     auto_contacts_page = models.BooleanField(
-        u"Publish an automatic contacts & people", default=False,
+        u"Publish an automatic contacts & people page", default=False,
         )
     contacts_page_menu_title = models.CharField(
         u"Title",
@@ -349,7 +350,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         )
 
     auto_vacancies_page = models.BooleanField(
-        u"Publish an automatic vacancies & studentships",
+        u"Publish an automatic vacancies & studentships page",
         default=False,
         )
     vacancies_page_menu_title = models.CharField(

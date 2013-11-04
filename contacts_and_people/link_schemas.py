@@ -87,7 +87,9 @@ class EntityWrapper(LinkWrapper):
 
     def short_text(self):
         return unicode(self.obj.short_name)
-schema.register_wrapper([models.Entity],EntityWrapper)
+
+
+schema.register_wrapper([models.Entity], EntityWrapper)
 
 
 class BuildingWrapper(LinkWrapper):
