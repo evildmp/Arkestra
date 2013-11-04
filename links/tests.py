@@ -10,16 +10,21 @@ from filer.models.imagemodels import Image
 from links.models import Link, GenericLinkListPluginItem, CarouselPluginItem
 from links.admin import check_urls
 
-from contacts_and_people.models import Site, Person, Building, Entity, Membership
+from contacts_and_people.models import (
+    Site, Person, Building, Entity, Membership
+    )
 from contacts_and_people.tests import EntityTestObjectsMixin
+
 
 class SearchTests(EntityTestObjectsMixin, TestCase):
 
     def test_entity_description(self):
 
         link_to_school = Link(
-            destination_content_type = ContentType.objects.get_for_model(self.school),
-            destination_object_id = self.school.id,
+            destination_content_type=ContentType.objects.get_for_model(
+                self.school
+                ),
+            destination_object_id=self.school.id,
             )
 
         self.assertEquals(link_to_school.text(), self.school.name)
