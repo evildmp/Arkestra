@@ -56,7 +56,7 @@ form.filter-form input {width: 100%}
     background-color: white;
     color: #505050;
 }
-</style>   
+</style>
 {% endaddtoblock %}
 {% for list in lister.lists %}
     <div class="row columns3">
@@ -66,26 +66,26 @@ form.filter-form input {width: 100%}
                     <div>
                         <label for="{{ field.field_name }}">
                         	<span class="label-text">{{ field.field_label }}:</span>
-                        </label>                  
-                
-                        <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}"> 
+                        </label>
+
+                        <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}">
                     </div>
-                {% endfor %}    
+                {% endfor %}
                 <input type="submit" value="Apply">
                 {% for field in list.hidden_search_fields %}
-                    <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}"> 
-                {% endfor %}    
+                    <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}">
+                {% endfor %}
             </form>
             {% with list.itemfilter.qs as items %}
-                {{ list.itemfilter }} 
+                {{ list.itemfilter }}
 			    {% include "arkestra/generic_list_other_items.html" %}
-       
-        
+
+
         </div>
     	<div class = "column firstcolumn doublecolumn">
             {% autopaginate items 8 %}
 			{{ list.itemfilter.qs.count }} items found
-            {% paginate %}  
+            {% paginate %}
                     <ul class="{{ lister.list_format}} plugin-list">
                         {% for item in items %}
                             {% include list.item_template %}
@@ -93,5 +93,5 @@ form.filter-form input {width: 100%}
                     </ul>
             {% endwith %}
         </div>
-    </div>    
+    </div>
 {% endfor %}

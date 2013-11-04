@@ -1,6 +1,5 @@
 {% load placeholder_tags %}
 {% render_placeholder intro_page_placeholder %}
-
 {% if lister.lists %}
     <div class="{{ lister.row_class }} {{ lister.list_format }}">
 
@@ -26,15 +25,14 @@
 						    	</li>
     						{% endfor %}
 
-    			    	{% else %}
+                        {% else %}
 
-    						{% for item in list.items %}
-    							{% include list.item_template %}
-    						{% endfor %}
+                        	{% for item in list.items %}
+                        		{% include list.item_template %}
+                        	{% endfor %}
 
-    					{% endif %}
+                        {% endif %}
 					</ul>
-
 					{% include "arkestra/generic_list_other_items.html" %}
     			</div>
 

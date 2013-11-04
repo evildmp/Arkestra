@@ -32,9 +32,10 @@ DEFAULT_PUBLICATIONS_PAGE_TITLE = getattr(settings, "DEFAULT_PUBLICATIONS_PAGE_T
 
 # How many items should be displayed on main news & events pages,
 # such as /news-and-events
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 6)
+LISTER_MAIN_PAGE_LIST_LENGTH = getattr(settings, "LISTER_MAIN_PAGE_LIST_LENGTH", 6)
 
-# the age in days at which items can be considered to have expired and should be archived
+# the age in days at which items can be considered to have expired and should be
+# archived
 AGE_AT_WHICH_ITEMS_EXPIRE = getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 180)
 
 # in All forthcoming events lists, gather top events  together

@@ -10,7 +10,7 @@ from menus.menu_pool import menu_pool
 from menus.base import Modifier, Menu
 from datetime import datetime
 
-from arkestra_utilities.settings import MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH, ARKESTRA_MENUS
+from arkestra_utilities.settings import LISTER_MAIN_PAGE_LIST_LENGTH, ARKESTRA_MENUS
 
 try:
     # pre-2.4

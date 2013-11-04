@@ -1,9 +1,9 @@
 {% if lister.other_items %}
-
 	<ul class="close other-items icons">
 		{% for item in lister.other_items %}
-			<li class="{{ item.cls }}"><a href = "{{item.link}}">{{item.title|capfirst }}</a></li>
+			<li class="{{ item.css_class }}">
+                <a href = "{{item.link}}">{{item.title|capfirst }}</a></li>
 		{% endfor %}
-
-{% endif %}      
+    </ul>
+{% endif %}
 
