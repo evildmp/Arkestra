@@ -2,7 +2,6 @@ from django.db import models
 
 from cms.models import CMSPlugin
 
-
 from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
@@ -10,20 +9,19 @@ from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LE
 
 from contacts_and_people.models import Entity, Person #, default_entity_id
 
-from managers import VacancyManager, StudentshipManager
 
-class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin):
+class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
     class Meta:
         abstract = True
-        ordering = ['-date']  
+        ordering = ['date']
 
     date = models.DateField()
-    
+
     description = models.TextField(null=True, blank=True,
         help_text="No longer used")
 
     def link_to_more(self):
-        return self.get_hosted_by.get_auto_page_url("vacancies-and-studentships")        
+        return self.get_hosted_by.get_auto_page_url("vacancies-and-studentships")
 
     @property
     def get_when(self):
@@ -37,33 +35,31 @@ class CommonVacancyAndStudentshipInformation(ArkestraGenericModel, URLModelMixin
                 return "Top news"
         except AttributeError:
             pass
-        
+
         date_format = "F Y"
         get_when = nice_date(self.date, date_format)
         return get_when
 
 
-class Vacancy(CommonVacancyAndStudentshipInformation):
+class Vacancy(VacancyStudentshipBase):
     url_path = "vacancy"
-    
+
     job_number = models.CharField(max_length=9)
     salary = models.CharField(blank=True, max_length=255, null=True,
         help_text=u"Please include currency symbol")
-    
-    objects = VacancyManager()
 
-    class Meta:
-        verbose_name_plural = "Vacancies"
-        
+    class Meta(VacancyStudentshipBase.Meta):
+        verbose_name_plural = "vacancies"
 
-class Studentship(CommonVacancyAndStudentshipInformation):
+
+class Studentship(VacancyStudentshipBase):
     url_path = "studentship"
-    
+
     supervisors = models.ManyToManyField(Person, null=True, blank=True,
         related_name="%(class)s_people")
 
-    objects = StudentshipManager()
-
+    class Meta:
+        verbose_name_plural = "studentships"
 
 class VacanciesPlugin(CMSPlugin, ArkestraGenericPluginOptions):
     DISPLAY = (
@@ -72,7 +68,7 @@ class VacanciesPlugin(CMSPlugin, ArkestraGenericPluginOptions):
         (u"studentships", u"Studentships only"),
     )
     display = models.CharField(max_length=25,choices=DISPLAY, default="vacancies & studentships")
-    # entity = models.ForeignKey(Entity, null=True, blank=True, 
+    # entity = models.ForeignKey(Entity, null=True, blank=True,
     #     help_text="Leave blank for autoselect", related_name="%(class)s_plugin")
     vacancies_heading_text = models.CharField(max_length=25, default="Vacancies")
     studentships_heading_text = models.CharField(max_length=25, default="Studentships")
