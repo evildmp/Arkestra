@@ -3,11 +3,7 @@ from datetime import datetime
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
-from django.db.models import ForeignKey
-from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext_lazy as _
-
-from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
 from treeadmin.admin import TreeAdmin
 
@@ -25,7 +21,6 @@ from contacts_and_people.models import Entity
 
 class NewsAndEventsAdmin(GenericModelAdmin):
     exclude = ('content', 'url')
-    search_fields = ['title',]
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     related_search_fields = ['hosted_by', 'external_url',]
@@ -34,10 +29,6 @@ class NewsAndEventsAdmin(GenericModelAdmin):
             }
     list_max_show_all = 1000
     list_per_page = 1000
-
-    def _media(self):
-        return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
-    media = property(_media)
 
 # this or something like it can be enabled when the
 # autocomplete-stop-sworking-after-adding-an-inlin
@@ -77,20 +68,16 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
     form = NewsArticleForm
     list_filter = ('date', HostedByFilter)
     read_only_fields = ('sticky_until')
-    filter_horizontal = (
-        'please_contact',
-        'publish_to',
-        )
     # inlines = [MembershipInline,]
     fieldset_stickiness = ('How this item should behave in lists', {'fields': ('sticky_until', 'is_sticky_everywhere',)})
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],),}),
-            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"], fieldset_stickiness)}),
-            ('Body', {'fieldsets': (fieldsets["body"],)}),
-            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
-            ('Related people', {'fieldsets': (fieldsets["people"],)}),
-            ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
+        ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],),}),
+        ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"], fieldset_stickiness)}),
+        ('Body', {'fieldsets': (fieldsets["body"],)}),
+        ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
+        ('Related people', {'fieldsets': (fieldsets["people"],)}),
+        ('Links', {'inlines': (ObjectLinkInline,),}),
+        ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
 class EventForm(NewsAndEventsForm):
@@ -101,16 +88,13 @@ class EventForm(NewsAndEventsForm):
         # 1. obtain missing information from parent
         parent = self.cleaned_data['parent']
         if parent:
-            print "admin.clean thinks this has a parent:", parent
             # the many-to-many fields can be inherited
             m2m_fields = ['publish_to',  ] #organisers ,'enquiries', 'registration_enquiries',
             for field_name in m2m_fields:
-                print "checking parent field_content"
                 self.cleaned_data[field_name] = self.cleaned_data[field_name] or list(getattr(parent,field_name).all())
             # other fields
             attribute_list = ['building', 'precise_location', 'hosted_by', 'access_note']
             for field_name in attribute_list:
-                print "checking which attributes to inherit:", field_name
                 self.cleaned_data[field_name] = self.cleaned_data[field_name] or getattr(parent,field_name)
             # if parent is single day event, and this one has no date set, inherit the parent's
             if not self.cleaned_data["date"]:

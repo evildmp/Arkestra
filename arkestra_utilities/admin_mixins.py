@@ -61,12 +61,74 @@ class HostedByFilter(SimpleListFilter):
         if self.value() == 'nobody':
             return queryset.exclude(hosted_by__in=entities)
 
-class GenericModelAdmin(AutocompleteMixin, SupplyRequestMixin, ModelAdminWithTabsAndCMSPlaceholder):
+fieldsets = {
+    'basic': ('', {'fields': ('title',  'short_title', 'summary')}),
+    'host': ('', {'fields': ('hosted_by',)}),
+    'image': ('', {'fields': ('image',)}),
+    'publishing_control': ('Publishing control', {'fields': ('published', 'in_lists')}),
+
+    'body':  ('', {
+        'fields': ('body',),
+        'classes': ('plugin-holder', 'plugin-holder-nopage',)
+        }),
+
+    'where_to_publish': ('', {'fields': ('publish_to',)}),
+
+    'people': ('People to contact about this item', {'fields': ('please_contact',)}),
+
+    'date': ('', {'fields': ('date',)}),
+    'importance': ('', {'fields': ('importance',)}),
+
+    'url': ('If this is an external item', {'fields': ('external_url', 'input_url',)}),
+    'slug': ('If this is an internal item', {'fields': ('slug',)}),
+
+    'location': ('', {'fields': ('precise_location', 'access_note',)}),
+    'address_report': ('', {'fields': ('address_report',)}),
+    'email': ('', {'fields': ('email',)}),
+    }
+
+
+class GenericModelAdmin(
+    AutocompleteMixin,
+    SupplyRequestMixin,
+    ModelAdminWithTabsAndCMSPlaceholder
+    ):
+
+    tabs = (
+        ['Basic', {
+            'fieldsets': (
+                fieldsets["basic"],
+                fieldsets["host"],
+                fieldsets["image"],
+                fieldsets["publishing_control"],
+                ),
+            }
+        ],
+        ['Body', {'fieldsets': [fieldsets["body"]]}],
+        ['Where to Publish', {'fieldsets': [fieldsets["where_to_publish"]]}],
+        ['Related people', {'fieldsets': [fieldsets["people"]]}],
+
+    )
+
+    filter_horizontal = (
+        'please_contact',
+        'publish_to',
+        )
+    search_fields = ['title']
+    related_search_fields = ['hosted_by']
+
+    def _media(self):
+        return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
+    media = property(_media)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "publish_to":
-            kwargs["queryset"] = Entity.objects.filter(website__published = True)
-        return super(AutocompleteMixin, self).formfield_for_manytomany(db_field, request, **kwargs)
+            kwargs["queryset"] = Entity.objects.filter(
+                website__published = True
+                )
+        return super(AutocompleteMixin, self).formfield_for_manytomany(
+            db_field, request, **kwargs
+            )
 
 
 class InputURLMixin(forms.ModelForm):
@@ -128,25 +190,3 @@ class GenericModelForm(InputURLMixin):
                 messages.add_message(self.request, messages.WARNING, message)
 
         return self.cleaned_data
-
-
-fieldsets = {
-    'basic': ('', {'fields': ('title',  'short_title', 'summary')}),
-    'host': ('', {'fields': ('hosted_by',)}),
-    'image': ('', {'fields': ('image',)}),
-    'body':  ('', {
-        'fields': ('body',),
-        'classes': ('plugin-holder', 'plugin-holder-nopage',)
-        }),
-    'where_to_publish': ('', {'fields': ('publish_to',)}),
-    'people': ('People to contact about this item', {'fields': ('please_contact',)}),
-    'publishing_control': ('Publishing control', {'fields': ('published', 'in_lists')}),
-    'date': ('', {'fields': ('date',)}),
-    'date': ('', {'fields': ('date',)}),
-    'importance': ('', {'fields': ('importance',)}),
-    'url': ('If this is an external item', {'fields': ('external_url', 'input_url',)}),
-    'slug': ('If this is an internal item', {'fields': ('slug',)}),
-    'location': ('', {'fields': ('precise_location', 'access_note',)}),
-    'address_report': ('', {'fields': ('address_report',)}),
-    'email': ('', {'fields': ('email',)}),
-    }
