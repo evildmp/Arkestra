@@ -46,7 +46,7 @@ ul.plugin-list li.grouper ul {
 
 /* list for links to other items, (e.g. news and events) */
 ul.other-items  {
-    border-top: 1px solid #999;
+    border-top: 1px solid #ddd;
     padding-top: 0.5em;
     clear: both;
     }
