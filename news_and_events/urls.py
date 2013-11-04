@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+
 from news_and_events import views
 
 urlpatterns = patterns('news_and_events.views',
