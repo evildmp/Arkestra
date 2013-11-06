@@ -8,19 +8,32 @@
             <span class="title">{{ item.short_title|typogrify }}</span>
         {% else %}
     		{% if item.external_url %}
-    			<a class="external title" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+    			<a
+                    class="external title"
+                    href="{{ item.get_absolute_url }}"
+                    >
+                    {{item.short_title}}
+                </a> -
+                <span class="site-name">
+                    {{ item.external_url.external_site }}
+                </span>
     		   {% else %}
-    			<a class = "title" href="{{ item.get_absolute_url }}">{{item.short_title|typogrify}}</a>
+    			<a
+                    class = "title"
+                    href="{{ item.get_absolute_url }}">
+                    {{item.short_title|typogrify}}
+                </a>
     		{% endif %}
     	{% endif %}
 	{% endblock item_title %}
 
 	{% block item_image %}
     	{% if "image" in lister.item_format and item.image %}
-			{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}<img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
+			{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
+            <img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
 		{% endif %}
 	{% endblock item_image %}
-	
+
 
     {% block item_details %}
 		{% if "details" in lister.item_format %}
@@ -28,6 +41,6 @@
     		{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30|typogrify }}</div>{% endif %}{% endblock item_summary %}
 		{% endif %}
 	{% endblock item_details %}
-	
+
 </li>
 {% endblock list_item %}
