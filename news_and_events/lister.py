@@ -124,7 +124,6 @@ class NewsList(ArkestraGenericList):
         self.re_order_by_importance()
         self.truncate_items()
         self.set_show_when()
-        print self.limit_to
 
 
 class NewsListCurrent(NewsList):

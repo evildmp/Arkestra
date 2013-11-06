@@ -9,7 +9,7 @@ from arkestra_utilities.views import ArkestraGenericView
 from contacts_and_people.models import Entity
 
 from models import Event, NewsArticle
-from lister import NewsAndEventsCurrentLister, NewsArchiveLister, \
+from .lister import NewsAndEventsCurrentLister, NewsArchiveLister, \
     EventsArchiveLister, EventsForthcomingLister
 
 
@@ -17,7 +17,7 @@ from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
 class NewsAndEventsView(ArkestraGenericView):
     auto_page_attribute = "auto_news_page"
-    
+
     def get(self, request, *args, **kwargs):
         self.get_entity()
 

@@ -9,24 +9,22 @@ from treeadmin.admin import TreeAdmin
 
 from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, HostedByFilter, fieldsets
 
-from links.admin import ExternalLinkForm, ObjectLinkInline
+from links.admin import ObjectLinkInline
 
 from models import NewsArticle, NewsSource, Event, EventType
+
 
 class NewsAndEventsForm(GenericModelForm):
     # a shared form for news and events
     pass
 
-from contacts_and_people.models import Entity
 
 class NewsAndEventsAdmin(GenericModelAdmin):
     exclude = ('content', 'url')
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     related_search_fields = ['hosted_by', 'external_url',]
-    prepopulated_fields = {
-        'slug': ('title',)
-            }
+    prepopulated_fields = {'slug': ['title']}
     list_max_show_all = 1000
     list_per_page = 1000
 
@@ -42,6 +40,7 @@ class NewsAndEventsAdmin(GenericModelAdmin):
 #     def _media(self):
 #         return super(AutocompleteMixin, self).media
 #     media = property(_media)
+
 
 class NewsArticleForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -76,9 +75,10 @@ class NewsArticleAdmin(NewsAndEventsAdmin):
         ('Body', {'fieldsets': (fieldsets["body"],)}),
         ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],)}),
         ('Related people', {'fieldsets': (fieldsets["people"],)}),
-        ('Links', {'inlines': (ObjectLinkInline,),}),
+        ('Links', {'inlines': [ObjectLinkInline]}),
         ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
+
 
 class EventForm(NewsAndEventsForm):
     class Meta(NewsAndEventsForm.Meta):
@@ -164,6 +164,7 @@ class EventForm(NewsAndEventsForm):
         return data
     '''
 
+
 class EventIsSeries(SimpleListFilter):
     title = _('actual/series')
     parameter_name = 'series'
@@ -238,8 +239,10 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
 class EventTypeAdmin(admin.ModelAdmin):
     pass
 
+
 class NewsSourceAdmin(admin.ModelAdmin):
     pass
+
 
 admin.site.register(Event,EventAdmin)
 admin.site.register(NewsSource,NewsSourceAdmin)
