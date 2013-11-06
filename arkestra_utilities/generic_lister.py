@@ -168,6 +168,14 @@ class ArkestraGenericList(object):
         if self.other_items():
             return True
 
+
+class ArkestraGenericFilterList(ArkestraGenericList):
+    def build(self):
+        self.items = self.model.objects.listable_objects()
+        self.filter_on_search_terms()
+        self.itemfilter = self.filter_set(self.items, self.request.GET)
+
+
 class ArkestraGenericLister(object):
 
     # attributes that must be passed on to the Lists
