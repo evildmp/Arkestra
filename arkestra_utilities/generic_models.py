@@ -131,8 +131,10 @@ class ArkestraGenericModel(models.Model):
 
     @property
     def is_uninformative(self):
-        if self.external_url or self.body.cmsplugin_set.all() \
-                or self.please_contact.all() or self.links:
+        if (
+            self.external_url or self.body.cmsplugin_set.all()
+            or self.please_contact.all() or self.links
+            ):
 
             return False
         else:
