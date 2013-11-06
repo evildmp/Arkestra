@@ -10,13 +10,14 @@ register = template.Library()
 def date(context, date=date):
     """
     The `date` argument is a context attribute containing the date you want
-    published; if not specified, the "date" will be used by default.
+    published; if not specified, then "date" will be used by default.
     """
-    date_format = "jS F Y"
-    now = datetime.now()
-    # this year? don't include the year
-    if date.year == now.year:
-        date_format = "jS F"
-    # nicedate will use tomorrow, today or yesterday when appropriate
-    date = nice_date(date, date_format) 
-    return date
+    if date:
+        date_format = "jS F Y"
+        now = datetime.now()
+        # this year? don't include the year
+        if date.year == now.year:
+            date_format = "jS F"
+        # nicedate will use tomorrow, today or yesterday when appropriate
+        date = nice_date(date, date_format)
+        return date
