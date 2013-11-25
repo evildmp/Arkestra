@@ -2,6 +2,7 @@ from django.db.models import ForeignKey
 from django import forms
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 
 from cms.utils import cms_static_url
 
@@ -202,3 +203,13 @@ class GenericModelForm(InputURLMixin):
                 messages.add_message(self.request, messages.WARNING, message)
 
         return self.cleaned_data
+
+
+class ButtonLinkWidget(forms.widgets.Widget):
+    def __init__(self, attrs=None, *args, **kwargs):
+        super(ButtonLinkWidget, self).__init__(attrs, *args, **kwargs)
+
+    def render(self, name, value, attrs=None):
+        return mark_safe(u'<input type="button" value="%s" onclick="window.open(\'%s\')" />' % (
+            value, self.attrs.get("link"))
+            )
