@@ -1,7 +1,3 @@
-from django.conf.urls.defaults import patterns, url
-
-from django.db.models import Q
-
 from django.conf import settings
 
 from django.contrib import admin, messages
@@ -11,8 +7,6 @@ from django.contrib.auth.models import User
 
 from django import forms
 
-
-from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,8 +19,6 @@ from contacts_and_people import models
 
 from links.admin import ObjectLinkInline
 from links.utils import get_or_create_external_link
-
-from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from arkestra_utilities.admin_mixins import AutocompleteMixin, SupplyRequestMixin, InputURLMixin, fieldsets
 from arkestra_utilities.settings import ENABLE_CONTACTS_AND_PEOPLE_AUTH_ADMIN_INTEGRATION

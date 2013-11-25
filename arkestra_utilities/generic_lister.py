@@ -138,7 +138,6 @@ class ArkestraGenericList(object):
         elif self.items.count() > self.limit_to:
             self.items = self.items[:self.limit_to]
 
-
     # methods that inspect self.items and set something useful
 
     def set_show_when(self):
@@ -209,8 +208,6 @@ class ArkestraGenericLister(object):
 
         for kind, listclass in self.listkinds:
             if kind in self.display:
-
-
 
                 # any attributes supplied as kwargs
                 list_ = listclass(**kwargs)
