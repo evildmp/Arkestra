@@ -229,7 +229,7 @@ class EventsList(ArkestraGenericList):
             self.items.filter(featuring=self.person)
 
     def set_items_for_place(self):
-        self.items = self.items.filter(building=self.lister.place)
+        self.items = self.items.filter(building=self.place)
 
     def other_items(self):
         other_items = []

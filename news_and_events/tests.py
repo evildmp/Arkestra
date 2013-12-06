@@ -16,7 +16,7 @@ from news_and_events.lister import (
     NewsAndEventsPluginLister, NewsList, NewsListArchive,
     EventsList, EventsFilterList
     )
-from contacts_and_people.models import Entity, Person
+from contacts_and_people.models import Entity, Person, Building, Site
 
 
 @override_settings(
@@ -677,6 +677,21 @@ class EventsListTests(TestCase):
 
         self.itemlist.person = p
         self.itemlist.set_items_for_person()
+
+        self.assertEqual(
+            list(self.itemlist.items),
+            [self.item1]
+        )
+
+    def test_set_items_for_place(self):
+        s = Site(id=1)
+        p = Building(site=s)
+        p.save()
+        self.item1.building = p
+        self.item1.save()
+
+        self.itemlist.place = s
+        self.itemlist.set_items_for_place()
 
         self.assertEqual(
             list(self.itemlist.items),
