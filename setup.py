@@ -18,7 +18,10 @@ setup(
         'BeautifulSoup',
         'django-cms == 2.3.5',
         'django-filer',
-        # 'semanticeditor',
+        'semanticeditor',
         'pillow',
+        'django-pagination',
+        'django-easyfilters',
+        'django-treeadmin'
     ]
 )

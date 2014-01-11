@@ -1,4 +1,5 @@
--e hg+https://bitbucket.org/evildmp/semanticeditor#egg=semanticeditor
+# -e hg+https://bitbucket.org/evildmp/semanticeditor#egg=semanticeditor
+
 -e git+https://github.com/evildmp/django-widgetry.git#egg=django-widgetry
 
 # for now, we need to pin filer to this version - 0.9 introduces backwards incompatible changes
@@ -6,6 +7,5 @@
 # the example database will need to be upgraded before we can use the main branch
 # -e git+https://github.com/stefanfoulis/django-filer.git@develop#egg=django-filer
 
--e git+https://github.com/stefanfoulis/django-filer.git@81c7304b8240279a5fe13bf769d7839fed72fba9#egg=django_filer-0.9a1-py2.6-feature/issue-213
+# -e git+https://github.com/stefanfoulis/django-filer.git@81c7304b8240279a5fe13bf769d7839fed72fba9#egg=django_filer-0.9a1-py2.6-feature/issue-213
 
--e git+https://github.com/evildmp/django-treeadmin.git#egg=django_treeadmin-dev
