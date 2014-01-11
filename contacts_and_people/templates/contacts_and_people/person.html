@@ -19,25 +19,31 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ person}}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
+        {{ person}}
+    </h{{PAGE_TITLE_HEADING_LEVEL}}>
 	{% if home_role %}
 		<p><span class="home-role">{{ home_role.role }}</span>, {{ entity }}</p>
-	{% endif %}{% endblock pagetitle %}
+	{% endif %}
+{% endblock pagetitle %}
 
 {% block main_page_body %}
     {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
 	{% block arkestra_content %}
-    {% include "arkestra/tabbed_menu.html" %}
+        {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}
     		<div class="row columns2">
     			<div class="column firstcolumn">
     				<div>
-						{% if building or address or location or access_note or email or phone.all %}<h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
-						<dl class="not-indented">
-    						{% with person_map_size as map_size %}
-    							{% include "includes/contact_information.html" %}
-    						{% endwith %}
-						</dl>
+						{% if building or address or location or access_note or email or phone.all %}
+                            <h{{ IN_BODY_HEADING_LEVEL }}>
+                                Contact information
+                            </h{{ IN_BODY_HEADING_LEVEL }}>
+    						<dl class="not-indented">
+        						{% with person_map_size as map_size %}
+        							{% include "includes/contact_information.html" %}
+        						{% endwith %}
+    						</dl>
 						{% endif %}
                     	{% with placeholder_width=person_description_width %}
     						{% render_placeholder person.description %}
@@ -49,9 +55,13 @@
 				</div>
 				<div class="column lastcolumn">
 					<div class = "">
-						{% if image %}<img src="{{ image.url }}" alt="" />{% endif %}
+						{% if image %}
+                            <img src="{{ image.url }}" alt="" />
+                        {% endif %}
 						{% if person.real_entity_memberships.count > 1 %}
-							<h{{ IN_BODY_HEADING_LEVEL }}>Roles & memberships</h{{ IN_BODY_HEADING_LEVEL }}>
+							<h{{ IN_BODY_HEADING_LEVEL }}>
+                                Roles & memberships
+                            </h{{ IN_BODY_HEADING_LEVEL }}>
 							{% membership_tree_roots person %}
 						{% endif %}
 						{% person_events %}
