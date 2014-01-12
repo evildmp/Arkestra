@@ -10,7 +10,7 @@ from arkestra_utilities.generic_lister import (
 
 from arkestra_utilities.settings import (
     NEWS_AND_EVENTS_LAYOUT, LISTER_MAIN_PAGE_LIST_LENGTH,
-    AGE_AT_WHICH_ITEMS_EXPIRE
+    AGE_AT_WHICH_ITEMS_EXPIRE, MULTIPLE_ENTITY_MODE
     )
 
 from .models import NewsArticle, Event
@@ -40,13 +40,19 @@ class NewsList(ArkestraGenericList):
                 })
 
         if "main" in self.other_item_kinds:
-            auto_page = menu.menu_dict["title_attribute"]
-            other_items.append({
-                "link": self.entity.get_auto_page_url(auto_page),
-                "title": "%s %s" % (
+            auto_page_title = menu.menu_dict["title_attribute"]
+
+            if not MULTIPLE_ENTITY_MODE:
+                title = getattr(self.entity, auto_page_title)
+            else:
+                title = "%s %s" % (
                     self.entity.short_name,
-                    getattr(self.entity, auto_page).lower()
-                    ),
+                    getattr(self.entity, auto_page_title).lower()
+                    )
+
+            other_items.append({
+                "link": self.entity.get_auto_page_url("news-and-events"),
+                "title": title,
                 "css_class": "main"
             })
 
@@ -159,7 +165,7 @@ class NewsListArchive(NewsList):
     search_fields = [
         {
             "field_name": "text",
-            "field_label": "Title/summary",
+            "field_label": "Search title/summary",
             "placeholder": "Search",
             "search_keys": [
                 "title__icontains",
@@ -249,15 +255,22 @@ class EventsList(ArkestraGenericList):
                 })
 
         if "main" in self.other_item_kinds:
-            auto_page = menu.menu_dict["title_attribute"]
-            other_items.append({
-                "link": self.entity.get_auto_page_url(auto_page),
-                "title": "%s %s" % (
+            auto_page_title = menu.menu_dict["title_attribute"]
+
+            if not MULTIPLE_ENTITY_MODE:
+                title = getattr(self.entity, auto_page_title)
+            else:
+                title = "%s %s" % (
                     self.entity.short_name,
-                    getattr(self.entity, auto_page).lower()
-                    ),
+                    getattr(self.entity, auto_page_title).lower()
+                    )
+
+            other_items.append({
+                "link": self.entity.get_auto_page_url("news-and-events"),
+                "title": title,
                 "css_class": "main"
             })
+
         return other_items
 
 
