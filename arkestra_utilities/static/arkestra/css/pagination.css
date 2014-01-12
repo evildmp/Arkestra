@@ -159,6 +159,7 @@ form.filter-form input {width: 100%}
 /* :hover come after to override */
 .addfilter a:hover,
 .removefilter a:hover {
+    text-decoration: none;
     border-radius: 4px;
     padding: 0px 1px 2px 3px;
     border: 1px solid #3355bb;
@@ -169,7 +170,7 @@ form.filter-form input {width: 100%}
 .displayfilter {
     border-radius: 4px;
     padding: 0px 1px 2px 3px;
-    border: 1px solid white;
-    background-color: white;
-    color: #505050;
+    border: 1px solid black;
+    background-color: black;
+    color: white;
 }

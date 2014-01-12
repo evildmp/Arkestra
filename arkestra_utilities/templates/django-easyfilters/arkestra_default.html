@@ -1,7 +1,7 @@
 <div class="filterline"><span class="filterlabel">{{ filterlabel }}:</span>
 {% for choice in choices %}
   {% if choice.link_type == 'add' %}
-    <span class="addfilter"><a href="{{ choice.url }}" title="Add filter">{{ choice.label }}&nbsp;<span class="choice-count">({{ choice.count }})</span></a></span>&nbsp;
+    <span class="addfilter"><a href="{{ choice.url }}" title="Add filter">{{ choice.label }}</span></a></span>&nbsp;
   {% else %}
     {% if choice.link_type == 'remove' %}
     <span class="removefilter"><a href="{{ choice.url }}" title="Remove filter">{{ choice.label }}&nbsp;&laquo;&nbsp;</a></span>
