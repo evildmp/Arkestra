@@ -9,7 +9,7 @@
 {% block scripts %}
 {{ block.super }}
 {% if place.has_map %}
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="/static/arkestra/js/maps/markerwithlabel.js"></script>
 <script type="text/javascript">
 	var infowindow = null;
@@ -55,7 +55,7 @@
 		       		map: map,
 		            {% ifequal place p %}
 	    	            animation: google.maps.Animation.DROP,
-	    	            icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png',
+	    	            icon: '//maps.google.com/mapfiles/ms/micons/blue-dot.png',
 	    	            zIndex: 10000,
 	    				labelClass: "labels main-label", // the CSS class for the label
 		            {% else %}

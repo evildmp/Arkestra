@@ -134,6 +134,7 @@ class ImageSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
 
     ASPECT_RATIOS = (
         (0, u'Automatic'),
+        (9.0, u'9x1'),
         (3.0, u'3x1'),
         (1.778, u'16x9'),
         (1.618, u'Golden ratio (horizontal)'),

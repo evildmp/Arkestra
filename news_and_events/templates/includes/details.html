@@ -13,7 +13,7 @@
 		{% endif %}
 		{% event_date_and_time %}
 	    {% if event.get_featuring %}
- 				    <dt>Featuring</dt>
+ 				    <dt>With</dt>
 				{% for speaker in event.get_featuring %}
 					<dd>
 						<a href = "{{ speaker.get_absolute_url }}">{{ speaker }}</a>
@@ -70,5 +70,5 @@
  				    <dt>Note</dt>
  				    <dd>{{ event.access_note }}</dd>
 	    {% endif %}
-	</dl>    
+	</dl>
 </div>
