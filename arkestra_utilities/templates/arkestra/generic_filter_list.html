@@ -28,8 +28,8 @@
 
         </div>
     	<div class = "column firstcolumn doublecolumn">
-            {% autopaginate items 8 %}
-			{{ list.itemfilter.qs.count }} items found
+            {% autopaginate items 6 %}
+			<strong>{{ list.itemfilter.qs.count }} items found</strong>
             {% paginate %}
                     <ul class="{{ lister.list_format}} plugin-list">
                         {% for item in items %}
