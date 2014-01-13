@@ -243,10 +243,11 @@ class ArkestraGenericLister(object):
                 # give the first (if it exists) a "firstcolumn" CSS class
                 if list_.items:
                     list_.items[0].column_class += " firstcolumn"
-                    list_.items[-1].column_class += " lastcolumn"
-                # # give the last (if it exists) a "lastcolumn" CSS class
-                #     if len(list_.items) > 1:
-                #         list_.items[-1].column_class += " lastcolumn"
+
+                    # coercing to list() prevents a possible attempt to
+                    # apply negative slicing to a queryset
+                    # See https://github.com/evildmp/Arkestra/issues/111
+                    list(list_.items)[-1].column_class += " lastcolumn"
 
         elif "vertical" in self.list_format:
             self.list_format = "vertical"
