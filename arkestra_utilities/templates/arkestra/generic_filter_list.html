@@ -21,21 +21,22 @@
                     <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}">
                 {% endfor %}
             </form>
-            {% with list.itemfilter.qs as items %}
-                {{ list.itemfilter }}
-			    {% include "arkestra/generic_list_other_items.html" %}
+            {{ list.itemfilter }}
+			<strong>{{ list.itemfilter.qs.count }} items found</strong>
+		    {% include "arkestra/generic_list_other_items.html" %}
 
 
         </div>
     	<div class = "column firstcolumn doublecolumn">
-            {% autopaginate items 6 %}
-			<strong>{{ list.itemfilter.qs.count }} items found</strong>
+            {% with list.itemfilter.qs as items %}
+                {% autopaginate items 8 %}
+                {% paginate %}
+                <ul class="{{ lister.list_format}} plugin-list">
+                    {% for item in items %}
+                        {% include list.item_template %}
+                    {% endfor %}
+                </ul>
             {% paginate %}
-                    <ul class="{{ lister.list_format}} plugin-list">
-                        {% for item in items %}
-                            {% include list.item_template %}
-                        {% endfor %}
-                    </ul>
             {% endwith %}
         </div>
     </div>
