@@ -94,7 +94,7 @@ def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slu
             "email": entity.email,
             "title": title,
             "meta": meta,
-            "location": entity.precise_location,
+            "precise_location": entity.precise_location,
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
             "full_address" : entity.get_full_address,
