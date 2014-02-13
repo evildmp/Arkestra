@@ -177,8 +177,6 @@ INSTALLED_APPS = (
     'links',
     'arkestra_utilities.widgets.combobox',
     'arkestra_image_plugin',
-    'publications',
-    'symplectic',
     'video',
     'housekeeping',
 
@@ -191,8 +189,9 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',
     'widgetry',
-    # 'south', # don't leave this disabled
+    'south', # don't leave this disabled
     'treeadmin',
+    'pagination',
 
     # core Django applications
     # these should be last, so we can override their templates
