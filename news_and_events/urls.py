@@ -1,68 +1,74 @@
 from django.conf.urls.defaults import patterns, url
 
+from news_and_events import views
+
 urlpatterns = patterns('news_and_events.views',
-    
+
     # news and events items
     url(
-        r"^news/(?P<slug>[-\w]+)/$", 
-        "newsarticle", 
+        r"^news/(?P<slug>[-\w]+)/$",
+        "newsarticle",
         name="news"
         ),
     url(
-        r"^event/(?P<slug>[-\w]+)/$", 
+        r"^event/(?P<slug>[-\w]+)/$",
         "event",
         name="event"
         ),
-    
-    # news archives 
+
+    # main news and events
     url(
-        r'^news-archive/$', 
-        "news_archive", 
-        {"slug": None},
-        name="news-archive-base"
+        r"^news-and-events/(?:(?P<slug>[-\w]+)/)$",
+        views.NewsAndEventsView.as_view(),
+        name="news-and-events"
         ),
+
     url(
-        r'^news-archive/(?:(?P<slug>[-\w]+)/)$', 
-        "news_archive", 
+        r"^news-and-events/$",
+        views.NewsAndEventsView.as_view(),
+        {"slug": None},
+        name="news-and-events-base"
+        ),
+
+    # news archives
+    url(
+        r"^news-archive/(?:(?P<slug>[-\w]+)/)$",
+        views.NewsArchiveView.as_view(),
         name="news-archive"
         ),
 
-    # previous events 
     url(
-        r'^previous-events/$', 
-        "previous_events", 
-        {"slug": None}, 
-        name="previous-events-base"
-        ),
-    url(
-        r'^previous-events/(?:(?P<slug>[-\w]+)/)$', 
-        "previous_events", 
-        name="previous-events"
+        r'^news-archive/$',
+        views.NewsArchiveView.as_view(),
+        {"slug": None},
+        name="news-archive-base"
         ),
 
-    # forthcoming events 
+    # previous events
     url(
-        r'^forthcoming-events/$', 
-        "all_forthcoming_events", 
-        {"slug": None}, 
-        name="forthcoming-events-base"
-        ),
-    url(
-        r'^forthcoming-events/(?:(?P<slug>[-\w]+)/)$', 
-        "all_forthcoming_events", 
-        name="forthcoming-events"
+        r"^previous-events/(?:(?P<slug>[-\w]+)/)$",
+        views.EventsArchiveView.as_view(),
+        name="events-archive"
         ),
 
-    # main news and events 
     url(
-        r"^news-and-events/$", 
-        "news_and_events", 
-        {"slug": None}, 
-        name="news-and-events-base"
+        r'^previous-events/$',
+        views.EventsArchiveView.as_view(),
+        {"slug": None},
+        name="events-archive-base"
         ),
+
+    # forthcoming events
     url(
-        r"^news-and-events/(?:(?P<slug>[-\w]+)/)$", 
-        "news_and_events", 
-        name="news-and-events"
+        r"^forthcoming-events/(?:(?P<slug>[-\w]+)/)$",
+        views.EventsForthcomingView.as_view(),
+        name="events-forthcoming"
+        ),
+
+    url(
+        r'^forthcoming-events/$',
+        views.EventsForthcomingView.as_view(),
+        {"slug": None},
+        name="events-forthcoming-base"
         ),
     )

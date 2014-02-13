@@ -4,10 +4,7 @@
     <ul class= "object-links">
     	{% for link in kind.list %}
     		<li>
-    			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}
-    				{% else %}{{ link.destination_content_object }}
-    				{% endif %}
-    			</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
+    			<a href = "{{ link.url }}">{% if link.text %}{{ link.text }}{% else %}{{ link.destination_content_object }}{% endif %}</a>{% if link.include_description and link.description %}<br />{{ link.description }}{% endif %}
     		</li>
     	{% endfor %}
     </ul>

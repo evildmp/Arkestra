@@ -17,9 +17,9 @@ ARKESTRA_BASE_ENTITY = getattr(settings, "ARKESTRA_BASE_ENTITY", None)
 
 # MULTIPLE_ENTITY_MODE is for projects hosting the site of more than one entity
 # This does not necessarily entail a site for complex organisation,
-# or for a number of different organisations - being able to redirect 
+# or for a number of different organisations - being able to redirect
 # news and events items to particular entities for example requires
-# MULTIPLE_ENTITY_MODE to be True 
+# MULTIPLE_ENTITY_MODE to be True
 
 MULTIPLE_ENTITY_MODE = getattr(settings, "MULTIPLE_ENTITY_MODE", True)
 
@@ -30,11 +30,12 @@ DEFAULT_PUBLICATIONS_PAGE_TITLE = getattr(settings, "DEFAULT_PUBLICATIONS_PAGE_T
 
 # -------- News & Events ----------------------
 
-# How many items should be displayed on main news & events pages, 
+# How many items should be displayed on main news & events pages,
 # such as /news-and-events
-MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH = getattr(settings, "MAIN_NEWS_EVENTS_PAGE_LIST_LENGTH", 6)
+LISTER_MAIN_PAGE_LIST_LENGTH = getattr(settings, "LISTER_MAIN_PAGE_LIST_LENGTH", 6)
 
-# the age in days at which items can be considered to have expired and should be archived
+# the age in days at which items can be considered to have expired and should be
+# archived
 AGE_AT_WHICH_ITEMS_EXPIRE = getattr(settings, "AGE_AT_WHICH_ITEMS_EXPIRE", 180)
 
 # in All forthcoming events lists, gather top events  together
@@ -51,11 +52,11 @@ NEWS_AND_EVENTS_LAYOUT = getattr(settings, "NEWS_AND_EVENTS_LAYOUT", "sidebyside
 
 DATE_FORMAT = getattr(settings, "ARKESTRA_DATE_FORMATS", "jS F Y")
 
-ARKESTRA_DATE_FORMATS = getattr(settings, "ARKESTRA_DATE_FORMATS", 
+ARKESTRA_DATE_FORMATS = getattr(settings, "ARKESTRA_DATE_FORMATS",
     {
     "date_groups": "F Y",
     "not_this_year": "jS F Y",
-    "not_this_month": "jS F",    
+    "not_this_month": "jS F",
     "this_month": "jS",
     }
     )
@@ -83,14 +84,14 @@ PLUGIN_HEADING_LEVELS = getattr(settings, "PLUGIN_HEADING_LEVELS", (
     (5, u"Heading 5"),
     )
     )
-                                    
+
 # image processing
 
 IMAGESET_ITEM_PADDING = getattr(settings, "IMAGESET_ITEM_PADDING", 10) # should be relative to templates!
 
 # a dictionary to show how many items per row depending on the number of items
 LIGHTBOX_COLUMNS = getattr(
-    settings, 
+    settings,
     "LIGHTBOX_COLUMNS",
     {1:1, 2:2, 3:3, 4:4, 5:5, 6:3, 7:4, 8:4, 9:3, 10:5, 11:4, 12:4, 13:5, 14:5, 15:5, 16:4, 17:6, 18:6, 19:5, 20:5, 21:6, 22:6, 23:6, 24:6, 25:5 }
     )
@@ -134,11 +135,11 @@ ARKESTRA_MENUS = getattr(settings, "ARKESTRA_MENUS", [
     ]
     )
 
-# Do you want all menu branches to expand? 
+# Do you want all menu branches to expand?
 
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
 
-    
+
 # -------- Django ----------------------
 
-LOGIN_REDIRECT_URL = getattr(settings, "LOGIN_REDIRECT_URL", "/admin/") #what happens after login - why is this required? 
+LOGIN_REDIRECT_URL = getattr(settings, "LOGIN_REDIRECT_URL", "/admin/") #what happens after login - why is this required?

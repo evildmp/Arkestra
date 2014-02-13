@@ -1,0 +1,42 @@
+{% load pagination_tags sekizai_tags %}
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/pagination.css" />
+{% endaddtoblock %}
+
+{% for list in lister.lists %}
+    <div class="row columns3">
+    	<div class = "column lastcolumn">
+            <form action="" method="GET" class="filter-form">
+                {% for field in list.search_fields %}
+                    <div>
+                        <label for="{{ field.field_name }}">
+                        	<span class="label-text">{{ field.field_label }}:</span>
+                        </label>
+
+                        <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}">
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Apply">
+                {% for field in list.hidden_search_fields %}
+                    <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}">
+                {% endfor %}
+            </form>
+            {{ list.itemfilter }}
+			<strong>{{ list.itemfilter.qs.count }} items found</strong>
+		    {% include "arkestra/generic_list_other_items.html" %}
+        </div>
+
+    	<div class = "column firstcolumn doublecolumn">
+            {% with list.itemfilter.qs as items %}
+                {% autopaginate items 8 %}
+                {% paginate %}
+                <ul class="{{ lister.list_format}} plugin-list">
+                    {% for item in items %}
+                        {% include list.item_template %}
+                    {% endfor %}
+                </ul>
+            {% paginate %}
+            {% endwith %}
+        </div>
+    </div>
+{% endfor %}

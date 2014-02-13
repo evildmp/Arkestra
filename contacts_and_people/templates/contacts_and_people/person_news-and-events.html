@@ -1,0 +1,20 @@
+{% extends "contacts_and_people/person.html" %}
+{% load thumbnail typogrify_tags %}
+
+
+{% block meta %}
+	<meta name="description" content="Research overview for {{ person}}, {{ home_role.role }}{% if person.override_entity %}, {{ home_role.entity}}{% endif %}"/>
+{% endblock meta %}
+
+{% block title %}
+	<title>{{ person }} - Research </title>
+{% endblock %}
+{% block page_title %}
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ person}} - Research</h{{PAGE_TITLE_HEADING_LEVEL}}>
+{% endblock page_title %}
+
+{% block person_information %}
+	{% with person.news_and_events as lister %}
+        {% include "arkestra/generic_lister.html" %}
+    {% endwith %}
+{% endblock person_information %}

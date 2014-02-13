@@ -1,4 +1,4 @@
-{% block doctype %}<!DOCTYPE html>{% endblock doctype %} 
+{% block doctype %}<!DOCTYPE html>{% endblock doctype %}
 {% load cms_tags sekizai_tags menu_tags typogrify_tags insert_tags %}
 {% block html_tag %}<html lang="en" >{% endblock html_tag %}
 <head>
@@ -18,10 +18,12 @@
 {% block title %}<title>{% page_attribute title %}</title>{% endblock %}
 
 {% block favicon %}
-<link rel="icon" 
-      type="image/png" 
+<link rel="icon"
+      type="image/png"
       href="{{ STATIC_URL }}arkestra/images/arkestra-favicon.png">
 {% endblock favicon %}
+
+{% render_block "css" %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra.css" />
@@ -32,20 +34,19 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
- 
-<!--[if lte IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-8.css" rel="stylesheet" type="text/css" /><![endif]--> 
+
+<!--[if lte IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-8.css" rel="stylesheet" type="text/css" /><![endif]-->
 <!--[if lte IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-7.css" rel="stylesheet" type="text/css" /><![endif]-->
-<!--[if lte IE 6]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-6.css" rel="stylesheet" type="text/css" /><![endif]--> 
+<!--[if lte IE 6]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-6.css" rel="stylesheet" type="text/css" /><![endif]-->
 
     {% block extrastyles %}
     {% endblock extrastyles %}
-  	
+
     {% block site_styles %}
-	{% endblock site_styles %}
+    {% endblock site_styles %}
 
 {% endblock styles %}
 
-{% render_block "css" %}
 {% render_block "js" %}
 </head>
 
@@ -57,26 +58,27 @@
 					{% block outer_wrapper_top %}{% endblock %}
         			<div id="inner-wrapper">
         				{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
-				
+
         				{% block pagetitle %}
         					{% if not current_page.flags.no_page_title %}
         			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
         					{% endif %}
         				{% endblock pagetitle %}
-		
+
         				{% block main_page_body %}
                             {% filter amp|smartypants|caps|initial_quotes %}
         						{% insert "newsflash" %}
         				   		{% placeholder body %}
         					{% endfilter %}
         			  	{% endblock main_page_body %}
-   
+
         			</div>
 					{% block footer %}
 						{% insert "footer" %}
 					{% endblock footer %}
-        		</div>		
+        		</div>
     	{% endblock body_content %}
     {% endwith %}
 </body>
+{% block post_body_scripts %}{% endblock post_body_scripts %}
 </html>

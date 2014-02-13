@@ -12,6 +12,7 @@ from contacts_and_people.templatetags.entity_tags import work_out_entity
 
 from models import NewsAndEventsPlugin, NewsArticle, Event
 from mixins import NewsAndEventsPluginMixin
+from lister import NewsAndEventsPluginLister
 
 from menu import menu_dict
 
@@ -21,10 +22,12 @@ class NewsAndEventsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
 
 
 class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
+
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm
     menu_cues = menu_dict
+    
     fieldsets = (
         (None, {
         'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
@@ -37,8 +40,30 @@ class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, Au
 
     # autocomplete fields
     related_search_fields = ['entity',]
-    
+
     def icon_src(self, instance):
         return "/static/plugin_icons/news_and_events.png"
+
+    def render(self, context, instance, placeholder):
+        self.entity = getattr(instance, "entity", None) or \
+            work_out_entity(context, None)
+
+        self.lister = NewsAndEventsPluginLister(
+            entity=self.entity,
+            display=instance.display,
+            order_by=instance.order_by,
+            layout=instance.layout,
+            limit_to=instance.limit_to,
+            item_format=instance.format,
+            list_format=instance.list_format,
+            # request=instance.request
+            )
+
+        context.update({
+            'lister': self.lister,
+            'placeholder': placeholder,
+            })
+        return context
+
 
 plugin_pool.register_plugin(CMSNewsAndEventsPlugin)

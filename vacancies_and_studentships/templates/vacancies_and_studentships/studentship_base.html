@@ -30,7 +30,7 @@
 				{% endblock image %}				
 				<dl class="not-indented">
 					<dt>Closing date</dt>
-					<dd>{% date studentship.closing_date %}</dd>
+					<dd>{% date studentship.date %}</dd>
 					{% if studentship.supervisors.all %}
 	 				    <dt>General enquiries</dt>
 	 				    {% for person in studentship.supervisors.all %}

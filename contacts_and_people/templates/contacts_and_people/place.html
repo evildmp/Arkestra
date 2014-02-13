@@ -2,10 +2,10 @@
 {% load thumbnail news_and_events_tags typogrify_tags placeholder_tags %}
 
 {% block title %}
-	<title>{{ place.get_name }}</title>
+	<title>{{ place.identifier }}</title>
 {% endblock %}
 
-{% block columns %}	
+{% block columns %}
 {% endblock columns %}
 
 
@@ -13,7 +13,7 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.get_name }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.identifier }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
 {% block main_page_body %}
@@ -37,11 +37,11 @@
                     {% endif %}
 	    		{% endif %}
     		</div>
-    		<div class="column lastcolumn doublecolumn"> 
+    		<div class="column lastcolumn doublecolumn">
                 {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop as image %}
                 {% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
 				{% render_placeholder place.description %}
-			</div>	
-    	</div>	
+			</div>
+    	</div>
 	{% endblock place_information %}
 {% endblock main_page_body %}

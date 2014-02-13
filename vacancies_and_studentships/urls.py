@@ -1,82 +1,87 @@
 from django.conf.urls.defaults import patterns, url
+from vacancies_and_studentships import views
 
 urlpatterns = patterns('vacancies_and_studentships.views',
-    
-    # vacancies and studentship items
+
+    # vacancies and studentships items
     url(
-        r"^vacancy/(?P<slug>[-\w]+)/$", 
-        "vacancy", 
+        r"^vacancy/(?P<slug>[-\w]+)/$",
+        "vacancy",
         name="vacancy"
         ),
     url(
-        r"^studentship/(?P<slug>[-\w]+)/$", 
-        "studentship", 
+        r"^studentship/(?P<slug>[-\w]+)/$",
+        "studentship",
         name="studentship"
         ),
-    
-    # archived vacancies 
-    url(
-        r'^archived-vacancies/$', 
-        "archived_vacancies", 
-        {"slug": None}, 
-        "archived-vacancies-base"
-        ),
-    url(
-        r'^archived-vacancies/(?:(?P<slug>[-\w]+)/)$', 
-        "archived_vacancies", 
-        name="archived-vacancies"
-        ),
 
-    # all current vacancies 
+    # main vacancies and studentships
     url(
-        r'^current-vacancies/$', 
-        "all_current_vacancies", 
-        {"slug": None}, 
-        name="current-vacancies-base"
-        ),
-    url(
-        r'^current-vacancies/(?:(?P<slug>[-\w]+)/)$', 
-        "all_current_vacancies", 
-        name="current-vacancies"
-        ),
-
-    # archived studentships 
-    url(
-        r'^archived-studentships/$', 
-        "archived_studentships", 
-        {"slug": None}, 
-        "archived-studentships-base"
-        ),
-    url(
-        r'^archived-studentships/(?:(?P<slug>[-\w]+)/)$', 
-        "archived_studentships", 
-        name="archived-studentships"
-        ),
-
-    # all current studentships 
-    url(
-        r'^current-studentships/$', 
-        "all_current_studentships", 
-        {"slug": None}, 
-        "current-studentships-base"
-        ),
-    url(
-        r'^current-studentships/(?:(?P<slug>[-\w]+)/)$', 
-        "all_current_studentships", 
-        name="current-studentships"
-        ),
-
-    # main vacancies and studentships 
-    url(
-        r"^vacancies-and-studentships/$", 
-        "vacancies_and_studentships", 
-        {"slug": None}, 
-        "vacancies-and-studentships-base"
-        ),
-    url(
-        r"^vacancies-and-studentships/(?:(?P<slug>[-\w]+)/)$", 
-        "vacancies_and_studentships", 
+        r"^vacancies-and-studentships/(?:(?P<slug>[-\w]+)/)$",
+        views.VacanciesAndStudentshipsView.as_view(),
         name="vacancies-and-studentships"
         ),
 
-)
+    url(
+        r"^vacancies-and-studentships/$",
+        views.VacanciesAndStudentshipsView.as_view(),
+        {"slug": None},
+        name="vacancies-and-studentships-base"
+        ),
+
+    # current vacancies
+    url(
+        r"^vacancies/(?:(?P<slug>[-\w]+)/)$",
+        views.VacanciesCurrentView.as_view(),
+        name="vacancies-current"
+        ),
+
+    url(
+        r'^vacancies/$',
+        views.StudentshipsForthcomingView.as_view(),
+        {"slug": None},
+        name="vacancies-current-base"
+        ),
+
+    # vacancies archives
+    url(
+        r"^archived-vacancies/(?:(?P<slug>[-\w]+)/)$",
+        views.VacanciesArchiveView.as_view(),
+        name="vacancies-archive"
+        ),
+
+    url(
+        r'^archived-vacancies/$',
+        views.VacanciesArchiveView.as_view(),
+        {"slug": None},
+        name="vacancies-archive-base"
+        ),
+
+    # previous studentships
+    url(
+        r"^archived-studentships/(?:(?P<slug>[-\w]+)/)$",
+        views.StudentshipsArchiveView.as_view(),
+        name="studentships-archive"
+        ),
+
+    url(
+        r'^archived-studentships/$',
+        views.StudentshipsArchiveView.as_view(),
+        {"slug": None},
+        name="studentships-archive-base"
+        ),
+
+    # forthcoming studentships
+    url(
+        r"^studentships/(?:(?P<slug>[-\w]+)/)$",
+        views.StudentshipsForthcomingView.as_view(),
+        name="studentships-current"
+        ),
+
+    url(
+        r'^studentships/$',
+        views.StudentshipsForthcomingView.as_view(),
+        {"slug": None},
+        name="studentships-current-base"
+        ),
+    )

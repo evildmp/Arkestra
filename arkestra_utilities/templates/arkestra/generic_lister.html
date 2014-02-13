@@ -1,0 +1,44 @@
+{% load placeholder_tags %}
+{% render_placeholder intro_page_placeholder %}
+{% if lister.lists %}
+    <div class="{{ lister.row_class }} {{ lister.list_format }}">
+
+    	{% for list in lister.lists %}
+
+    			<div class = "{{ list.div_class }}">
+
+    				{% if lister.heading_level %}
+    					<h{{ lister.heading_level }}>{{ list.heading_text }}</h{{ lister.heading_level }}>
+    				{% endif %}
+
+    				<ul class="{{ lister.list_format}} plugin-list">
+
+    			        {% if list.show_when %}
+							{% regroup list.items by get_when as itemlist %}
+							{% for get_when in itemlist %}
+								<li class="grouper {{get_when.grouper|slugify}}" id ="{{get_when.grouper|slugify}}">{{ get_when.grouper }}
+								    <ul>
+						        		{% for item in get_when.list %}
+											{% include list.item_template %}
+						        	    {% endfor %}
+						        	</ul>
+						    	</li>
+    						{% endfor %}
+
+                        {% else %}
+
+                        	{% for item in list.items %}
+                        		{% include list.item_template %}
+                        	{% endfor %}
+
+                        {% endif %}
+					</ul>
+					{% include "arkestra/generic_list_other_items.html" %}
+    			</div>
+
+    	{% endfor %}
+        {% include "arkestra/generic_lister_other_items.html" %}
+    </div>
+
+
+{% endif %}

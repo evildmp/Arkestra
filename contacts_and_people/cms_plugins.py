@@ -43,7 +43,7 @@ class EntityAutoPageLinkPluginPublisher(AutocompleteMixin, CMSPluginBase):
                 entity = instance.entity
 
             if getattr(entity, auto_page_flag):
-                link = entity.get_related_info_page_url(kind)               
+                link = entity.get_auto_page_url(kind)               
                 link_title = instance.text_override or link_title
             
                 context.update({ 
