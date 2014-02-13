@@ -142,6 +142,8 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
+
+    'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'example.urls'
