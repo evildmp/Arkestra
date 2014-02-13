@@ -24,9 +24,8 @@
             {{ list.itemfilter }}
 			<strong>{{ list.itemfilter.qs.count }} items found</strong>
 		    {% include "arkestra/generic_list_other_items.html" %}
-
-
         </div>
+
     	<div class = "column firstcolumn doublecolumn">
             {% with list.itemfilter.qs as items %}
                 {% autopaginate items 8 %}
