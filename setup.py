@@ -22,6 +22,9 @@ setup(
         'pillow',
         'django-pagination',
         'django-easyfilters',
-        'django-treeadmin'
-    ]
+        'django-treeadmin',
+    ],
+    dependency_links=[
+        'https://github.com/evildmp/django-widgetry.git#egg=django-widgetry'
+    ],
 )

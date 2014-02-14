@@ -1,4 +1,4 @@
 # -e hg+https://bitbucket.org/evildmp/semanticeditor#egg=semanticeditor
 
--e git+https://github.com/evildmp/django-widgetry.git#egg=django-widgetry
+# -e git+https://github.com/evildmp/django-widgetry.git#egg=django-widgetry
 
