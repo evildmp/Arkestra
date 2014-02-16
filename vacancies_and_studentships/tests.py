@@ -221,9 +221,7 @@ class ReverseURLsTests(TestCase):
             )
 
 
-@override_settings(
-    CMS_TEMPLATES = (('null.html', "Null"),)
-)
+@override_settings(CMS_TEMPLATES = (('null.html', "Null"),))
 class VacanciesStudentshipsEntityPagesViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.

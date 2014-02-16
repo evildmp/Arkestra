@@ -19,9 +19,7 @@ from news_and_events.lister import (
 from contacts_and_people.models import Entity, Person, Building, Site
 
 
-@override_settings(
-    USE_TZ=False
-)
+@override_settings(USE_TZ=False)
 class NewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
@@ -59,9 +57,7 @@ class NewsTests(TestCase):
         self.assertEqual(self.tootharticle.get_when, "December 2012")
 
 
-@override_settings(
-    CMS_TEMPLATES=(('null.html', "Null"),)
-)
+@override_settings(CMS_TEMPLATES=(('null.html', "Null"),))
 class NewsEventsItemsViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
@@ -176,9 +172,7 @@ class ReverseURLsTests(TestCase):
             )
 
 
-@override_settings(
-    CMS_TEMPLATES=(('null.html', "Null"),)
-)
+@override_settings(CMS_TEMPLATES=(('null.html', "Null"),))
 class NewsEventsEntityPagesViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
