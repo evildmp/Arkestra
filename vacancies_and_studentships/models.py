@@ -2,10 +2,10 @@ from django.db import models
 
 from cms.models import CMSPlugin
 
-from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
 from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
+from arkestra_utilities.output_libraries.dates import nice_date
 
 from contacts_and_people.models import Entity, Person #, default_entity_id
 
@@ -26,13 +26,15 @@ class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
     @property
     def get_when(self):
         """
-        get_when provides a human-readable attribute under which items can be grouped.
-        Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
+        get_when provides a human-readable attribute under which items can be
+        grouped. Usually, this is an easily-readble rendering of the date (e.g.
+        "April 2010") but it can also be "Top news", for items to be given
+        special prominence.
         """
         try:
             # The render function of CMSNewsAndEventsPlugin can set a temporary sticky attribute for Top news items
             if self.sticky:
-                return "Top news"
+                return "Top items"
         except AttributeError:
             pass
 
