@@ -54,6 +54,7 @@ class ItemList(ArkestraGenericList):
 
 class ListBuildItemsTests(TestCase):
     def test_build_no_items(self):
+
         # items and listable_objects() should be []
         itemlist = ItemList()
         itemlist.build()
@@ -278,7 +279,7 @@ class ListIsShowable(TestCase):
         self.itemlist.items = TestModel.objects.all()
         self.assertTrue(self.itemlist.is_showable())
 
-        self.itemlist.items = [1,2,3]
+        self.itemlist.items = [1, 2, 3]
         self.assertTrue(self.itemlist.is_showable())
 
 
