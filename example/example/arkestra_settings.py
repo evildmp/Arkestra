@@ -21,7 +21,6 @@ ARKESTRA_BASE_ENTITY = 1
 
 MULTIPLE_ENTITY_MODE = False
 
-
 # how will video be encoded? by a thread? well, that's OK just for proof of
 # concept
 # but not really viable for anything else. We can use celery instead - but you
