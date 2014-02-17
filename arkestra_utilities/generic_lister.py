@@ -14,6 +14,7 @@ from generic_models import ArkestraGenericModel
 
 class ArkestraGenericFilterSet(FilterSet):
     template_file = "django-easyfilters/arkestra_default.html"
+    fields = []
 
 
 class ArkestraGenericList(object):
@@ -39,8 +40,19 @@ class ArkestraGenericList(object):
 
     def build(self):
         self.items = self.model.objects.listable_objects()
-        # self.set_items_for_entity()    # sets items_for_context
-        # self.item1()  # sets multiple attributes & self.items
+
+        # other, optional methods that a sub-class might invoke:
+        #
+        # select items for this context:
+        # self.set_items_for_entity() or
+        # set_items_for_person
+        #
+        # create a collection of other items (archived, forthcoming, etc):
+        # self.archived_items = self.items
+        #
+        # trim and re-order the list; apply extra date information:
+        # self.remove_expired()
+        # self.re_order_by_importance()
         # self.truncate_items()
         # self.set_show_when()
 
@@ -169,6 +181,8 @@ class ArkestraGenericList(object):
 
 
 class ArkestraGenericFilterList(ArkestraGenericList):
+    filter_set = ArkestraGenericFilterSet
+
     def build(self):
         self.items = self.model.objects.listable_objects()
         self.filter_on_search_terms()
