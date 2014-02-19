@@ -75,10 +75,7 @@ fieldsets = {
         'classes': ['plugin-holder', 'plugin-holder-nopage'],
         }],
     'where_to_publish': ['', {'fields': ['publish_to']}],
-    'people': [
-        'People to contact about this item',
-        {'fields': ['please_contact']}
-        ],
+    'people': ['', {'fields': ['please_contact']}],
     'date': ['', {'fields': ['date']}],
     'importance': ['', {'fields': ['importance']}],
     'url': [
