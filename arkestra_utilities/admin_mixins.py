@@ -30,12 +30,15 @@ class AutocompleteMixin(object):
         if (isinstance(db_field, ForeignKey) and
                 db_field.name in self.related_search_fields):
             kwargs['widget'] = fk_lookup.FkLookup(db_field.rel.to)
+
         return super(AutocompleteMixin, self).formfield_for_dbfield(
             db_field,
             **kwargs
             )
 
-
+# makes the request available to the admin form
+# useful for using the messages framework, and required for admin that
+# uses Arkestra's external_url functionality
 class SupplyRequestMixin(object):
     def get_form(self, request, obj=None, **kwargs):
         form_class = super(SupplyRequestMixin, self).get_form(
@@ -89,11 +92,37 @@ fieldsets = {
     }
 
 
-class GenericModelAdmin(
-        AutocompleteMixin, SupplyRequestMixin,
-        ModelAdminWithTabsAndCMSPlaceholder
+# WidgetifiedModelAdmin provides some hooks and widgets for the more
+# fully-featured admin, such as tabs, autocomplete search
+class WidgetifiedModelAdmin(
+        SupplyRequestMixin,
+        AutocompleteMixin,
+        ModelAdminWithTabsAndCMSPlaceholder,
         ):
 
+    def _media(self):
+        return super(
+            AutocompleteMixin,
+            self
+        ).media + super(
+            ModelAdminWithTabsAndCMSPlaceholder,
+            self
+        ).media
+    media = property(_media)
+
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "publish_to":
+            kwargs["queryset"] = Entity.objects.filter(
+                website__published=True
+                )
+        return super(AutocompleteMixin, self).formfield_for_manytomany(
+            db_field, request, **kwargs
+            )
+
+
+# GenericModelAdmin provides extra attributes
+class GenericModelAdmin(WidgetifiedModelAdmin):
     tabs = (
         ['Basic', {
             'fieldsets': (
@@ -113,21 +142,9 @@ class GenericModelAdmin(
         'please_contact',
         'publish_to',
         )
+
     search_fields = ['title']
     related_search_fields = ['hosted_by']
-
-    def _media(self):
-        return super(ModelAdminWithTabsAndCMSPlaceholder, self).media
-    media = property(_media)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "publish_to":
-            kwargs["queryset"] = Entity.objects.filter(
-                website__published=True
-                )
-        return super(AutocompleteMixin, self).formfield_for_manytomany(
-            db_field, request, **kwargs
-            )
 
 
 class InputURLMixin(forms.ModelForm):

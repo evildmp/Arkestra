@@ -19,7 +19,7 @@ ARKESTRA_BASE_ENTITY = 1
 # news and events items to particular entities for example requires
 # MULTIPLE_ENTITY_MODE to be True
 
-MULTIPLE_ENTITY_MODE = False
+MULTIPLE_ENTITY_MODE = True
 
 # how will video be encoded? by a thread? well, that's OK just for proof of
 # concept

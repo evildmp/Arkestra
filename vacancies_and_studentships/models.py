@@ -20,8 +20,7 @@ class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
     description = models.TextField(null=True, blank=True,
         help_text="No longer used")
 
-    def link_to_more(self):
-        return self.get_hosted_by.get_auto_page_url("vacancies-and-studentships")
+    auto_page_view_name = "vacancies-and-studentships"
 
     @property
     def get_when(self):
@@ -44,7 +43,7 @@ class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
 
 
 class Vacancy(VacancyStudentshipBase):
-    url_path = "vacancy"
+    view_name = "vacancy"
 
     job_number = models.CharField(max_length=9)
     salary = models.CharField(blank=True, max_length=255, null=True,
@@ -55,7 +54,7 @@ class Vacancy(VacancyStudentshipBase):
 
 
 class Studentship(VacancyStudentshipBase):
-    url_path = "studentship"
+    view_name = "studentship"
 
     supervisors = models.ManyToManyField(Person, null=True, blank=True,
         related_name="%(class)s_people")

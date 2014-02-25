@@ -1,10 +1,12 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
+from django.test.client import RequestFactory
+from django.http import Http404
 
 from contacts_and_people.models import (
     Site, Person, Building, Entity, Membership
     )
-
+from contacts_and_people.views import contacts_and_people
 from links.models import ExternalLink
 
 
@@ -61,6 +63,11 @@ class SiteTests(TestCase):
             self.main_building.get_absolute_url(),
             "/place/main-building-main-site/"
             )
+
+
+class EntityGetAbsoluteURLTests(TestCase):
+    def test_has_no_url(self):
+        self.assertEqual(Entity(slug="slug").get_absolute_url(), "/contact/slug/")
 
 
 class EntityManagerTests(TestCase):
@@ -201,30 +208,6 @@ class EntityGetRolesForMembersTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(
             self.school.get_roles_for_members(people),
             [self.smith]
-            )
-
-
-class EntityGetRelatedInfoPageTests(EntityTestObjectsMixin, TestCase):
-
-    def test_external_entity(self):
-        #  an external entity can't have any related info pages
-        external_url = ExternalLink(title="Example", url="http://example.com")
-        self.school.external_url = external_url
-        self.assertEquals(
-            self.school.get_auto_page_url("contact"),
-            ""
-            )
-
-    def test_base_entity_contact(self):
-        self.assertEquals(
-            self.school.get_auto_page_url("contact"),
-            "/contact/"
-            )
-
-    def test_base_entity_bogus(self):
-        self.assertEquals(
-            self.school.get_auto_page_url("bogus"),
-            "/bogus/"
             )
 
 
@@ -431,6 +414,32 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
         )
 
 
+class ResolveURLsTests(TestCase):
+    def test_resolve_base_entity_url(self):
+        resolver = resolve('/contact/')
+        self.assertEqual(resolver.view_name, "contact-entity")
+
+    def test_resolve_named_entity_url(self):
+        resolver = resolve('/contact/some-slug/')
+        self.assertEqual(resolver.view_name, "contact-entity")
+
+    def test_resolve_person_url(self):
+        resolver = resolve('/person/slug/')
+        self.assertEqual(resolver.view_name, "contact-person")
+
+    def test_resolve_person_tab_url(self):
+        resolver = resolve('/person/slug/tab/')
+        self.assertEqual(resolver.view_name, "contact-person-tab")
+
+    def test_resolve_people(self):
+        resolver = resolve('/people/entity/')
+        self.assertEqual(resolver.view_name, "contact-people")
+
+    def test_resolve_person_tab_url(self):
+        resolver = resolve('/people/entity/a/')
+        self.assertEqual(resolver.view_name, "contact-people-letter")
+
+
 class ReverseURLsTests(TestCase):
     def test_person_reverse_url(self):
         self.assertEqual(
@@ -482,6 +491,52 @@ class ReverseURLsTests(TestCase):
 
     def test_contact_base_entity_reverse_url(self):
         self.assertEqual(
-            reverse("contact-entity-base"),
+            reverse("contact-entity"),
             "/contact/"
+            )
+
+
+class EntityGetRelatedInfoPageTests(EntityTestObjectsMixin, TestCase):
+
+    def test_external_entity(self):
+        #  an external entity can't have any related info pages
+        external_url = ExternalLink(title="Example", url="http://example.com")
+        self.school.external_url = external_url
+        self.assertEquals(
+            Entity(external_url = external_url).get_auto_page_url("contact-entity"),
+            ""
+            )
+
+    def test_auto_page_url_no_kind_string_provided(self):
+        self.assertEquals(
+            Entity(slug="slug").get_auto_page_url(""),
+            ""
+            )
+
+    def test_auto_page_url(self):
+        self.assertEquals(
+            Entity(slug="slug").get_auto_page_url("contact-entity"),
+            "/contact/slug/"
+            )
+
+class EntityViewTests(TestCase):
+    def test_contacts_and_people_no_slug_match(self):
+        self.assertRaises(
+            Http404,
+            contacts_and_people, RequestFactory().get("/"), "slug"
+            )
+
+    def test_contacts_and_people_slug_match_but_external(self):
+        e = ExternalLink(title="external link", url="http://example.com/", id=1)
+        e.save()
+        entity = Entity(
+            name="School of Medicine",
+            slug="medicine",
+            external_url=e
+            )
+        entity.save()
+
+        self.assertRaises(
+            Http404,
+            contacts_and_people, RequestFactory().get("/"), "medicine"
             )
