@@ -17,9 +17,10 @@ if 'publications' in applications:
     from publications.models import BibliographicRecord
     from publications.models import Researcher # required for publications
 
-def contacts_and_people(request, slug=getattr(Entity.objects.base_entity(), "slug", None)):
-    # general values needed to set up and construct the page and menus
-    entity = Entity.objects.get(slug=slug)
+def contacts_and_people(request, slug):
+    slug = slug or getattr(Entity.objects.base_entity(), "slug", None)
+    entity = get_object_or_404(Entity, slug=slug, external_url=None)
+
     # for the menu, because next we mess up the path
     request.auto_page_url = request.path
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
@@ -116,7 +117,7 @@ def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), le
     # general values needed to set up and construct the page and menus
     entity = Entity.objects.get(slug=slug)
     # for the menu, because next we mess up the path
-    request.auto_page_url = entity.get_auto_page_url("contact")
+    request.auto_page_url = entity.get_auto_page_url("contact-entity")
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
     request.current_page = entity.get_website
     template = entity.get_template()

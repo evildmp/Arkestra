@@ -24,6 +24,11 @@ class ArkestraGenericModel(models.Model):
 
     objects = ArkestraGenericModelManager()
 
+    # needs to be overriden in the sub-class with the appropriate string
+    # for example: "contact-entity"
+    # see link_to_more() below
+    auto_page_view_name = ""
+
     # core fields
     title = models.CharField(
         max_length=255,
@@ -99,6 +104,14 @@ class ArkestraGenericModel(models.Model):
     @property
     def get_hosted_by(self):
         return self.hosted_by or Entity.objects.base_entity()
+
+    # when looking at an instance of this model, we can ask for a link to
+    # more of the same for the same entity
+    def link_to_more(self):
+        if self.get_hosted_by:
+            return self.get_hosted_by.get_auto_page_url(self.auto_page_view_name)
+        else:
+            return ""
 
     @property
     def get_template(self):

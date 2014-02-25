@@ -24,6 +24,7 @@ from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LE
 
 from managers import NewsArticleManager, EventManager
 
+
 class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 
     content = models.TextField(null=True, blank=True,
@@ -35,13 +36,12 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
     def save(self, *args, **kwargs):
         super(NewsAndEvents, self).save(*args, **kwargs)
 
-    def link_to_more(self):
-        if self.get_hosted_by:
-            return self.get_hosted_by.get_auto_page_url("news-and-events")
+    auto_page_view_name = "news-and-events"
 
 class NewsArticle(NewsAndEvents):
-    url_path = "news"
     objects = NewsArticleManager()
+
+    view_name = "news"
 
     date = models.DateTimeField(default=datetime.now,
         help_text=u"Dateline for the item (the item will not be published until then" ,  )
@@ -78,8 +78,9 @@ class NewsArticle(NewsAndEvents):
 
 
 class Event(NewsAndEvents, LocationModelMixin):
-    url_path = "event"
     objects = EventManager()
+
+    view_name = "event"
 
     type = models.ForeignKey('EventType',
         on_delete=models.PROTECT)
@@ -384,9 +385,3 @@ try:
     mptt.register(Event)
 except mptt.AlreadyRegistered:
     pass
-
-'''
-entity: ('name',)
-building: ('name', 'number', 'street', 'postcode', 'site__site_name',)
-website: ('title_set__title',)
-'''

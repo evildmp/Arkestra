@@ -1,6 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models.loading import get_model
 
 from cms.models import Page
 
@@ -12,28 +13,40 @@ from arkestra_utilities.settings import ARKESTRA_MENUS
 
 
 try:
-    # pre-2.4
+    # django CMS < 2.4
     CACHE_DURATIONS = settings.CMS_CACHE_DURATIONS['menus']
 except AttributeError:
-    # 2.4
+    # django CMS 2.4 +
     from cms.utils import get_cms_setting
     CACHE_DURATIONS = get_cms_setting('CACHE_DURATIONS')['menus']
 
+
+menus = []
 for menu in ARKESTRA_MENUS:
-    if menu.get("lister_name"):
-        lister = __import__(
-            menu["lister_module"],
-            fromlist=[menu["lister_name"]]
+    # old style
+    if type(menu) is dict:
+
+        if menu.get("lister_name"):
+            lister_module = __import__(
+                menu["lister_module"],
+                fromlist=[menu["lister_name"]]
+                )
+            menu["lister"] = getattr(lister_module, menu["lister_name"])
+
+        menus.append(menu)
+
+    # new style
+    elif type(menu) is str:
+        module_name, dot, class_name = menu.rpartition(".")
+        menu_class = __import__(
+            module_name,
+            fromlist=[class_name]
             )
-        menu["lister"] = getattr(lister, menu["lister_name"])
+        menus.append(getattr(menu_class, class_name))
 
-        if menu.get("entity_menu_model"):
-            model = __import__(menu.get("entity_menu_model"))
-
-
-# ArkestraPages(Modifier) checks whether there are Entities that
-# have automatic pages
-# (contacts & people, news & events, etc) that should be featured in the menu.
+# ArkestraPages(Modifier) checks whether there are Entities that have automatic
+# pages (contacts & people, news & events, etc) that should be featured in the
+# menu.
 #
 # These menu might have this structure:
 #
@@ -47,47 +60,17 @@ for menu in ARKESTRA_MENUS:
 #                                menu unless News & Events is selected]
 #       Contacts & People       [an Arkestra automatic page]
 #
-# class ArkestraPages(Modifier):
-#     def modify(self, request, nodes, namespace, root_id, post_cut,
-# breadcrumb):
-#         # this currently relies on the pre-cut nodes. It *will* hammer the
-# database
-#         if arkestra_menus and not post_cut:
-#
-#             self.auto_page_url = getattr(request, "auto_page_url", None)
-#             self.request = request
-#             self.nodes = nodes
-#
-#             # loop over all the nodes returned by the nodes in the Menu
-# classes
-#             for node in self.nodes:
-#                 # for each node, try to find a matching Page that is an
-# Entity's home page
-#                 try:
-#                     page = Page.objects.get(id=node.id, entity__isnull=False)
-#                 except Page.DoesNotExist:
-#                     pass
-#                 else:
-#                     entity = page.entity.all()[0]
-#                     # we have found a node for a Page with an Entity, so
-# check it against arkestra_menus
-#                     for menu in arkestra_menus:
-#                         self.do_menu(node, menu, entity)
-#
-#             return self.nodes
-#         else:
-#             return nodes
+
 
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
 
-        # this currently relies on the pre-cut nodes. It *will* hammer the
-        # database
+        # this currently relies on the pre-cut nodes
         self.nodes = nodes
         self.auto_page_url = getattr(request, "auto_page_url", None)
         self.request = request
 
-        if ARKESTRA_MENUS and not post_cut:
+        if menus and not post_cut:
             key = "ArkestraPages.modify()" + request.path + "pre_cut"
             cached_pre_cut_nodes = cache.get(key, None)
             if cached_pre_cut_nodes:
@@ -103,14 +86,14 @@ class ArkestraPages(Modifier):
                     node.entity = False
                 else:
                     node.entity = page.entity.all()[0]
-                    for menu in ARKESTRA_MENUS:
-                        self.do_menu(node, menu, node.entity)
+                    for menu_class in menus:
+                        if type(menu_class) is dict:
+                            self.do_old_menu(node, menu_class, node.entity)
 
-                    # self.create_new_node(
-                    #     title = "Publications",
-                    #     url = node.entity.get_auto_page_url("publications"),
-                    #     parent = node,
-                    #     )
+                        else:
+                            self.do_menu(node, menu_class, node.entity)
+
+
 
             # print "    ++ saving cache", key
             cache.set(key, self.nodes, CACHE_DURATIONS)
@@ -127,23 +110,75 @@ class ArkestraPages(Modifier):
             #         pass
             return self.nodes
 
-    def do_menu(self, node, menu, entity):
+    def do_menu(self, node, menu_class, entity):
+        # an always_publish menu is always published, no matter what
+        if menu_class.always_publish:
+            new_node = self.create_new_node(
+                title=menu_class.menu_title,
+                url=entity.get_auto_page_url(menu_class.url),
+                parent=node,
+                )
+            return
 
+        try:
+            # does the entity have a related menu class?
+            related_class = menu_class.model.objects.get(entity=entity)
+
+            # this menu is always published if the entity wants one
+            if menu_class.lister is None:
+                if related_class.publish_page:
+                    new_node = self.create_new_node(
+                        title=related_class.menu_title,
+                        url=entity.get_auto_page_url(menu_class.url),
+                        parent=node,
+                        )
+                return
+
+            # this menu is only published if the lister has items
+            else:
+                # create an instance of the lister for menus
+                lister_ = menu_class.lister(entity=entity)
+                if lister_.lists:
+                    new_node = self.create_new_node(
+                        title=related_class.menu_title,
+                        url=entity.get_auto_page_url(menu_class.url),
+                        parent=node,
+                        )
+                    # does this menu call for sub-menu items?
+                    if menu_class.sub_menus:
+                        for list_ in lister_.lists:
+                            # and go through the other_items lists for each,
+                            # creating a node for each
+                            for other_item in list_.other_items():
+                                self.create_new_node(
+                                    title=other_item["title"],
+                                    url=other_item["link"],
+                                    parent=new_node,
+                                )
+
+        # in case the entity has no reverse relation to the menu class instance
+        except menu_class.model.DoesNotExist:
+            return
+
+
+    def do_old_menu(self, node, menu_class, entity):
         # does this entity have this kind of auto-page in the menu?
-        if getattr(entity, menu["auto_page_attribute"]):
-            if menu.get("lister"):
+        if getattr(entity, menu_class["auto_page_attribute"]):
+            if menu_class.get("lister"):
                 # create an instance of the lister with appropriate attributes
-                lister_ = menu.get("lister")(entity=entity)
+                lister_ = menu_class.get("lister")(entity=entity)
                 # use the instance to create an instance of the plugin
                 # publisher
                 if lister_.lists:
                     new_node = self.create_new_node(
-                        title=getattr(entity, menu["title_attribute"]),
-                        url=entity.get_auto_page_url(menu["url_attribute"]),
+                        title=getattr(entity, menu_class["title_attribute"]),
+                        url=entity.get_auto_page_url(
+                            menu_class["url_attribute"]
+                            ),
                         parent=node
                         )
                     # does this menu call for sub-menu items?
-                    if menu.get("sub_menus", None):
+                    if menu_class.get("sub_menus", None):
                         for list_ in lister_.lists:
                             # and go through the other_items lists for each,
                             # creating a node for each
@@ -156,8 +191,8 @@ class ArkestraPages(Modifier):
 
             else:
                 new_node = self.create_new_node(
-                    title=getattr(entity, menu["title_attribute"]),
-                    url=entity.get_auto_page_url(menu["url_attribute"]),
+                    title=getattr(entity, menu_class["title_attribute"]),
+                    url=entity.get_auto_page_url(menu_class["url_attribute"]),
                     parent=node,
                     )
             # if new_node:

@@ -5,7 +5,8 @@ from contacts_and_people.models import Entity, Person
 
 from arkestra_utilities.text import concatenate
 from generic_lister import (
-    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet
+    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
+    ArkestraGenericFilterList
     )
 from generic_models import ArkestraGenericModel
 
@@ -296,3 +297,29 @@ class ListerTests(TestCase):
         self.assertEqual(
             lister.lists, []
         )
+
+
+
+
+# these classes and the FilterSetTests check that ArkestraGenericFilterSet
+# does not inadvertantly get interfered with
+class BasicFilterSet(ArkestraGenericFilterSet):
+    pass
+
+
+class BasicList(ArkestraGenericFilterList):
+    model = TestModel
+    filter_set = BasicFilterSet
+
+
+class BasicGenericList(ArkestraGenericFilterList):
+    model = TestModel
+
+
+class FilterSetTests(TestCase):
+
+    def test_filter_has_correct_fields(self):
+        self.assertItemsEqual(BasicGenericList.filter_set.fields, [])
+
+    def test_filter_has_correct_fields(self):
+        self.assertItemsEqual(BasicList.filter_set.fields, [])

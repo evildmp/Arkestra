@@ -5,7 +5,7 @@ from django.test.client import Client
 from django.test.utils import override_settings
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import resolve, reverse
 from django.contrib.auth.models import User
 from django.http import HttpRequest, QueryDict
 
@@ -22,15 +22,6 @@ from contacts_and_people.models import Entity, Person, Building, Site
 @override_settings(USE_TZ=False)
 class NewsTests(TestCase):
     def setUp(self):
-        # Every test needs a client.
-        self.client = Client()
-
-        # self.school = Entity(
-        #     name="School of Medicine",
-        #     slug="medicine",
-        #     )
-        # self.school.save()
-
         # create a news item
         self.tootharticle = NewsArticle(
             title="All about teeth",
@@ -56,13 +47,21 @@ class NewsTests(TestCase):
         self.tootharticle.date = datetime(year=2012, month=12, day=12)
         self.assertEqual(self.tootharticle.get_when, "December 2012")
 
+    def test_link_to_more(self):
+        self.assertEqual(
+            self.tootharticle.auto_page_view_name,
+            "news-and-events"
+            )
+        self.tootharticle.hosted_by = Entity(slug="slug")
+        self.assertEqual(
+            self.tootharticle.link_to_more(),
+            "/news-and-events/slug/"
+            )
+
 
 @override_settings(CMS_TEMPLATES=(('null.html', "Null"),))
 class NewsEventsItemsViewsTests(TestCase):
     def setUp(self):
-        # Every test needs a client.
-        self.client = Client()
-
         # create a news item
         self.tootharticle = NewsArticle(
             title="All about teeth",
@@ -110,6 +109,40 @@ class NewsEventsItemsViewsTests(TestCase):
         self.assertEqual(response.context['newsarticle'], self.tootharticle)
 
 
+class ResolveURLsTests(TestCase):
+    def test_resolve_news_and_events_base_entity(self):
+        resolver = resolve('/news-and-events/')
+        self.assertEqual(resolver.view_name, "news-and-events")
+
+    def test_resolve_news_and_events_named_entity(self):
+        resolver = resolve('/news-and-events/slug/')
+        self.assertEqual(resolver.view_name, "news-and-events")
+
+    def test_resolve_news_archive_base_entity(self):
+        resolver = resolve('/news-archive/')
+        self.assertEqual(resolver.view_name, "news-archive")
+
+    def test_resolve_news_archive_named_entity(self):
+        resolver = resolve('/news-archive/slug/')
+        self.assertEqual(resolver.view_name, "news-archive")
+
+    def test_resolve_events_archive_base_entity(self):
+        resolver = resolve('/previous-events/')
+        self.assertEqual(resolver.view_name, "events-archive")
+
+    def test_resolve_events_archive_named_entity(self):
+        resolver = resolve('/previous-events/slug/')
+        self.assertEqual(resolver.view_name, "events-archive")
+
+    def test_resolve_events_forthcoming_base_entity(self):
+        resolver = resolve('/forthcoming-events/')
+        self.assertEqual(resolver.view_name, "events-forthcoming")
+
+    def test_resolve_events_forthcoming_named_entity(self):
+        resolver = resolve('/forthcoming-events/slug/')
+        self.assertEqual(resolver.view_name, "events-forthcoming")
+
+
 class ReverseURLsTests(TestCase):
     def test_newsarticle_reverse_url(self):
         self.assertEqual(
@@ -125,7 +158,7 @@ class ReverseURLsTests(TestCase):
 
     def test_news_archive_base_reverse_url(self):
         self.assertEqual(
-            reverse("news-archive-base"),
+            reverse("news-archive"),
             "/news-archive/"
             )
 
@@ -137,7 +170,7 @@ class ReverseURLsTests(TestCase):
 
     def test_previous_events_base_reverse_url(self):
         self.assertEqual(
-            reverse("events-archive-base"),
+            reverse("events-archive"),
             "/previous-events/"
             )
 
@@ -149,7 +182,7 @@ class ReverseURLsTests(TestCase):
 
     def test_forthcoming_events_base_reverse_url(self):
         self.assertEqual(
-            reverse("events-forthcoming-base"),
+            reverse("events-forthcoming"),
             "/forthcoming-events/"
             )
 
@@ -161,7 +194,7 @@ class ReverseURLsTests(TestCase):
 
     def test_base_reverse_url(self):
         self.assertEqual(
-            reverse("news-and-events-base"),
+            reverse("news-and-events"),
             "/news-and-events/"
             )
 
@@ -697,7 +730,7 @@ class EventsListTests(TestCase):
         school.save()
 
         self.itemlist.entity = school
-        self.itemlist.other_item_kinds = ("previous_events")
+        self.itemlist.other_item_kinds = ("previous_events", "forthcoming_events")
         self.item1.hosted_by = school
         self.item2.hosted_by = school
         self.item3.hosted_by = school
@@ -709,6 +742,11 @@ class EventsListTests(TestCase):
         self.assertEqual(
             self.itemlist.other_items(),
             [{
+                'count': 2,
+                'link': '/forthcoming-events/',
+                'title': 'All forthcoming events'
+            },
+            {
                 'count': 1,
                 'link': '/previous-events/',
                 'title': 'Previous events'

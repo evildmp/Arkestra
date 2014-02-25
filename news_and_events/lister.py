@@ -242,14 +242,14 @@ class EventsList(ArkestraGenericList):
 
         if "forthcoming_events" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url("forthcoming-events"),
+                "link": self.entity.get_auto_page_url("events-forthcoming"),
                 "title": "All forthcoming events",
                 "count": self.forthcoming_events.count(),
                 })
 
         if "previous_events" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url("previous-events"),
+                "link": self.entity.get_auto_page_url("events-archive"),
                 "title": "Previous events",
                 "count": self.previous_events.count(),
                 })
