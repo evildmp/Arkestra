@@ -191,7 +191,11 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',
     'widgetry',
-    'south', # don't leave this disabled
+    # 'south', # don't leave this disabled; after re-enabling south:
+
+    # python manage.py syncdb # create the south tables
+    # python manage.py migrate --fake # create fake migration records
+
     'treeadmin',
     'pagination',
 
