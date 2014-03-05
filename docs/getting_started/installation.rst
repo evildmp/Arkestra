@@ -32,8 +32,6 @@ Install PIP components
 
     # install Arkestra & dependencies
     pip install -e git+https://github.com/evildmp/Arkestra.git@develop#egg=Arkestra
-    # install the things that pip can't do automatically
-    pip install -r src/arkestra/REQUIREMENTS.txt
 
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included.
@@ -64,8 +62,8 @@ Username and password are both `arkestra`.
 Note!
 =====
 
-When you start up the server, you won't see any of the news/events/vacancies/studentships items you'd expect.
+When you start up the server, you may not see any of the news/events/vacancies/studentships items you'd expect.
 
-That's because they're all out of date by now - this database was created some time ago.
+That's because they're out of date by now - this database was created some time ago.
 
 Go into the news/events/vacancies/studentships and give them more appropriate dates.
