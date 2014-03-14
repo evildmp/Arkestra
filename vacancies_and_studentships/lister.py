@@ -45,17 +45,15 @@ class List(ArkestraGenericList):
 
         if "open" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url(self.model_string),
-                "title": "All open %s" % self.model_string,
+                "link": self.entity.get_auto_page_url("vacancies-current"),
+                "title": "All open vacancies",
                 "count": self.open.count(),
                 })
 
         if "archived" in self.other_item_kinds:
             other_items.append({
-                "link": self.entity.get_auto_page_url(
-                    "archived-%s" % self.model_string
-                    ),
-                "title": "Archived %s" % self.model_string,
+                "link": self.entity.get_auto_page_url("vacancies-archive"),
+                "title": "Archived vacancies",
                 "count": self.archived.count(),
                 })
 
@@ -83,7 +81,6 @@ class VacanciesListMixin(object):
     Any Vacancy list needs to inherit this
     """
     model = Vacancy
-    model_string = "vacancies"
 
 
 class StudentshipsListMixin(object):
@@ -91,7 +88,6 @@ class StudentshipsListMixin(object):
     Any Studentship list needs to inherit this
     """
     model = Studentship
-    model_string = "studentships"
 
 
 class VacanciesListCurrent(VacanciesListMixin, List):
@@ -138,9 +134,12 @@ class StudentshipsListForPerson(StudentshipsListMixin, List):
         self.set_show_when()
 
 
+class FilterSet(ArkestraGenericFilterSet):
+    fields = ["date"]
+
+
 class FilterList(List):
-    filter_set = ArkestraGenericFilterSet
-    filter_set.fields = ['date']
+    filter_set = FilterSet
     search_fields = [
         {
             "field_name": "text",

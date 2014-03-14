@@ -1,6 +1,33 @@
 [
     {
         "pk": 1, 
+        "model": "arkestra_utilities.insert", 
+        "fields": {
+            "content": 77, 
+            "description": "Add a plugin, if you dare", 
+            "insertion_point": "newsflash"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "arkestra_utilities.insert", 
+        "fields": {
+            "content": 78, 
+            "description": "A site-wide footer", 
+            "insertion_point": "footer-disabled"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "arkestra_utilities.insert", 
+        "fields": {
+            "content": 97, 
+            "description": null, 
+            "insertion_point": "footer"
+        }
+    }, 
+    {
+        "pk": 1, 
         "model": "cms.placeholder", 
         "fields": {
             "slot": "body", 
@@ -3152,134 +3179,6 @@
         }
     }, 
     {
-        "pk": 396, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 397, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 398, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 399, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 400, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 401, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 402, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 403, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 404, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 405, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 406, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 407, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 408, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 409, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "body", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 410, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "insert", 
-            "default_width": null
-        }
-    }, 
-    {
-        "pk": 411, 
-        "model": "cms.placeholder", 
-        "fields": {
-            "slot": "insert", 
-            "default_width": null
-        }
-    }, 
-    {
         "pk": 1, 
         "model": "cms.cmsplugin", 
         "fields": {
@@ -4674,6 +4573,15 @@
         }
     }, 
     {
+        "pk": 7, 
+        "model": "menus.cachekey", 
+        "fields": {
+            "key": "cms-menu_nodes_en_1_/contact/", 
+            "site": 1, 
+            "language": "en"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "text.text", 
         "fields": {
@@ -4985,7 +4893,6 @@
             "building": 1, 
             "auto_contacts_page": true, 
             "precise_location": "", 
-            "url": "", 
             "level": 0, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Jobs", 
@@ -5018,7 +4925,6 @@
             "building": null, 
             "auto_contacts_page": false, 
             "precise_location": "", 
-            "url": "", 
             "level": 1, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5051,7 +4957,6 @@
             "building": null, 
             "auto_contacts_page": false, 
             "precise_location": "", 
-            "url": "", 
             "level": 2, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5084,7 +4989,6 @@
             "building": null, 
             "auto_contacts_page": false, 
             "precise_location": "", 
-            "url": "", 
             "level": 1, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5117,7 +5021,6 @@
             "building": 2, 
             "auto_contacts_page": true, 
             "precise_location": "5th Floor", 
-            "url": "", 
             "level": 2, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5150,7 +5053,6 @@
             "building": null, 
             "auto_contacts_page": true, 
             "precise_location": "Mediaeval Surgery", 
-            "url": "", 
             "level": 2, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5183,7 +5085,6 @@
             "building": null, 
             "auto_contacts_page": true, 
             "precise_location": "", 
-            "url": "", 
             "level": 2, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "vacancies & studentships", 
@@ -5216,7 +5117,6 @@
             "building": null, 
             "auto_contacts_page": true, 
             "precise_location": "", 
-            "url": "", 
             "level": 2, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5249,7 +5149,6 @@
             "building": null, 
             "auto_contacts_page": false, 
             "precise_location": "", 
-            "url": "", 
             "level": 0, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5282,7 +5181,6 @@
             "building": null, 
             "auto_contacts_page": false, 
             "precise_location": "", 
-            "url": "", 
             "level": 0, 
             "news_page_intro": null, 
             "vacancies_page_menu_title": "Vacancies & studentships", 
@@ -5695,14 +5593,13 @@
             "in_lists": true, 
             "description": null, 
             "title": "Tooth puller", 
-            "url": null, 
+            "importance": 0, 
             "image": 7, 
             "publish_to": [
                 1
             ], 
             "short_title": "Tooth puller", 
             "summary": "A qualified tooth puller is required to assist both in a clinical capacity and for research purposes", 
-            "importance": 0, 
             "please_contact": [
                 7
             ], 
@@ -5723,12 +5620,11 @@
             "in_lists": true, 
             "description": null, 
             "title": "Trainee tooth puller", 
-            "url": null, 
+            "importance": 0, 
             "image": 7, 
             "publish_to": [], 
             "short_title": "Trainee tooth puller", 
             "summary": "A trainee tooth puller is required to work alongside qualified staff. No experience necessary", 
-            "importance": 0, 
             "please_contact": [], 
             "published": true, 
             "date": "2012-09-11", 
@@ -5746,12 +5642,11 @@
             "in_lists": true, 
             "description": null, 
             "title": "Evil Eye - identifying signs", 
-            "url": null, 
+            "importance": 0, 
             "image": 6, 
             "publish_to": [], 
             "short_title": "Evil Eye - identifying signs", 
             "summary": "A three-year doctoral opportunity working as part of the Evil Eye special research project", 
-            "importance": 0, 
             "supervisors": [
                 12
             ], 
@@ -5833,58 +5728,6 @@
         }
     }, 
     {
-        "pk": 7, 
-        "model": "news_and_events.newsarticle", 
-        "fields": {
-            "body": 95, 
-            "hosted_by": 1, 
-            "in_lists": true, 
-            "title": "Evil spirits prompt Egyptian seed ban", 
-            "url": null, 
-            "sticky_until": null, 
-            "image": null, 
-            "is_sticky_everywhere": false, 
-            "publish_to": [], 
-            "display_indefinitely": false, 
-            "short_title": "Evil spirits prompt seed ban", 
-            "summary": "Evil spirits have infested recent supplies of Egyptian seeds; research by the Institute leads to a ban on imports", 
-            "content": null, 
-            "importance": 0, 
-            "external_news_source": null, 
-            "published": true, 
-            "date": "2014-07-04T23:27:19", 
-            "please_contact": [], 
-            "slug": "evil-spirits-prompt-egyptian-seed-ban", 
-            "external_url": 2
-        }
-    }, 
-    {
-        "pk": 6, 
-        "model": "news_and_events.newsarticle", 
-        "fields": {
-            "body": 93, 
-            "hosted_by": 1, 
-            "in_lists": true, 
-            "title": "Institute academic dismisses so-called \"germ theory\"", 
-            "url": null, 
-            "sticky_until": null, 
-            "image": null, 
-            "is_sticky_everywhere": false, 
-            "publish_to": [], 
-            "display_indefinitely": false, 
-            "short_title": "Institute academic dismisses \"germ theory\"", 
-            "summary": "A leading researcher at the Institute has shown the new and fashionable \"germ theory\" to have no scientific basis and to be contrary to the laws of nature", 
-            "content": null, 
-            "importance": 0, 
-            "external_news_source": null, 
-            "published": true, 
-            "date": "2014-03-01T23:21:34", 
-            "please_contact": [], 
-            "slug": "institute-academic-dismisses-germ-theory", 
-            "external_url": null
-        }
-    }, 
-    {
         "pk": 8, 
         "model": "news_and_events.newsarticle", 
         "fields": {
@@ -5892,8 +5735,7 @@
             "hosted_by": 2, 
             "in_lists": true, 
             "title": "The teeth of the future", 
-            "url": null, 
-            "sticky_until": null, 
+            "importance": 0, 
             "image": 9, 
             "is_sticky_everywhere": false, 
             "publish_to": [], 
@@ -5901,7 +5743,7 @@
             "short_title": "The teeth of the future", 
             "summary": "Will the people of the future enjoy mouths full of rotting teeth? Prognostical research probes the evidence", 
             "content": null, 
-            "importance": 0, 
+            "sticky_until": null, 
             "external_news_source": null, 
             "published": true, 
             "date": "2014-02-13T13:09:10", 
@@ -5918,8 +5760,7 @@
             "hosted_by": 15, 
             "in_lists": true, 
             "title": "Witchcraft MSc an enormous success for Institute", 
-            "url": null, 
-            "sticky_until": null, 
+            "importance": 0, 
             "image": null, 
             "is_sticky_everywhere": false, 
             "publish_to": [
@@ -5929,12 +5770,37 @@
             "short_title": "Witchcraft MSc success", 
             "summary": "The Institute's MSc in Witchcraft, launched last year, has become one of the most popular in Europe", 
             "content": null, 
-            "importance": 0, 
+            "sticky_until": null, 
             "external_news_source": null, 
             "published": true, 
             "date": "2011-07-03T23:15:39", 
             "please_contact": [], 
             "slug": "witchcraft-msc-enormous-success-institute", 
+            "external_url": null
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "news_and_events.newsarticle", 
+        "fields": {
+            "body": 93, 
+            "hosted_by": 1, 
+            "in_lists": true, 
+            "title": "Institute academic dismisses so-called \"germ theory\"", 
+            "importance": 0, 
+            "image": null, 
+            "is_sticky_everywhere": false, 
+            "publish_to": [], 
+            "display_indefinitely": false, 
+            "short_title": "Institute academic dismisses \"germ theory\"", 
+            "summary": "A leading researcher at the Institute has shown the new and fashionable \"germ theory\" to have no scientific basis and to be contrary to the laws of nature", 
+            "content": null, 
+            "sticky_until": null, 
+            "external_news_source": null, 
+            "published": true, 
+            "date": "2011-07-01T23:21:34", 
+            "please_contact": [], 
+            "slug": "institute-academic-dismisses-germ-theory", 
             "external_url": null
         }
     }, 
@@ -5946,8 +5812,7 @@
             "hosted_by": 1, 
             "in_lists": true, 
             "title": "Mediaeval techniques 'help smokers quit'", 
-            "url": null, 
-            "sticky_until": null, 
+            "importance": 0, 
             "image": null, 
             "is_sticky_everywhere": false, 
             "publish_to": [], 
@@ -5955,7 +5820,7 @@
             "short_title": "Mediaeval techniques 'help smokers quit'", 
             "summary": "Mediaeval techniques can double the chance of someone successfully quitting smoking, according to UK researchers.\r\n", 
             "content": null, 
-            "importance": 0, 
+            "sticky_until": null, 
             "external_news_source": null, 
             "published": true, 
             "date": "2011-06-22T22:05:18", 
@@ -5972,8 +5837,7 @@
             "hosted_by": 1, 
             "in_lists": true, 
             "title": "Prof Ernie Brooks awarded Nobel prize for Medicine", 
-            "url": null, 
-            "sticky_until": "2012-01-10", 
+            "importance": 10, 
             "image": 2, 
             "is_sticky_everywhere": false, 
             "publish_to": [], 
@@ -5981,7 +5845,7 @@
             "short_title": "Nobel Committee honour", 
             "summary": "Prof Ernie Brooks, Dean of Research at the Institute, has been awarded the 2011 Nobel prize for Medicine", 
             "content": null, 
-            "importance": 10, 
+            "sticky_until": "2012-01-10", 
             "external_news_source": null, 
             "published": true, 
             "date": "2011-06-06T01:07:01", 
@@ -5998,8 +5862,7 @@
             "hosted_by": 1, 
             "in_lists": true, 
             "title": "Plague \"not a threat\"", 
-            "url": null, 
-            "sticky_until": null, 
+            "importance": 0, 
             "image": null, 
             "is_sticky_everywhere": false, 
             "publish_to": [], 
@@ -6007,7 +5870,7 @@
             "short_title": "Plague \"not a threat\"", 
             "summary": "The recent plague sweeping the country will not affect the Institute's work", 
             "content": null, 
-            "importance": 0, 
+            "sticky_until": null, 
             "external_news_source": null, 
             "published": true, 
             "date": "2011-05-07T10:20:52", 
@@ -6024,8 +5887,7 @@
             "hosted_by": 9, 
             "in_lists": true, 
             "title": "Advances in malaria research", 
-            "url": null, 
-            "sticky_until": null, 
+            "importance": 0, 
             "image": null, 
             "is_sticky_everywhere": false, 
             "publish_to": [
@@ -6035,13 +5897,38 @@
             "short_title": "Advances in malaria research", 
             "summary": "The Institute's work into malaria is helping lift the veil on a terrible disease", 
             "content": null, 
-            "importance": 0, 
+            "sticky_until": null, 
             "external_news_source": null, 
             "published": true, 
             "date": "2011-04-30T19:18:55", 
             "please_contact": [], 
             "slug": "advances-malaria-research", 
             "external_url": null
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "news_and_events.newsarticle", 
+        "fields": {
+            "body": 95, 
+            "hosted_by": 1, 
+            "in_lists": true, 
+            "title": "Evil spirits prompt Egyptian seed ban", 
+            "importance": 0, 
+            "image": null, 
+            "is_sticky_everywhere": false, 
+            "publish_to": [], 
+            "display_indefinitely": false, 
+            "short_title": "Evil spirits prompt seed ban", 
+            "summary": "Evil spirits have infested recent supplies of Egyptian seeds; research by the Institute leads to a ban on imports", 
+            "content": null, 
+            "sticky_until": null, 
+            "external_news_source": null, 
+            "published": true, 
+            "date": "2010-07-04T23:27:19", 
+            "please_contact": [], 
+            "slug": "evil-spirits-prompt-egyptian-seed-ban", 
+            "external_url": 2
         }
     }, 
     {
@@ -6073,7 +5960,6 @@
             "building": null, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 0, 
             "show_titles": "series children", 
             "publish_to": [], 
@@ -6118,7 +6004,6 @@
             "building": 3, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 0, 
             "show_titles": "children", 
             "publish_to": [
@@ -6163,7 +6048,6 @@
             "building": 3, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 1, 
             "show_titles": "children", 
             "publish_to": [
@@ -6208,7 +6092,6 @@
             "building": 3, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 1, 
             "show_titles": "children", 
             "publish_to": [
@@ -6253,7 +6136,6 @@
             "building": 3, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 1, 
             "show_titles": "children", 
             "publish_to": [
@@ -6298,7 +6180,6 @@
             "building": 3, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 1, 
             "show_titles": "children", 
             "publish_to": [
@@ -6343,7 +6224,6 @@
             "building": null, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 0, 
             "show_titles": "children", 
             "publish_to": [], 
@@ -6388,7 +6268,6 @@
             "building": null, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 1, 
             "show_titles": "children", 
             "publish_to": [
@@ -6397,6 +6276,52 @@
             "short_title": "2011 Dark Ages Society Conference", 
             "summary": "The Annual Conference is a key multidisciplinary meeting for scholars in the field", 
             "end_time": null, 
+            "published": true, 
+            "please_contact": [], 
+            "jumps_queue_on": null, 
+            "child_list_heading": "", 
+            "external_url": null
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "news_and_events.event", 
+        "fields": {
+            "rght": 2, 
+            "single_day_event": true, 
+            "series": false, 
+            "image": 5, 
+            "lft": 1, 
+            "end_date": "2012-01-20", 
+            "access_note": "", 
+            "title": "Mediaeval medical forensic science", 
+            "content": null, 
+            "display_series_summary": false, 
+            "tree_id": 5, 
+            "featuring": [
+                5
+            ], 
+            "type": 3, 
+            "body": 113, 
+            "hosted_by": 1, 
+            "parent": null, 
+            "registration_enquiries": [], 
+            "importance": 0, 
+            "start_time": "12:00:00", 
+            "jumps_queue_everywhere": false, 
+            "date": "2012-01-20", 
+            "slug": "mediaeval-medical-forensic-science", 
+            "building": 3, 
+            "in_lists": true, 
+            "precise_location": "", 
+            "level": 0, 
+            "show_titles": "children", 
+            "publish_to": [
+                1
+            ], 
+            "short_title": "Mediaeval medical forensic science", 
+            "summary": "Medical science at the forefront of the fight against crime", 
+            "end_time": "13:00:00", 
             "published": true, 
             "please_contact": [], 
             "jumps_queue_on": null, 
@@ -6435,7 +6360,6 @@
             "building": null, 
             "in_lists": true, 
             "precise_location": "", 
-            "url": null, 
             "level": 0, 
             "show_titles": "children", 
             "publish_to": [
@@ -6443,53 +6367,6 @@
             ], 
             "short_title": "Why Witchcraft Works", 
             "summary": "A lecture by Sterling Morrison, Director of our MSc in Witchcraft programme", 
-            "end_time": "13:00:00", 
-            "published": true, 
-            "please_contact": [], 
-            "jumps_queue_on": null, 
-            "child_list_heading": "", 
-            "external_url": null
-        }
-    }, 
-    {
-        "pk": 9, 
-        "model": "news_and_events.event", 
-        "fields": {
-            "rght": 2, 
-            "single_day_event": true, 
-            "series": false, 
-            "image": 5, 
-            "lft": 1, 
-            "end_date": "2014-06-20", 
-            "access_note": "", 
-            "title": "Mediaeval medical forensic science", 
-            "content": null, 
-            "display_series_summary": false, 
-            "tree_id": 5, 
-            "featuring": [
-                5
-            ], 
-            "type": 3, 
-            "body": 113, 
-            "hosted_by": 1, 
-            "parent": null, 
-            "registration_enquiries": [], 
-            "importance": 0, 
-            "start_time": "12:00:00", 
-            "jumps_queue_everywhere": false, 
-            "date": "2014-06-20", 
-            "slug": "mediaeval-medical-forensic-science", 
-            "building": 3, 
-            "in_lists": true, 
-            "precise_location": "", 
-            "url": null, 
-            "level": 0, 
-            "show_titles": "children", 
-            "publish_to": [
-                1
-            ], 
-            "short_title": "Mediaeval medical forensic science", 
-            "summary": "Medical science at the forefront of the fight against crime", 
             "end_time": "13:00:00", 
             "published": true, 
             "please_contact": [], 
@@ -7509,7 +7386,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 5, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "buttonise", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7522,7 +7399,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "no-small-caps", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7535,7 +7412,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "doublecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 2, 
@@ -7548,7 +7425,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "images-left", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7561,7 +7438,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "images-right", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7574,7 +7451,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 3, 
-            "templates": "[u'[u\\'[u\\\\\\'[u\\\\\\\\\\\\\\'[u\"[u\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'[]\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\']\"]\\\\\\\\\\\\\\']\\\\\\']\\']']", 
+            "templates": "[u'[u\\'[u\\\\\\'[u\"[u\\\\\\\\\\\\\\'[]\\\\\\\\\\\\\\']\"]\\\\\\']\\']']", 
             "name": "background green", 
             "allowed_elements": "p blockquote ul ol li newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7587,7 +7464,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "image-borders", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7600,7 +7477,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "shadowed", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7613,7 +7490,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "no-image-link-arrows", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7626,7 +7503,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "standout", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7639,7 +7516,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "standout-mild", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7652,7 +7529,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u'[u\\'[u\"[u\\\\\\'\\\\\\']\"]\\']']", 
+            "templates": "[u'[u\"[u\\'\\']\"]']", 
             "name": "triplecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 3, 
@@ -7837,7 +7714,7 @@
         "fields": {
             "name": "filer/2011/07/06/07.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:07:26.536"
+            "modified": "2014-02-14T16:42:03"
         }
     }, 
     {
@@ -7846,25 +7723,43 @@
         "fields": {
             "name": "filer/2011/07/06/335.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-13T17:01:55.826"
+            "modified": "2014-02-14T16:42:03"
         }
     }, 
     {
         "pk": 22, 
         "model": "easy_thumbnails.source", 
         "fields": {
-            "name": "filer/2011/07/28/15644525.jpg", 
+            "name": "filer/2011/06/30/0020n040.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:23.937"
+            "modified": "2014-02-14T16:42:03"
         }
     }, 
     {
         "pk": 23, 
         "model": "easy_thumbnails.source", 
         "fields": {
-            "name": "filer/2011/07/06/jonathan-richman-101.jpg", 
+            "name": "filer/2011/07/28/arrow-right_1.png", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:52.189"
+            "modified": "2014-02-14T16:42:03"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "easy_thumbnails.source", 
+        "fields": {
+            "name": "filer/2011/07/28/arrow-down_1.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2014-02-14T16:42:03"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "easy_thumbnails.source", 
+        "fields": {
+            "name": "filer/2011/07/06/johncale.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2014-02-14T16:42:03"
         }
     }, 
     {
@@ -10351,10 +10246,10 @@
         "pk": 249, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 20, 
-            "name": "filer_public_thumbnails/filer/2011/07/06/07.jpg__460x460_q85_crop_subject_location-257,117.jpg", 
+            "source": 21, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/335.jpg__294x196_q85_crop_subject_location-249,172.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:07:26.792"
+            "modified": "2014-02-18T23:59:07.850"
         }
     }, 
     {
@@ -10362,79 +10257,59 @@
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
             "source": 22, 
-            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457,409_upscale.jpg", 
+            "name": "filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__294x384_q85_crop_subject_location-178,292.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:24.034"
+            "modified": "2014-03-13T11:16:52.546"
         }
     }, 
     {
         "pk": 251, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 22, 
-            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__64x64_q85_crop_subject_location-457,409_upscale.jpg", 
+            "source": 23, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__50x110_q85_crop.png", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:24.157"
+            "modified": "2014-03-13T11:16:52.694"
         }
     }, 
     {
         "pk": 252, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 22, 
-            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__48x48_q85_crop_subject_location-457,409_upscale.jpg", 
+            "source": 24, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__50x22_q85_crop.png", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:24.281"
+            "modified": "2014-03-13T11:16:52.878"
         }
     }, 
     {
         "pk": 253, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 22, 
-            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__16x16_q85_crop_subject_location-457,409_upscale.jpg", 
+            "source": 21, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/335.jpg__75x75_q85_crop_subject_location-249,172.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:24.420"
+            "modified": "2014-03-13T11:16:53.094"
         }
     }, 
     {
         "pk": 254, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 23, 
-            "name": "filer_public_thumbnails/filer/2011/07/06/jonathan-richman-101.jpg__32x32_q85_crop_subject_location-189,101_upscale.jpg", 
+            "source": 20, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/07.jpg__40x40_q85_crop_subject_location-257,117.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:52.345"
+            "modified": "2014-03-13T11:16:57.882"
         }
     }, 
     {
         "pk": 255, 
         "model": "easy_thumbnails.thumbnail", 
         "fields": {
-            "source": 23, 
-            "name": "filer_public_thumbnails/filer/2011/07/06/jonathan-richman-101.jpg__64x64_q85_crop_subject_location-189,101_upscale.jpg", 
+            "source": 25, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/johncale.jpg__40x40_q85_crop_subject_location-233,86.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:52.485"
-        }
-    }, 
-    {
-        "pk": 256, 
-        "model": "easy_thumbnails.thumbnail", 
-        "fields": {
-            "source": 23, 
-            "name": "filer_public_thumbnails/filer/2011/07/06/jonathan-richman-101.jpg__48x48_q85_crop_subject_location-189,101_upscale.jpg", 
-            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:52.604"
-        }
-    }, 
-    {
-        "pk": 257, 
-        "model": "easy_thumbnails.thumbnail", 
-        "fields": {
-            "source": 23, 
-            "name": "filer_public_thumbnails/filer/2011/07/06/jonathan-richman-101.jpg__16x16_q85_crop_subject_location-189,101_upscale.jpg", 
-            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-03-05T15:08:52.710"
+            "modified": "2014-03-13T11:16:58.054"
         }
     }, 
     {
@@ -10447,7 +10322,7 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2014-03-05T15:06:53.099", 
+            "last_login": "2014-02-13T21:41:49.486", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$qXiZFHkAMorY$TY93IarzG+j3RjgU4SCBY7e1Ej+0ISCY+FfhQUblAi8=", 
@@ -10568,11 +10443,43 @@
         }
     }, 
     {
-        "pk": "756a377aa74d4c31c64db6f07333d1e0", 
+        "pk": "d4977bdc502043f5fb0618ed6ca1088e", 
         "model": "sessions.session", 
         "fields": {
-            "expire_date": "2014-03-19T15:07:05.914", 
-            "session_data": "NWY2YzIzNGQ1ZmU0OTc5MjAwNzM1OGNmN2M4MzdkMGQzOTkzOGZhZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlcQJLAVUNX2F1dGhfdXNlcl9pZEsBVRJfYXV0aF91c2VyX2JhY2tlbmRVKWRqYW5nby5j\nb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kdS4=\n"
+            "expire_date": "2014-03-04T23:38:58.536", 
+            "session_data": "ODUzZjNkNWJiN2Y3OTk2M2FkNDllMzI5ZDM4ZjI5MzQxYzhjN2JiYTqAAn1xAS4=\n"
+        }
+    }, 
+    {
+        "pk": "671a6f482e98e2c7b28d3c20f39e3ff3", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2014-03-04T23:51:27.288", 
+            "session_data": "ODUzZjNkNWJiN2Y3OTk2M2FkNDllMzI5ZDM4ZjI5MzQxYzhjN2JiYTqAAn1xAS4=\n"
+        }
+    }, 
+    {
+        "pk": "c59d815093c65d8f900505b3aa0739dd", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2014-03-04T23:51:27.695", 
+            "session_data": "ODUzZjNkNWJiN2Y3OTk2M2FkNDllMzI5ZDM4ZjI5MzQxYzhjN2JiYTqAAn1xAS4=\n"
+        }
+    }, 
+    {
+        "pk": "36e711c855e9aaf5915eeada7ea6b547", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2014-03-10T11:42:42.002", 
+            "session_data": "ODUzZjNkNWJiN2Y3OTk2M2FkNDllMzI5ZDM4ZjI5MzQxYzhjN2JiYTqAAn1xAS4=\n"
+        }
+    }, 
+    {
+        "pk": "3b9347086a076a029777733c8425debe", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2014-03-27T11:16:53.234", 
+            "session_data": "ODUzZjNkNWJiN2Y3OTk2M2FkNDllMzI5ZDM4ZjI5MzQxYzhjN2JiYTqAAn1xAS4=\n"
         }
     }, 
     {
@@ -10581,96 +10488,6 @@
         "fields": {
             "domain": "l003.medcn.uwcm.ac.uk:8000", 
             "name": "l003.medcn.uwcm.ac.uk:8000"
-        }
-    }, 
-    {
-        "pk": 43, 
-        "model": "admin.logentry", 
-        "fields": {
-            "action_flag": 2, 
-            "action_time": "2014-03-05T15:09:07.109", 
-            "object_repr": "Mediaeval medical forensic science", 
-            "object_id": "9", 
-            "change_message": "Changed date, end_date and body.", 
-            "user": [
-                "arkestra"
-            ], 
-            "content_type": [
-                "news_and_events", 
-                "event"
-            ]
-        }
-    }, 
-    {
-        "pk": 42, 
-        "model": "admin.logentry", 
-        "fields": {
-            "action_flag": 2, 
-            "action_time": "2014-03-05T15:08:41.059", 
-            "object_repr": "Institute academic dismisses so-called \"germ theory\"", 
-            "object_id": "6", 
-            "change_message": "Changed date and body.", 
-            "user": [
-                "arkestra"
-            ], 
-            "content_type": [
-                "news_and_events", 
-                "newsarticle"
-            ]
-        }
-    }, 
-    {
-        "pk": 41, 
-        "model": "admin.logentry", 
-        "fields": {
-            "action_flag": 2, 
-            "action_time": "2014-03-05T15:08:33.569", 
-            "object_repr": "Evil spirits prompt Egyptian seed ban", 
-            "object_id": "7", 
-            "change_message": "Changed date and body.", 
-            "user": [
-                "arkestra"
-            ], 
-            "content_type": [
-                "news_and_events", 
-                "newsarticle"
-            ]
-        }
-    }, 
-    {
-        "pk": 40, 
-        "model": "admin.logentry", 
-        "fields": {
-            "action_flag": 2, 
-            "action_time": "2014-03-05T15:08:22.260", 
-            "object_repr": "Institute academic dismisses so-called \"germ theory\"", 
-            "object_id": "6", 
-            "change_message": "Changed date and body.", 
-            "user": [
-                "arkestra"
-            ], 
-            "content_type": [
-                "news_and_events", 
-                "newsarticle"
-            ]
-        }
-    }, 
-    {
-        "pk": 39, 
-        "model": "admin.logentry", 
-        "fields": {
-            "action_flag": 2, 
-            "action_time": "2014-03-05T15:08:10.815", 
-            "object_repr": "Evil spirits prompt Egyptian seed ban", 
-            "object_id": "7", 
-            "change_message": "Changed date and body.", 
-            "user": [
-                "arkestra"
-            ], 
-            "content_type": [
-                "news_and_events", 
-                "newsarticle"
-            ]
         }
     }, 
     {
@@ -11976,7 +11793,6 @@
             "description": 33, 
             "access_note": "", 
             "precise_location": "Room 2.34", 
-            "url": "", 
             "override_entity": null, 
             "image": 2, 
             "institutional_username": "", 
@@ -11998,7 +11814,6 @@
             "description": 21, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": 4, 
             "institutional_username": "", 
@@ -12020,7 +11835,6 @@
             "description": 38, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12042,7 +11856,6 @@
             "description": 26, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12064,7 +11877,6 @@
             "description": 36, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12086,7 +11898,6 @@
             "description": 24, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12108,7 +11919,6 @@
             "description": 22, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12130,7 +11940,6 @@
             "description": 34, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12152,7 +11961,6 @@
             "description": 35, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12174,7 +11982,6 @@
             "description": 20, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12196,7 +12003,6 @@
             "description": 23, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12218,7 +12024,6 @@
             "description": 28, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 
@@ -12240,7 +12045,6 @@
             "description": 25, 
             "access_note": "", 
             "precise_location": "", 
-            "url": "", 
             "override_entity": null, 
             "image": null, 
             "institutional_username": "", 

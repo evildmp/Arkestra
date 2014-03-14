@@ -47,6 +47,18 @@ class VacanciesTests(TestCase):
         self.toothjob.date = datetime(year=2012, month=12, day=12)
         self.assertEqual(self.toothjob.get_when, "December 2012")
 
+    def test_link_to_more(self):
+        self.assertEqual(
+            self.toothjob.auto_page_view_name,
+            "vacancies-and-studentships"
+            )
+        self.toothjob.hosted_by = Entity(slug="slug")
+        self.assertEqual(
+            self.toothjob.link_to_more(),
+            "/vacancies-and-studentships/slug/"
+            )
+
+
 @override_settings(CMS_TEMPLATES = (('null.html', "Null"),))
 class VacanciesItemsViewsTests(TestCase):
     def setUp(self):
@@ -162,7 +174,7 @@ class ReverseURLsTests(TestCase):
 
     def test_archived_vacancies_base_reverse_url(self):
         self.assertEqual(
-            reverse("vacancies-archive-base"),
+            reverse("vacancies-archive"),
             "/archived-vacancies/"
             )
 
@@ -174,7 +186,7 @@ class ReverseURLsTests(TestCase):
 
     def test_current_vacancies_base_reverse_url(self):
         self.assertEqual(
-            reverse("vacancies-current-base"),
+            reverse("vacancies-current"),
             "/vacancies/"
             )
 
@@ -186,7 +198,7 @@ class ReverseURLsTests(TestCase):
 
     def test_archived_studentships_base_reverse_url(self):
         self.assertEqual(
-            reverse("studentships-archive-base"),
+            reverse("studentships-archive"),
             "/archived-studentships/"
             )
 
@@ -198,7 +210,7 @@ class ReverseURLsTests(TestCase):
 
     def test_current_studentships_base_reverse_url(self):
         self.assertEqual(
-            reverse("studentships-current-base"),
+            reverse("studentships-current"),
             "/studentships/"
             )
 
@@ -210,7 +222,7 @@ class ReverseURLsTests(TestCase):
 
     def test_base_reverse_url(self):
         self.assertEqual(
-            reverse("vacancies-and-studentships-base"),
+            reverse("vacancies-and-studentships"),
             "/vacancies-and-studentships/"
             )
 
@@ -221,9 +233,7 @@ class ReverseURLsTests(TestCase):
             )
 
 
-@override_settings(
-    CMS_TEMPLATES = (('null.html', "Null"),)
-)
+@override_settings(CMS_TEMPLATES = (('null.html', "Null"),))
 class VacanciesStudentshipsEntityPagesViewsTests(TestCase):
     def setUp(self):
         # Every test needs a client.
@@ -485,7 +495,6 @@ class ListTests(TestCase):
 
         self.itemlist = List()
         self.itemlist.model = Vacancy
-        self.itemlist.model_string = "vacancies"
         self.itemlist.items = Vacancy.objects.all()
 
     def test_all_items_order(self):
@@ -540,11 +549,11 @@ class ListTests(TestCase):
         self.assertEqual(list(self.itemlist.items), [self.item1, self.item3])
 
     def test_other_items(self):
-        school = Entity(name="School of Medicine")
+        school = Entity(name="School of Medicine", short_name="Medicine")
         school.save()
 
         self.itemlist.entity = school
-        self.itemlist.other_item_kinds = ["archived"]
+        self.itemlist.other_item_kinds = ["archived", "open", "main"]
         self.item1.hosted_by = school
         self.item2.hosted_by = school
         self.item3.hosted_by = school
@@ -559,10 +568,21 @@ class ListTests(TestCase):
         self.assertEqual(
             list(self.itemlist.other_items()),
             [{
+                'count': 2,
+                'link': '/vacancies/',
+                'title': 'All open vacancies'
+                },
+            {
                 'count': 1,
                 'link': '/archived-vacancies/',
                 'title': 'Archived vacancies'
-                }]
+                },
+            {
+                'link': '/vacancies-and-studentships/',
+                'title': u'Medicine vacancies & studentships',
+                'css_class': 'main',
+                },
+            ]
             )
 
 

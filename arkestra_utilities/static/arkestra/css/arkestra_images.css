@@ -43,7 +43,7 @@ span.imageset.image {
                 span.link-arrow (if no span.more-information)
 */
 
-ul.imageset {padding: 0; margin: 0; position}
+ul.imageset {padding: 0; margin: 0;}
 
 /* ================ all items in multiple image sets =============== */
 

@@ -7,6 +7,8 @@ from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
 
 from contacts_and_people.models import Entity
 
+# a handy class-based view for lists of an Entity's items - news, events,
+# clinical trials or whatever they might be
 class ArkestraGenericView(View):
     # override the auto_page_attibute in sub-classes to check
     auto_page_attribute = None
@@ -25,9 +27,7 @@ class ArkestraGenericView(View):
             raise Http404
 
         if self.auto_page_attribute and not getattr(
-            entity,
-            self.auto_page_attribute,
-            None
+            entity, self.auto_page_attribute, None
         ):
             raise Http404
 

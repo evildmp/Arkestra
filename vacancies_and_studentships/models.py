@@ -2,10 +2,10 @@ from django.db import models
 
 from cms.models import CMSPlugin
 
-from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin
 from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
+from arkestra_utilities.output_libraries.dates import nice_date
 
 from contacts_and_people.models import Entity, Person #, default_entity_id
 
@@ -20,19 +20,20 @@ class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
     description = models.TextField(null=True, blank=True,
         help_text="No longer used")
 
-    def link_to_more(self):
-        return self.get_hosted_by.get_auto_page_url("vacancies-and-studentships")
+    auto_page_view_name = "vacancies-and-studentships"
 
     @property
     def get_when(self):
         """
-        get_when provides a human-readable attribute under which items can be grouped.
-        Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
+        get_when provides a human-readable attribute under which items can be
+        grouped. Usually, this is an easily-readble rendering of the date (e.g.
+        "April 2010") but it can also be "Top news", for items to be given
+        special prominence.
         """
         try:
             # The render function of CMSNewsAndEventsPlugin can set a temporary sticky attribute for Top news items
             if self.sticky:
-                return "Top news"
+                return "Top items"
         except AttributeError:
             pass
 
@@ -42,7 +43,7 @@ class VacancyStudentshipBase(ArkestraGenericModel, URLModelMixin):
 
 
 class Vacancy(VacancyStudentshipBase):
-    url_path = "vacancy"
+    view_name = "vacancy"
 
     job_number = models.CharField(max_length=9)
     salary = models.CharField(blank=True, max_length=255, null=True,
@@ -53,7 +54,7 @@ class Vacancy(VacancyStudentshipBase):
 
 
 class Studentship(VacancyStudentshipBase):
-    url_path = "studentship"
+    view_name = "studentship"
 
     supervisors = models.ManyToManyField(Person, null=True, blank=True,
         related_name="%(class)s_people")

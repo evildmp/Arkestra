@@ -20,7 +20,7 @@ class NewsAndEventsForm(GenericModelForm):
 
 
 class NewsAndEventsAdmin(GenericModelAdmin):
-    exclude = ('content', 'url')
+    exclude = ('content',)
     list_display = ('short_title', 'date', 'hosted_by',)
     list_editable = ('hosted_by',)
     related_search_fields = ['hosted_by', 'external_url',]
