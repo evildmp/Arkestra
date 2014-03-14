@@ -193,7 +193,7 @@ INSTALLED_APPS = (
     'typogrify',
     'filer',
     'widgetry',
-    'south', # don't leave this disabled
+    'south',
     'treeadmin',
     'pagination',
 
