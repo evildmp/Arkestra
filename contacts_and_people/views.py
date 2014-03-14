@@ -115,7 +115,8 @@ def people(request, slug=getattr(Entity.objects.base_entity(), "slug", None), le
     Responsible for lists of people
     """
     # general values needed to set up and construct the page and menus
-    entity = Entity.objects.get(slug=slug)
+    slug = slug or getattr(Entity.objects.base_entity(), "slug", None)
+    entity = get_object_or_404(Entity, slug=slug, external_url=None)
     # for the menu, because next we mess up the path
     request.auto_page_url = entity.get_auto_page_url("contact-entity")
     # request.path = entity.get_website.get_absolute_url() # for the menu, so it knows where we are
@@ -293,7 +294,7 @@ def place(request, slug, active_tab=""):
 
     The template receives "_" + active_tab to identify the correct template (from includes).
     """
-    place = Building.objects.get(slug=slug)
+    place = get_object_or_404(Building, slug=slug)
     tabs_dict = { # information for each kind of place page
         "about": {
             "tab": "about",
