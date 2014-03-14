@@ -1,8 +1,8 @@
 /**
  * @name MarkerWithLabel for V3
- * @version 1.1.4 [April 13, 2011]
+ * @version 1.1.8 [February 26, 2013]
  * @author Gary Little (inspired by code from Marc Ridey of Google).
- * @copyright Copyright 2010 Gary Little [gary at luxcentral.com]
+ * @copyright Copyright 2012 Gary Little [gary at luxcentral.com]
  * @fileoverview MarkerWithLabel extends the Google Maps JavaScript API V3
  *  <code>google.maps.Marker</code> class.
  *  <p>
@@ -36,14 +36,31 @@
 /*global document,google */
 
 /**
+ * @param {Function} childCtor Child class.
+ * @param {Function} parentCtor Parent class.
+ */
+function inherits(childCtor, parentCtor) {
+  /** @constructor */
+  function tempCtor() {};
+  tempCtor.prototype = parentCtor.prototype;
+  childCtor.superClass_ = parentCtor.prototype;
+  childCtor.prototype = new tempCtor();
+  /** @override */
+  childCtor.prototype.constructor = childCtor;
+}
+
+/**
  * This constructor creates a label and associates it with a marker.
  * It is for the private use of the MarkerWithLabel class.
  * @constructor
  * @param {Marker} marker The marker with which the label is to be associated.
+ * @param {string} crossURL The URL of the cross image =.
+ * @param {string} handCursor The URL of the hand cursor.
  * @private
  */
-function MarkerLabel_(marker) {
+function MarkerLabel_(marker, crossURL, handCursorURL) {
   this.marker_ = marker;
+  this.handCursorURL_ = marker.handCursorURL;
 
   this.labelDiv_ = document.createElement("div");
   this.labelDiv_.style.cssText = "position: absolute; overflow: hidden;";
@@ -60,18 +77,17 @@ function MarkerLabel_(marker) {
   this.eventDiv_.setAttribute("ondragstart", "return false;");
 
   // Get the DIV for the "X" to be displayed when the marker is raised.
-  this.crossDiv_ = MarkerLabel_.getSharedCross();
+  this.crossDiv_ = MarkerLabel_.getSharedCross(crossURL);
 }
-
-// MarkerLabel_ inherits from OverlayView:
-MarkerLabel_.prototype = new google.maps.OverlayView();
+inherits(MarkerLabel_, google.maps.OverlayView);
 
 /**
  * Returns the DIV for the cross used when dragging a marker when the
  * raiseOnDrag parameter set to true. One cross is shared with all markers.
+ * @param {string} crossURL The URL of the cross image =.
  * @private
  */
-MarkerLabel_.getSharedCross = function () {
+MarkerLabel_.getSharedCross = function (crossURL) {
   var div;
   if (typeof MarkerLabel_.getSharedCross.crossDiv === "undefined") {
     div = document.createElement("img");
@@ -79,7 +95,7 @@ MarkerLabel_.getSharedCross = function () {
     // Hopefully Google never changes the standard "X" attributes:
     div.style.marginLeft = "-8px";
     div.style.marginTop = "-9px";
-    div.src = "http://maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
+    div.src = crossURL;
     MarkerLabel_.getSharedCross.crossDiv = div;
   }
   return MarkerLabel_.getSharedCross.crossDiv;
@@ -102,7 +118,7 @@ MarkerLabel_.prototype.onAdd = function () {
   var cStartCenter;
   // Constants:
   var cRaiseOffset = 20;
-  var cDraggingCursor = "url(http://maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur)";
+  var cDraggingCursor = "url(" + this.handCursorURL_ + ")";
 
   // Stops all processing of an event.
   //
@@ -382,12 +398,14 @@ MarkerLabel_.prototype.setMandatoryStyles = function () {
   this.labelDiv_.style.overflow = "hidden";
   // Make sure the opacity setting causes the desired effect on MSIE:
   if (typeof this.labelDiv_.style.opacity !== "undefined" && this.labelDiv_.style.opacity !== "") {
+    this.labelDiv_.style.MsFilter = "\"progid:DXImageTransform.Microsoft.Alpha(opacity=" + (this.labelDiv_.style.opacity * 100) + ")\"";
     this.labelDiv_.style.filter = "alpha(opacity=" + (this.labelDiv_.style.opacity * 100) + ")";
   }
 
   this.eventDiv_.style.position = this.labelDiv_.style.position;
   this.eventDiv_.style.overflow = this.labelDiv_.style.overflow;
   this.eventDiv_.style.opacity = 0.01; // Don't use 0; DIV won't be clickable on MSIE
+  this.eventDiv_.style.MsFilter = "\"progid:DXImageTransform.Microsoft.Alpha(opacity=1)\"";
   this.eventDiv_.style.filter = "alpha(opacity=1)"; // For MSIE
 
   this.setAnchor();
@@ -499,6 +517,10 @@ MarkerLabel_.prototype.setVisible = function () {
  * @property {boolean} [optimized] A flag indicating whether rendering is to be optimized for the
  *  marker. <b>Important: The optimized rendering technique is not supported by MarkerWithLabel,
  *  so the value of this parameter is always forced to <code>false</code>.
+ * @property {string} [crossImage="http://maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png"]
+ *  The URL of the cross image to be displayed while dragging a marker.
+ * @property {string} [handCursor="http://maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur"]
+ *  The URL of the cursor to be displayed while dragging a marker.
  */
 /**
  * Creates a MarkerWithLabel with the options specified in {@link MarkerWithLabelOptions}.
@@ -527,9 +549,11 @@ function MarkerWithLabel(opt_options) {
   if (typeof opt_options.optimized === "undefined") {
     opt_options.optimized = false;
   }
+  opt_options.crossImage = opt_options.crossImage || "http" + (document.location.protocol === "https:" ? "s" : "") + "://maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
+  opt_options.handCursor = opt_options.handCursor || "http" + (document.location.protocol === "https:" ? "s" : "") + "://maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur";
   opt_options.optimized = false; // Optimized rendering is not supported
 
-  this.label = new MarkerLabel_(this); // Bind the label to the marker
+  this.label = new MarkerLabel_(this, opt_options.crossImage, opt_options.handCursor); // Bind the label to the marker
 
   // Call the parent constructor. It calls Marker.setValues to initialize, so all
   // the new parameters are conveniently saved and can be accessed with get/set.
@@ -537,13 +561,11 @@ function MarkerWithLabel(opt_options) {
   // that the marker label listens for in order to react to state changes.
   google.maps.Marker.apply(this, arguments);
 }
-
-// MarkerWithLabel inherits from <code>Marker</code>:
-MarkerWithLabel.prototype = new google.maps.Marker();
+inherits(MarkerWithLabel, google.maps.Marker);
 
 /**
  * Overrides the standard Marker setMap function.
- * @param {Map} marker The map to which the marker is to be added.
+ * @param {Map} theMap The map to which the marker is to be added.
  * @private
  */
 MarkerWithLabel.prototype.setMap = function (theMap) {
