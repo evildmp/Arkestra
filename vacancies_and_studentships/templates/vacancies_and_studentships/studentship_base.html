@@ -23,11 +23,11 @@
 				    {% render_placeholder studentship.body %}
 				{% endblock placeholder %}
 			</div>
-			<div class="column lastcolumn">
+			<div class="column lastcolumn sidebar">
 				{% block image %}
 				    {% thumbnail studentship.image.file 227x0 subject_location=studentship.image.subject_location as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
-				{% endblock image %}				
+				{% endblock image %}
 				<dl class="not-indented">
 					<dt>Closing date</dt>
 					<dd>{% date studentship.date %}</dd>
@@ -43,7 +43,7 @@
 							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
 						{% endfor %}
 					{% endif %}
-				</dl>    
+				</dl>
 				{% with studentship.links as links %}
 				    {% include "includes/related_links_list.html" %}
 		        {% endwith %}
