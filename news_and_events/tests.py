@@ -731,6 +731,15 @@ class EventsListTests(TestCase):
 
         self.itemlist.entity = school
         self.itemlist.other_item_kinds = ("previous_events", "forthcoming_events")
+        self.itemlist.build()
+
+        # there is nothing to show in other_items()
+        self.assertEqual(
+            self.itemlist.other_items(),
+            [],
+        )
+
+        # create some items that will count as other_items()
         self.item1.hosted_by = school
         self.item2.hosted_by = school
         self.item3.hosted_by = school
@@ -738,7 +747,6 @@ class EventsListTests(TestCase):
         self.item2.save()
         self.item3.save()
 
-        self.itemlist.build()
         self.assertEqual(
             self.itemlist.other_items(),
             [{
