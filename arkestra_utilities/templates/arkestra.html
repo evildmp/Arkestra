@@ -65,12 +65,14 @@
         					{% endif %}
         				{% endblock pagetitle %}
 
-        				{% block main_page_body %}
-                            {% filter amp|smartypants|caps|initial_quotes %}
-        						{% insert "newsflash" %}
-        				   		{% placeholder body %}
-        					{% endfilter %}
-        			  	{% endblock main_page_body %}
+            			<div id="main-page-body">
+            				{% block main_page_body %}
+                                {% filter amp|smartypants|caps|initial_quotes %}
+            						{% insert "newsflash" %}
+            				   		{% placeholder body %}
+            					{% endfilter %}
+            			  	{% endblock main_page_body %}
+            			</div>
 
         			</div>
 					{% block footer %}

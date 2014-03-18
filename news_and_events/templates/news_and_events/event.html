@@ -35,15 +35,15 @@
 				    {% render_placeholder event.body %}
 				{% endblock placeholder %}
             </div>
-			<div class="column lastcolumn">
+			<div class="column lastcolumn sidebar">
 				{% block image %}{% if not event.body.cmsplugin_set.all %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}{% endif %}
-				{% endblock image %}				
+				{% endblock image %}
 				{% include "includes/details.html" %}
 				{% with event.links as links %}
 				    {% include "includes/related_links_list.html" %}
 		        {% endwith %}
-				{% include "includes/children.html" %}		        				
+				{% include "includes/children.html" %}
 			</div>
 		</div>
 		<ul class = "news icons">
