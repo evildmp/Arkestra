@@ -43,14 +43,14 @@ class List(ArkestraGenericList):
     def other_items(self):
         other_items = []
 
-        if "open" in self.other_item_kinds:
+        if "open" in self.other_item_kinds and self.open.exists():
             other_items.append({
                 "link": self.entity.get_auto_page_url("vacancies-current"),
                 "title": "All open vacancies",
                 "count": self.open.count(),
                 })
 
-        if "archived" in self.other_item_kinds:
+        if "archived" in self.other_item_kinds and self.archived.exists():
             other_items.append({
                 "link": self.entity.get_auto_page_url("vacancies-archive"),
                 "title": "Archived vacancies",

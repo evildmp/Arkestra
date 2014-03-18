@@ -269,36 +269,60 @@ class ListTruncateItems(TestCase):
 
 
 class ListIsShowable(TestCase):
-    def test_is_showable(self):
-        self.itemlist = ItemList()
-        self.itemlist.items = TestModel.objects.all()
+    # is_showable() tells us whether a list should be shown
 
-        self.assertFalse(self.itemlist.is_showable())
+    def test_nothing_to_show(self):
+        itemlist = ItemList()
+        itemlist.build()
+        self.assertFalse(itemlist.is_showable())
 
-        self.item1 = TestModel(title="1")
-        self.item1.save()
-        self.itemlist.items = TestModel.objects.all()
-        self.assertTrue(self.itemlist.is_showable())
+    def test_one_published_item_to_show(self):
+        item = TestModel(published=True, in_lists=True)
+        item.save()
+        itemlist = ItemList()
+        itemlist.build()
+        self.assertTrue(itemlist.is_showable())
 
-        self.itemlist.items = [1, 2, 3]
-        self.assertTrue(self.itemlist.is_showable())
+
+    def test_one_published_item_to_show_in_list(self):
+        item = TestModel(published=True, in_lists=True)
+        item.save()
+        itemlist = ItemList()
+        itemlist.build()
+        itemlist.items = []
+        self.assertFalse(itemlist.is_showable())
+
+    def test_only_other_items_exist(self):
+
+        class ItemList(ArkestraGenericList):
+            model = TestModel
+            filter_set = TestFilterSet
+
+            def other_items(self):
+                return True
+
+        item = TestModel(published=True, in_lists=True)
+        item.save()
+        itemlist = ItemList()
+        itemlist.build()
+        itemlist.items = []
+        self.assertTrue(itemlist.is_showable())
 
 
 class ListerTests(TestCase):
 
+
     def test_empty_lists_do_not_appear_in_lister(self):
+
         lister = ArkestraGenericLister(
             listkinds=[
                 ("list1", ItemList)
             ],
             display="list1"
         )
-
         self.assertEqual(
             lister.lists, []
         )
-
-
 
 
 # these classes and the FilterSetTests check that ArkestraGenericFilterSet

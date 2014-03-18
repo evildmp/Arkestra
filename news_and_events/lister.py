@@ -240,14 +240,14 @@ class EventsList(ArkestraGenericList):
     def other_items(self):
         other_items = []
 
-        if "forthcoming_events" in self.other_item_kinds:
+        if "forthcoming_events" in self.other_item_kinds and self.forthcoming_events.exists():
             other_items.append({
                 "link": self.entity.get_auto_page_url("events-forthcoming"),
                 "title": "All forthcoming events",
                 "count": self.forthcoming_events.count(),
                 })
 
-        if "previous_events" in self.other_item_kinds:
+        if "previous_events" in self.other_item_kinds and self.previous_events.exists():
             other_items.append({
                 "link": self.entity.get_auto_page_url("events-archive"),
                 "title": "Previous events",

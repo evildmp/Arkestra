@@ -172,7 +172,8 @@ class ArkestraGenericList(object):
 
     def is_showable(self):
         try:
-            return self.items.exists()
+            if self.items.exists():
+                return True
         except AttributeError:
             if self.items:
                 return True

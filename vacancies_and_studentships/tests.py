@@ -554,6 +554,21 @@ class ListTests(TestCase):
 
         self.itemlist.entity = school
         self.itemlist.other_item_kinds = ["archived", "open", "main"]
+
+        self.itemlist.build()
+
+        # "main" other items are always created; the others need tests to
+        # see if any exist
+        self.assertEqual(
+            self.itemlist.other_items(),
+            [{
+                'link': '/vacancies-and-studentships/',
+                'title': u'Medicine vacancies & studentships',
+                'css_class': 'main',
+                }]
+            )
+
+        # now we save some items
         self.item1.hosted_by = school
         self.item2.hosted_by = school
         self.item3.hosted_by = school
@@ -562,7 +577,6 @@ class ListTests(TestCase):
         self.item3.save()
 
         self.itemlist.build()
-
         self.assertEqual(list(self.itemlist.items), [self.item1, self.item3])
         self.assertEqual(list(self.itemlist.archived), [self.item2])
         self.assertEqual(
