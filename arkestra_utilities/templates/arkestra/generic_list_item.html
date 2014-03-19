@@ -37,7 +37,7 @@
 
     {% block item_details %}
 		{% if "details" in lister.item_format %}
-            {% block item_date %}<div class = "date">{{ item.date|naturalday|capfirst|typogrify }}</div>{% endblock item_date %}
+            {% block item_date %}{% if item.date %}<div class = "date">{{ item.date|naturalday|capfirst|typogrify }}</div>{% endif %}{% endblock item_date %}
     		{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.summary|truncatewords:30|typogrify }}</div>{% endif %}{% endblock item_summary %}
 		{% endif %}
 	{% endblock item_details %}
