@@ -111,55 +111,49 @@ class ArkestraPages(Modifier):
             return self.nodes
 
     def do_menu(self, node, menu_class, entity):
-        # an always_publish menu is always published, no matter what
-        if menu_class.always_publish:
-            new_node = self.create_new_node(
-                title=menu_class.menu_title,
-                url=entity.get_auto_page_url(menu_class.url),
-                parent=node,
-                )
-            return
 
-        try:
-            # does the entity have a related menu class?
-            related_class = menu_class.model.objects.get(entity=entity)
-
-            # this menu is always published if the entity wants one
-            if menu_class.lister is None:
-                if related_class.publish_page:
-                    new_node = self.create_new_node(
-                        title=related_class.menu_title,
-                        url=entity.get_auto_page_url(menu_class.url),
-                        parent=node,
-                        )
+        entity_model = getattr(menu_class, "entity_model", None)
+        # check if we are we using an entity_model
+        if entity_model:
+            try:
+                # can we get and entity_model instance?
+                entity_model_instance = entity_model.objects.get(entity=entity)
+                # if it doesn't want the page published, give up
+                if entity_model_instance.publish_page is False:
+                    return
+                menu_title = entity_model_instance.menu_title
+            # if no entity_model instance has been created for this entity
+            except entity_model.DoesNotExist:
                 return
 
-            # this menu is only published if the lister has items
-            else:
-                # create an instance of the lister for menus
-                lister_ = menu_class.lister(entity=entity)
-                if lister_.lists:
-                    new_node = self.create_new_node(
-                        title=related_class.menu_title,
-                        url=entity.get_auto_page_url(menu_class.url),
-                        parent=node,
-                        )
-                    # does this menu call for sub-menu items?
-                    if menu_class.sub_menus:
-                        for list_ in lister_.lists:
-                            # and go through the other_items lists for each,
-                            # creating a node for each
-                            for other_item in list_.other_items():
-                                self.create_new_node(
-                                    title=other_item["title"],
-                                    url=other_item["link"],
-                                    parent=new_node,
-                                )
+        # not using an entity_model; determine menu_title from class
+        else:
+            menu_title = menu_class.menu_title
 
-        # in case the entity has no reverse relation to the menu class instance
-        except menu_class.model.DoesNotExist:
-            return
+        # check if we're using a lister,
+        if getattr(menu_class, "lister", None):
+            lister_ = menu_class.lister(entity=entity)
+            if not lister_.lists:
+                return
 
+        # if we haven't bailed out yet, create the menu node
+        new_node = self.create_new_node(
+            title=menu_title,
+            url=entity.get_auto_page_url(menu_class.url),
+            parent=node,
+            )
+
+        # does this menu call for sub-menu items?
+        if getattr(menu_class, "sub_menus", None):
+            for list_ in lister_.lists:
+                # and go through the other_items lists for each,
+                # creating a node for each
+                for other_item in list_.other_items():
+                    self.create_new_node(
+                        title=other_item["title"],
+                        url=other_item["link"],
+                        parent=new_node,
+                    )
 
     def do_old_menu(self, node, menu_class, entity):
         # does this entity have this kind of auto-page in the menu?
