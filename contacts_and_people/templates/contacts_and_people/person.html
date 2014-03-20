@@ -35,6 +35,14 @@
     		<div class="row columns2">
     			<div class="column firstcolumn">
     				<div>
+                    	{% with placeholder_width=person_description_width %}
+                            {% if person.description.cmsplugin_set.all %}
+                                <h{{ IN_BODY_HEADING_LEVEL }}>
+                                    About
+                                </h{{ IN_BODY_HEADING_LEVEL }}>
+    						    {% render_placeholder person.description %}
+                            {% endif %}
+                    	{% endwith %}
 						{% if building or address or location or access_note or email or phone.all %}
                             <h{{ IN_BODY_HEADING_LEVEL }}>
                                 Contact information
@@ -45,9 +53,6 @@
         						{% endwith %}
     						</dl>
 						{% endif %}
-                    	{% with placeholder_width=person_description_width %}
-    						{% render_placeholder person.description %}
-                    	{% endwith %}
 						{% with person.links as links %}
 						    {% include "includes/related_links_list.html" %}
 				        {% endwith %}
