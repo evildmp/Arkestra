@@ -221,6 +221,8 @@ ul.boxed li li {border: none;}
 ul.boxed li dl {margin:0;}
 
 dl dd {padding: 0; margin: 0 0 5px 10px;}
+.sidebar dl,
+.sidebar ul,
 dl dd.not-indented,
 dl.not-indented dd
  {padding: 0; margin-left: 0;}
