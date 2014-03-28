@@ -11,7 +11,6 @@ from arkestra_utilities.admin_mixins import AutocompleteMixin
 from contacts_and_people.templatetags.entity_tags import work_out_entity
 
 from models import NewsAndEventsPlugin, NewsArticle, Event
-from mixins import NewsAndEventsPluginMixin
 from lister import NewsAndEventsPluginLister
 
 from menu import menu_dict
@@ -21,13 +20,13 @@ class NewsAndEventsPluginForm(ArkestraGenericPluginForm, forms.ModelForm):
         model = NewsAndEventsPlugin
 
 
-class CMSNewsAndEventsPlugin(NewsAndEventsPluginMixin, ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
+class CMSNewsAndEventsPlugin(ArkestraGenericPlugin, AutocompleteMixin, CMSPluginBase):
 
     model = NewsAndEventsPlugin
     name = _("News & events")
     form = NewsAndEventsPluginForm
     menu_cues = menu_dict
-    
+
     fieldsets = (
         (None, {
         'fields': (('display', 'layout', 'list_format',),  ( 'format', 'order_by', 'group_dates',), 'limit_to')
