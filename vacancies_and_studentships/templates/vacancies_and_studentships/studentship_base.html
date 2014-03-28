@@ -10,9 +10,11 @@
 
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>Studentship ({{ studentship.hosted_by.short_name }}): {{ studentship }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-
-   		<p class= "subtitle"><strong>{{ studentship.summary }}</strong></p>
 {% endblock pagetitle %}
+
+{% block summary %}
+	<p class="subtitle"><strong>{{ studentship.summary }}</strong></p>
+{% endblock summary %}
 
 
 {% block main_page_body %}

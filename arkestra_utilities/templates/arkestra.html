@@ -65,6 +65,8 @@
         					{% endif %}
         				{% endblock pagetitle %}
 
+                        {% block summary %}{% endblock summary %}
+
             			<div id="main-page-body">
             				{% block main_page_body %}
                                 {% filter amp|smartypants|caps|initial_quotes %}

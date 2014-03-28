@@ -10,10 +10,11 @@
 
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>Vacancy: {{ vacancy }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-
-   		<p class= "subtitle"><strong>{{ vacancy.summary }}</strong></p>
 {% endblock pagetitle %}
 
+{% block summary %}
+	<p class= "subtitle"><strong>{{ vacancy.summary }}</strong></p>
+{% endblock summary %}
 
 {% block main_page_body %}
     {% block arkestra_content %}

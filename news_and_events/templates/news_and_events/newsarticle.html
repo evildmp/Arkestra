@@ -10,12 +10,11 @@
 
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-
-	{% if newsarticle.summary %}
-   		<p class="subtitle">{{ newsarticle.summary }}</p>
-	{% endif %}
 {% endblock pagetitle %}
 
+{% block summary %}
+   	<p class="subtitle">{{ newsarticle.summary }}</p>
+{% endblock summary %}
 
 {% block main_page_body %}
     {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location crop as image %}

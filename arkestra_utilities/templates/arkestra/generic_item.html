@@ -5,16 +5,15 @@
 	<title>{{ item }}</title>
 {% endblock %}
 
-{% block nav_local %}
-{% endblock nav_local %}
+{% block nav_local %}{% endblock nav_local %}
 
 {% block pagetitle %}
 	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ item }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-
-	{% if item.summary %}
-   		<p class="subtitle">{{ item.summary }}</p>
-	{% endif %}
 {% endblock pagetitle %}
+
+{% block summary %}
+	<p class="subtitle">{{ item.summary }}</p>
+{% endblock summary %}
 
 
 {% block main_page_body %}
