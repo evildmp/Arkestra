@@ -22,7 +22,8 @@
 
 	    		{% if item.external_url %}
 
-	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+                <span class="site-name">{{ item.external_url.external_site }}</span>
 
     		   {% else %}
 	    			<a class = "{{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
@@ -38,7 +39,8 @@
 
 	   		{% if item.external_url %}
 
-	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a> - <span class="site-name">{{ item.external_url.external_site }}</span>
+	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+                <span class="site-name">{{ item.external_url.external_site }}</span>
 
 			{% else %}
 
