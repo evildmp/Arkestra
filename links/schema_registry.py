@@ -1,8 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 
-#WIDGETRY_AVAILABLE =  'widgetry' in settings.INSTALLED_APPS
-
 from widgetry.utils import traverse_object
 from widgetry.views import search, WrapperFactory, SearchItemWrapper, call_if_callable
 from widgetry import signals as widgetry_signals
@@ -11,6 +9,7 @@ from widgetry import signals as widgetry_signals
 class LinkWrapper(SearchItemWrapper):
     # gets default identifier, title, description and thumbnail methods
     # from SearchItemWrapper
+
     def text(self):
         return call_if_callable(getattr(self.obj, 'text', self.title()))
 
@@ -31,7 +30,8 @@ ATTRIBUTES = [
     # at least one of these is absolutely required
     'title',
     'text',
-    # useful
+
+    # useful attributes
     'identifier',
     'description',
     'thumbnail_url',
@@ -50,6 +50,7 @@ wrapper_factory = MyWrapperFactory(LinkWrapper, ATTRIBUTES)
 
 
 class Registry(object):
+
     def __init__(self):
         self.wrappers = dict()
         self.content_types = dict()
