@@ -36,6 +36,7 @@ class AutocompleteMixin(object):
             **kwargs
             )
 
+
 # makes the request available to the admin form
 # useful for using the messages framework, and required for admin that
 # uses Arkestra's external_url functionality
@@ -110,7 +111,6 @@ class WidgetifiedModelAdmin(
         ).media
     media = property(_media)
 
-
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "publish_to":
             kwargs["queryset"] = Entity.objects.filter(
@@ -143,7 +143,7 @@ class GenericModelAdmin(WidgetifiedModelAdmin):
         'publish_to',
         )
 
-    search_fields = ['title']
+    search_fields = ['title', 'short_title', 'summary']
     related_search_fields = ['hosted_by']
 
 
@@ -224,6 +224,9 @@ class ButtonLinkWidget(forms.widgets.Widget):
         super(ButtonLinkWidget, self).__init__(attrs, *args, **kwargs)
 
     def render(self, name, value, attrs=None):
-        return mark_safe(u'<input type="button" value="%s" onclick="window.open(\'%s\')" />' % (
-            value, self.attrs.get("link"))
+        return mark_safe(u"""
+            <input type="button" value="%s" onclick="window.open(\'%s\')" />
+            """ % (
+            value, self.attrs.get("link")
             )
+        )

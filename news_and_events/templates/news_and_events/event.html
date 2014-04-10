@@ -1,9 +1,5 @@
 {% extends event.get_template %}
-{% load events_tags %}
-{% load placeholder_tags %}
-{% load humanize %}
-{% load typogrify_tags %}
-{% load thumbnail %}
+{% load events_tags placeholder_tags humanize typogrify_tags thumbnail %}
 
 {% block meta %}
 	<meta name="description" content="{{event.summary}}"/>
@@ -17,7 +13,7 @@
 {% block nav_local %}{% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
 {% endblock pagetitle %}
 
 {% block summary %}

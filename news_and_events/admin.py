@@ -195,7 +195,6 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
     ordering = ['type',]
     list_display = ('short_title', 'hosted_by', 'date')
     list_editable = ()
-    search_fields = ['title']
     list_filter = (EventIsSeries, 'date', HostedByFilter)
     save_as = True
 

@@ -7,26 +7,26 @@
 
 		{# the series is informative, so link to it #}
 	  	{% if not item.parent.is_uninformative %}
-			<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent.short_title}}</a><br />
+			<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent}}</a><br />
 	  	{% else %}
-			<span class="title">{{item.parent.short_title}}</span><br />
+			<span class="title">{{item.parent}}</span><br />
 	  	{% endif %}
 
 		{# it should show its own title too #}
 		{% if "children" in item.show_parent_series %}
 
 	        {% if "details" in everything.format and item.is_uninformative %}
-	            <span class="{{ class }}">{{ item.short_title }}</span>
+	            <span class="{{ class }}">{{ item }}</span>
 
 	        {% else %}
 
 	    		{% if item.external_url %}
 
-	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-                <span class="site-name">{{ item.external_url.external_site }}</span>
+	   			<a class = "title external {{ class }}" href="{{ item.get_absolute_url }}">{{ item }}</a>
+                <span class="site-name"> {{ item.external_url.external_site }}</span>
 
     		   {% else %}
-	    			<a class = "{{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
+	    			<a class = "{{ class }}" href="{{ item.get_absolute_url }}">{{item}}</a>
 	    		{% endif %}
 
 	    	{% endif %}
@@ -39,23 +39,23 @@
 
 	   		{% if item.external_url %}
 
-	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item.short_title}}</a>
-                <span class="site-name">{{ item.external_url.external_site }}</span>
+	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item}}</a>
+                <span class="site-name"> {{ item.external_url.external_site }}</span>
 
 			{% else %}
 
 				{% if item.parent.series and not item.parent.is_uninformative %}
 
-					<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
+					<a class = "{{ class }}" href="{{ item.informative_url }}">{{item}}</a>
 
 				{% else %}
 					{% if not "details" in lister.item_format or not item.is_uninformative %}
 
-			   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item.short_title}}</a>
+			   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item}}</a>
 
 					{% else %}
 
-			            <span class="{{ class }}">{{ item.short_title }}</span>
+			            <span class="{{ class }}">{{ item }}</span>
 
 					{% endif %}
 		   		{% endif %}

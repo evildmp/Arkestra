@@ -1,32 +1,47 @@
 {% spaceless %}
+{% load thumbnail %}
 {% autoescape off %}
 {% if object.insert_as == 0 %}
 
-	{% for link in links %}<a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>{{ link.separator }}{% endfor %}
+	{% for link in links %}
+        <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>{{ link.separator }}
+    {% endfor %}
 
 {% elif object.insert_as == 2 %}
 
     {% for link in links %}
     	<p {% if use_link_icons %}class="icons"{% endif %}>
-        <a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>
-        {% if link.include_description and link.description %}
-            <br /><span class="link-description">{{ link.description }}</span>
-        {% endif %}</p>
+            {% if link.key_link %}<strong>{% endif %}
+            <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>
+            {% if link.key_link %}</strong>{% endif %}
+
+	    	{% if "image" in link.format and link.image %}
+    			{% thumbnail link.image.file plugin_thumbnail_size crop subject_location=link.image.subject_location as image %}
+                <img class="right" src="{{ image.url }}" alt="" />
+            {% endif %}
+
+            {% if "details" in link.format and link.summary %}
+                <div class="link-description">{{ link.summary }}</div>
+            {% endif %}
+        </p>
 	{% endfor %}
 
 {% else %}
 
-    <ul class = "{% if use_link_icons %}icons{% else %}none{% endif %}">
+    <ul class = "plugin-list{% if use_link_icons %} icons{% else %} none{% endif %}">
     	{% for link in links %}
     		<li>
                 {% if link.key_link %}<strong>{% endif %}
-                <a href="{{ link.url }}"{% if link.title %} title="{{ link.title }}"{% endif %}>{{ link.text }}</a>
+                <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>
                 {% if link.key_link %}</strong>{% endif %}
-                {% if link.include_description and link.description %}
-                    <div class="link-description">{{ link.description }}</div>
+
+                {% if "image" in link.format and link.image %}
+                    {% thumbnail link.image.file plugin_thumbnail_size crop subject_location=link.image.subject_location as image %}
+                    <img class="right" src="{{ image.url }}" alt="" />
                 {% endif %}
-    	    	{% if show_images and link.thumbnail_url %}
-                    <img class="right" src="{{ link.thumbnail_url }}" />
+
+                {% if "details" in link.format and link.summary %}
+                    <div class="link-description">{{ link.summary }}</div>
                 {% endif %}
             </li>
     	{% endfor %}

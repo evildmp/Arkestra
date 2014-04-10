@@ -15,25 +15,28 @@ def smart_description(obj):
     now = datetime.now()
     if obj.date.year == now.year: # this year
         date_format = "jS F"
-    date = date(obj.date, date_format) 
-    
+    date = date(obj.date, date_format)
+
     s = u"Closing date: %s" % date
     if obj.please_contact:
         s += u" contact: %s" % smart_unicode(obj.please_contact)
-    r.append(s) 
+    r.append(s)
     r.append(u"%s" % obj.summary)
     #r.append(u"%s" % obj.description)
     return "<br />".join(r)
 
-schema.register(models.Vacancy, search_fields=admin.VacancyAdmin.search_fields,
-    title=lambda obj: u"%s (%s)" % (obj.title, obj.job_number),
-    description='summary',
-    short_text='short_title',
+schema.register(
+    models.Vacancy,
+    search_fields=admin.VacancyAdmin.search_fields,
+    # title=lambda obj: u"%s (%s)" % (obj.title, obj.job_number),
     heading='"Related vacancies"',
-#                description=smart_description,
+    image="image",
     )
-schema.register(models.Studentship, search_fields=admin.StudentshipAdmin.search_fields,
-    title=lambda obj: u"%s (%s)" % (obj.title, obj.job_number),
-    description='summary',
-    short_text='short_title',
-    heading='"Related studentships"',)
+
+schema.register(
+    models.Studentship,
+    search_fields=admin.StudentshipAdmin.search_fields,
+    # title=lambda obj: u"%s (%s)" % (obj.title, obj.job_number),
+    heading='"Related studentships"',
+    image="image",
+    )

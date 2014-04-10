@@ -10,17 +10,14 @@ from django.template.defaultfilters import date, time, slugify
 import mptt
 
 from cms.models import CMSPlugin
-from cms.models.fields import PlaceholderField
 
-from contacts_and_people.models import Entity, Person, Building
+from contacts_and_people.models import Person, Building
 
-from links.models import ExternalLink
 
 from arkestra_utilities.output_libraries.dates import nice_date
 from arkestra_utilities.generic_models import ArkestraGenericPluginOptions, ArkestraGenericModel
 from arkestra_utilities.mixins import URLModelMixin, LocationModelMixin
-from arkestra_utilities.managers import ArkestraGenericModelManager
-from arkestra_utilities.settings import PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT, COLLECT_TOP_ALL_FORTHCOMING_EVENTS, DATE_FORMAT, ARKESTRA_DATE_FORMATS, AGE_AT_WHICH_ITEMS_EXPIRE
+from arkestra_utilities.settings import COLLECT_TOP_ALL_FORTHCOMING_EVENTS, ARKESTRA_DATE_FORMATS, AGE_AT_WHICH_ITEMS_EXPIRE
 
 from managers import NewsArticleManager, EventManager
 
@@ -41,26 +38,44 @@ class NewsAndEvents(ArkestraGenericModel, URLModelMixin):
 class NewsArticle(NewsAndEvents):
     objects = NewsArticleManager()
 
+
     view_name = "news"
 
-    date = models.DateTimeField(default=datetime.now,
-        help_text=u"Dateline for the item (the item will not be published until then" ,  )
+    date = models.DateTimeField(
+        default=datetime.now,
+        help_text=u"""
+            Dateline for the item (the item will not be published until then
+            """
+            )
     display_indefinitely = models.BooleanField(
-        help_text=u"Important news; it won't expire from news lists" , )
-    external_news_source = models.ForeignKey('NewsSource', null=True, blank=True,
-        help_text=u"If this news item is from an external source")
-    sticky_until = models.DateField(u"Featured until",
-        null=True, blank=True, default=pythondate.today,
-        help_text=u"Will remain a featured item until this date")
-    is_sticky_everywhere = models.BooleanField(u"Featured everywhere",
-        default=False, help_text=u"Will be featured in other entities's news lists")
+        help_text=u"Important news; it won't expire from news lists"
+        )
+    external_news_source = models.ForeignKey(
+        'NewsSource',
+        null=True,
+        blank=True,
+        help_text=u"If this news item is from an external source"
+        )
+    sticky_until = models.DateField(
+        u"Featured until",
+        null=True,
+        blank=True,
+        default=pythondate.today,
+        help_text=u"Will remain a featured item until this date"
+        )
+    is_sticky_everywhere = models.BooleanField(
+        u"Featured everywhere",
+        default=False,
+        help_text=u"Will be featured in other entities's news lists"
+        )
 
     class Meta:
         ordering = ['-date']
 
     @property
     def has_expired(self):
-       # the item is too old to appear in current lists, and should only be listed in archives
+       # the item is too old to appear in current lists, and should only be
+       # listed in archives
        age = datetime.now() - self.date
        if AGE_AT_WHICH_ITEMS_EXPIRE and age.days > AGE_AT_WHICH_ITEMS_EXPIRE:
            return True
@@ -68,8 +83,10 @@ class NewsArticle(NewsAndEvents):
     @property
     def get_when(self):
         """
-        get_when provides a human-readable attribute under which items can be grouped.
-        Usually, this is an easily-readble rendering of the date (e.g. "April 2010") but it can also be "Top news", for items to be given special prominence.
+        get_when provides a human-readable attribute under which items can be
+        grouped. Usually, this is an easily-readble rendering of the date (e.g.
+        "April 2010") but it can also be "Top news", for items to be given
+        special prominence.
         """
         if getattr(self, "sticky", None):
             return "Top news"
@@ -82,15 +99,24 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     view_name = "event"
 
-    type = models.ForeignKey('EventType',
-        on_delete=models.PROTECT)
-    featuring = models.ManyToManyField(Person, related_name='%(class)s_featuring',
-        null=True, blank=True,
-        help_text="The speakers, lecturers, instructors or other people featured in this event")
-    parent = models.ForeignKey('self',
-        blank=True, null=True,
+    type = models.ForeignKey(
+        'EventType',
+        on_delete=models.PROTECT
+        )
+    featuring = models.ManyToManyField(
+        Person,
+        related_name='%(class)s_featuring',
+        null=True,
+        blank=True,
+        help_text="The speakers, lecturers, instructors or other people featured in this event"
+        )
+    parent = models.ForeignKey(
+        'self',
+        blank=True,
+        null=True,
         on_delete=models.PROTECT,
-        related_name='children')
+        related_name='children'
+        )
     SERIES = (
         (False, u"an actual event"),
         (True, u"a series of events"),
@@ -101,7 +127,8 @@ class Event(NewsAndEvents, LocationModelMixin):
         ("series", u"show title of series only"),
         ("children", u"show title of children only"),
     )
-    show_titles = models.CharField(u"Titles",
+    show_titles = models.CharField(
+        u"Titles",
         max_length = 25,
         default="children",
         choices=SHOW_TITLES,
@@ -114,22 +141,33 @@ class Event(NewsAndEvents, LocationModelMixin):
         default=False,
         choices=DISPLAY_SERIES_SUMMARY,
         )
-    child_list_heading = models.CharField(max_length=50, null=True, blank=True,
+    child_list_heading = models.CharField(
+        max_length=50,
+        blank=True,
         help_text= u"e.g. Conference sessions; Lectures in this series")
-    date = models.DateField("Start date",
-        null=True, blank=True,
-        help_text=u"Not required for a series of events")
+    date = models.DateField(
+        "Start date",
+        null=True,
+        blank=True,
+        help_text=u"Not required for a series of events"
+        )
     start_time = models.TimeField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     single_day_event = models.BooleanField(default=False)
-    building = models.ForeignKey(Building,
+    building = models.ForeignKey(
+        Building,
         null=True, blank=True,
-        on_delete=models.SET_NULL)
-    jumps_queue_on = models.DateField(null=True, blank=True,
-        help_text=u"Will become a featured item on this date")
+        on_delete=models.SET_NULL
+        )
+    jumps_queue_on = models.DateField(
+        null=True,
+        blank=True,
+        help_text=u"Will become a featured item on this date"
+        )
     jumps_queue_everywhere = models.BooleanField(default=False)
-    registration_enquiries = models.ManyToManyField(Person,
+    registration_enquiries = models.ManyToManyField(
+        Person,
         related_name = '%(class)s_registration',
         null = True, blank = True,
         help_text=u"The people who responsible for registration, if different from those in <em>Please contact</em>"
@@ -141,7 +179,8 @@ class Event(NewsAndEvents, LocationModelMixin):
     @property
     def informative_url(self):
         """
-        An event has an 'informative_url' if it itself is uninformative, but it is a child of a series
+        An event has an 'informative_url' if it itself is uninformative, but it
+        is a child of a series
         """
         # print
         # print "========================================"
@@ -211,13 +250,22 @@ class Event(NewsAndEvents, LocationModelMixin):
 
     def get_children_forthcoming(self):
         if self.series:
-            return self.children.filter(Q(date__gte = datetime.now()) | Q(end_date__gte = datetime.now()) | Q(series = True)).order_by('date')
+            return self.children.filter(
+                Q(date__gte = datetime.now()) |
+                Q(end_date__gte = datetime.now()) |
+                Q(series = True)
+            ).order_by('date')
         else:
             return self.children.all()
 
     def get_children_previous(self):
         if self.series:
-            return self.children.filter(Q(date__lt = datetime.now()) | Q(end_date__lt = datetime.now()) | Q(series = True)).order_by('-date')
+            return self.children.filter(
+                Q(date__lt = datetime.now()) |
+                Q(end_date__lt = datetime.now()) |
+                Q(series = True)
+            ).order_by('-date'
+        )
 
     def get_featuring(self, featuring = None):
         featuring = set(self.featuring.all()) or set()
@@ -239,7 +287,7 @@ class Event(NewsAndEvents, LocationModelMixin):
         date_and_time = []
         date = self.get_dates()
         time = self.get_times()
-        if self.parent.single_day_event and not time:
+        if self.parent and self.parent.single_day_event and not time:
             date_and_time.append(date)
         if time:
             date_and_time.append(time)
@@ -280,7 +328,8 @@ class Event(NewsAndEvents, LocationModelMixin):
     def get_image(self):
         return self.image or (self.parent.get_image() if self.parent else None)
 
-    def check_date(self): # we need somehow to send a message to the user about this
+    def check_date(self):
+        # we need somehow to send a message to the user about this
         if not self.children.all():
             return
         else:
@@ -288,7 +337,9 @@ class Event(NewsAndEvents, LocationModelMixin):
                 need_to_save = False
                 child.check_date()
                 if child.date and not self.series:
-                    child.check_date() # we start at the leaves and work backwards, so we can assume all descendants are OK
+                    child.check_date()
+                    # we start at the leaves and work backwards, so we can
+                    # assume all descendants are OK
                     if (not self.date) or (self.date > child.date):
                         self.date = child.date
                         need_to_save = True
@@ -341,7 +392,6 @@ class Event(NewsAndEvents, LocationModelMixin):
         elif self.series:
             return "Regular events"
 
-
     def get_admin_title(self):
         return self.title + " (" + self.get_dates() + ")"
 
@@ -376,7 +426,12 @@ class NewsAndEventsPlugin(CMSPlugin, ArkestraGenericPluginOptions):
         ("news", u"News only"),
         ("events", u"Events only"),
         )
-    display = models.CharField("Show", max_length=25,choices = DISPLAY, default = "news & events")
+    display = models.CharField(
+        "Show",
+        max_length=25,
+        choices=DISPLAY,
+        default="news & events"
+        )
     show_previous_events = models.BooleanField()
     news_heading_text = models.CharField(max_length=25, default=_(u"News"))
     events_heading_text = models.CharField(max_length=25, default=_(u"Events"))
