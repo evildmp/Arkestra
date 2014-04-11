@@ -42,7 +42,7 @@ class Migration(SchemaMigration):
 
 
 
-        # Rename field 'ObjectLink.include_description'
+        # Rename field 'ObjectLink.description_override'
         db.rename_column(
             'links_objectlink',
             'description_override',

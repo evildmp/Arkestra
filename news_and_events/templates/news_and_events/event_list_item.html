@@ -69,7 +69,7 @@
 {% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
 
 {% block item_details %}
-{{ block.super }}{% if not list.place %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building.identifier }}</a></span></div>{% endif %}{% endif %}{% endblock item_details%}
+{{ block.super }}{% if not list.place %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building }}</a></span></div>{% endif %}{% endif %}{% endblock item_details%}
 
 {% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary }}</div>{% endif %}{% endblock item_summary %}
 {% endspaceless %}
