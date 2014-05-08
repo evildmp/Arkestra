@@ -401,7 +401,7 @@ class EmbeddedVideoSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
             plugin_item.plugin = self
             plugin_item.save()
 
-class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
+class EmbeddedVideoSetItem(ArkestraGenericPluginItemOrdering):
     class Meta:
         ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(
