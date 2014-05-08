@@ -813,6 +813,12 @@ class Person(PersonLite, CommonFields):
         else:
             return self
 
+    def get_phone_contacts(self):
+        return self.get_please_contact().phone_contacts.all()
+
+    def get_email(self):
+        return self.get_please_contact().email
+
     @property
     def real_entity_memberships(self):
         # returns Memberships of non-abstract entities the person belongs to

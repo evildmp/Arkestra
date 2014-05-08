@@ -207,9 +207,10 @@ def person(request, slug, active_tab=""):
 
     building = person.get_building
 
-    contact = person.get_please_contact()
-    email = contact.email
-    phone = contact.phone_contacts.all()
+    email = person.get_email()
+    phone = person.get_phone_contacts()
+
+    # contact = person.get_please_contact()
 
     if person.please_contact:
         precise_location = None
@@ -307,16 +308,13 @@ def person(request, slug, active_tab=""):
             "building": building,
             "email": email, # from person or please_contact
             "precise_location": precise_location, # from person, or None
-            "contact": contact, # from person or please_contact
             "phone": phone,
             "full_address" : person.get_full_address,
             "access_note": access_note, # from person
             "tabs": tabs,
             "tab_object": person,
             "active_tab": active_tab,
-            # "news_and_events": news_and_events,
             "meta": meta,
-            # "links": links,
         },
         RequestContext(request),
     )
