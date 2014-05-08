@@ -27,7 +27,8 @@ ul.icons    {
 
 ul.plugin-list {margin-top: 0;}
 
-ul.plugin-list .title   {font-weight: bold;}
+ul.plugin-list .title,
+.plugin-list-item .title {font-weight: bold;}
 
 ul.plugin-list.vertical li {
     list-style: none;
@@ -50,6 +51,9 @@ ul.plugin-list li.grouper ul {
     padding-left: 0;
     }
 
+/* paragragh-style lists of links */
+
+p.plugin-list-item {margin: 0; clear: both;}
 
 /* list for links to other items, (e.g. news and events) */
 ul.other-items  {
@@ -73,66 +77,6 @@ p.fancy   {
 p.fancy   {
     display: list-item;
     }
-
-/*
-
-ul.close li, div.plugin ul.close li {margin-left: 0; padding-bottom: .2em;}
-
-ul.linkIcon,
-ul.plugin,
-.fancy ul {
-        margin: 0;
-        padding: 0;
-        list-style:none;
-    }
-
-ul.linkIcon li,
-ul.plugin_list li,
-.fancy li   {
-    list-style:none;
-    margin: 0;
-    }
-
-div.plugin ul {
-    font-weight: normal;
-    list-style:none;
-    }
-
-div.plugin ul li {
-    margin: 0;
-    }
-
-div.plugin li.pluslistitem   {
-    clear: right;
-    padding: 0 0 .4em;
-}
-
-.plugin li    {
-    line-height: 1.25;
-    padding-bottom: .6em;
-    clear: both;
-    }
-
-ul.none {list-style-type: none;}
-
-ul.linkIcon li,
-.fancy li,
-li.key   {
-    background: url(/media/images/hand-right.png) left .5ex no-repeat;
-    padding-left: 30px;
-    display: block;
-    }
-
-.fancy li li,
-li.key li    {
-    background: none;
-    padding-left: 20px;
-    display: block;
-    }
-
-
-li.key  {font-weight: bold; list-style: none; margin: 0; padding: 0.1em 0;} */
-
 
 /* used only in entity trees, I think */
 
@@ -232,7 +176,14 @@ dl.not-indented dd
 
 /* link system */
 
-li div.link-description  {padding: 0 0 .2em 0;}
+ /* in plugin lists, certain spans need to be blocks */
+.plugin-list-item .date,
+.plugin-list-item .venue-line,
+.plugin-list-item .link-description
+    {display: block;}
+
+.plugin-list-item .link-description  {padding: 0 0 .2em 0;}
+
 ul.object-links li  {
     margin: 1em 0;
     padding: 0;
