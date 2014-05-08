@@ -1,53 +1,24 @@
-{% spaceless %}
-{% load thumbnail %}
 {% autoescape off %}
 {% if object.insert_as == 0 %}
 
-	{% for link in links %}
-        <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>{{ link.separator }}
+	{% for item in links %}
+        <a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %}>{{ item }}</a>{{ item.separator }}
     {% endfor %}
 
 {% elif object.insert_as == 2 %}
-
-    {% for link in links %}
-    	<p {% if use_link_icons %}class="icons"{% endif %}>
-            {% if link.key_link %}<strong>{% endif %}
-            <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>
-            {% if link.key_link %}</strong>{% endif %}
-
-	    	{% if "image" in link.format and link.image %}
-    			{% thumbnail link.image.file plugin_thumbnail_size crop subject_location=link.image.subject_location as image %}
-                <img class="right" src="{{ image.url }}" alt="" />
-            {% endif %}
-
-            {% if "details" in link.format and link.summary %}
-                <div class="link-description">{{ link.summary }}</div>
-            {% endif %}
+    {% for item in links %}
+    	<p class="{% if use_link_icons %}icons{% endif %} plugin-list-item">
+    	    {% include item.block_level_item_template %}
         </p>
 	{% endfor %}
-
 {% else %}
 
-    <ul class = "plugin-list{% if use_link_icons %} icons{% else %} none{% endif %}">
-    	{% for link in links %}
-    		<li>
-                {% if link.key_link %}<strong>{% endif %}
-                <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>
-                {% if link.key_link %}</strong>{% endif %}
-
-                {% if "image" in link.format and link.image %}
-                    {% thumbnail link.image.file plugin_thumbnail_size crop subject_location=link.image.subject_location as image %}
-                    <img class="right" src="{{ image.url }}" alt="" />
-                {% endif %}
-
-                {% if "details" in link.format and link.summary %}
-                    <div class="link-description">{{ link.summary }}</div>
-                {% endif %}
-            </li>
+    <ul class="{% if use_link_icons %} icons{% else %} none{% endif %}">
+    	{% for item in links %}
+    		<li>{% include item.block_level_item_template %}</li>
     	{% endfor %}
     </ul>
 
 {% endif %}
 
 {% endautoescape %}
-{% endspaceless %}

@@ -1,23 +1,9 @@
 {% regroup links by heading as link_types %}
-{% load thumbnail %}
 {% for kind in link_types %}
     <h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
     <ul class= "object-links">
-    	{% for link in kind.list %}
-    		<li>
-                {% if link.key_link %}<strong>{% endif %}
-                <a href="{{ link.url }}"{% if link.html_title_attribute %} title="{{ link.html_title_attribute }}"{% endif %}>{{ link }}</a>
-                {% if link.key_link %}</strong>{% endif %}
-
-                {% if "image" in link.format and link.image %}
-                    {% thumbnail link.image.file plugin_thumbnail_size crop subject_location=link.image.subject_location as image %}
-                    <img class="right" src="{{ image.url }}" alt="" />
-                {% endif %}
-
-                {% if "details" in link.format and link.summary %}
-                    <div class="link-description">{{ link.summary }}</div>
-                {% endif %}
-    		</li>
+    	{% for item in kind.list %}
+    		<li>{% include item.block_level_item_template %}</li>
     	{% endfor %}
     </ul>
 {% endfor %}

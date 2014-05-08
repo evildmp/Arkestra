@@ -1,32 +1,29 @@
 {% extends "arkestra/generic_list_item.html" %}
 {% spaceless %}
 {% block item_title %}
-
 	{# this item is the child of a series that shows the parent's title #}
 	{% if "series" in item.show_parent_series %}
 
 		{# the series is informative, so link to it #}
 	  	{% if not item.parent.is_uninformative %}
-			<a class="title" href="{{ item.parent.get_absolute_url }}">{{item.parent}}</a><br />
+			<a class="title" href="{{ item.parent.get_absolute_url }}">
+                {{item.parent }}
+            </a><br>
 	  	{% else %}
-			<span class="title">{{item.parent}}</span><br />
+			<span class="title">{{item.parent}}</span><br>
 	  	{% endif %}
 
 		{# it should show its own title too #}
 		{% if "children" in item.show_parent_series %}
 
-	        {% if "details" in everything.format and item.is_uninformative %}
-	            <span class="{{ class }}">{{ item }}</span>
-
+	        {% if "details" in lister.format and item.is_uninformative %}
+	            <span>{{ item }}</span>
 	        {% else %}
-
 	    		{% if item.external_url %}
-
-	   			<a class = "title external {{ class }}" href="{{ item.get_absolute_url }}">{{ item }}</a>
-                <span class="site-name"> {{ item.external_url.external_site }}</span>
-
+    	   			<a class="external {{ class }}" href="{{ item.get_absolute_url }}">{{ item }}</a>
+                    <span class="site-name"> {{ item.external_url.external_site }}</span>
     		   {% else %}
-	    			<a class = "{{ class }}" href="{{ item.get_absolute_url }}">{{item}}</a>
+	    			<a href="{{ item.get_absolute_url }}">{{item}}</a>
 	    		{% endif %}
 
 	    	{% endif %}
@@ -34,42 +31,50 @@
 
 	{# either not a child of a series, or we don't display the parent's title #}
 	{% else %}
-
-		{% with class="title" %}
-
-	   		{% if item.external_url %}
-
-	   			<a class = "external {{ class }}" href="{{ item.get_absolute_url }}">{{item}}</a>
-                <span class="site-name"> {{ item.external_url.external_site }}</span>
-
+   		{% if item.external_url %}
+   			<a class="external title" href="{{ item.get_absolute_url }}">{{item}}</a>
+            <span class="site-name"> {{ item.external_url.external_site }}</span>
+		{% else %}
+			{% if item.parent.series and not item.parent.is_uninformative %}
+				<a class="title" href="{{ item.informative_url }}">{{ item }}</a>
 			{% else %}
-
-				{% if item.parent.series and not item.parent.is_uninformative %}
-
-					<a class = "{{ class }}" href="{{ item.informative_url }}">{{item}}</a>
-
+				{% if not "details" in lister.item_format or not item.is_uninformative %}
+		   			<a class="title" href="{{ item.informative_url }}">{{ item }}</a>
 				{% else %}
-					{% if not "details" in lister.item_format or not item.is_uninformative %}
-
-			   			<a class = "{{ class }}" href="{{ item.informative_url }}">{{item}}</a>
-
-					{% else %}
-
-			            <span class="{{ class }}">{{ item }}</span>
-
-					{% endif %}
-		   		{% endif %}
+		            <span class="title">{{ item }}</span>
+				{% endif %}
 	   		{% endif %}
-
-		{% endwith %}
+   		{% endif %}
    	{% endif %}
-
 {% endblock item_title %}
 
-{% block item_date %}<div class = "date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</div>{% endblock item_date %}
+{% block item_date %}
+    <span class="date">
+        {{ item.get_dates }}
+        {% if item.get_times %}
+            , {{ item.get_times|safe }}
+        {% endif %}
+    </span>
+{% endblock item_date %}
 
 {% block item_details %}
-{{ block.super }}{% if not list.place %}{% if item.building %}<div class="venue-line">Venue: <span class = "venue"><a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building }}</a></span></div>{% endif %}{% endif %}{% endblock item_details%}
+	{% if "details" in lister.item_format or "details" in item.format %}
+        {{ block.super }}
+        {% if not list.place %}
+            {% if item.building %}
+                <span class="venue-line">Venue:
+                    <span class="venue">
+                        <a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building }}</a>
+                    </span>
+                </span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock item_details%}
 
-{% block item_summary %}{% if item.summary %}<div class = "summary">{{ item.calculated_summary }}</div>{% endif %}{% endblock item_summary %}
+{% block item_summary %}
+    {% if item.calculated_summary %}
+        <span class = "summary">{{ item.calculated_summary }}</span>
+    {% endif %}
+{% endblock item_summary %}
 {% endspaceless %}

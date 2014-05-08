@@ -24,24 +24,26 @@
     {% endblock item_title %}
 
     {% block item_image %}
-    	{% if "image" in lister.item_format and item.image %}
-    		{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
-            <img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
+    	{% if "image" in lister.item_format or "image" in item.format %}
+            {% if item.image %}
+        		{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
+                <img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
+    	    {% endif %}
     	{% endif %}
     {% endblock item_image %}
 
     {% block item_details %}
-    	{% if "details" in lister.item_format %}
+    	{% if "details" in lister.item_format or "details" in item.format %}
 
             {% block item_date %}
                 {% if item.date %}
-                    <div class = "date">{{ item.date|naturalday|capfirst|typogrify }}</div>
+                    <span class="date">{{ item.date|naturalday|capfirst|typogrify }}</span>
                 {% endif %}
             {% endblock item_date %}
 
             {% block item_summary %}
                 {% if item.summary %}
-                    <div class="summary">{{ item.summary|truncatewords:40|typogrify }}</div>
+                    <span class="summary">{{ item.summary|truncatewords:40|typogrify }}</span>
                 {% endif %}
             {% endblock item_summary %}
     	{% endif %}
