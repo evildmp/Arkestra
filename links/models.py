@@ -21,6 +21,14 @@ from links import schema
 
 class LinkMethodsMixin(object):
 
+    # if there are any special_attributes set on the LinkWrapper subclass
+    # we want them here so we can refer back to the method of the same name
+    # on the subclass
+    def __init__(self, *args, **kwargs):
+        super(LinkMethodsMixin, self).__init__(*args, **kwargs)
+        for attr in getattr(self.wrapped_destination_obj, "special_attributes"):
+            setattr(self, attr, getattr(self.wrapped_destination_obj, attr))
+
     def _smart_get_attribute_for_destination(self, field_basename):
         # returns object.someattr_override, or object.someattr
         override_value = getattr(self, "%s_override" % field_basename, None)
@@ -52,28 +60,37 @@ class LinkMethodsMixin(object):
     there. If it matches, return that, or the fallback
     """
 
+    # the favoured representation of the item
     def __unicode__(self):
-        return self.text_override or self.destination_content_object.__unicode__()
+        if self.destination_content_object:
+            return self.text_override or self.destination_content_object.__unicode__()
+        else:
+            return ""
 
-    # def admin_identifier(self):
-    #     return getattr(
-    #         self.destination_content_object,
-    #         "admin_identifier",
-    #         ""
-    #         ) or self.destination_content_object.__unicode__()
+    # we ought to remove the url attribute from use in the link schema,
+    # and use get_absolute_url instead.
+    def get_absolute_url(self):
+        return self.wrapped_destination_obj.get_absolute_url()
 
     @property
     def url(self):
         return self.wrapped_destination_obj.url
 
+    # a simple text summary
     @property
     def summary(self):
         return self._smart_get_attribute_for_destination('summary')
 
     @property
+    def date(self):
+        return self.wrapped_destination_obj.date
+
+    # the heading under which items will be grouped
+    @property
     def heading(self):
         return self._smart_get_attribute_for_destination('heading')
 
+    # for admin purposes only
     @property
     def admin_metadata(self):
         return self._smart_get_attribute_for_destination('admin_metadata')
@@ -85,6 +102,11 @@ class LinkMethodsMixin(object):
     @property
     def thumbnail_url(self):
         return self._smart_get_attribute_for_destination('thumbnail_url')
+
+    # if this item should have its own special template
+    @property
+    def block_level_item_template(self):
+        return self.wrapped_destination_obj.block_level_item_template
 
 
 class BaseLink(models.Model):
@@ -113,12 +135,13 @@ class Link(BaseLink, LinkMethodsMixin):
     ObjectLinks and links.GenericLinkListPluginItem
     """
 
+
     FORMATS = (
         ("title", u"Title only"),
         ("details image", u"Details"),
         )
     format = models.CharField(
-        "Item format", max_length=25, choices=FORMATS,
+        "Item format", max_length=25,
         default="title"
         )
 
