@@ -20,8 +20,12 @@ from links.utils import check_urls
 class LinkAdmin(admin.ModelAdmin, AutocompleteMixin):
     related_search_fields = ['destination_content_type']
 
+from chained_selectbox.forms import FKChainedChoicesForm
+from chained_selectbox.form_fields import ChainedChoiceField
 
-class LinkItemForm(InputURLMixin):
+
+class LinkItemForm(InputURLMixin, FKChainedChoicesForm):
+
     def __init__(self, *args, **kwargs):
         super(LinkItemForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None: #  has already been saved()?
@@ -36,6 +40,12 @@ class LinkItemForm(InputURLMixin):
             )
         self.fields['destination_object_id'].widget = widget
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
+
+    # different destination_content_types need different link formatting options
+    format = ChainedChoiceField(
+        parent_field='destination_content_type',
+        ajax_url='/chainedselectchoices'
+        )
 
 
 class ObjectLinkInline(generic.GenericStackedInline):

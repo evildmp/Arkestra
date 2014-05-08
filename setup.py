@@ -24,8 +24,11 @@ setup(
         'django-easyfilters',
         'django-treeadmin',
         'django-widgetry',
+        'django-chained-selectbox',
     ],
     dependency_links=[
-        'https://github.com/evildmp/django-widgetry/archive/master.zip#egg=django-widgetry-0.9.2a1'
+        'https://github.com/evildmp/django-widgetry/archive/master.zip#egg=django-widgetry-0.9.2a1',
+        'https://github.com/s-block/django-chained-selectbox.git@6658ef6acd041ea8beeba620b5aeba6057ddc8be#egg=django_chained_selectbox-dev',
+
     ],
 )

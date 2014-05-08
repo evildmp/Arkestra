@@ -9,6 +9,15 @@ from easy_thumbnails.files import get_thumbnailer
 
 class PersonWrapper(LinkWrapper):
     search_fields = admin.PersonAdmin.search_fields
+    special_attributes = ["phone", "email", "get_full_address", "get_building"]
+    block_level_item_template = "contacts_and_people/person_block_level_list_item.html"
+    link_format_choices = (
+        (u"title", u"Name only"),
+        (u"details", u"Name & summary (role)"),
+        (u"details image", u"Name, summary (role) & image"),
+        (u"details contact image", u"Name, summary (role), contact information & image"),
+        (u"details contact", u"Name, summary (role) & contact information"),
+        )
 
     def summary(self):
         data = []
@@ -37,6 +46,18 @@ class PersonWrapper(LinkWrapper):
     def heading(self):
         return "Related people"
 
+    def phone(self):
+        return self.obj.get_phone_contacts()
+
+    def email(self):
+        return self.obj.get_email()
+
+    def get_full_address(self):
+        return self.obj.get_full_address
+
+    def get_building(self):
+        return self.obj.get_building
+
 schema.register_wrapper(models.Person, PersonWrapper)
 
 
@@ -63,6 +84,15 @@ schema.register_wrapper(models.User, UserWrapper)
 
 class EntityWrapper(LinkWrapper):
     search_fields = admin.EntityAdmin.search_fields
+    special_attributes = ["phone", "email", "get_full_address", "get_building"]
+    block_level_item_template = "contacts_and_people/entity_block_level_list_item.html"
+    link_format_choices = (
+        (u"title", u"Name only"),
+        (u"details", u"Name & summary (description)"),
+        (u"details image", u"Name, summary (description) & image"),
+        (u"details contact image", u"Name, summary (description), contact information & image"),
+        (u"details contact", u"Name, summary (description) & contact information"),
+        )
 
     def summary(self):
         if self.obj.abstract_entity:
@@ -73,6 +103,9 @@ class EntityWrapper(LinkWrapper):
             return self.obj.get_website.get_meta_description()
         else:
             return ""
+
+    def image(self):
+        return self.obj.image
 
     def heading(self):
         return "Related pages"
@@ -103,11 +136,30 @@ class EntityWrapper(LinkWrapper):
             nor an External URL.</span>
             """ % entity_path
 
+    def phone(self):
+        return self.obj.phone_contacts.all()
+
+    def email(self):
+        return self.obj.email
+
+    def get_full_address(self):
+        return self.obj.get_full_address
+
+    def get_building(self):
+        return self.obj.get_building
+
 schema.register_wrapper([models.Entity], EntityWrapper)
 
 
 class BuildingWrapper(LinkWrapper):
     search_fields = admin.BuildingAdmin.search_fields
+    block_level_item_template = "contacts_and_people/building_block_level_list_item.html"
+    special_attributes = ["map"]
+    link_format_choices = (
+        (u"title", u"Name only"),
+        (u"details", u"Name & summary (address)"),
+        (u"details image", u"Name, summary (address) & image"),
+        )
 
     def summary(self):
         return ", ".join(self.obj.get_postal_address[1:])
@@ -117,6 +169,9 @@ class BuildingWrapper(LinkWrapper):
 
     def image(self):
         return self.obj.image
+
+    def map(self):
+        return self.obj.has_map()
 
     def thumbnail_url(self):
         try:

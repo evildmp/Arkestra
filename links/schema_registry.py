@@ -6,10 +6,16 @@ from widgetry import signals as widgetry_signals
 
 
 class LinkWrapper(SearchItemWrapper):
+    # sub-classes should override this to provide special attributes
+    special_attributes = []
+
+
     # gets default identifier, title, description and thumbnail methods
     # from SearchItemWrapper
 
-    pass
+    def block_level_item_template(self):
+        return "includes/links_block_level_list_item.html"
+
 
 # any fields that are to be allowed as search fields must be listed here
 # unless they are defined as methods on the LinkWrapper subclass for that model
@@ -17,8 +23,10 @@ ATTRIBUTES = [
     'summary',
     'heading',
     'url',
+    'get_absolute_url',
     'admin_metadata',
     'image',
+    'block_level_item_template'
 ]
 
 
@@ -97,7 +105,7 @@ class Registry(object):
         self.discover_links_schemas()
         choices = [('', '----')]
         #q_obj = None
-        for model_class, content_type in self.content_types.items():
+        for model_class, content_type in sorted(self.content_types.items()):
             #new_q = Q(app_label = model_class._meta.app_name, )
             choices.append((
                 content_type.pk,

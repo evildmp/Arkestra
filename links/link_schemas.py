@@ -20,6 +20,10 @@ schema.register(
 
 class PageLinkWrapper(LinkWrapper):
     search_fields = ['title_set__title']
+    link_format_choices = (
+        (u"title", u"Name only"),
+        (u"details", u"Name & summary (description)"),
+        )
 
     def title(self):
         return self.obj.get_title()

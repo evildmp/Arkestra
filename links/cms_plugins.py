@@ -62,9 +62,10 @@ class LinksPlugin(CMSPluginBase):
         return "/static/plugin_icons/links.png"
 
     def render(self, context, instance, placeholder):
-        links = list(instance.links_item.active_items().exclude(
-            destination_object_id=None)
-            )
+        links = [
+            link for link in instance.links_item.active_items().exclude(
+                destination_object_id=None) if link.destination_content_object
+            ]
         if links:
             # are there at least two items? if so, the second-last has a
             # final_separator

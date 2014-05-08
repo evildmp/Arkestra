@@ -5,10 +5,29 @@ from news_and_events import models, admin
 from news_and_events.templatetags.events_tags import event_date_and_time
 from links import schema, LinkWrapper
 
+class GenericWrapper(LinkWrapper):
+    special_attributes = ["is_uninformative", "external_url"]
 
-class NewsWrapper(LinkWrapper):
+    def get_absolute_url(self):
+        return self.obj.get_absolute_url()
+
+    def image(self):
+        return self.obj.image
+
+    def is_uninformative(self):
+        return self.obj.is_uninformative
+
+    def external_url(self):
+        return self.obj.external_url
+
+class NewsWrapper(GenericWrapper):
     search_fields = admin.NewsArticleAdmin.search_fields
     heading = "Related news"
+    block_level_item_template = "arkestra/generic_list_item.html"
+
+
+    def date(self):
+        return nice_date(self.obj.date)
 
     def admin_metadata(self):
         date = nice_date(self.obj.date)
@@ -20,17 +39,45 @@ class NewsWrapper(LinkWrapper):
             """
         return """
         %s %s
-        """ % (status, date)
+        """ % (status, self.date())
 
-    def image(self):
-        return self.obj.image
 
 schema.register_wrapper([models.NewsArticle], NewsWrapper)
 
 
-class EventWrapper(LinkWrapper):
+class EventWrapper(GenericWrapper):
     search_fields = admin.EventAdmin.search_fields
     heading = "Related events"
+    block_level_item_template = "news_and_events/event_list_item.html"
+
+    special_attributes = [
+        "parent",
+        "show_parent_series",
+        "calculated_summary",
+        "get_dates",
+        "building",
+        "is_uninformative",
+        "informative_url",
+         "external_url",
+         ]
+
+    def parent(self):
+        return self.obj.parent
+
+    def show_parent_series(self):
+        return self.obj.show_parent_series
+
+    def calculated_summary(self):
+        return self.obj.calculated_summary
+
+    def get_dates(self):
+        return self.date()
+
+    def building(self):
+        return self.obj.building
+
+    def informative_url(self):
+        return self.obj.informative_url
 
     def date(self):
         date_dict = event_date_and_time(context=None, event=self.obj)
@@ -54,7 +101,5 @@ class EventWrapper(LinkWrapper):
         %s %s
         """ % (status, self.date())
 
-    def image(self):
-        return self.obj.image
 
 schema.register_wrapper([models.Event], EventWrapper)
