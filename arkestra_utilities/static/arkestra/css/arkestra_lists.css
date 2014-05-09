@@ -176,6 +176,8 @@ dl.not-indented dd
 
 /* link system */
 
+.plugin-list-item .title    {font-weight: bold;}
+
  /* in plugin lists, certain spans need to be blocks */
 .plugin-list-item .date,
 .plugin-list-item .venue-line,

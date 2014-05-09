@@ -50,10 +50,7 @@
 
 {% block item_date %}
     <span class="date">
-        {{ item.get_dates }}
-        {% if item.get_times %}
-            , {{ item.get_times|safe }}
-        {% endif %}
+        {{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}
     </span>
 {% endblock item_date %}
 

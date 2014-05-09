@@ -21,7 +21,7 @@
                                     {{ get_when.grouper }}
 								    <ul>
 						        		{% for item in get_when.list %}
-											<li class="{{ item.column_class }} {{ item.get_importance}}">
+											<li class="plugin-list-item {{ item.column_class }} {{ item.get_importance}}">
                                                 {% include list.item_template %}
                                             </li>
 						        	    {% endfor %}
@@ -32,7 +32,7 @@
                         {% else %}
 
                         	{% for item in list.items %}
-                        		<li class = "{{ item.column_class }} {{ item.get_importance}}">
+                        		<li class="plugin-list-item {{ item.column_class }} {{ item.get_importance}}">
                                     {% include list.item_template %}
                                 </li>
                         	{% endfor %}

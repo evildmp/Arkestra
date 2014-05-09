@@ -32,7 +32,7 @@
                 {% paginate %}
                 <ul class="{{ lister.list_format}} plugin-list">
                     {% for item in items %}
-                        <li class = "{{ item.column_class }} {{ item.get_importance}}">
+                        <li class = "plugin-list-item {{ item.column_class }} {{ item.get_importance}}">
                             {% include list.item_template %}
                         </li>
                     {% endfor %}
