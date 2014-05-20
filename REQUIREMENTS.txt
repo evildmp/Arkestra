@@ -1,4 +1,3 @@
-# -e hg+https://bitbucket.org/evildmp/semanticeditor#egg=semanticeditor
+-e git+https://github.com/evildmp/django-widgetry.git@master#egg=django-widgetry-evildmp
 
-# -e git+https://github.com/evildmp/django-widgetry.git#egg=django-widgetry
-
+-e git+https://github.com/evildmp/django-chained-selectbox.git@master#egg=django-chained-select-box-evildmp

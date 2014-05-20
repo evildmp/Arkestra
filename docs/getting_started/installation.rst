@@ -32,6 +32,8 @@ Install PIP components
 
     # install Arkestra & dependencies
     pip install -e git+https://github.com/evildmp/Arkestra.git@develop#egg=Arkestra
+    # install the things that pip can't do automatically
+    pip install -r src/arkestra/REQUIREMENTS.txt
 
 
 From this point you can wrestle Arkestra into submission on your own, or get started using the `example` project included.
