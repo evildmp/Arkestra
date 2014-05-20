@@ -354,7 +354,7 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
     @property
     def link_title(self):
         if self.plugin.items_have_links:
-            return self.manual_link_title or (self.auto_link_title and self.text)
+            return self.manual_link_title or (self.auto_link_title and self.destination_content_object)
 
     @property
     def link_description(self):
