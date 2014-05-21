@@ -5,29 +5,29 @@ from contacts_and_people.models import Site, Building
 
 
 class BuildingIdentifierTests(TestCase):
-    """tests for Building.identifier()"""
-    def test_identifier_with_name_returns_name(self):
+    """tests for Building.__unicode__()"""
+    def test_unicode_with_name_returns_name(self):
         building = Building(
             name="Main Building",
             street="St Mary's Street",
             number="37a",
             postcode="CF5 1QE",
             )
-        self.assertEqual(building.identifier(), "Main Building")
+        self.assertEqual(building.__unicode__(), "Main Building")
 
-    def test_identifier_with_no_name_returns_street_address(self):
+    def test_unicode_with_no_name_returns_street_address(self):
         building = Building(
             street="St Mary's Street",
             number="37a",
             postcode="CF5 1QE",
             )
-        self.assertEqual(building.identifier(), "37a St Mary's Street")
+        self.assertEqual(building.__unicode__(), "37a St Mary's Street")
 
-    def test_identifier_with_no_name_or_street_returns_postcode(self):
+    def test_unicode_with_no_name_or_street_returns_postcode(self):
         building = Building(
             postcode="CF5 1QE",
             )
-        self.assertEqual(building.identifier(), "CF5 1QE")
+        self.assertEqual(building.__unicode__(), "CF5 1QE")
 
 
 class BuildingGetPostalAddressTests(TestCase):
@@ -65,14 +65,14 @@ class BuildingGetPostalAddressTests(TestCase):
 
 class BuildingTests(TestCase):
     """Other tests of smaller methods etc"""
-    def test_unicode(self):
+    def test_admin_identifier(self):
         building = Building(
             name="Main Building",
             site=Site()
             )
         self.assertEqual(
-            building.__unicode__(),
-            u"%s (%s)" % (building.identifier(), unicode(building.site))
+            building.admin_identifier,
+            u"%s (%s)" % (building.__unicode__(), unicode(building.site))
             )
 
     def test_has_map_is_always_boolean(self):
@@ -120,4 +120,4 @@ class BuildingTests(TestCase):
         # a blank slug will be automatically regenerated
         building.slug = ""
         building.save()
-        self.assertEqual(building.slug, "main-building-main-site")
+        self.assertEqual(building.slug, "main-building")

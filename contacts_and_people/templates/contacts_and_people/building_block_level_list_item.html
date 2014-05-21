@@ -1,0 +1,15 @@
+{% load thumbnail %}
+
+<a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %} class="title">{{ item }}</a>
+
+{% if "image" in item.format and item.image %}
+    {% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
+    <img class="right" src="{{ image.url }}" alt="" />
+{% endif %}
+
+{% if "details" in item.format and item.summary %}
+    <span class="link-description">
+        {{ item.summary }}
+        {% if item.map %}<a href="{{ item.url }}map/">(map)</a>{% endif %}
+    </span>
+{% endif %}

@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
 from django.conf import settings
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
@@ -115,19 +115,20 @@ class Building(models.Model):
     class Meta:
         ordering = ('site', 'street', 'number', 'name',)
 
-    def identifier(self):
+    def __unicode__(self):
         """
         A text-friendly way of referring to a building
         """
         if self.name:
             return self.name
         elif self.street:
-            return " ".join((self.number, self.street))
+            return concatenate([self.number, self.street], " ")
         else:
             return self.postcode
 
-    def __unicode__(self):
-        return u"%s (%s)" % (self.identifier(), unicode(self.site))
+    @property
+    def admin_identifier(self):
+        return u"%s (%s)" % (self.__unicode__(), unicode(self.site))
 
     def get_absolute_url(self):
         return reverse("contact-place", kwargs={"slug": self.slug})
@@ -475,7 +476,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
             # try
             return self.parent.get_website_url()
         else:  # except
-            return Entity.objects.base_entity().get_website
+            return None
 
     def get_auto_page_url(self, view_name):
         """
@@ -496,7 +497,6 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         # info pages for other entities
         else:
             return reverse(view_name, kwargs={"slug": self.slug})
-
 
     def get_template(self):
         """
@@ -812,6 +812,12 @@ class Person(PersonLite, CommonFields):
             return self.please_contact.get_please_contact()
         else:
             return self
+
+    def get_phone_contacts(self):
+        return self.get_please_contact().phone_contacts.all()
+
+    def get_email(self):
+        return self.get_please_contact().email
 
     @property
     def real_entity_memberships(self):

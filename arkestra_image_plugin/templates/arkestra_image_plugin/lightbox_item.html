@@ -2,21 +2,21 @@
 <div style="width: {{ imageset_item.width}}px;" class="imageset imageset-item">
 	{% if imageset_item.image_title %}<span class="imageset-item-data image-title text">{{ imageset_item.image_title }}</span>{% endif %}
 	{% if imageset_item.image_caption %}<span class="imageset-item-data image-caption text">{{ imageset_item.image_caption }}</span>{% endif %}
-	<img 
-		src="{{ imageset_item.large_url }}" 
-		alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}" 
-		width={{ imageset_item.width}} 
+	<img
+		src="{{ imageset_item.large_url }}"
+		alt="{% if imageset_item.alt %}{{ imageset_item.alt }}{% endif %}"
+		width={{ imageset_item.width}}
 		height={{ imageset_item.height }}
 		style="display: block;" {# has to be here, otherwise it appears not to act in time - just putting it in the CSS file is not enough #}
 	/>
 	{% if imageset_item.url %}
     	<div class="link-information">
     	    {% if imageset_item.link_title or imageset.auto_link_title %}
-				<span class="link-title text">{{ imageset_item.link_title|default:imageset_item.text }}</span>
+				<span class="link-title text">{{ imageset_item.link_title|default:imageset_item }}</span>
 			{% endif %}
    	        {% if imageset_item.link_description %}<span class="link-description text">{{ imageset_item.link_description }}</span>{% endif %}
 			<a href="{{ imageset_item.url }}">
-				<span class="more-information">Read more<span class="hide"> about {{ imageset_item.link_title|default:imageset_item.text }}</span>...</span>
+				<span class="more-information">Read more<span class="hide"> about {{ imageset_item.link_title|default:imageset_item }}</span>...</span>
 	        </a>
 		</div>
     {% endif %}

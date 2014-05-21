@@ -21,7 +21,6 @@ class ArkestraGenericList(object):
 
     limit_to = None
     order_by = ""
-    item_format = "details image"
     group_dates = True
 
     entity = None

@@ -480,7 +480,7 @@ class SiteAdmin(admin.ModelAdmin):
 
 class BuildingAdmin(ModelAdminWithTabsAndCMSPlaceholder):
     list_filter = ('site',)
-    list_display = ('identifier', 'site', 'has_map')
+    list_display = ('__unicode__', 'site', 'has_map')
     search_fields = ['name','number','street','postcode','site__site_name']
     form = BuildingAdminForm
     address_fieldsets = (('', {'fields': ('name', 'number', 'street', 'additional_street_address', 'postcode', 'site', 'slug'),}),)

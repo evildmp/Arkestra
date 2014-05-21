@@ -61,7 +61,7 @@ class SiteTests(TestCase):
         self.main_building.save()
         self.assertEquals(
             self.main_building.get_absolute_url(),
-            "/place/main-building-main-site/"
+            "/place/main-building/"
             )
 
 

@@ -1,19 +1,15 @@
 import datetime
-from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import Http404
 
 from arkestra_utilities.views import ArkestraGenericView
-
-from contacts_and_people.models import Entity
 
 from models import Event, NewsArticle
 from .lister import NewsAndEventsCurrentLister, NewsArchiveLister, \
     EventsArchiveLister, EventsForthcomingLister
 
-
 from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
+
 
 class NewsAndEventsView(ArkestraGenericView):
     auto_page_attribute = "auto_news_page"
@@ -27,7 +23,7 @@ class NewsAndEventsView(ArkestraGenericView):
             )
 
         self.main_page_body_file = "arkestra/generic_lister.html"
-        self.meta = {"description": "Recent news and forthcoming events",}
+        self.meta = {"description": "Recent news and forthcoming events"}
         self.title = unicode(self.entity) + u" news & events"
         if MULTIPLE_ENTITY_MODE:
             self.pagetitle = unicode(self.entity) + u" news & events"
@@ -35,6 +31,7 @@ class NewsAndEventsView(ArkestraGenericView):
             self.pagetitle = "News & events"
 
         return self.response(request)
+
 
 class NewsArchiveView(ArkestraGenericView):
     auto_page_attribute = "auto_news_page"
@@ -48,11 +45,12 @@ class NewsArchiveView(ArkestraGenericView):
             )
 
         self.main_page_body_file = "arkestra/generic_filter_list.html"
-        self.meta = {"description": "Searchable archive of news items",}
+        self.meta = {"description": "Searchable archive of news items"}
         self.title = u"News archive for %s" % unicode(self.entity)
         self.pagetitle = u"News archive for %s" % unicode(self.entity)
 
         return self.response(request)
+
 
 class EventsArchiveView(ArkestraGenericView):
     auto_page_attribute = "auto_news_page"
@@ -66,7 +64,7 @@ class EventsArchiveView(ArkestraGenericView):
             )
 
         self.main_page_body_file = "arkestra/generic_filter_list.html"
-        self.meta = {"description": "Searchable archive of events",}
+        self.meta = {"description": "Searchable archive of events"}
         self.title = u"Events archive for %s" % unicode(self.entity)
         self.pagetitle = u"Events archive for %s" % unicode(self.entity)
 
@@ -85,7 +83,7 @@ class EventsForthcomingView(ArkestraGenericView):
             )
 
         self.main_page_body_file = "arkestra/generic_filter_list.html"
-        self.meta = {"description": "Searchable list of forthcoming events",}
+        self.meta = {"description": "Searchable list of forthcoming events"}
         self.title = u"Forthcoming events for %s" % unicode(self.entity)
         self.pagetitle = u"Forthcoming events for %s" % unicode(self.entity)
 
@@ -99,16 +97,21 @@ def newsarticle(request, slug):
     if request.user.is_staff:
         newsarticle = get_object_or_404(NewsArticle, slug=slug)
     else:
-        newsarticle = get_object_or_404(NewsArticle, slug=slug, published=True, date__lte=datetime.datetime.now())
+        newsarticle = get_object_or_404(
+            NewsArticle,
+            slug=slug,
+            published=True,
+            date__lte=datetime.datetime.now()
+            )
     return render_to_response(
-        "news_and_events/newsarticle.html",
-        {
-        "newsarticle":newsarticle,
-        "entity": newsarticle.get_hosted_by,
-        "meta": {"description": newsarticle.summary,}
+        "news_and_events/newsarticle.html", {
+            "newsarticle": newsarticle,
+            "entity": newsarticle.get_hosted_by,
+            "meta": {"description": newsarticle.summary}
         },
         RequestContext(request),
     )
+
 
 def event(request, slug):
     """
@@ -118,10 +121,10 @@ def event(request, slug):
     event = get_object_or_404(Event, slug=slug)
 
     return render_to_response(
-        "news_and_events/event.html",
-        {"event": event,
-        "entity": event.get_hosted_by,
-        "meta": {"description": event.summary,},
+        "news_and_events/event.html", {
+            "event": event,
+            "entity": event.get_hosted_by,
+            "meta": {"description": event.summary}
         },
         RequestContext(request),
         )

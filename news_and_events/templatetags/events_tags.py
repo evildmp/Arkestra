@@ -1,9 +1,9 @@
 from django import template
 
 register = template.Library()
-    
+
 @register.inclusion_tag('event_date_and_time.html', takes_context = True)
-def event_date_and_time(context, event = None, date_time_info = None):
+def event_date_and_time(context=None, event=None, date_time_info = None):
     date_and_time_heading = []
     date_and_time = []
     if not event:

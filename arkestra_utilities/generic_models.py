@@ -87,6 +87,9 @@ class ArkestraGenericModel(models.Model):
         default=0, choices=IMPORTANCES,
         help_text=u"Important items will be featured in lists")
 
+    def __unicode__(self):
+        return self.short_title
+
     @property
     def has_expired(self):
         # the item is too old to appear in current lists, and should only be
@@ -109,7 +112,9 @@ class ArkestraGenericModel(models.Model):
     # more of the same for the same entity
     def link_to_more(self):
         if self.get_hosted_by:
-            return self.get_hosted_by.get_auto_page_url(self.auto_page_view_name)
+            return self.get_hosted_by.get_auto_page_url(
+                self.auto_page_view_name
+                )
         else:
             return ""
 
@@ -245,173 +250,3 @@ class ArkestraGenericPlugin(object):
 
     def icon_src(self, instance):
         return "/static/plugin_icons/generic.png"
-
-
-    # # def __init__(self, model = None, admin_site = None):
-    # #     super(ArkestraGenericPlugin, self).__init__(model, admin_site)
-    #
-    # def set_defaults(self, instance):
-    #     # set defaults
-    #     # ** important ** - these are set only when the render() function is
-    #     # called
-    #     # this means that when the plugin is invoked (as in
-    #     # contacts_and_people.Building.evets()
-    #     # it is necessary to set these values manually)
-    #     instance.display = getattr(instance, "display", "")
-    #     instance.view = getattr(instance, "view", "current")
-    #     instance.list_format = getattr(instance, "list_format", "vertical")
-    #     instance.layout = getattr(instance, "layout", "")
-    #     instance.limit_to = getattr(instance, "limit_to", None)
-    #     instance.group_dates = getattr(instance, "group_dates", True)
-    #     instance.format = getattr(instance, "format", "details image")
-    #     instance.type = getattr(instance, "type", "plugin") # assume it's a
-    #     # plugin unless otherwise stated
-    #     instance.order_by = getattr(instance, "order_by", "")
-    #     instance.heading_level = getattr(instance, "heading_level", PLUGIN_HEADING_LEVEL_DEFAULT)
-    #
-    #     # print "---- plugin settings ----"
-    #     # print "self.display", instance.display
-    #     # print "self.view", instance.view
-    #     # print "self.group_dates", instance.group_dates
-    #     # print "self.format", instance.format
-    #     # print "self.list_format", instance.list_format
-    #     # print "self.order_by", instance.order_by
-    #     # print "self.limit_to", instance.limit_to
-    #     # print "self.layout", instance.layout
-    #     # print "self.heading_level", instance.heading_level
-    #     return
-    #
-    # def add_link_to_main_page(self, instance):
-    #     # only plugins and sub_pages need a link to the main page
-    #     if instance.type == "plugin" or instance.type == "sub_page":
-    #         # do any of models referred to by this instance have items and is
-    #         # entity.menu_cues["auto_page_attribute"] (e.g.
-    #         # entity.auto_news_page) True?
-    #         # menu_cues is this application's menu_dict
-    #         if (any(d['items'] for d in self.lists)) and \
-    #             getattr(instance.entity, getattr(self, "menu_cues", {}).get("auto_page_attribute", ""), False):
-    #             # set the url attribute of the link to the main page
-    #             instance.link_to_main_page = instance.entity.get_auto_page_url(self.menu_cues["url_attribute"])
-    #             # set the title of the link
-    #             instance.main_page_name = getattr(instance.entity, self.menu_cues["title_attribute"])
-    #
-    # # def print_settings(self):
-    # #     print "---- plugin settings ----"
-    # #     print "self.display", self.display
-    # #     print "self.view", self.view
-    # #     print "self.order_by", self.order_by
-    # #     print "self.group_dates", self.group_dates
-    # #     print "self.format", self.format
-    # #     print "self.list_format", self.list_format
-    # #     print "self.limit_to", self.limit_to
-    # #     print "self.layout", self.layout
-    #
-    # def add_links_to_other_items(self, instance):
-    #     if instance.type == "main_page" or instance.type == "sub_page" or instance.type == "menu":
-    #         for this_list in self.lists:
-    #             # does this list have a function specified that will add the
-    #             # links we need to other items?
-    #             if this_list.get("links_to_other_items"):
-    #                 # call that function
-    #                 this_list["links_to_other_items"](instance, this_list)
-    #
-    # def set_limits_and_indexes(self, instance):
-    #
-    #     for this_list in self.lists:
-    #         # if a plugin or a main page or menu, eliminate expired items
-    #         if instance.view == "current" and instance.type in ["plugin", "main_page", "menu"]:
-    #             this_list["items"] = [item for item in this_list["items"] if not item.has_expired]
-    #
-    #         # cut the list down to size if necessary
-    #         if this_list["items"] and len(this_list["items"]) > instance.limit_to:
-    #             this_list["items"] = this_list["items"][:instance.limit_to]
-    #         # gather non-top items into a list to be indexed
-    #         this_list["index_items"] = [item for item in this_list["items"] if not getattr(item, 'sticky', False)]
-    #         # extract a list of dates for the index
-    #         this_list["no_of_get_whens"] = len(set(getattr(item, "get_when", None) for item in this_list["items"]))
-    #         # more than one date in the list: show an index
-    #         if instance.type == "sub_page" and this_list["no_of_get_whens"] > 1:
-    #             this_list["index"] = True
-    #         # we only show date groups when warranted
-    #         this_list["show_when"] = instance.group_dates and not ("horizontal" in instance.list_format or this_list["no_of_get_whens"] < 2)
-    #
-    #
-    # def determine_layout_settings(self, instance):
-    #     """
-    #     Sets:
-    #         list_format
-    #     """
-    #     # set columns for horizontal lists
-    #     if "horizontal" in instance.list_format:
-    #         instance.list_format = "row columns" + str(instance.limit_to) + " " + instance.list_format
-    #
-    #         for this_list in self.lists:
-    #             this_list["items"] = list(this_list["items"])
-    #             if this_list["items"]:
-    #                 for item in this_list["items"]:
-    #                     item.column_class = "column"
-    #                 if this_list["items"]:
-    #                     this_list["items"][0].column_class = this_list["items"][0].column_class + " firstcolumn"
-    #                     if len(this_list["items"]) > 1:
-    #                         this_list["items"][-1].column_class = this_list["items"][-1].column_class + " lastcolumn"
-    #
-    #     elif "vertical" in instance.list_format:
-    #         instance.list_format = "vertical"
-    #
-    # def set_layout_classes(self, instance):
-    #     """
-    #     Lays out the plugin's divs
-    #     """
-    #     instance.row_class="row"
-    #     # if divs will be side-by-side
-    #     if instance.layout == "sidebyside":
-    #         if len(self.lists) > 1:
-    #             instance.row_class=instance.row_class+" columns" + str(len(self.lists))
-    #             self.lists[0]["div_class"] = "column firstcolumn"
-    #             self.lists[-1]["div_class"] = "column lastcolumn"
-    #         # if just one, and it needs an index
-    #         else:
-    #             for this_list in self.lists:
-    #                 if this_list.get("index"):
-    #                     instance.row_class=instance.row_class+" columns3"
-    #                     instance.index_div_class = "column lastcolumn"
-    #                     this_list["div_class"] = "column firstcolumn doublecolumn"
-    #                 # and if it doesn't need an index
-    #                 else:
-    #                     instance.row_class=instance.row_class+" columns1"
-    #
-    # def get_items(self, instance):
-    #     self.lists = []
-    #
-    # def render(self, context, instance, placeholder):
-    #     instance.entity = getattr(instance, "entity", None) or \
-    #         work_out_entity(context, None)
-    #
-    #     # print instance.display
-    #     #
-    #     # lister = ArkestraGenericLister(
-    #     #     display=instance.display,
-    #     #     list_format=instance.list_format,
-    #     #     layout=instance.layout,
-    #     #     limit_to=instance.limit_to,
-    #     #     group_dates=instance.group_dates,
-    #     #     format=instance.format,
-    #     #     order_by=instance.order_by,
-    #     #     heading_level=instance.heading_level,
-    #     #     )
-    #     #
-    #     # lister.lists = self.new_get_items(instance)
-    #
-    #     self.set_defaults(instance)
-    #     self.get_items(instance)
-    #     self.add_link_to_main_page(instance)
-    #     self.add_links_to_other_items(instance)
-    #     self.set_limits_and_indexes(instance)
-    #     self.determine_layout_settings(instance)
-    #     self.set_layout_classes(instance)
-    #     instance.lists = self.lists
-    #     context.update({
-    #         'everything': instance,
-    #         'placeholder': placeholder,
-    #         })
-    #     return context

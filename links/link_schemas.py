@@ -1,125 +1,142 @@
-# register all interesting models for search
-#print "LOADING link_schemas.py for %s" % __name__
-
 from django.conf import settings
 
-from links import models, admin
-from links import schema, LinkWrapper
+from cms.models import Page
+
+from filer.models import File, Image
 
 from arkestra_utilities.settings import PERMITTED_FILETYPES
 
-schema.register(models.ExternalLink, search_fields=admin.ExternalLinkAdmin.search_fields, 
-                #url='url', description=lambda obj: u"%s<br />%s" % (obj.url, obj.description), metadata='description', heading='"External links"'
-                url='url', 
-                description = 'description', 
-                #short_text = 'title', 
-                heading='"External links"'
+from links import models, admin, schema, LinkWrapper
+
+
+schema.register(
+    models.ExternalLink,
+    search_fields=admin.ExternalLinkAdmin.search_fields,
+    url='url',
+    summary='description',
+    heading='"External links"',
+    )
+
+
+class PageLinkWrapper(LinkWrapper):
+    search_fields = ['title_set__title']
+    link_format_choices = (
+        (u"title", u"Name only"),
+        (u"details", u"Name & summary (description)"),
+        )
+
+    def title(self):
+        return self.obj.get_title()
+
+    def short_text(self):
+        return self.obj.get_menu_title()
+
+    def summary(self):
+        return self.obj.get_meta_description()
+
+    def metadata(self):
+        ancestors = self.obj.get_cached_ancestors()
+        r = []
+        for ancestor in ancestors:
+            r.append(u"%s" % ancestor.get_menu_title())
+        r.append(self.obj.get_menu_title())
+        return u" &raquo; ".join(r)
+
+    def heading(self):
+        return "Related pages"
+
+schema.register_wrapper(Page, PageLinkWrapper)
+
+
+class FileLinkWrapper(LinkWrapper):
+    search_fields = ['name', 'original_filename', 'sha1', 'description']
+
+    # methods used by the Wrapper attributes
+    def filetype(self):
+        return PERMITTED_FILETYPES[self.obj.extension]
+
+    def folder_path(self):
+        # find the item's folder_path
+        if self.obj.folder:
+            folder = self.obj.folder
+            path = [unicode(folder)]
+            while folder.parent:
+                path.insert(0, unicode(folder.parent))
+                folder = folder.parent
+            folder_path = u" &rsaquo; ".join(path)
+        else:
+            folder_path = file.logical_folder.name
+        return folder_path
+
+    def errors(self):
+        file = self.obj
+        # an empty list for errors to report
+        errors = []
+
+        # improperly filed? warn
+        if self.folder_path == "unfiled files":
+            errors.append(
+                "This file is unfiled, and may be deleted without warning"
                 )
 
-if 'cms' in settings.INSTALLED_APPS:
-    from cms.models import Page
-    from cms.admin.pageadmin import PageAdmin
-    class PageLinkWrapper(LinkWrapper):
-        #search_fields = PageAdmin.search_fields
-        search_fields = ['title_set__title',]
-        def text(self):
-            return self.obj.get_title()
-        def short_text(self):
-            return self.obj.get_menu_title()
-        def description(self):
-            # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
+        # no file name? warn
+        if not file.name:
+            errors.append("Name field is missing")
 
-            # if not self.obj.get_meta_description():
-            #     return "<span class='errornote'>The Page <em>" + unicode(self.obj) + "</em> has no <strong>Description metadata</strong>. If you are responsible for this Page, please address this problem <strong>immediately.</strong></span>"
-
-            return self.obj.get_meta_description()
-        def metadata(self):
-            ancestors = self.obj.get_cached_ancestors()
-            r = []
-            for ancestor in ancestors:
-                r.append(u"%s" % ancestor.get_menu_title())
-            r.append(self.obj.get_menu_title())
-            return u" &raquo; ".join(r)
-        def heading(self):
-            return "Related pages"
-    schema.register_wrapper(Page, PageLinkWrapper)
-
-if 'filer' in settings.INSTALLED_APPS:
-    from filer.models import File
-    from filer.admin import FileAdmin
-    
-
-    class FileLinkWrapper(LinkWrapper):
-        search_fields = ['name', 'original_filename', 'sha1', 'description']
-        def title(self):
-            return self.obj.label
-            
-            # warn the user if the item lacks a Name field
-            if not self.obj.name:
-                item = self.obj.label
-                return "%s <span class='errornote'>This Filer item has an empty <strong>Name</strong> field. If you are responsible for this item, please provide a proper name for it."  % item
-            # otherwise, return its name
-            else:
-                return self.obj.name
- 
-        def url(self):
-            return self.obj.url
-
-        def description(self):
-            return self.obj.description
-
-            # the following functionality will have to be restored in such a way that we don't return admin messages to the frontend - later
-
-            file = self.obj
-            # an empty list for errors to report
-            errors = []
-
-            # find the item's folder_path
-            if file.folder:
-                folder = file.folder
-                path = [unicode(folder)]
-                while folder.parent:
-                    path.insert(0, unicode(folder.parent))
-                    folder = folder.parent
-                folder_path = u" &rsaquo; ".join(path)
-            else:
-                folder_path = file.logical_folder.name
-                
-            # improperly filed? warn
-            if folder_path == "unfiled files":
-                errors.append("unfiled, and may be deleted")
-
-            # no file name? warn
-            if not file.name:
-                errors.append("missing Name field")
-                            
-            # errors? list them all together
-            if errors:
-                error_message = "<span class='errornote'>Is this your file?<br />" + "<br />".join(["<em class='item_description'>%s</em>" %e for e in errors]) + "</span>"
-            else:
-                error_message = ""
-                        
-            # if not in allowed types, raises an exception and prevents item from being returned
-            filetype = PERMITTED_FILETYPES[file.extension]
-            
-            
-            # build the description
-            description = u"%s<br /><em>Folder:</em> %s<br />%s %s" % (
-                 filetype, folder_path, file.description or "No description available", error_message
+        # errors? list them all together
+        if errors:
+            error_items = "<br />".join(
+                ["<em class='item_description'>%s</em>" % e for e in errors]
                 )
-            
-            return description
-                    
-        def heading(self):
-            return u"Files"    
-            
-    schema.register_wrapper(File, FileLinkWrapper)
-    
+            error_message = """
+                <span class='errornote'>Is this your file?<br />%s</span>
+                """ % error_items
+        else:
+            error_message = ""
+        return error_message
+
+    # Wrapper attributes
+    def summary(self):
+        return self.obj.description or ""
+
+    def admin_metadata(self):
+        # the following functionality will have to be restored in such a
+        # way that we don't return admin messages to the frontend - later
+
+        return u"%s<br /><em>Folder:</em> %s<br />%s" % (
+            self.filetype() or "",
+            self.folder_path(),
+            self.errors()
+            )
+
+    def heading(self):
+        return u"Files"
+
+    def url(self):
+        return self.obj.url
+
+
+schema.register_wrapper(File, FileLinkWrapper)
+
+
+class ImageLinkWrapper(FileLinkWrapper):
+    def image(self):
+        return self.obj
+
+    def admin_metadata(self):
+        return u"<em>Folder:</em> %s<br />%s" % (
+            self.folder_path(),
+            self.errors()
+            )
+
+schema.register_wrapper(Image, ImageLinkWrapper)
+
+
 if 'form_designer' in settings.INSTALLED_APPS:
-    from form_designer.models import FormDefinition    
+    from form_designer.models import FormDefinition
 
     schema.register(
-        FormDefinition, 
-        search_fields = ['title',],
-        description = 'body',
+        FormDefinition,
+        search_fields=['title'],
+        summary='body',
         )

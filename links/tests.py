@@ -27,20 +27,21 @@ class SearchTests(EntityTestObjectsMixin, TestCase):
             destination_object_id=self.school.id,
             )
 
-        self.assertEquals(link_to_school.text(), self.school.name)
-
-        # home_page = create_page("title", "arkestra.html", "en", menu_title=None, slug=None, apphook=None, redirect=None, meta_description="Description")
-        #
-        #
-        # self.assertEquals(link_to_school.description(), "Description")
+        self.assertEquals(link_to_school.__unicode__(), self.school.name)
 
         link_to_building = Link(
             destination_content_type = ContentType.objects.get_for_model(self.main_building),
             destination_object_id = self.main_building.id,
             )
 
-        self.assertEquals(link_to_building.text(), self.main_building.identifier())
-        self.assertEquals(link_to_building.description(), u"St Mary's Street, Cardiff")
+        self.assertEquals(
+            link_to_building.__unicode__(),
+            self.main_building.__unicode__()
+            )
+        self.assertEquals(
+            link_to_building.summary(),
+            u"St Mary's Street, Cardiff"
+            )
 
         """
         Currently autocomplete searches on description, but this isn't good enough.

@@ -23,9 +23,5 @@ setup(
         'django-pagination',
         'django-easyfilters',
         'django-treeadmin',
-        'django-widgetry',
-    ],
-    dependency_links=[
-        'https://github.com/evildmp/django-widgetry/archive/master.zip#egg=django-widgetry-0.9.2a1'
     ],
 )

@@ -297,14 +297,20 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
         ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(ImageSetPlugin, related_name="imageset_item")
     image = FilerImageField(on_delete=models.PROTECT)
-    alt_text = models.CharField(null=True, blank=True, max_length=255,
-        help_text = "The image's meaning, message or function (if any). Leave empty for items with links."
+    alt_text = models.CharField(
+        blank=True,
+        max_length=255,
+        help_text = """
+        The image's meaning, message or function (if any). Leave empty for
+        items with links.
+        """
         )
     auto_image_title = models.BooleanField(_("Auto image title"),
         default=False,
         help_text = "Use the image's name field as a title")
     manual_image_title = models.TextField(_("Manual image title"),
         blank=True, null=True)
+
     auto_image_caption = models.BooleanField(_("Auto image caption"),
         default=False,
         help_text = "Use the image's description field as caption")
@@ -314,8 +320,10 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
     auto_link_title = models.BooleanField(_("Auto link title"),
         default=False,
         help_text = "Use the link destination's title")
+
     manual_link_title = models.TextField(_("Manual link title"),
         blank=True, null=True)
+
     auto_link_description = models.BooleanField(_("Auto link description"),
         default=False,
         help_text = "Use the link destination's description metadata")
@@ -346,7 +354,7 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
     @property
     def link_title(self):
         if self.plugin.items_have_links:
-            return self.manual_link_title or (self.auto_link_title and self.text)
+            return self.manual_link_title or (self.auto_link_title and self.destination_content_object)
 
     @property
     def link_description(self):
@@ -393,7 +401,7 @@ class EmbeddedVideoSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
             plugin_item.plugin = self
             plugin_item.save()
 
-class EmbeddedVideoSetItem(LinkMethodsMixin, ArkestraGenericPluginItemOrdering):
+class EmbeddedVideoSetItem(ArkestraGenericPluginItemOrdering):
     class Meta:
         ordering=('inline_item_ordering', 'id',)
     plugin = models.ForeignKey(
