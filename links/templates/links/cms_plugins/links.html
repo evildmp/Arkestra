@@ -1,24 +1,23 @@
 {% autoescape off %}
-{% if object.insert_as == 0 %}
+    {% if object.insert_as == 0 %}
 
-	{% for item in links %}
-        <a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %}>{{ item }}</a>{{ item.separator }}
-    {% endfor %}
-
-{% elif object.insert_as == 2 %}
-    {% for item in links %}
-    	<p class="{% if use_link_icons %}icons{% endif %} plugin-list-item">
-    	    {% include item.block_level_item_template %}
-        </p>
-	{% endfor %}
-{% else %}
-
-    <ul class="{% if use_link_icons %} icons{% else %} none{% endif %}">
     	{% for item in links %}
-    		<li class="plugin-list-item">{% include item.block_level_item_template %}</li>
+            <a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %}>{{ item }}</a>{{ item.separator }}
+        {% endfor %}
+
+    {% elif object.insert_as == 2 %}
+        {% for item in links %}
+        	<p class="{% if use_link_icons %}icons{% endif %} plugin-list-item">
+        	    {% include item.block_level_item_template %}
+            </p>
     	{% endfor %}
-    </ul>
+    {% else %}
 
-{% endif %}
+        <ul class="{% if use_link_icons %} icons{% else %} none{% endif %}">
+        	{% for item in links %}
+        		<li class="plugin-list-item">{% include item.block_level_item_template %}</li>
+        	{% endfor %}
+        </ul>
 
+    {% endif %}
 {% endautoescape %}
