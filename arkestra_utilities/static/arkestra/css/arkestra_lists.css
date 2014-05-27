@@ -27,15 +27,17 @@ ul.icons    {
 
 ul.plugin-list {margin-top: 0;}
 
-ul.plugin-list .title,
-.plugin-list-item .title {font-weight: bold;}
+ul.plugin-list .title {font-weight: bold;}
 
 ul.plugin-list.vertical li {
     list-style: none;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     margin-left: 0;
+    clear: both;
 }
+
+li.plugin-list-item {clear: both;}
 
 ul.plugin-list.vertical li:first-child {padding-top: 0;}
 div.main_page ul.plugin-list.vertical li.grouper li.important {
@@ -190,4 +192,5 @@ ul.object-links li  {
     margin: 1em 0;
     padding: 0;
     list-style: none;
+    clear: both;
 }
