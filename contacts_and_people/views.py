@@ -270,8 +270,13 @@ def person(request, slug, active_tab=""):
     if 'publications' in applications:
         try:
             if person.researcher and person.researcher.publishes:
-                tabs.append(tabs_dict["research"])
-                tabs.append(tabs_dict["publications"])
+                r = person.researcher
+                if r.synopsis and r.description:
+                        if r.synopsis.cmsplugin_set.all() \
+                                or r.description.cmsplugin_set.all():
+                            tabs.append(tabs_dict["research"])
+                if r.authored.exists():
+                    tabs.append(tabs_dict["publications"])
         except Researcher.DoesNotExist:
             pass
 
