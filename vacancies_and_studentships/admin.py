@@ -1,14 +1,7 @@
-from django import forms
-from django.contrib import admin, messages
-from django.db.models import ForeignKey
+from django.contrib import admin
 
-from cms.admin.placeholderadmin import PlaceholderAdmin
-
-from widgetry import fk_lookup
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
-from arkestra_utilities.widgets.wym_editor import WYMEditor
-from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, HostedByFilter, fieldsets
 
 from links.admin import ExternalLinkForm, ObjectLinkInline
@@ -93,11 +86,6 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
             ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
-    # autocomplete fields
-    related_search_fields = [
-        'hosted_by',
-        'please_contact',
-        ]
 
-admin.site.register(Vacancy,VacancyAdmin)
-admin.site.register(Studentship,StudentshipAdmin)
+admin.site.register(Vacancy, VacancyAdmin)
+admin.site.register(Studentship, StudentshipAdmin)
