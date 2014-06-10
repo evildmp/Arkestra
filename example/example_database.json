@@ -3179,6 +3179,118 @@
         }
     }, 
     {
+        "pk": 396, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 397, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 398, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 399, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 400, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 401, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 402, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 403, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 404, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 405, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 406, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 407, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 408, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 409, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "cms.cmsplugin", 
         "fields": {
@@ -6571,11 +6683,10 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 10, 
             "object_id": 3, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
             "destination_content_type": [
                 "contacts_and_people", 
                 "person"
@@ -6585,7 +6696,8 @@
                 "newsarticle"
             ], 
             "key_link": false, 
-            "heading_override": ""
+            "heading_override": "", 
+            "summary_override": ""
         }
     }, 
     {
@@ -6594,11 +6706,11 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 2, 
             "key_link": false, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
+            "plugin": 15, 
             "destination_content_type": [
                 "contacts_and_people", 
                 "person"
@@ -6606,7 +6718,7 @@
             "active": true, 
             "heading_override": "", 
             "inline_item_ordering": 0, 
-            "plugin": 15
+            "summary_override": ""
         }
     }, 
     {
@@ -6615,11 +6727,11 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 14, 
             "key_link": false, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
+            "plugin": 15, 
             "destination_content_type": [
                 "contacts_and_people", 
                 "person"
@@ -6627,7 +6739,7 @@
             "active": true, 
             "heading_override": "", 
             "inline_item_ordering": 0, 
-            "plugin": 15
+            "summary_override": ""
         }
     }, 
     {
@@ -6636,11 +6748,11 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 5, 
             "key_link": false, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
+            "plugin": 15, 
             "destination_content_type": [
                 "contacts_and_people", 
                 "person"
@@ -6648,7 +6760,7 @@
             "active": true, 
             "heading_override": "", 
             "inline_item_ordering": 0, 
-            "plugin": 15
+            "summary_override": ""
         }
     }, 
     {
@@ -6657,11 +6769,11 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "home page", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 1, 
             "key_link": false, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
+            "plugin": 57, 
             "destination_content_type": [
                 "cms", 
                 "page"
@@ -6669,7 +6781,7 @@
             "active": true, 
             "heading_override": "", 
             "inline_item_ordering": 0, 
-            "plugin": 57
+            "summary_override": ""
         }
     }, 
     {
@@ -6678,11 +6790,11 @@
         "fields": {
             "metadata_override": "", 
             "text_override": "", 
-            "html_title_attribute": "", 
+            "format": "title", 
             "destination_object_id": 3, 
             "key_link": false, 
-            "description_override": "", 
-            "include_description": false, 
+            "html_title_attribute": "", 
+            "plugin": 65, 
             "destination_content_type": [
                 "links", 
                 "externallink"
@@ -6690,7 +6802,7 @@
             "active": true, 
             "heading_override": "", 
             "inline_item_ordering": 0, 
-            "plugin": 65
+            "summary_override": ""
         }
     }, 
     {
@@ -7386,7 +7498,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 5, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "buttonise", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7399,7 +7511,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "no-small-caps", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7412,7 +7524,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "doublecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 2, 
@@ -7425,7 +7537,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "images-left", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7438,7 +7550,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "images-right", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7451,7 +7563,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 3, 
-            "templates": "[u'[u\\'[u\\\\\\'[u\"[u\\\\\\\\\\\\\\'[]\\\\\\\\\\\\\\']\"]\\\\\\']\\']']", 
+            "templates": "[u'[u\\'[u\\\\\\'[u\\\\\\\\\\\\\\'[u\"[u\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'[]\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\']\"]\\\\\\\\\\\\\\']\\\\\\']\\']']", 
             "name": "background green", 
             "allowed_elements": "p blockquote ul ol li newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7464,7 +7576,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "image-borders", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7477,7 +7589,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "shadowed", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7490,7 +7602,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "no-image-link-arrows", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7503,7 +7615,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "standout", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7516,7 +7628,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "standout-mild", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7529,7 +7641,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u'[u\"[u\\'\\']\"]']", 
+            "templates": "[u\"[u'']\"]", 
             "name": "triplecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 3, 
