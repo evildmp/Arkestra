@@ -1,23 +1,17 @@
-from django import forms
-from django.contrib import admin, messages
-from django.db.models import ForeignKey
+from django.contrib import admin
 
-from cms.admin.placeholderadmin import PlaceholderAdmin
-
-from widgetry import fk_lookup
 from widgetry.tabs.placeholderadmin import ModelAdminWithTabsAndCMSPlaceholder
 
-from arkestra_utilities.widgets.wym_editor import WYMEditor
-from arkestra_utilities import admin_tabs_extension
 from arkestra_utilities.admin_mixins import GenericModelAdmin, GenericModelForm, HostedByFilter, fieldsets
 
-from links.admin import ExternalLinkForm, ObjectLinkInline
+from links.admin import ObjectLinkInline
 
 from models import Vacancy, Studentship
 
 class VacancyStudentshipForm(GenericModelForm):
     # a shared form for vacancies & studentships
     pass
+
 
 class VacancyStudentshipAdmin(GenericModelAdmin, ModelAdminWithTabsAndCMSPlaceholder):
     # inlines = (ObjectLinkInline,)
@@ -48,6 +42,7 @@ class VacancyForm(VacancyStudentshipForm):
     class Meta(VacancyStudentshipForm.Meta):
         model = Vacancy
 
+
 class VacancyAdmin(VacancyStudentshipAdmin):
     # def __init__(self):
     #     super(VacancyAdmin, self).__init__(self)
@@ -57,13 +52,13 @@ class VacancyAdmin(VacancyStudentshipAdmin):
     fieldset_vacancy = ('', {'fields': ('salary', 'job_number')})
 
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy, fieldsets["image"], fieldsets["publishing_control"],)}),
-            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
-            ('Body', {'fieldsets': (fieldsets["body"],)}),
-            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
-            ('Please contact', {'fieldsets': (fieldsets["people"],)}),
-            ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
+        ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldset_vacancy, fieldsets["image"], fieldsets["publishing_control"],)}),
+        ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
+        ('Body', {'fieldsets': (fieldsets["body"],)}),
+        ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
+        ('Please contact', {'fieldsets': (fieldsets["people"],)}),
+        ('Links', {'inlines': (ObjectLinkInline,),}),
+        ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
 
@@ -83,21 +78,16 @@ class StudentshipAdmin(VacancyStudentshipAdmin):
 
     fieldset_supervision = ('', {'fields': ('supervisors',)})
     tabs = (
-            ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],)}),
-            ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
-            ('Body', {'fieldsets': (fieldsets["body"],)}),
-            ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
-            ('Supervisors', {'fieldsets': (fieldset_supervision,)}),
-            ('Please contact', {'fieldsets': (fieldsets["people"],)}),
-            ('Links', {'inlines': (ObjectLinkInline,),}),
-            ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
+        ('Basic', {'fieldsets': (fieldsets["basic"], fieldsets["host"], fieldsets["image"], fieldsets["publishing_control"],)}),
+        ('Date & significance', {'fieldsets': (fieldsets["date"], fieldsets["importance"])}),
+        ('Body', {'fieldsets': (fieldsets["body"],)}),
+        ('Where to Publish', {'fieldsets': (fieldsets["where_to_publish"],),}),
+        ('Supervisors', {'fieldsets': (fieldset_supervision,)}),
+        ('Please contact', {'fieldsets': (fieldsets["people"],)}),
+        ('Links', {'inlines': (ObjectLinkInline,),}),
+        ('Advanced Options', {'fieldsets': (fieldsets["url"], fieldsets["slug"],)}),
         )
 
-    # autocomplete fields
-    related_search_fields = [
-        'hosted_by',
-        'please_contact',
-        ]
 
-admin.site.register(Vacancy,VacancyAdmin)
-admin.site.register(Studentship,StudentshipAdmin)
+admin.site.register(Vacancy, VacancyAdmin)
+admin.site.register(Studentship, StudentshipAdmin)
