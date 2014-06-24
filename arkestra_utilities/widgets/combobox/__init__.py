@@ -1,12 +1,10 @@
-from os.path import join
 from itertools import chain
 from django import forms
-from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
 from cms.utils import cms_static_url
-from cms.templatetags.cms_admin import admin_static_url
+
 
 class Combobox(forms.Select):
     class Media:
@@ -36,7 +34,7 @@ class Combobox(forms.Select):
                 else:
                     option_values.append(option_value)
             if not value in option_values:
-                choices.append((value,value))
+                choices.append((value, value))
         rendered = super(Combobox, self).render(name, value, attrs, choices)
         context = {
             'name': name,
@@ -49,14 +47,15 @@ class Combobox(forms.Select):
             });
             </script>''' % context)
 
+
 class ComboboxField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         kwargs.update({'widget': Combobox})
         return super(ComboboxField, self).__init__(*args, **kwargs)
-    
+
     def clean(self, value):
         return super(ComboboxField, self).clean(value)
-    
+
     def valid_value(self, value):
         "Check to see if the provided value is a valid choice"
         # all values are valid
