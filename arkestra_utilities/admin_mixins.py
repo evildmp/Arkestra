@@ -40,8 +40,11 @@ class AutocompleteMixin(object):
 # makes the request available to the admin form
 # useful for using the messages framework, and required for admin that
 # uses Arkestra's external_url functionality
+# allows you to get self.request in an admin form method that wouldn't otherwise
+# have it
 class SupplyRequestMixin(object):
     def get_form(self, request, obj=None, **kwargs):
+
         form_class = super(SupplyRequestMixin, self).get_form(
             request, obj, **kwargs
             )
