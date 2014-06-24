@@ -428,7 +428,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
                     .exclude(abstract_entity=True):
 
                 if showparent:
-                    ancestors.append(entity)
+                    ancestors.append(entity.name)
                 showparent = entity.display_parent
             return ancestors
 
