@@ -149,7 +149,7 @@ class PersonForm(InputURLMixin):
         self.cleaned_data["external_url"] = get_or_create_external_link(self.request,
             self.cleaned_data.get("input_url", None), # a manually entered url
             self.cleaned_data.get("external_url", None), # a url chosen with autocomplete
-            self.cleaned_data.get("link_title"), # link title
+            link_title, # link title
             "", # link description
             )
 
@@ -226,10 +226,15 @@ class PersonAdmin(PersonAndEntityAdmin):
     readonly_fields = ['address_report',]
 
     def address_report(self, instance):
+
         if instance.building and instance.get_full_address == instance.get_entity.get_full_address:
-            return "Warning: this Person has the Specify Building field set, probably unnecessarily."
+            return "Warning: this Person has the Specify Building field set unnecessarily."
         else:
-            return "%s" % (", ".join(instance.get_full_address)) or "<span class='errors'>Warning: this person has no address.</span>"
+            address_parts = [instance.get_entity.name]
+            address_parts.extend(instance.get_full_address)
+
+            return  "%s" % (", ".join(address_parts)) \
+                or "<span class='errors'>Warning: this person has no address.</span>"
 
     address_report.short_description = "Address"
     address_report.allow_tags = True
