@@ -124,7 +124,7 @@ CMS_MENU_TITLE_OVERWRITE = getattr(settings, "CMS_MENU_TITLE_OVERWRITE", True)
 
 
 from news_and_events.menu import menu_dict as news_and_events_menu
-from contacts_and_people.menu import menu_dict as contacts_and_people_menu
+from contacts_and_people import menu as contacts_and_people_menu
 from vacancies_and_studentships.menu import menu_dict as vacancies_and_studentships_menu
 
 
@@ -133,7 +133,7 @@ ARKESTRA_MENUS = getattr(
     "ARKESTRA_MENUS",
     [
         news_and_events_menu,
-        contacts_and_people_menu,
+        contacts_and_people_menu.menu_dict,
         vacancies_and_studentships_menu,
     ]
 )
@@ -141,6 +141,10 @@ ARKESTRA_MENUS = getattr(
 # Do you want all menu branches to expand?
 EXPAND_ALL_MENU_BRANCHES = getattr(settings, "EXPAND_ALL_MENU_BRANCHES", False)
 
+
+PERSON_TABS = getattr(
+    settings, "PERSON_TABS", contacts_and_people_menu.PersonTabs
+    )
 
 # -------- Django ----------------------
 

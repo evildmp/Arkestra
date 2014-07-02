@@ -2,7 +2,7 @@
 {% load mptt_tags person_tags thumbnail typogrify_tags news_and_events_tags placeholder_tags %}
 
 {% block meta %}
-	{% for name,content in meta.items %}
+	{% for name, content in meta.items %}
 		<meta name="{{ name }}" content="{{ content }}" />
 	{% endfor %}
 {% endblock meta %}
@@ -28,8 +28,8 @@
 {% endblock pagetitle %}
 
 {% block main_page_body %}
-    {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
 	{% block arkestra_content %}
+        {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
         {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}
     		<div class="row columns2">

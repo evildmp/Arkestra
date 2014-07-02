@@ -228,14 +228,14 @@ class EntityAddressTests(EntityTestObjectsMixin, TestCase):
         #   a list of its section's ancestors excluding abstract entities
         self.assertEquals(
             self.section._get_institutional_address,
-            [self.department, self.school]
+            [self.department.name, self.school.name]
             )
 
     def test_student_centre_entity_get_institutional_address(self):
         #  for student_centre, should exclude department
         self.assertEquals(
             self.student_centre._get_institutional_address,
-            [self.school]
+            [self.school.name]
             )
 
     def test_entity_get_full_address(self):
@@ -259,14 +259,14 @@ class EntityAddressTests(EntityTestObjectsMixin, TestCase):
         #  abstract entity is skipped in address
         self.assertEquals(
             self.department.get_full_address,
-            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            [self.school.name, u'Main Building', u"St Mary's Street", u'Cardiff']
             )
 
     def test_dont_display_parent_in_address(self):
         #  an entity that doesn't display its parent in the address
         self.assertEquals(
             self.student_centre.get_full_address,
-            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            [self.school.name, u'Main Building', u"St Mary's Street", u'Cardiff']
             )
 
     def test_building_recapitulates_entity_name_in_address(self):
@@ -274,7 +274,7 @@ class EntityAddressTests(EntityTestObjectsMixin, TestCase):
         #  its name with the building & drops the 1st line of postal address
         self.assertEquals(
             self.testing_centre.get_full_address,
-            [self.department, self.school, u"Queen Street", u'Cardiff']
+            [self.department.name, self.school.name, u"Queen Street", u'Cardiff']
             )
 
 
@@ -345,7 +345,12 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_building, self.main_building)
         self.assertEquals(
             self.smith.get_full_address,
-            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            [
+                self.school.name,
+                u'Main Building',
+                u"St Mary's Street",
+                u'Cardiff'
+                ]
             )
 
     def test_person_with_better_entity_membership(self):
@@ -403,7 +408,12 @@ class PersonTests(EntityTestObjectsMixin, TestCase):
         self.assertEquals(self.smith.get_building, self.main_building)
         self.assertEquals(
             self.smith.get_full_address,
-            [self.school, u'Main Building', u"St Mary's Street", u'Cardiff']
+            [
+                self.school.name,
+                u'Main Building',
+                u"St Mary's Street",
+                u'Cardiff'
+                ]
             )
         #  check his membership of school has been downgraded by the save()
         self.assertEquals(
