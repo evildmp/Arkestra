@@ -201,7 +201,7 @@ def person(request, slug, active_tab=""):
             raise Http404
 
         active_tab = "_" + tabs.live_tabs[active_tab]["tab"]
-        meta = {"description": tabs.meta_dict}
+        meta = {"description": tabs.description}
 
     person.links = object_links(person)
 
@@ -236,6 +236,7 @@ def person(request, slug, active_tab=""):
         description = Entity.objects.base_entity().__unicode__()
         request.current_page = Entity.objects.base_entity().get_website
 
+    # if we don't have an active_tab, meta["description"] is ""
     meta.setdefault(
         "description", " ".join((person.__unicode__(), description))
         )
