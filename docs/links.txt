@@ -1,12 +1,14 @@
 Generic Links App
 
-The links app allows generic links between any models. You need to add a setting similar to this:
+The links app allows generic links between any models. You need to add a
+setting similar to this:
 
-To register specific models that they can be links, a link_schema.py module needs to be created in
-your app. The registry system is comparable with how django.contrib.admin works.
-Every linkable needs a certain list of attributes. Either defined on the model itself or provided with a wrapper.
-A list of the needed attributes is in `links.schema_registry.ATTRIBUTES`. Be aware that 'title' and 'description'
-are also used in the autocomplete widget.
+To register specific models that they can be links, a link_schema.py module
+needs to be created in your app. The registry system is comparable with how
+django.contrib.admin works. Every linkable needs a certain list of attributes.
+Either defined on the model itself or provided with a wrapper. A list of the
+needed attributes is in `links.schema_registry.ATTRIBUTES`. Be aware that
+'title' and 'description' are also used in the autocomplete widget.
 
 There a multiple ways how you can define a link/wrapper:
 
