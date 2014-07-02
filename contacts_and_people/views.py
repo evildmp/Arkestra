@@ -199,7 +199,7 @@ def person(request, slug, active_tab=""):
     if active_tab:
         if active_tab not in tabs.live_tabs:
             raise Http404
-        print tabs.live_tabs[active_tab]
+
         active_tab = "_" + tabs.live_tabs[active_tab]["tab"]
         meta = {"description": tabs.meta_dict}
 
