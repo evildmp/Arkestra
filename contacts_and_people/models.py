@@ -644,8 +644,8 @@ class PersonLite(models.Model):
         'contacts_and_people.Title',
         blank=True, null=True,
         on_delete=models.SET_NULL)
-    given_name = models.CharField(max_length=50, blank=True, null=True)
-    middle_names = models.CharField(max_length=100, blank=True, null=True)
+    given_name = models.CharField(max_length=50, blank=True)
+    middle_names = models.CharField(max_length=100, blank=True)
     surname = models.CharField(max_length=50)
 
     def __unicode__(self):
