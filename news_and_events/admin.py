@@ -85,6 +85,10 @@ class EventForm(NewsAndEventsForm):
         model = Event
 
     def clean(self):
+        # if any fields are invalid, give up now
+        if not self.is_valid():
+            return self.cleaned_data
+
         # 1. obtain missing information from parent
         parent = self.cleaned_data['parent']
         if parent:
