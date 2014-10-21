@@ -1,7 +1,6 @@
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models.loading import get_model
 
 from cms.models import Page
 

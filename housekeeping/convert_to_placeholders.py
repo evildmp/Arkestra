@@ -1,11 +1,9 @@
-from django.db.models import get_model
-
 from django.conf import settings
 
 from cms.models import Placeholder
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugins.text.models import Text
-from cms.api import add_plugin      
+from cms.api import add_plugin
 
 
 def convert(action = "dryrun"):
@@ -21,7 +19,7 @@ def convert(action = "dryrun"):
                         "fields": [                 # a list of the fields we're working on
                             {                       # a dictionary for each field
                                 "old_field": "content",
-                                "new_field": "body",                
+                                "new_field": "body",
                                 "slot": "body",
                                 },
                             ],
@@ -29,10 +27,10 @@ def convert(action = "dryrun"):
                         "actions": {},              # an empty dictionary where we we store the results
                         },
                     "Event": {                      # a second model in that module
-                        "fields": [                 
-                            {                       
+                        "fields": [
+                            {
                                 "old_field": "content",
-                                "new_field": "body",                
+                                "new_field": "body",
                                 "slot": "body",
                                 },
                             ],
@@ -45,10 +43,10 @@ def convert(action = "dryrun"):
                 "application": "Vacancies & Studentships",
                 "models": {
                     "Vacancy": {
-                        "fields": [                 
-                            {                       
+                        "fields": [
+                            {
                                 "old_field": "description",
-                                "new_field": "body",                
+                                "new_field": "body",
                                 "slot": "body",
                                 },
                             ],
@@ -56,10 +54,10 @@ def convert(action = "dryrun"):
                         "actions": {},
                         },
                     "Studentship": {
-                        "fields": [                 
-                            {                       
+                        "fields": [
+                            {
                                 "old_field": "description",
-                                "new_field": "body",                
+                                "new_field": "body",
                                 "slot": "body",
                                 },
                                 ],
@@ -68,19 +66,19 @@ def convert(action = "dryrun"):
                         },
                     },
                 },
-            "publications.models": {                
+            "publications.models": {
                 "application": "Publications",
                 "models": {
                     "Researcher": {
-                        "fields": [                 
-                            {                       
+                        "fields": [
+                            {
                                 "old_field": "research_synopsis",
-                                "new_field": "synopsis",                
+                                "new_field": "synopsis",
                                 "slot": "body",
                                 },
-                            {                       
+                            {
                                 "old_field": "research_description",
-                                "new_field": "description",                
+                                "new_field": "description",
                                 "slot": "body",
                                 },
                             ],
@@ -95,17 +93,17 @@ def convert(action = "dryrun"):
     print "------executing --------"
     # loop over the modules
     for module, module_values in models_dictionary["modules"].items():
-        
+
         # loop over the models in the module
         for model, model_values in module_values["models"].items():
-            
+
             # mmodel is the human-readable name of the model, used for the report summary
             mmodel = models_dictionary["modules"][module]["models"][model]["model"]
             models_dictionary["messages"][mmodel]={}
 
             # import the model
             actual_model = getattr(__import__(module, globals(), locals(), module_values["models"], -1), model)
-                                            
+
             # loop over the fields that need converting
             for field in model_values["fields"]:
 
@@ -122,17 +120,17 @@ def convert(action = "dryrun"):
                     message = "field " + new_field + " is missing - check the model and try agin"
                     models_dictionary["messages"][mmodel][old_field]["Error"]=message
                     continue
-                    
+
                 junk_content = []   # a record of those items with nothing but <br /> in them
                 moved_items =[]     # a record of the items we migrated to placeholders
 
                 # loop over each item in the class
                 for item in actual_model.objects.all():
-                    
+
                     old_field_content = getattr(item, old_field)  # the old field we want to convert
-                    
+
                     # now the serious business of converting the fields
-            
+
                     # if the item lacks a placeholder, create the placeholder and the reference to it
                     if old_field_content and not getattr(item, new_field, None):
 
@@ -143,26 +141,31 @@ def convert(action = "dryrun"):
                             placeholder=Placeholder(slot=slot)
                             if execute == "execute":
                                 placeholder.save()
-        
+
                             # refer to the placeholder from the item
                             setattr(item, new_field, placeholder)
-        
+
                             if execute == "execute":
-                                add_plugin(placeholder, "SemanticTextPlugin", settings.CMS_LANGUAGES[0][0], body = old_field_content)
-                                                                                                                            
+                                add_plugin(
+                                    placeholder,
+                                    "SemanticTextPlugin",
+                                    get_cms_setting("LANGUAGES")[0][0],
+                                    body = old_field_content,
+                                    )
+
                             # setattr(item, old_field, "")
                             if execute == "execute":
                                 item.status = "Converted to placeholder"
                             else:
                                 item.status = "Unconverted"
-                                        
+
                         else:
                             # this item is so short it must be junk
                             if execute == "execute":
                                 setattr(item, old_field, "")
-                            
+
                                 item.status = "Junk field - too short; was deleted instead of converted:" + old_field_content
-                            else:    
+                            else:
                                 item.status = "Junk field - too short; will be deleted instead of converted:" + old_field_content
                             # make a note that this was a junk item
                             junk_content.append(item)
@@ -172,13 +175,13 @@ def convert(action = "dryrun"):
 
                     if execute == "execute":
                         item.save()
-                        
- 
+
+
                 # information about junk content items
                 if execute == "execute":
                     message = " ".join((str(len(junk_content)), "junk items not converted items"))
                 else:
-                    message = " ".join((str(len(junk_content)), "junk items found"))                    
+                    message = " ".join((str(len(junk_content)), "junk items found"))
 
                 models_dictionary["messages"][mmodel][old_field]["Junk fields"]=message
 
@@ -187,22 +190,22 @@ def convert(action = "dryrun"):
                     message = str(len(moved_items)) + " items were converted to placeholder " + new_field
                 else:
                     message = str(len(moved_items)) + " items need to be converted to placeholder " + new_field
-            
+
                 models_dictionary["messages"][mmodel][old_field]["Conversions"]=message
-            
+
                 # list every item that was copied for the full report
                 if execute == "execute":
                     action = "Fields that were copied"
                 else:
                     action = "Fields to be copied"
-                    
+
                 models_dictionary["modules"][module]["models"][model]["actions"][action]=moved_items
-                
+
     report = {
         "action": execute,
         "task": "convert-placeholders",
         "converted": models_dictionary,
         "template": "housekeeping/convert_to_placeholders.html"
-        }        
+        }
 
     return report

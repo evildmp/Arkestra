@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.http import HttpRequest, QueryDict
 
 from cms.api import create_page
+from cms.utils import get_cms_setting
 
 from news_and_events.models import NewsArticle, Event
 from news_and_events.lister import (
@@ -40,7 +41,7 @@ class NewsTests(TestCase):
         #  no Entities in the database, so default to settings's template
         self.assertEqual(
             self.tootharticle.get_template,
-            settings.CMS_TEMPLATES[0][0]
+            get_cms_setting("TEMPLATES")[0][0]
             )
 
     def test_date_related_attributes(self):

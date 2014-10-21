@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 
 from cms.models import Page, CMSPlugin
 from cms.models.fields import PlaceholderField
+from cms.utils import get_cms_setting
 
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
@@ -506,7 +507,7 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.get_website:
             return self.get_website.get_template()
         else:
-            return settings.CMS_TEMPLATES[0][0]
+            return get_cms_setting("TEMPLATES")[0][0]
 
     def get_contacts(self):
         """

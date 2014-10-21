@@ -2,9 +2,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 
-from django.conf import settings
-
 from cms.models.fields import PlaceholderField
+from cms.utils.conf import get_cms_setting
 
 from filer.fields.image import FilerImageField
 
@@ -123,7 +122,7 @@ class ArkestraGenericModel(models.Model):
         if self.get_hosted_by:
             return self.get_hosted_by.get_template()
         else:
-            return settings.CMS_TEMPLATES[0][0]
+            return get_cms_setting("TEMPLATES")[0][0]
 
     @property
     def get_entity(self):

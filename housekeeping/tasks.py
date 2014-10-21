@@ -4,9 +4,10 @@ import django.shortcuts as shortcuts
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from cms.utils import get_cms_setting
 
-from convert_to_placeholders import convert 
-from tidy_links import tidy_links 
+from convert_to_placeholders import convert
+from tidy_links import tidy_links
 
 @login_required
 def tasks(request, task = None, action = "dryrun"):
@@ -20,18 +21,17 @@ def tasks(request, task = None, action = "dryrun"):
         # nothing matched, so just do the menu
         return shortcuts.render_to_response(
         "housekeeping/housekeeping.html", {
-                "base_template": settings.CMS_TEMPLATES[0][0],
+                "base_template": get_cms_settings.("TEMPLATES")[0][0],
                 },
             RequestContext(request),
             )
-        
+
     return shortcuts.render_to_response(
         report["template"], {
             "task": task,
             "action": action,
             "report": report,
-            "base_template": settings.CMS_TEMPLATES[0][0],
+            "base_template": get_cms_setting("CMS_TEMPLATES")[0][0],
             },
         RequestContext(request),
         )
-                                           

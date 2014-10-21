@@ -12,6 +12,7 @@ from django.db.models import get_model
 import django.shortcuts as shortcuts
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from cms.utils import get_cms_setting
 
 
 def setup():
@@ -21,7 +22,7 @@ def setup():
 def check_no_moderator():
     print "  checking that CMS_MODERATOR is set to False"
     from django.conf import settings
-    if settings.CMS_MODERATOR:
+    if get_cms_setting("MODERATOR"):
         print "!! Please set CMS_MODERATOR=False in settings before using this script !!"
         print 'aborted'
         raise Exception("!! Please set CMS_MODERATOR=False in settings before using this script !!")
@@ -32,14 +33,14 @@ def fix_tree_id(model):
     print "  rewriting tree_id..."
     #from django.db.models import Avg, Max, Min, Count
     #base_tree_id = Page.objects.filter(parent=None).aggregate(tree_id=Max('tree_id'))['tree_id'] + 1
-    base_tree_id = 1    
+    base_tree_id = 1
     for node in model.objects.filter(parent=None).order_by('tree_id'):
         node.tree_id = base_tree_id
         node.save()
         r_fix_tree_id(node.children.all(), base_tree_id)
         base_tree_id += 1
     return "I fixed some trees"
-    
+
 def r_fix_tree_id(nodes, tree_id):
     for node in nodes:
         node.tree_id = tree_id
@@ -47,7 +48,7 @@ def r_fix_tree_id(nodes, tree_id):
             node.save(no_signals=True)
         else:
             node.save()
-        r_fix_tree_id(node.children.all(), tree_id)      
+        r_fix_tree_id(node.children.all(), tree_id)
 
 def fix_leftright(model,do_alteration=True):
     setup()
@@ -72,7 +73,7 @@ def fix_leftright(model,do_alteration=True):
         if not total_nodes * 2 == counter-1:
             print "            something is wrong! %s != %s" % (total_nodes * 2, counter-1)
     return "did some leftright checking"
-    
+
 def fix_level(model):
     setup()
     print "  fixing level..."
@@ -122,9 +123,9 @@ def fix(request,slug):
         "leftright_report":leftright_report,},
         RequestContext(request),
         )
-    
-    
-    
+
+
+
 def check_leftright():
     report = []
     report.append("Checking left/right")

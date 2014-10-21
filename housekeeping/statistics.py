@@ -9,18 +9,20 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from arkestra_utilities.models import ArkestraUser
+from cms.utils import get_cms_setting
+
 
 @login_required
 def stats(request):
     pages = Page.objects.count()
     people = Person.objects.count()
     entities = Entity.objects.count()
-    roles = Membership.objects.count() 
-    newsarticles = NewsArticle.objects.count() 
-    events = Event.objects.count() 
-    users = ArkestraUser.objects.filter(is_active = True, is_staff = True) 
+    roles = Membership.objects.count()
+    newsarticles = NewsArticle.objects.count()
+    events = Event.objects.count()
+    users = ArkestraUser.objects.filter(is_active = True, is_staff = True)
     groups = Group.objects.all().order_by("name")
-    plugins = CMSPlugin.objects.count() 
+    plugins = CMSPlugin.objects.count()
     return shortcuts.render_to_response(
         "housekeeping/statistics.html", {
             "pages": pages,
@@ -32,11 +34,11 @@ def stats(request):
             "users": users,
             "plugins": plugins,
             "groups": groups,
-            "base_template": settings.CMS_TEMPLATES[0][0],
+            "base_template": get_cms_setting.("CMS_TEMPLATES")[0][0],
             },
         RequestContext(request),
         )
-        
+
 @login_required
 def userstats(request,slug):
     print "userstats", slug
@@ -46,4 +48,4 @@ def userstats(request,slug):
         "housekeeping/user_statistics.html", {
             "user": user,
             }
-        )        
+        )
