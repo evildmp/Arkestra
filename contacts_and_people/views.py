@@ -25,7 +25,6 @@ def contacts_and_people(request, slug):
     # request.path = entity.get_website.get_absolute_url()
     request.current_page = entity.get_website
     template = entity.get_template()
-    main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
 
     # meta values - title and meta
     title = "Contact information for %s" % entity
@@ -99,12 +98,11 @@ def contacts_and_people(request, slug):
     return render_to_response(
         # this is a catch-all template, that then uses includes to bring in
         # extra information
-        "arkestra_utilities/entity_auto_page.html",
+        "contacts_and_people/contacts_and_people.html",
         {
             "entity": entity,
             "pagetitle": pagetitle,
             "entity.website.template": template,
-            "main_page_body_file": main_page_body_file,
             "email": entity.email,
             "title": title,
             "meta": meta,
