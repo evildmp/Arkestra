@@ -65,8 +65,7 @@ def check_urls(url, allowed_schemes=None):
     elif str(scheme) == "mailto":
         message_list.append({
             "message": """
-                Warning: this email address hasn't been checked. I hope it's
-                correct.
+                Warning: this email address hasn't been checked. I hope it's correct.
                 """,
             "level": messages.WARNING
             })

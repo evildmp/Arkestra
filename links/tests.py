@@ -101,7 +101,10 @@ class ExternalLinkTests(TestCase):
         # a link we can't open should return a message
         self.assertDictEqual(
             check_urls("mailto:daniele@vurt.org")[0],
-            {'message': "Warning: this email address hasn't been checked. I hope it's correct.", 'level': 30}
+            {'message': """
+                Warning: this email address hasn't been checked. I hope it's correct.
+                """,
+             'level': 30}
             )
 
 
