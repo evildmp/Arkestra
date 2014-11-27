@@ -21,7 +21,9 @@ Extends the base page template, and includes the main_page_body_file specified i
 
 {% if pagetitle %}
 	{% block pagetitle %}
-	    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+        <div id="pagetitle">
+    	    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+        </div>
 	{% endblock pagetitle %}
 {% endif %}
 
@@ -35,7 +37,7 @@ Extends the base page template, and includes the main_page_body_file specified i
             {% render_placeholder intro_page_placeholder %}
 
             <div class="column firstcolumn">
-                <div class = "">
+                <div>
                     <h{{ IN_BODY_HEADING_LEVEL }}>Contact information</h{{ IN_BODY_HEADING_LEVEL }}>
                     <dl class="not-indented">
                         {% include "includes/key_contacts.html" %}

@@ -19,13 +19,15 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
-        {{ person}}
-    </h{{PAGE_TITLE_HEADING_LEVEL}}>
-	{% if home_role %}
-		<p><span class="home-role">{{ home_role.role }}</span>
-            {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
-	{% endif %}
+    <div id="pagetitle">
+    	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
+            {{ person}}
+        </h{{PAGE_TITLE_HEADING_LEVEL}}>
+    	{% if home_role %}
+    		<p><span class="home-role">{{ home_role.role }}</span>
+                {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
+    	{% endif %}
+    </div>
 {% endblock pagetitle %}
 
 {% block main_page_body %}

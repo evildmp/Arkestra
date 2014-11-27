@@ -9,7 +9,7 @@ Extends the base page template, and includes the main_page_body_file specified i
 {% block title %}
 	<title>{{ title }}</title>
 {% endblock %}
-  
+
 {% block col_class %}
 	{% with is_menu_node="True" %}
 		{{ block.super }}
@@ -21,7 +21,9 @@ Extends the base page template, and includes the main_page_body_file specified i
 
 {% if pagetitle %}
 	{% block pagetitle %}
-	    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	    <div id="pagetitle">
+            <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+        </div>
 	{% endblock pagetitle %}
 {% endif %}
 

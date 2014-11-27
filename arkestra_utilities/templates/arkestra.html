@@ -60,9 +60,11 @@
         				{% block menu %}<ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul>{% endblock menu %}
 
         				{% block pagetitle %}
-        					{% if not current_page.flags.no_page_title %}
-        			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
-        					{% endif %}
+                            <div id="pagetitle">
+            					{% if not current_page.flags.no_page_title %}
+            			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
+            					{% endif %}
+                            </div>
         				{% endblock pagetitle %}
 
                         {% block summary %}{% endblock summary %}

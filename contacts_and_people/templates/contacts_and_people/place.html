@@ -13,7 +13,9 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.identifier }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+    <div id="pagetitle">
+    	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.identifier }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+    </div>
 {% endblock pagetitle %}
 
 {% block main_page_body %}

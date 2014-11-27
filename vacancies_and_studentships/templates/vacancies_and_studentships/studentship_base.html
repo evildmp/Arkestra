@@ -9,7 +9,9 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}}>Studentship ({{ studentship.hosted_by.short_name }}): {{ studentship.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<div id="pagetitle">
+        <h{{PAGE_TITLE_HEADING_LEVEL}}>Studentship ({{ studentship.hosted_by.short_name }}): {{ studentship.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+    </div>
 {% endblock pagetitle %}
 
 {% block summary %}
