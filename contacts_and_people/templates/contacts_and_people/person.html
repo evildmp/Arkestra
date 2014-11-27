@@ -23,7 +23,8 @@
         {{ person}}
     </h{{PAGE_TITLE_HEADING_LEVEL}}>
 	{% if home_role %}
-		<p><span class="home-role">{{ home_role.role }}</span>, {{ entity }}</p>
+		<p><span class="home-role">{{ home_role.role }}</span>
+            {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
 	{% endif %}
 {% endblock pagetitle %}
 
