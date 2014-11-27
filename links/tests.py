@@ -78,11 +78,10 @@ class ExternalLinkTests(TestCase):
 
     def test_host_not_found(self):
         # a hostname we can't find should raise a forms.ValidationError
-        self.assertRaisesMessage(
-            forms.ValidationError,
-            u'Hostname vurt.vurt.vurt.vurt.org not found. Please check that it is correct.',
-            check_urls,
-            "http://vurt.vurt.vurt.vurt.org/"
+        # a link we can't open should return a message
+        self.assertDictEqual(
+            check_urls("http://vurt.vurt.vurt.vurt.org/")[0],
+            {'message': 'Hostname vurt.vurt.vurt.vurt.org not found. Please check that it is correct.', 'level': 30}
             )
 
     def test_404(self):
