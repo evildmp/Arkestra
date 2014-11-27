@@ -64,33 +64,6 @@ a img { border: none; }
 
 
 /*
-standout - large type
-big-quotes - fancy quotes - implies standout */
-
-p.standout,
-p.big-quotes
-    {
-    font-size:177%;
-    line-height: 1.5;
-    font-family:"Hoefler Text", "Didot", Georgia, serif;
-    padding-right:25px;
-    margin-left:0;
-    margin-top:.0em;
-    }
-
-p.standout:first-line,
-p.big-quotes:first-line   {
-    color: #990033;
-}
-
-p.big-quotes     {
-    background:url(fixes/quotes-right.png) right bottom no-repeat;
-    display:list-item;
-    padding-left:35px;
-    list-style:none inside url(fixes/quotes-left.png);
-    text-indent:-35px;
-    }
-/*
 pull-out - in a space-on-right or space-on-left element, brings the pulled-out element out of the margin in the appropriate direction
 */
 
