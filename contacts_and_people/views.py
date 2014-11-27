@@ -336,7 +336,7 @@ def place(request, slug, active_tab=""):
         place.access_and_parking.cmsplugin_set.all()
     ):
         tabs.append(tabs_dict["getting-here"])
-    if place.events:
+    if place.events.lists:
         tabs.append(tabs_dict["events"])
 
     if not active_tab:
