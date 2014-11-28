@@ -300,8 +300,7 @@ span.image.right {
 it's a bit awkward when non-floated images can have borders, because then the border area is the width of the containing element, which can be rather wide*/
 
 .image-borders span.image,
-.image-borders div.anythingSlider,
-*[class|="has-background"]  {
+.image-borders div.anythingSlider {
     background: #efefef;
     padding: 7px;
     border: 1px solid #888;

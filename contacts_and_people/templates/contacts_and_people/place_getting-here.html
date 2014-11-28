@@ -1,12 +1,16 @@
 {% extends "contacts_and_people/place.html" %}{% load placeholder_tags %}
 
+{% block title %}
+	<title>{{ place }} - getting here</title>
+{% endblock %}
+
 {% block place_information %}
 	{% if place.getting_here.get_plugins %}
 		<div class="{{ place.row_class }}">
 			<h2>Getting here</h2>
 			{% render_placeholder place.getting_here %}
-		</div>	
-	{% endif %}	
+		</div>
+	{% endif %}
 	{% if place.access_and_parking.get_plugins %}
 		<div class="{{ place.row_class }}">
 			<h2>Access & parking</h2>

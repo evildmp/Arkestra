@@ -1,4 +1,9 @@
 {% extends "contacts_and_people/place.html" %}
+
+{% block title %}
+	<title>{{ place }} - what's on</title>
+{% endblock %}
+
 {% load thumbnail news_and_events_tags typogrify_tags %}
 
 	{% block place_information %}
