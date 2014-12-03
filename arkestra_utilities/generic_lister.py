@@ -7,7 +7,8 @@ from django.db.models import Q
 from django_easyfilters import FilterSet
 
 from arkestra_utilities.settings import (
-    MULTIPLE_ENTITY_MODE, PLUGIN_HEADING_LEVEL_DEFAULT
+    MULTIPLE_ENTITY_MODE, PAGE_TITLE_HEADING_LEVEL,
+    PLUGIN_HEADING_LEVEL_DEFAULT,
     )
 from generic_models import ArkestraGenericModel
 
@@ -200,7 +201,7 @@ class ArkestraGenericLister(object):
     # attributes that the Lists don't need
     entity = None
     layout = ""
-    heading_level = PLUGIN_HEADING_LEVEL_DEFAULT
+    heading_level = PAGE_TITLE_HEADING_LEVEL
     list_format = "vertical"
 
     # may be required by in GenericList
@@ -276,3 +277,7 @@ class ArkestraGenericLister(object):
             self.row_class = self.row_class+" columns" + str(len(self.lists))
             self.lists[0].div_class = "column firstcolumn"
             self.lists[-1].div_class = "column lastcolumn"
+
+
+class ArkestraGenericPluginLister(ArkestraGenericLister):
+    heading_level = PLUGIN_HEADING_LEVEL_DEFAULT

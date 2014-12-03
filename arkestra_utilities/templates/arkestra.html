@@ -57,22 +57,24 @@
     			<div id="inner-wrapper">
     				{% block menu %}<nav><ul class= "menu">{% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}</ul></nav>{% endblock menu %}
 
-    				{% block pagetitle %}
-                        <div id="pagetitle">
-        					{% if not current_page.flags.no_page_title %}
-        			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
-        					{% endif %}
-                        </div>
-    				{% endblock pagetitle %}
-
-                    {% block summary %}{% endblock summary %}
-
         			<div id="main-page-body">
         				{% block main_page_body %}
+
+            				{% block pagetitle %}
+                                <div id="pagetitle">
+                					{% if not current_page.flags.no_page_title %}
+                			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
+                					{% endif %}
+                                </div>
+            				{% endblock pagetitle %}
+
+                            {% block summary %}{% endblock summary %}
+
                             {% filter amp|smartypants|caps|initial_quotes %}
         						{% insert "newsflash" %}
         				   		{% placeholder body %}
         					{% endfilter %}
+
         			  	{% endblock main_page_body %}
         			</div>
 

@@ -46,9 +46,9 @@ Arkestra also provides template hooks for other variables, which can be set in t
 
 Some views, such as for an entity's Contacts & People page or News & Events page, expect your templates to be lined up in the right way. For example:
 
-* the view for a Contacts & People page will load `arkestra_utilities/entity_auto_page.html`
+* the view for a Contacts & People page will load `arkestra/entity_generic_lister_page.html`
 * this extend the template that it gets from the entity's cms.Page: `{% extends entity.get_template %}`
-* the site template in its `{% block main_page_body %}` will thus include the file that view has specified, containing the special stuff for that view: `{% include main_page_body_file %}`
+* the site template in its `{% block main_page_body %}` will thus include the file that view has specified, containing the special stuff for that view: `{% include generic_lister_template %}`
 
 So, anything in your template that should *not* end up in pages like Contacts & People should be *inside* `{% block main_page_body %}`, so that it is replaced.
 

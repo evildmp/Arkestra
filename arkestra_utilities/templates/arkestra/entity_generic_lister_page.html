@@ -1,7 +1,7 @@
 {% extends entity.get_template %}
 {% comment %}
 
-Extends the base page template, and includes the main_page_body_file specified in the view.
+Extends the base page template, and includes the generic_lister_template specified in the view.
 
 {% endcomment %}
 {% load typogrify_tags %}
@@ -19,14 +19,6 @@ Extends the base page template, and includes the main_page_body_file specified i
 {% block skip_and_language %}
 {% endblock %}
 
-{% if pagetitle %}
-	{% block pagetitle %}
-	    <div id="pagetitle">
-            <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ pagetitle|typogrify }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-        </div>
-	{% endblock pagetitle %}
-{% endif %}
-
 {% block main_page_body %}
-		{% include main_page_body_file %}
+		{% include generic_lister_template %}
 {% endblock main_page_body %}

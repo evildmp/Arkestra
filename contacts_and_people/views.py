@@ -141,7 +141,7 @@ def people(
     # request.path = entity.get_website.get_absolute_url()
     request.current_page = entity.get_website
     template = entity.get_template()
-    main_page_body_file = "includes/people_list_with_index.html"
+    generic_lister_template = "includes/people_list_with_index.html"
 
     # meta values - title and meta
     meta = {u"description": "People in %s" % entity}
@@ -155,12 +155,12 @@ def people(
         title = u"%s, people by surname: %s" % (entity, letter.upper())
 
     return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
+        "arkestra/entity_generic_lister_page.html",
         {
             "entity": entity,
             "pagetitle": entity,
             "entity.website.template": template,
-            "main_page_body_file": main_page_body_file,
+            "generic_lister_template": generic_lister_template,
 
             "title": title,
             "meta": meta,

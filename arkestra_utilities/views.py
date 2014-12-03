@@ -44,7 +44,7 @@ class ArkestraGenericView(View):
             "title": self.title,
             "meta": self.meta,
             "pagetitle": self.pagetitle,
-            "main_page_body_file": self.main_page_body_file,
+            "generic_lister_template": self.generic_lister_template,
 
             # this will need to be dealt with!
             "intro_page_placeholder": self.entity.news_page_intro,
@@ -54,6 +54,6 @@ class ArkestraGenericView(View):
         )
 
         return render_to_response(
-            "arkestra_utilities/entity_auto_page.html",
+            "arkestra/entity_generic_lister_page.html",
             context,
         )

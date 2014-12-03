@@ -22,7 +22,7 @@ class NewsAndEventsView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_lister.html"
+        self.generic_lister_template = "arkestra/generic_lister.html"
         self.meta = {"description": "Recent news and forthcoming events"}
         self.title = unicode(self.entity) + u" news & events"
         if MULTIPLE_ENTITY_MODE:
@@ -44,7 +44,7 @@ class NewsArchiveView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable archive of news items"}
         self.title = u"News archive for %s" % unicode(self.entity)
         self.pagetitle = u"News archive for %s" % unicode(self.entity)
@@ -63,7 +63,7 @@ class EventsArchiveView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable archive of events"}
         self.title = u"Events archive for %s" % unicode(self.entity)
         self.pagetitle = u"Events archive for %s" % unicode(self.entity)
@@ -82,7 +82,7 @@ class EventsForthcomingView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable list of forthcoming events"}
         self.title = u"Forthcoming events for %s" % unicode(self.entity)
         self.pagetitle = u"Forthcoming events for %s" % unicode(self.entity)
