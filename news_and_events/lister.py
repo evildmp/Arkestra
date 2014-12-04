@@ -334,11 +334,13 @@ class EventsFilterList(EventsList):
 class EventsListForthcoming(EventsFilterList):
     item_collections = ("forthcoming_events", "previous_events")
     other_item_kinds = ("previous_events", "main")
+    heading_text = _(u"Forthcoming events")
 
 
 class EventsListArchive(EventsFilterList):
     item_collections = ("previous_events", "forthcoming_events")
     other_item_kinds = ("forthcoming_events", "main")
+    heading_text = _(u"Previous events")
 
 
 class NewsAndEventsCurrentLister(ArkestraGenericLister):

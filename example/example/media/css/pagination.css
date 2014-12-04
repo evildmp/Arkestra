@@ -131,26 +131,20 @@ form.filter-form input {width: 100%}
 .filterline .filterlabel {
     font-weight: bold;
 }
-.removefilter a:link,
-.removefilter a:visited,
-.addfilter a:link,
-.addfilter a:visited {
-    text-decoration: none;
-}
 
-.removefilter a:link,
-.removefilter a:visited {
+.removefilter a:link, .removefilter a:visited, .addfilter a:link, .addfilter a:visited {
+    text-decoration: none;
     border-radius: 4px;
     padding: 0px 1px 2px 3px;
+}
+
+.removefilter a:link, .removefilter a:visited {
     border: 1px solid #113399;
     background-color: #113399;
     color: white;
 }
 
-.addfilter a:link,
-.addfilter a:visited {
-    border-radius: 4px;
-    padding: 0px 1px 2px 3px;
+.addfilter a:link, .addfilter a:visited {
     border: 1px solid #f0f0f0;
     background-color: #f0f0f0;
     color: black;

@@ -1,28 +1,37 @@
 {% load pagination_tags sekizai_tags %}
 {% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/pagination.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pagination.css" />
 {% endaddtoblock %}
 
 {% for list in lister.lists %}
-    <div class="row columns3">
-    	<div class = "column lastcolumn sidebar">
-            <form action="" method="GET" class="filter-form">
-                {% for field in list.search_fields %}
-                    <div>
-                        <label for="{{ field.field_name }}">
-                        	<span class="label-text">{{ field.field_label }}:</span>
-                        </label>
+    				{% if lister.heading_level %}
+    					<h{{ lister.heading_level }}>
+                            {{ list.heading_text }}
+                        </h{{ lister.heading_level }}>
+    				{% endif %}
 
-                        <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}">
-                    </div>
-                {% endfor %}
-                <input type="submit" value="Apply">
-                {% for field in list.hidden_search_fields %}
-                    <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}">
-                {% endfor %}
-            </form>
-            {{ list.itemfilter }}
-			<strong>{{ list.itemfilter.qs.count }} items found</strong>
+    <div class="row columns3">
+    	<div class="column lastcolumn sidebar">
+            <h{{ IN_BODY_HEADING_LEVEL }}>Filter</h{{ IN_BODY_HEADING_LEVEL }}>
+            <div class="generic_filtration">
+                <form action="" method="GET" class="filter-form">
+                    {% for field in list.search_fields %}
+                        <div>
+                            <label for="{{ field.field_name }}">
+                            	<span class="label-text">{{ field.field_label }}:</span>
+                            </label>
+
+                            <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}">
+                        </div>
+                    {% endfor %}
+                    <input type="submit" value="Apply">
+                    {% for field in list.hidden_search_fields %}
+                        <input type="hidden" name="{{ field.field_name }}" value="{{ field.value }}">
+                    {% endfor %}
+                </form>
+                {{ list.itemfilter }}
+    			<strong>{{ list.itemfilter.qs.count }} items found</strong>
+            </div>
 		    {% include "arkestra/generic_list_other_items.html" %}
         </div>
 
