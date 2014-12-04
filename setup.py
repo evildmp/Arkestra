@@ -22,7 +22,8 @@ setup(
         'semanticeditor',
         'pillow',
         'django-pagination',
-        'django-easyfilters',
+         # will need to be restored once easyfilters is updated - see REQUIREMENTS.txt
+         # 'django-easyfilters',
         'django-treeadmin',
     ],
 )
