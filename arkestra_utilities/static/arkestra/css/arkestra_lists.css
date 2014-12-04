@@ -18,11 +18,6 @@ ul.entity-tree li {list-style: none;}
 /* icons */
 ul.no-marker {list-style-type: none;}
 
-ul.icons    {
-    list-style: square url(/static/arkestra/images/default_styles/hand-right.png);
-    padding-left: 30px;
-}
-
 /* plugin list items */
 
 ul.plugin-list {margin-top: 0;}
