@@ -8,19 +8,21 @@
 {% block nav_local %}
 {% endblock nav_local %}
 
-{% block pagetitle %}
-	<div id="pagetitle">
-        <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-    </div>
-{% endblock pagetitle %}
-
-{% block summary %}
-   	<p class="subtitle">{{ newsarticle.summary }}</p>
-{% endblock summary %}
 
 {% block main_page_body %}
     {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location crop as image %}
 	{% with placeholder_width=generic_main_width %}
+
+        {% block pagetitle %}
+        	<div id="pagetitle">
+                <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+            </div>
+        {% endblock pagetitle %}
+
+        {% block summary %}
+           	<p class="subtitle">{{ newsarticle.summary }}</p>
+        {% endblock summary %}
+
 		<div class="row columns3">
 	       	<div class="column firstcolumn doublecolumn">
 				{% block placeholder %}
