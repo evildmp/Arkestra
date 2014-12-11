@@ -87,6 +87,11 @@ ul.plugin-list li span.site-name    {
     color: black;
 }
 
+/* typogrify_tags */
+
+.caps {font-size: 93%;}
+.amp {font-size: 105%; font-family: "Hoefler Text", "Didot", Georgia, serif; font-style:italic;}
+
 /* ----------------- arkestra_navigation.css ----------------- */
 
 ul.menu	{ /* the whole thing */
