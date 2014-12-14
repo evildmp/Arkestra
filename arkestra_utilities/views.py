@@ -3,8 +3,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
 
-from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
-
 from contacts_and_people.models import Entity
 
 # a handy class-based view for lists of an Entity's items - news, events,
