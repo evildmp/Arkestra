@@ -14,23 +14,21 @@
 {% block skip_and_language %}
 {% endblock %}
 
-
 {% block nav_local %}
 {% endblock nav_local %}
 
-{% block pagetitle %}
-    <div id="pagetitle">
-    	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
-            {{ person}}
-        </h{{PAGE_TITLE_HEADING_LEVEL}}>
-    	{% if home_role %}
-    		<p><span class="home-role">{{ home_role.role }}</span>
-                {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
-    	{% endif %}
-    </div>
-{% endblock pagetitle %}
-
 {% block main_page_body %}
+    {% block pagetitle %}
+        <div id="pagetitle">
+        	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
+                {{ person}}
+            </h{{PAGE_TITLE_HEADING_LEVEL}}>
+        	{% if home_role %}
+        		<p><span class="home-role">{{ home_role.role }}</span>
+                    {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
+        	{% endif %}
+        </div>
+    {% endblock pagetitle %}
 	{% block arkestra_content %}
         {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
         {% include "arkestra/tabbed_menu.html" %}

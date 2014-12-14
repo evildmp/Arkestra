@@ -11,13 +11,12 @@
 {% block nav_local %}
 {% endblock nav_local %}
 
-{% block pagetitle %}
-    <div id="pagetitle">
-        <h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-    </div>
-{% endblock pagetitle %}
-
 {% block main_page_body %}
+    {% block pagetitle %}
+        <div id="pagetitle">
+            <h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+        </div>
+    {% endblock pagetitle %}
     {% include "arkestra/tabbed_menu.html" %}
     {% block place_information %}
         <div class="row columns3">
