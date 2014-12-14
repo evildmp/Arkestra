@@ -4,7 +4,7 @@
 
     {% block item_title %}
         {% if "details" in lister.item_format and item.is_uninformative %}
-            <span class="title">{{ item|typogrify }}</span>
+            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
         {% else %}
     		{% if item.external_url %}
     			<a
@@ -17,7 +17,7 @@
     			<a
                     class = "title"
                     href="{{ item.get_absolute_url }}">
-                    {{item|typogrify}}
+                    {{ item|amp|smartypants|caps|initial_quotes }}
                 </a>
     		{% endif %}
     	{% endif %}
@@ -37,13 +37,13 @@
 
             {% block item_date %}
                 {% if item.date %}
-                    <span class="date">{{ item.date|naturalday|capfirst|typogrify }}</span>
+                    <span class="date">{{ item.date|naturalday|capfirst|amp|smartypants|caps|initial_quotes }}</span>
                 {% endif %}
             {% endblock item_date %}
 
             {% block item_summary %}
                 {% if item.summary %}
-                    <span class="summary">{{ item.summary|truncatewords:40|typogrify }}</span>
+                    <span class="summary">{{ item.summary|truncatewords:40|amp|smartypants|caps|initial_quotes }}</span>
                 {% endif %}
             {% endblock item_summary %}
     	{% endif %}

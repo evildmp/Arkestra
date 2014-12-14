@@ -23,7 +23,7 @@
     {% block place_information %}
         <div class="row columns3">
             <div class="column firstcolumn">
-                <p class="subtitle">{{ place.summary|typogrify }}</p>
+                <p class="subtitle">{{ place.summary|amp|smartypants|caps|initial_quotes }}</p>
                 {% if place.postcode or place.street %}
                     <h2>Address</h2>
                     {{ place.get_postal_address|join:"<br />" }}

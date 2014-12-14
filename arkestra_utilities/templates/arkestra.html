@@ -63,7 +63,7 @@
             				{% block pagetitle %}
                                 <div id="pagetitle">
                 					{% if not current_page.flags.no_page_title %}
-                			           	{% filter typogrify %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
+                			           	{% filter amp|smartypants|caps|initial_quotes %}<h{{PAGE_TITLE_HEADING_LEVEL}}>{% page_attribute title %}</h{{PAGE_TITLE_HEADING_LEVEL}}>{% endfilter %}
                 					{% endif %}
                                 </div>
             				{% endblock pagetitle %}
