@@ -1,8 +1,8 @@
 {% spaceless %}
-{% autoescape off %}
+{% load typogrify_tags %}
     {% if object.insert_as == 0 %}
 
-    	{% for item in links %}<a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %}>{{ item }}</a>{{ item.separator }}{% endfor %}
+    	{% for item in links %}<a href="{{ item.url }}"{% if item.html_title_attribute %} title="{{ item.html_title_attribute }}"{% endif %}>{{ item|amp|smartypants|caps|initial_quotes }}</a>{{ item.separator }}{% endfor %}
 
     {% elif object.insert_as == 2 %}
         {% for item in links %}
@@ -19,5 +19,4 @@
         </ul>
 
     {% endif %}
-{% endautoescape %}
 {% endspaceless %}

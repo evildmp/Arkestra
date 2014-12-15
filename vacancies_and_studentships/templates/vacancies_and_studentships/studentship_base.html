@@ -15,7 +15,7 @@
 {% endblock pagetitle %}
 
 {% block summary %}
-	<p class="subtitle"><strong>{{ studentship.summary }}</strong></p>
+	<p class="subtitle">{{ studentship.summary|amp|smartypants|caps|initial_quotes }}</p>
 {% endblock summary %}
 
 

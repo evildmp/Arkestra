@@ -1,24 +1,14 @@
-{% spaceless %}
-{% load thumbnail humanize typogrify_tags %}
+{% load thumbnail typogrify_tags humanize  %}
 {% block list_item %}
-
     {% block item_title %}
         {% if "details" in lister.item_format and item.is_uninformative %}
             <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
         {% else %}
     		{% if item.external_url %}
-    			<a
-                    class="external title"
-                    href="{{ item.get_absolute_url }}"
-                    >
-                    {{item}}</a>
-                <span class="site-name"> {{ item.external_url.external_site }}</span>
-    		   {% else %}
-    			<a
-                    class = "title"
-                    href="{{ item.get_absolute_url }}">
-                    {{ item|amp|smartypants|caps|initial_quotes }}
-                </a>
+    			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+                <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
+    		{% else %}
+    			<a class="title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
     		{% endif %}
     	{% endif %}
     {% endblock item_title %}
@@ -47,8 +37,5 @@
                 {% endif %}
             {% endblock item_summary %}
     	{% endif %}
-
     {% endblock item_details %}
-
 {% endblock list_item %}
-{% endspaceless %}

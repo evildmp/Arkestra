@@ -9,45 +9,43 @@
 	<title>{{event.type}}: {{ event }}</title>
 {% endblock %}
 
-
 {% block nav_local %}{% endblock nav_local %}
 
 {% block main_page_body %}
-{% with placeholder_width=generic_main_width %}
-
-    {% block pagetitle %}
-    	<div id="pagetitle">
-            <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-        </div>
-    {% endblock pagetitle %}
-
-    {% block summary %}
-    	<p class="subtitle">{{ event.summary }}</p>
-    {% endblock summary %}
-
-    {% block arkestra_content %}
-	    {% thumbnail event.image.file sidebar_image_size subject_location=event.image.subject_location crop as image %}
-        <div class="row columns3">
-        	<div class="column firstcolumn doublecolumn">
-				{% block placeholder %}
-				    {% render_placeholder event.body %}
-				{% endblock placeholder %}
+    {% with placeholder_width=generic_main_width %}
+        {% block pagetitle %}
+        	<div id="pagetitle">
+                <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ event.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
             </div>
-			<div class="column lastcolumn sidebar">
-				{% block image %}{% if not event.body.cmsplugin_set.all %}
-				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}{% endif %}
-				{% endblock image %}
-				{% include "includes/details.html" %}
-				{% with event.links as links %}
-				    {% include "includes/related_links_list.html" %}
-		        {% endwith %}
-				{% include "includes/children.html" %}
-			</div>
-		</div>
-		<ul class = "news icons">
-			<li><a href = "{{ event.link_to_more }}">More {{ entity.short_name }} events</a></li>
-		</ul>
-    {% endblock arkestra_content %}
-{% endwith %}
+        {% endblock pagetitle %}
+
+        {% block summary %}
+        	<p class="subtitle">{{ event.summary|amp|smartypants|caps|initial_quotes }}</p>
+        {% endblock summary %}
+
+        {% block arkestra_content %}
+    	    {% thumbnail event.image.file sidebar_image_size subject_location=event.image.subject_location crop as image %}
+            <div class="row columns3">
+            	<div class="column firstcolumn doublecolumn">
+    				{% block placeholder %}
+    				    {% render_placeholder event.body %}
+    				{% endblock placeholder %}
+                </div>
+    			<div class="column lastcolumn sidebar">
+    				{% block image %}{% if not event.body.cmsplugin_set.all %}
+    				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}{% endif %}
+    				{% endblock image %}
+    				{% include "includes/details.html" %}
+    				{% with event.links as links %}
+    				    {% include "includes/related_links_list.html" %}
+    		        {% endwith %}
+    				{% include "includes/children.html" %}
+    			</div>
+    		</div>
+    		<ul class = "news icons">
+    			<li><a href = "{{ event.link_to_more }}">More {{ entity.short_name }} events</a></li>
+    		</ul>
+        {% endblock arkestra_content %}
+    {% endwith %}
 {% endblock main_page_body %}
 {% block sub %}{% endblock sub %}

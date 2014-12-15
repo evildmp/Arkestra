@@ -8,47 +8,47 @@
 {% block nav_local %}
 {% endblock nav_local %}
 
-
 {% block main_page_body %}
     {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location crop as image %}
 	{% with placeholder_width=generic_main_width %}
+        {% autoescape off %}
+            {% block pagetitle %}
+            	<div id="pagetitle">
+                    <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle.title|amp|smartypants|caps|initial_quotes }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+                </div>
+            {% endblock pagetitle %}
 
-        {% block pagetitle %}
-        	<div id="pagetitle">
-                <h{{PAGE_TITLE_HEADING_LEVEL}}>{{ newsarticle.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-            </div>
-        {% endblock pagetitle %}
+            {% block summary %}
+               	<p class="subtitle">{{ newsarticle.summary|amp|smartypants|caps|initial_quotes }}</p>
+            {% endblock summary %}
 
-        {% block summary %}
-           	<p class="subtitle">{{ newsarticle.summary }}</p>
-        {% endblock summary %}
-
-		<div class="row columns3">
-	       	<div class="column firstcolumn doublecolumn">
-				{% block placeholder %}
-				    {% render_placeholder newsarticle.body %}
-				{% endblock placeholder %}
-			</div>
-			<div class="column lastcolumn sidebar">
-				{% block image %}
-				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
-				{% endblock image %}
-				<dl class="not-indented">
-					<dt>Published</dt>
-					<dd>{% date newsarticle.date %}</dd>
-					{% if newsarticle.please_contact.all %}
-	 				    <dt>General enquiries</dt>
-	 				    {% for person in newsarticle.please_contact.all %}
-							<dd><a href = "{{ person.get_absolute_url }}">{{ person }}</a></dd>
-						{% endfor %}
-					{% endif %}
-				</dl>
+    		<div class="row columns3">
+    	       	<div class="column firstcolumn doublecolumn">
+    				{% block placeholder %}
+    				    {% render_placeholder newsarticle.body %}
+    				{% endblock placeholder %}
+    			</div>
+    			<div class="column lastcolumn sidebar">
+    				{% block image %}
+    				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
+    				{% endblock image %}
+    				<dl class="not-indented">
+    					<dt>Published</dt>
+    					<dd>{% date newsarticle.date %}</dd>
+    					{% if newsarticle.please_contact.all %}
+    	 				    <dt>General enquiries</dt>
+    	 				    {% for person in newsarticle.please_contact.all %}
+    							<dd><a href="{{ person.get_absolute_url }}">{{ person }}</a></dd>
+    						{% endfor %}
+    					{% endif %}
+    				</dl>
+                {% endautoescape %}
 				{% with newsarticle.links as links %}
 				    {% include "includes/related_links_list.html" %}
 		        {% endwith %}
 			</div>
 		</div>
-		<ul class = "news icons">
+		<ul class="news icons">
 			<li><a href = "{{ newsarticle.link_to_more }}">More {{ newsarticle.hosted_by.short_name }} news</a></li>
 		</ul>
 	{% endwith %}

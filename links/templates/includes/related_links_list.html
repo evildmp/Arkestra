@@ -1,11 +1,9 @@
-{% autoescape off %}
-    {% regroup links by heading as link_types %}
-    {% for kind in link_types %}
-        <h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
-        <ul class="object-links">
-        	{% for item in kind.list %}
-        		<li class="plugin-list-item">{% include item.block_level_item_template %}</li>
-        	{% endfor %}
-        </ul>
-    {% endfor %}
-{% endautoescape %}
+{% regroup links by heading as link_types %}
+{% for kind in link_types %}
+    <h{{ IN_BODY_HEADING_LEVEL }}>{{kind.grouper}}</h{{ IN_BODY_HEADING_LEVEL }}>
+    <ul class="object-links">
+    	{% for item in kind.list %}
+    		<li class="plugin-list-item">{% include item.block_level_item_template %}</li>
+    	{% endfor %}
+    </ul>
+{% endfor %}

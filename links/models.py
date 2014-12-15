@@ -135,7 +135,6 @@ class Link(BaseLink, LinkMethodsMixin):
     ObjectLinks and links.GenericLinkListPluginItem
     """
 
-
     FORMATS = (
         ("title", u"Title only"),
         ("details image", u"Details"),
