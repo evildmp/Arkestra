@@ -107,6 +107,7 @@ def contacts_and_people(request, slug):
             "title": title,
             "meta": meta,
             "precise_location": entity.precise_location,
+            "access_note": entity.access_note,
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
             "full_address": entity.get_full_address,
