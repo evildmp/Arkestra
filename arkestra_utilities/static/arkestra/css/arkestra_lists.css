@@ -3,8 +3,8 @@
 /* we really need to fix some of these styles. the idea of a div.plugin ul li
 is quite out of date now and a nuisance */
 
-ul, ol, dl  {margin-left: 0; padding-left: 0;}
-ul ul, ol ol, dl dl {margin-left: 0; padding-left: 20px;}
+ul, dl  {margin-left: 0; padding-left: 0;}
+ul ul, dl dl {margin-left: 0; padding-left: 20px;}
 
 ul	{margin-bottom: .2em;}
 ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 0;}
@@ -13,6 +13,10 @@ ul ul, ul ul ul, ul ul ul ul, ul ul ul ul ul, ul ul ul ul ul ul {margin-bottom: 
 ul.entity-tree li {margin: 0; padding: 0;}
 ul.entity-tree ul {margin: 0.5em 0px 0px 20px;}
 ul.entity-tree li {list-style: none;}
+
+ol {list-style: decimal inside;}
+ol li {padding-bottom: .5em;}
+
 
 
 /* icons */
