@@ -4,6 +4,7 @@ from django.http import HttpRequest, QueryDict
 from contacts_and_people.models import Entity, Person
 
 from arkestra_utilities.text import concatenate
+from arkestra_utilities.utilities import get_fallback_template, get_cms_media_url
 from generic_lister import (
     ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
     ArkestraGenericFilterList
@@ -38,6 +39,14 @@ class TestConcatenate(TestCase):
             concatenate(["La", "vita", "nuda"], "-"),
             "La-vita-nuda"
             )
+
+
+class TestSettingFunctions(TestCase):
+    def test_get_fallback_template(self):
+        self.assertEqual(get_fallback_template(), "institute.html")
+
+    def test_get_cms_media_url(self):
+        self.assertEqual(get_cms_media_url(), "/static/cms/")
 
 
 class TestModel(ArkestraGenericModel):

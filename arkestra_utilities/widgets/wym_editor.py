@@ -6,9 +6,12 @@ from django.conf import settings
 
 from cms.plugins.text.settings import WYM_TOOLS, WYM_CONTAINERS, WYM_CLASSES, WYM_STYLES
 
+from arkestra_utilities.utilities import get_cms_media_url
+
+
 class WYMEditor(forms.Textarea):
     class Media:
-        js = [join(settings.CMS_MEDIA_URL, path) for path in (
+        js = [join(get_cms_media_url(), path) for path in (
             'wymeditor/jquery.wymeditor.js',
             'wymeditor/plugins/resizable/jquery.wymeditor.resizable.js',
             'js/wymeditor.placeholdereditor.js',
@@ -16,7 +19,7 @@ class WYMEditor(forms.Textarea):
             #'js/placeholder_editor_registry.js',
         )]
         """css = {
-            'all': [join(settings.CMS_MEDIA_URL, path) for path in (
+            'all': [join(get_cms_media_url(), path) for path in (
                         'css/jquery/cupertino/jquery-ui.css',
                     )],
         }"""
@@ -33,7 +36,7 @@ class WYMEditor(forms.Textarea):
         context = {
             'name': name,
             'language': self.language,
-            'CMS_MEDIA_URL': settings.CMS_MEDIA_URL,
+            'CMS_MEDIA_URL': get_cms_media_url(),
             'WYM_TOOLS': mark_safe(WYM_TOOLS),
             'WYM_CONTAINERS': mark_safe(WYM_CONTAINERS),
             'WYM_CLASSES': mark_safe(WYM_CLASSES),
@@ -60,8 +63,7 @@ class WYMEditor(forms.Textarea):
                     editorStyles: [
                         %(WYM_STYLES)s
                         ],
-                    
+
                 });
             });
             </script>''' % context)
-        

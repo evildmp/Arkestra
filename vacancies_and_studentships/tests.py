@@ -3,14 +3,13 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from django.test.client import Client
 from django.test.utils import override_settings
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest, QueryDict
 
-
 from cms.api import create_page
+
+from arkestra_utilities.utilities import get_fallback_template
 
 from contacts_and_people.models import Person
 
@@ -41,7 +40,7 @@ class VacanciesTests(TestCase):
         self.assertEqual(self.toothjob.hosted_by, None)
 
         # since there are no Entities in the database, default to settings's template
-        self.assertEqual(self.toothjob.get_template, settings.CMS_TEMPLATES[0][0])
+        self.assertEqual(self.toothjob.get_template, get_fallback_template())
 
     def test_date_related_attributes(self):
         self.toothjob.date = datetime(year=2012, month=12, day=12)

@@ -24,6 +24,7 @@ from arkestra_utilities.settings import (
     DEFAULT_CONTACTS_PAGE_TITLE, DEFAULT_VACANCIES_PAGE_TITLE,
     DEFAULT_PUBLICATIONS_PAGE_TITLE
     )
+from arkestra_utilities.utilities import get_fallback_template
 
 import news_and_events
 
@@ -506,7 +507,8 @@ class Entity(MPTTModel, EntityLite, CommonFields):
         if self.get_website:
             return self.get_website.get_template()
         else:
-            return settings.CMS_TEMPLATES[0][0]
+            return get_fallback_template()
+
 
     def get_contacts(self):
         """

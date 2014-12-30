@@ -2,8 +2,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 
-from django.conf import settings
-
 from cms.models.fields import PlaceholderField
 
 from filer.fields.image import FilerImageField
@@ -12,6 +10,7 @@ from arkestra_utilities.settings import (
     PLUGIN_HEADING_LEVELS, PLUGIN_HEADING_LEVEL_DEFAULT
     )
 from arkestra_utilities.managers import ArkestraGenericModelManager
+from arkestra_utilities.utilities import get_fallback_template
 
 from links.models import ObjectLink
 
@@ -123,7 +122,7 @@ class ArkestraGenericModel(models.Model):
         if self.get_hosted_by:
             return self.get_hosted_by.get_template()
         else:
-            return settings.CMS_TEMPLATES[0][0]
+            return get_fallback_template()
 
     @property
     def get_entity(self):
