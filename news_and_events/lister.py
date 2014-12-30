@@ -5,7 +5,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from arkestra_utilities.generic_lister import (
-    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet
+    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
+    ArkestraGenericPluginLister
     )
 
 from arkestra_utilities.settings import (
@@ -363,7 +364,7 @@ class NewsAndEventsMenuLister(ArkestraGenericLister):
     limit_to = LISTER_MAIN_PAGE_LIST_LENGTH
 
 
-class NewsAndEventsPluginLister(ArkestraGenericLister):
+class NewsAndEventsPluginLister(ArkestraGenericPluginLister):
     listkinds = [
         ("news", NewsListPlugin),
         ("events", EventsListPlugin),
