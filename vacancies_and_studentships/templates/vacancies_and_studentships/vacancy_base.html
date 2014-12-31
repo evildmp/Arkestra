@@ -28,7 +28,7 @@
 			</div>
 			<div class="column lastcolumn sidebar">
 				{% block image %}
-				    {% thumbnail vacancy.image.file 227x0 subject_location=vacancy.image.subject_location as image %}
+				    {% thumbnail vacancy.image.file 227x0 subject_location=vacancy.image.subject_location quality=thumbnail_quality as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}
 				<dl class="not-indented"> {% if vacancy.hosted_by %}

@@ -19,7 +19,7 @@
 
 
 {% block main_page_body %}
-    {% thumbnail item.image.file sidebar_image_size subject_location=item.image.subject_location crop as image %}
+    {% thumbnail item.image.file sidebar_image_size subject_location=item.image.subject_location quality=thumbnail_quality crop as image %}
 	{% with placeholder_width=generic_main_width %}
 		<div class="row columns3">
 	       	<div class="column firstcolumn doublecolumn">

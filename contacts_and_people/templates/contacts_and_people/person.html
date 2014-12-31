@@ -30,7 +30,7 @@
         </div>
     {% endblock pagetitle %}
 	{% block arkestra_content %}
-        {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
+        {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop quality=thumbnail_quality as image %}
         {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}
     		<div class="row columns2">

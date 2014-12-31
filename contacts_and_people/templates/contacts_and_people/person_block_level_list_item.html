@@ -3,7 +3,7 @@
 
 {% if "image" in item.format and item.image %}
 
-    {% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
+    {% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location quality=thumbnail_quality as image %}
     <img class="right" src="{{ image.url }}" alt="" />
 {% endif %}
 

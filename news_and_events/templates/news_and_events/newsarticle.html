@@ -9,7 +9,7 @@
 {% endblock nav_local %}
 
 {% block main_page_body %}
-    {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location crop as image %}
+    {% thumbnail newsarticle.image.file sidebar_image_size subject_location=newsarticle.image.subject_location crop quality=thumbnail_quality as image %}
 	{% with placeholder_width=generic_main_width %}
         {% autoescape off %}
             {% block pagetitle %}

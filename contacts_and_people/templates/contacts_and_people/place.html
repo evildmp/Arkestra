@@ -38,7 +38,7 @@
                 {% endif %}
             </div>
             <div class="column lastcolumn doublecolumn">
-                {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop as image %}
+                {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop quality=thumbnail_quality as image %}
                 {% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
                 {% with placeholder_width=place_main_width %}
                     {% render_placeholder place.description %}

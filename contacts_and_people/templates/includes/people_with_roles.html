@@ -1,6 +1,6 @@
 {% comment %}
 
-Used by: views.contacts_and_people, entity_tags.people_with_roles 
+Used by: views.contacts_and_people, entity_tags.people_with_roles
 
 When provided with a list of people, then for each one will also display the best membership it can find.
 
@@ -9,7 +9,7 @@ When provided with a list of people, then for each one will also display the bes
 
 <ul class="personlist">
 	{% for person in people %}
-    	{% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop as personimage %}
+    	{% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop quality=thumbnail_quality as personimage %}
     	<li class="row"><a href="{{ person.get_absolute_url }}">{{ person }}<img class="right" alt="" src="{{ personimage.url }}" /></a><br />
 	{{ person.membership.role}}{% if entity != person.membership.entity  %} ({% if entity.get_website != person.membership.entity.get_website and person.membership.entity.get_website %}<a href = "{{ person.membership.entity.get_website_url }}">{{ person.membership.entity.short_name }}</a>{% else %}{{ person.membership.entity.short_name }}{% endif %}){% endif %}
 		</li>

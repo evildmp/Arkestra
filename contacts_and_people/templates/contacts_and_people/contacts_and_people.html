@@ -21,7 +21,7 @@ Extends the base page template, and includes the generic_lister_template specifi
 
 {% block main_page_body %}
 
-    {% thumbnail entity.image.file entity_image_size crop subject_location=entity.image.subject_location as image %}
+    {% thumbnail entity.image.file entity_image_size crop subject_location=entity.image.subject_location quality=thumbnail_quality as image %}
 
     {% block arkestra_content %}
 
@@ -75,7 +75,7 @@ Extends the base page template, and includes the generic_lister_template specifi
                                     {% for role in roles %}
                                         <dt>{{ role.grouper }}</dt>
                                         {% for person in role.list %}
-                                            {% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop as personimage %}
+                                            {% thumbnail person.person.image.file person_thumbnail_size subject_location=person.person.image.subject_location crop quality=thumbnail_quality as personimage %}
                                             <dd class="row"><a href ="{{ person.person.get_absolute_url }}">{{person.person}}{% if personimage %} <img class="right" alt="" src="{{ personimage.url }}" />{% endif %}</a></dd>
                                         {% endfor %}
                                     {% endfor %}
