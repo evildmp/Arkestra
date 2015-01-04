@@ -129,7 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "arkestra_utilities.context_processors.arkestra_templates",
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -142,9 +142,10 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
-
+    'cms.middleware.language.LanguageCookieMiddleware',  # only 2.4+
     'pagination.middleware.PaginationMiddleware',
-)
+]
+
 
 ROOT_URLCONF = 'example.urls'
 
@@ -196,6 +197,7 @@ INSTALLED_APPS = (
     'south',
     'treeadmin',
     'pagination',
+    'chained_selectbox',
 
     # core Django applications
     # these should be last, so we can override their templates
