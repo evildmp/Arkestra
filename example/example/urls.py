@@ -13,13 +13,14 @@ urlpatterns = patterns('',
 
     (r'^semantic/', include('semanticeditor.urls')),
     (r"", include("contacts_and_people.urls")),
+    url(r"", include("links.urls")),
 
     (r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
 )
 
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-               
+
 urlpatterns += patterns('',
     url('^autocomplete/$', 'widgetry.views.search', name='widgetry-search'),
     url(r'^', include('cms.urls')),
