@@ -46,7 +46,7 @@ class TestSettingFunctions(TestCase):
         self.assertEqual(get_fallback_template(), "institute.html")
 
     def test_get_cms_media_url(self):
-        self.assertEqual(get_cms_media_url(), "/static/cms/")
+        self.assertEqual(get_cms_media_url(), "/media/cms/")
 
 
 class TestModel(ArkestraGenericModel):

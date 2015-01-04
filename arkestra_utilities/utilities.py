@@ -26,5 +26,5 @@ else:
         return get_cms_setting("TEMPLATES")[0][0]
 
     def get_cms_media_url():
-        return get_cms_setting("CMS_MEDIA_URL")
+        return get_cms_setting("MEDIA_URL")
 
