@@ -7,7 +7,7 @@ from widgetry import fk_lookup
 from treeadmin.admin import TreeAdmin
 
 from arkestra_utilities.admin_mixins import (
-    AutocompleteMixin, SupplyRequestMixin, InputURLMixin
+    AutocompleteMixin, SupplyRequestMixin,
     )
 
 from links import schema
@@ -24,7 +24,7 @@ from chained_selectbox.forms import FKChainedChoicesForm
 from chained_selectbox.form_fields import ChainedChoiceField
 
 
-class LinkItemForm(InputURLMixin, FKChainedChoicesForm):
+class LinkItemForm(FKChainedChoicesForm):
 
     def __init__(self, *args, **kwargs):
         super(LinkItemForm, self).__init__(*args, **kwargs)
