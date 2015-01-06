@@ -6,6 +6,9 @@ from widgetry import fk_lookup
 
 from treeadmin.admin import TreeAdmin
 
+from chained_selectbox.forms import ChainedChoicesForm
+from chained_selectbox.form_fields import ChainedChoiceField
+
 from arkestra_utilities.admin_mixins import (
     AutocompleteMixin, SupplyRequestMixin,
     )
@@ -15,24 +18,46 @@ from links.models import (
     ObjectLink, ExternalLink, ExternalSite, LinkType
     )
 from links.utils import check_urls
+from links.views import DEFAULT_CHOICES
 
 
 class LinkAdmin(admin.ModelAdmin, AutocompleteMixin):
     related_search_fields = ['destination_content_type']
 
-from chained_selectbox.forms import FKChainedChoicesForm
-from chained_selectbox.form_fields import ChainedChoiceField
 
+class LinkItemForm(ChainedChoicesForm):
 
-class LinkItemForm(FKChainedChoicesForm):
+    # different destination_content_types need different link formatting options
+    format = ChainedChoiceField(
+        parent_field='destination_content_type',
+        ajax_url='/chainedselectchoices'
+        )
 
     def __init__(self, *args, **kwargs):
         super(LinkItemForm, self).__init__(*args, **kwargs)
-        if self.instance.pk is not None: #  has already been saved()?
-            if self.instance.destination_content_type:
-                destination_content_type = self.instance.destination_content_type.model_class()
+
+        # if an object has already been saved for this LinkItem, get the correct link_format_choices
+        if "instance" in kwargs:
+            instance = kwargs['instance']
+
+            destination_content_type = self.instance.destination_content_type.model_class()
+
+            # get the appropriate choices from the wrapper
+            choices = getattr(
+                schema.get_wrapper(instance.destination_content_type.model_class()),
+                "link_format_choices",
+                DEFAULT_CHOICES
+                )
+
+            # find the field that we apply the choices to
+            for field_name, field in self.fields.items():
+                if hasattr(field, 'parent_field'):
+                    field.choices = choices
+
         else:
+
             destination_content_type = None
+
         # look up the correct widget from the content type
         widget = fk_lookup.GenericFkLookup(
             'id_%s-destination_content_type' % self.prefix,
@@ -40,12 +65,6 @@ class LinkItemForm(FKChainedChoicesForm):
             )
         self.fields['destination_object_id'].widget = widget
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
-
-    # different destination_content_types need different link formatting options
-    format = ChainedChoiceField(
-        parent_field='destination_content_type',
-        ajax_url='/chainedselectchoices'
-        )
 
 
 class ObjectLinkInline(generic.GenericStackedInline):
