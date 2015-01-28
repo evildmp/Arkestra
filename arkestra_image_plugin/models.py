@@ -227,12 +227,16 @@ class ImageSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
             aspect_ratio
             )
 
-        # fancybox icons and multiple images with links have padding, so:
-        if self.kind == "lightbox" or self.items_have_links:
-            each_item_width = each_item_width - padding_adjuster
-        else:
-            # otherwise give them a margin
-            each_item_width = int(each_item_width - (items_per_row-1) * padding_adjuster/items_per_row)
+        # disabled, perhaps not such a good idea to bake in paddings to model code like this
+        #
+        # # fancybox icons and multiple images with links have padding, so:
+        # if self.kind == "lightbox" or self.items_have_links:
+        #     each_item_width = each_item_width - padding_adjuster
+        # else:
+        #     # otherwise give them a margin
+
+        each_item_width = int(each_item_width - (items_per_row-1) * padding_adjuster/items_per_row)
+
 
         # set up each item
         # for counter, item in enumerate(self.items, start = 1):

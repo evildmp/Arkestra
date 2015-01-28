@@ -85,23 +85,6 @@ ul.imageset li.image a {
     font-weight: 300;
 }
 
-ul.imageset li.image.link {
-    /* these is a default padding value - Arkestra can overwrite it in
-    multiple.html and lightbox.html */
-    padding: 10px;
-    margin-right: 0;
-    }
-
-/* hovering over the set dims it, but not the one we're hovering over */
-ul.imageset:hover li.image.link {
-    opacity: 1;
-    }
-
-ul.imageset:hover li.image.link:hover {
-    opacity: 1;
-    background: white;
-    outline: 1px solid gray;
-    }
 
 /* ================ when images have text =============== */
 
@@ -119,27 +102,6 @@ ul.imageset:hover li.image.link:hover {
     zoom: 1;
 }
 
-/* the image-title is generally superimposed on it */
-.imageset .image-title {
-    text-transform:uppercase;
-    text-align: right;
-    font-size: 95%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 2px 10px;
-    color: black;
-    background: rgba(255,255,255,.7);
-    }
-
-.imageset .image-caption {
-    font-style: italic;
-    font-weight: lighter;
-    font-size: 90%;
-    text-align: right;
-    padding-bottom: 5px;
-    }
 
 .imageset .link-title {
     font-weight: bold;

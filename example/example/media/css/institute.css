@@ -259,3 +259,28 @@ ul#tab-menu li a:active{
 	text-decoration:none;
 	border-bottom: none;
 }
+
+/* ----------------- images ----------------- */
+
+
+/* the image-title is generally superimposed on it */
+.imageset .image-title {
+    text-transform:uppercase;
+    text-align: right;
+    font-size: 95%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 2px 10px;
+    color: black;
+    background: rgba(255,255,255,.7);
+    }
+
+.imageset .image-caption {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 90%;
+    text-align: right;
+    padding-bottom: 5px;
+    }
