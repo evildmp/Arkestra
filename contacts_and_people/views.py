@@ -358,7 +358,7 @@ def place(request, slug, active_tab=""):
 
     meta = {"description": meta_description_content}
     page = Entity.objects.base_entity().get_website
-    request.current_page = page
+    # request.current_page = page
     template = page.get_template()
 
     return render_to_response(
