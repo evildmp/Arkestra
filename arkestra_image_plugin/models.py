@@ -219,24 +219,18 @@ class ImageSetPlugin(CMSPlugin, ImageSetTypePluginMixin):
         items_per_row = self.items_per_row or LIGHTBOX_COLUMNS.get(self.items.count(), 8)
 
         # each item will be the same width - the user gets no say in this
-
         each_item_width = self.get_container_width(context) / items_per_row
+
+        # adjust for padding
+        each_item_width = int(each_item_width - (items_per_row-1) * padding_adjuster/items_per_row)
+
         aspect_ratio = self.calculate_aspect_ratio(self.items)
+
+        # make final calculations of height and width
         each_item_width, each_item_height = self.calculate_plugin_dimensions(
             each_item_width,
             aspect_ratio
             )
-
-        # disabled, perhaps not such a good idea to bake in paddings to model code like this
-        #
-        # # fancybox icons and multiple images with links have padding, so:
-        # if self.kind == "lightbox" or self.items_have_links:
-        #     each_item_width = each_item_width - padding_adjuster
-        # else:
-        #     # otherwise give them a margin
-
-        each_item_width = int(each_item_width - (items_per_row-1) * padding_adjuster/items_per_row)
-
 
         # set up each item
         # for counter, item in enumerate(self.items, start = 1):
@@ -370,7 +364,7 @@ class ImageSetItem(ArkestraGenericPluginItemOrdering, LinkMethodsMixin, models.M
         if self.plugin.items_have_links:
             return self.alt_text or self.destination_content_object
         else:
-            return ""
+            return self.alt_text or ""
 
     @property
     def image_size(self):
