@@ -6,9 +6,7 @@
     <div>
         <img alt="{% if item.link_title %}{{ item.alt }}{% endif %}" class="plugin" src="{{ image_src.url }}" />
     {% if item.image_title %}
-        <span class="imageset-item-data image-title text">
-            {{ item.image_title }}
-        </span>
+        <span class="imageset-item-data image-title text">{{ item.image_title }}</span>
     {% endif %}
 	{% if item.url and imageset.items_have_links %}
         <a class="link-title text" href="{{ item.url }}">
@@ -35,7 +33,7 @@
    	    {% if item.link_title %}
             <span  class="image-title">{{ item.link_title }}</span>
         {% endif %}
-	    <img class="fancybox-icon" alt="{{ item.image.name }}"  src="{{ image_src.url }}" />
+	    <img class="fancybox-icon" alt="{{ item.image.name }}" src="{{ image_src.url }}" />
         <span class="link-arrow"></span>
    	</a>
 {% endif %}
@@ -46,14 +44,10 @@
     	<img alt="{{ item.alt }}" class="plugin" src="{{ image_src.url }}" />
 
     	{% if item.image_title %}
-            <span class="imageset-item-data image-title text">
-                {{ item.image_title }}
-            </span>
+            <span class="imageset-item-data image-title text">{{ item.image_title }}</span>
         {% endif %}
     	{% if item.image_caption %}
-            <span class="imageset-item-data image-caption text">
-                {{ item.image_caption }}
-            </span>
+            <span class="imageset-item-data image-caption text">{{ item.image_caption }}</span>
         {% endif %}
 
     	{% if item.link_title %}<span class="link-title text">{{ item.link_title }}</span>{% endif %}
@@ -63,9 +57,7 @@
 
     	{% if imageset.items_have_links %}
     	    {% if item.link_title or item.link_description %}
-    	        <span class="hide">
-                    {{ item.link_title|default:item.destination_content_object }}
-                </span>
+    	        <span class="hide">{{ item.link_title|default:item.destination_content_object }}</span>
     	    {% endif %}
    	        <span class="link-arrow"></span>
     	{% endif %}
