@@ -2,10 +2,10 @@
 {% load typogrify_tags %}
 {% spaceless %}
 {% block item_title %}
-	{# this item is the child of a series that shows the parent's title #}
+	{# is this item the child of a series that shows the parent's title? #}
 	{% if "series" in item.show_parent_series %}
 
-		{# the series is informative, so link to it #}
+		{# is the series informative? #}
 	  	{% if not item.parent.is_uninformative %}
 			<a class="title" href="{{ item.parent.get_absolute_url }}">
                 {{ item.parent|amp|smartypants|caps|initial_quotes }}
@@ -14,7 +14,7 @@
 			<span class="title">{{ item.parent|amp|smartypants|caps|initial_quotes }}</span><br>
 	  	{% endif %}
 
-		{# it should show its own title too #}
+		{# should it show its own title too? #}
 		{% if "children" in item.show_parent_series %}
 
 	        {% if "details" in lister.format and item.is_uninformative %}
@@ -30,17 +30,18 @@
 	    	{% endif %}
 	    {% endif %}
 
-	{# either not a child of a series, or we don't display the parent's title #}
+	{# this item is not the child of a series #}
 	{% else %}
    		{% if item.external_url %}
    			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
             <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
 		{% else %}
+            {# is this item the child of an informative series? #}
 			{% if item.parent.series and not item.parent.is_uninformative %}
 				<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 			{% else %}
-				{% if not "details" in lister.item_format or not item.is_uninformative %}
-		   			<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+                {# is this item informative, or not displaying details here? #}
+				{% if not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 				{% else %}
 		            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
 				{% endif %}

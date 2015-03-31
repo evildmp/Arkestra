@@ -1,16 +1,16 @@
-{% load thumbnail typogrify_tags humanize  %}
+{% load thumbnail typogrify_tags humanize %}
 {% block list_item %}
     {% block item_title %}
-        {% if "details" in lister.item_format and item.is_uninformative %}
-            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
+		{% if item.external_url %}
+			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
         {% else %}
-    		{% if item.external_url %}
-    			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
-                <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
-    		{% else %}
-    			<a class="title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
-    		{% endif %}
-    	{% endif %}
+            {% if not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}
+        		<a class="title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            {% else %}
+                <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
+        	{% endif %}
+        {% endif %}
     {% endblock item_title %}
 
     {% block item_image %}

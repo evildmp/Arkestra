@@ -28,14 +28,14 @@ works out the exact size of the images required
 
 class SimplePlaceholderWidthAdjuster(WidthAdjuster):
     kind="placeholder_width"
-    
+
     def modify(self, context, placeholder_width):
         # check for conditions that adjust the placeholder width
         adjust_width = context.get("adjust_width", False)
         # can be "percent", "relative", "absolute", "divider"
-        adjuster = context.get("width_adjuster", None) 
+        adjuster = context.get("width_adjuster", None)
         adjustment = float(context.get("width_adjustment", 0))
-    
+
         if adjust_width:
             # print "need to adjust"
             if adjuster == "divider":
@@ -56,7 +56,7 @@ class SimplePlaceholderWidthAdjuster(WidthAdjuster):
 class AutoSpaceFloat(WidthAdjuster):
     """
     this truth table gives us clues about how to decide on width reductions.
-    The three conditions that make up the key are: 
+    The three conditions that make up the key are:
         auto
         space [the space-on-left/right classes that we use]
         floated
@@ -80,14 +80,14 @@ class AutoSpaceFloat(WidthAdjuster):
     def modify(self, context, target, width, auto):
         # check for attributes that use the reduce_key
         grandparent = target.parent.parent
-        if grandparent: 
+        if grandparent:
             grandparent_class = grandparent.get("class", "")
             self.space = "space-on" in grandparent_class
             self.floated = "images-left" in grandparent_class or "images-right" in grandparent_class
         reduce_key = (auto, self.space, self.floated)
         width = width * self.reduce_by[reduce_key] / 100
         return width
-        
+
 class ReduceForBackground(WidthAdjuster):
     kind="image_width"
     """
@@ -133,11 +133,11 @@ class ColumnWidths(WidthAdjuster):
         two_fifths: 37.73,
         three_fifths: 58.4,
     }
-    
+
     def modify(self, context, element, width):
         # print "============ ColumnWidths "
         element_class = element.get("class", "") # and its HTML class
-        # if this is a column whose parent is a row        
+        # if this is a column whose parent is a row
         if re.search(r"\column\b", element_class) and "columns" in element.parent.get("class", ""):
             # columns is the number of columns, or 1 if not specified
             columns = float(element.parent.get("class", "").split("columns")[1][0] or 1)
@@ -155,7 +155,7 @@ class ColumnWidths(WidthAdjuster):
 
 class ImageBorders(WidthAdjuster):
     kind="mark_and_modify"
-    
+
     def mark(self, context, element, markers):
         image_border_class = context.get("image_border_class", "image-borders")
         no_image_border_class = context.get("no_image_border_class", "no-image-borders")
@@ -163,10 +163,10 @@ class ImageBorders(WidthAdjuster):
         if image_border_class in element_class:
             # print "has borders"
             markers["has_borders"] = True
-        if no_image_border_class in element_class:     
+        if no_image_border_class in element_class:
             markers["has_borders"] = False
         return markers
-    
+
     def modify(self, context, markers, width):
         if markers.get("has_borders"):
             # print "-16 for borders"
