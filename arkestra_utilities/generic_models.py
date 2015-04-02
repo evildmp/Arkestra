@@ -46,11 +46,11 @@ class ArkestraGenericModel(models.Model):
             (maximum two lines)"""
         )
     published = models.BooleanField(
-        default=False, verbose_name=_(u"Is published"), db_index=True,
+        default=False, verbose_name=_(u"Published"), db_index=True,
         help_text=_(u"Select when ready to be published")
         )
     in_lists = models.BooleanField(
-        _(u"Display in lists"), default=True, db_index=True,
+        _(u"Listed"), default=True, db_index=True,
         help_text=_(u"If deselected, this item will not appear in lists")
         )
     body = PlaceholderField(
