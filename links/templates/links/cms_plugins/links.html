@@ -6,7 +6,7 @@
 
     {% elif object.insert_as == 2 %}
         {% for item in links %}
-        	<p class="{% if use_link_icons %}icons{% endif %} plugin-list-item">
+        	<p class="{% if use_link_icons %}icons{% endif %} plugin-list-item" {{ item.format }}>
         	    {% include item.block_level_item_template %}
             </p>
     	{% endfor %}
@@ -14,7 +14,7 @@
 
         <ul class="{% if use_link_icons %} icons{% else %} none{% endif %}">
         	{% for item in links %}
-        		<li class="plugin-list-item">{% include item.block_level_item_template %}</li>
+        		<li class="plugin-list-item  {{ item.format }}">{% include item.block_level_item_template %}</li>
         	{% endfor %}
         </ul>
 

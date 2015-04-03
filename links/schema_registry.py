@@ -111,10 +111,10 @@ class Registry(object):
                 content_type.pk,
                 u"%s: %s" % (
                     content_type.app_label.replace('_', ' '),
-                    content_type.name
+                    content_type.name,
                     )
                 ))
-        return choices
+        return sorted(choices)
 
     def discover_links_schemas(self, *args, **kwargs):
         '''
