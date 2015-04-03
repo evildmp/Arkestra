@@ -2,8 +2,18 @@
 {% load typogrify_tags %}
 {% spaceless %}
 {% block item_title %}
+    {% if "programme" in item.format %}
+        <span class="date programme">{{ item.get_times|safe }} </span>
+   		{% if item.external_url %}
+   			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
+		{% elif not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+		{% else %}
+            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
+		{% endif %}
+
 	{# is this item the child of a series that shows the parent's title? #}
-	{% if "series" in item.show_parent_series %}
+	{% elif "series" in item.show_parent_series %}
 
 		{# is the series informative? #}
 	  	{% if not item.parent.is_uninformative %}
@@ -51,9 +61,9 @@
 {% endblock item_title %}
 
 {% block item_date %}
-    <span class="date">
-        {{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}
-    </span>
+    {% if not "programme" in item.format %}
+        <span class="date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</span>
+    {% endif %}
 {% endblock item_date %}
 
 {% block item_details %}

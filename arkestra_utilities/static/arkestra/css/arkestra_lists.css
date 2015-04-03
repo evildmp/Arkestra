@@ -193,3 +193,9 @@ ul.object-links li  {
     list-style: none;
     clear: both;
 }
+
+/* special rules for the programme item format for events only */
+.plugin-list-item.programme .date {display: inline;}
+.plugin-list-item.programme .summary {display: block;}
+
+

@@ -5,6 +5,7 @@ from news_and_events import models, admin
 from news_and_events.templatetags.events_tags import event_date_and_time
 from links import schema, LinkWrapper
 
+
 class GenericWrapper(LinkWrapper):
     special_attributes = ["is_uninformative", "external_url"]
 
@@ -19,6 +20,7 @@ class GenericWrapper(LinkWrapper):
 
     def external_url(self):
         return self.obj.external_url
+
 
 class NewsWrapper(GenericWrapper):
     search_fields = admin.NewsArticleAdmin.search_fields
@@ -55,11 +57,19 @@ class EventWrapper(GenericWrapper):
         "show_parent_series",
         "calculated_summary",
         "get_dates",
+        "get_times",
         "building",
         "is_uninformative",
         "informative_url",
          "external_url",
          ]
+
+    link_format_choices = (
+            ("title", u"Title only"),
+            ("details", u"Title & summary"),
+            ("details image", u"Title, summary & image"),
+            ("programme image details", u"Programme item"),
+        )
 
     def parent(self):
         return self.obj.parent
@@ -71,7 +81,10 @@ class EventWrapper(GenericWrapper):
         return self.obj.calculated_summary
 
     def get_dates(self):
-        return self.date()
+        return self.obj.get_dates()
+
+    def get_times(self):
+        return self.obj.get_times()
 
     def building(self):
         return self.obj.building
