@@ -7,7 +7,7 @@
    		{% if item.external_url %}
    			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
             <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
-		{% elif not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+		{% elif not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 		{% else %}
             <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
 		{% endif %}
