@@ -12,9 +12,9 @@
     	{% endfor %}
     {% else %}
 
-        <ul class="{% if use_link_icons %} icons{% else %} none{% endif %}">
+        <ul class="plugin-list vertical {% if use_link_icons %} icons{% else %} none{% endif %}">
         	{% for item in links %}
-        		<li class="plugin-list-item  {{ item.format }}">{% include item.block_level_item_template %}</li>
+        		<li class="plugin-list-item {{ item.format }}">{% include item.block_level_item_template %}</li>
         	{% endfor %}
         </ul>
 
