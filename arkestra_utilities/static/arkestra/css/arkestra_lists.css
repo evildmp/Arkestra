@@ -195,7 +195,5 @@ ul.object-links li  {
 }
 
 /* special rules for the programme item format for events only */
-.plugin-list-item.programme .date {display: inline;}
+.plugin-list-item.programme .date, .plugin-list-item.programme .title {display: inline;}
 .plugin-list-item.programme .summary {display: block;}
-
-

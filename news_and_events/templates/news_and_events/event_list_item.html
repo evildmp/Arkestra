@@ -1,11 +1,11 @@
 {% extends "arkestra/generic_list_item.html" %}
 {% load typogrify_tags %}
+{% spaceless }
 {% block item_title %}
     {% if "programme" in item.format %}
-        {% if item.get_times %}<span class="date programme">{{ item.get_times|safe }}</span>{% endif %}
+        {% if item.get_times %}<span class="date programme">{{ item.get_times|safe }} </span>{% endif %}
    		{% if item.external_url %}
-   			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
-            <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
+   			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a> <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
 		{% elif not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 		{% else %}
             <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
@@ -86,3 +86,4 @@
         <span class="summary">{{ item.calculated_summary|amp|smartypants|caps|initial_quotes }}</span>
     {% endif %}
 {% endblock item_summary %}
+{% endspaceless }
