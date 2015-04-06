@@ -13,7 +13,7 @@ from links.admin import check_urls
 from contacts_and_people.models import (
     Site, Person, Building, Entity, Membership
     )
-from contacts_and_people.tests import EntityTestObjectsMixin
+from tests.contacts_and_people.test_contactsandpeople import EntityTestObjectsMixin
 
 
 class SearchTests(EntityTestObjectsMixin, TestCase):

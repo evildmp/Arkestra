@@ -1,5 +1,6 @@
 # include *.txt
-# recursive-include docs *.txt           
+# recursive-include docs *.txt
+include *.rst
 graft arkestra_image_plugin
 graft arkestra_utilities
 graft arkestra_utilities

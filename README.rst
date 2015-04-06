@@ -4,6 +4,12 @@ Arkestra
 
 Arkestra is a semantic web publishing system for organisations, created in Django.
 
+.. image:: https://api.travis-ci.org/evildmp/Arkestra.png
+   :target: https://travis-ci.org/evildmp/Arkestra
+.. image:: https://coveralls.io/repos/evildmp/Arkestra/badge.png?branch=master
+   :target: https://coveralls.io/r/evildmp/Arkestra
+
+
 Documentation & support
 =======================
 
@@ -44,8 +50,8 @@ A large project
 
 Arkestra currently publishes the website of Cardiff University School of Medicine: http://medicine.cf.ac.uk/; this includes information about:
 
-* 1700 people, in 
-* 2700 different roles, in 
+* 1700 people, in
+* 2700 different roles, in
 * 160 entities (i.e. parts of the organisation), as well as
 * 330 news articles and 570 events.
 

@@ -4,12 +4,11 @@ from django.http import HttpRequest, QueryDict
 from contacts_and_people.models import Entity, Person
 
 from arkestra_utilities.text import concatenate
-from generic_lister import (
+from arkestra_utilities.generic_lister import (
     ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
     ArkestraGenericFilterList
     )
-from generic_models import ArkestraGenericModel
-
+from tests.arkestra_utilities.models import TestModel
 
 class TestConcatenate(TestCase):
     def test_concatenate_with_no_arguments(self):
@@ -38,10 +37,6 @@ class TestConcatenate(TestCase):
             concatenate(["La", "vita", "nuda"], "-"),
             "La-vita-nuda"
             )
-
-
-class TestModel(ArkestraGenericModel):
-    pass
 
 
 class TestFilterSet(ArkestraGenericFilterSet):
