@@ -5,7 +5,7 @@
 
 /* ================ all images =============== */
 
-.imageset.image a  {
+.imageset.image a, .imageset .image a  {
     position: relative; /* for any absolutely-positioned elements inside */
     display: block;
 }
