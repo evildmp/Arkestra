@@ -69,14 +69,12 @@
 {% block item_details %}
 	{% if "details" in lister.item_format or "details" in item.format %}
         {{ block.super }}
-        {% if not list.place %}
-            {% if item.building %}
-                <span class="venue-line">Venue:
-                    <span class="venue">
-                        <a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building|amp|smartypants|caps|initial_quotes }}</a>
-                    </span>
+        {% if "venue" in item.format or "venue" in lister.item_format and item.building %}
+            <span class="venue-line">Venue:
+                <span class="venue">
+                    <a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building|amp|smartypants|caps|initial_quotes }}</a>
                 </span>
-            {% endif %}
+            </span>
         {% endif %}
     {% endif %}
 {% endblock item_details%}

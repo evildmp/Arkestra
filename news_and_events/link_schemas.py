@@ -70,6 +70,7 @@ class EventWrapper(GenericWrapper):
             ("details image", u"Title, summary & image"),
             ("programme", u"Programme item (simple)"),
             ("programme image details", u"Programme item (detailed)"),
+            ("programme image venue details", u"Programme item (detailed inc. venue)"),
         )
 
     def parent(self):

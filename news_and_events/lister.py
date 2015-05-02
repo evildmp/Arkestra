@@ -396,11 +396,13 @@ class NewsArchiveLister(ArkestraGenericLister):
 class EventsArchiveLister(ArkestraGenericLister):
     listkinds = [("events", EventsListArchive)]
     display = "events"
+    item_format = "details image venue"
 
 
 class EventsForthcomingLister(ArkestraGenericLister):
     listkinds = [("events", EventsListForthcoming)]
     display = "events"
+    item_format = "details image venue"
 
 
 class EventsPlaceLister(ArkestraGenericLister):
