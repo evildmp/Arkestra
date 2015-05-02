@@ -140,7 +140,7 @@ class Link(BaseLink, LinkMethodsMixin):
         ("details image", u"Details"),
         )
     format = models.CharField(
-        "Item format", max_length=25,
+        "Item format", max_length=255,
         default="title"
         )
 
