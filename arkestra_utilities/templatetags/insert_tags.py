@@ -1,8 +1,6 @@
 from django import template
 from django.template.defaultfilters import safe
 
-from arkestra_utilities.models import Insert
-
 from classytags.arguments import Argument
 from classytags.core import Tag, Options
 
@@ -16,6 +14,7 @@ class RenderInserter(Tag):
     )
 
     def render_tag(self, context, insertion_point, width):
+        from arkestra_utilities.models import Insert
         inserter, created = Insert.objects.get_or_create(insertion_point = insertion_point)
         request = context.get('request', None)
         if not request:

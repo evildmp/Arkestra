@@ -88,7 +88,7 @@ class ArkestraGenericModel(models.Model):
         help_text=u"Important items will be featured in lists")
 
     def __unicode__(self):
-        return self.short_title
+        return self.short_title or u''
 
     @property
     def has_expired(self):

@@ -4,7 +4,8 @@ from django.test.client import RequestFactory
 from django.http import Http404
 
 from contacts_and_people.models import (
-    Site, Person, Building, Entity, Membership
+    Site, Person, Building, Entity, Membership,
+    PhoneContact, EntityLite,
     )
 from contacts_and_people.views import contacts_and_people
 from links.models import ExternalLink
@@ -63,6 +64,21 @@ class SiteTests(TestCase):
             self.main_building.get_absolute_url(),
             "/place/main-building/"
             )
+
+    def test_buildings_property(self):
+        #  add a Building
+        self.main_building = Building(
+            name="Main Building",
+            street="St Mary's Street",
+            site=self.cardiff,
+            )
+        self.main_building.save()
+        self.assertEquals(
+            self.cardiff.buildings(),
+            1,
+            )
+
+
 
 
 class EntityGetAbsoluteURLTests(TestCase):
@@ -549,4 +565,27 @@ class EntityViewTests(TestCase):
         self.assertRaises(
             Http404,
             contacts_and_people, RequestFactory().get("/"), "medicine"
+            )
+
+
+class PhoneContactTests(TestCase):
+    def test_unicode_rendering(self):
+        phone_contact = PhoneContact(
+            label='Office',
+            number='1234567',
+            )
+        self.assertEquals(
+            unicode(phone_contact),
+            u'Office: 1234567',
+            )
+
+
+class EntityLiteTests(TestCase):
+    def test_unicode_rendering(self):
+        entity = EntityLite(
+            name='Raisins',
+            )
+        self.assertEquals(
+            unicode(entity),
+            u'Raisins',
             )
