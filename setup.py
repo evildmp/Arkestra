@@ -4,11 +4,11 @@ from setuptools import setup, find_packages
 from os.path import join, dirname
 
 tests_require = [
-    'pytest==2.7.0',
+    'pytest==2.7.2',
     'pytest-cov==1.8.1',
     'pytest-cache==1.0',
     'pytest-django==2.8.0',
-    'pytest-pythonpath==0.6'
+    'pytest-pythonpath==0.7'
 ]
 
 descriptions = []
