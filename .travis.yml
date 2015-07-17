@@ -7,5 +7,4 @@ env:
   - TESTENV=coveralls
 install:
 - pip install tox
-- pip install coveralls
 script: tox -e $TESTENV
