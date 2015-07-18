@@ -1,10 +1,13 @@
 {% extends "contacts_and_people/place.html" %}{% load thumbnail placeholder_tags %}
 
+{% block title %}
+	<title>{{ place }} - map</title>
+{% endblock %}
+
 {% block extrastyles %}
 {{ block.super }}
 <link href="{{ STATIC_URL }}arkestra/css/arkestra_maps.css" rel="stylesheet" type="text/css" />
 {% endblock extrastyles %}
-
 
 {% block scripts %}
 {{ block.super }}
@@ -69,7 +72,7 @@
 
 			    google.maps.event.addListener(marker, "click", function () {
 				    infowindow.setContent('{% spaceless %}
-						{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop as image %}
+						{% thumbnail p.image.file 80x80 subject_location=p.image.subject_location crop quality=thumbnail_quality as image %}
 						{% if image %}<img height="80px" width="80px" class = "right" src="{{ image.url }}" alt="" />{% endif %}<h2>{% ifnotequal place p %}<a href="{{ p.get_absolute_url }}">{{p}}</a>{% else %}{{p}}{% endifnotequal %}</h2>{{p.summary}}{% if p.forthcoming_events %}<p><a href="{{p.get_absolute_url}}events/">Events</a></p>{% endif %}{% endspaceless %}');
 		            infowindow.open(map, this);
 		        });
@@ -97,12 +100,13 @@
 {% block skip_and_language %}
 {% endblock %}
 
-
 {% block nav_local %}
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<div id="pagetitle">
+        <h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+    </div>
 {% endblock pagetitle %}
 
 {% block place_information %}

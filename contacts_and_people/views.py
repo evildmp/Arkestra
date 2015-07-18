@@ -25,7 +25,6 @@ def contacts_and_people(request, slug):
     # request.path = entity.get_website.get_absolute_url()
     request.current_page = entity.get_website
     template = entity.get_template()
-    main_page_body_file = "contacts_and_people/entity_contacts_and_people.html"
 
     # meta values - title and meta
     title = "Contact information for %s" % entity
@@ -99,16 +98,16 @@ def contacts_and_people(request, slug):
     return render_to_response(
         # this is a catch-all template, that then uses includes to bring in
         # extra information
-        "arkestra_utilities/entity_auto_page.html",
+        "contacts_and_people/contacts_and_people.html",
         {
             "entity": entity,
             "pagetitle": pagetitle,
             "entity.website.template": template,
-            "main_page_body_file": main_page_body_file,
             "email": entity.email,
             "title": title,
             "meta": meta,
             "precise_location": entity.precise_location,
+            "access_note": entity.access_note,
             "intro_page_placeholder": entity.contacts_page_intro,
             "phone": entity.phone_contacts.all(),
             "full_address": entity.get_full_address,
@@ -143,7 +142,7 @@ def people(
     # request.path = entity.get_website.get_absolute_url()
     request.current_page = entity.get_website
     template = entity.get_template()
-    main_page_body_file = "includes/people_list_with_index.html"
+    generic_lister_template = "includes/people_list_with_index.html"
 
     # meta values - title and meta
     meta = {u"description": "People in %s" % entity}
@@ -157,12 +156,12 @@ def people(
         title = u"%s, people by surname: %s" % (entity, letter.upper())
 
     return render_to_response(
-        "arkestra_utilities/entity_auto_page.html",
+        "arkestra/entity_generic_lister_page.html",
         {
             "entity": entity,
             "pagetitle": entity,
             "entity.website.template": template,
-            "main_page_body_file": main_page_body_file,
+            "generic_lister_template": generic_lister_template,
 
             "title": title,
             "meta": meta,
@@ -338,7 +337,7 @@ def place(request, slug, active_tab=""):
         place.access_and_parking.cmsplugin_set.all()
     ):
         tabs.append(tabs_dict["getting-here"])
-    if place.events:
+    if place.events.lists:
         tabs.append(tabs_dict["events"])
 
     if not active_tab:
@@ -359,7 +358,7 @@ def place(request, slug, active_tab=""):
 
     meta = {"description": meta_description_content}
     page = Entity.objects.base_entity().get_website
-    request.current_page = page
+    # request.current_page = page
     template = page.get_template()
 
     return render_to_response(

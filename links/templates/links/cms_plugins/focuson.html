@@ -2,7 +2,7 @@
 {% spaceless %}
 {% if focuson.heading_level %}
 	<h{{ focuson.heading_level }}>Focus on&#8230; {{ focuson.short_text_override|default:focuson }}</h{{ focuson.heading_level }}>{% endif %}
-	{% if focuson.image %}{% thumbnail focuson.image.file 75x75 crop subject_location=focuson.image.subject_location as image %}<img class="right" src="{{ image.url }}" />{% endif %}
+	{% if focuson.image %}{% thumbnail focuson.image.file 75x75 crop subject_location=focuson.image.subject_location quality=thumbnail_quality as image %}<img class="right" src="{{ image.url }}" />{% endif %}
 
     <div class="link-description">{{ focuson.summary }}</div>
 

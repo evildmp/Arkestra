@@ -1,47 +1,59 @@
 {% extends "arkestra/generic_list_item.html" %}
-{% spaceless %}
+{% load typogrify_tags %}
+{% spaceless }
 {% block item_title %}
-	{# this item is the child of a series that shows the parent's title #}
-	{% if "series" in item.show_parent_series %}
+    {% if "programme" in item.format %}
+        {% if item.get_times %}<span class="date programme">{{ item.get_times|safe }} </span>{% endif %}
+   		{% if item.external_url %}
+   			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a> <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
+		{% elif not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+		{% else %}
+            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
 
-		{# the series is informative, so link to it #}
+		{% endif %}
+
+	{# is this item the child of a series that shows the parent's title? #}
+	{% elif "series" in item.show_parent_series %}
+
+		{# is the series informative? #}
 	  	{% if not item.parent.is_uninformative %}
 			<a class="title" href="{{ item.parent.get_absolute_url }}">
-                {{item.parent }}
+                {{ item.parent|amp|smartypants|caps|initial_quotes }}
             </a><br>
 	  	{% else %}
-			<span class="title">{{item.parent}}</span><br>
+			<span class="title">{{ item.parent|amp|smartypants|caps|initial_quotes }}</span><br>
 	  	{% endif %}
 
-		{# it should show its own title too #}
+		{# should it show its own title too? #}
 		{% if "children" in item.show_parent_series %}
 
 	        {% if "details" in lister.format and item.is_uninformative %}
-	            <span>{{ item }}</span>
+	            <span>{{ item|amp|smartypants|caps|initial_quotes }}</span>
 	        {% else %}
 	    		{% if item.external_url %}
-    	   			<a class="external {{ class }}" href="{{ item.get_absolute_url }}">{{ item }}</a>
-                    <span class="site-name"> {{ item.external_url.external_site }}</span>
+    	   			<a class="external {{ class }}" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+                    <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
     		   {% else %}
-	    			<a href="{{ item.get_absolute_url }}">{{item}}</a>
+	    			<a href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 	    		{% endif %}
 
 	    	{% endif %}
 	    {% endif %}
 
-	{# either not a child of a series, or we don't display the parent's title #}
+	{# this item is not the child of a series #}
 	{% else %}
    		{% if item.external_url %}
-   			<a class="external title" href="{{ item.get_absolute_url }}">{{item}}</a>
-            <span class="site-name"> {{ item.external_url.external_site }}</span>
+   			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
 		{% else %}
+            {# is this item the child of an informative series? #}
 			{% if item.parent.series and not item.parent.is_uninformative %}
-				<a class="title" href="{{ item.informative_url }}">{{ item }}</a>
+				<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 			{% else %}
-				{% if not "details" in lister.item_format or not item.is_uninformative %}
-		   			<a class="title" href="{{ item.informative_url }}">{{ item }}</a>
+                {# is this item informative, or not displaying details here? #}
+				{% if not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}<a class="title" href="{{ item.informative_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
 				{% else %}
-		            <span class="title">{{ item }}</span>
+		            <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
 				{% endif %}
 	   		{% endif %}
    		{% endif %}
@@ -49,29 +61,27 @@
 {% endblock item_title %}
 
 {% block item_date %}
-    <span class="date">
-        {{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}
-    </span>
+    {% if not "programme" in item.format %}
+        <span class="date">{{ item.get_dates }}{% if item.get_times %}, {{ item.get_times|safe }}{% endif %}</span>
+    {% endif %}
 {% endblock item_date %}
 
 {% block item_details %}
 	{% if "details" in lister.item_format or "details" in item.format %}
         {{ block.super }}
-        {% if not list.place %}
-            {% if item.building %}
-                <span class="venue-line">Venue:
-                    <span class="venue">
-                        <a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building }}</a>
-                    </span>
+        {% if "venue" in item.format or "venue" in lister.item_format and item.building %}
+            <span class="venue-line">Venue:
+                <span class="venue">
+                    <a href="{{item.building.get_absolute_url}}{% if item.building.has_map %}map/{% endif %}">{{ item.building|amp|smartypants|caps|initial_quotes }}</a>
                 </span>
-            {% endif %}
+            </span>
         {% endif %}
     {% endif %}
 {% endblock item_details%}
 
 {% block item_summary %}
     {% if item.calculated_summary %}
-        <span class = "summary">{{ item.calculated_summary }}</span>
+        <span class="summary">{{ item.calculated_summary|amp|smartypants|caps|initial_quotes }}</span>
     {% endif %}
 {% endblock item_summary %}
-{% endspaceless %}
+{% endspaceless }

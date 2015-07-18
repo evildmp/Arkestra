@@ -21,8 +21,8 @@ class NewsAndEventsForm(GenericModelForm):
 
 class NewsAndEventsAdmin(GenericModelAdmin):
     exclude = ('content',)
-    list_display = ('short_title', 'date', 'hosted_by',)
-    list_editable = ('hosted_by',)
+    list_display = ['short_title', 'date', 'hosted_by', 'published', 'in_lists']
+    list_editable = ['published', 'in_lists']
     related_search_fields = ['hosted_by', 'external_url',]
     prepopulated_fields = {'slug': ['title']}
     list_max_show_all = 1000
@@ -197,8 +197,6 @@ class EventAdmin(NewsAndEventsAdmin, TreeAdmin):
         'featuring',
         )
     ordering = ['type',]
-    list_display = ('short_title', 'hosted_by', 'date')
-    list_editable = ()
     list_filter = (EventIsSeries, 'date', HostedByFilter)
     save_as = True
 

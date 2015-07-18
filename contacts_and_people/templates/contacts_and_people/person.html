@@ -8,28 +8,29 @@
 {% endblock meta %}
 
 {% block title %}
-	<title>{{ test }}{{ person }}</title>
+	<title>{{ person }}</title>
 {% endblock %}
 
 {% block skip_and_language %}
 {% endblock %}
 
-
 {% block nav_local %}
 {% endblock nav_local %}
 
-{% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
-        {{ person}}
-    </h{{PAGE_TITLE_HEADING_LEVEL}}>
-	{% if home_role %}
-		<p><span class="home-role">{{ home_role.role }}</span>, {{ entity }}</p>
-	{% endif %}
-{% endblock pagetitle %}
-
 {% block main_page_body %}
+    {% block pagetitle %}
+        <div id="pagetitle">
+        	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">
+                {{ person}}
+            </h{{PAGE_TITLE_HEADING_LEVEL}}>
+        	{% if home_role %}
+        		<p><span class="home-role">{{ home_role.role }}</span>
+                    {% if MULTIPLE_ENTITY_MODE %}, {{ entity }}{% endif %}</p>
+        	{% endif %}
+        </div>
+    {% endblock pagetitle %}
 	{% block arkestra_content %}
-        {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop as image %}
+        {% thumbnail person.image.file person_image_size subject_location=person.image.subject_location crop quality=thumbnail_quality as image %}
         {% include "arkestra/tabbed_menu.html" %}
 		{% block person_information %}
     		<div class="row columns2">

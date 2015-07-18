@@ -1,10 +1,10 @@
+sudo: false
 language: python
-python:
-#  - "3.3"
-#  - "2.7"
-  - "2.6"
-# install Arkestra & dependencies
+env:
+  matrix:
+  - TESTENV=py26
+  - TESTENV=py27
+  - TESTENV=coveralls
 install:
-  - pip install -r REQUIREMENTS.txt
-# command to run tests, e.g. python setup.py test
-script:  python example/testrunner.py
+- pip install tox
+script: tox -e $TESTENV

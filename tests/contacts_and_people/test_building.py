@@ -53,6 +53,20 @@ class BuildingGetPostalAddressTests(TestCase):
             building.get_postal_address
         )
 
+    def test_get_postal_address_includes_additional_street_address(self):
+        building = Building(
+            name="Main Building",
+            street="St Mary's Street",
+            additional_street_address="Building 8",
+            number="37a",
+            postcode="CF5 1QE",
+            site=self.cardiff
+            )
+        self.assertEqual(
+            ['Main Building', "37a St Mary's Street", 'Building 8', 'Cardiff CF5 1QE'],
+            building.get_postal_address
+        )
+
     def test_get_postal_address_with_missing_components(self):
         building = Building(
             site=self.cardiff

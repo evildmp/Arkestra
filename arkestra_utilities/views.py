@@ -3,8 +3,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
 
-from arkestra_utilities.settings import MULTIPLE_ENTITY_MODE
-
 from contacts_and_people.models import Entity
 
 # a handy class-based view for lists of an Entity's items - news, events,
@@ -44,7 +42,7 @@ class ArkestraGenericView(View):
             "title": self.title,
             "meta": self.meta,
             "pagetitle": self.pagetitle,
-            "main_page_body_file": self.main_page_body_file,
+            "generic_lister_template": self.generic_lister_template,
 
             # this will need to be dealt with!
             "intro_page_placeholder": self.entity.news_page_intro,
@@ -54,6 +52,6 @@ class ArkestraGenericView(View):
         )
 
         return render_to_response(
-            "arkestra_utilities/entity_auto_page.html",
+            "arkestra/entity_generic_lister_page.html",
             context,
         )

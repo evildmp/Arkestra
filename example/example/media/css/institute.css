@@ -87,6 +87,11 @@ ul.plugin-list li span.site-name    {
     color: black;
 }
 
+/* typogrify_tags */
+
+.caps {font-size: 93%;}
+.amp {font-size: 105%; font-family: "Hoefler Text", "Didot", Georgia, serif; font-style:italic;}
+
 /* ----------------- arkestra_navigation.css ----------------- */
 
 ul.menu	{ /* the whole thing */
@@ -210,3 +215,72 @@ ul.menu li li:hover ul ul
    {display:none;}
 ul.menu li li:hover ul,
 ul.menu li li li:hover ul    {display:block;}
+
+/* the default tab menu, as used for People and Places */
+
+ul#tab-menu {
+	border-bottom: 7px solid #707070;
+	float:left;
+	width: 100%; /* width of entire menu */
+	margin: 0 0 .5em 0; /*margin underneath menu*/
+	padding: 0;
+}
+ul#tab-menu li {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_rt.gif) no-repeat right top;
+	float:left;
+	margin: 0 2px 0 0; /*gap between menu tabs*/
+	padding:0;
+	list-style: none;
+}
+
+ul#tab-menu a {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_inactive_lt.gif) no-repeat left top;
+	display:block;
+	padding: 0.1em 1.2em;/*padding within tab*/
+}
+ul#tab-menu  .active span {
+	color:#fff;
+	display:block;
+	padding: 0.1em 1.2em;
+}
+ul#tab-menu .active {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_active_rt.gif) no-repeat right top;
+	border-bottom: 1px solid #707070;
+}
+ul#tab-menu .active span {
+	background:url(/static/arkestra/images/tabmenu/tabmenu_bg_active_lt.gif) no-repeat left top;
+}
+ul#tab-menu a,
+ul#tab-menu li a:link,
+ul#tab-menu li a:visited,
+ul#tab-menu li a:hover,
+ul#tab-menu li a:active{
+	color:#fff;
+	text-decoration:none;
+	border-bottom: none;
+}
+
+/* ----------------- images ----------------- */
+
+
+/* the image-title is generally superimposed on it */
+.imageset .image-title {
+    text-transform:uppercase;
+    text-align: right;
+    font-size: 95%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 2px 10px;
+    color: black;
+    background: rgba(255,255,255,.7);
+    }
+
+.imageset .image-caption {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 90%;
+    text-align: right;
+    padding-bottom: 5px;
+    }

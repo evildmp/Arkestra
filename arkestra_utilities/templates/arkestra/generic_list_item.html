@@ -1,32 +1,22 @@
-{% spaceless %}
-{% load thumbnail humanize typogrify_tags %}
+{% load thumbnail typogrify_tags humanize %}
 {% block list_item %}
-
     {% block item_title %}
-        {% if "details" in lister.item_format and item.is_uninformative %}
-            <span class="title">{{ item|typogrify }}</span>
+		{% if item.external_url %}
+			<a class="external title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            <span class="site-name"> {{ item.external_url.external_site|amp|smartypants|caps|initial_quotes }}</span>
         {% else %}
-    		{% if item.external_url %}
-    			<a
-                    class="external title"
-                    href="{{ item.get_absolute_url }}"
-                    >
-                    {{item}}</a>
-                <span class="site-name"> {{ item.external_url.external_site }}</span>
-    		   {% else %}
-    			<a
-                    class = "title"
-                    href="{{ item.get_absolute_url }}">
-                    {{item|typogrify}}
-                </a>
-    		{% endif %}
-    	{% endif %}
+            {% if not "details" in lister.item_format and not "details" in item.format or not item.is_uninformative %}
+        		<a class="title" href="{{ item.get_absolute_url }}">{{ item|amp|smartypants|caps|initial_quotes }}</a>
+            {% else %}
+                <span class="title">{{ item|amp|smartypants|caps|initial_quotes }}</span>
+        	{% endif %}
+        {% endif %}
     {% endblock item_title %}
 
     {% block item_image %}
     	{% if "image" in lister.item_format or "image" in item.format %}
             {% if item.image %}
-        		{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location as image %}
+        		{% thumbnail item.image.file plugin_thumbnail_size crop subject_location=item.image.subject_location quality=thumbnail_quality as image %}
                 <img class="right" src="{{ image.url }}" alt="{% if image.alt %}{{ image.alt }}{% endif %}" />
     	    {% endif %}
     	{% endif %}
@@ -37,18 +27,15 @@
 
             {% block item_date %}
                 {% if item.date %}
-                    <span class="date">{{ item.date|naturalday|capfirst|typogrify }}</span>
+                    <span class="date">{{ item.date|naturalday|capfirst|amp|smartypants|caps|initial_quotes }}</span>
                 {% endif %}
             {% endblock item_date %}
 
             {% block item_summary %}
                 {% if item.summary %}
-                    <span class="summary">{{ item.summary|truncatewords:40|typogrify }}</span>
+                    <span class="summary">{{ item.summary|truncatewords:40|amp|smartypants|caps|initial_quotes }}</span>
                 {% endif %}
             {% endblock item_summary %}
     	{% endif %}
-
     {% endblock item_details %}
-
 {% endblock list_item %}
-{% endspaceless %}

@@ -12,6 +12,7 @@
 *.egg-info
 *~
 *#
+.coverage
 
 # OS or Editor folders
 .DS_Store
@@ -39,3 +40,5 @@ _tmp
 dist
 build
 _build
+/.env
+/.tox

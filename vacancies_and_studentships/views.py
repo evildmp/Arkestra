@@ -27,7 +27,7 @@ class VacanciesAndStudentshipsView(ArkestraGenericView, ):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_lister.html"
+        self.generic_lister_template = "arkestra/generic_lister.html"
         self.meta = {"description": "Recent vacancies and forthcoming studentships",}
         self.title = unicode(self.entity) + u" vacancies & studentships"
         if MULTIPLE_ENTITY_MODE:
@@ -49,7 +49,7 @@ class VacanciesCurrentView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable list of forthcoming studentships",}
         self.title = u"Forthcoming studentships for %s" % unicode(self.entity)
         self.pagetitle = u"Forthcoming studentships for %s" % unicode(self.entity)
@@ -67,7 +67,7 @@ class VacanciesArchiveView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable archive of vacancies items",}
         self.title = u"Vacancies archive for %s" % unicode(self.entity)
         self.pagetitle = u"Vacancies archive for %s" % unicode(self.entity)
@@ -85,7 +85,7 @@ class StudentshipsArchiveView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable archive of studentships",}
         self.title = u"Studentships archive for %s" % unicode(self.entity)
         self.pagetitle = u"Studentships archive for %s" % unicode(self.entity)
@@ -104,7 +104,7 @@ class StudentshipsForthcomingView(ArkestraGenericView):
             request=self.request
             )
 
-        self.main_page_body_file = "arkestra/generic_filter_list.html"
+        self.generic_lister_template = "arkestra/generic_filter_list.html"
         self.meta = {"description": "Searchable list of forthcoming studentships",}
         self.title = u"Forthcoming studentships for %s" % unicode(self.entity)
         self.pagetitle = u"Forthcoming studentships for %s" % unicode(self.entity)

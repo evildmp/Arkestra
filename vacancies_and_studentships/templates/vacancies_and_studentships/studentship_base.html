@@ -9,11 +9,13 @@
 {% endblock nav_local %}
 
 {% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}}>Studentship ({{ studentship.hosted_by.short_name }}): {{ studentship.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+	<div id="pagetitle">
+        <h{{PAGE_TITLE_HEADING_LEVEL}}>Studentship ({{ studentship.hosted_by.short_name }}): {{ studentship.title }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+    </div>
 {% endblock pagetitle %}
 
 {% block summary %}
-	<p class="subtitle"><strong>{{ studentship.summary }}</strong></p>
+	<p class="subtitle">{{ studentship.summary|amp|smartypants|caps|initial_quotes }}</p>
 {% endblock summary %}
 
 
@@ -27,7 +29,7 @@
 			</div>
 			<div class="column lastcolumn sidebar">
 				{% block image %}
-				    {% thumbnail studentship.image.file 227x0 subject_location=studentship.image.subject_location as image %}
+				    {% thumbnail studentship.image.file 227x0 subject_location=studentship.image.subject_location quality=thumbnail_quality as image %}
 				    {% if image %}<div><img src="{{ image.url }}" /></div>{% endif %}
 				{% endblock image %}
 				<dl class="not-indented">

@@ -2,46 +2,48 @@
 {% load thumbnail news_and_events_tags typogrify_tags placeholder_tags %}
 
 {% block title %}
-	<title>{{ place.identifier }}</title>
+    <title>{{ place }}</title>
 {% endblock %}
 
 {% block columns %}
 {% endblock columns %}
 
-
 {% block nav_local %}
 {% endblock nav_local %}
 
-{% block pagetitle %}
-	<h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place.identifier }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
-{% endblock pagetitle %}
-
 {% block main_page_body %}
+    {% block pagetitle %}
+        <div id="pagetitle">
+            <h{{PAGE_TITLE_HEADING_LEVEL}} class="name">{{ place }}</h{{PAGE_TITLE_HEADING_LEVEL}}>
+        </div>
+    {% endblock pagetitle %}
     {% include "arkestra/tabbed_menu.html" %}
-	{% block place_information %}
+    {% block place_information %}
         <div class="row columns3">
-    		<div class="column firstcolumn">
-				<p class="subtitle">{{ place.summary|typogrify }}</p>
-	 		    {% if place.postcode or place.street %}
-	       			<h2>Address</h2>
-        		    {{ place.get_postal_address|join:"<br />" }}
+            <div class="column firstcolumn">
+                <p class="subtitle place">{{ place.summary|amp|smartypants|caps|initial_quotes }}</p>
+                {% if place.postcode or place.street %}
+                    <h2>Address</h2>
+                    {{ place.get_postal_address|join:"<br />" }}
                     {% if place.map %}
-                    	<br />
-                    	<span class="image imageset map">
-                    		<a href="{{ place.get_absolute_url }}map/">
-                    			<img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ place.latitude }},{{ place.longitude }}&zoom={{ place.zoom|add:"-4" }}&size={{ place_map_size }}&markers=color:red|{{ place.latitude }},{{ place.longitude }}&sensor=false" />
-                    			<span class="imageset-item-data image-title text">map &amp; directions</span>
-                    			<span class="link-arrow"></span>
-                    		</a>
+                        <br />
+                        <span class="image imageset map">
+                            <a href="{{ place.get_absolute_url }}map/">
+                                <img alt="map" src="http://maps.googleapis.com/maps/api/staticmap?center={{ place.latitude }},{{ place.longitude }}&zoom={{ place.zoom|add:"-4" }}&size={{ place_map_size }}&markers=color:red|{{ place.latitude }},{{ place.longitude }}&sensor=false" />
+                                <span class="imageset-item-data image-title text">map &amp; directions</span>
+                                <span class="link-arrow"></span>
+                            </a>
                         </span>
                     {% endif %}
-	    		{% endif %}
-    		</div>
-    		<div class="column lastcolumn doublecolumn">
-                {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop as image %}
+                {% endif %}
+            </div>
+            <div class="column lastcolumn doublecolumn">
+                {% thumbnail place.image.file place_image_size subject_location=place.image.subject_location crop quality=thumbnail_quality as image %}
                 {% if image %}<p><img src="{{ image.url }}" alt="" /></p>{% endif %}
-				{% render_placeholder place.description %}
-			</div>
-    	</div>
-	{% endblock place_information %}
+                {% with placeholder_width=place_main_width %}
+                    {% render_placeholder place.description %}
+                {% endwith %}
+            </div>
+        </div>
+    {% endblock place_information %}
 {% endblock main_page_body %}

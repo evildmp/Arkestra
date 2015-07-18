@@ -1,24 +1,14 @@
 {% spaceless %}
 {% load sekizai_tags %}
 
-{% addtoblock "css" %}      
+{% addtoblock "css" %}
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/css/jquery.fancybox-1.3.4.css" media="screen" />
 {% endaddtoblock %}
-
-{% if imageset.kind == "lightbox" %}
-	{% addtoblock "css" %}      
-		<style>
-			ul.imageset li.image.link {
-			    padding: {{ imageset.padding }}px; 
-		    }
-		</style>
-	{% endaddtoblock %}
-{% endif %}
 
 {% addtoblock "js" %}
 	<script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
 	<script src="{{ STATIC_URL }}fancybox/js/jquery.mousewheel.min.js"></script>
-	<script src="{{ STATIC_URL }}fancybox/js/jquery.fancybox-1.3.4.pack.js"></script> 
+	<script src="{{ STATIC_URL }}fancybox/js/jquery.fancybox-1.3.4.pack.js"></script>
     <script src="{{ STATIC_URL }}fancybox/js/jquery.easing-1.3.pack.js"></script>
     <script type="text/javascript">
     var fancyBOX = jQuery.noConflict();
@@ -34,11 +24,11 @@
 	        });
 		});
 	</script>
-        
+
 {% endaddtoblock %}
 <ul class="imageset multiple lightbox" style="width: {{ imageset.container_width }}px;">
 	{% for item in imageset.items %}
-		<li class="image link {% if item.lastinrow %}lastinrow{% endif %}">      
+		<li class="image link {% if item.lastinrow %}lastinrow{% endif %}">
 			{% include "arkestra_image_plugin/includes/imageset_item.html" %}
 		</li>
 	{% endfor %}

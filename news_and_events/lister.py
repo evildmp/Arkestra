@@ -5,7 +5,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from arkestra_utilities.generic_lister import (
-    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet
+    ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
+    ArkestraGenericPluginLister
     )
 
 from arkestra_utilities.settings import (
@@ -334,11 +335,13 @@ class EventsFilterList(EventsList):
 class EventsListForthcoming(EventsFilterList):
     item_collections = ("forthcoming_events", "previous_events")
     other_item_kinds = ("previous_events", "main")
+    heading_text = _(u"Forthcoming events")
 
 
 class EventsListArchive(EventsFilterList):
     item_collections = ("previous_events", "forthcoming_events")
     other_item_kinds = ("forthcoming_events", "main")
+    heading_text = _(u"Previous events")
 
 
 class NewsAndEventsCurrentLister(ArkestraGenericLister):
@@ -361,7 +364,7 @@ class NewsAndEventsMenuLister(ArkestraGenericLister):
     limit_to = LISTER_MAIN_PAGE_LIST_LENGTH
 
 
-class NewsAndEventsPluginLister(ArkestraGenericLister):
+class NewsAndEventsPluginLister(ArkestraGenericPluginLister):
     listkinds = [
         ("news", NewsListPlugin),
         ("events", EventsListPlugin),
@@ -393,11 +396,13 @@ class NewsArchiveLister(ArkestraGenericLister):
 class EventsArchiveLister(ArkestraGenericLister):
     listkinds = [("events", EventsListArchive)]
     display = "events"
+    item_format = "details image venue"
 
 
 class EventsForthcomingLister(ArkestraGenericLister):
     listkinds = [("events", EventsListForthcoming)]
     display = "events"
+    item_format = "details image venue"
 
 
 class EventsPlaceLister(ArkestraGenericLister):

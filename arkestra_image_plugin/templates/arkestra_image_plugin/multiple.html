@@ -1,20 +1,17 @@
 {% load sekizai_tags %}
 {% spaceless %}
-{% addtoblock "css" %}      
+{% addtoblock "css" %}
 	<style>
 		ul.imageset li.image {
-		    padding-top: {{ imageset.padding }}px; 
-		    padding-bottom: {{ imageset.padding }}px; 
-		    margin-right: {{ imageset.padding|add:imageset.padding }}px; 
+		    padding-top: {{ imageset.padding }}px;
+		    padding-bottom: {{ imageset.padding }}px;
+		    margin-right: {{ imageset.padding|add:imageset.padding }}px;
 		}
-		ul.imageset li.image.link {
-		    padding: {{ imageset.padding }}px;
-		    }
 	</style>
 {% endaddtoblock %}
 <ul class="imageset multiple" style="width: {{ imageset.container_width }}px;">
 	{% for item in imageset.items %}
-		<li 
+		<li
 		    id="imageset-item-{{ item.plugin.id }}-{{ item.id }}"
 		    class="
 		        image

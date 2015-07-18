@@ -14,8 +14,8 @@ from cms.utils import get_cms_setting
 
 from contacts_and_people.models import Person
 
-from models import Vacancy, Studentship
-from lister import (
+from vacancies_and_studentships.models import Vacancy, Studentship
+from vacancies_and_studentships.lister import (
     List, VacanciesAndStudentshipsPluginLister, FilterList
     )
 
