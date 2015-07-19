@@ -34,7 +34,7 @@ def stats(request):
             "users": users,
             "plugins": plugins,
             "groups": groups,
-            "base_template": get_cms_setting.("CMS_TEMPLATES")[0][0],
+            "base_template": get_cms_setting("CMS_TEMPLATES")[0][0],
             },
         RequestContext(request),
         )

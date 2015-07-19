@@ -21,7 +21,7 @@ def tasks(request, task = None, action = "dryrun"):
         # nothing matched, so just do the menu
         return shortcuts.render_to_response(
         "housekeeping/housekeeping.html", {
-                "base_template": get_cms_settings.("TEMPLATES")[0][0],
+                "base_template": get_cms_settings("TEMPLATES")[0][0],
                 },
             RequestContext(request),
             )

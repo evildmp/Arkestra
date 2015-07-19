@@ -31,11 +31,11 @@ setup(
     tests_require=tests_require,
     extras_require={'test': tests_require},
     install_requires=[
-        'django >= 1.4, <=1.4.10',
+        'django >= 1.4, <=1.4.21',
         'easy-thumbnails==1.5',
         'django-typogrify',
         'BeautifulSoup',
-        'django-cms == 2.3.5',
+        'django-cms == 2.4.3',
         'django-filer',
         'semanticeditor',
         'pillow',
