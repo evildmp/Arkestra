@@ -130,11 +130,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.doc.XViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -277,7 +279,7 @@ gettext = lambda s: s
 CMS_SOFTROOT = True
 CMS_PERMISSION = True
 CMS_SEO_FIELDS = True
-
+CMS_MENU_TITLE_OVERWRITE = True
 
 # this is only here because I don't know how to make other apps find it otherwise, and they rely on it.
 CMS_MEDIA_URL = STATIC_URL + 'cms/'

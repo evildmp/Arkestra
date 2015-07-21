@@ -24,7 +24,6 @@ if settings.DEBUG:
 
 urlpatterns += patterns('',
     url('^autocomplete/$', 'widgetry.views.search', name='widgetry-search'),
-    url(r'^', include('cms.urls')),
 )
 
 urlpatterns += i18n_patterns('',

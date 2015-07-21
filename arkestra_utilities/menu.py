@@ -76,23 +76,29 @@ class ArkestraPages(Modifier):
                 return cached_pre_cut_nodes
 
             # loop over all the nodes returned by the nodes in the Menu classes
+            # each node is a menus.base.NavigationNode
             for node in self.nodes:
-                # for each node, try to find a matching Page that is an
-                # Entity's home page
-                try:
-                    page = Page.objects.get(id=node.id, entity__isnull=False)
-                except Page.DoesNotExist:
-                    node.entity = False
-                else:
-                    node.entity = page.entity.all()[0]
-                    for menu_class in menus:
-                        if type(menu_class) is dict:
-                            self.do_old_menu(node, menu_class, node.entity)
 
-                        else:
-                            self.do_menu(node, menu_class, node.entity)
+                # no point in doing this if we don't have a node.id
+                if node.id:
+                    # get the Page for the node id
+                    possible_page = Page.objects.get(id=node.id)
+                    # make sure we have the draft version if we don't already
+                    page = possible_page.get_draft_object()
 
+                    try:
+                        node.entity = page.entity.all()[0]
 
+                    except IndexError:
+                        node.entity = False
+
+                    else:
+                        for menu_class in menus:
+                            if type(menu_class) is dict:
+                                self.do_old_menu(node, menu_class, node.entity)
+
+                            else:
+                                self.do_menu(node, menu_class, node.entity)
 
             # print "    ++ saving cache", key
             cache.set(key, self.nodes, CACHE_DURATIONS)

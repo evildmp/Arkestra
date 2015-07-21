@@ -3291,11 +3291,243 @@
         }
     }, 
     {
+        "pk": 410, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 411, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 412, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 413, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 414, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 415, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 416, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 417, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 418, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 419, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 420, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 421, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 422, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 423, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 424, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 425, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 426, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 427, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 428, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 429, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 430, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 431, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 432, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 433, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 434, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 435, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 436, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 437, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 439, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "body", 
+            "default_width": null
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 28, 
-            "changed_date": "2014-02-13T21:42:20.143", 
+            "rght": 12, 
+            "changed_date": "2015-07-19T21:33:04.834", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -3311,13 +3543,13 @@
         "pk": 10, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 5, 
+            "rght": 3, 
             "changed_date": "1969-12-31T18:00:00", 
             "parent": 1, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2011-06-30T17:03:08", 
-            "lft": 4, 
+            "lft": 2, 
             "tree_id": 1, 
             "position": 0, 
             "placeholder": 1, 
@@ -3328,13 +3560,13 @@
         "pk": 12, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 7, 
+            "rght": 5, 
             "changed_date": "1969-12-31T18:00:00", 
             "parent": 1, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2011-06-30T17:12:54", 
-            "lft": 6, 
+            "lft": 4, 
             "tree_id": 1, 
             "position": 1, 
             "placeholder": 1, 
@@ -3345,13 +3577,13 @@
         "pk": 27, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 23, 
+            "rght": 7, 
             "changed_date": "2013-04-10T18:30:24.756", 
             "parent": 1, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
-            "lft": 22, 
+            "lft": 6, 
             "tree_id": 1, 
             "position": null, 
             "placeholder": 1, 
@@ -3362,13 +3594,13 @@
         "pk": 66, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 25, 
+            "rght": 9, 
             "changed_date": "2014-02-13T21:42:09.421", 
             "parent": 1, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
-            "lft": 24, 
+            "lft": 8, 
             "tree_id": 1, 
             "position": null, 
             "placeholder": 1, 
@@ -3379,13 +3611,13 @@
         "pk": 67, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 27, 
+            "rght": 11, 
             "changed_date": "2014-02-13T21:42:17.554", 
             "parent": 1, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
-            "lft": 26, 
+            "lft": 10, 
             "tree_id": 1, 
             "position": null, 
             "placeholder": 1, 
@@ -3403,7 +3635,7 @@
             "level": 0, 
             "creation_date": "2011-06-30T17:55:44", 
             "lft": 1, 
-            "tree_id": 3, 
+            "tree_id": 2, 
             "position": null, 
             "placeholder": 33, 
             "plugin_type": "SemanticTextPlugin"
@@ -3413,14 +3645,14 @@
         "pk": 14, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 10, 
+            "rght": 6, 
             "changed_date": "1969-12-31T18:00:00", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
             "creation_date": "2011-06-30T19:21:17", 
             "lft": 1, 
-            "tree_id": 4, 
+            "tree_id": 3, 
             "position": null, 
             "placeholder": 67, 
             "plugin_type": "SemanticTextPlugin"
@@ -3437,7 +3669,7 @@
             "level": 1, 
             "creation_date": "2011-06-30T19:24:53", 
             "lft": 2, 
-            "tree_id": 4, 
+            "tree_id": 3, 
             "position": 1, 
             "placeholder": 67, 
             "plugin_type": "LinksPlugin"
@@ -3454,7 +3686,7 @@
             "level": 1, 
             "creation_date": "2011-07-02T01:09:18", 
             "lft": 4, 
-            "tree_id": 4, 
+            "tree_id": 3, 
             "position": 1, 
             "placeholder": 67, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3471,7 +3703,7 @@
             "level": 0, 
             "creation_date": "2011-07-01T01:04:30", 
             "lft": 1, 
-            "tree_id": 5, 
+            "tree_id": 4, 
             "position": null, 
             "placeholder": 69, 
             "plugin_type": "SemanticTextPlugin"
@@ -3488,7 +3720,7 @@
             "level": 0, 
             "creation_date": "2011-07-02T11:12:23", 
             "lft": 1, 
-            "tree_id": 6, 
+            "tree_id": 5, 
             "position": null, 
             "placeholder": 74, 
             "plugin_type": "SemanticTextPlugin"
@@ -3505,7 +3737,7 @@
             "level": 1, 
             "creation_date": "2011-07-02T16:23:25", 
             "lft": 2, 
-            "tree_id": 6, 
+            "tree_id": 5, 
             "position": null, 
             "placeholder": 74, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3522,7 +3754,7 @@
             "level": 0, 
             "creation_date": "2011-07-02T11:30:00", 
             "lft": 1, 
-            "tree_id": 7, 
+            "tree_id": 6, 
             "position": null, 
             "placeholder": 71, 
             "plugin_type": "SemanticTextPlugin"
@@ -3539,7 +3771,7 @@
             "level": 0, 
             "creation_date": "2011-07-02T18:44:38", 
             "lft": 1, 
-            "tree_id": 8, 
+            "tree_id": 7, 
             "position": null, 
             "placeholder": 78, 
             "plugin_type": "SemanticTextPlugin"
@@ -3556,7 +3788,7 @@
             "level": 1, 
             "creation_date": "2011-07-02T18:47:16", 
             "lft": 2, 
-            "tree_id": 8, 
+            "tree_id": 7, 
             "position": null, 
             "placeholder": 78, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3573,7 +3805,7 @@
             "level": 0, 
             "creation_date": "2011-07-05T22:13:23", 
             "lft": 1, 
-            "tree_id": 9, 
+            "tree_id": 8, 
             "position": 0, 
             "placeholder": 31, 
             "plugin_type": "CMSVacanciesPlugin"
@@ -3590,7 +3822,7 @@
             "level": 0, 
             "creation_date": "2011-07-06T21:06:59", 
             "lft": 1, 
-            "tree_id": 14, 
+            "tree_id": 9, 
             "position": 0, 
             "placeholder": 116, 
             "plugin_type": "SemanticTextPlugin"
@@ -3607,7 +3839,7 @@
             "level": 1, 
             "creation_date": "2011-07-06T21:07:17", 
             "lft": 2, 
-            "tree_id": 14, 
+            "tree_id": 9, 
             "position": null, 
             "placeholder": 116, 
             "plugin_type": "CMSVacanciesPlugin"
@@ -3624,7 +3856,7 @@
             "level": 1, 
             "creation_date": "2011-07-06T21:07:28", 
             "lft": 4, 
-            "tree_id": 14, 
+            "tree_id": 9, 
             "position": null, 
             "placeholder": 116, 
             "plugin_type": "CMSVacanciesPlugin"
@@ -3641,7 +3873,7 @@
             "level": 1, 
             "creation_date": "2011-07-06T21:07:54", 
             "lft": 6, 
-            "tree_id": 14, 
+            "tree_id": 9, 
             "position": null, 
             "placeholder": 116, 
             "plugin_type": "CMSVacanciesPlugin"
@@ -3651,14 +3883,14 @@
         "pk": 41, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 14, 
+            "rght": 12, 
             "changed_date": "1969-12-31T18:00:00", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
             "creation_date": "2011-07-10T22:34:29", 
             "lft": 1, 
-            "tree_id": 16, 
+            "tree_id": 10, 
             "position": 1, 
             "placeholder": 96, 
             "plugin_type": "SemanticTextPlugin"
@@ -3675,7 +3907,7 @@
             "level": 1, 
             "creation_date": "2011-07-10T22:38:17", 
             "lft": 2, 
-            "tree_id": 16, 
+            "tree_id": 10, 
             "position": 0, 
             "placeholder": 96, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3692,7 +3924,7 @@
             "level": 1, 
             "creation_date": "2011-07-10T22:40:51", 
             "lft": 4, 
-            "tree_id": 16, 
+            "tree_id": 10, 
             "position": 1, 
             "placeholder": 96, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3709,7 +3941,7 @@
             "level": 1, 
             "creation_date": "2011-07-10T22:44:07", 
             "lft": 6, 
-            "tree_id": 16, 
+            "tree_id": 10, 
             "position": 2, 
             "placeholder": 96, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3726,7 +3958,7 @@
             "level": 1, 
             "creation_date": "2011-07-14T22:56:40", 
             "lft": 8, 
-            "tree_id": 16, 
+            "tree_id": 10, 
             "position": 3, 
             "placeholder": 96, 
             "plugin_type": "CMSNewsAndEventsPlugin"
@@ -3736,14 +3968,14 @@
         "pk": 57, 
         "model": "cms.cmsplugin", 
         "fields": {
-            "rght": 13, 
+            "rght": 11, 
             "changed_date": "1969-12-31T18:00:00", 
             "parent": 41, 
             "language": "en", 
             "level": 1, 
             "creation_date": "2011-07-27T11:49:51", 
-            "lft": 12, 
-            "tree_id": 16, 
+            "lft": 10, 
+            "tree_id": 10, 
             "position": null, 
             "placeholder": 96, 
             "plugin_type": "LinksPlugin"
@@ -3760,7 +3992,7 @@
             "level": 0, 
             "creation_date": "2011-07-28T15:08:12", 
             "lft": 1, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": 0, 
             "placeholder": 122, 
             "plugin_type": "SemanticTextPlugin"
@@ -3777,7 +4009,7 @@
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
             "lft": 2, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "ImageSetPublisher"
@@ -3794,7 +4026,7 @@
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
             "lft": 4, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "ImageSetPublisher"
@@ -3811,7 +4043,7 @@
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
             "lft": 6, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "ImageSetPublisher"
@@ -3828,7 +4060,7 @@
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
             "lft": 8, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "ImageSetPublisher"
@@ -3845,7 +4077,7 @@
             "level": 1, 
             "creation_date": "2013-04-10T00:00:00", 
             "lft": 10, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "ImageSetPublisher"
@@ -3862,7 +4094,7 @@
             "level": 1, 
             "creation_date": "2011-07-28T22:59:21", 
             "lft": 12, 
-            "tree_id": 17, 
+            "tree_id": 11, 
             "position": null, 
             "placeholder": 122, 
             "plugin_type": "LinksPlugin"
@@ -3879,7 +4111,7 @@
             "level": 0, 
             "creation_date": "2011-07-31T10:06:34", 
             "lft": 1, 
-            "tree_id": 18, 
+            "tree_id": 12, 
             "position": 0, 
             "placeholder": 152, 
             "plugin_type": "SemanticTextPlugin"
@@ -3896,10 +4128,435 @@
             "level": 0, 
             "creation_date": "2011-09-29T11:18:12", 
             "lft": 1, 
-            "tree_id": 19, 
+            "tree_id": 13, 
             "position": null, 
             "placeholder": 101, 
             "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2015-07-19T09:58:24.587", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-07-05T22:13:23", 
+            "lft": 1, 
+            "tree_id": 14, 
+            "position": 0, 
+            "placeholder": 427, 
+            "plugin_type": "CMSVacanciesPlugin"
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 12, 
+            "changed_date": "2015-07-19T09:58:25.037", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-07-10T22:34:29", 
+            "lft": 1, 
+            "tree_id": 15, 
+            "position": 1, 
+            "placeholder": 434, 
+            "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 3, 
+            "changed_date": "2015-07-19T09:58:24.978", 
+            "parent": 77, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-10T22:38:17", 
+            "lft": 2, 
+            "tree_id": 15, 
+            "position": 0, 
+            "placeholder": 434, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 5, 
+            "changed_date": "2015-07-19T09:58:24.988", 
+            "parent": 77, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-10T22:40:51", 
+            "lft": 4, 
+            "tree_id": 15, 
+            "position": 1, 
+            "placeholder": 434, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 7, 
+            "changed_date": "2015-07-19T09:58:24.998", 
+            "parent": 77, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-10T22:44:07", 
+            "lft": 6, 
+            "tree_id": 15, 
+            "position": 2, 
+            "placeholder": 434, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 9, 
+            "changed_date": "2015-07-19T09:58:25.008", 
+            "parent": 77, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-14T22:56:40", 
+            "lft": 8, 
+            "tree_id": 15, 
+            "position": 3, 
+            "placeholder": 434, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 11, 
+            "changed_date": "2015-07-19T09:58:25.016", 
+            "parent": 77, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-27T11:49:51", 
+            "lft": 10, 
+            "tree_id": 15, 
+            "position": null, 
+            "placeholder": 434, 
+            "plugin_type": "LinksPlugin"
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 8, 
+            "changed_date": "2015-07-19T09:58:25.148", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-07-06T21:06:59", 
+            "lft": 1, 
+            "tree_id": 16, 
+            "position": 0, 
+            "placeholder": 435, 
+            "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 3, 
+            "changed_date": "2015-07-19T09:58:25.120", 
+            "parent": 83, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-06T21:07:17", 
+            "lft": 2, 
+            "tree_id": 16, 
+            "position": null, 
+            "placeholder": 435, 
+            "plugin_type": "CMSVacanciesPlugin"
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 5, 
+            "changed_date": "2015-07-19T09:58:25.128", 
+            "parent": 83, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-06T21:07:28", 
+            "lft": 4, 
+            "tree_id": 16, 
+            "position": null, 
+            "placeholder": 435, 
+            "plugin_type": "CMSVacanciesPlugin"
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 7, 
+            "changed_date": "2015-07-19T09:58:25.135", 
+            "parent": 83, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-06T21:07:54", 
+            "lft": 6, 
+            "tree_id": 16, 
+            "position": null, 
+            "placeholder": 435, 
+            "plugin_type": "CMSVacanciesPlugin"
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 14, 
+            "changed_date": "2015-07-19T09:58:25.405", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-07-28T15:08:12", 
+            "lft": 1, 
+            "tree_id": 17, 
+            "position": 0, 
+            "placeholder": 436, 
+            "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 3, 
+            "changed_date": "2015-07-19T09:58:25.214", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 2, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 5, 
+            "changed_date": "2015-07-19T09:58:25.223", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 4, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 90, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 7, 
+            "changed_date": "2015-07-19T09:58:25.232", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 6, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 91, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 9, 
+            "changed_date": "2015-07-19T09:58:25.243", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 8, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 92, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 11, 
+            "changed_date": "2015-07-19T09:58:25.253", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 10, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 93, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 13, 
+            "changed_date": "2015-07-19T09:58:25.262", 
+            "parent": 87, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-07-28T22:59:21", 
+            "lft": 12, 
+            "tree_id": 17, 
+            "position": null, 
+            "placeholder": 436, 
+            "plugin_type": "LinksPlugin"
+        }
+    }, 
+    {
+        "pk": 94, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2015-07-19T09:58:25.475", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-07-31T10:06:34", 
+            "lft": 1, 
+            "tree_id": 18, 
+            "position": 0, 
+            "placeholder": 437, 
+            "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 95, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 12, 
+            "changed_date": "2015-07-21T22:40:04.868", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2011-06-21T16:05:50", 
+            "lft": 1, 
+            "tree_id": 19, 
+            "position": 0, 
+            "placeholder": 424, 
+            "plugin_type": "SemanticTextPlugin"
+        }
+    }, 
+    {
+        "pk": 96, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 3, 
+            "changed_date": "2015-07-21T22:40:04.811", 
+            "parent": 95, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-06-30T17:03:08", 
+            "lft": 2, 
+            "tree_id": 19, 
+            "position": 0, 
+            "placeholder": 424, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 97, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 5, 
+            "changed_date": "2015-07-21T22:40:04.816", 
+            "parent": 95, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2011-06-30T17:12:54", 
+            "lft": 4, 
+            "tree_id": 19, 
+            "position": 1, 
+            "placeholder": 424, 
+            "plugin_type": "CMSNewsAndEventsPlugin"
+        }
+    }, 
+    {
+        "pk": 98, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 7, 
+            "changed_date": "2015-07-21T22:40:04.821", 
+            "parent": 95, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 6, 
+            "tree_id": 19, 
+            "position": null, 
+            "placeholder": 424, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 99, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 9, 
+            "changed_date": "2015-07-21T22:40:04.828", 
+            "parent": 95, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 8, 
+            "tree_id": 19, 
+            "position": null, 
+            "placeholder": 424, 
+            "plugin_type": "ImageSetPublisher"
+        }
+    }, 
+    {
+        "pk": 100, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 11, 
+            "changed_date": "2015-07-21T22:40:04.834", 
+            "parent": 95, 
+            "language": "en", 
+            "level": 1, 
+            "creation_date": "2013-04-10T00:00:00", 
+            "lft": 10, 
+            "tree_id": 19, 
+            "position": null, 
+            "placeholder": 424, 
+            "plugin_type": "ImageSetPublisher"
         }
     }, 
     {
@@ -3916,19 +4573,18 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "institute.html", 
             "tree_id": 1, 
             "placeholders": [
                 1
             ], 
-            "changed_date": "2011-10-03T18:04:20", 
+            "changed_date": "2015-07-21T22:40:38.004", 
             "limit_visibility_in_menu": null, 
             "parent": null, 
             "publisher_state": 1, 
             "soft_root": false, 
             "publication_date": "2011-06-21T16:05:44", 
-            "publisher_public": null, 
+            "publisher_public": 16, 
             "level": 0, 
             "changed_by": "arkestra", 
             "publisher_is_draft": true, 
@@ -3949,21 +4605,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 86
             ], 
-            "changed_date": "2011-07-05T23:17:42", 
+            "changed_date": "2015-07-19T09:58:24.485", 
             "limit_visibility_in_menu": null, 
             "parent": 1, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-05T23:17:38", 
-            "publisher_public": null, 
+            "publisher_public": 17, 
             "level": 1, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -3982,21 +4637,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 87
             ], 
-            "changed_date": "2011-07-05T23:20:28", 
+            "changed_date": "2015-07-19T09:58:24.535", 
             "limit_visibility_in_menu": null, 
             "parent": 8, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-05T23:18:23", 
-            "publisher_public": null, 
+            "publisher_public": 18, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4015,21 +4669,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 31
             ], 
-            "changed_date": "2011-07-28T23:18:51", 
+            "changed_date": "2015-07-19T09:58:24.595", 
             "limit_visibility_in_menu": null, 
             "parent": 8, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-22T08:03:36", 
-            "publisher_public": null, 
+            "publisher_public": 19, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4048,21 +4701,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 61
             ], 
-            "changed_date": "2011-06-30T18:44:37", 
+            "changed_date": "2015-07-19T09:58:24.651", 
             "limit_visibility_in_menu": null, 
             "parent": 1, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-30T00:56:23", 
-            "publisher_public": null, 
+            "publisher_public": 20, 
             "level": 1, 
-            "changed_by": "sagdp6", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4081,21 +4733,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 19
             ], 
-            "changed_date": "2011-07-27T15:40:13", 
+            "changed_date": "2015-07-19T09:58:24.704", 
             "limit_visibility_in_menu": null, 
             "parent": 7, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-21T16:35:51", 
-            "publisher_public": null, 
+            "publisher_public": 21, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4114,21 +4765,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 29
             ], 
-            "changed_date": "2011-07-27T15:40:18", 
+            "changed_date": "2015-07-19T09:58:24.760", 
             "limit_visibility_in_menu": null, 
             "parent": 7, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-22T08:03:34", 
-            "publisher_public": null, 
+            "publisher_public": 22, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4147,21 +4797,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 30
             ], 
-            "changed_date": "2011-07-27T12:56:57", 
+            "changed_date": "2015-07-19T09:58:24.807", 
             "limit_visibility_in_menu": null, 
             "parent": 7, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-22T08:03:34", 
-            "publisher_public": null, 
+            "publisher_public": 23, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4180,21 +4829,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 123
             ], 
-            "changed_date": "2011-07-28T16:19:36", 
+            "changed_date": "2015-07-19T09:58:24.862", 
             "limit_visibility_in_menu": null, 
             "parent": 7, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-28T16:19:36", 
-            "publisher_public": null, 
+            "publisher_public": 24, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4213,21 +4861,20 @@
             "login_required": false, 
             "created_by": "sagdp6", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 32
             ], 
-            "changed_date": "2011-10-03T18:11:47", 
+            "changed_date": "2015-07-19T09:58:24.913", 
             "limit_visibility_in_menu": null, 
             "parent": 1, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-06-22T08:03:56", 
-            "publisher_public": null, 
+            "publisher_public": 25, 
             "level": 1, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4246,21 +4893,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 96
             ], 
-            "changed_date": "2011-07-28T23:01:01", 
+            "changed_date": "2015-07-19T09:58:25.048", 
             "limit_visibility_in_menu": null, 
             "parent": 6, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-06T00:26:59", 
-            "publisher_public": null, 
+            "publisher_public": 26, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4279,21 +4925,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 116
             ], 
-            "changed_date": "2011-07-28T23:03:40", 
+            "changed_date": "2015-07-19T09:58:25.158", 
             "limit_visibility_in_menu": null, 
             "parent": 6, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-06T21:06:29", 
-            "publisher_public": null, 
+            "publisher_public": 27, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4312,21 +4957,20 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 122
             ], 
-            "changed_date": "2011-07-28T22:59:57", 
+            "changed_date": "2015-07-19T09:58:25.421", 
             "limit_visibility_in_menu": null, 
             "parent": 6, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-28T22:59:57", 
-            "publisher_public": null, 
+            "publisher_public": 28, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
             "published": true
         }
@@ -4345,22 +4989,469 @@
             "login_required": false, 
             "created_by": "arkestra", 
             "publication_end_date": null, 
-            "moderator_state": 0, 
             "template": "INHERIT", 
             "tree_id": 1, 
             "placeholders": [
                 152
             ], 
-            "changed_date": "2011-10-03T18:11:20", 
+            "changed_date": "2015-07-19T09:58:25.482", 
             "limit_visibility_in_menu": null, 
             "parent": 6, 
-            "publisher_state": 1, 
+            "publisher_state": 0, 
             "soft_root": false, 
             "publication_date": "2011-07-31T11:54:19", 
-            "publisher_public": null, 
+            "publisher_public": 29, 
             "level": 2, 
-            "changed_by": "arkestra", 
+            "changed_by": "script", 
             "publisher_is_draft": true, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 28, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.060", 
+            "lft": 1, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "institute.html", 
+            "tree_id": 2, 
+            "placeholders": [
+                424
+            ], 
+            "changed_date": "2015-07-21T22:40:04.733", 
+            "limit_visibility_in_menu": null, 
+            "parent": null, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-21T16:05:44", 
+            "publisher_public": 1, 
+            "level": 0, 
+            "changed_by": "arkestra", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 7, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.454", 
+            "lft": 2, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                425
+            ], 
+            "changed_date": "2015-07-19T09:58:24.454", 
+            "limit_visibility_in_menu": null, 
+            "parent": 16, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-05T23:17:38", 
+            "publisher_public": 8, 
+            "level": 1, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 4, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.505", 
+            "lft": 3, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                426
+            ], 
+            "changed_date": "2015-07-19T09:58:24.505", 
+            "limit_visibility_in_menu": null, 
+            "parent": 17, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-05T23:18:23", 
+            "publisher_public": 9, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 6, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.560", 
+            "lft": 5, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                427
+            ], 
+            "changed_date": "2015-07-19T09:58:24.560", 
+            "limit_visibility_in_menu": null, 
+            "parent": 17, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-22T08:03:36", 
+            "publisher_public": 5, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 17, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.619", 
+            "lft": 8, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                428
+            ], 
+            "changed_date": "2015-07-19T09:58:24.619", 
+            "limit_visibility_in_menu": null, 
+            "parent": 16, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-30T00:56:23", 
+            "publisher_public": 7, 
+            "level": 1, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 10, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.672", 
+            "lft": 9, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                429
+            ], 
+            "changed_date": "2015-07-19T09:58:24.672", 
+            "limit_visibility_in_menu": null, 
+            "parent": 20, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-21T16:35:51", 
+            "publisher_public": 2, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 12, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.724", 
+            "lft": 11, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                430
+            ], 
+            "changed_date": "2015-07-19T09:58:24.724", 
+            "limit_visibility_in_menu": null, 
+            "parent": 20, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-22T08:03:34", 
+            "publisher_public": 3, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 14, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.780", 
+            "lft": 13, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                431
+            ], 
+            "changed_date": "2015-07-19T09:58:24.780", 
+            "limit_visibility_in_menu": null, 
+            "parent": 20, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-22T08:03:34", 
+            "publisher_public": 4, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 16, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.828", 
+            "lft": 15, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                432
+            ], 
+            "changed_date": "2015-07-19T09:58:24.828", 
+            "limit_visibility_in_menu": null, 
+            "parent": 20, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-28T16:19:36", 
+            "publisher_public": 14, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 27, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.882", 
+            "lft": 18, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                433
+            ], 
+            "changed_date": "2015-07-19T09:58:24.882", 
+            "limit_visibility_in_menu": null, 
+            "parent": 16, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-06-22T08:03:56", 
+            "publisher_public": 6, 
+            "level": 1, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 20, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:24.938", 
+            "lft": 19, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                434
+            ], 
+            "changed_date": "2015-07-19T09:58:24.938", 
+            "limit_visibility_in_menu": null, 
+            "parent": 25, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-06T00:26:59", 
+            "publisher_public": 10, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 22, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:25.074", 
+            "lft": 21, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                435
+            ], 
+            "changed_date": "2015-07-19T09:58:25.074", 
+            "limit_visibility_in_menu": null, 
+            "parent": 25, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-06T21:06:29", 
+            "publisher_public": 11, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 24, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:25.178", 
+            "lft": 23, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                436
+            ], 
+            "changed_date": "2015-07-19T09:58:25.178", 
+            "limit_visibility_in_menu": null, 
+            "parent": 25, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-28T22:59:57", 
+            "publisher_public": 13, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 26, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2015-07-19T09:58:25.441", 
+            "lft": 25, 
+            "in_navigation": true, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "script", 
+            "publication_end_date": null, 
+            "template": "INHERIT", 
+            "tree_id": 2, 
+            "placeholders": [
+                437
+            ], 
+            "changed_date": "2015-07-19T09:58:25.441", 
+            "limit_visibility_in_menu": null, 
+            "parent": 25, 
+            "publisher_state": 0, 
+            "soft_root": false, 
+            "publication_date": "2011-07-31T11:54:19", 
+            "publisher_public": 15, 
+            "level": 2, 
+            "changed_by": "script", 
+            "publisher_is_draft": false, 
             "published": true
         }
     }, 
@@ -4368,7 +5459,7 @@
         "pk": 1, 
         "model": "cms.title", 
         "fields": {
-            "menu_title": "Home", 
+            "menu_title": "Yeah whatever", 
             "redirect": "", 
             "meta_keywords": "", 
             "page_title": "", 
@@ -4631,64 +5722,276 @@
         }
     }, 
     {
+        "pk": 16, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Draft", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Institute of Mediaeval Medicine", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-21T16:04:48", 
+            "page": 16, 
+            "path": "", 
+            "meta_description": "The Institute for the Promotion of Mediaeval Medicine works to reverse the advancements of post-15th Century science, and to restore the theories and practices of mediaeval medicine to the status they enjoyed in the Dark Ages", 
+            "slug": "institute"
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Departments", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-05T23:17:27", 
+            "page": 17, 
+            "path": "departments", 
+            "meta_description": "", 
+            "slug": "departments"
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Witchcraft", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Department of Witchcraft", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-05T23:18:00", 
+            "page": 18, 
+            "path": "departments/witchcraft", 
+            "meta_description": "The Department of Witchcraft has pioneered modern science-based teaching in one of the oldest fields in medicine", 
+            "slug": "witchcraft"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Public Information", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Department for Public Information and Education", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-22T08:03:22", 
+            "page": 19, 
+            "path": "departments/public-education", 
+            "meta_description": "", 
+            "slug": "public-education"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Research Centres", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-30T00:56:18", 
+            "page": 20, 
+            "path": "research-centres", 
+            "meta_description": "", 
+            "slug": "research-centres"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Dentistry", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Centre for Research into Mediaeval Dentistry", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-21T16:33:32", 
+            "page": 21, 
+            "path": "research-centres/mediaeval-dentistry", 
+            "meta_description": "", 
+            "slug": "mediaeval-dentistry"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Surgery", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Centre for Research into Mediaeval Surgery", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-22T08:02:56", 
+            "page": 22, 
+            "path": "research-centres/mediaeval-surgery", 
+            "meta_description": "", 
+            "slug": "mediaeval-surgery"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "Bad Air", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Bad Air Research Centre", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-22T08:03:12", 
+            "page": 23, 
+            "path": "research-centres/bad-air", 
+            "meta_description": "", 
+            "slug": "bad-air"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Evil Eye Research Project", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-28T16:19:00", 
+            "page": 24, 
+            "path": "research-centres/evil-eye-research-project", 
+            "meta_description": "", 
+            "slug": "evil-eye-research-project"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Technical demonstrations", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-06-22T08:03:52", 
+            "page": 25, 
+            "path": "technical-demonstrations", 
+            "meta_description": "", 
+            "slug": "technical-demonstrations"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "News & Events", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-06T00:08:44", 
+            "page": 26, 
+            "path": "technical-demonstrations/news-events-plugin", 
+            "meta_description": "", 
+            "slug": "news-events-plugin"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Vacancies & Studentships", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-06T21:06:14", 
+            "page": 27, 
+            "path": "technical-demonstrations/vacancies-studentships-plugin", 
+            "meta_description": "", 
+            "slug": "vacancies-studentships-plugin"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Images", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-28T15:07:51", 
+            "page": 28, 
+            "path": "technical-demonstrations/images", 
+            "meta_description": "", 
+            "slug": "images"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Rows & columns", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2011-07-31T10:06:12", 
+            "page": 29, 
+            "path": "technical-demonstrations/rows-columns", 
+            "meta_description": "", 
+            "slug": "rows-columns"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "menus.cachekey", 
         "fields": {
-            "key": "cms-menu_nodes_en_1_/", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1_1_user", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1_/_1_user", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1_/technical-demonstrations/_1_user", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1_/technical-demonstrations/images/_1_user", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 6, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1", 
-            "site": 1, 
-            "language": "en"
-        }
-    }, 
-    {
-        "pk": 7, 
-        "model": "menus.cachekey", 
-        "fields": {
-            "key": "cms-menu_nodes_en_1_/contact/", 
+            "key": "menu_cache_menu_nodes_en_1_1_user", 
             "site": 1, 
             "language": "en"
         }
@@ -4697,7 +6000,7 @@
         "pk": 1, 
         "model": "text.text", 
         "fields": {
-            "body": "\n  \n    <p>The Institute for the Promotion of Mediaeval Medicine works to reverse the advancements of post-15th Century science, and to restore the theories and practices of mediaeval medicine to the status they enjoyed in the Dark Ages.</p>\n    <p>The Institute is a major research and teaching centre.</p>\n    <div class=\"row columns3\">\n      <div class=\"column firstcolumn\">\n        <div>\n          <div class=\"div\">\n            <img alt=\"Image - Cutaway body\" id=\"plugin_obj_27\" src=\"/media/filer_thumbnails/2011/06/30/0020n040.jpg__32x32_q85_crop_subject_location-178%2C292_upscale.jpg\" title=\"Image - Cutaway body\">\n          </div>\n        </div>\n      </div>\n      <div class=\"column\">\n        <div>\n          <h2>News &amp; Events plugins</h2>\n          <p>This page features two <em>News &amp; Events</em> plugins.</p>\n          <p>News and events items are added to the database; a News &amp; Events plugin in a page will publish the appropriate ones for that page and at the particular moment the page is loaded.</p>\n          <p>\n            <img alt=\"Image/link set - image-set-basic\" id=\"plugin_obj_66\" src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__32x32_q85_crop_upscale.png\" title=\"Image/link set - image-set-basic\">One, on the right, is configured to publish the <em>top</em>\n            <em>three</em>\n            <em>events</em> in a <em>vertical format</em>, together with their <em>summaries and metadata<strong>.</strong>\n            </em>\n          </p>\n          <p>\n            <img alt=\"Image/link set - image-set-basic\" id=\"plugin_obj_67\" src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__32x32_q85_crop_upscale.png\" title=\"Image/link set - image-set-basic\">The other, below, publishes the <em>top</em>\n            <em>three</em>\n            <em>news articles</em>, in <em>horizontal format</em>.</p>\n        </div>\n      </div>\n      <div class=\"column lastcolumn\">\n        <div>\n          <div class=\"div\">\n            <img alt=\"News &amp; events - 10\" id=\"plugin_obj_10\" src=\"/static/plugin_icons/news_and_events.png\" title=\"News &amp; events - 10\">\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div>\n        <div>\n          <div class=\"div\">\n            <img alt=\"News &amp; events - 12\" id=\"plugin_obj_12\" src=\"/static/plugin_icons/news_and_events.png\" title=\"News &amp; events - 12\">\n          </div>\n        </div>\n      </div>\n    </div>\n  \n\n"
+            "body": "\n  \n    <p>The Institute for the Promotion of Mediaeval Medicine works to reverse the advancements of post-15th Century science, and to restore the theories and practices of mediaeval medicine to the status they enjoyed in the Dark Ages....</p>\n    <p>The Institute is a major research and teaching centre.</p>\n    <div class=\"row columns3\">\n      <div class=\"column firstcolumn\">\n        <div>\n          <div class=\"div\">\n            <img id=\"plugin_obj_27\" title=\"Image - Cutaway body\" alt=\"Image - Cutaway body\" src=\"/media/filer_thumbnails/2011/06/30/0020n040.jpg__32x32_q85_crop_subject_location-178%2C292_upscale.jpg\">\n          </div>\n        </div>\n      </div>\n      <div class=\"column\">\n        <div>\n          <h2>News &amp; Events plugins</h2>\n          <p>This page features two <em>News &amp; Events</em> plugins.</p>\n          <p>News and events items are added to the database; a News &amp; Events plugin in a page will publish the appropriate ones for that page and at the particular moment the page is loaded.</p>\n          <p>\n            <img id=\"plugin_obj_66\" title=\"Image/link set - image-set-basic\" alt=\"Image/link set - image-set-basic\" src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__32x32_q85_crop_upscale.png\">One, on the right, is configured to publish the <em>top</em>\n            <em>three</em>\n            <em>events</em> in a <em>vertical format</em>, together with their <em>summaries and metadata<strong>.</strong>\n            </em>\n          </p>\n          <p>\n            <img id=\"plugin_obj_67\" title=\"Image/link set - image-set-basic\" alt=\"Image/link set - image-set-basic\" src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__32x32_q85_crop_upscale.png\">The other, below, publishes the <em>top</em>\n            <em>three</em>\n            <em>news articles</em>, in <em>horizontal format</em>.</p>\n        </div>\n      </div>\n      <div class=\"column lastcolumn\">\n        <div>\n          <div class=\"div\">\n            <img id=\"plugin_obj_10\" title=\"News &amp; events - 10\" alt=\"News &amp; events - 10\" src=\"/static/plugin_icons/news_and_events.png\">\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div>\n        <div>\n          <div class=\"div\">\n            <img id=\"plugin_obj_12\" title=\"News &amp; events - 12\" alt=\"News &amp; events - 12\" src=\"/static/plugin_icons/news_and_events.png\">\n          </div>\n        </div>\n      </div>\n    </div>\n  \n\n"
         }
     }, 
     {
@@ -4775,6 +6078,41 @@
         "model": "text.text", 
         "fields": {
             "body": "<p>A great deal of nonsense has been written about witchcraft in recent years.</p>\n    <p>In this lecture, Professor Sterling Morrison looks at the science behind witchcraft.</p>\n  \n\n"
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "text.text", 
+        "fields": {
+            "body": "\r\n  \r\n    <p>The News &amp; Events plugin provides a convenient way to place lists of current news and events items into other content.</p>\r\n    <p>The way these lists are displayed is configured in the plugin. This site's <img src=\"/static/plugin_icons/links.png\" alt=\"Link(s) - 82\" title=\"Link(s) - 82\" id=\"plugin_obj_82\" /> contains two examples; some others are show below.</p>\r\n    <h2>The default</h2>\r\n    <p>News &amp; events, side-by-side, listed vertically, showing details, ordered by importance as well as date, and showing date groups:</p>\r\n    <div class=\"div\">\r\n      <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 78\" title=\"News &amp; events - 78\" id=\"plugin_obj_78\" />\r\n    </div>\r\n    <div class=\"row\">\r\n      <div>\r\n        <div>\r\n          <h2>A horizontal list</h2>\r\n          <div class=\"div\">\r\n            <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 81\" title=\"News &amp; events - 81\" id=\"plugin_obj_81\" />\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns3\">\r\n      <div class=\"column firstcolumn doublecolumn\">\r\n        <div>\r\n          <h2>Simpler lists</h2>\r\n          <p>Three items each, titles only:</p>\r\n          <div class=\"div\">\r\n            <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 79\" title=\"News &amp; events - 79\" id=\"plugin_obj_79\" />\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"column lastcolumn\">\r\n        <div>\r\n          <h2>A stacked view</h2>\r\n          <p>The lists can be stacked as well as placed side-by-side:</p>\r\n          <div class=\"div\">\r\n            <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 80\" title=\"News &amp; events - 80\" id=\"plugin_obj_80\" />\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  \r\n\r\n"
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "text.text", 
+        "fields": {
+            "body": "\r\n  \r\n    <h2>Default settings</h2>\r\n    <div class=\"div\">\r\n      <img src=\"/static/plugin_icons/vacancies_and_studentships.png\" alt=\"Vacancies &amp; Studentships - 84\" title=\"Vacancies &amp; Studentships - 84\" id=\"plugin_obj_84\" />\r\n    </div>\r\n    <h2>Titles only, date order</h2>\r\n    <div class=\"div\">\r\n      <img src=\"/static/plugin_icons/vacancies_and_studentships.png\" alt=\"Vacancies &amp; Studentships - 85\" title=\"Vacancies &amp; Studentships - 85\" id=\"plugin_obj_85\" />\r\n    </div>\r\n    <h2>Horizontal</h2>\r\n    <div class=\"div\">\r\n      <img src=\"/static/plugin_icons/vacancies_and_studentships.png\" alt=\"Vacancies &amp; Studentships - 86\" title=\"Vacancies &amp; Studentships - 86\" id=\"plugin_obj_86\" />\r\n    </div>\r\n  \r\n\r\n"
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "text.text", 
+        "fields": {
+            "body": "\r\n  \r\n    <p>Arkestra makes <strong>intelligent use</strong> of images.</p>\r\n    <p>Arkestra can associate images with other objects, displaying them automatically as required, resizing them for different purposes.</p>\r\n    <p>Using <img src=\"/static/plugin_icons/links.png\" alt=\"Link(s) - 93\" title=\"Link(s) - 93\" id=\"plugin_obj_93\" /> Arkestra will scale and crop images automatically, preserving important detail.</p>\r\n    <p>Images can also be inserted manually into content using a flexible and sophisticated plugin which also calculates appropriate sizes.</p>\r\n    <p>Arkestra uses image metadata to work out which parts of the image are most significant.</p>\r\n    <p>In these examples, Shane MacGowan's <strong>blessed teeth</strong> have been set as the focus of the image.</p>\r\n    <div class=\"row\">\r\n      <div>\r\n        <div class=\"image-borders\">\r\n          <p>\r\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457%2C409_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_92\" />\r\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457%2C409_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_89\" />\r\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457%2C409_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_88\" />\r\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457%2C409_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_91\" />\r\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457%2C409_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_90\" />How neatly all these lines line up, thanks to the magic of Arkestra!</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  \r\n\r\n"
+        }
+    }, 
+    {
+        "pk": 94, 
+        "model": "text.text", 
+        "fields": {
+            "body": "\r\n  \r\n    <div class=\"row\">\r\n      <div>\r\n        <div class=\"has-background-green\">\r\n          <p>one column</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns2\">\r\n      <div class=\"column column-1 firstcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns4\">\r\n      <div class=\"column column-1 firstcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-4 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column four</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns4\">\r\n      <div class=\"column column-1 firstcolumn doublecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one - double width</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns4\">\r\n      <div class=\"column column-1 firstcolumn triplecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one - triple width</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns3\">\r\n      <div class=\"column column-1 firstcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns3\">\r\n      <div class=\"column column-1 firstcolumn doublecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns6\">\r\n      <div class=\"column column-1 firstcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-4\">\r\n        <div class=\"has-background-green\">\r\n          <p>column four</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-5\">\r\n        <div class=\"has-background-green\">\r\n          <p>column five</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-6 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column six</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns6\">\r\n      <div class=\"column column-1 firstcolumn triplecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one - triple column</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2 doublecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two - double column</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns5\">\r\n      <div class=\"column column-1 firstcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-4\">\r\n        <div class=\"has-background-green\">\r\n          <p>column four</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-5 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column five</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns5\">\r\n      <div class=\"column column-1 firstcolumn triplecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two </p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-3 lastcolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column three</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row columns5\">\r\n      <div class=\"column column-1 firstcolumn triplecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column one</p>\r\n        </div>\r\n      </div>\r\n      <div class=\"column column-2 lastcolumn doublecolumn\">\r\n        <div class=\"has-background-green\">\r\n          <p>column two</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  \r\n\r\n"
+        }
+    }, 
+    {
+        "pk": 95, 
+        "model": "text.text", 
+        "fields": {
+            "body": "\n  \n    <p>The Institute for the Promotion of Mediaeval Medicine works to reverse the advancements of post-15th Century science, and to restore the theories and practices of mediaeval medicine to the status they enjoyed in the Dark Ages....</p>\n    <p>The Institute is a major research and teaching centre.</p>\n    <div class=\"row columns3\">\n      <div class=\"column firstcolumn\">\n        <div>\n          <div class=\"div\">\n            <img src=\"/media/filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__32x32_q85_crop_subject_location-178%2C292_upscale.jpg\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_98\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"column\">\n        <div>\n          <h2>News &amp; Events plugins</h2>\n          <p>This page features two <em>News &amp; Events</em> plugins.</p>\n          <p>News and events items are added to the database; a News &amp; Events plugin in a page will publish the appropriate ones for that page and at the particular moment the page is loaded.</p>\n          <p>\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__32x32_q85_crop_upscale.png\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_99\" />One, on the right, is configured to publish the <em>top</em>\n            <em>three</em>\n            <em>events</em> in a <em>vertical format</em>, together with their <em>summaries and metadata<strong>.</strong>\n            </em>\n          </p>\n          <p>\n            <img src=\"/media/filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__32x32_q85_crop_upscale.png\" alt=\"Image/link set - image-set-basic\" title=\"Image/link set - image-set-basic\" id=\"plugin_obj_100\" />The other, below, publishes the <em>top</em>\n            <em>three</em>\n            <em>news articles</em>, in <em>horizontal format</em>.</p>\n        </div>\n      </div>\n      <div class=\"column lastcolumn\">\n        <div>\n          <div class=\"div\">\n            <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 96\" title=\"News &amp; events - 96\" id=\"plugin_obj_96\" />\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div>\n        <div>\n          <div class=\"div\">\n            <img src=\"/static/plugin_icons/news_and_events.png\" alt=\"News &amp; events - 97\" title=\"News &amp; events - 97\" id=\"plugin_obj_97\" />\n          </div>\n        </div>\n      </div>\n    </div>\n  \n\n"
         }
     }, 
     {
@@ -5840,6 +7178,74 @@
         }
     }, 
     {
+        "pk": 76, 
+        "model": "vacancies_and_studentships.vacanciesplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "featured vertical", 
+            "group_dates": true, 
+            "studentships_heading_text": "Studentships", 
+            "entity": 1, 
+            "vacancies_heading_text": "Vacancies", 
+            "display": "vacancies studentships", 
+            "limit_to": 5, 
+            "layout": "sidebyside", 
+            "heading_level": 2, 
+            "list_format": "vertical"
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "vacancies_and_studentships.vacanciesplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": true, 
+            "studentships_heading_text": "Studentships", 
+            "entity": null, 
+            "vacancies_heading_text": "Vacancies", 
+            "display": "vacancies & studentships", 
+            "limit_to": 5, 
+            "layout": "sidebyside", 
+            "heading_level": 3, 
+            "list_format": "vertical"
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "vacancies_and_studentships.vacanciesplugin", 
+        "fields": {
+            "order_by": "date", 
+            "format": "title", 
+            "group_dates": true, 
+            "studentships_heading_text": "Studentships", 
+            "entity": null, 
+            "vacancies_heading_text": "Vacancies", 
+            "display": "vacancies & studentships", 
+            "limit_to": 5, 
+            "layout": "sidebyside", 
+            "heading_level": 3, 
+            "list_format": "vertical"
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "vacancies_and_studentships.vacanciesplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": false, 
+            "studentships_heading_text": "Studentships", 
+            "entity": null, 
+            "vacancies_heading_text": "Vacancies", 
+            "display": "vacancies & studentships", 
+            "limit_to": 3, 
+            "layout": "stacked", 
+            "heading_level": 3, 
+            "list_format": "horizontal"
+        }
+    }, 
+    {
         "pk": 8, 
         "model": "news_and_events.newsarticle", 
         "fields": {
@@ -6678,6 +8084,114 @@
         }
     }, 
     {
+        "pk": 78, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": true, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "news & events", 
+            "news_heading_text": "News", 
+            "limit_to": 5, 
+            "layout": "sidebyside", 
+            "heading_level": 3, 
+            "list_format": "vertical", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "date", 
+            "format": "title", 
+            "group_dates": false, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "news & events", 
+            "news_heading_text": "News", 
+            "limit_to": 3, 
+            "layout": "sidebyside", 
+            "heading_level": 3, 
+            "list_format": "vertical", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "title", 
+            "group_dates": true, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "news & events", 
+            "news_heading_text": "News", 
+            "limit_to": 3, 
+            "layout": "stacked", 
+            "heading_level": 3, 
+            "list_format": "vertical", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": false, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "news & events", 
+            "news_heading_text": "News", 
+            "limit_to": 3, 
+            "layout": "stacked", 
+            "heading_level": 3, 
+            "list_format": "horizontal", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
+        "pk": 96, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": false, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "events", 
+            "news_heading_text": "News", 
+            "limit_to": 3, 
+            "layout": "sidebyside", 
+            "heading_level": 2, 
+            "list_format": "vertical", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
+        "pk": 97, 
+        "model": "news_and_events.newsandeventsplugin", 
+        "fields": {
+            "order_by": "importance/date", 
+            "format": "details image", 
+            "group_dates": false, 
+            "show_previous_events": false, 
+            "entity": null, 
+            "display": "news", 
+            "news_heading_text": "News", 
+            "limit_to": 3, 
+            "layout": "stacked", 
+            "heading_level": 2, 
+            "list_format": "horizontal", 
+            "events_heading_text": "Events"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "links.objectlink", 
         "fields": {
@@ -6795,6 +8309,48 @@
             "key_link": false, 
             "html_title_attribute": "", 
             "plugin": 65, 
+            "destination_content_type": [
+                "links", 
+                "externallink"
+            ], 
+            "active": true, 
+            "heading_override": "", 
+            "inline_item_ordering": 0, 
+            "summary_override": ""
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "links.genericlinklistpluginitem", 
+        "fields": {
+            "metadata_override": "", 
+            "text_override": "home page", 
+            "format": "title", 
+            "destination_object_id": 1, 
+            "key_link": false, 
+            "html_title_attribute": "", 
+            "plugin": 82, 
+            "destination_content_type": [
+                "cms", 
+                "page"
+            ], 
+            "active": true, 
+            "heading_override": "", 
+            "inline_item_ordering": 0, 
+            "summary_override": ""
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "links.genericlinklistpluginitem", 
+        "fields": {
+            "metadata_override": "", 
+            "text_override": "", 
+            "format": "title", 
+            "destination_object_id": 3, 
+            "key_link": false, 
+            "html_title_attribute": "", 
+            "plugin": 93, 
             "destination_content_type": [
                 "links", 
                 "externallink"
@@ -7195,6 +8751,26 @@
         }
     }, 
     {
+        "pk": 82, 
+        "model": "links.genericlinklistplugin", 
+        "fields": {
+            "use_link_icons": false, 
+            "final_separator": " and ", 
+            "separator": ", ", 
+            "insert_as": 0
+        }
+    }, 
+    {
+        "pk": 93, 
+        "model": "links.genericlinklistplugin", 
+        "fields": {
+            "use_link_icons": false, 
+            "final_separator": " and ", 
+            "separator": ", ", 
+            "insert_as": 0
+        }
+    }, 
+    {
         "pk": 27, 
         "model": "arkestra_image_plugin.imagesetplugin", 
         "fields": {
@@ -7287,6 +8863,102 @@
             "height": null, 
             "width": 1000.0, 
             "aspect_ratio": 3.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "right", 
+            "height": null, 
+            "width": 25.0, 
+            "aspect_ratio": 0.3, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "left", 
+            "height": null, 
+            "width": 75.0, 
+            "aspect_ratio": 3.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 90, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "left", 
+            "height": null, 
+            "width": 25.0, 
+            "aspect_ratio": 0.75, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 91, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "left", 
+            "height": null, 
+            "width": 50.0, 
+            "aspect_ratio": 1.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 92, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": null, 
+            "height": null, 
+            "width": 1000.0, 
+            "aspect_ratio": 3.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 98, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": null, 
+            "height": null, 
+            "width": 1000.0, 
+            "aspect_ratio": 0.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 99, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "right", 
+            "height": null, 
+            "width": -50.0, 
+            "aspect_ratio": 0.0, 
+            "items_per_row": null
+        }
+    }, 
+    {
+        "pk": 100, 
+        "model": "arkestra_image_plugin.imagesetplugin", 
+        "fields": {
+            "kind": "basic", 
+            "float": "right", 
+            "height": null, 
+            "width": -50.0, 
+            "aspect_ratio": 0.0, 
             "items_per_row": null
         }
     }, 
@@ -7459,6 +9131,174 @@
         }
     }, 
     {
+        "pk": 12, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 88, 
+            "image": 9, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 89, 
+            "image": 9, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 90, 
+            "image": 9, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 91, 
+            "image": 9, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 92, 
+            "image": 9, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "This image has been placed in the text and told to size itself automatically.", 
+            "plugin": 98, 
+            "image": 1, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 99, 
+            "image": 12, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "arkestra_image_plugin.imagesetitem", 
+        "fields": {
+            "manual_image_title": null, 
+            "auto_image_title": false, 
+            "manual_image_caption": "", 
+            "plugin": 100, 
+            "image": 10, 
+            "destination_object_id": null, 
+            "manual_link_description": null, 
+            "alt_text": "", 
+            "destination_content_type": null, 
+            "auto_link_description": false, 
+            "active": true, 
+            "inline_item_ordering": 0, 
+            "manual_link_title": null, 
+            "auto_link_title": false, 
+            "auto_image_caption": false
+        }
+    }, 
+    {
         "pk": 3, 
         "model": "semanticeditor.cssclasscategory", 
         "fields": {
@@ -7498,7 +9338,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 5, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "buttonise", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7511,7 +9351,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "no-small-caps", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7524,7 +9364,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "doublecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 2, 
@@ -7537,7 +9377,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "images-left", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7550,7 +9390,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "images-right", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7576,7 +9416,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "image-borders", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7589,7 +9429,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "shadowed", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7602,7 +9442,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 2, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "no-image-link-arrows", 
             "allowed_elements": "p newrow newcol innerrow innercol", 
             "column_equiv": null, 
@@ -7615,7 +9455,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "standout", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7628,7 +9468,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 4, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "standout-mild", 
             "allowed_elements": "p", 
             "column_equiv": null, 
@@ -7641,7 +9481,7 @@
         "model": "semanticeditor.cssclass", 
         "fields": {
             "category": 1, 
-            "templates": "[u\"[u'']\"]", 
+            "templates": "[u'']", 
             "name": "triplecolumn", 
             "allowed_elements": "newcol innercol", 
             "column_equiv": 3, 
@@ -7826,7 +9666,7 @@
         "fields": {
             "name": "filer/2011/07/06/07.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-14T16:42:03"
+            "modified": "2015-07-21T22:40:49.800"
         }
     }, 
     {
@@ -7844,7 +9684,7 @@
         "fields": {
             "name": "filer/2011/06/30/0020n040.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-14T16:42:03"
+            "modified": "2015-07-19T09:58:44.658"
         }
     }, 
     {
@@ -7853,7 +9693,7 @@
         "fields": {
             "name": "filer/2011/07/28/arrow-right_1.png", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-14T16:42:03"
+            "modified": "2015-07-19T09:58:44.681"
         }
     }, 
     {
@@ -7862,7 +9702,7 @@
         "fields": {
             "name": "filer/2011/07/28/arrow-down_1.png", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-14T16:42:03"
+            "modified": "2015-07-19T09:58:44.698"
         }
     }, 
     {
@@ -7871,7 +9711,16 @@
         "fields": {
             "name": "filer/2011/07/06/johncale.jpg", 
             "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
-            "modified": "2014-02-14T16:42:03"
+            "modified": "2015-07-21T22:40:49.822"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "easy_thumbnails.source", 
+        "fields": {
+            "name": "filer/2011/07/28/15644525.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:25.309"
         }
     }, 
     {
@@ -10425,6 +12274,186 @@
         }
     }, 
     {
+        "pk": 256, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 22, 
+            "name": "filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__48x48_q85_crop_subject_location-178,292_upscale.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.329"
+        }
+    }, 
+    {
+        "pk": 257, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 22, 
+            "name": "filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__32x32_q85_crop_subject_location-178,292_upscale.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.339"
+        }
+    }, 
+    {
+        "pk": 258, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 22, 
+            "name": "filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__210x10000_q85_subject_location-178,292.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.355"
+        }
+    }, 
+    {
+        "pk": 259, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 23, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__48x48_q85_crop_upscale.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.371"
+        }
+    }, 
+    {
+        "pk": 260, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 23, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__32x32_q85_crop_upscale.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.376"
+        }
+    }, 
+    {
+        "pk": 261, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 23, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__210x10000_q85.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.381"
+        }
+    }, 
+    {
+        "pk": 262, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 24, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__48x48_q85_crop_upscale.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.392"
+        }
+    }, 
+    {
+        "pk": 263, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 24, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__32x32_q85_crop_upscale.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.396"
+        }
+    }, 
+    {
+        "pk": 264, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 24, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__210x10000_q85.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:24.401"
+        }
+    }, 
+    {
+        "pk": 265, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 26, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__48x48_q85_crop_subject_location-457,409_upscale.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:25.311"
+        }
+    }, 
+    {
+        "pk": 266, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 26, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__32x32_q85_crop_subject_location-457,409_upscale.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:25.340"
+        }
+    }, 
+    {
+        "pk": 267, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 26, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/15644525.jpg__210x10000_q85_subject_location-457,409.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:25.374"
+        }
+    }, 
+    {
+        "pk": 268, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 22, 
+            "name": "filer_public_thumbnails/filer/2011/06/30/0020n040.jpg__294x384_q95_crop_subject_location-178,292.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:44.661"
+        }
+    }, 
+    {
+        "pk": 269, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 23, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-right_1.png__50x110_q95_crop.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:44.683"
+        }
+    }, 
+    {
+        "pk": 270, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 24, 
+            "name": "filer_public_thumbnails/filer/2011/07/28/arrow-down_1.png__50x22_q95_crop.png", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-19T09:58:44.700"
+        }
+    }, 
+    {
+        "pk": 271, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 20, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/07.jpg__75x75_q95_crop_subject_location-257,117.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-21T22:38:57.535"
+        }
+    }, 
+    {
+        "pk": 272, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 20, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/07.jpg__60x60_q95_crop_subject_location-257,117.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-21T22:40:49.803"
+        }
+    }, 
+    {
+        "pk": 273, 
+        "model": "easy_thumbnails.thumbnail", 
+        "fields": {
+            "source": 25, 
+            "name": "filer_public_thumbnails/filer/2011/07/06/johncale.jpg__60x60_q95_crop_subject_location-233,86.jpg", 
+            "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e", 
+            "modified": "2015-07-21T22:40:49.825"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "auth.user", 
         "fields": {
@@ -10434,7 +12463,7 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2014-02-13T21:41:49.486", 
+            "last_login": "2015-07-19T20:29:37.273", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$qXiZFHkAMorY$TY93IarzG+j3RjgU4SCBY7e1Ej+0ISCY+FfhQUblAi8=", 
@@ -10595,11 +12624,127 @@
         }
     }, 
     {
+        "pk": "00c77ed5ad9b81ca51e35f9535720367", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2015-08-04T22:40:38.123", 
+            "session_data": "YTA0MTc0OWEzYmI3YjgxZmRkNDk0ZjM4NzdlZDQ5OTk1ZGI0ZWM3ZjqAAn1xAShVDmNtc19hZG1p\nbl9zaXRlSwFVDV9hdXRoX3VzZXJfaWRLAVUSX2F1dGhfdXNlcl9iYWNrZW5kVSlkamFuZ28uY29u\ndHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHUu\n"
+        }
+    }, 
+    {
         "pk": 1, 
         "model": "sites.site", 
         "fields": {
             "domain": "l003.medcn.uwcm.ac.uk:8000", 
             "name": "l003.medcn.uwcm.ac.uk:8000"
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2015-07-21T22:40:38.002", 
+            "object_repr": "Draft", 
+            "object_id": "1", 
+            "change_message": "Changed menu_title.", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 3, 
+            "action_time": "2015-07-19T23:16:31.972", 
+            "object_repr": "Unpublished page", 
+            "object_id": "30", 
+            "change_message": "", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2015-07-19T23:16:07.145", 
+            "object_repr": "Unpublished page", 
+            "object_id": "30", 
+            "change_message": "", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2015-07-19T23:14:50.705", 
+            "object_repr": "Unpublished page", 
+            "object_id": "30", 
+            "change_message": "", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2015-07-19T21:42:08.090", 
+            "object_repr": "CHanged", 
+            "object_id": "1", 
+            "change_message": "Changed menu_title.", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2015-07-19T21:41:56.201", 
+            "object_repr": "Home", 
+            "object_id": "1", 
+            "change_message": "Changed menu_title.", 
+            "user": [
+                "arkestra"
+            ], 
+            "content_type": [
+                "cms", 
+                "page"
+            ]
         }
     }, 
     {
