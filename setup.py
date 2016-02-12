@@ -35,14 +35,15 @@ setup(
         'easy-thumbnails==1.5',
         'django-typogrify',
         'BeautifulSoup',
-        'django-cms == 2.4.3',
-        'django-filer',
+        'django-cms==2.3.5',
+        'django-filer==0.9.4',
         'semanticeditor',
         'pillow',
         'django-pagination',
         'django-easyfilters',
         'django-treeadmin',
         'django-widgetry',
-        'django-chained-selectbox'
+        'django-chained-selectbox',
+        'django-polymorphic==0.5.6',
     ],
 )
