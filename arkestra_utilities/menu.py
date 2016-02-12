@@ -62,6 +62,23 @@ for menu in ARKESTRA_MENUS:
 #
 
 
+def entity_for_node(id):
+    """
+    If this node represents a page that is an entity's home page, return that;
+    otherwise return False
+    """
+    try:
+        # does this node.id represent a page that is an entity's home page?
+        return Page.objects.get(id=id).entity.all()[0]
+    except (Page.DoesNotExist, IndexError) as e:
+        print "getting alternative"
+        # if not, maybe the publisher_public version of the page is the one...
+        try:
+            return Page.objects.get(id=id).publisher_public.entity.all()[0]
+        except (Page.DoesNotExist, IndexError) as e:
+            return False
+
+
 class ArkestraPages(Modifier):
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
 
@@ -78,21 +95,16 @@ class ArkestraPages(Modifier):
 
             # loop over all the nodes returned by the nodes in the Menu classes
             for node in self.nodes:
-                # for each node, try to find a matching Page that is an
-                # Entity's home page
-                try:
-                    page = Page.objects.get(id=node.id, entity__isnull=False)
-                except Page.DoesNotExist:
-                    node.entity = False
-                else:
-                    node.entity = page.entity.all()[0]
+
+                # for each node, try to identify the Entity for it
+                node.entity = entity_for_node(node.id)
+
+                if node.entity:
                     for menu_class in menus:
                         if type(menu_class) is dict:
                             self.do_old_menu(node, menu_class, node.entity)
-
                         else:
                             self.do_menu(node, menu_class, node.entity)
-
 
 
             # print "    ++ saving cache", key

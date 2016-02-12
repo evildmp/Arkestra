@@ -1,7 +1,10 @@
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.core.urlresolvers import reverse, resolve
 from django.test.client import RequestFactory
 from django.http import Http404
+
+from cms.api import create_page
 
 from contacts_and_people.models import (
     Site, Person, Building, Entity, Membership,
@@ -9,6 +12,7 @@ from contacts_and_people.models import (
     )
 from contacts_and_people.views import contacts_and_people
 from links.models import ExternalLink
+from arkestra_utilities.menu import entity_for_node
 
 
 class SiteTests(TestCase):
@@ -77,8 +81,6 @@ class SiteTests(TestCase):
             self.cardiff.buildings(),
             1,
             )
-
-
 
 
 class EntityGetAbsoluteURLTests(TestCase):
@@ -589,3 +591,30 @@ class EntityLiteTests(TestCase):
             unicode(entity),
             u'Raisins',
             )
+
+
+@override_settings(CMS_TEMPLATES=(('null.html', "Null"),))
+class EntityMenuTests(EntityTestObjectsMixin, TestCase):
+    """
+    tests that entity_for_node() correctly returns the published version of
+    the home page
+    """
+
+    def test_entity_for_node(self):
+        # create the page using the django CMS API
+        page = create_page(
+            "School home page",
+            "null.html",
+            "en",
+            published=True
+            )
+
+        # attach an Entity to the page
+        self.school.website = page
+        self.school.save()
+
+        # get the id of the published version of the page
+        published_page_id = page.publisher_public.id
+
+        # check that entity_for_node() returns the right page
+        self.assertEquals(entity_for_node(page.id), self.school)
