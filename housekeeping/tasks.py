@@ -20,7 +20,7 @@ def tasks(request, task = None, action = "dryrun"):
         # nothing matched, so just do the menu
         return shortcuts.render_to_response(
         "housekeeping/housekeeping.html", {
-                "base_template": settings.CMS_TEMPLATES[0][0],
+                "base_template": get_fallback_template(),
                 },
             RequestContext(request),
             )
@@ -30,7 +30,7 @@ def tasks(request, task = None, action = "dryrun"):
             "task": task,
             "action": action,
             "report": report,
-            "base_template": settings.CMS_TEMPLATES[0][0],
+            "base_template": get_fallback_template(),
             },
         RequestContext(request),
         )

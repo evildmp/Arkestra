@@ -142,6 +142,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',  # only 2.4+
 
     'pagination.middleware.PaginationMiddleware',
 )
@@ -196,6 +197,7 @@ INSTALLED_APPS = (
     'south',
     'treeadmin',
     'pagination',
+    'chained_selectbox',
 
     # core Django applications
     # these should be last, so we can override their templates

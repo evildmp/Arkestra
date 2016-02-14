@@ -3,6 +3,7 @@ from django.http import HttpRequest, QueryDict
 
 from contacts_and_people.models import Entity, Person
 
+from arkestra_utilities.utilities import get_fallback_template, get_cms_media_url
 from arkestra_utilities.text import concatenate
 from arkestra_utilities.generic_lister import (
     ArkestraGenericLister, ArkestraGenericList, ArkestraGenericFilterSet,
@@ -306,7 +307,6 @@ class ListIsShowable(TestCase):
 
 class ListerTests(TestCase):
 
-
     def test_empty_lists_do_not_appear_in_lister(self):
 
         lister = ArkestraGenericLister(
@@ -342,3 +342,11 @@ class FilterSetTests(TestCase):
 
     def test_filter_has_correct_fields(self):
         self.assertItemsEqual(BasicList.filter_set.fields, [])
+
+
+class TestSettingFunctions(TestCase):
+    def test_get_fallback_template(self):
+        self.assertEqual(get_fallback_template(), "institute.html")
+
+    def test_get_cms_media_url(self):
+        self.assertEqual(get_cms_media_url(), "/media/cms/")

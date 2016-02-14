@@ -32,7 +32,7 @@ def stats(request):
             "users": users,
             "plugins": plugins,
             "groups": groups,
-            "base_template": settings.CMS_TEMPLATES[0][0],
+            "base_template": get_fallback_template(),
             },
         RequestContext(request),
         )

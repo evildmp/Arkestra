@@ -4,7 +4,6 @@ from django.test import TestCase
 from django.test.client import Client
 from django.test.utils import override_settings
 
-from django.conf import settings
 from django.core.urlresolvers import resolve, reverse
 from django.contrib.auth.models import User
 from django.http import HttpRequest, QueryDict
@@ -18,6 +17,7 @@ from news_and_events.lister import (
     )
 from contacts_and_people.models import Entity, Person, Building, Site
 
+from arkestra_utilities.utilities import get_fallback_template
 
 @override_settings(USE_TZ=False)
 class NewsTests(TestCase):
@@ -40,7 +40,7 @@ class NewsTests(TestCase):
         #  no Entities in the database, so default to settings's template
         self.assertEqual(
             self.tootharticle.get_template,
-            settings.CMS_TEMPLATES[0][0]
+            get_fallback_template()
             )
 
     def test_date_related_attributes(self):

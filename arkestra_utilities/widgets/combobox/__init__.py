@@ -5,6 +5,9 @@ from django.conf import settings
 
 from cms.utils import cms_static_url
 
+# once we no longer need 2.3 support we can stop using this and use
+# settings.CMS_MEDIA_URL instead
+from arkestra_utilities.utilities import get_cms_media_url
 
 class Combobox(forms.Select):
     class Media:
@@ -12,7 +15,7 @@ class Combobox(forms.Select):
             # settings.ADMIN_MEDIA_PREFIX + 'js/jquery.min.js',
             # "%sjs/jquery.min.js" % admin_static_url(),
             cms_static_url('js/libs/jquery.ui.core.js'),
-            settings.CMS_MEDIA_URL + 'js/placeholder_editor_registry.js',
+            get_cms_media_url() + 'js/placeholder_editor_registry.js',
             'combobox/ui.combobox.js',
             ]
         css = {'all': ['combobox/ui.combobox.css']}
@@ -38,7 +41,7 @@ class Combobox(forms.Select):
         rendered = super(Combobox, self).render(name, value, attrs, choices)
         context = {
             'name': name,
-            'CMS_MEDIA_URL': settings.CMS_MEDIA_URL,
+            'CMS_MEDIA_URL': get_cms_media_url(),
             'STATIC_URL': settings.STATIC_URL,
         }
         return rendered + mark_safe(u'''<script type="text/javascript">
