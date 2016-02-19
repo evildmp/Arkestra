@@ -6,9 +6,14 @@ from widgetry import signals as widgetry_signals
 
 
 class LinkWrapper(SearchItemWrapper):
-    # sub-classes should override this to provide special attributes
+    # sub-classes should these this to provide special attributes
     special_attributes = []
 
+    link_format_choices = (
+        (u"title", u"Title only"),
+        (u"details", u"Title & summary"),
+        (u"details image", u"Title, summary & image"),
+    )
 
     # gets default identifier, title, description and thumbnail methods
     # from SearchItemWrapper

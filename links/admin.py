@@ -6,13 +6,15 @@ from widgetry import fk_lookup
 
 from treeadmin.admin import TreeAdmin
 
+from chained_selectbox.form_fields import ChainedChoiceField
+
 from arkestra_utilities.admin_mixins import (
     AutocompleteMixin, SupplyRequestMixin, InputURLMixin
     )
 
 from links import schema
 from links.models import (
-    ObjectLink, ExternalLink, ExternalSite, LinkType
+    ObjectLink, ExternalLink, ExternalSite, LinkType, GenericLinkListPluginItem
     )
 from links.utils import check_urls
 
@@ -20,23 +22,35 @@ from links.utils import check_urls
 class LinkAdmin(admin.ModelAdmin, AutocompleteMixin):
     related_search_fields = ['destination_content_type']
 
-from chained_selectbox.forms import FKChainedChoicesForm
-from chained_selectbox.form_fields import ChainedChoiceField
 
-
-class LinkItemForm(InputURLMixin, FKChainedChoicesForm):
+class LinkItemForm(forms.ModelForm):
+    class Meta:
+        model = GenericLinkListPluginItem
 
     def __init__(self, *args, **kwargs):
         super(LinkItemForm, self).__init__(*args, **kwargs)
-        if self.instance.pk is not None: #  has already been saved()?
-            if self.instance.destination_content_type:
-                destination_content_type = self.instance.destination_content_type.model_class()
+
+        instance = self.instance
+
+        # does this represent a saved instance with a destination_content_type?
+        if instance.pk is not None and instance.destination_content_type:
+
+            # get the class of the instance we're linking to
+            cls = instance.destination_content_type.model_class()
+
+            # and the format choices from its wrapper
+            choices = schema.wrappers[cls].link_format_choices
+
+            # set the available choices according to that
+            self.fields["format"].choices = choices
+
+
         else:
-            destination_content_type = None
+            cls = None
         # look up the correct widget from the content type
         widget = fk_lookup.GenericFkLookup(
             'id_%s-destination_content_type' % self.prefix,
-            destination_content_type,
+            cls,
             )
         self.fields['destination_object_id'].widget = widget
         self.fields['destination_content_type'].widget.choices = schema.content_type_choices()
@@ -56,7 +70,6 @@ class ObjectLinkInline(generic.GenericStackedInline):
         (None, {
             'fields': (
                 'destination_content_type', 'destination_object_id',
-                # 'external_link_input_url',
                 'text_override',
                 ('format', 'key_link',),
             ),

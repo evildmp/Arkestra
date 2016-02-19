@@ -19,7 +19,7 @@ from models import ImageSetItem, ImageSetPlugin, EmbeddedVideoSetItem, EmbeddedV
 
 class ImageSetItemPluginForm(forms.ModelForm):
     class Meta:
-        model=ImageSetItem
+        model = ImageSetItem
 
     def __init__(self, *args, **kwargs):
         super(ImageSetItemPluginForm, self).__init__(*args, **kwargs)
@@ -72,8 +72,8 @@ class ImageSetItemFormFormSet(forms.models.BaseInlineFormSet):
 
 
 class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMixin):
+    model = ImageSetItem
     form = ImageSetItemPluginForm
-    model=ImageSetItem
     extra=1
 
     fieldset_basic = ('', {'fields': ((
@@ -93,6 +93,7 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
         ),
         'classes': ('collapse',)
         })
+
     fieldsets = (
         fieldset_basic,
         fieldset_advanced,
@@ -106,9 +107,11 @@ class ImageSetItemEditor(SupplyRequestMixin, admin.StackedInline, AutocompleteMi
         }),
         fieldset_control,
         )
+
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'cols':30, 'rows':3,},),},
     }
+
 
 class ImageSetPluginForm(forms.ModelForm):
     class Meta:

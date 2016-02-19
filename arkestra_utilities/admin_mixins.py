@@ -156,7 +156,6 @@ class InputURLMixin(forms.ModelForm):
     #
     #   PersonForm(InputURLMixin):
     #   EntityForm(InputURLMixin)
-    #   LinkItemForm(InputURLMixin)
     #   GenericModelForm(InputURLMixin)
     #       NewsAndEventsForm(GenericModelForm)
     #           NewsArticleForm(NewsAndEventsForm)

@@ -20,6 +20,7 @@ class PluginInlineLink(SupplyRequestMixin, admin.StackedInline):
     model = GenericLinkListPluginItem
     form = LinkItemForm
     extra = 3
+
     fieldsets = (
         (None, {
             'fields': (

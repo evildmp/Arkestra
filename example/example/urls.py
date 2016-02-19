@@ -9,7 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
+    url('^autocomplete/$', 'widgetry.views.search', name='widgetry-search'),
     (r'^semantic/', include('semanticeditor.urls')),
     (r"", include("contacts_and_people.urls")),
     url(r"", include("links.urls")),
@@ -23,9 +23,6 @@ if settings.DEBUG:
         document_root=settings.MEDIA_ROOT,
     )
 
-urlpatterns += patterns('',
-    url('^autocomplete/$', 'widgetry.views.search', name='widgetry-search'),
-)
 
 urlpatterns += i18n_patterns('',
     url(r'^admin/', include(admin.site.urls)),

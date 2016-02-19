@@ -9,28 +9,20 @@ from schema_registry import schema
 
 class ChainedSelectChoices(BaseDetailView):
     """
-    View to handel the ajax request for the field options.
+    View to handle the ajax request for the field options.
     """
 
     def get(self, request, *args, **kwargs):
-
         parent_value = request.GET.get("parent_value")
 
         wrapper = schema.wrappers[
             ContentType.objects.get(id=parent_value).model_class()
             ]
 
-        default_choices = (
-            ("title", u"Title only"),
-            ("details", u"Title & summary"),
-            ("details image", u"Title, summary & image"),
-            )
-
         choices = getattr(
             wrapper,
-            "link_format_choices",
-            default_choices
-            )
+            "link_format_choices"
+        )
 
         response = HttpResponse(
             json.dumps(choices, cls=DjangoJSONEncoder),

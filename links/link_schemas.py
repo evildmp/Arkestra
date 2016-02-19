@@ -46,6 +46,13 @@ class PageLinkWrapper(LinkWrapper):
     def heading(self):
         return "Related pages"
 
+    def url(self):
+        public_object = self.obj.get_public_object()
+        if public_object:
+            return public_object.get_absolute_url()
+        else:
+            return ""
+
     @classmethod
     def pre_filter(cls):
         return Q(publisher_is_draft=True)
