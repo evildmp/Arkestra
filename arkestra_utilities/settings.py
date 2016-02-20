@@ -133,8 +133,8 @@ ARKESTRA_MENUS = getattr(
     "ARKESTRA_MENUS",
     [
         news_and_events_menu,
-        contacts_and_people_menu.menu_dict,
         vacancies_and_studentships_menu,
+        contacts_and_people_menu.menu_dict,
     ]
 )
 

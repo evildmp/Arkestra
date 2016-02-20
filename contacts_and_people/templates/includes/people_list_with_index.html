@@ -1,6 +1,6 @@
 {% comment %}
 
-Used by: views.people 
+Used by: views.people
 
 Lists members of an entity - either all people by surname, or surnames beginning {{ letter }}.
 
@@ -11,12 +11,12 @@ Lists members of an entity - either all people by surname, or surnames beginning
 		<h{{ IN_BODY_HEADING_LEVEL }} style="clear:both">{% if letter %}{% trans "People: surnames beginning" %} {{letter|upper}}{% else %}{% trans "All people by surname" %}{% endif %}</h{{ IN_BODY_HEADING_LEVEL }}>
 		{% people_with_roles letter %}
 	</div>
-	<div class="column lastcolumn"> 
+	<div class="column lastcolumn">
 	{% if initials_list %}
 		<h{{ IN_BODY_HEADING_LEVEL }}>{% trans "Index of people by surname" %}</h{{ IN_BODY_HEADING_LEVEL }}>
 		<ul class="index">
 			{% for initial in initials_list %}
-				<li><a href="{% url contact-people-letter entity.slug initial|lower %}">{{ initial }}</a></li>
+				<li><a href="{% url "contact-people-letter" entity.slug initial|lower %}">{{ initial }}</a></li>
 			{% endfor %}
 		</ul>
 	{% endif %}

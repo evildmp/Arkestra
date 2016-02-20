@@ -39,9 +39,9 @@ Called up by arkestra_utilities/entity_auto_page,html
                             <label for="{{ field.field_name }}">
                                 <span class="label-text">{{ field.field_label }}:</span>
                             </label>
-                        
+
                             <input placeholder="{{ field.placeholder }}" type="search" name="{{ field.field_name }}" value="{{ field.value }}"> <input type="submit" value="Search">
-                    
+
                         </div>
                     {% endfor %}
                 </form>
@@ -74,7 +74,7 @@ Called up by arkestra_utilities/entity_auto_page,html
                     <h{{ IN_BODY_HEADING_LEVEL }}>All people A-Z by surname</h{{ IN_BODY_HEADING_LEVEL }}>
                     <ul class= "index">
                         {% for initial in initials_list %}
-                            <li><a href="{% url contact-people-letter entity.slug,initial|lower %}">{{ initial }}</a></li>
+                            <li><a href="{% url "contact-people-letter" entity.slug initial|lower %}">{{ initial }}</a></li>
                         {% endfor %}
                     </ul>
                 {% endif %}
