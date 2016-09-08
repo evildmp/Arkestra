@@ -42,8 +42,8 @@ setup(
         'django-pagination',
         'django-easyfilters',
         'django-treeadmin',
-        'django-widgetry',
-        'django-chained-selectbox',
+        # 'django-widgetry',
+        # 'django-chained-selectbox',
         'django-polymorphic==0.5.6',
     ],
 )
