@@ -1,3 +1,4 @@
+<!-- imageset_item.html -->
 {% spaceless %}
 {% load thumbnail %}
 {% thumbnail item.image.file item.image_size crop subject_location=item.image.subject_location quality=thumbnail_quality as image_src %}
@@ -39,7 +40,7 @@
 {% endif %}
 
 {% if imageset.kind == "basic" or imageset.kind == "multiple" %}
-    <a {% if imageset.items_have_links %}href="{{ item.url }}"{% endif %} style="width: {{ item.width }}px; min-height: {{ item.height }}px;">
+    <a {% if imageset.items_have_links %}href="{{ item.url }}"{% endif %}>
 
     	<img alt="{{ item.alt }}" class="plugin" src="{{ image_src.url }}" />
 

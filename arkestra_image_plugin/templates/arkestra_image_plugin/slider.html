@@ -1,10 +1,10 @@
 {% load sekizai_tags thumbnail %}
 <ul id="slider{{ imageset.id }}" class="imageset slider">
 	{% for item in imageset.items %}
-    	<li id="imageset-item-{{ imageset.id }}-{{ item.id }}">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</li>			
+    	<li id="imageset-item-{{ imageset.id }}-{{ item.id }}">{% include "arkestra_image_plugin/includes/imageset_item.html" %}</li>
 	{% endfor %}
 </ul>
-	
+
 
 {% addtoblock "css" %}
 <!-- AnythingSlider -->
@@ -59,10 +59,10 @@ div.anythingSlider-minimalist-square.activeSlider .anythingControls ul a {
 				autoPlayLocked : true,
 				buildStartStop: false,
 				delay: {{ slider_delay|default:"4000" }},
-				expand: false,
-				resizeContents: true,
-				resumeDelay : 8000
+				expand: true,
+				resizeContents: false,
+				resumeDelay : 8000,
 			});
 		});
 	</script>
-{% endaddtoblock %}    
+{% endaddtoblock %}

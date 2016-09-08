@@ -11,6 +11,7 @@
     	{% else %}
     		<meta name="description" content="{% page_attribute meta_description %}"/>
     	{% endif %}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endblock meta %}
 
 {% block title %}<title>{% page_attribute title %}</title>{% endblock %}
@@ -24,18 +25,15 @@
 {% render_block "css" %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_lists.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_images.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_layout.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
-
-<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script><![endif]-->
-<!--[if lte IE 8]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-8.css" rel="stylesheet" type="text/css" /><![endif]-->
-<!--[if lte IE 7]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-7.css" rel="stylesheet" type="text/css" /><![endif]-->
-<!--[if lte IE 6]><link href="{{ STATIC_URL }}arkestra/css/ie-fixes/ie-lte-6.css" rel="stylesheet" type="text/css" /><![endif]-->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/arkestra.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/arkestra_lists.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/arkestra_images.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/arkestra_layout.css" />
+<link rel="stylesheet" media="screen and (min-width:600px)" href="{{ STATIC_URL }}arkestra/css/arkestra_layout_over_500.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/arkestra_presentation_editor.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/temporaryhacks.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}arkestra/css/carousel.css" />
 
 {% block extrastyles %}
 {% endblock extrastyles %}
