@@ -31,7 +31,7 @@ setup(
     tests_require=tests_require,
     extras_require={'test': tests_require},
     install_requires=[
-        'django >= 1.4, <=1.4.10',
+        'django >= 1.4, <=1.4.22',
         'easy-thumbnails==1.5',
         'django-typogrify',
         'BeautifulSoup',
@@ -40,10 +40,10 @@ setup(
         'semanticeditor',
         'pillow',
         'django-pagination',
-        'django-easyfilters',
+        # 'django-easyfilters',
         'django-treeadmin',
-        'django-widgetry',
-        'django-chained-selectbox',
+        # 'django-widgetry',
+        # 'django-chained-selectbox',
         'django-polymorphic==0.5.6',
     ],
 )
