@@ -155,9 +155,9 @@ class ListSetItemsTests(TestCase):
 
 class FilterListTests(TestCase):
     def setUp(self):
-        self.item1 = TestModel(title="1")
-        self.item2 = TestModel(title="2")
-        self.item3 = TestModel(title="3", summary="1")
+        self.item1 = TestModel(title="1", short_title="1")
+        self.item2 = TestModel(title="2", short_title="2")
+        self.item3 = TestModel(title="3", short_title="3", summary="1")
         self.item1.save()
         self.item2.save()
         self.item3.save()
