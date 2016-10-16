@@ -209,7 +209,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
-    'django.contrib.markup'
+    'django.contrib.markup',
+
+    'example',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -277,7 +279,7 @@ gettext = lambda s: s
 CMS_SOFTROOT = True
 CMS_PERMISSION = True
 CMS_SEO_FIELDS = True
-
+CMS_MENU_TITLE_OVERWRITE = True
 
 # this is only here because I don't know how to make other apps find it otherwise, and they rely on it.
 CMS_MEDIA_URL = STATIC_URL + 'cms/'

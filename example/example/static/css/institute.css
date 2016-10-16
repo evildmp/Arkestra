@@ -1,0 +1,116 @@
+/* HTML element styling */
+
+body	{
+	background: gray;
+}
+
+/* main layout and styling divs */
+
+div#outer-wrapper {
+	background: white;
+}
+
+/* typography */
+
+
+/* ---- menus ---- */
+
+nav#menu li a {font-size: 120%; text-decoration: none;}
+
+/* by default, don't display the menu */
+
+nav#menu li {display: none;}
+
+/* just display the menu icon */
+
+nav#menu.topnav li.icon {
+    margin-top: 0;
+    display: block;
+    font-variant: small-caps;
+  }
+
+/* when the user hits the menu icon */
+
+nav#menu.expanded li {display: block;}
+
+/* menu for larger widths */
+
+@media screen and (min-width: 660px) {
+
+    nav#menu li a {font-size: 100%;}
+
+    nav#menu ul {background: white;}
+
+    /* hide the icon and show the menu items */
+
+    nav#menu.topnav li.icon {display: none;}
+
+    /* default list items */
+
+    nav#menu li {
+        display: inline;
+    	width: 100%;
+        position: relative;
+    	list-style-type: none;
+    }
+
+    /* main items line up with root; dropdowns have no left padding */
+
+    nav#menu ul ul {
+        float: right;
+        padding-left: 0;
+    }
+
+    /* main items have some horizontal spacing */
+
+    nav#menu > ul > li > ul > li {padding-right: 1em;}
+
+    nav#menu > ul ul ul li {padding-top: 1ex;}
+
+
+    /* third levels and above, hidden by default */
+
+    nav#menu ul ul ul {
+        display: none;
+        position: absolute;
+        width: 100%;
+        background: #eee;
+    }
+
+    /* hovering over 2nd/3rd-level item displays 3rd/4th-level list */
+
+    nav#menu ul ul li:hover > ul {display: block;}
+
+    nav#menu ul ul li:hover > ul li {display: list-item;}
+
+    /* levels 4+ positioned at top right of parent */
+
+    nav#menu ul ul ul ul {
+        left: 100%;
+        top: 0;
+        background: #ddd;
+    }
+
+    /* display triangles on items with children */
+
+    nav#menu ul ul li a.children:after {content: " \25BE"}
+    nav#menu ul ul ul li a.children:after {
+        content: "\25B8";
+        float: right;
+    }
+
+}
+
+@media screen and (min-width: 880px) {
+  body {
+    max-width: 1040px;
+  	margin: 50px auto; padding: 0px;
+  	border: black solid 2px;
+  }
+
+  div#outer-wrapper {
+  	padding: 10px 40px;
+  }
+
+
+}

@@ -1,12 +1,39 @@
 {% extends "arkestra.html" %}
-{% load typogrify_tags %}
+{% load typogrify_tags menu_tags %}
 
 {% block site_styles %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/institute.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/institute.css" />
 {% endblock site_styles %}
+
+{% block scripts %}
+	{{ block.super }}
+
+  <script>
+  function myFunction() {
+      var x = document.getElementById("menu");
+      if (x.className === "topnav") {
+          x.className += " expanded";
+      } else {
+          x.className = "topnav";
+      }
+  }
+  </script>
+{% endblock scripts %}
+
+{% block menu %}
+  <nav id="menu" class="topnav">
+    <ul class="menu">
+      <li class="icon menu_item">
+        <a href="javascript:void(0);" onclick="myFunction()">&#9776; Menu</a>
+      </li>
+      {% show_menu 0 100 100 100 "cms/arkestra_menu.html" "" "" %}
+    </ul>
+  </nav>
+{% endblock menu %}
 
 {% block body_content %}
     {# do you need to have different widths in this template? manage them like this: with placeholder_width=960 generic_main_width=523 sidebar_image_size="294x196" person_image_size="445x384" #}
         {{ block.super }}
     {# endwith #}
 {% endblock body_content %}
+
