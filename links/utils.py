@@ -1,5 +1,5 @@
 from urlparse import urlparse
-from urllib import urlopen
+import requests
 
 from django import forms
 from django.contrib import messages
@@ -34,35 +34,29 @@ def check_urls(url, allowed_schemes=None):
 
     # for hypertext types only
     if str(scheme) == "http" or scheme == "https":
+
         # can we reach the domain?
         try:
-            url_test = urlopen(url)
-        except IOError:
+            r = requests.get(url)
+
+        # test for
+        except requests.ConnectionError:
             message_list.append({
-                "message": "Hostname %s not found. Please check that it is correct." % purl.netloc,
+                "message": "Cannot connect to %s. Please check that it is correct." % purl.netloc,
                 "level": messages.WARNING,
                 })
 
-        if url_test:
-            # check for a 404 (needs python 2.6)
-            try:
-                code = url_test.getcode()
-            except AttributeError:
+        else:
+            if r.status_code == 404:
                 message_list.append({
-                    "message": "Warning: I couldn't check your link %s. Please check that it works." % url,
+                    "message": "Warning: cannot reach %s. Please check that it is correct." % url,
                     "level": messages.WARNING
                     })
-            else:
-                if code == 404:
-                    message_list.append({
-                        "message": "Warning: the link %s appears not to work. Please check that it is correct." % url,
-                        "level": messages.WARNING
-                        })
 
             # check for a redirect
-            if url_test.geturl() != url:
+            if r.history:
                 message_list.append({
-                    "message": "Warning: your URL " + url + " doesn't match the site's, which is: " + url_test.geturl(),
+                    "message": "Warning: %s redirects to %s." % (url, r.url),
                     "level": messages.WARNING
                     })
 

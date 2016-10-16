@@ -56,7 +56,7 @@ class ExternalLinkTests(TestCase):
 
     def test_good_url(self):
         # http://vurt.org/ should be accepted without a murmur
-        self.assertEquals([], check_urls("http://vurt.org/"))
+        self.assertEquals([], check_urls("https://github.com"))
 
     def test_unknown_scheme(self):
         # an unknown urlscheme should raise a forms.ValidationError
@@ -77,24 +77,32 @@ class ExternalLinkTests(TestCase):
             )
 
     def test_host_not_found(self):
-        # a hostname we can't find should raise a forms.ValidationError
+        # a hostname we can't find should raise a requests.ConnectionError
         # a link we can't open should return a message
         self.assertDictEqual(
             check_urls("http://vurt.vurt.vurt.vurt.org/")[0],
-            {'message': 'Hostname vurt.vurt.vurt.vurt.org not found. Please check that it is correct.', 'level': 30}
+            {'message': 'Cannot connect to vurt.vurt.vurt.vurt.org. Please check that it is correct.', 'level': 30}
             )
 
     def test_404(self):
-        # a link we can't open shouuld return a message
+        # a link we can't open should return a message
         self.assertDictEqual(
-            check_urls("http://vurt.org/zxcvbnmmnbvcxz/")[0],
-            {'message': 'Warning: the link http://vurt.org/zxcvbnmmnbvcxz/ appears not to work. Please check that it is correct.', 'level': 30}
+            check_urls("http://github.com/evildmp/akresta")[0],
+            {
+                'message': 'Warning: cannot reach http://github.com/evildmp/akresta. Please check that it is correct.',
+                'level': 30
+            }
 )
 
-    # def test_does_not_match(self):
-    #     a link we can't open shouuld return a message
-    #     not sure how this can be tested
-    #     "Warning: your URL " + url + " doesn't match the site's, which is: " + url_test.geturl()
+    def test_does_not_match(self):
+        # warn user when the URL is redirected
+        self.assertDictEqual(
+            check_urls("http://github.com/")[0],
+            {
+                'message': 'Warning: http://github.com/ redirects to https://github.com/.',
+                'level': 30
+            }
+)
 
     def test_mail_to(self):
         # a link we can't open should return a message
