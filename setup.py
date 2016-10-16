@@ -45,6 +45,7 @@ setup(
         'django-widgetry',
         'django-chained-selectbox',
         'django-polymorphic==0.5.6',
+        'html5lib==0.95',
         'requests',
     ],
 )
